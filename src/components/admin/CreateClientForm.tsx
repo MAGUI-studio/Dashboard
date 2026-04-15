@@ -12,34 +12,21 @@ import { createClientAction } from "@/src/lib/actions/user.actions"
 export function CreateClientForm() {
   const t = useTranslations("Admin.clients")
   const router = useRouter()
-  const [pending, setPending] = React.useState(false)
-  const [error, setError] = React.useState<string | null>(null)
 
-  async function handleSubmit(formData: FormData) {
-    setPending(true)
-    setError(null)
-
-    try {
+  const [state, formAction, isPending] = React.useActionState(
+    async (_prevState: unknown, formData: FormData) => {
       const result = await createClientAction(formData)
-
-      if (result?.error) {
-        if (typeof result.error === "string") {
-          setError(result.error)
-        } else {
-          setError("Invalid fields")
-        }
-      } else if (result?.success) {
+      if (result.success) {
         router.push("/admin/clients")
+        return { success: true, error: null }
       }
-    } catch {
-      setError("An unexpected error occurred")
-    } finally {
-      setPending(false)
-    }
-  }
+      return { success: false, error: result.error }
+    },
+    { success: false, error: null }
+  )
 
   return (
-    <form action={handleSubmit} className="flex flex-col gap-6">
+    <form action={formAction} className="flex flex-col gap-6">
       <div className="grid gap-6 sm:grid-cols-2">
         <div className="flex flex-col gap-2">
           <label
@@ -53,7 +40,8 @@ export function CreateClientForm() {
             name="firstName"
             type="text"
             required
-            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none"
+            disabled={isPending}
+            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
           />
         </div>
         <div className="flex flex-col gap-2">
@@ -68,25 +56,45 @@ export function CreateClientForm() {
             name="lastName"
             type="text"
             required
-            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none"
+            disabled={isPending}
+            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
           />
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="email"
-          className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-        >
-          {t("form.email")}
-        </label>
-        <input
-          id="email"
-          name="email"
-          type="email"
-          required
-          className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none"
-        />
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="email"
+            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
+          >
+            {t("form.email")}
+          </label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            required
+            disabled={isPending}
+            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="username"
+            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
+          >
+            {t("form.username")}
+          </label>
+          <input
+            id="username"
+            name="username"
+            type="text"
+            required
+            disabled={isPending}
+            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
+          />
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -102,22 +110,25 @@ export function CreateClientForm() {
           type="password"
           required
           minLength={8}
-          className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none"
+          disabled={isPending}
+          className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
         />
       </div>
 
-      {error && (
+      {state.error && (
         <p className="text-[10px] font-bold uppercase tracking-widest text-destructive">
-          {error}
+          {typeof state.error === "string"
+            ? state.error
+            : "Check the fields and try again"}
         </p>
       )}
 
       <Button
         type="submit"
-        disabled={pending}
+        disabled={isPending}
         className="mt-4 rounded-full py-6 text-xs uppercase tracking-[0.2em]"
       >
-        {pending ? "Creating..." : t("form.submit")}
+        {isPending ? "Creating..." : t("form.submit")}
       </Button>
     </form>
   )

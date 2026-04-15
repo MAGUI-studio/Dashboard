@@ -66,9 +66,17 @@
         "email": "Email Address",
         "firstName": "First Name",
         "lastName": "Last Name",
+        "username": "Username",
         "submit": "Create Access",
         "success": "Client created successfully!",
-        "error": "Error creating client."
+        "error": "Error creating client.",
+        "errors": {
+          "password_pwned": "This password is too weak and has been found in data breaches. Please choose another one.",
+          "identifier_exists": "This email is already registered in the system.",
+          "password_too_short": "The password must be at least 8 characters long.",
+          "username_invalid": "The username does not meet the system requirements.",
+          "general": "An error occurred while processing your request."
+        }
       }
     }
   }

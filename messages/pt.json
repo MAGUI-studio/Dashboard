@@ -66,9 +66,17 @@
         "email": "Endereço de E-mail",
         "firstName": "Nome",
         "lastName": "Sobrenome",
+        "username": "Nome de Usuário",
         "submit": "Criar Acesso",
         "success": "Cliente criado com sucesso!",
-        "error": "Erro ao criar cliente."
+        "error": "Erro ao criar cliente.",
+        "errors": {
+          "password_pwned": "Esta senha é muito fraca e foi encontrada em vazamentos de dados. Escolha outra.",
+          "identifier_exists": "Este e-mail já está cadastrado no sistema.",
+          "password_too_short": "A senha deve ter no mínimo 8 caracteres.",
+          "username_invalid": "O nome de usuário não atende aos requisitos do sistema.",
+          "general": "Ocorreu um erro ao processar sua solicitação."
+        }
       }
     }
   }
