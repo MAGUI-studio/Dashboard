@@ -2,9 +2,10 @@
 
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { CaretDownIcon, CaretUpIcon, CheckIcon } from "@phosphor-icons/react"
 import { Select as SelectPrimitive } from "radix-ui"
+
+import { cn } from "@/src/lib/utils/utils"
 
 function Select({
   ...props
