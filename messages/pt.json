@@ -52,6 +52,24 @@
   "Admin": {
     "eyebrow": "Controle Interno",
     "title": "Painel",
-    "subtitle": "Admin"
+    "subtitle": "Admin",
+    "clients": {
+      "title": "Gestão de Clientes",
+      "create": "Novo Cliente",
+      "table": {
+        "email": "E-mail",
+        "name": "Nome",
+        "role": "Permissão",
+        "actions": "Ações"
+      },
+      "form": {
+        "email": "Endereço de E-mail",
+        "firstName": "Nome",
+        "lastName": "Sobrenome",
+        "submit": "Criar Acesso",
+        "success": "Cliente criado com sucesso!",
+        "error": "Erro ao criar cliente."
+      }
+    }
   }
 }

@@ -52,6 +52,25 @@
   "Admin": {
     "eyebrow": "Internal Control",
     "title": "Admin",
-    "subtitle": "Dashboard"
+    "subtitle": "Panel",
+    "clients": {
+      "title": "Client Management",
+      "create": "New Client",
+      "table": {
+        "email": "Email",
+        "name": "Name",
+        "role": "Permission",
+        "actions": "Actions"
+      },
+      "form": {
+        "email": "Email Address",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "submit": "Create Access",
+        "success": "Client created successfully!",
+        "error": "Error creating client."
+      }
+    }
   }
-}
+  }
+

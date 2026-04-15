@@ -1,8 +1,11 @@
 import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
+import Link from "next/link"
 
 import { auth } from "@clerk/nextjs/server"
+
+import { Button } from "@/src/components/ui/button"
 
 import { Logo } from "@/src/components/common/logo"
 
@@ -42,6 +45,15 @@ export default async function AdminPage(): Promise<React.JSX.Element> {
               {sessionClaims?.metadata?.role || "member"}
             </span>
           </div>
+        </div>
+
+        <div className="mt-8">
+          <Button
+            asChild
+            className="w-full rounded-full py-6 uppercase tracking-widest"
+          >
+            <Link href="/admin/clients">Gerenciar Clientes</Link>
+          </Button>
         </div>
       </div>
     </main>
