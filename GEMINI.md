@@ -18,7 +18,12 @@ This project is a high-performance, production-ready template utilizing the Next
   - A Husky `pre-push` hook runs `pnpm build` automatically.
   - NEVER bypass these gates.
 
-### 2. Code Style & Documentation
+### 2. Studio Identity & Design
+- **IDENTITY ALIGNMENT:** For every task, you **MUST** consult `@MAGUI.md` (for identity, tone, and positioning) and `@STYLEGUIDE.md` (for visual standards, typography, and layout).
+- **RIGOR & AUTHORITY:** Every architectural, visual, or communicative decision must reflect the "Padrão de Autoridade Digital" and "Rigor Técnico" defined in the studio's documentation.
+- **CONSISTENCY:** Ensure all subprojects maintain total synchronia with the primary MAGUI.studio ecosystem.
+
+### 3. Code Style & Documentation
 - **NO COMMENTS:** NEVER include comments in the source code. The code must be self-explanatory through clean naming and structure.
 - **IMPORT ORDER:** Imports MUST be sorted automatically via Prettier (React, Next, Third-party, Internal, Local).
 - **LOGGING:** `console.log` is strictly FORBIDDEN. Use the structured `logger` from `@/src/lib/logger`.

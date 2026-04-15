@@ -1,58 +1,71 @@
 # 📘 Guia de Identidade: MAGUI.studio
 
-A **MAGUI.studio** é um estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.
+A **MAGUI.studio** é um estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance e autoridade.
 
 ## 1. O Conceito (O que é a MAGUI)
 A MAGUI nasceu da união entre a **precisão técnica** da engenharia de software e a **estratégia visual** do design de interface. O foco é atender clientes que buscam autoridade e soluções que não sejam apenas "bonitas", mas tecnicamente impecáveis e preparadas para escala.
 
-* **Público-alvo**: Empresas e profissionais que valorizam rigor, modernidade e exclusividade.
-* **Diferencial**: Entrega de interfaces de alta fidelidade (UI/UX) aliada a uma arquitetura de código limpo e performance otimizada (Core Web Vitals).
-* **Fundadores**: Operada por uma dupla de especialistas: um Tech Lead (Frontend Developer) e uma especialista em Operações e Design de Experiência (UX).
+*   **Público-alvo**: Empresas e profissionais que valorizam rigor, modernidade e exclusividade.
+*   **Diferencial**: Modelo **Boutique** (qualidade sobre volume), entrega de interfaces de alta fidelidade (UI/UX) aliada a uma arquitetura de código limpo e performance otimizada.
+*   **Fundadores**:
+    *   **Guilherme Bustamante**: Direção Técnica (Desenvolvimento + Design).
+    *   **Maisa**: Estratégia + Operação.
+*   **Slogan**: "Design e tecnologia em total sincronia."
+*   **Assinatura**: "Padrão de Autoridade Digital."
 
 ---
 
-## 2. Paleta de Cores (Rigor e Contraste)
-A paleta foi extraída diretamente das diretrizes de design do estúdio para garantir consistência em ambos os temas.
+## 2. Pilares e Metodologia
+
+### Os 4 Pilares (DNA MAGUI)
+1.  **Clareza**: Interfaces que conduzem a leitura de forma natural.
+2.  **Estética**: Design que projeta credibilidade imediata.
+3.  **Autoridade**: Posicionamento que sustenta a percepção de valor.
+4.  **Rigor**: Precisão matemática no código e na tipografia.
+
+### Protocolo de Execução (Método)
+1.  **Estratégia**: Mapeamento de ecossistema e metas reais.
+2.  **Arquitetura**: Estruturação técnica e organização de informação.
+3.  **Design**: Interfaces de alta fidelidade e direção de arte.
+4.  **Engenharia**: Implementação artesanal focada em performance (Next.js/React).
+
+---
+
+## 3. Paleta de Cores (Rigor e Contraste)
+A paleta utiliza o espaço de cor **OKLCH** para máxima precisão.
 
 ### ☀️ Tema Claro (Light Mode)
-| Cor | Hexadecimal | Aplicação |
-| :--- | :--- | :--- |
-| **Fundo Principal** | `#F0F0F0` | Superfícies amplas e fundos de página. |
-| **Destaque Azul** | `#0093C8` | Botões, ícones e elementos de ação principais. |
-| **Azul Contraste** | `#007AA6` | Garantia de acessibilidade em elementos de leitura sobre fundo claro. |
-| **Texto Primário** | `#161616` | Títulos e textos de leitura principal. |
-| **Texto Secundário** | `#333333` | Subtítulos e descrições. |
-| **Bordas/Linhas** | `#E2E2E2` | Divisores e contornos sutis. |
+*   **Fundo Principal**: `#F0F0F0` (`oklch(0.96 0 0)`)
+*   **Destaque Azul**: `#0093C8` (`oklch(0.65 0.2 240)`)
+*   **Texto Primário**: `#161616`
+*   **Texto Secundário**: `#333333`
+*   **Bordas/Linhas**: `#E2E2E2`
 
 ### 🌙 Tema Escuro (Dark Mode)
-| Cor | Hexadecimal | Aplicação |
-| :--- | :--- | :--- |
-| **Fundo Principal** | `#141414` | Base para o modo noturno. |
-| **Destaque Azul** | `#0093C8` | Mantido para consistência de marca. |
-| **Azul Luminoso** | `#33A9D3` | Variação para melhor legibilidade e "pop" visual em fundos escuros. |
-| **Texto Primário** | `#F2F2F2` | Leitura principal em alto contraste. |
-| **Texto Secundário** | `#CFCFCF` | Textos de apoio e parágrafos. |
+*   **Fundo Principal**: `#141414` (`oklch(0.12 0 0)`)
+*   **Destaque Azul**: `#0093C8`
+*   **Azul Luminoso**: `#33A9D3` (`oklch(0.72 0.15 235)`) - Para legibilidade em Dark Mode.
+*   **Texto Primário**: `#F2F2F2`
+*   **Texto Secundário**: `#CFCFCF`
 
 ---
 
-## 3. Guia de Uso dos Logotipos
-Utilize a variação correta dependendo do contexto visual e do tema aplicado.
-
-### Regra de Arquivo
-* **Arquivos _LM (Light Mode)**: Texto em preto/escuro. Usar exclusivamente em fundos claros.
-* **Arquivos _DM (Dark Mode)**: Texto em branco/claro. Usar exclusivamente em fundos escuros.
-
-### Variações de Formato
-1.  **VAR_01 (Vertical com Símbolo)**: Ideal para capas de propostas ou telas de carregamento.
-2.  **VAR_02 (Horizontal com Símbolo)**: Versão principal para o cabeçalho (header) de sites.
-3.  **VAR_03 (Somente Tipografia)**: Uso em rodapés (footers) ou locais com altura limitada.
-4.  **VAR_04 (Horizontal Compacto)**: Ideal para barras laterais ou menus.
-5.  **VAR_05 (Vertical Compacto)**: Uso em materiais institucionais ou assinaturas.
-6.  **Favicon**: Uso exclusivo para ícone de aba de navegador.
+## 4. Diretrizes Visuais e de UI
+*   **Tipografia**: Rigor tipográfico absoluto. Hierarquias desenhadas para guiar o olhar.
+*   **Espaçamento**: Uso consciente de espaços negativos (Minimalismo de Elite).
+*   **Componentes**: Bordas sutis, arredondamento padrão `2xl` (menus) e `4xl` (blocos grandes).
+*   **Efeitos**: `backdrop-blur-xl` para cabeçalhos e overlays (Glassmorphism sutil).
 
 ---
 
-## 5. Diretrizes de Comunicação
-* **Idioma**: Toda a comunicação oficial e técnica deve ser em **Português** e **Inglês**.
-* **Tom**: Profissional, direto, técnico e extremamente cuidadoso com detalhes.
-* **Assinatura**: "Design e tecnologia em total sincronia."
+## 5. Serviços (Especialidades)
+1.  **Landing Pages**: Conversão consciente com carregamento ágil.
+2.  **Páginas de Vendas**: Focadas em autoridade e suporte ao faturamento.
+3.  **Sites Institucionais**: Projeção de solidez e diferenciais de mercado.
+
+---
+
+## 6. Diretrizes de Comunicação
+*   **Idioma**: Português e Inglês (Internacionalização nativa).
+*   **Tom**: Profissional, direto, técnico, porém sofisticado. Evita ruídos e burocracia.
+*   **Marquee**: "ESTRATÉGIA ✦ ENGENHARIA ✦ DESIGN ✦ PERFORMANCE ✦ AUTORIDADE ✦"
