@@ -97,22 +97,46 @@ export function CreateClientForm() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="password"
-          className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-        >
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type="password"
-          required
-          minLength={8}
-          disabled={isPending}
-          className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
-        />
+      <div className="grid gap-6 sm:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="password"
+            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
+          >
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type="password"
+            required
+            minLength={8}
+            disabled={isPending}
+            className="rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="role"
+            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
+          >
+            {t("form.role")}
+          </label>
+          <select
+            id="role"
+            name="role"
+            required
+            disabled={isPending}
+            className="appearance-none rounded-xl border border-border/60 bg-muted/20 px-4 py-3 text-sm font-bold text-foreground focus:border-brand-primary focus:outline-none disabled:opacity-50"
+          >
+            <option value="client" className="bg-background">
+              {t("form.roles.client")}
+            </option>
+            <option value="admin" className="bg-background">
+              {t("form.roles.admin")}
+            </option>
+          </select>
+        </div>
       </div>
 
       {state.error && (

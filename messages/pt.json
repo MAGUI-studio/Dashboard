@@ -67,6 +67,11 @@
         "firstName": "Nome",
         "lastName": "Sobrenome",
         "username": "Nome de Usuário",
+        "role": "Permissão",
+        "roles": {
+          "admin": "Administrador",
+          "client": "Cliente"
+        },
         "submit": "Criar Acesso",
         "success": "Cliente criado com sucesso!",
         "error": "Erro ao criar cliente.",

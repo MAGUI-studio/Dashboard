@@ -11,6 +11,7 @@ const createUserSchema = z.object({
   firstName: z.string().min(2),
   lastName: z.string().min(2),
   username: z.string().min(3),
+  role: z.enum(["admin", "client"]),
   password: z.string().min(8),
 })
 
@@ -27,6 +28,7 @@ export async function createClientAction(formData: FormData) {
     firstName: formData.get("firstName"),
     lastName: formData.get("lastName"),
     username: formData.get("username"),
+    role: formData.get("role"),
     password: formData.get("password"),
   })
 
@@ -36,7 +38,7 @@ export async function createClientAction(formData: FormData) {
     }
   }
 
-  const { email, firstName, lastName, username, password } =
+  const { email, firstName, lastName, username, role, password } =
     validatedFields.data
 
   try {
@@ -48,7 +50,7 @@ export async function createClientAction(formData: FormData) {
       firstName,
       lastName,
       password,
-      publicMetadata: { role: "client" },
+      publicMetadata: { role },
     })
 
     revalidatePath("/admin/clients")
