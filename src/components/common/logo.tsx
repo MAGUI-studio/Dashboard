@@ -29,9 +29,13 @@ export function Logo({
 
   if (!mounted) {
     return (
-      <div
-        style={{ width, height }}
-        className={cn("animate-pulse bg-muted/20 rounded-lg", className)}
+      <Image
+        src="/logos/LOGO_VAR_03_DM.svg"
+        alt="MAGUI.studio"
+        width={width}
+        height={height}
+        priority={priority}
+        className={cn("h-auto w-auto opacity-20 grayscale", className)}
       />
     )
   }

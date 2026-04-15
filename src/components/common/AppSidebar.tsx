@@ -46,11 +46,12 @@ import {
   SidebarMenuSubItem,
   useSidebar,
 } from "@/src/components/ui/sidebar"
+import { Skeleton } from "@/src/components/ui/skeleton"
 
 import { Logo } from "@/src/components/common/logo"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user } = useUser()
+  const { user, isLoaded } = useUser()
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
   const { setOpenMobile } = useSidebar()
@@ -93,7 +94,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {isAdmin && (
+              {!isLoaded && (
+                <SidebarMenuItem>
+                  <SidebarMenuButton disabled>
+                    <Skeleton className="size-4 shrink-0" />
+                    <Skeleton className="h-4 w-24" />
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )}
+
+              {isLoaded && isAdmin && (
                 <Collapsible
                   asChild
                   defaultOpen={pathname.toString().startsWith("/admin/clients")}
@@ -147,77 +157,87 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-                >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={user?.imageUrl}
-                      alt={user?.fullName || ""}
-                    />
-                    <AvatarFallback className="rounded-lg">
-                      {user?.fullName?.charAt(0) ||
-                        user?.primaryEmailAddress?.emailAddress.charAt(0) ||
-                        "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {user?.fullName}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {user?.primaryEmailAddress?.emailAddress}
-                    </span>
-                  </div>
-                  <CaretDown weight="duotone" className="ml-auto size-4" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
-                side="bottom"
-                align="end"
-                sideOffset={4}
-              >
-                <div className="flex items-center gap-2 p-2">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage
-                      src={user?.imageUrl}
-                      alt={user?.fullName || ""}
-                    />
-                    <AvatarFallback className="rounded-lg">
-                      {user?.fullName?.charAt(0) || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {user?.fullName}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
-                      {user?.primaryEmailAddress?.emailAddress}
-                    </span>
-                  </div>
+            {!isLoaded ? (
+              <div className="flex items-center gap-2 px-2 py-1.5">
+                <Skeleton className="size-8 rounded-lg shrink-0" />
+                <div className="grid flex-1 gap-1">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-3 w-32" />
                 </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                  <UserCircle weight="duotone" />
-                  <span>{t("user.profile")}</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Gear weight="duotone" />
-                  <span>{t("user.settings")}</span>
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <SignOutButton>
+              </div>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <SidebarMenuButton
+                    size="lg"
+                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                  >
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        src={user?.imageUrl}
+                        alt={user?.fullName || ""}
+                      />
+                      <AvatarFallback className="rounded-lg text-[10px] font-black uppercase">
+                        {user?.fullName?.charAt(0) ||
+                          user?.primaryEmailAddress?.emailAddress.charAt(0) ||
+                          "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold uppercase tracking-tight text-[11px]">
+                        {user?.fullName}
+                      </span>
+                      <span className="truncate text-[10px] text-muted-foreground/60">
+                        {user?.primaryEmailAddress?.emailAddress}
+                      </span>
+                    </div>
+                    <CaretDown weight="duotone" className="ml-auto size-4" />
+                  </SidebarMenuButton>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent
+                  className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+                  side="bottom"
+                  align="end"
+                  sideOffset={4}
+                >
+                  <div className="flex items-center gap-2 p-2">
+                    <Avatar className="h-8 w-8 rounded-lg">
+                      <AvatarImage
+                        src={user?.imageUrl}
+                        alt={user?.fullName || ""}
+                      />
+                      <AvatarFallback className="rounded-lg">
+                        {user?.fullName?.charAt(0) || "U"}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className="grid flex-1 text-left text-sm leading-tight">
+                      <span className="truncate font-semibold">
+                        {user?.fullName}
+                      </span>
+                      <span className="truncate text-xs text-muted-foreground">
+                        {user?.primaryEmailAddress?.emailAddress}
+                      </span>
+                    </div>
+                  </div>
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem>
-                    <SignOut weight="duotone" />
-                    <span>{t("user.signOut")}</span>
+                    <UserCircle weight="duotone" />
+                    <span>{t("user.profile")}</span>
                   </DropdownMenuItem>
-                </SignOutButton>
-              </DropdownMenuContent>
-            </DropdownMenu>
+                  <DropdownMenuItem>
+                    <Gear weight="duotone" />
+                    <span>{t("user.settings")}</span>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <SignOutButton>
+                    <DropdownMenuItem>
+                      <SignOut weight="duotone" />
+                      <span>{t("user.signOut")}</span>
+                    </DropdownMenuItem>
+                  </SignOutButton>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
