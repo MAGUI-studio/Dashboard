@@ -2,17 +2,15 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
 import { Button } from "@/src/components/ui/button"
 
 import { createClientAction } from "@/src/lib/actions/user.actions"
 
-interface CreateClientFormProps {
-  t: (key: string) => string
-}
-
-export function CreateClientForm({ t }: CreateClientFormProps) {
+export function CreateClientForm() {
+  const t = useTranslations("Admin.clients")
   const router = useRouter()
   const [pending, setPending] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
