@@ -84,5 +84,19 @@
         }
       }
     }
+  },
+  "Sidebar": {
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "clients": {
+      "title": "Clientes",
+      "list": "Todos os Clientes",
+      "create": "Adicionar Cliente"
+    },
+    "user": {
+      "profile": "Meu Perfil",
+      "settings": "Configurações",
+      "signOut": "Sair"
+    }
   }
 }

@@ -56,7 +56,7 @@ export function ThemeToggle(): React.JSX.Element {
         title={t("light")}
       >
         <SunIcon
-          weight={isLight ? "fill" : "regular"}
+          weight="duotone"
           size={14}
           className="transition-transform duration-300"
         />
@@ -73,7 +73,7 @@ export function ThemeToggle(): React.JSX.Element {
         title={t("dark")}
       >
         <MoonIcon
-          weight={!isLight ? "fill" : "regular"}
+          weight="duotone"
           size={14}
           className="transition-transform duration-300"
         />

@@ -1,8 +1,8 @@
 import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
-import Link from "next/link"
 
+import { Link } from "@/src/i18n/navigation"
 import { clerkClient } from "@clerk/nextjs/server"
 
 import { Badge } from "@/src/components/ui/badge"
@@ -36,7 +36,7 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
           </h1>
         </div>
         <Button asChild className="rounded-full px-8 uppercase tracking-widest">
-          <Link href="/admin/clients/create">{t("create")}</Link>
+          <Link href="/admin/clients/register">{t("create")}</Link>
         </Button>
       </div>
 

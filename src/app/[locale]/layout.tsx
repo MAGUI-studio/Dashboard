@@ -4,11 +4,24 @@ import { getLocale, getMessages, getTranslations } from "next-intl/server"
 
 import { enUS, ptBR } from "@clerk/localizations"
 import { ClerkProvider } from "@clerk/nextjs"
+import { Show } from "@clerk/nextjs"
 import { shadcn } from "@clerk/ui/themes"
 import "@clerk/ui/themes/shadcn.css"
 import { GoogleAnalytics } from "@next/third-parties/google"
 
+import { Separator } from "@/src/components/ui/separator"
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/src/components/ui/sidebar"
+import { TooltipProvider } from "@/src/components/ui/tooltip"
+
+import { AppSidebar } from "@/src/components/common/AppSidebar"
+import { DynamicBreadcrumb } from "@/src/components/common/DynamicBreadcrumb"
+import { LanguageSwitcher } from "@/src/components/common/languageSwitcher"
 import { ThemeProvider } from "@/src/components/common/themeProvider"
+import { ThemeToggle } from "@/src/components/common/themeToggle"
 
 import { cn } from "@/src/lib/utils/utils"
 
@@ -85,7 +98,7 @@ export default async function RootLayout({
   params,
 }: Readonly<{
   children: React.ReactNode
-  params: { locale: string }
+  params: Promise<{ locale: string }>
 }>): Promise<React.JSX.Element> {
   const { locale } = await params
   const messages = await getMessages()
@@ -129,7 +142,36 @@ export default async function RootLayout({
           }
         >
           <NextIntlClientProvider messages={messages}>
-            <ThemeProvider>{children}</ThemeProvider>
+            <ThemeProvider>
+              <SidebarProvider>
+                <TooltipProvider>
+                  <Show when="signed-in">
+                    <AppSidebar />
+                  </Show>
+                  <SidebarInset>
+                    <header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12">
+                      <div className="flex items-center gap-2">
+                        <Show when="signed-in">
+                          <SidebarTrigger className="-ml-1" />
+                          <Separator
+                            orientation="vertical"
+                            className="mr-2 h-4"
+                          />
+                        </Show>
+                        <DynamicBreadcrumb />
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <LanguageSwitcher />
+                        <ThemeToggle />
+                      </div>
+                    </header>
+                    <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                      {children}
+                    </div>
+                  </SidebarInset>
+                </TooltipProvider>
+              </SidebarProvider>
+            </ThemeProvider>
           </NextIntlClientProvider>
         </ClerkProvider>
 

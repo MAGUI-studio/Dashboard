@@ -3,23 +3,22 @@ import { NextResponse } from "next/server"
 
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server"
 
-import { defaultLocale, locales } from "./i18n/config"
+import { defaultLocale, locales, pathnames } from "./i18n/config"
 
 const intlMiddleware = createMiddleware({
   locales,
   defaultLocale,
   localePrefix: "never",
+  pathnames,
 })
 
 const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
-  "/(pt|en)/sign-in(.*)",
-  "/(pt|en)/sign-up(.*)",
   "/api/og(.*)",
 ])
 
-const isAdminRoute = createRouteMatcher(["/admin(.*)", "/(pt|en)/admin(.*)"])
+const isAdminRoute = createRouteMatcher(["/admin(.*)"])
 
 export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {

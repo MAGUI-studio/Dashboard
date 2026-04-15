@@ -84,6 +84,19 @@
         }
       }
     }
-  }
-  }
-
+    },
+    "Sidebar": {
+    "menu": "Menu",
+    "dashboard": "Dashboard",
+    "clients": {
+      "title": "Clients",
+      "list": "All Clients",
+      "create": "Add Client"
+    },
+    "user": {
+      "profile": "My Profile",
+      "settings": "Settings",
+      "signOut": "Sign Out"
+    }
+    }
+    }

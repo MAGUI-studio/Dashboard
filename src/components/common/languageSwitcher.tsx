@@ -3,9 +3,9 @@
 import * as React from "react"
 
 import { useLocale, useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 
 import { locales } from "@/src/i18n/config"
+import { usePathname, useRouter } from "@/src/i18n/navigation"
 import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import Cookies from "js-cookie"
@@ -41,10 +41,17 @@ export function LanguageSwitcher(): React.JSX.Element {
     return () => cancelAnimationFrame(timer)
   }, [])
 
+  const pathname = usePathname()
+
   const handleLocaleChange = (newLocale: string): void => {
     if (newLocale === currentLocale) return
+
+    // Explicitly set cookie for middleware
     Cookies.set("NEXT_LOCALE", newLocale, { expires: 365 })
-    router.refresh()
+
+    // Use the localized router to replace the pathname with the new locale
+    // This will correctly translate pathnames without prefixing
+    router.replace(pathname, { locale: newLocale })
   }
 
   if (!mounted) {
@@ -69,6 +76,7 @@ export function LanguageSwitcher(): React.JSX.Element {
             </span>
           </div>
           <CaretDownIcon
+            weight="duotone"
             size={12}
             className="text-muted-foreground/60 transition-colors group-hover:text-foreground"
           />
@@ -112,7 +120,7 @@ export function LanguageSwitcher(): React.JSX.Element {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
               >
                 <CheckIcon
-                  weight="bold"
+                  weight="duotone"
                   size={12}
                   className="text-foreground/70"
                 />
