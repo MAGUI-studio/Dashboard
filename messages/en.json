@@ -33,5 +33,20 @@
       "description": "An unexpected error occurred.",
       "button": "Try again"
     }
+  },
+  "Auth": {
+    "signIn": {
+      "eyebrow": "Dashboard v1.0",
+      "title": "System",
+      "subtitle": "Access"
+    },
+    "signUp": {
+      "eyebrow": "Join the Studio",
+      "title": "Account",
+      "subtitle": "Creation"
+    },
+    "footer": {
+      "copyright": "MAGUI.studio • Digital Authority System"
+    }
   }
 }

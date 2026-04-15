@@ -2,12 +2,17 @@ import { Metadata, Viewport } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages, getTranslations } from "next-intl/server"
 
+import { enUS, ptBR } from "@clerk/localizations"
+import { ClerkProvider } from "@clerk/nextjs"
+import { shadcn } from "@clerk/ui/themes"
+import "@clerk/ui/themes/shadcn.css"
 import { GoogleAnalytics } from "@next/third-parties/google"
 
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
 import { cn } from "@/src/lib/utils/utils"
 
+import { env } from "@/src/config/env"
 import { fontVariables } from "@/src/config/fonts"
 import { siteConfig } from "@/src/config/site"
 
@@ -92,11 +97,14 @@ export default async function RootLayout({
     url: siteConfig.url,
   }
 
+  const clerkLocalization = locale === "pt" ? ptBR : enUS
+
   return (
     <html
       lang={locale}
       suppressHydrationWarning
       className={cn("antialiased", fontVariables)}
+      data-scroll-behavior="smooth"
     >
       <head>
         <script
@@ -105,9 +113,23 @@ export default async function RootLayout({
         />
       </head>
       <body className="mx-auto w-full max-w-440">
-        <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
-        </NextIntlClientProvider>
+        <ClerkProvider
+          localization={clerkLocalization}
+          publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+          appearance={{ theme: shadcn }}
+          signInUrl={env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
+          signUpUrl={env.NEXT_PUBLIC_CLERK_SIGN_UP_URL}
+          signInFallbackRedirectUrl={
+            env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL
+          }
+          signUpFallbackRedirectUrl={
+            env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL
+          }
+        >
+          <NextIntlClientProvider messages={messages}>
+            <ThemeProvider>{children}</ThemeProvider>
+          </NextIntlClientProvider>
+        </ClerkProvider>
 
         {siteConfig.analytics.google && (
           <GoogleAnalytics gaId={siteConfig.analytics.google} />

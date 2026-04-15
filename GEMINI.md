@@ -58,7 +58,7 @@ This project is a high-performance, production-ready template utilizing the Next
   - `src/components/common/`: Shared, high-level components.
   - `src/components/sections/`: Landing page sections (e.g., Hero, Features). Use **camelCase** for filenames.
   - `src/app/`: Routes, layouts, and global styles.
-- **SECURITY:** Maintain strict Content Security Policy (CSP) and security headers in `next.config.mjs`. Use `pnpm lint:secrets` to scan for credentials.
+- **SECURITY:** Use `pnpm lint:secrets` to scan for credentials.
 - **PERFORMANCE:** Use `pnpm analyze` to monitor bundle sizes and maintain edge runtime for dynamic routes where possible.
 - **MAINTENANCE:** Before adding any new library, validate its impact via `pnpm analyze`. Favor native Web APIs over third-party packages.
 - **TESTING:** 

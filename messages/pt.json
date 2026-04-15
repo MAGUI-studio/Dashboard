@@ -33,5 +33,20 @@
       "description": "Ocorreu um erro inesperado.",
       "button": "Tentar novamente"
     }
+  },
+  "Auth": {
+    "signIn": {
+      "eyebrow": "Dashboard v1.0",
+      "title": "Acesso ao",
+      "subtitle": "Sistema"
+    },
+    "signUp": {
+      "eyebrow": "Join the Studio",
+      "title": "Criação de",
+      "subtitle": "Conta"
+    },
+    "footer": {
+      "copyright": "MAGUI.studio • Digital Authority System"
+    }
   }
 }
