@@ -1,6 +1,7 @@
 import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
+import { redirect } from "next/navigation"
 
 import { Link } from "@/src/i18n/navigation"
 import { clerkClient } from "@clerk/nextjs/server"
@@ -16,7 +17,14 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 
+import { isAdmin } from "@/src/lib/permissions"
+
 export default async function ClientsPage(): Promise<React.JSX.Element> {
+  // Defense-in-depth: Secure server-side role check
+  if (!(await isAdmin())) {
+    redirect("/")
+  }
+
   const t = await getTranslations("Admin.clients")
   const client = await clerkClient()
   const { data: users } = await client.users.getUserList({

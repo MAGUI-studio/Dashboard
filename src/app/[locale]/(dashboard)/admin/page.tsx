@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 import Link from "next/link"
+import { redirect } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 
@@ -9,7 +10,14 @@ import { Button } from "@/src/components/ui/button"
 
 import { Logo } from "@/src/components/common/logo"
 
+import { isAdmin } from "@/src/lib/permissions"
+
 export default async function AdminPage(): Promise<React.JSX.Element> {
+  // Defense-in-depth: Secure server-side role check
+  if (!(await isAdmin())) {
+    redirect("/")
+  }
+
   const t = await getTranslations("Admin")
   const { sessionClaims } = await auth()
 

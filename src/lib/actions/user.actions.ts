@@ -3,8 +3,10 @@
 import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
-import { auth, clerkClient } from "@clerk/nextjs/server"
+import { clerkClient } from "@clerk/nextjs/server"
 import { z } from "zod"
+
+import { protect } from "@/src/lib/permissions"
 
 const createUserSchema = z.object({
   email: z.string().email(),
@@ -17,11 +19,9 @@ const createUserSchema = z.object({
 
 export async function createClientAction(formData: FormData) {
   const t = await getTranslations("Admin.clients.form.errors")
-  const { sessionClaims } = await auth()
 
-  if (sessionClaims?.metadata?.role !== "admin") {
-    throw new Error("Unauthorized")
-  }
+  // Server-side role protection (Secure)
+  await protect("admin")
 
   const validatedFields = createUserSchema.safeParse({
     email: formData.get("email"),

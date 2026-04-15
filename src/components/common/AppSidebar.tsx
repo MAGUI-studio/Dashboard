@@ -48,14 +48,17 @@ import {
 } from "@/src/components/ui/sidebar"
 import { Skeleton } from "@/src/components/ui/skeleton"
 
+import { AdminOnly } from "@/src/components/common/can"
 import { Logo } from "@/src/components/common/logo"
 
+import { usePermissions } from "@/src/hooks/use-permissions"
+
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isLoaded } = useUser()
+  const { user } = useUser()
+  const { isLoaded, isAdmin } = usePermissions()
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
   const { setOpenMobile } = useSidebar()
-  const isAdmin = user?.publicMetadata?.role === "admin"
 
   // Close mobile sidebar on navigation
   React.useEffect(() => {
@@ -94,16 +97,16 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 </SidebarMenuButton>
               </SidebarMenuItem>
 
-              {!isLoaded && (
-                <SidebarMenuItem>
-                  <SidebarMenuButton disabled>
-                    <Skeleton className="size-4 shrink-0" />
-                    <Skeleton className="h-4 w-24" />
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )}
-
-              {isLoaded && isAdmin && (
+              <AdminOnly
+                loadingFallback={
+                  <SidebarMenuItem>
+                    <SidebarMenuButton disabled>
+                      <Skeleton className="size-4 shrink-0" />
+                      <Skeleton className="h-4 w-24" />
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                }
+              >
                 <Collapsible
                   asChild
                   defaultOpen={pathname.toString().startsWith("/admin/clients")}
@@ -148,7 +151,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                     </CollapsibleContent>
                   </SidebarMenuItem>
                 </Collapsible>
-              )}
+              </AdminOnly>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
