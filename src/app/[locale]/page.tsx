@@ -8,20 +8,6 @@ export default function Page(): React.JSX.Element {
   return (
     <main className="flex min-h-svh flex-col items-center justify-center gap-8">
       <div className="flex items-center gap-4">
-        <Show when="signed-out">
-          <Link
-            href="/sign-in"
-            className="rounded-full bg-brand-primary px-6 py-2 text-xs font-black uppercase tracking-widest text-white transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-          >
-            Sign In
-          </Link>
-          <Link
-            href="/sign-up"
-            className="rounded-full border border-brand-primary px-6 py-2 text-xs font-black uppercase tracking-widest text-brand-primary transition-transform hover:scale-105 active:scale-95 cursor-pointer"
-          >
-            Sign Up
-          </Link>
-        </Show>
         <Show when="signed-in">
           <div className="flex flex-col items-center gap-4">
             <p className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary sm:text-[11px]">

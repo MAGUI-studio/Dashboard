@@ -82,10 +82,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function RootLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode
+  params: { locale: string }
 }>): Promise<React.JSX.Element> {
-  const locale = await getLocale()
+  const { locale } = await params
   const messages = await getMessages()
   const t = await getTranslations("Config")
 

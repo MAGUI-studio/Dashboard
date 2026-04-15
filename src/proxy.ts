@@ -12,12 +12,11 @@ const intlMiddleware = createMiddleware({
 })
 
 const isPublicRoute = createRouteMatcher([
-  "/",
   "/sign-in(.*)",
   "/sign-up(.*)",
-  "/(pt|en)",
   "/(pt|en)/sign-in(.*)",
   "/(pt|en)/sign-up(.*)",
+  "/api/og(.*)",
 ])
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)", "/(pt|en)/admin(.*)"])
