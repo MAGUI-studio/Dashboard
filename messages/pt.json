@@ -48,5 +48,10 @@
     "footer": {
       "copyright": "MAGUI.studio • Digital Authority System"
     }
+  },
+  "Admin": {
+    "eyebrow": "Controle Interno",
+    "title": "Painel",
+    "subtitle": "Admin"
   }
 }
