@@ -26,7 +26,6 @@ export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req)) {
     const { sessionClaims } = await auth.protect()
 
-    // If it's an admin route, check for admin role
     if (isAdminRoute(req) && sessionClaims?.metadata?.role !== "admin") {
       const url = new URL("/", req.url)
       return NextResponse.redirect(url)
@@ -38,9 +37,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files
     "/((?!_next/static|_next/image|favicon.ico|apple-touch-icon.png|favicon-16x16.png|favicon-32x32.png|site.webmanifest|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)).*)",
-    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 }

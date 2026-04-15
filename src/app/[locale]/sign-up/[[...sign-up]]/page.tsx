@@ -33,7 +33,6 @@ const VARIANTS_FADE_IN_UP: Variants = {
 export default function SignUpPage(): React.JSX.Element {
   return (
     <main className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-x-hidden bg-background lg:flex-row">
-      {/* Controls Overlay - Positioned more elegantly */}
       <motion.div
         initial="hidden"
         animate="visible"
@@ -47,7 +46,6 @@ export default function SignUpPage(): React.JSX.Element {
         </div>
       </motion.div>
 
-      {/* Background Section (Desktop: Clipped Image | Mobile: Full Background) */}
       <section className="absolute inset-0 z-0 h-full w-full">
         <motion.div
           initial={{ opacity: 0, scale: 1.1 }}
@@ -62,20 +60,15 @@ export default function SignUpPage(): React.JSX.Element {
             priority
             className="object-cover grayscale-[0.3] brightness-[0.4] transition-all duration-700 hover:scale-105 lg:brightness-105 lg:grayscale-[0.1]"
           />
-          {/* Enhanced overlay with gradient for better text legibility on mobile */}
           <div className="absolute inset-0 bg-gradient-to-tr from-brand-primary/30 via-transparent to-transparent brightness-90 lg:from-brand-primary/10" />
         </motion.div>
 
-        {/* Mobile Overlay (Darker and Solid) */}
         <div className="absolute inset-0 z-10 bg-black/70 lg:hidden" />
       </section>
 
-      {/* Auth Content Wrapper */}
       <div className="relative z-30 flex min-h-svh w-full flex-col lg:flex-row">
-        {/* Spacer for Desktop Image Area */}
         <div className="hidden lg:flex lg:w-3/5" />
 
-        {/* Auth Section - Solid Background */}
         <motion.section
           initial="hidden"
           animate="visible"
@@ -117,7 +110,6 @@ export default function SignUpPage(): React.JSX.Element {
                   identityPreviewText: "font-sans font-bold text-foreground",
                   footerActionText:
                     "text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60",
-                  // Layout overrides
                   navbar: "bg-background",
                   scrollBox: "bg-background shadow-none",
                   alert:
@@ -128,7 +120,6 @@ export default function SignUpPage(): React.JSX.Element {
               }}
             />
 
-            {/* Footer Detail */}
             <div className="mt-16 border-t border-border/40 pt-8 w-full">
               <p className="text-[9px] font-bold uppercase tracking-[0.45em] text-muted-foreground/40 text-center lg:text-left">
                 © MAGUI.studio • Digital Authority System
