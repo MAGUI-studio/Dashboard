@@ -1,6 +1,6 @@
-# Landing Page Template - Development Manual
+# Template - Development Manual
 
-This project is a high-performance, production-ready Landing Page template utilizing the Next.js App Router (v16+), React 19, and Tailwind CSS v4. Adhere strictly to these mandates.
+This project is a high-performance, production-ready template utilizing the Next.js App Router (v16+), React 19, and Tailwind CSS v4. Adhere strictly to these mandates.
 
 ## Core Mandates
 

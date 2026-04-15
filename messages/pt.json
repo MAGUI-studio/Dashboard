@@ -1,12 +1,13 @@
 {
   "Index": {
-    "title": "Projeto pronto!",
-    "description": "Você já pode adicionar componentes e começar a construir.",
-    "button": "Botão",
-    "added_component": "Já adicionamos o componente de botão para você."
+    "title": "MAGUI.studio",
+    "description": "Estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
+    "hero_tag": "Design e tecnologia em total sincronia.",
+    "cta_primary": "Ver Projetos",
+    "cta_secondary": "Entrar em Contato"
   },
   "Locale": {
-    "en": "Inglês",
+    "en": "English",
     "pt": "Português"
   },
   "LanguageSwitcher": {
@@ -17,14 +18,9 @@
     "dark": "Escuro"
   },
   "Config": {
-    "name": "Template de Landing Page",
-    "description": "Um template profissional de landing page construído com Next.js, Tailwind CSS e shadcn/ui.",
-    "keywords": "Next.js, React, Tailwind CSS, Server Components, Landing Page, Template"
-  },
-  "CookieConsent": {
-    "message": "Usamos cookies para melhorar sua experiência em nosso site.",
-    "accept": "Aceitar",
-    "decline": "Recusar"
+    "name": "MAGUI.studio",
+    "description": "Estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
+    "keywords": "Design, Tecnologia, Frontend, UI/UX, Engenharia Visual, Performance, Core Web Vitals"
   },
   "Errors": {
     "not_found": {

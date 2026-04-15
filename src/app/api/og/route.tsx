@@ -18,10 +18,10 @@ export async function GET(req: Request): Promise<ImageResponse> {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#09090b",
+        backgroundColor: "#141414",
         backgroundImage:
-          "radial-gradient(circle at 25px 25px, #18181b 2%, transparent 0%), radial-gradient(circle at 75px 75px, #18181b 2%, transparent 0%)",
-        backgroundSize: "100px 100px",
+          "radial-gradient(circle at 2px 2px, #333 1px, transparent 0%)",
+        backgroundSize: "48px 48px",
       }}
     >
       <div
@@ -36,32 +36,35 @@ export async function GET(req: Request): Promise<ImageResponse> {
       >
         <div
           style={{
-            fontSize: "32px",
-            fontWeight: "bold",
-            color: "#6366f1",
-            marginBottom: "20px",
+            fontSize: "24px",
+            fontWeight: "900",
+            color: "#0093C8",
+            marginBottom: "40px",
             textTransform: "uppercase",
-            letterSpacing: "0.2em",
+            letterSpacing: "0.5em",
           }}
         >
           {siteConfig.shortName}
         </div>
         <h1
           style={{
-            fontSize: "80px",
-            fontWeight: "bold",
-            color: "white",
-            marginBottom: "30px",
-            lineHeight: 1.1,
+            fontSize: "96px",
+            fontWeight: "900",
+            color: "#F2F2F2",
+            marginBottom: "20px",
+            lineHeight: 0.8,
+            textTransform: "uppercase",
+            letterSpacing: "-0.05em",
           }}
         >
           {title}
         </h1>
         <p
           style={{
-            fontSize: "32px",
-            color: "#a1a1aa",
-            maxWidth: "800px",
+            fontSize: "36px",
+            color: "#CFCFCF",
+            maxWidth: "900px",
+            lineHeight: 1.4,
           }}
         >
           {description}
@@ -74,11 +77,14 @@ export async function GET(req: Request): Promise<ImageResponse> {
           bottom: "60px",
           display: "flex",
           alignItems: "center",
-          color: "#71717a",
-          fontSize: "24px",
+          color: "#333",
+          fontSize: "20px",
+          fontWeight: "900",
+          textTransform: "uppercase",
+          letterSpacing: "0.3em",
         }}
       >
-        {siteConfig.url}
+        {siteConfig.url.replace("https://", "")}
       </div>
     </div>,
     {

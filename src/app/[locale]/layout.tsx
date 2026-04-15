@@ -1,11 +1,9 @@
 import { Metadata, Viewport } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getLocale, getMessages, getTranslations } from "next-intl/server"
-import { cookies } from "next/headers"
 
 import { GoogleAnalytics } from "@next/third-parties/google"
 
-import { CookieConsent } from "@/src/components/common/cookieConsent"
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
 import { cn } from "@/src/lib/utils/utils"
@@ -85,8 +83,6 @@ export default async function RootLayout({
   const locale = await getLocale()
   const messages = await getMessages()
   const t = await getTranslations("Config")
-  const cookieStore = await cookies()
-  const consent = cookieStore.get("cookie-consent")?.value
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -110,13 +106,10 @@ export default async function RootLayout({
       </head>
       <body className="mx-auto w-full max-w-440">
         <NextIntlClientProvider messages={messages}>
-          <ThemeProvider>
-            {children}
-            <CookieConsent />
-          </ThemeProvider>
+          <ThemeProvider>{children}</ThemeProvider>
         </NextIntlClientProvider>
 
-        {siteConfig.analytics.google && consent === "accepted" && (
+        {siteConfig.analytics.google && (
           <GoogleAnalytics gaId={siteConfig.analytics.google} />
         )}
       </body>

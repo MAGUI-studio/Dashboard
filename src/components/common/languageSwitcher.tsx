@@ -85,7 +85,7 @@ export function LanguageSwitcher(): React.JSX.Element {
             key={loc}
             onClick={() => handleLocaleChange(loc)}
             className={cn(
-              "group mb-0.5 flex cursor-pointer items-center justify-between rounded-xl px-2.5 py-2 text-sm transition-all last:mb-0",
+              "group mb-0.5 flex cursor-pointer items-center justify-between rounded-2xl px-2.5 py-2 text-sm transition-all last:mb-0",
               currentLocale === loc
                 ? "bg-muted font-medium text-foreground"
                 : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
