@@ -18,23 +18,29 @@ export function formatCurrencyBRL(value: string | number): string {
 export function formatLocalTime(date: Date, timezone: string): string {
   try {
     const tz = timezone || "America/Sao_Paulo"
-    const formatter = new Intl.DateTimeFormat("pt-BR", {
+
+    // Formatter para as partes da data/hora
+    const parts = new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       timeZone: tz,
-    })
+      timeZoneName: "shortOffset",
+    }).formatToParts(date)
 
-    const formatted = formatter.format(date)
+    const getPart = (type: string) =>
+      parts.find((p) => p.type === type)?.value || ""
 
-    // Friendly timezone display
-    const friendlyTz = tz.includes("/")
-      ? tz.split("/").pop()?.replace(/_/g, " ")
-      : tz
+    const day = getPart("day")
+    const month = getPart("month")
+    const year = getPart("year")
+    const hour = getPart("hour")
+    const minute = getPart("minute")
+    const gmt = getPart("timeZoneName") // Retorna "GMT-3", "GMT+1", etc.
 
-    return `${formatted} (${friendlyTz})`
+    return `${day}/${month}/${year}, ${hour}:${minute} (${gmt})`
   } catch (error) {
     console.error("Format error for timezone:", timezone, error)
     return new Intl.DateTimeFormat("pt-BR", {
