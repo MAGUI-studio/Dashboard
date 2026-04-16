@@ -199,6 +199,11 @@
   },
   "Dashboard": {
     "eyebrow": "Painel do Cliente",
+    "admin_eyebrow": "Protocolo de Monitoramento",
+    "admin_title": "Visão Geral do Estúdio",
+    "global_timeline_title": "Timeline Global de Evolução",
+    "active_projects_count": "{count} projetos em execução",
+    "project_name_label": "Projeto",
     "no_project": "Nenhum projeto ativo encontrado.",
     "status": {
       "title": "Status do Protocolo",

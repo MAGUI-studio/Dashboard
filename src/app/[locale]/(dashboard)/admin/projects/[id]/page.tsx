@@ -77,7 +77,15 @@ export default async function AdminProjectDetailPage({
                   <div className="absolute -left-[9px] top-0 size-4 rounded-full border-2 border-background bg-muted-foreground/40" />
                   <div className="flex flex-col gap-2">
                     <span className="text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
-                      {new Date(update.createdAt).toLocaleDateString()}
+                      {new Intl.DateTimeFormat("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZone: "America/Sao_Paulo",
+                      }).format(new Date(update.createdAt))}{" "}
+                      BRT
                     </span>
                     <h4 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
                       {update.title}

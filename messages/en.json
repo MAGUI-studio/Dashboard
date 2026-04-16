@@ -199,6 +199,11 @@
   },
   "Dashboard": {
     "eyebrow": "Client Dashboard",
+    "admin_eyebrow": "Monitoring Protocol",
+    "admin_title": "Studio Overview",
+    "global_timeline_title": "Global Evolution Timeline",
+    "active_projects_count": "{count} active projects",
+    "project_name_label": "Project",
     "no_project": "No active projects found.",
     "status": {
       "title": "Protocol Status",
