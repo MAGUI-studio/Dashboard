@@ -174,6 +174,7 @@ export async function createProjectAssetAction(data: {
   url: string
   key: string
   type: AssetType
+  timezone?: string
 }) {
   try {
     await protect("admin")
@@ -182,6 +183,14 @@ export async function createProjectAssetAction(data: {
   }
 
   try {
+    // Get current max order to append at the end
+    const lastAsset = await prisma.asset.findFirst({
+      where: { projectId: data.projectId },
+      orderBy: { order: "desc" },
+    })
+
+    const nextOrder = lastAsset ? lastAsset.order + 1 : 0
+
     await prisma.asset.create({
       data: {
         projectId: data.projectId,
@@ -189,14 +198,45 @@ export async function createProjectAssetAction(data: {
         url: data.url,
         key: data.key,
         type: data.type,
+        timezone: data.timezone || "America/Sao_Paulo",
+        order: nextOrder,
       },
     })
 
     revalidatePath(`/admin/projects/${data.projectId}`)
+    revalidatePath(`/admin/projects/${data.projectId}/assets`)
     return { success: true }
   } catch (error) {
     console.error("Create Asset Error:", error)
     return { error: "Erro ao registrar arquivo" }
+  }
+}
+
+export async function updateProjectAssetsOrderAction(
+  projectId: string,
+  assetIds: string[]
+) {
+  try {
+    await protect("admin")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  try {
+    await prisma.$transaction(
+      assetIds.map((id, index) =>
+        prisma.asset.update({
+          where: { id },
+          data: { order: index },
+        })
+      )
+    )
+
+    revalidatePath(`/admin/projects/${projectId}/assets`)
+    return { success: true }
+  } catch (error) {
+    console.error("Update Assets Order Error:", error)
+    return { error: "Erro ao atualizar ordem dos arquivos" }
   }
 }
 
@@ -213,6 +253,7 @@ export async function deleteProjectAssetAction(id: string, projectId: string) {
     })
 
     revalidatePath(`/admin/projects/${projectId}`)
+    revalidatePath(`/admin/projects/${projectId}/assets`)
     return { success: true }
   } catch (error) {
     console.error("Delete Asset Error:", error)

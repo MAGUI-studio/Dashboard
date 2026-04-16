@@ -31,7 +31,7 @@ export default async function ProjectAssetsPage({
     where: { id },
     include: {
       assets: {
-        orderBy: { createdAt: "desc" },
+        orderBy: { order: "asc" },
       },
     },
   })

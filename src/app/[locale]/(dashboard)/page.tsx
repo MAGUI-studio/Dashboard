@@ -177,7 +177,7 @@ export default async function DashboardPage({
             orderBy: { createdAt: "desc" },
           },
           assets: {
-            orderBy: { createdAt: "desc" },
+            orderBy: { order: "asc" },
           },
         },
         orderBy: { updatedAt: "desc" },

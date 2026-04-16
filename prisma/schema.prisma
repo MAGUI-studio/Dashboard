@@ -79,6 +79,8 @@ model Asset {
   url  String // URL vinda do UploadThing
   key  String // Key do UploadThing para deleção futura
   type AssetType @default(DOCUMENT)
+  order Int       @default(0) // Ordem de exibição
+  timezone String  @default("UTC") // Fuso horário do upload
 
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)

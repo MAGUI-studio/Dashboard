@@ -5,6 +5,25 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import {
+  DndContext,
+  DragEndEvent,
+  KeyboardSensor,
+  PointerSensor,
+  closestCenter,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core"
+import {
+  SortableContext,
+  arrayMove,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable"
+import { CSS } from "@dnd-kit/utilities"
+import {
+  Clock,
+  DotsSixVertical,
   File,
   FilePdf,
   Image as ImageIcon,
@@ -27,25 +46,133 @@ import {
 import {
   createProjectAssetAction,
   deleteProjectAssetAction,
+  updateProjectAssetsOrderAction,
 } from "@/src/lib/actions/project.actions"
 import { useUploadThing } from "@/src/lib/uploadthing"
-import { cn } from "@/src/lib/utils/utils"
+import { formatLocalTime } from "@/src/lib/utils/utils"
+
+interface Asset {
+  id: string
+  name: string
+  url: string
+  type: string
+  order: number
+  timezone: string
+  createdAt: Date
+}
 
 interface AssetManagementProps {
   projectId: string
-  assets: Array<{
-    id: string
-    name: string
-    url: string
-    type: string
-  }>
+  assets: Asset[]
 }
 
-export function AssetManagement({ projectId, assets }: AssetManagementProps) {
+function SortableAssetItem({
+  asset,
+  onDelete,
+  isDeleting,
+}: {
+  asset: Asset
+  onDelete: (id: string) => void
+  isDeleting: boolean
+}) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id: asset.id })
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 1,
+  }
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className={React.useMemo(
+        () =>
+          `group relative flex flex-col gap-4 rounded-2xl border border-border/40 bg-background/50 p-5 transition-all hover:border-brand-primary/20 hover:bg-muted/5 ${isDragging ? "opacity-50 border-brand-primary shadow-2xl" : ""}`,
+        [isDragging]
+      )}
+    >
+      <div className="flex items-center gap-4">
+        <div
+          {...attributes}
+          {...listeners}
+          className="cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-brand-primary"
+        >
+          <DotsSixVertical weight="bold" className="size-5" />
+        </div>
+        <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+          <File weight="duotone" className="size-5" />
+        </div>
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <span className="truncate text-[11px] font-bold uppercase tracking-tight text-foreground">
+            {asset.name}
+          </span>
+          <div className="flex items-center gap-2">
+            <span className="text-[9px] font-medium text-muted-foreground/60 uppercase tracking-widest">
+              {asset.type}
+            </span>
+            <div className="flex items-center gap-1 text-[9px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
+              <Clock weight="bold" className="size-2.5" />
+              <span>
+                {formatLocalTime(new Date(asset.createdAt), asset.timezone)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between gap-3">
+        <a
+          href={asset.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[9px] font-black uppercase tracking-widest text-brand-primary hover:underline"
+        >
+          Visualizar
+        </a>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="size-8 rounded-lg text-destructive hover:bg-destructive/10"
+          onClick={() => onDelete(asset.id)}
+          disabled={isDeleting}
+        >
+          <Trash weight="bold" className="size-4" />
+        </Button>
+      </div>
+    </div>
+  )
+}
+
+export function AssetManagement({
+  projectId,
+  assets: initialAssets,
+}: AssetManagementProps) {
   const t = useTranslations("Admin.projects.details")
+  const [assets, setAssets] = React.useState(initialAssets)
   const [isDeleting, setIsDeleting] = React.useState<string | null>(null)
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([])
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
+
+  // Update local state when props change
+  React.useEffect(() => {
+    setAssets(initialAssets)
+  }, [initialAssets])
+
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  )
 
   const { startUpload, isUploading } = useUploadThing("projectAsset", {
     onClientUploadComplete: async (res) => {
@@ -56,7 +183,8 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
             name: file.name,
             url: file.url,
             key: file.key,
-            type: "DOCUMENT", // Could be dynamic based on extension
+            type: "DOCUMENT",
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           })
         }
         setSelectedFiles([])
@@ -79,6 +207,24 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
     setIsDeleting(null)
   }
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event
+
+    if (over && active.id !== over.id) {
+      const oldIndex = assets.findIndex((item) => item.id === active.id)
+      const newIndex = assets.findIndex((item) => item.id === over.id)
+
+      const newAssets = arrayMove(assets, oldIndex, newIndex)
+      setAssets(newAssets)
+
+      // Save new order to database
+      await updateProjectAssetsOrderAction(
+        projectId,
+        newAssets.map((a) => a.id)
+      )
+    }
+  }
+
   const removeSelectedFile = (index: number) => {
     const newFiles = [...selectedFiles]
     newFiles.splice(index, 1)
@@ -90,56 +236,35 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="flex flex-col gap-4">
-        {assets.length === 0 ? (
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
-            {t("no_assets")}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {assets.map((asset) => (
-              <div
-                key={asset.id}
-                className="group relative flex flex-col gap-4 rounded-2xl border border-border/40 bg-background/50 p-5 transition-all hover:border-brand-primary/20 hover:bg-muted/5"
-              >
-                <div className="flex items-center gap-4">
-                  <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-                    <File weight="duotone" className="size-5" />
-                  </div>
-                  <div className="flex flex-1 flex-col overflow-hidden">
-                    <span className="truncate text-[11px] font-bold uppercase tracking-tight text-foreground">
-                      {asset.name}
-                    </span>
-                    <span className="text-[9px] font-medium text-muted-foreground/60 uppercase tracking-widest">
-                      {asset.type}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between gap-3">
-                  <a
-                    href={asset.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[9px] font-black uppercase tracking-widest text-brand-primary hover:underline"
-                  >
-                    Visualizar
-                  </a>
-                  <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8 rounded-lg text-destructive hover:bg-destructive/10"
-                    onClick={() => handleDelete(asset.id)}
-                    disabled={isDeleting === asset.id}
-                  >
-                    <Trash weight="bold" className="size-4" />
-                  </Button>
-                </div>
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="flex flex-col gap-4">
+          {assets.length === 0 ? (
+            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
+              {t("no_assets")}
+            </p>
+          ) : (
+            <SortableContext
+              items={assets.map((a) => a.id)}
+              strategy={verticalListSortingStrategy}
+            >
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {assets.map((asset) => (
+                  <SortableAssetItem
+                    key={asset.id}
+                    asset={asset}
+                    onDelete={handleDelete}
+                    isDeleting={isDeleting === asset.id}
+                  />
+                ))}
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </SortableContext>
+          )}
+        </div>
+      </DndContext>
 
       <div className="flex flex-col gap-4">
         <div className="relative">
@@ -199,7 +324,9 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
                       {file.name}
                     </span>
                     <span className="text-[10px] font-medium text-muted-foreground/60">
-                      {(file.size / 1024 / 1024).toFixed(2)} MB
+                      {file.size < 1024 * 1024
+                        ? `${(file.size / 1024).toFixed(2)} KB`
+                        : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
                     </span>
                   </div>
                 </div>
