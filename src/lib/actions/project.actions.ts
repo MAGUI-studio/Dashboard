@@ -58,6 +58,7 @@ export async function createProjectAction(formData: FormData) {
           description: "Fase de Estratégia iniciada com sucesso.",
           projectId: project.id,
           isMilestone: true,
+          timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
         },
       })
     })
@@ -118,13 +119,15 @@ export async function addProjectTimelineAction(formData: FormData) {
     title: formData.get("title"),
     description: formData.get("description"),
     isMilestone: formData.get("isMilestone") === "true",
+    timezone: formData.get("timezone"),
   })
 
   if (!validatedFields.success) {
     return { error: "Dados inválidos" }
   }
 
-  const { projectId, title, description, isMilestone } = validatedFields.data
+  const { projectId, title, description, isMilestone, timezone } =
+    validatedFields.data
 
   try {
     await prisma.update.create({
@@ -133,6 +136,7 @@ export async function addProjectTimelineAction(formData: FormData) {
         title,
         description,
         isMilestone,
+        timezone,
       },
     })
 

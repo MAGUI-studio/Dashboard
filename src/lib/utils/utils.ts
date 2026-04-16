@@ -14,3 +14,35 @@ export function formatCurrencyBRL(value: string | number): string {
     currency: "BRL",
   }).format(amount)
 }
+
+export function formatLocalTime(date: Date, timezone: string): string {
+  try {
+    const formatter = new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      timeZone: timezone,
+    })
+
+    const formatted = formatter.format(date)
+
+    // Friendly timezone display
+    // America/Sao_Paulo -> Sao Paulo
+    const friendlyTz = timezone.includes("/")
+      ? timezone.split("/").pop()?.replace(/_/g, " ")
+      : timezone
+
+    return `${formatted} (${friendlyTz})`
+  } catch (error) {
+    console.error("Format error for timezone:", timezone, error)
+    return new Intl.DateTimeFormat("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    }).format(date)
+  }
+}

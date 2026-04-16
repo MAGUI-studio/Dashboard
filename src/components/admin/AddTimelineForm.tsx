@@ -27,6 +27,7 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
     setIsPending(true)
     const formData = new FormData(e.currentTarget)
     formData.set("projectId", projectId)
+    formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
 
     const isMilestone = (
       e.currentTarget.elements.namedItem("isMilestone") as HTMLInputElement

@@ -65,6 +65,7 @@ model Update {
   title       String // Ex: "Design da Home Finalizado"
   description String? @db.Text
   isMilestone Boolean @default(false) // Se marcar como true, pode ter um destaque visual na UI
+  timezone    String  @default("UTC") // Fuso horário do momento do registro
 
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)

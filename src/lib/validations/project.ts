@@ -28,4 +28,5 @@ export const addProjectTimelineSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
   description: z.string().optional(),
   isMilestone: z.boolean().default(false),
+  timezone: z.string(),
 })

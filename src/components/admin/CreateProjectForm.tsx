@@ -75,6 +75,7 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
   const [state, formAction, isPending] = React.useActionState(
     async (_prevState: unknown, formData: FormData) => {
       formData.set("clientId", selectedClientId)
+      formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
       if (date) {
         formData.set("deadline", date.toISOString())
       }

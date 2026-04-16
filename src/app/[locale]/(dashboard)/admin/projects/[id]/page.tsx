@@ -12,6 +12,7 @@ import { UpdateStatusForm } from "@/src/components/admin/UpdateStatusForm"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { formatLocalTime } from "@/src/lib/utils/utils"
 
 interface ProjectPageProps {
   params: Promise<{ id: string; locale: string }>
@@ -81,15 +82,10 @@ export default async function AdminProjectDetailPage({
                     <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
                       <Clock weight="bold" className="size-3" />
                       <span>
-                        {new Intl.DateTimeFormat("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: "America/Sao_Paulo",
-                        }).format(new Date(update.createdAt))}{" "}
-                        (GMT-3)
+                        {formatLocalTime(
+                          new Date(update.createdAt),
+                          update.timezone
+                        )}
                       </span>
                     </div>
                     <h4 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">

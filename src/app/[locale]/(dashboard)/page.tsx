@@ -13,7 +13,7 @@ import {
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 
 import prisma from "@/src/lib/prisma"
-import { cn } from "@/src/lib/utils/utils"
+import { cn, formatLocalTime } from "@/src/lib/utils/utils"
 
 export default async function DashboardPage({
   searchParams,
@@ -96,15 +96,10 @@ export default async function DashboardPage({
                         <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
                           <Clock weight="bold" className="size-3" />
                           <span>
-                            {new Intl.DateTimeFormat("pt-BR", {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              timeZone: "America/Sao_Paulo",
-                            }).format(new Date(update.createdAt))}{" "}
-                            (GMT-3)
+                            {formatLocalTime(
+                              new Date(update.createdAt),
+                              update.timezone
+                            )}
                           </span>
                         </div>
                         <span className="rounded-lg bg-muted/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 border border-border/20">
@@ -334,15 +329,10 @@ export default async function DashboardPage({
                       <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
                         <Clock weight="bold" className="size-3" />
                         <span>
-                          {new Intl.DateTimeFormat("pt-BR", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            timeZone: "America/Sao_Paulo",
-                          }).format(new Date(update.createdAt))}{" "}
-                          (GMT-3)
+                          {formatLocalTime(
+                            new Date(update.createdAt),
+                            update.timezone
+                          )}
                         </span>
                       </div>
                       {update.isMilestone && (
