@@ -139,6 +139,22 @@
         "errors": {
           "validation_failed": "Invalid form data.",
           "general": "Error creating project."
+        },
+        "details": {
+          "management_title": "Status and Engineering Control",
+          "timeline_title": "Evolution Timeline",
+          "client_card_title": "Owner Information",
+          "assets_title": "Assets Repository",
+          "update_status": "Update Status",
+          "add_timeline": "New Timeline Event",
+          "status_label": "Current Protocol Phase",
+          "progress_label": "Execution Progress",
+          "timeline_form": {
+            "title": "Milestone Title",
+            "description": "Detailed description (optional)",
+            "is_milestone": "Mark as important milestone",
+            "submit": "Record Evolution"
+          }
         }
       }
     }
