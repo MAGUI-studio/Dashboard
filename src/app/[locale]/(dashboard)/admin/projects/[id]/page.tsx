@@ -6,7 +6,7 @@ import { notFound, redirect } from "next/navigation"
 import { Clock } from "@phosphor-icons/react/dist/ssr"
 
 import { AddTimelineForm } from "@/src/components/admin/AddTimelineForm"
-import { AssetManagement } from "@/src/components/admin/AssetManagement"
+import { DangerZone } from "@/src/components/admin/DangerZone"
 import { ProjectDetailsHeader } from "@/src/components/admin/ProjectDetailsHeader"
 import { UpdateStatusForm } from "@/src/components/admin/UpdateStatusForm"
 
@@ -128,16 +128,10 @@ export default async function AdminProjectDetailPage({
               </div>
             </div>
           </section>
-
-          {/* Assets Management */}
-          <section className="rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm">
-            <h3 className="mb-6 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              {t("assets_title")}
-            </h3>
-            <AssetManagement projectId={project.id} assets={project.assets} />
-          </section>
         </div>
       </div>
+
+      <DangerZone projectId={project.id} projectName={project.name} />
     </main>
   )
 }

@@ -5,25 +5,15 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
+import { Link } from "@/src/i18n/navigation"
 import {
   ArrowLeft,
   Calendar,
   CurrencyDollar,
-  Trash,
+  Files,
 } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/src/components/ui/dialog"
-
-import { deleteProjectAction } from "@/src/lib/actions/project.actions"
 
 interface ProjectDetailsHeaderProps {
   project: {
@@ -37,27 +27,15 @@ interface ProjectDetailsHeaderProps {
 export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
   const t = useTranslations("Admin.projects.details")
   const router = useRouter()
-  const [isDeleting, setIsDeleting] = React.useState(false)
-
-  const handleDelete = async () => {
-    setIsDeleting(true)
-    const result = await deleteProjectAction(project.id)
-    if (result.success) {
-      router.push("/admin/projects")
-    } else {
-      setIsDeleting(false)
-      // Could add a toast here
-    }
-  }
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col gap-6">
         <Button
           variant="ghost"
+          className="-ml-4 w-max gap-2 text-muted-foreground/60 hover:text-foreground"
           size="sm"
           onClick={() => router.back()}
-          className="w-max gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft weight="bold" className="size-3" />
           {t("back_button")}
@@ -88,44 +66,15 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
         </div>
       </div>
 
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button
-            variant="outline"
-            className="h-14 rounded-full border-destructive/20 px-8 font-sans font-black uppercase tracking-widest text-destructive hover:bg-destructive hover:text-white"
-          >
-            <Trash weight="duotone" className="mr-2 size-5" />
-            {t("delete_project")}
+      <div className="flex items-center gap-3">
+        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+        <Link href={`/admin/projects/${project.id}/assets` as any}>
+          <Button className="h-14 rounded-full px-8 font-sans font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20">
+            <Files weight="duotone" className="mr-2 size-5" />
+            {t("assets_manage_button")}
           </Button>
-        </DialogTrigger>
-        <DialogContent className="rounded-3xl border-border/40 bg-background/95 backdrop-blur-xl">
-          <DialogHeader>
-            <DialogTitle className="font-heading text-xl font-black uppercase tracking-tight">
-              {t("delete_confirm_title")}
-            </DialogTitle>
-            <DialogDescription className="text-sm font-medium text-muted-foreground">
-              {t("delete_confirm_desc")}
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter className="mt-6 flex gap-3">
-            <Button
-              variant="ghost"
-              className="rounded-full font-bold uppercase tracking-widest"
-              onClick={() => {}}
-            >
-              {t("cancel")}
-            </Button>
-            <Button
-              variant="destructive"
-              className="rounded-full font-black uppercase tracking-widest"
-              onClick={handleDelete}
-              disabled={isDeleting}
-            >
-              {isDeleting ? t("deleting") : t("confirm_delete")}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        </Link>
+      </div>
     </div>
   )
 }
