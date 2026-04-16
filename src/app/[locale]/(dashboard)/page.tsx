@@ -93,17 +93,20 @@ export default async function DashboardPage({
 
                     <div className="flex flex-col gap-2">
                       <div className="flex items-center gap-3 flex-wrap">
-                        <span className="text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
-                          {new Intl.DateTimeFormat("pt-BR", {
-                            day: "2-digit",
-                            month: "2-digit",
-                            year: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            timeZone: "America/Sao_Paulo",
-                          }).format(new Date(update.createdAt))}{" "}
-                          Horário de Brasília
-                        </span>
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
+                          <Clock weight="bold" className="size-3" />
+                          <span>
+                            {new Intl.DateTimeFormat("pt-BR", {
+                              day: "2-digit",
+                              month: "2-digit",
+                              year: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              timeZone: "America/Sao_Paulo",
+                            }).format(new Date(update.createdAt))}{" "}
+                            (GMT-3)
+                          </span>
+                        </div>
                         <span className="rounded-lg bg-muted/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 border border-border/20">
                           {t("project_name_label")}: {update.project.name}
                         </span>
@@ -328,17 +331,20 @@ export default async function DashboardPage({
 
                   <div className="flex flex-col gap-2">
                     <div className="flex items-center gap-3">
-                      <span className="text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
-                        {new Intl.DateTimeFormat("pt-BR", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: "America/Sao_Paulo",
-                        }).format(new Date(update.createdAt))}{" "}
-                        Horário de Brasília
-                      </span>
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
+                        <Clock weight="bold" className="size-3" />
+                        <span>
+                          {new Intl.DateTimeFormat("pt-BR", {
+                            day: "2-digit",
+                            month: "2-digit",
+                            year: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            timeZone: "America/Sao_Paulo",
+                          }).format(new Date(update.createdAt))}{" "}
+                          (GMT-3)
+                        </span>
+                      </div>
                       {update.isMilestone && (
                         <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-brand-primary">
                           {t("timeline.milestone")}
