@@ -51,7 +51,8 @@ export function LanguageSwitcher(): React.JSX.Element {
 
     // Use the localized router to replace the pathname with the new locale
     // This will correctly translate pathnames without prefixing
-    router.replace(pathname as AppPathnames, { locale: newLocale })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    router.replace(pathname as any, { locale: newLocale })
   }
 
   if (!mounted) {

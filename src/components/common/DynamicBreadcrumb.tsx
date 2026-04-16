@@ -72,7 +72,8 @@ export function DynamicBreadcrumb() {
                     asChild
                     className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 hover:text-brand-primary"
                   >
-                    <Link href={href}>{label}</Link>
+                    {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                    <Link href={href as any}>{label}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>

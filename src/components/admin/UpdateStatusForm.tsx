@@ -30,6 +30,7 @@ export function UpdateStatusForm({
   currentProgress,
 }: UpdateStatusFormProps) {
   const t = useTranslations("Admin.projects.details")
+  const tStatus = useTranslations("Dashboard.status")
   const [isPending, setIsPending] = React.useState(false)
   const [progress, setProgress] = React.useState(currentProgress)
   const [status, setStatus] = React.useState(currentStatus)
@@ -70,7 +71,7 @@ export function UpdateStatusForm({
                   value={s}
                   className="rounded-xl py-3 text-[10px] font-bold uppercase tracking-widest transition-colors focus:bg-brand-primary focus:text-white"
                 >
-                  {s}
+                  {tStatus(s as keyof typeof tStatus)}
                 </SelectItem>
               ))}
             </SelectContent>
