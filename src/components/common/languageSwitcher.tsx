@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useLocale, useTranslations } from "next-intl"
 
-import { locales } from "@/src/i18n/config"
+import { AppPathnames, locales } from "@/src/i18n/config"
 import { usePathname, useRouter } from "@/src/i18n/navigation"
 import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
@@ -51,7 +51,7 @@ export function LanguageSwitcher(): React.JSX.Element {
 
     // Use the localized router to replace the pathname with the new locale
     // This will correctly translate pathnames without prefixing
-    router.replace(pathname, { locale: newLocale })
+    router.replace(pathname as AppPathnames, { locale: newLocale })
   }
 
   if (!mounted) {

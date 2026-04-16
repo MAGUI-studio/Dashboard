@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { Link } from "@/src/i18n/navigation"
 import { MagnifyingGlass, ProjectorScreen } from "@phosphor-icons/react"
 
 import { Badge } from "@/src/components/ui/badge"
@@ -149,11 +150,19 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                   </TableCell>
                   <TableCell className="px-8 py-6 text-right">
                     <Button
+                      asChild
                       variant="ghost"
                       size="sm"
-                      className="rounded-full h-10 px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
+                      className="h-10 rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
                     >
-                      {commonT("inspect")}
+                      <Link
+                        href={{
+                          pathname: "/admin/projects/[id]",
+                          params: { id: project.id },
+                        }}
+                      >
+                        {commonT("inspect")}
+                      </Link>
                     </Button>
                   </TableCell>
                 </TableRow>

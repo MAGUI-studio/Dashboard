@@ -29,7 +29,7 @@ export function UpdateStatusForm({
   currentStatus,
   currentProgress,
 }: UpdateStatusFormProps) {
-  const t = useTranslations("Admin.projects.form.details")
+  const t = useTranslations("Admin.projects.details")
   const [isPending, setIsPending] = React.useState(false)
   const [progress, setProgress] = React.useState(currentProgress)
   const [status, setStatus] = React.useState(currentStatus)
@@ -103,7 +103,7 @@ export function UpdateStatusForm({
         {isPending ? (
           <div className="flex items-center gap-3">
             <Gear weight="bold" className="size-5 animate-spin" />
-            <span>Processando...</span>
+            <span>{t("submitting")}</span>
           </div>
         ) : (
           <div className="flex items-center gap-3">

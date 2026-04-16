@@ -103,15 +103,15 @@ export default async function AdminProjectDetailPage({
             <div className="flex flex-col gap-4">
               <div className="flex flex-col">
                 <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  Nome do Cliente
+                  {t("client_name_label")}
                 </span>
                 <span className="font-bold text-foreground">
-                  {project.client.name || "N/A"}
+                  {project.client.name || t("not_available")}
                 </span>
               </div>
               <div className="flex flex-col">
                 <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  E-mail de Contato
+                  {t("client_email_label")}
                 </span>
                 <span className="font-bold text-foreground">
                   {project.client.email}

@@ -35,7 +35,7 @@ interface ProjectDetailsHeaderProps {
 }
 
 export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
-  const t = useTranslations("Admin.projects")
+  const t = useTranslations("Admin.projects.details")
   const router = useRouter()
   const [isDeleting, setIsDeleting] = React.useState(false)
 
@@ -60,7 +60,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
           className="w-max gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft weight="bold" className="size-3" />
-          Voltar
+          {t("back_button")}
         </Button>
 
         <div className="flex flex-col gap-2">
@@ -73,7 +73,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
                 weight="duotone"
                 className="size-4 text-brand-primary"
               />
-              {project.budget || "Sem orçamento"}
+              {project.budget || t("no_budget")}
             </div>
             <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
               <Calendar
@@ -82,7 +82,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
               />
               {project.deadline
                 ? new Date(project.deadline).toLocaleDateString()
-                : "Sem prazo definido"}
+                : t("no_deadline")}
             </div>
           </div>
         </div>
@@ -95,17 +95,16 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
             className="h-14 rounded-full border-destructive/20 px-8 font-sans font-black uppercase tracking-widest text-destructive hover:bg-destructive hover:text-white"
           >
             <Trash weight="duotone" className="mr-2 size-5" />
-            Deletar Projeto
+            {t("delete_project")}
           </Button>
         </DialogTrigger>
         <DialogContent className="rounded-3xl border-border/40 bg-background/95 backdrop-blur-xl">
           <DialogHeader>
             <DialogTitle className="font-heading text-xl font-black uppercase tracking-tight">
-              Confirmar Exclusão
+              {t("delete_confirm_title")}
             </DialogTitle>
             <DialogDescription className="text-sm font-medium text-muted-foreground">
-              Esta ação é permanente e removerá todos os dados, timeline e
-              ativos vinculados a este projeto.
+              {t("delete_confirm_desc")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="mt-6 flex gap-3">
@@ -114,7 +113,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
               className="rounded-full font-bold uppercase tracking-widest"
               onClick={() => {}}
             >
-              Cancelar
+              {t("cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -122,7 +121,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
               onClick={handleDelete}
               disabled={isDeleting}
             >
-              {isDeleting ? "Deletando..." : "Confirmar Exclusão"}
+              {isDeleting ? t("deleting") : t("confirm_delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

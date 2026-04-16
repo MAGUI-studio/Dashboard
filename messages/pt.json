@@ -139,22 +139,41 @@
         "errors": {
           "validation_failed": "Dados do formulário inválidos.",
           "general": "Erro ao criar projeto."
-        },
-        "details": {
-          "management_title": "Controle de Status e Engenharia",
-          "timeline_title": "Timeline de Evolução",
-          "client_card_title": "Informações do Proprietário",
-          "assets_title": "Repositório de Ativos (Assets)",
-          "update_status": "Atualizar Status",
-          "add_timeline": "Novo Evento na Timeline",
-          "status_label": "Fase Atual do Protocolo",
-          "progress_label": "Progresso de Execução",
-          "timeline_form": {
-            "title": "Título do Marco",
-            "description": "Descrição detalhada (opcional)",
-            "is_milestone": "Marcar como marco importante",
-            "submit": "Registrar Evolução"
-          }
+        }
+      },
+      "details": {
+        "management_title": "Controle de Status e Engenharia",
+        "timeline_title": "Timeline de Evolução",
+        "client_card_title": "Informações do Proprietário",
+        "assets_title": "Repositório de Ativos (Assets)",
+        "update_status": "Atualizar Status",
+        "add_timeline": "Novo Evento na Timeline",
+        "status_label": "Fase Atual do Protocolo",
+        "progress_label": "Progresso de Execução",
+        "client_name_label": "Nome do Cliente",
+        "client_email_label": "E-mail de Contato",
+        "not_available": "N/A",
+        "no_budget": "Sem orçamento",
+        "no_deadline": "Sem prazo definido",
+        "back_button": "Voltar",
+        "submitting": "Processando...",
+        "deleting": "Deletando...",
+        "delete_project": "Deletar Projeto",
+        "delete_confirm_title": "Confirmar Exclusão",
+        "delete_confirm_desc": "Esta ação é permanente e removerá todos os dados, timeline e ativos vinculados a este projeto.",
+        "cancel": "Cancelar",
+        "confirm_delete": "Confirmar Exclusão",
+        "no_assets": "Nenhum arquivo catalogado.",
+        "upload_button": "Upload de Arquivo",
+        "uploading": "Carregando...",
+        "upload_hint": "PDF, Imagens, Documentos (Max 32MB)",
+        "timeline_form": {
+          "title": "Título do Marco",
+          "title_placeholder": "Ex: Wireframes Finalizados",
+          "description": "Descrição detalhada (opcional)",
+          "description_placeholder": "Detalhes sobre esta evolução...",
+          "is_milestone": "Marcar como marco importante",
+          "submit": "Registrar Evolução"
         }
       }
     }

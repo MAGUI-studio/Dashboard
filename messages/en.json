@@ -139,22 +139,41 @@
         "errors": {
           "validation_failed": "Invalid form data.",
           "general": "Error creating project."
-        },
-        "details": {
-          "management_title": "Status and Engineering Control",
-          "timeline_title": "Evolution Timeline",
-          "client_card_title": "Owner Information",
-          "assets_title": "Assets Repository",
-          "update_status": "Update Status",
-          "add_timeline": "New Timeline Event",
-          "status_label": "Current Protocol Phase",
-          "progress_label": "Execution Progress",
-          "timeline_form": {
-            "title": "Milestone Title",
-            "description": "Detailed description (optional)",
-            "is_milestone": "Mark as important milestone",
-            "submit": "Record Evolution"
-          }
+        }
+      },
+      "details": {
+        "management_title": "Status and Engineering Control",
+        "timeline_title": "Evolution Timeline",
+        "client_card_title": "Owner Information",
+        "assets_title": "Assets Repository",
+        "update_status": "Update Status",
+        "add_timeline": "New Timeline Event",
+        "status_label": "Current Protocol Phase",
+        "progress_label": "Execution Progress",
+        "client_name_label": "Client Name",
+        "client_email_label": "Contact Email",
+        "not_available": "N/A",
+        "no_budget": "No budget",
+        "no_deadline": "No deadline defined",
+        "back_button": "Back",
+        "submitting": "Processing...",
+        "deleting": "Deleting...",
+        "delete_project": "Delete Project",
+        "delete_confirm_title": "Confirm Deletion",
+        "delete_confirm_desc": "This action is permanent and will remove all data, timeline, and assets linked to this project.",
+        "cancel": "Cancel",
+        "confirm_delete": "Confirm Deletion",
+        "no_assets": "No cataloged files.",
+        "upload_button": "File Upload",
+        "uploading": "Loading...",
+        "upload_hint": "PDF, Images, Documents (Max 32MB)",
+        "timeline_form": {
+          "title": "Milestone Title",
+          "title_placeholder": "Ex: Finalized Wireframes",
+          "description": "Detailed description (optional)",
+          "description_placeholder": "Details about this evolution...",
+          "is_milestone": "Mark as important milestone",
+          "submit": "Record Evolution"
         }
       }
     }

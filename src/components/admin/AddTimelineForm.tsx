@@ -18,7 +18,7 @@ interface AddTimelineFormProps {
 }
 
 export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
-  const t = useTranslations("Admin.projects.form.details.timeline_form")
+  const t = useTranslations("Admin.projects.details.timeline_form")
   const [isPending, setIsPending] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement>(null)
 
@@ -54,7 +54,7 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
           <InputGroup className="h-12 rounded-xl border-border/40 bg-muted/10">
             <InputGroupInput
               name="title"
-              placeholder="Ex: Wireframes Finalizados"
+              placeholder={t("title_placeholder")}
               required
               className="font-bold text-foreground"
             />
@@ -82,7 +82,7 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
           </FieldLabel>
           <Textarea
             name="description"
-            placeholder="Detalhes sobre esta evolução..."
+            placeholder={t("description_placeholder")}
             className="min-h-[100px] rounded-xl border-border/40 bg-muted/10 font-medium text-foreground"
           />
         </Field>

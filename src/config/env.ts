@@ -10,6 +10,7 @@ const envSchema = z.object({
   NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: z.string().min(1),
   NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z.string().min(1),
   CLERK_PROXY_URL: z.string().optional(),
+  UPLOADTHING_TOKEN: z.string().min(1),
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
@@ -28,6 +29,7 @@ const parsedEnv = envSchema.safeParse({
   NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL:
     process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL,
   CLERK_PROXY_URL: process.env.CLERK_PROXY_URL,
+  UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
   NODE_ENV: process.env.NODE_ENV,
 })
 

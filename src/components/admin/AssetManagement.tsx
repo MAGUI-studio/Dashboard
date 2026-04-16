@@ -27,7 +27,7 @@ interface AssetManagementProps {
 }
 
 export function AssetManagement({ projectId, assets }: AssetManagementProps) {
-  const t = useTranslations("Admin.projects.form.details")
+  const t = useTranslations("Admin.projects.details")
   const [isDeleting, setIsDeleting] = React.useState<string | null>(null)
 
   const handleDelete = async (id: string) => {
@@ -41,7 +41,7 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
       <div className="flex flex-col gap-4">
         {assets.length === 0 ? (
           <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
-            Nenhum arquivo catalogado.
+            {t("no_assets")}
           </p>
         ) : (
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
@@ -109,13 +109,13 @@ export function AssetManagement({ projectId, assets }: AssetManagementProps) {
           }}
           content={{
             button({ ready }) {
-              if (ready) return "Upload de Arquivo"
-              return "Carregando..."
+              if (ready) return t("upload_button")
+              return t("uploading")
             },
           }}
         />
         <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-          PDF, Imagens, Documentos (Max 32MB)
+          {t("upload_hint")}
         </p>
       </div>
     </div>
