@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { ProjectStatus } from "@/src/generated/client"
 import { CheckCircle, Gear } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
@@ -49,13 +50,21 @@ export function UpdateStatusForm({
 
   return (
     <div className="flex flex-col gap-8">
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
+        Os campos marcados com <span className="text-red-500">*</span> são
+        obrigatórios.
+      </p>
+
       <FieldGroup className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <Field>
           <FieldLabel className="mb-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            {t("status_label")}
+            {t("status_label")} <span className="text-red-500">*</span>
           </FieldLabel>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="h-14 rounded-2xl border-border/40 bg-muted/10 font-bold uppercase tracking-widest text-foreground transition-all hover:bg-muted/20">
+            <SelectTrigger
+              size="lg"
+              className="h-14 rounded-2xl border-border/40 bg-muted/10 font-sans font-bold uppercase tracking-widest text-foreground transition-all hover:bg-muted/20"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl">
@@ -72,7 +81,7 @@ export function UpdateStatusForm({
                   value={s}
                   className="rounded-xl py-3 text-[10px] font-bold uppercase tracking-widest transition-colors focus:bg-brand-primary focus:text-white"
                 >
-                  {tStatus(s as keyof typeof tStatus)}
+                  {tStatus(s as ProjectStatus)}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -82,7 +91,7 @@ export function UpdateStatusForm({
         <Field>
           <div className="mb-4 flex items-center justify-between">
             <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              {t("progress_label")}
+              {t("progress_label")} <span className="text-red-500">*</span>
             </FieldLabel>
             <span className="font-mono text-xs font-bold text-brand-primary">
               {progress[0]}%
@@ -103,7 +112,7 @@ export function UpdateStatusForm({
       <Button
         onClick={handleUpdate}
         disabled={isPending}
-        className="h-14 w-full rounded-2xl font-sans font-black uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99] md:w-max md:px-12 shadow-lg shadow-brand-primary/10"
+        className="h-14 w-full rounded-2xl font-sans font-black uppercase tracking-widest transition-all hover:scale-[1.01] active:scale-[0.99] shadow-lg shadow-brand-primary/10 md:w-max md:px-12"
       >
         {isPending ? (
           <div className="flex items-center gap-3">

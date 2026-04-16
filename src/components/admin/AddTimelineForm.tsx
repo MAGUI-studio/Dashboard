@@ -46,10 +46,15 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
       onSubmit={handleSubmit}
       className="flex flex-col gap-8 rounded-3xl border border-border/40 bg-muted/5 p-6 backdrop-blur-sm lg:p-8"
     >
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
+        Os campos marcados com <span className="text-red-500">*</span> são
+        obrigatórios.
+      </p>
+
       <FieldGroup className="grid grid-cols-1 gap-8 md:grid-cols-2">
         <Field className="md:col-span-2">
           <FieldLabel className="mb-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            {t("title")}
+            {t("title")} <span className="text-red-500">*</span>
           </FieldLabel>
           <InputGroup className="h-14 rounded-2xl border-border/40 bg-muted/10 transition-all focus-within:bg-muted/20">
             <InputGroupInput

@@ -3,7 +3,12 @@
 import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
-import { AssetType } from "@/src/generated/client"
+import {
+  AssetType,
+  Priority,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client"
 import { UTApi } from "uploadthing/server"
 
 import { protect } from "@/src/lib/permissions"
@@ -29,6 +34,11 @@ export async function createProjectAction(formData: FormData) {
     projectDescription: formData.get("projectDescription"),
     budget: formData.get("budget"),
     deadline: formData.get("deadline"),
+    startDate: formData.get("startDate"),
+    liveUrl: formData.get("liveUrl"),
+    repositoryUrl: formData.get("repositoryUrl"),
+    category: formData.get("category"),
+    priority: formData.get("priority"),
   })
 
   if (!validatedFields.success) {
@@ -47,6 +57,11 @@ export async function createProjectAction(formData: FormData) {
           description: data.projectDescription,
           budget: data.budget,
           deadline: data.deadline ? new Date(data.deadline) : null,
+          startDate: data.startDate ? new Date(data.startDate) : new Date(),
+          liveUrl: data.liveUrl,
+          repositoryUrl: data.repositoryUrl,
+          category: data.category as ProjectCategory,
+          priority: data.priority as Priority,
           clientId: data.clientId,
           status: "STRATEGY",
           progress: 0,
@@ -96,7 +111,10 @@ export async function updateProjectStatusAction(formData: FormData) {
   try {
     await prisma.project.update({
       where: { id },
-      data: { status, progress },
+      data: {
+        status: status as ProjectStatus,
+        progress,
+      },
     })
 
     revalidatePath(`/admin/projects/${id}`)
@@ -120,6 +138,7 @@ export async function addProjectTimelineAction(formData: FormData) {
     title: formData.get("title"),
     description: formData.get("description"),
     isMilestone: formData.get("isMilestone") === "true",
+    imageUrl: formData.get("imageUrl"),
     timezone: formData.get("timezone"),
   })
 
@@ -127,7 +146,7 @@ export async function addProjectTimelineAction(formData: FormData) {
     return { error: "Dados inválidos" }
   }
 
-  const { projectId, title, description, isMilestone, timezone } =
+  const { projectId, title, description, isMilestone, imageUrl, timezone } =
     validatedFields.data
 
   try {
@@ -137,6 +156,7 @@ export async function addProjectTimelineAction(formData: FormData) {
         title,
         description,
         isMilestone,
+        imageUrl,
         timezone,
       },
     })

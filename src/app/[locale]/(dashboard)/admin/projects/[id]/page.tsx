@@ -7,7 +7,6 @@ import {
   Clock,
   Files,
   Info,
-  ProjectorScreen,
   Sliders,
   Terminal,
 } from "@phosphor-icons/react/dist/ssr"
@@ -81,7 +80,7 @@ export default async function AdminProjectDetailPage({
               className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
             >
               <Terminal weight="duotone" className="mr-2 size-4" />
-              {t("tabs.engineering", { fallback: "Engenharia" })}
+              {t("tabs.engineering", { fallback: "Status" })}
             </TabsTrigger>
             <TabsTrigger
               value="timeline"

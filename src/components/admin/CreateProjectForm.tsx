@@ -13,7 +13,11 @@ import {
   CurrencyDollar,
   FileText,
   FolderPlus,
+  GithubLogo,
+  Globe,
+  Monitor,
   ShieldCheck,
+  Tag,
   User,
 } from "@phosphor-icons/react"
 import { format } from "date-fns"
@@ -47,6 +51,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/components/ui/popover"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select"
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProjectAction } from "@/src/lib/actions/project.actions"
@@ -69,16 +80,16 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
   const [selectedClientId, setSelectedClientId] = React.useState<string>("")
   const [openClients, setOpenClients] = React.useState(false)
 
-  const [date, setDate] = React.useState<Date | undefined>(undefined)
+  const [deadline, setDeadline] = React.useState<Date | undefined>(undefined)
+  const [startDate, setStartDate] = React.useState<Date | undefined>(new Date())
   const [budgetValue, setBudgetValue] = React.useState("")
 
   const [state, formAction, isPending] = React.useActionState(
     async (_prevState: unknown, formData: FormData) => {
       formData.set("clientId", selectedClientId)
       formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
-      if (date) {
-        formData.set("deadline", date.toISOString())
-      }
+      if (deadline) formData.set("deadline", deadline.toISOString())
+      if (startDate) formData.set("startDate", startDate.toISOString())
 
       const result = await createProjectAction(formData)
       if (result.success) {
@@ -98,6 +109,11 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
   return (
     <form action={formAction} className="mx-auto w-full">
       <FieldGroup className="gap-12">
+        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
+          Os campos marcados com <span className="text-red-500">*</span> são
+          obrigatórios.
+        </p>
+
         {/* Section: Client Protocol */}
         <FieldSet>
           <div className="mb-6 flex flex-col gap-1">
@@ -111,7 +127,7 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
 
           <Field data-invalid={state.error && !selectedClientId}>
             <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              Cliente Responsável
+              Cliente Responsável <span className="text-red-500">*</span>
             </FieldLabel>
 
             <input type="hidden" name="clientId" value={selectedClientId} />
@@ -193,9 +209,6 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                 </Command>
               </PopoverContent>
             </Popover>
-            <FieldDescription className="mt-1 text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-              {t("client_selection_desc")}
-            </FieldDescription>
           </Field>
         </FieldSet>
 
@@ -206,14 +219,14 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
               {t("project_info")}
             </FieldLegend>
             <FieldDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-              {t("project_engineering")}
+              Configurações estratégicas e técnicas
             </FieldDescription>
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
             <Field>
               <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                {t("projectName")}
+                {t("projectName")} <span className="text-red-500">*</span>
               </FieldLabel>
               <InputGroup className="h-14 rounded-2xl border-border/40 bg-muted/10 transition-all focus-within:bg-muted/20">
                 <InputGroupAddon>
@@ -230,9 +243,66 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                   className="font-sans font-bold text-foreground placeholder:font-medium placeholder:text-muted-foreground/30"
                 />
               </InputGroup>
-              <FieldDescription className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                {t("project_name_desc")}
-              </FieldDescription>
+            </Field>
+
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                Categoria do Projeto <span className="text-red-500">*</span>
+              </FieldLabel>
+              <Select name="category" defaultValue="WEB_APP" required>
+                <SelectTrigger
+                  size="lg"
+                  className="rounded-2xl border-border/40 bg-muted/10 font-sans font-bold text-foreground"
+                >
+                  <div className="flex items-center gap-3">
+                    <Monitor
+                      weight="bold"
+                      className="size-4 text-brand-primary/60"
+                    />
+                    <SelectValue />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl">
+                  <SelectItem value="WEB_APP">Web Application</SelectItem>
+                  <SelectItem value="MOBILE_APP">Mobile Application</SelectItem>
+                  <SelectItem value="BRANDING">
+                    Branding / Identidade
+                  </SelectItem>
+                  <SelectItem value="LANDING_PAGE">Landing Page</SelectItem>
+                  <SelectItem value="SALES_PAGE">Página de Vendas</SelectItem>
+                  <SelectItem value="INSTITUTIONAL_SITE">
+                    Site Institucional
+                  </SelectItem>
+                  <SelectItem value="E_COMMERCE">E-Commerce</SelectItem>
+                  <SelectItem value="UI_UX_DESIGN">UI/UX Design</SelectItem>
+                </SelectContent>
+              </Select>
+            </Field>
+
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                Prioridade de Execução <span className="text-red-500">*</span>
+              </FieldLabel>
+              <Select name="priority" defaultValue="MEDIUM" required>
+                <SelectTrigger
+                  size="lg"
+                  className="rounded-2xl border-border/40 bg-muted/10 font-sans font-bold text-foreground"
+                >
+                  <div className="flex items-center gap-3">
+                    <Tag
+                      weight="bold"
+                      className="size-4 text-brand-primary/60"
+                    />
+                    <SelectValue />
+                  </div>
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl">
+                  <SelectItem value="LOW">Baixa</SelectItem>
+                  <SelectItem value="MEDIUM">Média</SelectItem>
+                  <SelectItem value="HIGH">Alta</SelectItem>
+                  <SelectItem value="URGENT">Urgente</SelectItem>
+                </SelectContent>
+              </Select>
             </Field>
 
             <Field>
@@ -255,13 +325,135 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                   className="font-sans font-bold text-foreground placeholder:font-medium placeholder:text-muted-foreground/30"
                 />
               </InputGroup>
-              <FieldDescription className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                {t("budget_desc")}
-              </FieldDescription>
             </Field>
           </div>
 
-          <Field className="mt-4">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mt-8">
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                URL de Produção (Live)
+              </FieldLabel>
+              <InputGroup className="h-14 rounded-2xl border-border/40 bg-muted/10 transition-all focus-within:bg-muted/20">
+                <InputGroupAddon>
+                  <Globe
+                    weight="bold"
+                    className="size-4 text-brand-primary/60"
+                  />
+                </InputGroupAddon>
+                <InputGroupInput
+                  name="liveUrl"
+                  placeholder="https://exemplo.com"
+                  disabled={isPending}
+                  className="font-sans font-bold text-foreground placeholder:font-medium placeholder:text-muted-foreground/30"
+                />
+              </InputGroup>
+            </Field>
+
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                Repositório (GitHub)
+              </FieldLabel>
+              <InputGroup className="h-14 rounded-2xl border-border/40 bg-muted/10 transition-all focus-within:bg-muted/20">
+                <InputGroupAddon>
+                  <GithubLogo
+                    weight="bold"
+                    className="size-4 text-brand-primary/60"
+                  />
+                </InputGroupAddon>
+                <InputGroupInput
+                  name="repositoryUrl"
+                  placeholder="https://github.com/..."
+                  disabled={isPending}
+                  className="font-sans font-bold text-foreground placeholder:font-medium placeholder:text-muted-foreground/30"
+                />
+              </InputGroup>
+            </Field>
+          </div>
+
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mt-8">
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                Data de Início
+              </FieldLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="h-14 justify-start text-left font-sans font-bold rounded-2xl border-border/40 bg-muted/10 px-4 transition-all hover:bg-muted/20"
+                  >
+                    <CalendarIcon
+                      className="mr-3 size-4 text-brand-primary/60"
+                      weight="bold"
+                    />
+                    {startDate ? (
+                      format(startDate, "PPP", { locale: ptBR })
+                    ) : (
+                      <span className="font-medium opacity-30">
+                        Selecione o início
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto p-0 rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={startDate}
+                    onSelect={setStartDate}
+                    initialFocus
+                    locale={ptBR}
+                    className="rounded-2xl"
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
+
+            <Field>
+              <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                {t("deadline")}
+              </FieldLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={cn(
+                      "h-14 justify-start text-left font-sans font-bold rounded-2xl border-border/40 bg-muted/10 px-4 transition-all hover:bg-muted/20",
+                      !deadline && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon
+                      className="mr-3 size-4 text-brand-primary/60"
+                      weight="bold"
+                    />
+                    {deadline ? (
+                      format(deadline, "PPP", { locale: ptBR })
+                    ) : (
+                      <span className="font-medium opacity-30">
+                        {t("deadline_placeholder")}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  className="w-auto p-0 rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl"
+                  align="start"
+                >
+                  <Calendar
+                    mode="single"
+                    selected={deadline}
+                    onSelect={setDeadline}
+                    initialFocus
+                    locale={ptBR}
+                    className="rounded-2xl"
+                  />
+                </PopoverContent>
+              </Popover>
+            </Field>
+          </div>
+
+          <Field className="mt-8">
             <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
               {t("projectDescription")}
             </FieldLabel>
@@ -279,48 +471,6 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                 className="flex-1 border-none bg-transparent pt-4 font-sans font-bold text-foreground shadow-none ring-0 focus-visible:ring-0 placeholder:font-medium placeholder:text-muted-foreground/30"
               />
             </InputGroup>
-          </Field>
-
-          <Field className="mt-4">
-            <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              {t("deadline")}
-            </FieldLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className={cn(
-                    "h-14 justify-start text-left font-sans font-bold rounded-2xl border-border/40 bg-muted/10 px-4 transition-all hover:bg-muted/20",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon
-                    className="mr-3 size-4 text-brand-primary/60"
-                    weight="bold"
-                  />
-                  {date ? (
-                    format(date, "PPP", { locale: ptBR })
-                  ) : (
-                    <span className="font-medium opacity-30">
-                      {t("deadline_placeholder")}
-                    </span>
-                  )}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-0 rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl"
-                align="start"
-              >
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                  locale={ptBR}
-                  className="rounded-2xl"
-                />
-              </PopoverContent>
-            </Popover>
           </Field>
         </FieldSet>
 

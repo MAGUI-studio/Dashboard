@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/client"
 }
 
@@ -20,6 +20,24 @@ enum ProjectStatus {
   LAUNCHED // Finalizado/Lançado
 }
 
+enum ProjectCategory {
+  WEB_APP
+  MOBILE_APP
+  BRANDING
+  LANDING_PAGE
+  SALES_PAGE
+  INSTITUTIONAL_SITE
+  E_COMMERCE
+  UI_UX_DESIGN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
 // Enum para tipos de arquivos no UploadThing
 enum AssetType {
   CONTRACT
@@ -35,7 +53,15 @@ model User {
   email     String    @unique
   name      String?
   role      String    @default("CLIENT") // ADMIN ou CLIENT
-  projects  Project[] // Um cliente pode ter vários projetos (ex: Landing Page + App)
+  
+  // Informações adicionais para Autoridade Digital
+  companyName String?
+  phone       String?
+  position    String?
+  avatarUrl   String?
+  taxId       String?
+
+  projects  Project[] // Um cliente pode ter vários projetos
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -43,11 +69,20 @@ model User {
 model Project {
   id          String        @id @default(cuid())
   name        String
-  description String?
+  description String?       @db.Text
   status      ProjectStatus @default(STRATEGY)
   progress    Int           @default(0) // 0 a 100
-  budget      String? // Para controle interno do Admin
+  budget      String?       // Para controle interno do Admin
+  
+  // Datas e Prazos
+  startDate   DateTime      @default(now())
   deadline    DateTime?
+
+  // Ativos e Links Rápidos
+  liveUrl       String?
+  repositoryUrl String?
+  category      ProjectCategory @default(WEB_APP)
+  priority      Priority        @default(MEDIUM)
 
   // Relacionamentos
   clientId String
@@ -65,6 +100,7 @@ model Update {
   title       String // Ex: "Design da Home Finalizado"
   description String? @db.Text
   isMilestone Boolean @default(false) // Se marcar como true, pode ter um destaque visual na UI
+  imageUrl    String? // Screenshot ou imagem do progresso
   timezone    String  @default("UTC") // Fuso horário do momento do registro
 
   projectId String

@@ -7,11 +7,14 @@ import { useRouter } from "next/navigation"
 
 import {
   ArrowRight,
+  Buildings,
   EnvelopeSimple,
   Fingerprint,
   IdentificationCard,
   LockKey,
+  Phone,
   ShieldCheck,
+  Tag,
   User,
   UserCircleGear,
 } from "@phosphor-icons/react"
@@ -48,7 +51,12 @@ export function CreateClientForm() {
 
   return (
     <form action={formAction} className="flex flex-col gap-12 text-left">
-      {/* Section: Personal Information */}
+      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
+        Os campos marcados com <span className="text-red-500">*</span> são
+        obrigatórios.
+      </p>
+
+      {/* Section: Professional Identity */}
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -71,7 +79,7 @@ export function CreateClientForm() {
               htmlFor="firstName"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("firstName")}
+              {t("firstName")} <span className="text-red-500">*</span>
             </Label>
             <div className="relative group">
               <User
@@ -93,7 +101,7 @@ export function CreateClientForm() {
               htmlFor="lastName"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("lastName")}
+              {t("lastName")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="lastName"
@@ -103,6 +111,90 @@ export function CreateClientForm() {
               disabled={isPending}
               className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
             />
+          </div>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="companyName"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              Empresa / Marca
+            </Label>
+            <div className="relative group">
+              <Buildings
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="companyName"
+                name="companyName"
+                placeholder="MAGUI.studio"
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="position"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              Cargo / Função
+            </Label>
+            <Input
+              id="position"
+              name="position"
+              placeholder="CEO / Diretor"
+              disabled={isPending}
+              className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="phone"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              WhatsApp / Contato
+            </Label>
+            <div className="relative group">
+              <Phone
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="phone"
+                name="phone"
+                placeholder="+55 (11) 99999-9999"
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="taxId"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              CPF / CNPJ (Opcional)
+            </Label>
+            <div className="relative group">
+              <Tag
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="taxId"
+                name="taxId"
+                placeholder="000.000.000-00"
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -129,7 +221,7 @@ export function CreateClientForm() {
               htmlFor="email"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("email")}
+              {t("email")} <span className="text-red-500">*</span>
             </Label>
             <div className="relative group">
               <EnvelopeSimple
@@ -152,7 +244,7 @@ export function CreateClientForm() {
               htmlFor="username"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("username")}
+              {t("username")} <span className="text-red-500">*</span>
             </Label>
             <Input
               id="username"
@@ -171,7 +263,7 @@ export function CreateClientForm() {
               htmlFor="password"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("password")}
+              {t("password")} <span className="text-red-500">*</span>
             </Label>
             <div className="relative group">
               <LockKey
@@ -198,7 +290,7 @@ export function CreateClientForm() {
               htmlFor="role"
               className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              {t("role")}
+              {t("role")} <span className="text-red-500">*</span>
             </Label>
             <Select
               name="role"
@@ -208,7 +300,8 @@ export function CreateClientForm() {
             >
               <SelectTrigger
                 id="role"
-                className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold text-foreground transition-all focus:ring-brand-primary/20 disabled:opacity-50"
+                size="lg"
+                className="rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold text-foreground transition-all focus:ring-brand-primary/20 disabled:opacity-50"
               >
                 <div className="flex items-center gap-3">
                   <UserCircleGear

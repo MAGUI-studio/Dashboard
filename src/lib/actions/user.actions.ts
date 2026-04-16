@@ -16,12 +16,16 @@ const createUserSchema = z.object({
   username: z.string().min(3),
   role: z.enum(["admin", "client"]),
   password: z.string().min(8),
+  companyName: z.string().optional(),
+  phone: z.string().optional(),
+  position: z.string().optional(),
+  taxId: z.string().optional(),
 })
 
 export async function createClientAction(formData: FormData) {
   const t = await getTranslations("Admin.clients.form.errors")
 
-  // Server-side role protection (Secure)
+  // Server-side role protection
   await protect("admin")
 
   const validatedFields = createUserSchema.safeParse({
@@ -31,6 +35,10 @@ export async function createClientAction(formData: FormData) {
     username: formData.get("username"),
     role: formData.get("role"),
     password: formData.get("password"),
+    companyName: formData.get("companyName"),
+    phone: formData.get("phone"),
+    position: formData.get("position"),
+    taxId: formData.get("taxId"),
   })
 
   if (!validatedFields.success) {
@@ -39,8 +47,18 @@ export async function createClientAction(formData: FormData) {
     }
   }
 
-  const { email, firstName, lastName, username, role, password } =
-    validatedFields.data
+  const {
+    email,
+    firstName,
+    lastName,
+    username,
+    role,
+    password,
+    companyName,
+    phone,
+    position,
+    taxId,
+  } = validatedFields.data
 
   try {
     const client = await clerkClient()
@@ -61,6 +79,10 @@ export async function createClientAction(formData: FormData) {
         email,
         name: `${firstName} ${lastName}`,
         role: role.toUpperCase(),
+        companyName,
+        phone,
+        position,
+        taxId,
       },
     })
 

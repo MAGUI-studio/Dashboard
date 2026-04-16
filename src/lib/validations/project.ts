@@ -6,6 +6,26 @@ export const createProjectSchema = z.object({
   projectDescription: z.string().optional(),
   budget: z.string().optional(),
   deadline: z.string().optional(),
+  startDate: z.string().optional(),
+  liveUrl: z
+    .string()
+    .url("URL de produção inválida")
+    .optional()
+    .or(z.literal("")),
+  repositoryUrl: z
+    .string()
+    .url("URL do repositório inválida")
+    .optional()
+    .or(z.literal("")),
+  category: z.enum([
+    "WEB_APP",
+    "MOBILE_APP",
+    "BRANDING",
+    "LANDING_PAGE",
+    "E_COMMERCE",
+    "UI_UX_DESIGN",
+  ]),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
 })
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>
@@ -28,5 +48,6 @@ export const addProjectTimelineSchema = z.object({
   title: z.string().min(2, "Título é obrigatório"),
   description: z.string().optional(),
   isMilestone: z.boolean().default(false),
+  imageUrl: z.string().url().optional().or(z.literal("")),
   timezone: z.string(),
 })
