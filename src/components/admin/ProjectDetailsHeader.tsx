@@ -5,13 +5,13 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
-import { Link } from "@/src/i18n/navigation"
 import {
   ArrowLeft,
   Calendar,
   CurrencyDollar,
-  Files,
+  ProjectorScreen,
 } from "@phosphor-icons/react"
+import dayjs from "dayjs"
 
 import { Button } from "@/src/components/ui/button"
 
@@ -28,52 +28,90 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
   const t = useTranslations("Admin.projects.details")
   const router = useRouter()
 
-  return (
-    <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
-      <div className="flex flex-col gap-6">
-        <Button
-          variant="ghost"
-          className="-ml-4 w-max gap-2 text-muted-foreground/60 hover:text-foreground"
-          size="sm"
-          onClick={() => router.back()}
-        >
-          <ArrowLeft weight="bold" className="size-3" />
-          {t("back_button")}
-        </Button>
+  const getDeadlineText = () => {
+    if (!project.deadline) return t("no_deadline")
 
-        <div className="flex flex-col gap-2">
-          <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-6xl">
-            {project.name}
-          </h1>
-          <div className="flex flex-wrap items-center gap-6">
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
-              <CurrencyDollar
-                weight="duotone"
-                className="size-4 text-brand-primary"
-              />
-              {project.budget || t("no_budget")}
+    const now = dayjs().startOf("day")
+    const deadline = dayjs(project.deadline).startOf("day")
+    const diffDays = deadline.diff(now, "day")
+
+    if (diffDays === 0) {
+      return "ENTREGA HOJE"
+    } else if (diffDays < 0) {
+      return `ATRASADO (${Math.abs(diffDays)} ${Math.abs(diffDays) === 1 ? "dia" : "dias"})`
+    } else {
+      return `FALTAM ${diffDays} ${diffDays === 1 ? "DIA" : "DIAS"}`
+    }
+  }
+
+  return (
+    <div className="flex flex-col gap-10">
+      <Button
+        variant="ghost"
+        className="-ml-4 w-max gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 transition-all hover:bg-transparent hover:text-foreground"
+        size="sm"
+        onClick={() => router.back()}
+      >
+        <ArrowLeft weight="bold" className="size-3" />
+        {t("back_button")}
+      </Button>
+
+      <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+        <div className="flex flex-col gap-6">
+          <div className="flex items-center gap-4">
+            <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+              <ProjectorScreen weight="duotone" className="size-6" />
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-widest text-muted-foreground/60">
-              <Calendar
-                weight="duotone"
-                className="size-4 text-brand-primary"
-              />
-              {project.deadline
-                ? new Date(project.deadline).toLocaleDateString()
-                : t("no_deadline")}
+            <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl lg:text-7xl">
+              {project.name}
+            </h1>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-8 pl-1">
+            <div className="flex items-center gap-3">
+              <div className="flex size-8 items-center justify-center rounded-full bg-muted/10">
+                <CurrencyDollar
+                  weight="duotone"
+                  className="size-4 text-brand-primary"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                  {t("budget_label", { fallback: "Investimento" })}
+                </span>
+                <span className="text-sm font-bold text-foreground">
+                  {project.budget || t("no_budget")}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <div className="flex size-8 items-center justify-center rounded-full bg-muted/10">
+                <Calendar
+                  weight="duotone"
+                  className="size-4 text-brand-primary"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                  {t("deadline_label", { fallback: "Prazo Final" })}
+                </span>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold text-foreground">
+                    {project.deadline
+                      ? new Date(project.deadline).toLocaleDateString()
+                      : t("no_deadline")}
+                  </span>
+                  {project.deadline && (
+                    <span className="rounded-full bg-brand-primary/10 px-2 py-0.5 text-[9px] font-black uppercase tracking-widest text-brand-primary">
+                      {getDeadlineText()}
+                    </span>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="flex items-center gap-3">
-        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-        <Link href={`/admin/projects/${project.id}/assets` as any}>
-          <Button className="h-14 rounded-full px-8 font-sans font-black uppercase tracking-widest shadow-lg shadow-brand-primary/20">
-            <Files weight="duotone" className="mr-2 size-5" />
-            {t("assets_manage_button")}
-          </Button>
-        </Link>
       </div>
     </div>
   )

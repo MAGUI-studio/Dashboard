@@ -15,6 +15,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
+import { Slider } from "@/src/components/ui/slider"
 
 import { updateProjectStatusAction } from "@/src/lib/actions/project.actions"
 
@@ -32,7 +33,7 @@ export function UpdateStatusForm({
   const t = useTranslations("Admin.projects.details")
   const tStatus = useTranslations("Dashboard.status")
   const [isPending, setIsPending] = React.useState(false)
-  const [progress, setProgress] = React.useState(currentProgress)
+  const [progress, setProgress] = React.useState([currentProgress])
   const [status, setStatus] = React.useState(currentStatus)
 
   const handleUpdate = async () => {
@@ -40,7 +41,7 @@ export function UpdateStatusForm({
     const formData = new FormData()
     formData.set("id", projectId)
     formData.set("status", status)
-    formData.set("progress", progress.toString())
+    formData.set("progress", progress[0].toString())
 
     await updateProjectStatusAction(formData)
     setIsPending(false)
@@ -48,13 +49,13 @@ export function UpdateStatusForm({
 
   return (
     <div className="flex flex-col gap-8">
-      <FieldGroup className="grid grid-cols-1 gap-8 md:grid-cols-2">
+      <FieldGroup className="grid grid-cols-1 gap-10 md:grid-cols-2">
         <Field>
-          <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+          <FieldLabel className="mb-4 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
             {t("status_label")}
           </FieldLabel>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="h-14 rounded-2xl border-border/40 bg-muted/10 font-bold uppercase tracking-widest text-foreground">
+            <SelectTrigger className="h-14 rounded-2xl border-border/40 bg-muted/10 font-bold uppercase tracking-widest text-foreground transition-all hover:bg-muted/20">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl">
@@ -79,18 +80,21 @@ export function UpdateStatusForm({
         </Field>
 
         <Field>
-          <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            {t("progress_label")} ({progress}%)
-          </FieldLabel>
-          <div className="flex items-center gap-4">
-            <input
-              type="range"
-              min="0"
-              max="100"
-              step="5"
+          <div className="mb-4 flex items-center justify-between">
+            <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+              {t("progress_label")}
+            </FieldLabel>
+            <span className="font-mono text-xs font-bold text-brand-primary">
+              {progress[0]}%
+            </span>
+          </div>
+          <div className="flex h-14 items-center px-2">
+            <Slider
               value={progress}
-              onChange={(e) => setProgress(Number(e.target.value))}
-              className="h-1.5 w-full cursor-pointer appearance-none rounded-full bg-muted/30 accent-brand-primary"
+              onValueChange={setProgress}
+              max={100}
+              step={5}
+              className="[&_[data-slot=slider-range]]:bg-brand-primary [&_[data-slot=slider-thumb]]:border-brand-primary [&_[data-slot=slider-track]]:bg-muted/20"
             />
           </div>
         </Field>

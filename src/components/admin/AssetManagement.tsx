@@ -30,6 +30,7 @@ import {
   Plus,
   Trash,
   UploadSimple,
+  Warning,
   X,
 } from "@phosphor-icons/react"
 
@@ -41,6 +42,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/src/components/ui/dialog"
 
 import {
@@ -55,6 +57,7 @@ interface Asset {
   id: string
   name: string
   url: string
+  key: string
   type: string
   order: number
   timezone: string
@@ -68,13 +71,16 @@ interface AssetManagementProps {
 
 function SortableAssetItem({
   asset,
+  index,
   onDelete,
   isDeleting,
 }: {
   asset: Asset
-  onDelete: (id: string) => void
+  index: number
+  onDelete: (id: string, key: string) => void
   isDeleting: boolean
 }) {
+  const t = useTranslations("Admin.projects.details")
   const {
     attributes,
     listeners,
@@ -96,57 +102,117 @@ function SortableAssetItem({
       style={style}
       className={React.useMemo(
         () =>
-          `group relative flex flex-col gap-4 rounded-2xl border border-border/40 bg-background/50 p-5 transition-all hover:border-brand-primary/20 hover:bg-muted/5 ${isDragging ? "opacity-50 border-brand-primary shadow-2xl" : ""}`,
+          `group relative flex flex-col gap-5 rounded-3xl border border-border/40 bg-background/50 p-6 transition-all hover:border-brand-primary/30 hover:bg-muted/5 ${isDragging ? "opacity-50 border-brand-primary shadow-2xl" : ""}`,
         [isDragging]
       )}
     >
-      <div className="flex items-center gap-4">
-        <div
-          {...attributes}
-          {...listeners}
-          className="cursor-grab active:cursor-grabbing text-muted-foreground/40 hover:text-brand-primary"
-        >
-          <DotsSixVertical weight="bold" className="size-5" />
-        </div>
-        <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-          <File weight="duotone" className="size-5" />
-        </div>
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <span className="truncate text-[11px] font-bold uppercase tracking-tight text-foreground">
-            {asset.name}
-          </span>
-          <div className="flex items-center gap-2">
-            <span className="text-[9px] font-medium text-muted-foreground/60 uppercase tracking-widest">
-              {asset.type}
-            </span>
-            <div className="flex items-center gap-1 text-[9px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
-              <Clock weight="bold" className="size-2.5" />
-              <span>
-                {formatLocalTime(new Date(asset.createdAt), asset.timezone)}
-              </span>
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center gap-4 overflow-hidden">
+          <div
+            {...attributes}
+            {...listeners}
+            className="cursor-grab active:cursor-grabbing text-muted-foreground/30 hover:text-brand-primary transition-colors"
+          >
+            <DotsSixVertical weight="bold" className="size-5" />
+          </div>
+          <div className="relative flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+            <File weight="duotone" className="size-6" />
+            <div className="absolute -top-2 -right-2 flex size-6 items-center justify-center rounded-full bg-brand-primary font-heading text-[10px] font-black text-white shadow-lg ring-4 ring-background">
+              {index + 1}
             </div>
           </div>
+          <div className="flex flex-col overflow-hidden gap-0.5">
+            <span className="truncate text-xs font-black uppercase tracking-tight text-foreground">
+              {asset.name}
+            </span>
+          </div>
         </div>
+
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="size-10 rounded-xl text-muted-foreground/40 hover:bg-red-600/10 hover:text-red-600 transition-all"
+              disabled={isDeleting}
+            >
+              <Trash weight="bold" className="size-5" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-xl border-none bg-background/95 p-0 overflow-hidden rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+            <div className="bg-red-600/10 p-10 pb-6">
+              <DialogHeader className="gap-5">
+                <div className="flex size-16 items-center justify-center rounded-[1.25rem] bg-red-600 text-white shadow-xl shadow-red-600/20">
+                  <Warning weight="bold" className="size-8" />
+                </div>
+                <div className="flex flex-col gap-1.5">
+                  <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight text-red-600 leading-none">
+                    {t("delete_asset_confirm_title")}
+                  </DialogTitle>
+                  <DialogDescription className="text-xs font-black text-red-600/60 uppercase tracking-[0.2em]">
+                    Ação Irreversível e Permanente
+                  </DialogDescription>
+                </div>
+              </DialogHeader>
+            </div>
+
+            <div className="p-10 pt-6">
+              <p className="mb-10 text-base font-medium leading-relaxed text-muted-foreground/80">
+                {t("delete_asset_confirm_desc")}
+              </p>
+
+              <div className="mb-10 flex items-center gap-4 rounded-[1.5rem] border border-border/40 bg-muted/5 p-6">
+                <div className="flex size-12 items-center justify-center rounded-xl bg-muted/10 text-muted-foreground">
+                  <File weight="duotone" className="size-6" />
+                </div>
+                <div className="flex flex-col gap-0.5 overflow-hidden">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                    Arquivo Selecionado
+                  </span>
+                  <span className="truncate text-sm font-black text-foreground uppercase">
+                    {asset.name}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-5">
+                <DialogTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    className="h-16 rounded-[1.25rem] font-sans font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-muted/10 hover:text-foreground"
+                  >
+                    {t("cancel")}
+                  </Button>
+                </DialogTrigger>
+                <Button
+                  className="h-16 rounded-[1.25rem] bg-red-600 font-sans font-black uppercase tracking-widest text-white shadow-xl shadow-red-600/20 transition-all hover:bg-red-700 active:scale-[0.98]"
+                  onClick={() => onDelete(asset.id, asset.key)}
+                  disabled={isDeleting}
+                >
+                  {isDeleting ? t("deleting") : t("confirm_delete")}
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      <div className="flex items-center justify-between gap-3">
+      <div className="mt-auto flex items-end justify-between gap-4 pt-2">
+        <div className="flex items-center gap-2 rounded-xl bg-muted/10 px-3 py-1.5">
+          <Clock weight="bold" className="size-3 text-muted-foreground/30" />
+          <span className="text-[9px] font-bold text-muted-foreground/40 uppercase tracking-tighter">
+            {formatLocalTime(new Date(asset.createdAt), asset.timezone)}
+          </span>
+        </div>
+
         <a
           href={asset.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[9px] font-black uppercase tracking-widest text-brand-primary hover:underline"
+          className="flex h-10 items-center justify-center rounded-xl border border-brand-primary/20 bg-brand-primary/5 px-5 text-[10px] font-black uppercase tracking-widest text-brand-primary transition-all hover:bg-brand-primary hover:text-white"
         >
-          Visualizar
+          {t("visualize")}
         </a>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="size-8 rounded-lg text-destructive hover:bg-destructive/10"
-          onClick={() => onDelete(asset.id)}
-          disabled={isDeleting}
-        >
-          <Trash weight="bold" className="size-4" />
-        </Button>
       </div>
     </div>
   )
@@ -162,7 +228,6 @@ export function AssetManagement({
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([])
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
 
-  // Update local state when props change
   React.useEffect(() => {
     setAssets(initialAssets)
   }, [initialAssets])
@@ -201,9 +266,9 @@ export function AssetManagement({
     }
   }
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = async (id: string, key: string) => {
     setIsDeleting(id)
-    await deleteProjectAssetAction(id, projectId)
+    await deleteProjectAssetAction(id, projectId, key)
     setIsDeleting(null)
   }
 
@@ -217,7 +282,6 @@ export function AssetManagement({
       const newAssets = arrayMove(assets, oldIndex, newIndex)
       setAssets(newAssets)
 
-      // Save new order to database
       await updateProjectAssetsOrderAction(
         projectId,
         newAssets.map((a) => a.id)
@@ -235,7 +299,7 @@ export function AssetManagement({
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="flex flex-col gap-10">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -243,19 +307,22 @@ export function AssetManagement({
       >
         <div className="flex flex-col gap-4">
           {assets.length === 0 ? (
-            <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
-              {t("no_assets")}
-            </p>
+            <div className="flex min-h-[200px] items-center justify-center rounded-[2rem] border-2 border-dashed border-border/20 bg-muted/5">
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
+                {t("no_assets")}
+              </p>
+            </div>
           ) : (
             <SortableContext
               items={assets.map((a) => a.id)}
               strategy={verticalListSortingStrategy}
             >
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {assets.map((asset) => (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {assets.map((asset, index) => (
                   <SortableAssetItem
                     key={asset.id}
                     asset={asset}
+                    index={index}
                     onDelete={handleDelete}
                     isDeleting={isDeleting === asset.id}
                   />
@@ -275,102 +342,107 @@ export function AssetManagement({
             onChange={handleFileSelect}
             title=""
           />
-          <Button className="h-14 w-full rounded-2xl border-2 border-dashed border-border/40 bg-muted/5 font-sans font-black uppercase tracking-widest text-muted-foreground/60 transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 hover:text-brand-primary">
-            <Plus weight="bold" className="mr-2 size-5" />
+          <Button className="h-20 w-full rounded-[2rem] border-2 border-dashed border-border/40 bg-muted/5 font-sans font-black uppercase tracking-[0.2em] text-muted-foreground/60 transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 hover:text-brand-primary">
+            <Plus weight="bold" className="mr-3 size-6" />
             {t("upload_button")}
           </Button>
         </div>
-        <p className="text-center text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
+        <p className="text-center text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">
           {t("upload_hint")}
         </p>
       </div>
 
       <Dialog open={isPreviewOpen} onOpenChange={setIsPreviewOpen}>
-        <DialogContent className="max-w-2xl rounded-3xl border-border/40 bg-background/95 backdrop-blur-xl">
-          <DialogHeader>
-            <DialogTitle className="font-heading text-xl font-black uppercase tracking-tight">
-              Confirmar Upload
-            </DialogTitle>
-            <DialogDescription className="text-sm font-medium text-muted-foreground">
-              Revise os arquivos selecionados antes de enviar para o servidor.
-            </DialogDescription>
-          </DialogHeader>
-
-          <div className="mt-6 flex flex-col gap-3 max-h-[400px] overflow-y-auto pr-2 scrollbar-hide">
-            {selectedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded-xl border border-border/40 bg-muted/10 p-4"
-              >
-                <div className="flex items-center gap-3 overflow-hidden">
-                  {file.type.startsWith("image/") ? (
-                    <ImageIcon
-                      weight="duotone"
-                      className="size-5 text-brand-primary"
-                    />
-                  ) : file.type === "application/pdf" ? (
-                    <FilePdf
-                      weight="duotone"
-                      className="size-5 text-brand-primary"
-                    />
-                  ) : (
-                    <File
-                      weight="duotone"
-                      className="size-5 text-brand-primary"
-                    />
-                  )}
-                  <div className="flex flex-col overflow-hidden">
-                    <span className="truncate text-xs font-bold text-foreground">
-                      {file.name}
-                    </span>
-                    <span className="text-[10px] font-medium text-muted-foreground/60">
-                      {file.size < 1024 * 1024
-                        ? `${(file.size / 1024).toFixed(2)} KB`
-                        : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
-                    </span>
-                  </div>
-                </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="size-8 rounded-full hover:bg-destructive/10 hover:text-destructive"
-                  onClick={() => removeSelectedFile(index)}
-                >
-                  <X weight="bold" className="size-4" />
-                </Button>
+        <DialogContent className="max-w-2xl border-none bg-background/95 p-0 overflow-hidden rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+          <div className="bg-brand-primary/10 p-10 pb-6">
+            <DialogHeader className="gap-5">
+              <div className="flex size-16 items-center justify-center rounded-[1.25rem] bg-brand-primary text-white shadow-xl shadow-brand-primary/20">
+                <UploadSimple weight="bold" className="size-8" />
               </div>
-            ))}
+              <div className="flex flex-col gap-1.5">
+                <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight text-brand-primary leading-none">
+                  Confirmar Upload
+                </DialogTitle>
+                <DialogDescription className="text-xs font-black text-brand-primary/60 uppercase tracking-[0.2em]">
+                  Processamento de Arquivos
+                </DialogDescription>
+              </div>
+            </DialogHeader>
           </div>
 
-          <DialogFooter className="mt-8 flex gap-3">
-            <Button
-              variant="ghost"
-              className="rounded-full font-bold uppercase tracking-widest"
-              onClick={() => {
-                setSelectedFiles([])
-                setIsPreviewOpen(false)
-              }}
-            >
-              {t("cancel")}
-            </Button>
-            <Button
-              className="rounded-full font-black uppercase tracking-widest px-8"
-              onClick={() => startUpload(selectedFiles)}
-              disabled={isUploading}
-            >
-              {isUploading ? (
-                <>
-                  <div className="mr-2 size-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
-                  {t("uploading")}
-                </>
-              ) : (
-                <>
-                  <UploadSimple weight="bold" className="mr-2 size-5" />
-                  Confirmar Upload
-                </>
-              )}
-            </Button>
-          </DialogFooter>
+          <div className="p-10 pt-6">
+            <p className="mb-8 text-base font-medium leading-relaxed text-muted-foreground/80">
+              Revise os arquivos selecionados antes de enviar para o servidor de
+              ativos.
+            </p>
+
+            <div className="mb-10 flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-2 scrollbar-hide">
+              {selectedFiles.map((file, index) => (
+                <div
+                  key={index}
+                  className="flex items-center justify-between rounded-[1.25rem] border border-border/40 bg-muted/10 p-5"
+                >
+                  <div className="flex items-center gap-4 overflow-hidden">
+                    <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                      {file.type.startsWith("image/") ? (
+                        <ImageIcon weight="duotone" className="size-6" />
+                      ) : (
+                        <File weight="duotone" className="size-6" />
+                      )}
+                    </div>
+                    <div className="flex flex-col overflow-hidden">
+                      <span className="truncate text-xs font-black text-foreground uppercase tracking-tight">
+                        {file.name}
+                      </span>
+                      <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
+                        {file.size < 1024 * 1024
+                          ? `${(file.size / 1024).toFixed(2)} KB`
+                          : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                      </span>
+                    </div>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="size-10 rounded-xl hover:bg-destructive/10 hover:text-destructive transition-all"
+                    onClick={() => removeSelectedFile(index)}
+                  >
+                    <X weight="bold" className="size-5" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+
+            <div className="grid grid-cols-2 gap-5">
+              <Button
+                variant="ghost"
+                className="h-16 rounded-[1.25rem] font-sans font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-muted/10 hover:text-foreground"
+                onClick={() => {
+                  setSelectedFiles([])
+                  setIsPreviewOpen(false)
+                }}
+              >
+                {t("cancel")}
+              </Button>
+              <Button
+                className="h-16 rounded-[1.25rem] bg-brand-primary font-sans font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:brightness-110 active:scale-[0.98]"
+                onClick={() => startUpload(selectedFiles)}
+                disabled={isUploading}
+              >
+                {isUploading ? (
+                  <div className="flex items-center gap-3">
+                    <div className="size-5 animate-spin rounded-full border-3 border-white/20 border-t-white" />
+                    <span>{t("uploading")}</span>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3">
+                    <UploadSimple weight="bold" className="size-6" />
+                    <span>Confirmar</span>
+                  </div>
+                )}
+              </Button>
+            </div>
+          </div>
         </DialogContent>
       </Dialog>
     </div>

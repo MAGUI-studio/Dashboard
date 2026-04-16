@@ -1,7 +1,7 @@
 {
   "Index": {
     "title": "MAGUI.studio",
-    "description": "Visual engineering and interface studio focused on transforming business challenges into high-performance digital systems.",
+    "description": "Strategic design and interface studio focused on transforming business challenges into high-performance digital systems.",
     "hero_tag": "Design and technology in total sync.",
     "cta_primary": "View Projects",
     "cta_secondary": "Get in Touch"
@@ -19,8 +19,8 @@
   },
   "Config": {
     "name": "MAGUI.studio",
-    "description": "Visual engineering and interface studio focused on transforming business challenges into high-performance digital systems.",
-    "keywords": "Design, Technology, Frontend, UI/UX, Visual Engineering, Performance, Core Web Vitals"
+    "description": "Strategic design and interface studio focused on transforming business challenges into high-performance digital systems.",
+    "keywords": "Design, Technology, Frontend, UI/UX, Performance, Core Web Vitals"
   },
   "Errors": {
     "not_found": {
@@ -56,7 +56,7 @@
     "clients": {
       "eyebrow": "Management Portal",
       "title": "Clients",
-      "description": "Control and monitor your digital ecosystem access. Manage permissions, roles, and security settings in one centralized visual terminal.",
+      "description": "Control and monitor your digital ecosystem access. Manage permissions, roles, and security settings in a visual center.",
       "create": "New Client",
       "search_placeholder": "Search by name or email...",
       "filter": "Filter",
@@ -105,7 +105,7 @@
       }
     },
     "projects": {
-      "eyebrow": "Execution Protocol",
+      "eyebrow": "Execution Process",
       "title": "Projects",
       "description": "Start and manage high-performance projects in the MAGUI ecosystem.",
       "create": "New Project",
@@ -114,15 +114,15 @@
         "client_desc": "Client access data and identity",
         "project_info": "Project Data",
         "project_desc": "Execution settings and deadlines",
-        "client_protocol": "Owner identification protocol",
+        "client_protocol": "Owner identification",
         "client_selection_desc": "The project will be permanently linked to this access",
-        "project_engineering": "Execution parameters and architecture",
-        "project_name_desc": "Official protocol title",
+        "project_engineering": "Execution parameters and deadlines",
+        "project_name_desc": "Official project title",
         "budget_desc": "Agreed gross value",
         "project_description_placeholder": "Summary scope and main system objectives...",
         "deadline_placeholder": "Define final delivery date...",
         "confirmation_title": "Opening Confirmation",
-        "confirmation_desc": "Upon starting, the design protocol will begin immediately.",
+        "confirmation_desc": "Upon starting, the design process will begin immediately.",
         "select_client_placeholder": "Select client in system...",
         "search_client_placeholder": "Search by name or email...",
         "empty_clients": "No cataloged clients.",
@@ -142,13 +142,34 @@
         }
       },
       "details": {
-        "management_title": "Status and Engineering Control",
-        "timeline_title": "Evolution Timeline",
+        "tabs": {
+          "overview": "Overview",
+          "engineering": "Status",
+          "timeline": "Timeline",
+          "assets": "Assets",
+          "settings": "Settings"
+        },
+        "project_info_title": "Project Information",
+        "project_description_label": "Scope Description",
+        "no_description": "No detailed description.",
+        "asset_types": {
+          "CONTRACT": "Contract",
+          "DESIGN_SYSTEM": "Design System",
+          "IMAGE": "Image",
+          "DOCUMENT": "Document",
+          "SOURCE_CODE": "Source Code"
+        },
+        "management_title": "Status and Evolution Management",
+        "timeline_title": "Evolution History",
+        "timeline_form_title": "Record New Evolution",
         "client_card_title": "Owner Information",
+        "settings_title": "Project Settings",
         "assets_title": "Assets Repository",
+        "budget_label": "Investment",
+        "deadline_label": "Final Deadline",
         "update_status": "Update Status",
         "add_timeline": "New Timeline Event",
-        "status_label": "Current Protocol Phase",
+        "status_label": "Current Project Phase",
         "progress_label": "Execution Progress",
         "client_name_label": "Client Name",
         "client_email_label": "Contact Email",
@@ -169,6 +190,9 @@
         "danger_zone_title": "Danger Zone",
         "danger_zone_desc": "Irreversible actions for this project.",
         "assets_manage_button": "Manage Assets",
+        "visualize": "Visualize",
+        "delete_asset_confirm_title": "Remove File",
+        "delete_asset_confirm_desc": "Are you sure you want to permanently delete this file from the system and storage?",
         "no_assets": "No cataloged files.",
         "upload_button": "File Upload",
         "uploading": "Loading...",
@@ -204,22 +228,27 @@
     }
   },
   "Dashboard": {
-    "eyebrow": "Client Dashboard",
-    "admin_eyebrow": "Monitoring Protocol",
+    "eyebrow": "Client Panel",
+    "admin_eyebrow": "Project Management",
     "admin_title": "Studio Overview",
+    "greetings": {
+      "morning": "Good morning {name}, have a great day.",
+      "afternoon": "Good afternoon {name}, have an excellent afternoon.",
+      "evening": "Good evening {name}, ending the day with mastery."
+    },
     "global_timeline_title": "Global Evolution Timeline",
     "active_projects_count": "{count} active projects",
     "project_name_label": "Project",
     "no_project": "No active projects found.",
     "status": {
-      "title": "Protocol Status",
+      "title": "Project Status",
       "progress": "Overall Progress",
       "STRATEGY": "Strategy",
       "ARCHITECTURE": "Architecture",
       "DESIGN": "Design",
-      "ENGINEERING": "Engineering",
+      "ENGINEERING": "Development",
       "QA": "Quality",
-      "LAUNCHED": "Launched"
+      "LAUNCHED": "Finished"
     },
     "timeline": {
       "title": "Execution Timeline",

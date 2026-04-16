@@ -1,7 +1,7 @@
 {
   "Index": {
     "title": "MAGUI.studio",
-    "description": "Estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
+    "description": "Estúdio de design estratégico e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
     "hero_tag": "Design e tecnologia em total sincronia.",
     "cta_primary": "Ver Projetos",
     "cta_secondary": "Entrar em Contato"
@@ -19,8 +19,8 @@
   },
   "Config": {
     "name": "MAGUI.studio",
-    "description": "Estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
-    "keywords": "Design, Tecnologia, Frontend, UI/UX, Engenharia Visual, Performance, Core Web Vitals"
+    "description": "Estúdio de design estratégico e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
+    "keywords": "Design, Tecnologia, Frontend, UI/UX, Performance, Core Web Vitals"
   },
   "Errors": {
     "not_found": {
@@ -56,7 +56,7 @@
     "clients": {
       "eyebrow": "Portal de Gestão",
       "title": "Clientes",
-      "description": "Controle e monitore os acessos do seu ecossistema digital. Gerencie permissões, cargos e configurações de segurança em um terminal visual centralizado.",
+      "description": "Controle e monitore os acessos do seu ecossistema digital. Gerencie permissões, cargos e configurações de segurança em uma central visual.",
       "create": "Novo Cliente",
       "search_placeholder": "Buscar por nome ou e-mail...",
       "filter": "Filtrar",
@@ -105,7 +105,7 @@
       }
     },
     "projects": {
-      "eyebrow": "Protocolo de Execução",
+      "eyebrow": "Processo de Execução",
       "title": "Projetos",
       "description": "Inicie e gerencie novos projetos de alta performance no ecossistema MAGUI.",
       "create": "Novo Projeto",
@@ -114,15 +114,15 @@
         "client_desc": "Dados de acesso e identidade do cliente",
         "project_info": "Dados do Projeto",
         "project_desc": "Configurações e prazos de execução",
-        "client_protocol": "Protocolo de identificação do proprietário",
+        "client_protocol": "Identificação do proprietário",
         "client_selection_desc": "O projeto será vinculado permanentemente a este acesso",
-        "project_engineering": "Parâmetros de execução e arquitetura",
-        "project_name_desc": "Título oficial do protocolo",
+        "project_engineering": "Parâmetros de execução e prazos",
+        "project_name_desc": "Título oficial do projeto",
         "budget_desc": "Valor bruto acordado",
         "project_description_placeholder": "Escopo resumido e objetivos principais do sistema...",
         "deadline_placeholder": "Definir data de entrega final...",
         "confirmation_title": "Confirmação de Abertura",
-        "confirmation_desc": "Ao iniciar, o protocolo de design começará imediatamente.",
+        "confirmation_desc": "Ao iniciar, o processo de design começará imediatamente.",
         "select_client_placeholder": "Selecionar cliente no sistema...",
         "search_client_placeholder": "Buscar por nome ou e-mail...",
         "empty_clients": "Nenhum cliente catalogado.",
@@ -142,13 +142,34 @@
         }
       },
       "details": {
-        "management_title": "Controle de Status e Engenharia",
-        "timeline_title": "Timeline de Evolução",
+        "tabs": {
+          "overview": "Visão Geral",
+          "engineering": "Status",
+          "timeline": "Timeline",
+          "assets": "Ativos",
+          "settings": "Configurações"
+        },
+        "project_info_title": "Informações do Projeto",
+        "project_description_label": "Descrição do Escopo",
+        "no_description": "Sem descrição detalhada.",
+        "asset_types": {
+          "CONTRACT": "Contrato",
+          "DESIGN_SYSTEM": "Design System",
+          "IMAGE": "Imagem",
+          "DOCUMENT": "Documento",
+          "SOURCE_CODE": "Código Fonte"
+        },
+        "management_title": "Gestão de Status e Evolução",
+        "timeline_title": "Histórico de Evolução",
+        "timeline_form_title": "Registrar Nova Evolução",
         "client_card_title": "Informações do Proprietário",
+        "settings_title": "Configurações do Projeto",
         "assets_title": "Repositório de Ativos (Assets)",
+        "budget_label": "Investimento",
+        "deadline_label": "Prazo Final",
         "update_status": "Atualizar Status",
         "add_timeline": "Novo Evento na Timeline",
-        "status_label": "Fase Atual do Protocolo",
+        "status_label": "Fase Atual do Projeto",
         "progress_label": "Progresso de Execução",
         "client_name_label": "Nome do Cliente",
         "client_email_label": "E-mail de Contato",
@@ -169,6 +190,9 @@
         "danger_zone_title": "Zona de Perigo",
         "danger_zone_desc": "Ações irreversíveis para este projeto.",
         "assets_manage_button": "Gerenciar Ativos",
+        "visualize": "Visualizar",
+        "delete_asset_confirm_title": "Remover Arquivo",
+        "delete_asset_confirm_desc": "Tem certeza que deseja excluir permanentemente este arquivo do sistema e do armazenamento?",
         "no_assets": "Nenhum arquivo catalogado.",
         "upload_button": "Upload de Arquivo",
         "uploading": "Carregando...",
@@ -205,21 +229,26 @@
   },
   "Dashboard": {
     "eyebrow": "Painel do Cliente",
-    "admin_eyebrow": "Protocolo de Monitoramento",
+    "admin_eyebrow": "Gestão de Projetos",
     "admin_title": "Visão Geral do Estúdio",
+    "greetings": {
+      "morning": "Bom dia {name}, tenha um ótimo dia.",
+      "afternoon": "Boa tarde {name}, tenha uma excelente tarde.",
+      "evening": "Boa noite {name}, finalizando o dia com maestria."
+    },
     "global_timeline_title": "Timeline Global de Evolução",
     "active_projects_count": "{count} projetos em execução",
     "project_name_label": "Projeto",
     "no_project": "Nenhum projeto ativo encontrado.",
     "status": {
-      "title": "Status do Protocolo",
+      "title": "Status do Projeto",
       "progress": "Progresso Geral",
       "STRATEGY": "Estratégia",
       "ARCHITECTURE": "Arquitetura",
       "DESIGN": "Design",
-      "ENGINEERING": "Engenharia",
+      "ENGINEERING": "Desenvolvimento",
       "QA": "Qualidade",
-      "LAUNCHED": "Lançado"
+      "LAUNCHED": "Finalizado"
     },
     "timeline": {
       "title": "Timeline de Execução",

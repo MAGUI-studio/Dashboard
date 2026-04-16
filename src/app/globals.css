@@ -14,6 +14,9 @@
     --muted: oklch(0.92 0 0);
     --muted-foreground: oklch(0.4 0 0);
     
+    --destructive: oklch(0.5 0.2 25); /* Professional Deep Red */
+    --destructive-foreground: oklch(1 0 0);
+    
     --border: oklch(0 0 0 / 8%); /* Slightly more visible border */
     --radius: 1.5rem;
 
@@ -29,6 +32,9 @@
     
     --muted: oklch(0.18 0 0);
     --muted-foreground: oklch(0.7 0 0);
+    
+    --destructive: oklch(0.6 0.2 25);
+    --destructive-foreground: oklch(0.12 0 0);
     
     --border: oklch(1 0 0 / 12%); /* Slightly more visible border */
     
@@ -49,6 +55,8 @@
     --color-primary-foreground: var(--primary-foreground);
     --color-muted: var(--muted);
     --color-muted-foreground: var(--muted-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
     --spacing-440: 110rem;
 
     @keyframes collapsible-down {

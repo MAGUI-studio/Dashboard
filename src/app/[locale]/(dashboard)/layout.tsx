@@ -7,7 +7,7 @@ import {
 import { TooltipProvider } from "@/src/components/ui/tooltip"
 
 import { AppSidebar } from "@/src/components/common/AppSidebar"
-import { DynamicBreadcrumb } from "@/src/components/common/DynamicBreadcrumb"
+import BackgroundImages from "@/src/components/common/backgroundImages"
 import { LanguageSwitcher } from "@/src/components/common/languageSwitcher"
 import { ThemeToggle } from "@/src/components/common/themeToggle"
 
@@ -25,7 +25,6 @@ export default async function DashboardLayout({
             <div className="flex items-center gap-2">
               <SidebarTrigger className="-ml-1" />
               <Separator orientation="vertical" className="mr-2 h-4" />
-              <DynamicBreadcrumb />
             </div>
             <div className="flex items-center gap-2">
               <LanguageSwitcher />
@@ -33,6 +32,8 @@ export default async function DashboardLayout({
             </div>
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+
+          <BackgroundImages />
         </SidebarInset>
       </TooltipProvider>
     </SidebarProvider>

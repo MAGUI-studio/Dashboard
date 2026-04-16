@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
 import { AssetType } from "@/src/generated/client"
+import { UTApi } from "uploadthing/server"
 
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -240,14 +241,24 @@ export async function updateProjectAssetsOrderAction(
   }
 }
 
-export async function deleteProjectAssetAction(id: string, projectId: string) {
+export async function deleteProjectAssetAction(
+  id: string,
+  projectId: string,
+  key: string
+) {
   try {
     await protect("admin")
   } catch {
     return { error: "Unauthorized" }
   }
 
+  const utapi = new UTApi()
+
   try {
+    // Delete from UploadThing storage
+    await utapi.deleteFiles(key)
+
+    // Delete from Database
     await prisma.asset.delete({
       where: { id },
     })
