@@ -102,7 +102,7 @@ export default async function DashboardPage({
                             minute: "2-digit",
                             timeZone: "America/Sao_Paulo",
                           }).format(new Date(update.createdAt))}{" "}
-                          BRT
+                          Horário de Brasília
                         </span>
                         <span className="rounded-lg bg-muted/10 px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 border border-border/20">
                           {t("project_name_label")}: {update.project.name}
@@ -337,7 +337,7 @@ export default async function DashboardPage({
                           minute: "2-digit",
                           timeZone: "America/Sao_Paulo",
                         }).format(new Date(update.createdAt))}{" "}
-                        BRT
+                        Horário de Brasília
                       </span>
                       {update.isMilestone && (
                         <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-brand-primary">

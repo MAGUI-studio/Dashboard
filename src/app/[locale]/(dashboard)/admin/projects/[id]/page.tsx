@@ -85,7 +85,7 @@ export default async function AdminProjectDetailPage({
                         minute: "2-digit",
                         timeZone: "America/Sao_Paulo",
                       }).format(new Date(update.createdAt))}{" "}
-                      BRT
+                      Horário de Brasília
                     </span>
                     <h4 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
                       {update.title}
