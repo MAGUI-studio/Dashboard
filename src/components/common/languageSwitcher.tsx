@@ -3,8 +3,9 @@
 import * as React from "react"
 
 import { useLocale, useTranslations } from "next-intl"
+import { useParams } from "next/navigation"
 
-import { AppPathnames, locales } from "@/src/i18n/config"
+import { locales } from "@/src/i18n/config"
 import { usePathname, useRouter } from "@/src/i18n/navigation"
 import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
@@ -42,6 +43,7 @@ export function LanguageSwitcher(): React.JSX.Element {
   }, [])
 
   const pathname = usePathname()
+  const params = useParams()
 
   const handleLocaleChange = (newLocale: string): void => {
     if (newLocale === currentLocale) return
@@ -51,8 +53,8 @@ export function LanguageSwitcher(): React.JSX.Element {
 
     // Use the localized router to replace the pathname with the new locale
     // This will correctly translate pathnames without prefixing
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    router.replace(pathname as any, { locale: newLocale })
+    // @ts-expect-error - next-intl type complexity with dynamic params
+    router.replace({ pathname, params }, { locale: newLocale })
   }
 
   if (!mounted) {
