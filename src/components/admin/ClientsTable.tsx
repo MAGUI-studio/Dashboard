@@ -208,14 +208,9 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="px-8 py-6">
-                    <div className="flex flex-col gap-1">
-                      <span className="font-sans text-xs font-bold text-muted-foreground/80">
-                        {user.emailAddresses[0]?.emailAddress}
-                      </span>
-                      <span className="text-[9px] font-black font-mono uppercase tracking-tighter text-muted-foreground/30">
-                        ID: {user.id.split("_").pop()}
-                      </span>
-                    </div>
+                    <span className="font-sans text-xs font-bold text-muted-foreground/80">
+                      {user.emailAddresses[0]?.emailAddress}
+                    </span>
                   </TableCell>
                   <TableCell className="px-8 py-6">
                     <Badge
