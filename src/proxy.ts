@@ -16,31 +16,32 @@ const isPublicRoute = createRouteMatcher([
   "/sign-in(.*)",
   "/sign-up(.*)",
   "/api/og(.*)",
+  "/api/uploadthing(.*)",
 ])
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"])
 
 export default clerkMiddleware(async (auth, req) => {
-  // 1. Exclude UploadThing from internationalization and auth redirection
-  if (req.nextUrl.pathname.startsWith("/api/uploadthing")) {
-    return NextResponse.next()
-  }
-
+  // 1. Proteger rotas privadas
   if (!isPublicRoute(req)) {
     const { sessionClaims } = await auth.protect()
 
+    // 2. Controle de acesso Admin
     if (isAdminRoute(req) && sessionClaims?.metadata?.role !== "admin") {
       const url = new URL("/", req.url)
       return NextResponse.redirect(url)
     }
   }
 
+  // 3. Executar internacionalização
   return intlMiddleware(req)
 })
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|apple-touch-icon.png|favicon-16x16.png|favicon-32x32.png|site.webmanifest|manifest.webmanifest|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)).*)",
+    // Skip Next.js internals and all static files, unless found in search params
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    // Always run for API routes
     "/(api|trpc)(.*)",
   ],
 }

@@ -3,7 +3,7 @@
 import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
-import { AssetType } from "@/src/generated/prisma"
+import { AssetType } from "@/src/generated/client"
 
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"

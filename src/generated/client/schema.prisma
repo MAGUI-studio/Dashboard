@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enum para as fases do seu Protocolo de Execução
+enum ProjectStatus {
+  STRATEGY // Estratégia
+  ARCHITECTURE // Arquitetura
+  DESIGN // Design
+  ENGINEERING // Engenharia
+  QA // Qualidade
+  LAUNCHED // Finalizado/Lançado
+}
+
+// Enum para tipos de arquivos no UploadThing
+enum AssetType {
+  CONTRACT
+  DESIGN_SYSTEM
+  IMAGE
+  DOCUMENT
+  SOURCE_CODE
+}
+
+model User {
+  id        String    @id @default(cuid())
+  clerkId   String    @unique // Link direto com o Auth do Clerk
+  email     String    @unique
+  name      String?
+  role      String    @default("CLIENT") // ADMIN ou CLIENT
+  projects  Project[] // Um cliente pode ter vários projetos (ex: Landing Page + App)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  name        String
+  description String?
+  status      ProjectStatus @default(STRATEGY)
+  progress    Int           @default(0) // 0 a 100
+  budget      String? // Para controle interno do Admin
+  deadline    DateTime?
+
+  // Relacionamentos
+  clientId String
+  client   User   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  updates Update[] // A Timeline do projeto
+  assets  Asset[] // Arquivos do UploadThing
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Update {
+  id          String  @id @default(cuid())
+  title       String // Ex: "Design da Home Finalizado"
+  description String? @db.Text
+  isMilestone Boolean @default(false) // Se marcar como true, pode ter um destaque visual na UI
+  timezone    String  @default("UTC") // Fuso horário do momento do registro
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Asset {
+  id       String    @id @default(cuid())
+  name     String // Nome visível do arquivo
+  url      String // URL vinda do UploadThing
+  key      String // Key do UploadThing para deleção futura
+  type     AssetType @default(DOCUMENT)
+  order    Int       @default(0) // Ordem de exibição
+  timezone String    @default("UTC") // Fuso horário do upload
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
