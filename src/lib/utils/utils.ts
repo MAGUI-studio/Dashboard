@@ -17,22 +17,22 @@ export function formatCurrencyBRL(value: string | number): string {
 
 export function formatLocalTime(date: Date, timezone: string): string {
   try {
+    const tz = timezone || "America/Sao_Paulo"
     const formatter = new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
-      timeZone: timezone,
+      timeZone: tz,
     })
 
     const formatted = formatter.format(date)
 
     // Friendly timezone display
-    // America/Sao_Paulo -> Sao Paulo
-    const friendlyTz = timezone.includes("/")
-      ? timezone.split("/").pop()?.replace(/_/g, " ")
-      : timezone
+    const friendlyTz = tz.includes("/")
+      ? tz.split("/").pop()?.replace(/_/g, " ")
+      : tz
 
     return `${formatted} (${friendlyTz})`
   } catch (error) {

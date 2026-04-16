@@ -46,7 +46,7 @@ export default async function AdminProjectDetailPage({
   }
 
   return (
-    <main className="relative flex min-h-svh flex-col gap-10 bg-background/50 p-6 lg:p-12">
+    <main className="relative flex min-h-svh flex-col gap-10 overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="absolute top-0 right-0 -z-10 size-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
 
       <ProjectDetailsHeader project={project} />

@@ -49,7 +49,7 @@ export default async function DashboardPage({
     })
 
     return (
-      <main className="relative flex min-h-svh flex-col bg-background/50 p-6 lg:p-12">
+      <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
         <div className="flex flex-col gap-12 w-full">
           {/* Header */}
           <div className="flex flex-col gap-3">
@@ -213,7 +213,7 @@ export default async function DashboardPage({
   const currentStatusIndex = statusSteps.indexOf(activeProject.status)
 
   return (
-    <main className="relative flex min-h-svh flex-col bg-background/50 p-6 lg:p-12">
+    <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="flex flex-col gap-12 w-full">
         {/* Header & Project Switcher */}
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
