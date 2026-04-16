@@ -7,6 +7,8 @@ import { ClerkProvider } from "@clerk/nextjs"
 import { shadcn } from "@clerk/ui/themes"
 import "@clerk/ui/themes/shadcn.css"
 import { GoogleAnalytics } from "@next/third-parties/google"
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin"
+import { extractRouterConfig } from "uploadthing/server"
 
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
@@ -16,6 +18,7 @@ import { env } from "@/src/config/env"
 import { fontVariables } from "@/src/config/fonts"
 import { siteConfig } from "@/src/config/site"
 
+import { ourFileRouter } from "@/src/app/api/uploadthing/core"
 import "@/src/app/globals.css"
 
 export const viewport: Viewport = {
@@ -129,6 +132,7 @@ export default async function RootLayout({
           }
         >
           <NextIntlClientProvider messages={messages}>
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <ThemeProvider>{children}</ThemeProvider>
           </NextIntlClientProvider>
         </ClerkProvider>

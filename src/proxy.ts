@@ -21,6 +21,11 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(["/admin(.*)"])
 
 export default clerkMiddleware(async (auth, req) => {
+  // 1. Exclude UploadThing from internationalization and auth redirection
+  if (req.nextUrl.pathname.startsWith("/api/uploadthing")) {
+    return NextResponse.next()
+  }
+
   if (!isPublicRoute(req)) {
     const { sessionClaims } = await auth.protect()
 
