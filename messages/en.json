@@ -103,6 +103,44 @@
           "general": "An error occurred while processing your request."
         }
       }
+    },
+    "projects": {
+      "eyebrow": "Execution Protocol",
+      "title": "Projects",
+      "description": "Start and manage high-performance projects in the MAGUI ecosystem.",
+      "create": "New Project",
+      "form": {
+        "client_info": "Client Information",
+        "client_desc": "Client access data and identity",
+        "project_info": "Project Data",
+        "project_desc": "Execution settings and deadlines",
+        "client_protocol": "Owner identification protocol",
+        "client_selection_desc": "The project will be permanently linked to this access",
+        "project_engineering": "Execution parameters and architecture",
+        "project_name_desc": "Official protocol title",
+        "budget_desc": "Agreed gross value",
+        "project_description_placeholder": "Summary scope and main system objectives...",
+        "deadline_placeholder": "Define final delivery date...",
+        "confirmation_title": "Opening Confirmation",
+        "confirmation_desc": "Upon starting, the design protocol will begin immediately.",
+        "select_client_placeholder": "Select client in system...",
+        "search_client_placeholder": "Search by name or email...",
+        "empty_clients": "No cataloged clients.",
+        "hidden_identity": "Hidden Identity",
+        "email": "Client Email",
+        "clientName": "Full Name",
+        "password": "Access Password",
+        "projectName": "Project Name",
+        "projectDescription": "Description/Goal",
+        "budget": "Expected Budget",
+        "deadline": "Delivery Deadline",
+        "submit": "Start Project",
+        "submitting": "Processing...",
+        "errors": {
+          "validation_failed": "Invalid form data.",
+          "general": "Error creating project."
+        }
+      }
     }
   },
   "Sidebar": {
@@ -113,10 +151,33 @@
       "list": "All Clients",
       "create": "Add Client"
     },
+    "projects": {
+      "title": "Projects",
+      "list": "All Projects",
+      "create": "Start Project"
+    },
     "user": {
       "profile": "My Profile",
       "settings": "Settings",
       "signOut": "Sign Out"
+    }
+  },
+  "Dashboard": {
+    "eyebrow": "Client Dashboard",
+    "no_project": "No active projects found.",
+    "status": {
+      "title": "Protocol Status",
+      "progress": "Overall Progress",
+      "STRATEGY": "Strategy",
+      "ARCHITECTURE": "Architecture",
+      "DESIGN": "Design",
+      "ENGINEERING": "Engineering",
+      "QA": "Quality",
+      "LAUNCHED": "Launched"
+    },
+    "timeline": {
+      "title": "Execution Timeline",
+      "milestone": "Milestone Achieved"
     }
   }
 }

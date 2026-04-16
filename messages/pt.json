@@ -103,6 +103,44 @@
           "general": "Ocorreu um erro ao processar sua solicitação."
         }
       }
+    },
+    "projects": {
+      "eyebrow": "Protocolo de Execução",
+      "title": "Projetos",
+      "description": "Inicie e gerencie novos projetos de alta performance no ecossistema MAGUI.",
+      "create": "Novo Projeto",
+      "form": {
+        "client_info": "Informações do Cliente",
+        "client_desc": "Dados de acesso e identidade do cliente",
+        "project_info": "Dados do Projeto",
+        "project_desc": "Configurações e prazos de execução",
+        "client_protocol": "Protocolo de identificação do proprietário",
+        "client_selection_desc": "O projeto será vinculado permanentemente a este acesso",
+        "project_engineering": "Parâmetros de execução e arquitetura",
+        "project_name_desc": "Título oficial do protocolo",
+        "budget_desc": "Valor bruto acordado",
+        "project_description_placeholder": "Escopo resumido e objetivos principais do sistema...",
+        "deadline_placeholder": "Definir data de entrega final...",
+        "confirmation_title": "Confirmação de Abertura",
+        "confirmation_desc": "Ao iniciar, o protocolo de design começará imediatamente.",
+        "select_client_placeholder": "Selecionar cliente no sistema...",
+        "search_client_placeholder": "Buscar por nome ou e-mail...",
+        "empty_clients": "Nenhum cliente catalogado.",
+        "hidden_identity": "Identidade Oculta",
+        "email": "E-mail do Cliente",
+        "clientName": "Nome Completo",
+        "password": "Senha de Acesso",
+        "projectName": "Nome do Projeto",
+        "projectDescription": "Descrição/Objetivo",
+        "budget": "Orçamento Previsto",
+        "deadline": "Prazo de Entrega",
+        "submit": "Iniciar Projeto",
+        "submitting": "Processando...",
+        "errors": {
+          "validation_failed": "Dados do formulário inválidos.",
+          "general": "Erro ao criar projeto."
+        }
+      }
     }
   },
   "Sidebar": {
@@ -113,10 +151,33 @@
       "list": "Todos os Clientes",
       "create": "Adicionar Cliente"
     },
+    "projects": {
+      "title": "Projetos",
+      "list": "Todos os Projetos",
+      "create": "Iniciar Projeto"
+    },
     "user": {
       "profile": "Meu Perfil",
       "settings": "Configurações",
       "signOut": "Sair"
+    }
+  },
+  "Dashboard": {
+    "eyebrow": "Painel do Cliente",
+    "no_project": "Nenhum projeto ativo encontrado.",
+    "status": {
+      "title": "Status do Protocolo",
+      "progress": "Progresso Geral",
+      "STRATEGY": "Estratégia",
+      "ARCHITECTURE": "Arquitetura",
+      "DESIGN": "Design",
+      "ENGINEERING": "Engenharia",
+      "QA": "Qualidade",
+      "LAUNCHED": "Lançado"
+    },
+    "timeline": {
+      "title": "Timeline de Execução",
+      "milestone": "Marco Alcançado"
     }
   }
 }

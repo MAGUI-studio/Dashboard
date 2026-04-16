@@ -12,6 +12,7 @@ import {
   Files,
   Gear,
   Plus,
+  ProjectorScreen,
   SignOut,
   UserCircle,
   Users,
@@ -55,7 +56,7 @@ import { usePermissions } from "@/src/hooks/use-permissions"
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user } = useUser()
-  const { isLoaded, isAdmin } = usePermissions()
+  const { isLoaded } = usePermissions()
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
   const { setOpenMobile } = useSidebar()
@@ -144,6 +145,53 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             <Link href="/admin/clients/register">
                               <Plus weight="duotone" />
                               <span>{t("clients.create")}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+
+                <Collapsible
+                  asChild
+                  defaultOpen={pathname
+                    .toString()
+                    .startsWith("/admin/projects")}
+                  className="group/collapsible"
+                >
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton tooltip={t("projects.title")}>
+                        <ProjectorScreen weight="duotone" />
+                        <span>{t("projects.title")}</span>
+                        <CaretDown
+                          weight="duotone"
+                          className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-180"
+                        />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === "/admin/projects"}
+                          >
+                            <Link href="/admin/projects">
+                              <Files weight="duotone" />
+                              <span>{t("projects.list")}</span>
+                            </Link>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                        <SidebarMenuSubItem>
+                          <SidebarMenuSubButton
+                            asChild
+                            isActive={pathname === "/admin/projects/register"}
+                          >
+                            <Link href="/admin/projects/register">
+                              <Plus weight="duotone" />
+                              <span>{t("projects.create")}</span>
                             </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>

@@ -7,6 +7,7 @@ import { clerkClient } from "@clerk/nextjs/server"
 import { z } from "zod"
 
 import { protect } from "@/src/lib/permissions"
+import prisma from "@/src/lib/prisma"
 
 const createUserSchema = z.object({
   email: z.string().email(),
@@ -44,7 +45,7 @@ export async function createClientAction(formData: FormData) {
   try {
     const client = await clerkClient()
 
-    await client.users.createUser({
+    const clerkUser = await client.users.createUser({
       emailAddress: [email],
       username,
       firstName,
@@ -53,20 +54,24 @@ export async function createClientAction(formData: FormData) {
       publicMetadata: { role },
     })
 
+    // Sincronizar com Prisma
+    await prisma.user.create({
+      data: {
+        clerkId: clerkUser.id,
+        email,
+        name: `${firstName} ${lastName}`,
+        role: role.toUpperCase(),
+      },
+    })
+
     revalidatePath("/admin/clients")
     return { success: true }
-  } catch (error: unknown) {
+  } catch (error) {
     console.error("Clerk Error:", error)
-
-    interface ClerkError {
-      code: string
-      message: string
-      longMessage?: string
-    }
 
     const clerkError =
       error instanceof Object && "errors" in error
-        ? (error as { errors: ClerkError[] }).errors?.[0]
+        ? (error as { errors: Array<{ code: string }> }).errors?.[0]
         : null
     const code = clerkError?.code
 

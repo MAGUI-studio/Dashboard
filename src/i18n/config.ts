@@ -15,6 +15,14 @@ export const pathnames = {
     pt: "/admin/clientes/cadastrar",
     en: "/admin/clients/register",
   },
+  "/admin/projects": {
+    pt: "/admin/projetos",
+    en: "/admin/projects",
+  },
+  "/admin/projects/register": {
+    pt: "/admin/projetos/cadastrar",
+    en: "/admin/projects/register",
+  },
 }
 
 export type AppPathnames = keyof typeof pathnames
