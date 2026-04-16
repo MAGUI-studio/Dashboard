@@ -5,6 +5,17 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
+import {
+  ArrowRight,
+  EnvelopeSimple,
+  Fingerprint,
+  IdentificationCard,
+  LockKey,
+  ShieldCheck,
+  User,
+  UserCircleGear,
+} from "@phosphor-icons/react"
+
 import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import { Label } from "@/src/components/ui/label"
@@ -15,11 +26,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
+import { Separator } from "@/src/components/ui/separator"
 
 import { createClientAction } from "@/src/lib/actions/user.actions"
 
 export function CreateClientForm() {
-  const t = useTranslations("Admin.clients")
+  const t = useTranslations("Admin.clients.form")
   const router = useRouter()
 
   const [state, formAction, isPending] = React.useActionState(
@@ -35,147 +47,227 @@ export function CreateClientForm() {
   )
 
   return (
-    <form action={formAction} className="flex flex-col gap-6">
-      <div className="grid gap-6 sm:grid-cols-2">
+    <form action={formAction} className="flex flex-col gap-12 text-left">
+      {/* Section: Personal Information */}
+      <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="firstName"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            {t("form.firstName")}
-          </Label>
-          <Input
-            id="firstName"
-            name="firstName"
-            type="text"
-            required
-            disabled={isPending}
-            className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus-visible:ring-brand-primary disabled:opacity-50"
-          />
+          <div className="flex items-center gap-3">
+            <IdentificationCard
+              weight="bold"
+              className="size-5 text-brand-primary"
+            />
+            <h3 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
+              {t("identity_title")}
+            </h3>
+          </div>
+          <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">
+            {t("identity_desc")}
+          </p>
         </div>
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="lastName"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            {t("form.lastName")}
-          </Label>
-          <Input
-            id="lastName"
-            name="lastName"
-            type="text"
-            required
-            disabled={isPending}
-            className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus-visible:ring-brand-primary disabled:opacity-50"
-          />
-        </div>
-      </div>
 
-      <div className="grid gap-6 sm:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="email"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            {t("form.email")}
-          </Label>
-          <Input
-            id="email"
-            name="email"
-            type="email"
-            required
-            disabled={isPending}
-            className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus-visible:ring-brand-primary disabled:opacity-50"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="username"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            {t("form.username")}
-          </Label>
-          <Input
-            id="username"
-            name="username"
-            type="text"
-            required
-            disabled={isPending}
-            className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus-visible:ring-brand-primary disabled:opacity-50"
-          />
-        </div>
-      </div>
-
-      <div className="grid gap-6 sm:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="password"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            Password
-          </Label>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            required
-            minLength={8}
-            disabled={isPending}
-            className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus-visible:ring-brand-primary disabled:opacity-50"
-          />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label
-            htmlFor="role"
-            className="text-[10px] font-black uppercase tracking-widest text-muted-foreground"
-          >
-            {t("form.role")}
-          </Label>
-          <Select
-            name="role"
-            defaultValue="client"
-            required
-            disabled={isPending}
-          >
-            <SelectTrigger
-              id="role"
-              className="rounded-xl border-border/60 bg-muted/20 px-4 h-12 text-sm font-bold text-foreground focus:ring-brand-primary disabled:opacity-50"
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="firstName"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
             >
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl border-border/60 bg-muted/90 backdrop-blur-md">
-              <SelectItem
-                value="client"
-                className="text-xs font-bold uppercase tracking-widest focus:bg-brand-primary focus:text-white"
-              >
-                {t("form.roles.client")}
-              </SelectItem>
-              <SelectItem
-                value="admin"
-                className="text-xs font-bold uppercase tracking-widest focus:bg-brand-primary focus:text-white"
-              >
-                {t("form.roles.admin")}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+              {t("firstName")}
+            </Label>
+            <div className="relative group">
+              <User
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="firstName"
+                name="firstName"
+                placeholder="Ex: John"
+                required
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="lastName"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              {t("lastName")}
+            </Label>
+            <Input
+              id="lastName"
+              name="lastName"
+              placeholder="Ex: Doe"
+              required
+              disabled={isPending}
+              className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+            />
+          </div>
         </div>
       </div>
 
-      {state.error && (
-        <p className="text-[10px] font-bold uppercase tracking-widest text-destructive">
-          {typeof state.error === "string"
-            ? state.error
-            : "Check the fields and try again"}
-        </p>
-      )}
+      <Separator className="bg-border/20" />
 
-      <Button
-        type="submit"
-        disabled={isPending}
-        className="mt-4 rounded-full py-6 text-xs uppercase tracking-[0.2em]"
-      >
-        {isPending ? "Creating..." : t("form.submit")}
-      </Button>
+      {/* Section: System Credentials */}
+      <div className="flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <div className="flex items-center gap-3">
+            <Fingerprint weight="bold" className="size-5 text-brand-primary" />
+            <h3 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
+              {t("security_title")}
+            </h3>
+          </div>
+          <p className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-[0.2em]">
+            {t("security_desc")}
+          </p>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="email"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              {t("email")}
+            </Label>
+            <div className="relative group">
+              <EnvelopeSimple
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="email"
+                name="email"
+                type="email"
+                placeholder="john@example.com"
+                required
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="username"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              {t("username")}
+            </Label>
+            <Input
+              id="username"
+              name="username"
+              placeholder="johndoe"
+              required
+              disabled={isPending}
+              className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+            />
+          </div>
+        </div>
+
+        <div className="grid gap-8 sm:grid-cols-2">
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="password"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              {t("password")}
+            </Label>
+            <div className="relative group">
+              <LockKey
+                weight="bold"
+                className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+              />
+              <Input
+                id="password"
+                name="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                minLength={8}
+                disabled={isPending}
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 pl-11 font-sans font-bold transition-all focus-visible:ring-brand-primary/20 focus-visible:bg-muted/20"
+              />
+            </div>
+            <p className="ml-1 text-[9px] font-bold text-muted-foreground/30 uppercase tracking-tighter">
+              {t("password_hint")}
+            </p>
+          </div>
+          <div className="flex flex-col gap-3">
+            <Label
+              htmlFor="role"
+              className="ml-1 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60"
+            >
+              {t("role")}
+            </Label>
+            <Select
+              name="role"
+              defaultValue="client"
+              required
+              disabled={isPending}
+            >
+              <SelectTrigger
+                id="role"
+                className="h-14 rounded-2xl border-border/40 bg-muted/10 px-4 font-sans font-bold text-foreground transition-all focus:ring-brand-primary/20 disabled:opacity-50"
+              >
+                <div className="flex items-center gap-3">
+                  <UserCircleGear
+                    weight="bold"
+                    className="size-4 text-brand-primary"
+                  />
+                  <SelectValue />
+                </div>
+              </SelectTrigger>
+              <SelectContent className="rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl">
+                <SelectItem
+                  value="client"
+                  className="rounded-lg py-3 text-xs font-bold uppercase tracking-widest transition-colors focus:bg-brand-primary focus:text-white"
+                >
+                  {t("roles.client")}
+                </SelectItem>
+                <SelectItem
+                  value="admin"
+                  className="rounded-lg py-3 text-xs font-bold uppercase tracking-widest transition-colors focus:bg-brand-primary focus:text-white"
+                >
+                  {t("roles.admin")}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-6 pt-6">
+        {state.error && (
+          <div className="flex items-center gap-3 rounded-2xl border border-destructive/20 bg-destructive/5 p-4 animate-in fade-in slide-in-from-top-2">
+            <ShieldCheck weight="bold" className="size-5 text-destructive" />
+            <p className="text-[10px] font-black uppercase tracking-widest text-destructive">
+              {state.error || t("security_violation")}
+            </p>
+          </div>
+        )}
+
+        <Button
+          type="submit"
+          disabled={isPending}
+          className="group relative h-16 w-full overflow-hidden rounded-full font-sans font-black uppercase tracking-[0.3em] shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-70 sm:w-max sm:px-12"
+        >
+          {isPending ? (
+            <div className="flex items-center gap-3">
+              <div className="size-4 animate-spin rounded-full border-2 border-white/20 border-t-white" />
+              <span>{t("submitting")}</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-3">
+              <span>{t("submit")}</span>
+              <ArrowRight
+                weight="bold"
+                className="size-5 transition-transform group-hover:translate-x-1"
+              />
+            </div>
+          )}
+        </Button>
+      </div>
     </form>
   )
 }

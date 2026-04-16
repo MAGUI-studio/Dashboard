@@ -3,8 +3,11 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
-import Link from "next/link"
 import { usePathname } from "next/navigation"
+
+import { AppPathnames } from "@/src/i18n/config"
+import { Link } from "@/src/i18n/navigation"
+import { CaretRight, List } from "@phosphor-icons/react"
 
 import {
   Breadcrumb,
@@ -17,7 +20,7 @@ import {
 
 export function DynamicBreadcrumb() {
   const pathname = usePathname()
-  const t = useTranslations("Sidebar") // Reusing Sidebar translations for simplicity or we can use another namespace
+  const t = useTranslations("Sidebar")
 
   // Split the pathname into segments
   const segments = pathname.split("/").filter(Boolean)
@@ -27,42 +30,57 @@ export function DynamicBreadcrumb() {
 
   return (
     <Breadcrumb>
-      <BreadcrumbList>
-        <BreadcrumbItem className="hidden md:block">
-          <BreadcrumbLink asChild>
-            <Link href="/">{t("dashboard")}</Link>
-          </BreadcrumbLink>
+      <BreadcrumbList className="gap-1.5 sm:gap-2">
+        <BreadcrumbItem>
+          <div className="flex items-center gap-2 rounded-lg border border-border/40 bg-muted/20 px-2 py-1 transition-colors hover:bg-muted/40">
+            <List weight="bold" className="size-3 text-muted-foreground/60" />
+            <BreadcrumbLink
+              asChild
+              className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 hover:text-brand-primary"
+            >
+              <Link href="/">{t("dashboard")}</Link>
+            </BreadcrumbLink>
+          </div>
         </BreadcrumbItem>
 
         {segmentsWithoutLocale.length > 0 && (
-          <BreadcrumbSeparator className="hidden md:block" />
+          <BreadcrumbSeparator className="text-muted-foreground/30">
+            <CaretRight weight="bold" />
+          </BreadcrumbSeparator>
         )}
 
         {segmentsWithoutLocale.map((segment, index) => {
-          const href = `/${segments[0]}/${segmentsWithoutLocale.slice(0, index + 1).join("/")}`
+          const href =
+            `/${segmentsWithoutLocale.slice(0, index + 1).join("/")}` as AppPathnames
           const isLast = index === segmentsWithoutLocale.length - 1
 
-          // Try to translate the segment
-          // We might need a specific mapping for segments to translation keys
           let label = segment.charAt(0).toUpperCase() + segment.slice(1)
 
-          // Example mapping for common segments
           if (segment === "admin") label = "Admin"
           if (segment === "clients") label = t("clients.title")
           if (segment === "register") label = t("clients.create")
 
           return (
-            <React.Fragment key={href}>
+            <React.Fragment key={segment}>
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{label}</BreadcrumbPage>
+                  <BreadcrumbPage className="text-[10px] font-black uppercase tracking-widest text-foreground">
+                    {label}
+                  </BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink asChild>
+                  <BreadcrumbLink
+                    asChild
+                    className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 hover:text-brand-primary"
+                  >
                     <Link href={href}>{label}</Link>
                   </BreadcrumbLink>
                 )}
               </BreadcrumbItem>
-              {!isLast && <BreadcrumbSeparator />}
+              {!isLast && (
+                <BreadcrumbSeparator className="text-muted-foreground/30">
+                  <CaretRight weight="bold" />
+                </BreadcrumbSeparator>
+              )}
             </React.Fragment>
           )
         })}

@@ -54,27 +54,47 @@
     "title": "Painel",
     "subtitle": "Admin",
     "clients": {
-      "title": "Gestão de Clientes",
+      "eyebrow": "Portal de Gestão",
+      "title": "Clientes",
+      "description": "Controle e monitore os acessos do seu ecossistema digital. Gerencie permissões, cargos e configurações de segurança em um terminal visual centralizado.",
       "create": "Novo Cliente",
+      "search_placeholder": "Buscar por nome ou e-mail...",
+      "filter": "Filtrar",
+      "sort": "Ordenar por Nome",
+      "empty": "Nenhum cliente encontrado.",
+      "summary": "Exibindo {count} clientes no sistema",
       "table": {
-        "email": "E-mail",
-        "name": "Nome",
-        "role": "Permissão",
-        "actions": "Ações"
+        "profile": "Perfil do Usuário",
+        "id": "Identificação",
+        "privileges": "Nível de Acesso",
+        "actions": "Ações",
+        "inspect": "Detalhes"
+      },
+      "roles": {
+        "admin": "Administrador",
+        "client": "Cliente"
       },
       "form": {
-        "email": "Endereço de E-mail",
+        "identity_title": "Perfil de Identidade",
+        "identity_desc": "Identificação legal e nome de exibição",
+        "security_title": "Acesso de Segurança",
+        "security_desc": "Autenticação e identificadores únicos",
+        "email": "E-mail",
         "firstName": "Nome",
         "lastName": "Sobrenome",
         "username": "Nome de Usuário",
+        "password": "Senha de Segurança",
+        "password_hint": "Mínimo de 8 caracteres",
         "role": "Permissão",
         "roles": {
           "admin": "Administrador",
           "client": "Cliente"
         },
         "submit": "Criar Acesso",
+        "submitting": "Inicializando...",
         "success": "Cliente criado com sucesso!",
         "error": "Erro ao criar cliente.",
+        "security_violation": "Violação de segurança: Verifique os campos e tente novamente.",
         "errors": {
           "password_pwned": "Esta senha é muito fraca e foi encontrada em vazamentos de dados. Escolha outra.",
           "identifier_exists": "Este e-mail já está cadastrado no sistema.",

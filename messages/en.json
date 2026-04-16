@@ -54,27 +54,47 @@
     "title": "Admin",
     "subtitle": "Panel",
     "clients": {
-      "title": "Client Management",
+      "eyebrow": "Management Portal",
+      "title": "Clients",
+      "description": "Control and monitor your digital ecosystem access. Manage permissions, roles, and security settings in one centralized visual terminal.",
       "create": "New Client",
+      "search_placeholder": "Search by name or email...",
+      "filter": "Filter",
+      "sort": "Sort by Name",
+      "empty": "No clients found.",
+      "summary": "Showing {count} clients in the system",
       "table": {
-        "email": "Email",
-        "name": "Name",
-        "role": "Permission",
-        "actions": "Actions"
+        "profile": "User Profile",
+        "id": "Identification",
+        "privileges": "Access Level",
+        "actions": "Actions",
+        "inspect": "Details"
+      },
+      "roles": {
+        "admin": "Administrator",
+        "client": "Client"
       },
       "form": {
-        "email": "Email Address",
+        "identity_title": "Identity Profile",
+        "identity_desc": "Legal identification and display name",
+        "security_title": "Security Access",
+        "security_desc": "Authentication and unique handles",
+        "email": "Email",
         "firstName": "First Name",
         "lastName": "Last Name",
         "username": "Username",
+        "password": "Security Password",
+        "password_hint": "Minimum 8 characters",
         "role": "Role",
         "roles": {
           "admin": "Administrator",
           "client": "Client"
         },
         "submit": "Create Access",
+        "submitting": "Initializing...",
         "success": "Client created successfully!",
         "error": "Error creating client.",
+        "security_violation": "Security violation: Check the fields and try again.",
         "errors": {
           "password_pwned": "This password is too weak and has been found in data breaches. Please choose another one.",
           "identifier_exists": "This email is already registered in the system.",
@@ -84,8 +104,8 @@
         }
       }
     }
-    },
-    "Sidebar": {
+  },
+  "Sidebar": {
     "menu": "Menu",
     "dashboard": "Dashboard",
     "clients": {
@@ -98,5 +118,5 @@
       "settings": "Settings",
       "signOut": "Sign Out"
     }
-    }
-    }
+  }
+}

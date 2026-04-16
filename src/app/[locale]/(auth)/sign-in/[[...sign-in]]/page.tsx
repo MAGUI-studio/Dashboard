@@ -13,7 +13,7 @@ import { Logo } from "@/src/components/common/logo"
 import { ThemeToggle } from "@/src/components/common/themeToggle"
 
 const VARIANTS_FADE_IN_LEFT: Variants = {
-  hidden: { opacity: 0, x: -20 },
+  hidden: { opacity: 0, x: -10 },
   visible: {
     opacity: 1,
     x: 0,
@@ -22,7 +22,7 @@ const VARIANTS_FADE_IN_LEFT: Variants = {
 }
 
 const VARIANTS_FADE_IN_UP: Variants = {
-  hidden: { opacity: 0, y: 20 },
+  hidden: { opacity: 0, y: 10 },
   visible: {
     opacity: 1,
     y: 0,
@@ -32,12 +32,12 @@ const VARIANTS_FADE_IN_UP: Variants = {
 
 export default function SignInPage(): React.JSX.Element {
   return (
-    <main className="relative flex min-h-svh w-full flex-col items-center justify-center overflow-x-hidden bg-background lg:flex-row">
+    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-background">
       <motion.div
         initial="hidden"
         animate="visible"
         variants={VARIANTS_FADE_IN_LEFT}
-        className="fixed top-8 left-8 z-50 flex items-center gap-3"
+        className="absolute top-8 left-8 z-50 flex items-center gap-3 lg:left-12"
       >
         <div className="flex items-center gap-2 rounded-full border border-border/40 bg-background/60 p-1.5 backdrop-blur-md shadow-sm">
           <LanguageSwitcher />
@@ -46,7 +46,7 @@ export default function SignInPage(): React.JSX.Element {
         </div>
       </motion.div>
 
-      <section className="absolute inset-0 z-0 h-full w-full">
+      <section className="absolute inset-0 z-0 h-full w-full overflow-hidden">
         <motion.div
           initial={{ opacity: 0, scale: 1.1 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -66,14 +66,14 @@ export default function SignInPage(): React.JSX.Element {
         <div className="absolute inset-0 z-10 bg-black/70 lg:hidden" />
       </section>
 
-      <div className="relative z-30 flex min-h-svh w-full flex-col lg:flex-row">
+      <div className="relative z-30 flex w-full flex-col items-center justify-center lg:flex-row">
         <div className="hidden lg:flex lg:w-3/5" />
 
         <motion.section
           initial="hidden"
           animate="visible"
           variants={VARIANTS_FADE_IN_UP}
-          className="flex min-h-svh w-full flex-col items-center justify-center bg-background px-6 py-20 lg:w-2/5 lg:py-6"
+          className="flex w-full flex-col items-center justify-center bg-background px-6 py-12 lg:w-2/5"
         >
           <div className="flex w-full max-w-[420px] flex-col items-center lg:items-start">
             <Link
