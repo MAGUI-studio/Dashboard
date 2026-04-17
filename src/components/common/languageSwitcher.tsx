@@ -58,30 +58,28 @@ export function LanguageSwitcher(): React.JSX.Element {
   }
 
   if (!mounted) {
-    return (
-      <div className="h-9 w-24 animate-pulse rounded-full border border-border/50 bg-muted/20" />
-    )
+    return <div className="h-8 w-20 animate-pulse rounded-full bg-muted/10" />
   }
 
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger className="cursor-pointer outline-none">
-        <div className="group flex h-9 items-center gap-2 rounded-full border border-border/60 bg-background/50 px-3 backdrop-blur-sm transition-all hover:border-border hover:bg-muted/50">
+      <DropdownMenuTrigger className="cursor-pointer outline-none focus-visible:ring-0 focus:ring-0">
+        <div className="group flex h-8 items-center gap-2 rounded-full px-3 transition-all hover:bg-muted/10">
           <div className="flex items-center gap-2">
             <ReactCountryFlag
               countryCode={flagCodes[currentLocale]}
               svg
-              className="rounded-[2px] opacity-90 grayscale-[0.2] transition-all group-hover:grayscale-0"
+              className="rounded-[2px] opacity-70 grayscale-[0.5] transition-all group-hover:opacity-100 group-hover:grayscale-0"
               style={{ width: "1.1em", height: "0.8em" }}
             />
-            <span className="text-xs font-medium text-muted-foreground uppercase transition-colors group-hover:text-foreground">
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 transition-colors group-hover:text-foreground/80">
               {currentLocale}
             </span>
           </div>
           <CaretDownIcon
-            weight="duotone"
-            size={12}
-            className="text-muted-foreground/60 transition-colors group-hover:text-foreground"
+            weight="bold"
+            size={10}
+            className="text-muted-foreground/30 transition-colors group-hover:text-foreground/60"
           />
         </div>
       </DropdownMenuTrigger>
