@@ -1,17 +1,16 @@
 import { z } from "zod"
 
 const optionalUrlList = z
-  .string()
-  .trim()
+  .union([z.string(), z.array(z.string())])
   .optional()
-  .transform((value) =>
-    value
-      ? value
-          .split(/\s+/)
-          .map((item) => item.trim())
-          .filter(Boolean)
-      : []
-  )
+  .transform((value) => {
+    if (!value) return []
+    if (Array.isArray(value)) return value.filter(Boolean)
+    return value
+      .split(/\s+/)
+      .map((item) => item.trim())
+      .filter(Boolean)
+  })
   .pipe(z.array(z.string().url("Cada referência precisa ser uma URL válida")))
 
 export const briefingSchema = z.object({

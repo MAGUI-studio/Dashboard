@@ -269,6 +269,7 @@
     "briefing_map": "Briefing map",
     "live": "Live",
     "step_number": "Step {number}",
+    "add_reference": "Add Reference",
     "steps": {
       "brandTone": {
         "label": "Brand Essence",

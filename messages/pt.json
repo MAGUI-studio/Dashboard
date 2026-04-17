@@ -269,6 +269,7 @@
     "briefing_map": "Mapa do briefing",
     "live": "Vivo",
     "step_number": "Etapa {number}",
+    "add_reference": "Adicionar Referência",
     "steps": {
       "brandTone": {
         "label": "Essência da Marca",
