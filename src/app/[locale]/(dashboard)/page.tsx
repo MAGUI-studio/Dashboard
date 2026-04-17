@@ -114,36 +114,77 @@ export default async function DashboardPage({
     include: {
       projects: {
         include: {
-          client: true,
+          client: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              companyName: true,
+              phone: true,
+              position: true,
+              taxId: true,
+            },
+          },
           updates: {
             orderBy: { createdAt: "desc" },
-            include: { project: true },
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              isMilestone: true,
+              imageUrl: true,
+              projectId: true,
+              createdAt: true,
+              requiresApproval: true,
+              approvalStatus: true,
+              approvedAt: true,
+              feedback: true,
+              project: {
+                select: {
+                  name: true,
+                },
+              },
+            },
           },
           assets: {
             orderBy: { order: "asc" },
+            select: {
+              id: true,
+              name: true,
+              url: true,
+              key: true,
+              type: true,
+              order: true,
+              projectId: true,
+              createdAt: true,
+            },
           },
           actionItems: {
             orderBy: { createdAt: "desc" },
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              status: true,
+              dueDate: true,
+              projectId: true,
+              createdAt: true,
+              updatedAt: true,
+            },
           },
           versions: {
             orderBy: { createdAt: "desc" },
-          },
-          notifications: {
-            where: { userId: user.id },
-            orderBy: { createdAt: "desc" },
-            take: 8,
-          },
-          auditLogs: {
-            orderBy: { createdAt: "desc" },
-            take: 8,
-            include: {
-              actor: {
-                select: {
-                  id: true,
-                  name: true,
-                  role: true,
-                },
-              },
+            select: {
+              id: true,
+              name: true,
+              deployUrl: true,
+              description: true,
+              scorePerformance: true,
+              scoreAccessibility: true,
+              scoreBestPractices: true,
+              scoreSEO: true,
+              projectId: true,
+              createdAt: true,
             },
           },
         },
@@ -171,6 +212,30 @@ export default async function DashboardPage({
   }
 
   const activeProject = project || projects[0]
+  const projectNotifications = await prisma.notification.findMany({
+    where: {
+      userId: user.id,
+      projectId: activeProject.id,
+    },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+  })
+  const projectAuditLogs = await prisma.auditLog.findMany({
+    where: {
+      projectId: activeProject.id,
+    },
+    orderBy: { createdAt: "desc" },
+    take: 8,
+    include: {
+      actor: {
+        select: {
+          id: true,
+          name: true,
+          role: true,
+        },
+      },
+    },
+  })
   const isBriefingEmpty =
     !activeProject.briefing ||
     Object.keys(activeProject.briefing as object).length === 0
@@ -216,8 +281,15 @@ export default async function DashboardPage({
             project={
               {
                 ...activeProject,
+                assets: activeProject.assets.map((asset) => ({
+                  ...asset,
+                  timezone: "America/Sao_Paulo",
+                })),
+                notifications: projectNotifications,
+                auditLogs: projectAuditLogs,
                 updates: activeProject.updates.map((u) => ({
                   ...u,
+                  timezone: "America/Sao_Paulo",
                   createdAt: u.createdAt.toISOString(),
                 })),
               } as unknown as DashboardProject

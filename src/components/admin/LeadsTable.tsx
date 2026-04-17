@@ -8,10 +8,12 @@ import { LeadStatus } from "@/src/generated/client/enums"
 import { Lead } from "@/src/types/crm"
 import {
   Building,
+  CalendarDots,
   CaretDown,
   CaretUp,
   CaretUpDown,
   CheckCircle,
+  ClockCountdown,
   DotsThreeVertical,
   Envelope,
   Globe,
@@ -146,6 +148,54 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
     return result
   }, [leads, search, sort])
 
+  const getNextActionMeta = (
+    dateValue: string | Date | null
+  ): { label: string; tone: string } => {
+    if (!dateValue) {
+      return {
+        label: "Sem proxima acao",
+        tone: "text-muted-foreground/50",
+      }
+    }
+
+    const target = new Date(dateValue)
+    const today = new Date()
+    const targetDay = new Date(target)
+    const todayDay = new Date(today)
+    targetDay.setHours(0, 0, 0, 0)
+    todayDay.setHours(0, 0, 0, 0)
+
+    const diffInDays = Math.ceil(
+      (targetDay.getTime() - todayDay.getTime()) / (1000 * 60 * 60 * 24)
+    )
+
+    if (diffInDays < 0) {
+      return {
+        label: `Atrasado ha ${Math.abs(diffInDays)} dia(s)`,
+        tone: "text-red-500",
+      }
+    }
+
+    if (diffInDays === 0) {
+      return {
+        label: "Acao prevista para hoje",
+        tone: "text-amber-500",
+      }
+    }
+
+    if (diffInDays <= 3) {
+      return {
+        label: `Proximo toque em ${diffInDays} dia(s)`,
+        tone: "text-brand-primary",
+      }
+    }
+
+    return {
+      label: `Agendado para ${target.toLocaleDateString()}`,
+      tone: "text-muted-foreground/70",
+    }
+  }
+
   const getStatusBadge = (status: LeadStatus): React.JSX.Element => {
     const variants: Record<LeadStatus, string> = {
       GARIMPAGEM: "bg-blue-500/10 text-blue-500 border-blue-500/20",
@@ -221,6 +271,9 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
                   {getSortIcon("value")}
                 </div>
               </TableHead>
+              <TableHead className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                Cadência
+              </TableHead>
               <TableHead className="px-8 h-16 text-right text-[10px] font-black uppercase tracking-widest text-muted-foreground">
                 {t("table.actions")}
               </TableHead>
@@ -230,7 +283,7 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
             {filteredAndSortedLeads.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={5}
+                  colSpan={6}
                   className="h-48 text-center text-xs font-bold uppercase tracking-widest text-muted-foreground/40"
                 >
                   {t("table.empty")}
@@ -287,6 +340,25 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
                   <TableCell className="px-8 py-6">
                     <div className="font-mono text-sm font-semibold text-brand-primary">
                       {lead.value || "---"}
+                    </div>
+                  </TableCell>
+                  <TableCell className="px-8 py-6">
+                    <div className="flex flex-col gap-1">
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
+                        {lead.source}
+                      </span>
+                      <span className="flex items-center gap-1 text-[10px] font-bold text-foreground/70">
+                        <CalendarDots size={12} />
+                        {lead.nextActionAt
+                          ? new Date(lead.nextActionAt).toLocaleDateString()
+                          : "Sem próxima ação"}
+                      </span>
+                      <span
+                        className={`flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.18em] ${getNextActionMeta(lead.nextActionAt).tone}`}
+                      >
+                        <ClockCountdown size={12} />
+                        {getNextActionMeta(lead.nextActionAt).label}
+                      </span>
                     </div>
                   </TableCell>
                   <TableCell className="px-8 py-6 text-right">

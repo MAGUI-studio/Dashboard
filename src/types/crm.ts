@@ -1,4 +1,4 @@
-import { LeadStatus } from "@/src/generated/client/enums"
+import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
 
 export interface Lead {
   id: string
@@ -9,8 +9,12 @@ export interface Lead {
   website: string | null
   instagram: string | null
   status: LeadStatus
+  source: LeadSource
   notes: string | null
   value: string | null
+  lastContactAt: string | Date | null
+  nextActionAt: string | Date | null
+  assignedToId: string | null
   createdAt: string | Date
   updatedAt: string | Date
 }

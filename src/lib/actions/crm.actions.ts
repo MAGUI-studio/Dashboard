@@ -2,10 +2,11 @@
 
 import { revalidatePath } from "next/cache"
 
-import { LeadStatus } from "@/src/generated/client/enums"
+import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
 import { Lead } from "@/src/types/crm"
 import { z } from "zod"
 
+import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 
 const LeadSchema = z.object({
@@ -18,12 +19,16 @@ const LeadSchema = z.object({
   notes: z.string().optional(),
   value: z.string().optional(),
   status: z.nativeEnum(LeadStatus).optional(),
+  source: z.nativeEnum(LeadSource).default(LeadSource.OTHER),
+  nextActionAt: z.string().optional(),
 })
 
 export async function createLead(
   data: z.infer<typeof LeadSchema>
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await protect("admin")
+
     const validatedData = LeadSchema.parse(data)
 
     await prisma.lead.create({
@@ -31,6 +36,9 @@ export async function createLead(
         ...validatedData,
         email: validatedData.email === "" ? null : validatedData.email,
         website: validatedData.website === "" ? null : validatedData.website,
+        nextActionAt: validatedData.nextActionAt
+          ? new Date(validatedData.nextActionAt)
+          : null,
       },
     })
 
@@ -46,9 +54,18 @@ export async function updateLeadStatus(
   status: LeadStatus
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await protect("admin")
+
     await prisma.lead.update({
       where: { id },
-      data: { status },
+      data: {
+        status,
+        lastContactAt:
+          status === LeadStatus.CONTATO_REALIZADO ||
+          status === LeadStatus.NEGOCIACAO
+            ? new Date()
+            : undefined,
+      },
     })
 
     revalidatePath("/admin/crm")
@@ -62,6 +79,8 @@ export async function deleteLead(
   id: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
+    await protect("admin")
+
     await prisma.lead.delete({
       where: { id },
     })
@@ -75,7 +94,7 @@ export async function deleteLead(
 
 export async function getLeads(): Promise<Lead[]> {
   const leads = await prisma.lead.findMany({
-    orderBy: { createdAt: "desc" },
+    orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
   })
 
   return leads as unknown as Lead[]

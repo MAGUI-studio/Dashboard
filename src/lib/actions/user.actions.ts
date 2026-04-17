@@ -120,3 +120,47 @@ export async function createClientAction(
     }
   }
 }
+
+export async function deleteClientAction(
+  clerkUserId: string
+): Promise<{ error?: string; success?: boolean }> {
+  const t = await getTranslations("Admin.clients.form.errors")
+
+  await protect("admin")
+
+  try {
+    const localUser = await prisma.user.findUnique({
+      where: { clerkId: clerkUserId },
+      include: {
+        _count: {
+          select: {
+            projects: true,
+          },
+        },
+      },
+    })
+
+    if (localUser?.role === UserRole.ADMIN) {
+      return { error: "Administradores não podem ser removidos por esta tela." }
+    }
+
+    const client = await clerkClient()
+    await client.users.deleteUser(clerkUserId)
+
+    if (localUser) {
+      await prisma.user.delete({
+        where: { clerkId: clerkUserId },
+      })
+    }
+
+    revalidatePath("/admin/clients")
+    revalidatePath("/admin/projects")
+    revalidatePath("/admin")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error, clerkUserId }, "Delete Client Error:")
+    return {
+      error: t("general"),
+    }
+  }
+}

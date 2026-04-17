@@ -12,6 +12,19 @@ import { Button } from "@/src/components/ui/button"
 import { ClientsTable } from "@/src/components/admin/ClientsTable"
 
 import { isAdmin } from "@/src/lib/permissions"
+import prisma from "@/src/lib/prisma"
+
+interface SerializableUser {
+  id: string
+  imageUrl: string
+  firstName: string | null
+  lastName: string | null
+  username: string | null
+  emailAddresses: { emailAddress: string }[]
+  publicMetadata: { role?: string }
+  projectCount: number
+  activeProjectCount: number
+}
 
 export default async function ClientsPage(): Promise<React.JSX.Element> {
   if (!(await isAdmin())) {
@@ -25,7 +38,36 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
     limit: 100,
   })
 
-  const serializableUsers = allUsers.map((user) => ({
+  const localUsers = await prisma.user.findMany({
+    select: {
+      clerkId: true,
+      _count: {
+        select: {
+          projects: true,
+        },
+      },
+      projects: {
+        select: {
+          id: true,
+          status: true,
+        },
+      },
+    },
+  })
+
+  const localUsersMap = new Map(
+    localUsers.map((user) => [
+      user.clerkId,
+      {
+        projectCount: user._count.projects,
+        activeProjectCount: user.projects.filter(
+          (project) => project.status !== "LAUNCHED"
+        ).length,
+      },
+    ])
+  )
+
+  const serializableUsers: SerializableUser[] = allUsers.map((user) => ({
     id: user.id,
     imageUrl: user.imageUrl,
     firstName: user.firstName,
@@ -35,7 +77,23 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
       emailAddress: e.emailAddress,
     })),
     publicMetadata: user.publicMetadata as { role?: string },
+    projectCount: localUsersMap.get(user.id)?.projectCount ?? 0,
+    activeProjectCount: localUsersMap.get(user.id)?.activeProjectCount ?? 0,
   }))
+
+  const stats = {
+    total: serializableUsers.length,
+    admins: serializableUsers.filter(
+      (user) => user.publicMetadata.role === "admin"
+    ).length,
+    clients: serializableUsers.filter(
+      (user) => user.publicMetadata.role !== "admin"
+    ).length,
+    activeProjects: serializableUsers.reduce(
+      (sum, user) => sum + user.activeProjectCount,
+      0
+    ),
+  }
 
   return (
     <main className="relative flex min-h-svh flex-col gap-10 bg-background/50 p-6 lg:p-12 overflow-hidden">
@@ -75,7 +133,7 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
         </Button>
       </div>
 
-      <ClientsTable initialUsers={serializableUsers} />
+      <ClientsTable initialUsers={serializableUsers} stats={stats} />
     </main>
   )
 }

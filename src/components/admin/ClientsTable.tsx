@@ -9,12 +9,27 @@ import {
   CaretUp,
   CaretUpDown,
   MagnifyingGlass,
+  ShieldCheck,
+  Trash,
+  UserCircle,
+  WarningOctagon,
 } from "@phosphor-icons/react"
+import { toast } from "sonner"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
 import { Card } from "@/src/components/ui/card"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/src/components/ui/dialog"
 import { Input } from "@/src/components/ui/input"
 import {
   Table,
@@ -25,6 +40,8 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 
+import { deleteClientAction } from "@/src/lib/actions/user.actions"
+
 interface UserData {
   id: string
   imageUrl: string
@@ -33,18 +50,29 @@ interface UserData {
   username: string | null
   emailAddresses: { emailAddress: string }[]
   publicMetadata: { role?: string }
+  projectCount: number
+  activeProjectCount: number
 }
 
 interface ClientsTableProps {
   initialUsers: UserData[]
+  stats: {
+    total: number
+    admins: number
+    clients: number
+    activeProjects: number
+  }
 }
 
 type SortConfig = {
-  key: "name" | "role"
+  key: "name" | "role" | "projects"
   direction: "asc" | "desc" | null
 }
 
-export function ClientsTable({ initialUsers }: ClientsTableProps) {
+export function ClientsTable({
+  initialUsers,
+  stats,
+}: ClientsTableProps): React.JSX.Element {
   const t = useTranslations("Admin.clients")
   const [search, setSearch] = React.useState("")
   const [debouncedSearch, setDebouncedSearch] = React.useState("")
@@ -52,11 +80,12 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
     key: "name",
     direction: null,
   })
+  const [pendingDeletion, startDeletion] = React.useTransition()
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search)
-    }, 2000)
+    }, 350)
     return () => clearTimeout(timer)
   }, [search])
 
@@ -78,8 +107,8 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
 
     if (sort.direction) {
       result.sort((a, b) => {
-        let valA = ""
-        let valB = ""
+        let valA: number | string = ""
+        let valB: number | string = ""
 
         if (sort.key === "name") {
           valA = `${a.firstName || ""} ${a.lastName || ""}`.trim().toLowerCase()
@@ -87,6 +116,9 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
         } else if (sort.key === "role") {
           valA = (a.publicMetadata.role || "client").toLowerCase()
           valB = (b.publicMetadata.role || "client").toLowerCase()
+        } else {
+          valA = a.projectCount
+          valB = b.projectCount
         }
 
         if (valA < valB) return sort.direction === "asc" ? -1 : 1
@@ -98,7 +130,7 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
     return result
   }, [initialUsers, debouncedSearch, sort])
 
-  const handleSort = (key: "name" | "role") => {
+  const handleSort = (key: SortConfig["key"]) => {
     setSort((prev) => {
       if (prev.key === key) {
         if (prev.direction === "asc") return { key, direction: "desc" }
@@ -109,7 +141,18 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
     })
   }
 
-  const getSortIcon = (key: "name" | "role") => {
+  const handleDelete = (userId: string) => {
+    startDeletion(async () => {
+      const result = await deleteClientAction(userId)
+      if (result.success) {
+        toast.success("Cliente removido do Clerk e da dashboard.")
+      } else {
+        toast.error(result.error ?? "Não foi possível remover o cliente.")
+      }
+    })
+  }
+
+  const getSortIcon = (key: SortConfig["key"]) => {
     if (sort.key !== key || !sort.direction)
       return <CaretUpDown className="size-3 opacity-30" />
     return sort.direction === "asc" ? (
@@ -121,6 +164,50 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
 
   return (
     <div className="flex flex-col gap-6">
+      <div className="grid gap-4 md:grid-cols-4">
+        {[
+          {
+            label: "Total no sistema",
+            value: stats.total,
+            icon: UserCircle,
+          },
+          {
+            label: "Clientes ativos",
+            value: stats.clients,
+            icon: UserCircle,
+          },
+          {
+            label: "Admins",
+            value: stats.admins,
+            icon: ShieldCheck,
+          },
+          {
+            label: "Projetos em andamento",
+            value: stats.activeProjects,
+            icon: WarningOctagon,
+          },
+        ].map((card) => (
+          <div
+            key={card.label}
+            className="rounded-[1.75rem] border border-border/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-5 backdrop-blur-sm"
+          >
+            <div className="flex items-center justify-between gap-3">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/45">
+                  {card.label}
+                </p>
+                <p className="mt-2 text-3xl font-black tracking-tight">
+                  {card.value}
+                </p>
+              </div>
+              <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+                <card.icon size={24} weight="duotone" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="relative flex-1 group">
           <MagnifyingGlass
@@ -141,7 +228,7 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
           <TableHeader className="bg-muted/30">
             <TableRow className="hover:bg-transparent border-border/40">
               <TableHead
-                className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground cursor-pointer group/header"
+                className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground cursor-pointer"
                 onClick={() => handleSort("name")}
               >
                 <div className="flex items-center gap-2">
@@ -153,12 +240,21 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
                 {t("table.id")}
               </TableHead>
               <TableHead
-                className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground cursor-pointer group/header"
+                className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground cursor-pointer"
                 onClick={() => handleSort("role")}
               >
                 <div className="flex items-center gap-2">
                   {t("table.privileges")}
                   {getSortIcon("role")}
+                </div>
+              </TableHead>
+              <TableHead
+                className="px-8 h-16 text-[10px] font-black uppercase tracking-widest text-muted-foreground cursor-pointer"
+                onClick={() => handleSort("projects")}
+              >
+                <div className="flex items-center gap-2">
+                  Projetos
+                  {getSortIcon("projects")}
                 </div>
               </TableHead>
               <TableHead className="px-8 h-16 text-right text-[10px] font-black uppercase tracking-widest text-muted-foreground">
@@ -170,66 +266,136 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
             {filteredUsers.length === 0 ? (
               <TableRow>
                 <TableCell
-                  colSpan={4}
+                  colSpan={5}
                   className="h-32 text-center text-xs font-bold uppercase tracking-widest text-muted-foreground/40"
                 >
                   {t("empty")}
                 </TableCell>
               </TableRow>
             ) : (
-              filteredUsers.map((user) => (
-                <TableRow
-                  key={user.id}
-                  className="group border-border/20 transition-all hover:bg-brand-primary/[0.03]"
-                >
-                  <TableCell className="px-8 py-6">
-                    <div className="flex items-center gap-4">
-                      <Avatar className="size-11 border-2 border-background ring-2 ring-border/20 transition-all group-hover:ring-brand-primary/30">
-                        <AvatarImage
-                          src={user.imageUrl}
-                          alt={user.firstName || "U"}
-                        />
-                        <AvatarFallback className="bg-muted/50 font-black text-brand-primary">
-                          {user.firstName?.charAt(0) ||
-                            user.emailAddresses[0]?.emailAddress
-                              .charAt(0)
-                              .toUpperCase()}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex flex-col gap-0.5">
-                        <span className="font-heading text-sm font-black uppercase tracking-tight text-foreground">
-                          {user.firstName} {user.lastName}
+              filteredUsers.map((user) => {
+                const isAdmin = user.publicMetadata?.role === "admin"
+                return (
+                  <TableRow
+                    key={user.id}
+                    className="group border-border/20 transition-all hover:bg-brand-primary/[0.03]"
+                  >
+                    <TableCell className="px-8 py-6">
+                      <div className="flex items-center gap-4">
+                        <Avatar className="size-11 border-2 border-background ring-2 ring-border/20 transition-all group-hover:ring-brand-primary/30">
+                          <AvatarImage
+                            src={user.imageUrl}
+                            alt={user.firstName || "U"}
+                          />
+                          <AvatarFallback className="bg-muted/50 font-black text-brand-primary">
+                            {user.firstName?.charAt(0) ||
+                              user.emailAddresses[0]?.emailAddress
+                                .charAt(0)
+                                .toUpperCase()}
+                          </AvatarFallback>
+                        </Avatar>
+                        <div className="flex flex-col gap-0.5">
+                          <span className="font-heading text-sm font-black uppercase tracking-tight text-foreground">
+                            {user.firstName} {user.lastName}
+                          </span>
+                          <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
+                            @{user.username || "client"}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="px-8 py-6">
+                      <span className="font-sans text-xs font-bold text-muted-foreground/80">
+                        {user.emailAddresses[0]?.emailAddress}
+                      </span>
+                    </TableCell>
+                    <TableCell className="px-8 py-6">
+                      <Badge
+                        variant="secondary"
+                        className="bg-brand-primary/5 text-brand-primary hover:bg-brand-primary/10 border-brand-primary/20 text-[9px] font-black uppercase tracking-widest py-1 px-3"
+                      >
+                        {t(`roles.${user.publicMetadata?.role || "client"}`)}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="px-8 py-6">
+                      <div className="flex flex-col gap-1">
+                        <span className="text-xs font-black text-foreground">
+                          {user.projectCount} projeto(s)
                         </span>
-                        <span className="text-[10px] font-bold text-muted-foreground/60 uppercase tracking-widest">
-                          @{user.username || "client"}
+                        <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/45">
+                          {user.activeProjectCount} em andamento
                         </span>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="px-8 py-6">
-                    <span className="font-sans text-xs font-bold text-muted-foreground/80">
-                      {user.emailAddresses[0]?.emailAddress}
-                    </span>
-                  </TableCell>
-                  <TableCell className="px-8 py-6">
-                    <Badge
-                      variant="secondary"
-                      className="bg-brand-primary/5 text-brand-primary hover:bg-brand-primary/10 border-brand-primary/20 text-[9px] font-black uppercase tracking-widest py-1 px-3"
-                    >
-                      {t(`roles.${user.publicMetadata?.role || "client"}`)}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="px-8 py-6 text-right">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="rounded-full h-10 px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
-                    >
-                      {t("table.inspect")}
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
+                    </TableCell>
+                    <TableCell className="px-8 py-6 text-right">
+                      <div className="flex justify-end gap-2">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          className="rounded-full h-10 px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
+                        >
+                          {t("table.inspect")}
+                        </Button>
+
+                        {!isAdmin && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="rounded-full h-10 px-5 border-red-500/20 text-red-500 hover:bg-red-500/10"
+                              >
+                                <Trash size={14} className="mr-2" />
+                                Excluir
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-w-xl rounded-[2rem]">
+                              <DialogHeader>
+                                <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight">
+                                  Remover cliente do sistema
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Isso remove o usuário do Clerk, encerra acesso
+                                  ao painel e apaga o cadastro local. Projetos
+                                  vinculados também serão removidos por cascata.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4 text-sm leading-relaxed text-foreground/75">
+                                Cliente:{" "}
+                                <span className="font-black uppercase">
+                                  {user.firstName} {user.lastName}
+                                </span>
+                                <br />
+                                Projetos vinculados:{" "}
+                                <span className="font-black">
+                                  {user.projectCount}
+                                </span>
+                              </div>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button
+                                    variant="outline"
+                                    className="rounded-full"
+                                  >
+                                    Cancelar
+                                  </Button>
+                                </DialogClose>
+                                <Button
+                                  onClick={() => handleDelete(user.id)}
+                                  disabled={pendingDeletion}
+                                  className="rounded-full bg-red-500 hover:bg-red-500/90"
+                                >
+                                  Confirmar exclusão
+                                </Button>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                        )}
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                )
+              })
             )}
           </TableBody>
         </Table>
