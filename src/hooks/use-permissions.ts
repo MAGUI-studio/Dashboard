@@ -4,9 +4,15 @@ import { useUser } from "@clerk/nextjs"
 
 export type Role = "admin" | "member" | "client"
 
+const roles = new Set<Role>(["admin", "member", "client"])
+
 export function usePermissions() {
   const { user, isLoaded } = useUser()
-  const userRole = user?.publicMetadata?.role as Role | undefined
+  const rawRole = user?.publicMetadata?.role
+  const userRole =
+    typeof rawRole === "string" && roles.has(rawRole as Role)
+      ? (rawRole as Role)
+      : undefined
 
   const hasRole = (role: Role | Role[]): boolean => {
     if (!isLoaded || !userRole) return false

@@ -1,9 +1,11 @@
 import {
   AssetType,
+  NotificationType,
   Priority,
   ProjectCategory,
   ProjectStatus,
-} from "@/src/generated/client"
+  UserRole,
+} from "@/src/generated/client/enums"
 
 export interface DashboardProject {
   id: string
@@ -19,7 +21,14 @@ export interface DashboardProject {
   category: ProjectCategory
   priority: Priority
   clientId: string
-  briefing: Record<string, unknown> | null
+  briefing: {
+    brandTone: string
+    visualReferences: string[]
+    businessGoals: string
+    primaryCta: string
+    targetAudience: string
+    differentiators: string
+  } | null
   client: {
     id: string
     name: string | null
@@ -33,6 +42,8 @@ export interface DashboardProject {
   assets: DashboardAsset[]
   actionItems?: DashboardActionItem[]
   versions?: DashboardVersion[]
+  notifications?: DashboardNotification[]
+  auditLogs?: DashboardAuditLog[]
 }
 
 export interface DashboardUpdate {
@@ -51,6 +62,31 @@ export interface DashboardUpdate {
   approvalStatus: "PENDING" | "APPROVED" | "REJECTED"
   approvedAt: Date | string | null
   feedback: string | null
+}
+
+export interface DashboardNotification {
+  id: string
+  type: NotificationType
+  title: string
+  message: string
+  ctaPath: string | null
+  readAt: Date | string | null
+  createdAt: Date | string
+}
+
+export interface DashboardAuditLog {
+  id: string
+  action: string
+  entityType: string
+  entityId: string
+  summary: string
+  createdAt: Date | string
+  actorType: "SYSTEM" | "USER"
+  actor: {
+    id: string
+    name: string | null
+    role: UserRole
+  } | null
 }
 
 export interface DashboardAsset {

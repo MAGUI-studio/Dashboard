@@ -1,4 +1,4 @@
-import { LeadStatus } from '@/src/generated/client'
+import { LeadStatus } from "@/src/generated/client/enums"
 
 export interface Lead {
   id: string

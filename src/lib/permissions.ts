@@ -1,18 +1,33 @@
+import { UserRole } from "@/src/generated/client/enums"
 import { auth } from "@clerk/nextjs/server"
 
 export type Role = "admin" | "member" | "client"
 
+const roleMap = {
+  admin: UserRole.ADMIN,
+  member: UserRole.MEMBER,
+  client: UserRole.CLIENT,
+} as const
+
+function normalizeRole(role: Role): UserRole {
+  return roleMap[role]
+}
+
 export async function hasRole(role: Role | Role[]): Promise<boolean> {
   const { sessionClaims } = await auth()
-  const userRole = sessionClaims?.metadata?.role as Role | undefined
+  const rawRole = sessionClaims?.metadata?.role
+  const userRole =
+    typeof rawRole === "string"
+      ? normalizeRole(rawRole.toLowerCase() as Role)
+      : undefined
 
   if (!userRole) return false
 
   if (Array.isArray(role)) {
-    return role.includes(userRole)
+    return role.map(normalizeRole).includes(userRole)
   }
 
-  return userRole === role
+  return userRole === normalizeRole(role)
 }
 
 export async function isAdmin(): Promise<boolean> {

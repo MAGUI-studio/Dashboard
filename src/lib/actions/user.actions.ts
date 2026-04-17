@@ -3,6 +3,7 @@
 import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
+import { UserRole } from "@/src/generated/client/enums"
 import { clerkClient } from "@clerk/nextjs/server"
 import { z } from "zod"
 
@@ -79,7 +80,7 @@ export async function createClientAction(
         clerkId: clerkUser.id,
         email,
         name: `${firstName} ${lastName}`,
-        role: role.toUpperCase(),
+        role: role === "admin" ? UserRole.ADMIN : UserRole.CLIENT,
         companyName: companyName ?? null,
         phone: phone ?? null,
         position: position ?? null,

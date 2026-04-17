@@ -1,5 +1,16 @@
 import { z } from "zod"
 
+const isTest = process.env.NODE_ENV === "test"
+const fallbackEnv = {
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_placeholder",
+  CLERK_SECRET_KEY: "sk_test_placeholder",
+  NEXT_PUBLIC_CLERK_SIGN_IN_URL: "/sign-in",
+  NEXT_PUBLIC_CLERK_SIGN_UP_URL: "/sign-up",
+  NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL: "/",
+  NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: "/",
+  UPLOADTHING_TOKEN: "ut_test_placeholder",
+}
+
 const envSchema = z.object({
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   NEXT_PUBLIC_GA_ID: z.string().optional(),
@@ -20,16 +31,31 @@ const parsedEnv = envSchema.safeParse({
   NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL,
   NEXT_PUBLIC_GA_ID: process.env.NEXT_PUBLIC_GA_ID,
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:
-    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
-  CLERK_SECRET_KEY: process.env.CLERK_SECRET_KEY,
-  NEXT_PUBLIC_CLERK_SIGN_IN_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL,
-  NEXT_PUBLIC_CLERK_SIGN_UP_URL: process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL,
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY ||
+    (isTest ? fallbackEnv.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY : undefined),
+  CLERK_SECRET_KEY:
+    process.env.CLERK_SECRET_KEY ||
+    (isTest ? fallbackEnv.CLERK_SECRET_KEY : undefined),
+  NEXT_PUBLIC_CLERK_SIGN_IN_URL:
+    process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ||
+    (isTest ? fallbackEnv.NEXT_PUBLIC_CLERK_SIGN_IN_URL : undefined),
+  NEXT_PUBLIC_CLERK_SIGN_UP_URL:
+    process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ||
+    (isTest ? fallbackEnv.NEXT_PUBLIC_CLERK_SIGN_UP_URL : undefined),
   NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL:
-    process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL,
+    process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ||
+    (isTest
+      ? fallbackEnv.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL
+      : undefined),
   NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL:
-    process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL,
+    process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ||
+    (isTest
+      ? fallbackEnv.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL
+      : undefined),
   CLERK_PROXY_URL: process.env.CLERK_PROXY_URL,
-  UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
+  UPLOADTHING_TOKEN:
+    process.env.UPLOADTHING_TOKEN ||
+    (isTest ? fallbackEnv.UPLOADTHING_TOKEN : undefined),
   NODE_ENV: process.env.NODE_ENV,
 })
 

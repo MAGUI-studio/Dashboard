@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+import { briefingSchema } from "@/src/lib/validations/briefing"
+
 export const createProjectSchema = z.object({
   clientId: z.string().min(1, "Selecione um cliente"),
   projectName: z.string().min(2, "Nome do projeto é obrigatório"),
@@ -52,3 +54,11 @@ export const addProjectTimelineSchema = z.object({
   imageUrl: z.string().url().optional().or(z.literal("")),
   timezone: z.string(),
 })
+
+export const rejectProjectUpdateSchema = z.object({
+  updateId: z.string().min(1),
+  projectId: z.string().min(1),
+  feedback: z.string().trim().min(10, "Explique o ajuste necessário"),
+})
+
+export { briefingSchema }

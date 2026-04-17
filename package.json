@@ -82,6 +82,7 @@
     "@vitest/browser": "^4.1.2",
     "eslint": "^9.39.4",
     "eslint-config-next": "16.1.7",
+    "get-port-please": "^3.2.0",
     "husky": "^9.1.7",
     "jsdom": "^29.0.1",
     "lint-staged": "^16.4.0",

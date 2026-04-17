@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
+import { UserRole } from "@/src/generated/client/enums"
 import { DashboardProject } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 
@@ -27,7 +28,11 @@ export default async function DashboardPage({
     where: { clerkId: userId },
   })
 
-  const isAdmin = user?.role === "ADMIN"
+  if (!user) {
+    return <div />
+  }
+
+  const isAdmin = user?.role === UserRole.ADMIN
 
   if (isAdmin) {
     const allProjects = await prisma.project.findMany({
@@ -73,11 +78,14 @@ export default async function DashboardPage({
                 priority: "MEDIUM",
                 liveUrl: null,
                 repositoryUrl: null,
+                briefing: null,
                 updates: allUpdates.map((u) => ({
                   ...u,
                   createdAt: u.createdAt.toISOString(),
                 })),
                 assets: [],
+                notifications: [],
+                auditLogs: [],
                 id: "admin-overview",
                 clientId: "admin",
                 startDate: new Date(),
@@ -120,6 +128,24 @@ export default async function DashboardPage({
           versions: {
             orderBy: { createdAt: "desc" },
           },
+          notifications: {
+            where: { userId: user.id },
+            orderBy: { createdAt: "desc" },
+            take: 8,
+          },
+          auditLogs: {
+            orderBy: { createdAt: "desc" },
+            take: 8,
+            include: {
+              actor: {
+                select: {
+                  id: true,
+                  name: true,
+                  role: true,
+                },
+              },
+            },
+          },
         },
         orderBy: { updatedAt: "desc" },
       },
@@ -127,7 +153,7 @@ export default async function DashboardPage({
   })
 
   const clerkUser = await currentUser()
-  const userName = clerkUser?.firstName || clerkUser?.username || user?.name
+  const userName = clerkUser?.firstName || clerkUser?.username || user.name
 
   const projects = userWithProjects?.projects || []
   const project = selectedProjectId

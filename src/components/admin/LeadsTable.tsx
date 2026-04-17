@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { LeadStatus } from "@/src/generated/client"
+import { LeadStatus } from "@/src/generated/client/enums"
 import { Lead } from "@/src/types/crm"
 import {
   Building,

@@ -3,21 +3,30 @@ import pg from "pg"
 
 import { logger } from "@/src/lib/logger"
 
-import { PrismaClient } from "../generated/client/index.js"
+import { PrismaClient } from "../generated/client/client.js"
 
 const connectionString = `${process.env.DATABASE_URL}`
 const isExternalDb =
   connectionString.includes("neon.tech") ||
-  connectionString.includes("supabase.co")
+  connectionString.includes("supabase.co") ||
+  connectionString.includes("db.prisma.io")
+
+const shouldUseSsl =
+  isExternalDb ||
+  connectionString.includes("sslmode=require") ||
+  connectionString.includes("sslmode=verify-full")
 
 const pool = new pg.Pool({
-  connectionString:
-    isExternalDb && !connectionString.includes("sslmode=")
-      ? `${connectionString}${connectionString.includes("?") ? "&" : "?"}sslmode=verify-full`
-      : connectionString,
+  connectionString,
+  ssl: shouldUseSsl
+    ? {
+        rejectUnauthorized: false,
+      }
+    : undefined,
   max: 10,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 5000,
+  connectionTimeoutMillis: 15000,
+  keepAlive: true,
 })
 
 pool.on("error", (err: Error) => {

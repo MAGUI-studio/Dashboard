@@ -1,11 +1,16 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/client"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  MEMBER
+  CLIENT
 }
 
 enum ProjectStatus {
@@ -62,38 +67,77 @@ enum LeadStatus {
   DESCARTADO
 }
 
-model User {
-  id          String   @id @default(cuid())
-  clerkId     String   @unique
-  email       String   @unique
-  name        String?
-  role        String   @default("CLIENT")
-  
-  companyName String?
-  phone       String?
-  position    String?
-  avatarUrl   String?
-  taxId       String?
+enum LeadSource {
+  REFERRAL
+  ORGANIC
+  INSTAGRAM
+  LINKEDIN
+  WEBSITE
+  OUTBOUND
+  EVENT
+  OTHER
+}
 
-  projects    Project[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+enum NotificationType {
+  UPDATE_PENDING_APPROVAL
+  UPDATE_APPROVED
+  UPDATE_REJECTED
+  BRIEFING_SUBMITTED
+  ASSET_UPLOADED
+  PROJECT_STATUS_CHANGED
+  LEAD_ASSIGNED
+}
+
+enum AuditActorType {
+  SYSTEM
+  USER
+}
+
+model User {
+  id            String         @id @default(cuid())
+  clerkId       String         @unique
+  email         String         @unique
+  name          String?
+  role          UserRole       @default(CLIENT)
+
+  companyName   String?
+  phone         String?
+  position      String?
+  avatarUrl     String?
+  taxId         String?
+
+  projects      Project[]
+  ownedLeads    Lead[]         @relation("LeadOwner")
+  notifications Notification[]
+  auditLogs     AuditLog[]     @relation("AuditActor")
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Lead {
-  id          String     @id @default(cuid())
-  companyName String
-  contactName String?
-  email       String?
-  phone       String?
-  website     String?
-  instagram   String?
-  status      LeadStatus @default(GARIMPAGEM)
-  notes       String?    @db.Text
-  value       String?
-  
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  id            String      @id @default(cuid())
+  companyName   String
+  contactName   String?
+  email         String?
+  phone         String?
+  website       String?
+  instagram     String?
+  status        LeadStatus  @default(GARIMPAGEM)
+  source        LeadSource  @default(OTHER)
+  notes         String?     @db.Text
+  value         String?
+  lastContactAt DateTime?
+  nextActionAt  DateTime?
+
+  assignedToId  String?
+  assignedTo    User?       @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
+
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  @@index([status])
+  @@index([assignedToId])
+  @@index([nextActionAt])
 }
 
 model Project {
@@ -120,9 +164,15 @@ model Project {
   assets        Asset[]
   actionItems   ActionItem[]
   versions      Version[]
+  notifications Notification[]
+  auditLogs     AuditLog[]
 
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
+
+  @@index([clientId])
+  @@index([status])
+  @@index([updatedAt])
 }
 
 model Update {
@@ -142,6 +192,10 @@ model Update {
   project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt      DateTime       @default(now())
+
+  @@index([projectId])
+  @@index([approvalStatus])
+  @@index([createdAt])
 }
 
 model ActionItem {
@@ -156,6 +210,10 @@ model ActionItem {
 
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+  @@index([dueDate])
 }
 
 model Asset {
@@ -171,6 +229,9 @@ model Asset {
   project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime  @default(now())
+
+  @@index([projectId])
+  @@index([order])
 }
 
 model Version {
@@ -188,4 +249,51 @@ model Version {
   project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
   createdAt   DateTime @default(now())
+
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  type      NotificationType
+  title     String
+  message   String           @db.Text
+  ctaPath   String?
+  metadata  Json?
+  readAt    DateTime?
+
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([readAt])
+  @@index([createdAt])
+  @@index([projectId])
+}
+
+model AuditLog {
+  id        String         @id @default(cuid())
+  action    String
+  entityType String
+  entityId  String
+  summary   String
+  metadata  Json?
+  actorType AuditActorType @default(SYSTEM)
+
+  actorId   String?
+  actor     User?          @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  projectId String?
+  project   Project?       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime       @default(now())
+
+  @@index([projectId])
+  @@index([actorId])
+  @@index([createdAt])
+  @@index([entityType, entityId])
 }

@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { ProjectStatus } from "@/src/generated/client"
+import { ProjectStatus } from "@/src/generated/client/enums"
 import { CheckCircle, Gear } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
