@@ -37,6 +37,10 @@ export interface DashboardUpdate {
   project: {
     name: string
   }
+  requiresApproval: boolean
+  approvalStatus: "PENDING" | "APPROVED" | "REJECTED"
+  approvedAt: Date | string | null
+  feedback: string | null
 }
 
 export interface DashboardAsset {

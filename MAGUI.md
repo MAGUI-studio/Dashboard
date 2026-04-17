@@ -7,9 +7,6 @@ A MAGUI nasceu da união entre a **precisão técnica** da engenharia de softwar
 
 *   **Público-alvo**: Empresas e profissionais que valorizam rigor, modernidade e exclusividade.
 *   **Diferencial**: Modelo **Boutique** (qualidade sobre volume), entrega de interfaces de alta fidelidade (UI/UX) aliada a uma arquitetura de código limpo e performance otimizada.
-*   **Fundadores**:
-    *   **Guilherme Bustamante**: Direção Técnica (Desenvolvimento + Design).
-    *   **Maisa**: Estratégia + Operação.
 *   **Slogan**: "Design e tecnologia em total sincronia."
 *   **Assinatura**: "Padrão de Autoridade Digital."
 

@@ -126,6 +126,26 @@ exports.Prisma.UserScalarFieldEnum = {
   email: 'email',
   name: 'name',
   role: 'role',
+  companyName: 'companyName',
+  phone: 'phone',
+  position: 'position',
+  avatarUrl: 'avatarUrl',
+  taxId: 'taxId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeadScalarFieldEnum = {
+  id: 'id',
+  companyName: 'companyName',
+  contactName: 'contactName',
+  email: 'email',
+  phone: 'phone',
+  website: 'website',
+  instagram: 'instagram',
+  status: 'status',
+  notes: 'notes',
+  value: 'value',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -135,9 +155,15 @@ exports.Prisma.ProjectScalarFieldEnum = {
   name: 'name',
   description: 'description',
   status: 'status',
+  category: 'category',
+  priority: 'priority',
   progress: 'progress',
   budget: 'budget',
+  briefing: 'briefing',
+  startDate: 'startDate',
   deadline: 'deadline',
+  liveUrl: 'liveUrl',
+  repositoryUrl: 'repositoryUrl',
   clientId: 'clientId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -148,9 +174,25 @@ exports.Prisma.UpdateScalarFieldEnum = {
   title: 'title',
   description: 'description',
   isMilestone: 'isMilestone',
+  imageUrl: 'imageUrl',
   timezone: 'timezone',
+  requiresApproval: 'requiresApproval',
+  approvalStatus: 'approvalStatus',
+  approvedAt: 'approvedAt',
+  feedback: 'feedback',
   projectId: 'projectId',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.ActionItemScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  dueDate: 'dueDate',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
 };
 
 exports.Prisma.AssetScalarFieldEnum = {
@@ -165,9 +207,27 @@ exports.Prisma.AssetScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.VersionScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  deployUrl: 'deployUrl',
+  description: 'description',
+  scorePerformance: 'scorePerformance',
+  scoreAccessibility: 'scoreAccessibility',
+  scoreBestPractices: 'scoreBestPractices',
+  scoreSEO: 'scoreSEO',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.QueryMode = {
@@ -179,6 +239,20 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+
+exports.Prisma.JsonNullValueFilter = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull,
+  AnyNull: Prisma.AnyNull
+};
+exports.LeadStatus = exports.$Enums.LeadStatus = {
+  GARIMPAGEM: 'GARIMPAGEM',
+  CONTATO_REALIZADO: 'CONTATO_REALIZADO',
+  NEGOCIACAO: 'NEGOCIACAO',
+  CONVERTIDO: 'CONVERTIDO',
+  DESCARTADO: 'DESCARTADO'
+};
+
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   STRATEGY: 'STRATEGY',
   ARCHITECTURE: 'ARCHITECTURE',
@@ -186,6 +260,35 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
   ENGINEERING: 'ENGINEERING',
   QA: 'QA',
   LAUNCHED: 'LAUNCHED'
+};
+
+exports.ProjectCategory = exports.$Enums.ProjectCategory = {
+  WEB_APP: 'WEB_APP',
+  MOBILE_APP: 'MOBILE_APP',
+  BRANDING: 'BRANDING',
+  LANDING_PAGE: 'LANDING_PAGE',
+  SALES_PAGE: 'SALES_PAGE',
+  INSTITUTIONAL_SITE: 'INSTITUTIONAL_SITE',
+  E_COMMERCE: 'E_COMMERCE',
+  UI_UX_DESIGN: 'UI_UX_DESIGN'
+};
+
+exports.Priority = exports.$Enums.Priority = {
+  LOW: 'LOW',
+  MEDIUM: 'MEDIUM',
+  HIGH: 'HIGH',
+  URGENT: 'URGENT'
+};
+
+exports.ApprovalStatus = exports.$Enums.ApprovalStatus = {
+  PENDING: 'PENDING',
+  APPROVED: 'APPROVED',
+  REJECTED: 'REJECTED'
+};
+
+exports.ActionStatus = exports.$Enums.ActionStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED'
 };
 
 exports.AssetType = exports.$Enums.AssetType = {
@@ -198,9 +301,12 @@ exports.AssetType = exports.$Enums.AssetType = {
 
 exports.Prisma.ModelName = {
   User: 'User',
+  Lead: 'Lead',
   Project: 'Project',
   Update: 'Update',
-  Asset: 'Asset'
+  ActionItem: 'ActionItem',
+  Asset: 'Asset',
+  Version: 'Version'
 };
 
 /**

@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { SignOutButton, useUser } from "@clerk/nextjs"
 import {
+  ChartLineUp,
   ChartPie,
   Gear,
   List,
@@ -73,6 +74,21 @@ export function Header(): React.JSX.Element {
             </Button>
 
             <AdminOnly>
+              <Button
+                variant="ghost"
+                asChild
+                className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                  pathname.startsWith("/admin/crm")
+                    ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                    : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
+                }`}
+              >
+                <Link href="/admin/crm">
+                  <ChartLineUp weight="duotone" className="mr-1.5 size-3.5" />
+                  CRM
+                </Link>
+              </Button>
+
               <div
                 onMouseEnter={() => setIsClientsMenuOpen(true)}
                 onMouseLeave={() => setIsClientsMenuOpen(false)}

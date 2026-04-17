@@ -104,6 +104,49 @@
         }
       }
     },
+    "crm": {
+      "eyebrow": "Sales Funnel",
+      "title": "Prospecting",
+      "description": "Manage leads and opportunities for new projects. Track each stage of the sales funnel with technical rigor.",
+      "create": "New Lead",
+      "stats": {
+        "total": "Total Leads",
+        "converted": "Converted",
+        "negotiation": "In Negotiation",
+        "value": "Estimated Value"
+      },
+      "table": {
+        "company": "Company",
+        "contact": "Contact",
+        "status": "Status",
+        "value": "Est. Ticket",
+        "actions": "Actions",
+        "empty": "No leads cataloged at the moment."
+      },
+      "details": {
+        "cancel": "Cancel Operation"
+      },
+      "status": {
+        "GARIMPAGEM": "Sourcing",
+        "CONTATO_REALIZADO": "Contact Made",
+        "NEGOCIACAO": "Negotiation",
+        "CONVERTIDO": "Converted",
+        "DESCARTADO": "Discarded"
+      },
+      "form": {
+        "company": "Company Name",
+        "contact": "Contact Person",
+        "email": "Email",
+        "phone": "Phone/WhatsApp",
+        "website": "Current Website (URL)",
+        "instagram": "Instagram",
+        "notes": "Strategic Observations",
+        "value": "Estimated Value",
+        "submit": "Save Lead",
+        "success": "Lead cataloged successfully!",
+        "error": "Error saving lead."
+      }
+    },
     "projects": {
       "eyebrow": "Execution Process",
       "title": "Projects",
@@ -199,13 +242,62 @@
         "upload_hint": "PDF, Images, Documents (Max 32MB)",
         "timeline_form": {
           "title": "Milestone Title",
-          "title_placeholder": "Ex: Finalized Wireframes",
+          "title_placeholder": "Ex: Home Design Finished",
           "description": "Detailed description (optional)",
           "description_placeholder": "Details about this evolution...",
           "is_milestone": "Mark as important milestone",
-          "submit": "Record Evolution"
+          "requires_approval": "Request Formal Approval",
+          "requires_approval_desc": "The client will need to approve this item to proceed",
+          "submit": "Register Evolution"
         }
       }
+    }
+  },
+  "Briefing": {
+    "title": "Briefing Center",
+    "description": "We need some information to start the engineering of your project.",
+    "step": "Step {current} of {total}",
+    "submit": "Submit Briefing",
+    "success": "Briefing submitted! Our team will analyze the data.",
+    "questions": {
+      "tone": "What is the brand's tone of voice?",
+      "references": "References (links to websites you like)",
+      "goals": "What are the main objectives of this project?"
+    }
+  },
+  "ActionItems": {
+    "title": "Required Actions",
+    "description": "Pending tasks that depend on you for the project's progress.",
+    "empty": "No active pending tasks.",
+    "waiting": "AWAITING YOU",
+    "status": {
+      "PENDING": "Pending",
+      "COMPLETED": "Completed"
+    }
+  },
+  "Versions": {
+    "title": "Versions and Preview Log",
+    "description": "Follow the technical evolution and staging of your project.",
+    "performance_title": "Performance Report",
+    "scores": {
+      "performance": "Performance",
+      "accessibility": "Accessibility",
+      "best_practices": "Practices",
+      "seo": "SEO"
+    }
+  },
+  "Approvals": {
+    "title": "Decisions and Approvals",
+    "description": "Items that require your formal validation to proceed.",
+    "status": {
+      "PENDING": "Pending Approval",
+      "APPROVED": "Approved on {date}",
+      "REJECTED": "Rejected"
+    },
+    "actions": {
+      "approve": "Approve Version",
+      "reject": "Request Adjustments",
+      "feedback_placeholder": "Describe the necessary adjustments..."
     }
   },
   "Sidebar": {

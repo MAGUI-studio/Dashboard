@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { PlusCircle, Spinner, Star } from "@phosphor-icons/react"
+import { CheckCircle, PlusCircle, Spinner, Star } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/src/components/ui/field"
@@ -22,6 +22,7 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
   const t = useTranslations("Admin.projects.details.timeline_form")
   const [isPending, setIsPending] = React.useState(false)
   const [isMilestone, setIsMilestone] = React.useState(false)
+  const [requiresApproval, setRequiresApproval] = React.useState(false)
   const formRef = React.useRef<HTMLFormElement>(null)
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -31,11 +32,13 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
     formData.set("projectId", projectId)
     formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
     formData.set("isMilestone", isMilestone.toString())
+    formData.set("requiresApproval", requiresApproval.toString())
 
     const result = await addProjectTimelineAction(formData)
     if (result.success) {
       formRef.current?.reset()
       setIsMilestone(false)
+      setRequiresApproval(false)
     }
     setIsPending(false)
   }
@@ -77,7 +80,7 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
           />
         </Field>
 
-        <Field className="md:col-span-2">
+        <Field>
           <label
             htmlFor="isMilestone"
             className="flex items-center justify-between rounded-2xl border-2 border-dashed border-border/40 bg-muted/5 p-6 transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 cursor-pointer group/milestone"
@@ -102,6 +105,36 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
               id="isMilestone"
               checked={isMilestone}
               onCheckedChange={setIsMilestone}
+              className="data-checked:bg-brand-primary shadow-sm"
+            />
+          </label>
+        </Field>
+
+        <Field>
+          <label
+            htmlFor="requiresApproval"
+            className="flex items-center justify-between rounded-2xl border-2 border-dashed border-border/40 bg-muted/5 p-6 transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 cursor-pointer group/approval"
+          >
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 select-none group-hover/approval:text-brand-primary transition-colors">
+                <CheckCircle
+                  weight={requiresApproval ? "fill" : "bold"}
+                  className={
+                    requiresApproval
+                      ? "text-brand-primary"
+                      : "text-muted-foreground/40 group-hover/approval:text-brand-primary/60"
+                  }
+                />
+                {t("requires_approval")}
+              </div>
+              <p className="text-[9px] font-bold uppercase tracking-tight text-muted-foreground/30 group-hover/approval:text-brand-primary/40 transition-colors">
+                {t("requires_approval_desc")}
+              </p>
+            </div>
+            <Switch
+              id="requiresApproval"
+              checked={requiresApproval}
+              onCheckedChange={setRequiresApproval}
               className="data-checked:bg-brand-primary shadow-sm"
             />
           </label>

@@ -104,6 +104,49 @@
         }
       }
     },
+    "crm": {
+      "eyebrow": "Funil de Vendas",
+      "title": "Prospecção",
+      "description": "Gerencie leads e oportunidades de novos projetos. Acompanhe cada etapa do funil comercial com rigor técnico.",
+      "create": "Novo Lead",
+      "stats": {
+        "total": "Total de Leads",
+        "converted": "Convertidos",
+        "negotiation": "Em Negociação",
+        "value": "Valor Estimado"
+      },
+      "table": {
+        "company": "Empresa",
+        "contact": "Contato",
+        "status": "Status",
+        "value": "Ticket Est.",
+        "actions": "Ações",
+        "empty": "Nenhum lead catalogado no momento."
+      },
+      "details": {
+        "cancel": "Cancelar Operação"
+      },
+      "status": {
+        "GARIMPAGEM": "Garimpagem",
+        "CONTATO_REALIZADO": "Contato Realizado",
+        "NEGOCIACAO": "Negociação",
+        "CONVERTIDO": "Convertido",
+        "DESCARTADO": "Descartado"
+      },
+      "form": {
+        "company": "Nome da Empresa",
+        "contact": "Pessoa de Contato",
+        "email": "E-mail",
+        "phone": "Telefone/WhatsApp",
+        "website": "Site Atual (URL)",
+        "instagram": "Instagram",
+        "notes": "Observações Estratégicas",
+        "value": "Valor Estimado",
+        "submit": "Salvar Lead",
+        "success": "Lead catalogado com sucesso!",
+        "error": "Erro ao salvar lead."
+      }
+    },
     "projects": {
       "eyebrow": "Processo de Execução",
       "title": "Projetos",
@@ -203,9 +246,58 @@
           "description": "Descrição detalhada (opcional)",
           "description_placeholder": "Detalhes sobre esta evolução...",
           "is_milestone": "Marcar como marco importante",
+          "requires_approval": "Solicitar Aprovação Formal",
+          "requires_approval_desc": "O cliente precisará aprovar este item para prosseguir",
           "submit": "Registrar Evolução"
         }
       }
+    }
+  },
+  "Briefing": {
+    "title": "Central de Briefing",
+    "description": "Precisamos de algumas informações para iniciar a engenharia do seu projeto.",
+    "step": "Passo {current} de {total}",
+    "submit": "Enviar Briefing",
+    "success": "Briefing enviado! Nossa equipe analisará os dados.",
+    "questions": {
+      "tone": "Qual o tom de voz da marca?",
+      "references": "Referências (links de sites que você gosta)",
+      "goals": "Quais os principais objetivos deste projeto?"
+    }
+  },
+  "ActionItems": {
+    "title": "Ações Necessárias",
+    "description": "Pendências que dependem de você para o avanço do projeto.",
+    "empty": "Nenhuma pendência ativa.",
+    "waiting": "AGUARDANDO VOCÊ",
+    "status": {
+      "PENDING": "Pendente",
+      "COMPLETED": "Concluído"
+    }
+  },
+  "Versions": {
+    "title": "Log de Versões e Preview",
+    "description": "Acompanhe a evolução técnica e o staging do seu projeto.",
+    "performance_title": "Relatório de Performance",
+    "scores": {
+      "performance": "Performance",
+      "accessibility": "Acessibilidade",
+      "best_practices": "Práticas",
+      "seo": "SEO"
+    }
+  },
+  "Approvals": {
+    "title": "Decisões e Aprovações",
+    "description": "Itens que requerem sua validação formal para prosseguir.",
+    "status": {
+      "PENDING": "Aprovação Pendente",
+      "APPROVED": "Aprovado em {date}",
+      "REJECTED": "Rejeitado"
+    },
+    "actions": {
+      "approve": "Aprovar Versão",
+      "reject": "Solicitar Ajustes",
+      "feedback_placeholder": "Descreva os ajustes necessários..."
     }
   },
   "Sidebar": {

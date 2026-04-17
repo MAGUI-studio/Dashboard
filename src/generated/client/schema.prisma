@@ -1,5 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// -----------------------------------------------------------------------------
+// CONFIGURAÇÃO BASE
+// -----------------------------------------------------------------------------
 
 generator client {
   provider = "prisma-client-js"
@@ -10,17 +11,37 @@ datasource db {
   provider = "postgresql"
 }
 
-// Enum para as fases do seu Protocolo de Execução
+// -----------------------------------------------------------------------------
+// ENUMS (OS PILARES DO PROTOCOLO)
+// -----------------------------------------------------------------------------
+
 enum ProjectStatus {
-  STRATEGY // Estratégia
-  ARCHITECTURE // Arquitetura
-  DESIGN // Design
-  ENGINEERING // Engenharia
-  QA // Qualidade
-  LAUNCHED // Finalizado/Lançado
+  STRATEGY
+  ARCHITECTURE
+  DESIGN
+  ENGINEERING
+  QA
+  LAUNCHED
 }
 
-// Enum para tipos de arquivos no UploadThing
+enum ProjectCategory {
+  WEB_APP
+  MOBILE_APP
+  BRANDING
+  LANDING_PAGE
+  SALES_PAGE
+  INSTITUTIONAL_SITE
+  E_COMMERCE
+  UI_UX_DESIGN
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
 enum AssetType {
   CONTRACT
   DESIGN_SYSTEM
@@ -29,43 +50,116 @@ enum AssetType {
   SOURCE_CODE
 }
 
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ActionStatus {
+  PENDING
+  COMPLETED
+}
+
+enum LeadStatus {
+  GARIMPAGEM
+  CONTATO_REALIZADO
+  NEGOCIACAO
+  CONVERTIDO
+  DESCARTADO
+}
+
+// -----------------------------------------------------------------------------
+// MODELOS DE USUÁRIO E CRM (FUNIL DA MAÍSA)
+// -----------------------------------------------------------------------------
+
 model User {
-  id        String    @id @default(cuid())
-  clerkId   String    @unique // Link direto com o Auth do Clerk
-  email     String    @unique
-  name      String?
-  role      String    @default("CLIENT") // ADMIN ou CLIENT
-  projects  Project[] // Um cliente pode ter vários projetos (ex: Landing Page + App)
+  id      String  @id @default(cuid())
+  clerkId String  @unique
+  email   String  @unique
+  name    String?
+  role    String  @default("CLIENT") // ADMIN | CLIENT
+
+  companyName String?
+  phone       String?
+  position    String?
+  avatarUrl   String?
+  taxId       String?
+
+  projects  Project[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
-model Project {
-  id          String        @id @default(cuid())
-  name        String
-  description String?
-  status      ProjectStatus @default(STRATEGY)
-  progress    Int           @default(0) // 0 a 100
-  budget      String? // Para controle interno do Admin
-  deadline    DateTime?
-
-  // Relacionamentos
-  clientId String
-  client   User   @relation(fields: [clientId], references: [id], onDelete: Cascade)
-
-  updates Update[] // A Timeline do projeto
-  assets  Asset[] // Arquivos do UploadThing
+model Lead {
+  id          String     @id @default(cuid())
+  companyName String
+  contactName String?
+  email       String?
+  phone       String?
+  website     String? // Site atual (ruim) do prospect
+  instagram   String?
+  status      LeadStatus @default(GARIMPAGEM)
+  notes       String?    @db.Text // Anotações da Maísa
+  value       String? // Estimativa de ticket
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
+// -----------------------------------------------------------------------------
+// NÚCLEO DO PROJETO
+// -----------------------------------------------------------------------------
+
+model Project {
+  id          String          @id @default(cuid())
+  name        String
+  description String?         @db.Text
+  status      ProjectStatus   @default(STRATEGY)
+  category    ProjectCategory @default(WEB_APP)
+  priority    Priority        @default(MEDIUM)
+  progress    Int             @default(0)
+  budget      String?
+
+  // Briefing Dinâmico (Armazenado como JSON para flexibilidade total)
+  briefing Json? @default("{}")
+
+  // Datas e Links
+  startDate     DateTime  @default(now())
+  deadline      DateTime?
+  liveUrl       String?
+  repositoryUrl String?
+
+  // Relacionamentos
+  clientId String
+  client   User   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  updates     Update[]
+  assets      Asset[]
+  actionItems ActionItem[] // Pendências do cliente
+  versions    Version[] // Logs de Preview e Performance
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// -----------------------------------------------------------------------------
+// TIMELINE E APROVAÇÕES (ESCUDO JURÍDICO)
+// -----------------------------------------------------------------------------
+
 model Update {
   id          String  @id @default(cuid())
-  title       String // Ex: "Design da Home Finalizado"
+  title       String
   description String? @db.Text
-  isMilestone Boolean @default(false) // Se marcar como true, pode ter um destaque visual na UI
-  timezone    String  @default("UTC") // Fuso horário do momento do registro
+  isMilestone Boolean @default(false)
+  imageUrl    String?
+  timezone    String  @default("UTC")
+
+  // Lógica de Aprovação
+  requiresApproval Boolean        @default(false)
+  approvalStatus   ApprovalStatus @default(PENDING)
+  approvedAt       DateTime?
+  feedback         String?        @db.Text // Caso o cliente rejeite
 
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -73,14 +167,50 @@ model Update {
   createdAt DateTime @default(now())
 }
 
+// -----------------------------------------------------------------------------
+// PENDÊNCIAS, ASSETS E VERSÕES (RIGOR TÉCNICO)
+// -----------------------------------------------------------------------------
+
+model ActionItem {
+  id          String       @id @default(cuid())
+  title       String // Ex: "Enviar Logotipo em Vetor"
+  description String?      @db.Text
+  status      ActionStatus @default(PENDING)
+  dueDate     DateTime?
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Asset {
   id       String    @id @default(cuid())
-  name     String // Nome visível do arquivo
-  url      String // URL vinda do UploadThing
-  key      String // Key do UploadThing para deleção futura
+  name     String
+  url      String
+  key      String // Para deleção no UploadThing
   type     AssetType @default(DOCUMENT)
-  order    Int       @default(0) // Ordem de exibição
-  timezone String    @default("UTC") // Fuso horário do upload
+  order    Int       @default(0)
+  timezone String    @default("UTC")
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+}
+
+model Version {
+  id          String  @id @default(cuid())
+  name        String // Ex: "v1.0.4 - Alpha"
+  deployUrl   String?
+  description String? @db.Text
+
+  // Relatório de Performance (Lighthouse)
+  scorePerformance   Int?
+  scoreAccessibility Int?
+  scoreBestPractices Int?
+  scoreSEO           Int?
 
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)

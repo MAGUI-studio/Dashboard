@@ -8,6 +8,7 @@ import { auth, currentUser } from "@clerk/nextjs/server"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
+import { BriefingForm } from "@/src/components/common/BriefingForm"
 
 import prisma from "@/src/lib/prisma"
 
@@ -115,6 +116,12 @@ export default async function DashboardPage({
           assets: {
             orderBy: { order: "asc" },
           },
+          actionItems: {
+            orderBy: { createdAt: "desc" },
+          },
+          versions: {
+            orderBy: { createdAt: "desc" },
+          },
         },
         orderBy: { updatedAt: "desc" },
       },
@@ -140,6 +147,7 @@ export default async function DashboardPage({
   }
 
   const activeProject = project || projects[0]
+  const isBriefingEmpty = !activeProject.briefing || Object.keys(activeProject.briefing as object).length === 0
 
   return (
     <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
@@ -174,17 +182,23 @@ export default async function DashboardPage({
           )}
         </div>
 
-        <DashboardSummary
-          project={
-            {
-              ...activeProject,
-              updates: activeProject.updates.map((u) => ({
-                ...u,
-                createdAt: u.createdAt.toISOString(),
-              })),
-            } as unknown as DashboardProject
-          }
-        />
+        {isBriefingEmpty ? (
+          <div className="py-12">
+            <BriefingForm projectId={activeProject.id} />
+          </div>
+        ) : (
+          <DashboardSummary
+            project={
+              {
+                ...activeProject,
+                updates: activeProject.updates.map((u) => ({
+                  ...u,
+                  createdAt: u.createdAt.toISOString(),
+                })),
+              } as unknown as DashboardProject
+            }
+          />
+        )}
       </div>
     </main>
   )

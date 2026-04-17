@@ -1,6 +1,7 @@
 import { Metadata, Viewport } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
+import { Toaster } from "sonner"
 
 import { enUS, ptBR } from "@clerk/localizations"
 import { ClerkProvider } from "@clerk/nextjs"
@@ -133,7 +134,10 @@ export default async function RootLayout({
         >
           <NextIntlClientProvider messages={messages}>
             <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
-            <ThemeProvider>{children}</ThemeProvider>
+            <ThemeProvider>
+              {children}
+              <Toaster position="top-right" richColors closeButton />
+            </ThemeProvider>
           </NextIntlClientProvider>
         </ClerkProvider>
 

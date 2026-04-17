@@ -14,9 +14,18 @@ import {
   Globe,
   Monitor,
   Tag,
+  WarningCircle,
+  CircleNotch,
+  HandsClapping
 } from "@phosphor-icons/react"
 
 import { cn, formatLocalTime } from "@/src/lib/utils/utils"
+import { approveUpdateAction } from "@/src/lib/actions/project.actions"
+import { toast } from "sonner"
+import { Button } from "../ui/button"
+
+import { ActionItemsWidget } from "./ActionItemsWidget"
+import { VersionsLog } from "./VersionsLog"
 
 interface DashboardSummaryProps {
   project: DashboardProject
@@ -25,6 +34,19 @@ interface DashboardSummaryProps {
 export function DashboardSummary({ project }: DashboardSummaryProps) {
   const t = useTranslations("Dashboard")
   const tStatus = useTranslations("Dashboard.status")
+  const tApp = useTranslations("Approvals")
+  const [isApproving, setIsApproving] = React.useState<string | null>(null)
+
+  const handleApprove = async (updateId: string) => {
+    setIsApproving(updateId)
+    const result = await approveUpdateAction(updateId, project.id)
+    if (result.success) {
+      toast.success("Aprovado com sucesso!")
+    } else {
+      toast.error("Erro ao aprovar")
+    }
+    setIsApproving(null)
+  }
 
   const statusSteps = [
     "STRATEGY",
@@ -38,6 +60,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
 
   return (
     <div className="flex flex-col gap-12 w-full">
+      <ActionItemsWidget items={(project as any).actionItems || []} />
       {/* Protocol Status Bar */}
       <section className="flex flex-col gap-8 rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm lg:p-12">
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -227,19 +250,75 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                         </span>
                       )}
                     </div>
-                    <h4 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
-                      {update.title}
-                    </h4>
-                    {update.description && (
-                      <p className="text-sm font-medium leading-relaxed text-muted-foreground/60 max-w-xl">
-                        {update.description}
-                      </p>
+                    {update.requiresApproval && update.approvalStatus === "PENDING" ? (
+                      <div className="relative group/decision p-6 rounded-2xl border border-brand-primary/30 bg-brand-primary/5 shadow-[0_0_20px_rgba(var(--brand-primary-rgb),0.1)] backdrop-blur-md overflow-hidden transition-all hover:shadow-[0_0_40px_rgba(var(--brand-primary-rgb),0.2)]">
+                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/decision:opacity-20 transition-opacity">
+                          <WarningCircle size={80} weight="fill" />
+                        </div>
+                        
+                        <div className="relative z-10 flex flex-col gap-4">
+                          <div className="flex items-center gap-2">
+                            <div className="size-2 rounded-full bg-brand-primary animate-ping" />
+                            <span className="text-[10px] font-black uppercase tracking-widest text-brand-primary">
+                              {tApp("status.PENDING")}
+                            </span>
+                          </div>
+                          
+                          <h4 className="font-heading text-xl font-black uppercase tracking-tight text-foreground">
+                            {update.title}
+                          </h4>
+                          
+                          {update.description && (
+                            <p className="text-sm font-medium leading-relaxed text-muted-foreground/80 max-w-lg">
+                              {update.description}
+                            </p>
+                          )}
+                          
+                          <div className="flex items-center gap-3 pt-2">
+                            <Button 
+                              onClick={() => handleApprove(update.id)}
+                              disabled={isApproving === update.id}
+                              className="rounded-full px-8 bg-brand-primary hover:bg-brand-primary/90 text-white font-black uppercase tracking-widest text-[10px] h-10"
+                            >
+                              {isApproving === update.id ? (
+                                <CircleNotch className="animate-spin size-4 mr-2" />
+                              ) : (
+                                <HandsClapping className="size-4 mr-2" weight="fill" />
+                              )}
+                              {tApp("actions.approve")}
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className={cn(
+                        "flex flex-col gap-2",
+                        update.requiresApproval && update.approvalStatus === "APPROVED" && "border-l-4 border-green-500/40 pl-6 py-2"
+                      )}>
+                        <h4 className="font-heading text-lg font-black uppercase tracking-tight text-foreground flex items-center gap-3">
+                          {update.title}
+                          {update.requiresApproval && update.approvalStatus === "APPROVED" && (
+                            <span className="text-[8px] font-bold uppercase tracking-widest text-green-500 flex items-center gap-1">
+                              <CheckCircle weight="fill" size={12} />
+                              {tApp("status.APPROVED", { date: update.approvedAt ? formatLocalTime(new Date(update.approvedAt), update.timezone) : '' })}
+                            </span>
+                          )}
+                        </h4>
+                        {update.description && (
+                          <p className="text-sm font-medium leading-relaxed text-muted-foreground/60 max-w-xl">
+                            {update.description}
+                          </p>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
               ))}
             </div>
           </section>
+
+          {/* Versions and Performance */}
+          <VersionsLog versions={(project as any).versions || []} />
         </div>
 
         {/* Project Assets (Client View) */}

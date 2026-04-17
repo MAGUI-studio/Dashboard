@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/client"
 }
 
@@ -70,7 +70,7 @@ enum LeadStatus {
 }
 
 // -----------------------------------------------------------------------------
-// MODELOS DE USUÁRIO E CRM (FUNIL DA MAÍSA)
+// MODELOS DE USUÁRIO E CRM (FUNIL DE VENDAS)
 // -----------------------------------------------------------------------------
 
 model User {
@@ -100,7 +100,7 @@ model Lead {
   website     String?    // Site atual (ruim) do prospect
   instagram   String?
   status      LeadStatus @default(GARIMPAGEM)
-  notes       String?    @db.Text // Anotações da Maísa
+  notes       String?    @db.Text // Observações estratégicas
   value       String?    // Estimativa de ticket
   
   createdAt   DateTime   @default(now())
@@ -153,6 +153,7 @@ model Update {
   description    String?        @db.Text
   isMilestone    Boolean        @default(false)
   imageUrl       String?
+  timezone       String         @default("UTC")
   
   // Lógica de Aprovação
   requiresApproval Boolean      @default(false)
@@ -191,6 +192,7 @@ model Asset {
   key         String    // Para deleção no UploadThing
   type        AssetType @default(DOCUMENT)
   order       Int       @default(0)
+  timezone    String    @default("UTC")
 
   projectId   String
   project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)

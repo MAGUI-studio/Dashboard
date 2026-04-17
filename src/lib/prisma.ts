@@ -4,9 +4,12 @@ import pg from "pg"
 import { PrismaClient } from "../generated/client/index.js"
 
 const connectionString = `${process.env.DATABASE_URL}`
+const isExternalDb = connectionString.includes("neon.tech") || connectionString.includes("supabase.co")
 
 const pool = new pg.Pool({
-  connectionString,
+  connectionString: isExternalDb && !connectionString.includes("sslmode=") 
+    ? `${connectionString}${connectionString.includes("?") ? "&" : "?"}sslmode=verify-full`
+    : connectionString,
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,

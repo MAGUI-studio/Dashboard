@@ -135,6 +135,7 @@ export async function addProjectTimelineAction(formData: FormData) {
     title: formData.get("title"),
     description: formData.get("description"),
     isMilestone: formData.get("isMilestone") === "true",
+    requiresApproval: formData.get("requiresApproval") === "true",
     imageUrl: formData.get("imageUrl"),
     timezone: formData.get("timezone"),
   })
@@ -143,8 +144,15 @@ export async function addProjectTimelineAction(formData: FormData) {
     return { error: "Dados inválidos" }
   }
 
-  const { projectId, title, description, isMilestone, imageUrl, timezone } =
-    validatedFields.data
+  const {
+    projectId,
+    title,
+    description,
+    isMilestone,
+    requiresApproval,
+    imageUrl,
+    timezone,
+  } = validatedFields.data
 
   try {
     await prisma.update.create({
@@ -153,6 +161,8 @@ export async function addProjectTimelineAction(formData: FormData) {
         title,
         description,
         isMilestone,
+        requiresApproval,
+        approvalStatus: requiresApproval ? "PENDING" : "APPROVED",
         imageUrl: imageUrl as any,
         timezone,
       } as any,
@@ -163,6 +173,53 @@ export async function addProjectTimelineAction(formData: FormData) {
   } catch (error) {
     console.error("Add Timeline Error:", error)
     return { error: "Erro ao adicionar atualização" }
+  }
+}
+
+export async function approveUpdateAction(updateId: string, projectId: string) {
+  try {
+    await protect("client")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  try {
+    await prisma.update.update({
+      where: { id: updateId },
+      data: {
+        approvalStatus: "APPROVED",
+        approvedAt: new Date(),
+      },
+    })
+
+    revalidatePath(`/dashboard/projects/${projectId}`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    console.error("Approve Update Error:", error)
+    return { error: "Erro ao aprovar atualização" }
+  }
+}
+
+export async function updateProjectBriefingAction(projectId: string, briefing: any) {
+  try {
+    await protect("client")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  try {
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { briefing },
+    })
+
+    revalidatePath(`/dashboard/projects/${projectId}`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    console.error("Update Briefing Error:", error)
+    return { error: "Erro ao atualizar briefing" }
   }
 }
 
