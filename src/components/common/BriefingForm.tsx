@@ -18,6 +18,7 @@ import {
   Trash,
   UsersThree,
 } from "@phosphor-icons/react"
+import { parseAsInteger, useQueryState } from "nuqs"
 import { toast } from "sonner"
 
 import { Button } from "@/src/components/ui/button"
@@ -69,7 +70,7 @@ export function BriefingForm({
 }: BriefingFormProps): React.JSX.Element {
   const t = useTranslations("Briefing")
   const router = useRouter()
-  const [step, setStep] = React.useState(0)
+  const [step, setStep] = useQueryState("step", parseAsInteger.withDefault(0))
   const [isLoading, setIsLoading] = React.useState(false)
   const [isFinished, setIsFinished] = React.useState(false)
 
@@ -98,30 +99,38 @@ export function BriefingForm({
     }))
   }
 
+  const saveCurrentStep = async () => {
+    const currentField = currentStepConfig.id
+    const currentValue = formData[currentField as keyof typeof formData]
+
+    const hasContent = Array.isArray(currentValue)
+      ? currentValue.some((v) => v.trim())
+      : (currentValue as string).trim()
+
+    if (hasContent) {
+      await savePartialBriefingAction(projectId, {
+        [currentField]: currentValue,
+      })
+    }
+  }
+
   const handleNext = async () => {
     if (step < stepsConfig.length - 1) {
-      // Auto-save current field before moving to next step
-      const currentField = currentStepConfig.id
-      const currentValue = formData[currentField as keyof typeof formData]
-
-      const hasContent = Array.isArray(currentValue)
-        ? currentValue.some((v) => v.trim())
-        : (currentValue as string).trim()
-
-      if (hasContent) {
-        await savePartialBriefingAction(projectId, {
-          [currentField]: currentValue,
-        })
-      }
-
-      setStep((previous) => previous + 1)
+      await saveCurrentStep()
+      setStep(step + 1)
     }
   }
 
   const handleBack = () => {
     if (step > 0) {
-      setStep((previous) => previous - 1)
+      setStep(step - 1)
     }
+  }
+
+  const onStepClick = async (index: number) => {
+    if (index === step) return
+    await saveCurrentStep()
+    setStep(index)
   }
 
   const handleSubmit = async () => {
@@ -357,9 +366,10 @@ export function BriefingForm({
             const isCompleted = index < step
 
             return (
-              <div
+              <button
                 key={item.id}
-                className={`rounded-3xl border p-4 transition-all ${
+                onClick={() => onStepClick(index)}
+                className={`w-full text-left rounded-3xl border p-4 transition-all hover:bg-muted/20 ${
                   isCurrent
                     ? "border-brand-primary/35 bg-brand-primary/8 shadow-lg shadow-brand-primary/5"
                     : isCompleted
@@ -386,7 +396,7 @@ export function BriefingForm({
                     </h4>
                   </div>
                 </div>
-              </div>
+              </button>
             )
           })}
         </div>

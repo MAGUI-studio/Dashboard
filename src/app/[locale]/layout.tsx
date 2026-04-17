@@ -8,6 +8,7 @@ import { shadcn } from "@clerk/ui/themes"
 import "@clerk/ui/themes/shadcn.css"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin"
+import { NuqsAdapter } from "nuqs/adapters/next/app"
 import { extractRouterConfig } from "uploadthing/server"
 
 import { Toaster } from "@/src/components/ui/sonner"
@@ -136,7 +137,7 @@ export default async function RootLayout({
           <NextIntlClientProvider messages={messages}>
             <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <ThemeProvider>
-              {children}
+              <NuqsAdapter>{children}</NuqsAdapter>
               <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
