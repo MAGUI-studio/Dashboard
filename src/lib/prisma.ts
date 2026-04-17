@@ -3,28 +3,12 @@ import pg from "pg"
 
 import { logger } from "@/src/lib/logger"
 
+import { env } from "@/src/config/env"
+
 import { PrismaClient } from "../generated/client/client"
 
-const rawConnectionString = `${process.env.DATABASE_URL}`
+const connectionString = env.DATABASE_URL
 
-function normalizeConnectionString(connectionString: string): string {
-  try {
-    const url = new URL(connectionString)
-
-    if (
-      url.searchParams.get("sslmode") === "require" &&
-      !url.searchParams.has("uselibpqcompat")
-    ) {
-      url.searchParams.set("uselibpqcompat", "true")
-    }
-
-    return url.toString()
-  } catch {
-    return connectionString
-  }
-}
-
-const connectionString = normalizeConnectionString(rawConnectionString)
 const isExternalDb =
   connectionString.includes("neon.tech") ||
   connectionString.includes("supabase.co") ||
@@ -42,9 +26,9 @@ const pool = new pg.Pool({
         rejectUnauthorized: false,
       }
     : undefined,
-  max: 10,
+  max: 20,
   idleTimeoutMillis: 30000,
-  connectionTimeoutMillis: 15000,
+  connectionTimeoutMillis: 30000,
   keepAlive: true,
 })
 
@@ -58,30 +42,11 @@ const prismaClientSingleton = (): PrismaClient => {
   return new PrismaClient({ adapter })
 }
 
-function hasRequiredDelegates(
-  client: PrismaClient | undefined
-): client is PrismaClient {
-  if (!client) {
-    return false
-  }
-
-  return Boolean(
-    client.user &&
-    client.project &&
-    client.update &&
-    client.asset &&
-    client.notification &&
-    client.auditLog
-  )
-}
-
 declare global {
   var prisma: undefined | ReturnType<typeof prismaClientSingleton>
 }
 
-const prisma = hasRequiredDelegates(globalThis.prisma)
-  ? globalThis.prisma
-  : prismaClientSingleton()
+const prisma = globalThis.prisma ?? prismaClientSingleton()
 
 export default prisma
 
