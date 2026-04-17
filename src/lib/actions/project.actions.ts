@@ -499,6 +499,49 @@ export async function updateProjectBriefingAction(
   }
 }
 
+export async function savePartialBriefingAction(
+  projectId: string,
+  partialBriefing: Record<string, unknown>
+): Promise<{ error?: string; success?: boolean }> {
+  // We allow partial updates during steps
+  const validated = briefingSchema.partial().safeParse(partialBriefing)
+
+  if (!validated.success) {
+    return {
+      error: validated.error.issues[0]?.message ?? "Dados parciais inválidos",
+    }
+  }
+
+  try {
+    await ensureProjectAccess(projectId, [
+      UserRole.CLIENT,
+      UserRole.ADMIN,
+      UserRole.MEMBER,
+    ])
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      select: { briefing: true },
+    })
+
+    if (!project) return { error: "Projeto não encontrado" }
+
+    const currentBriefing = (project.briefing as Record<string, unknown>) || {}
+    const updatedBriefing = { ...currentBriefing, ...validated.data }
+
+    await prisma.project.update({
+      where: { id: projectId },
+      data: { briefing: updatedBriefing },
+    })
+
+    // No notifications or audit logs for partial saves to avoid noise
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Save Partial Briefing Error:")
+    return { error: "Erro ao salvar progresso do briefing" }
+  }
+}
+
 export async function deleteProjectAction(
   id: string
 ): Promise<{ error?: string; success?: boolean }> {

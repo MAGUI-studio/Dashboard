@@ -22,11 +22,15 @@ import { Button } from "@/src/components/ui/button"
 import { Label } from "@/src/components/ui/label"
 import { Textarea } from "@/src/components/ui/textarea"
 
-import { updateProjectBriefingAction } from "@/src/lib/actions/project.actions"
+import {
+  savePartialBriefingAction,
+  updateProjectBriefingAction,
+} from "@/src/lib/actions/project.actions"
 import { briefingSchema } from "@/src/lib/validations/project"
 
 interface BriefingFormProps {
   projectId: string
+  initialData?: Record<string, unknown> | null
 }
 
 const stepsConfig = [
@@ -58,6 +62,7 @@ const stepsConfig = [
 
 export function BriefingForm({
   projectId,
+  initialData,
 }: BriefingFormProps): React.JSX.Element {
   const t = useTranslations("Briefing")
   const router = useRouter()
@@ -65,12 +70,14 @@ export function BriefingForm({
   const [isLoading, setIsLoading] = React.useState(false)
   const [isFinished, setIsFinished] = React.useState(false)
   const [formData, setFormData] = React.useState({
-    brandTone: "",
-    visualReferences: "",
-    businessGoals: "",
-    primaryCta: "",
-    targetAudience: "",
-    differentiators: "",
+    brandTone: (initialData?.brandTone as string) || "",
+    visualReferences: Array.isArray(initialData?.visualReferences)
+      ? initialData.visualReferences.join("\n")
+      : (initialData?.visualReferences as string) || "",
+    businessGoals: (initialData?.businessGoals as string) || "",
+    primaryCta: (initialData?.primaryCta as string) || "",
+    targetAudience: (initialData?.targetAudience as string) || "",
+    differentiators: (initialData?.differentiators as string) || "",
   })
 
   const currentStepConfig = stepsConfig[step]
@@ -83,8 +90,18 @@ export function BriefingForm({
     }))
   }
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (step < stepsConfig.length - 1) {
+      // Auto-save current field before moving to next step
+      const currentField = currentStepConfig.id
+      const currentValue = formData[currentField]
+
+      if (currentValue.trim()) {
+        await savePartialBriefingAction(projectId, {
+          [currentField]: currentValue,
+        })
+      }
+
       setStep((previous) => previous + 1)
     }
   }

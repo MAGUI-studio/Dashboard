@@ -236,9 +236,8 @@ export default async function DashboardPage({
       },
     },
   })
-  const isBriefingEmpty =
-    !activeProject.briefing ||
-    Object.keys(activeProject.briefing as object).length === 0
+  const briefingData = activeProject.briefing as Record<string, unknown> | null
+  const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6 // We have 6 steps in briefingSchema
 
   return (
     <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
@@ -274,7 +273,12 @@ export default async function DashboardPage({
 
         {isBriefingEmpty ? (
           <div className="py-12">
-            <BriefingForm projectId={activeProject.id} />
+            <BriefingForm
+              projectId={activeProject.id}
+              initialData={
+                activeProject.briefing as Record<string, unknown> | null
+              }
+            />
           </div>
         ) : (
           <DashboardSummary
