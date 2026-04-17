@@ -35,7 +35,7 @@ const stepsConfig = [
   { id: "brandTone", min: 100 },
   { id: "visualReferences", min: 0 }, // Optional
   { id: "businessGoals", min: 100 },
-  { id: "primaryCta", min: 3 }, // Mantendo 3 por ser CTA curto, mas posso subir se desejar
+  { id: "primaryCta", min: 100 },
   { id: "targetAudience", min: 100 },
   { id: "differentiators", min: 100 },
 ] as const
@@ -170,12 +170,22 @@ export function BriefingForm({
   const handleSubmit = async () => {
     if (!canSubmit) {
       setShowErrors(true)
+
+      const missingSteps = stepsConfig
+        .filter((s) => isFieldMissing(s.id))
+        .map((s) => t(`steps.${s.id}.label`))
+
+      // Navigate to the first missing field
       const firstMissing = stepsConfig.find((s) => isFieldMissing(s.id))
       if (firstMissing) {
         setCurrentSlug(idToSlug[firstMissing.id])
       }
+
       toast.error(
-        "Por favor, preencha todos os campos obrigatórios com o mínimo de caracteres."
+        `Atenção: Os seguintes campos precisam de mais detalhes (mín. 100 caracteres): ${missingSteps.join(", ")}.`,
+        {
+          duration: 5000,
+        }
       )
       return
     }
