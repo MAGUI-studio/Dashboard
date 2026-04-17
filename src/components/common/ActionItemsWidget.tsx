@@ -3,14 +3,14 @@
 import { useTranslations } from 'next-intl'
 import { 
   WarningCircle, 
-  CheckCircle, 
   Clock,
   ArrowRight
 } from '@phosphor-icons/react'
-import { cn } from '@/src/lib/utils/utils'
+
+import { DashboardActionItem } from '@/src/types/dashboard'
 
 interface ActionItemsWidgetProps {
-  items: any[]
+  items: DashboardActionItem[]
 }
 
 export function ActionItemsWidget({ items }: ActionItemsWidgetProps): React.JSX.Element {

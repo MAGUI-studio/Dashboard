@@ -12,6 +12,7 @@ export interface DashboardProject {
   category: any // eslint-disable-line @typescript-eslint/no-explicit-any
   priority: any // eslint-disable-line @typescript-eslint/no-explicit-any
   clientId: string
+  briefing: any // eslint-disable-line @typescript-eslint/no-explicit-any
   client: {
     id: string
     name: string | null
@@ -23,6 +24,8 @@ export interface DashboardProject {
   }
   updates: DashboardUpdate[]
   assets: DashboardAsset[]
+  actionItems?: DashboardActionItem[]
+  versions?: DashboardVersion[]
 }
 
 export interface DashboardUpdate {
@@ -53,4 +56,28 @@ export interface DashboardAsset {
   timezone: string
   projectId: string
   createdAt: Date
+}
+
+export interface DashboardActionItem {
+  id: string
+  title: string
+  description: string | null
+  status: "PENDING" | "COMPLETED"
+  dueDate: Date | string | null
+  projectId: string
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface DashboardVersion {
+  id: string
+  name: string
+  deployUrl: string | null
+  description: string | null
+  scorePerformance: number | null
+  scoreAccessibility: number | null
+  scoreBestPractices: number | null
+  scoreSEO: number | null
+  projectId: string
+  createdAt: Date | string
 }

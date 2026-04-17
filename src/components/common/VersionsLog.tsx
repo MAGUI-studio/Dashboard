@@ -9,10 +9,12 @@ import {
   Eye,
   Lightning
 } from '@phosphor-icons/react'
+
+import { DashboardVersion } from '@/src/types/dashboard'
 import { cn } from '@/src/lib/utils/utils'
 
 interface VersionsLogProps {
-  versions: any[]
+  versions: DashboardVersion[]
 }
 
 export function VersionsLog({ versions }: VersionsLogProps): React.JSX.Element {

@@ -4,6 +4,7 @@ import { ChartLineUp, Users, Target, CurrencyDollar } from '@phosphor-icons/reac
 import { CreateLeadForm } from '@/src/components/admin/CreateLeadForm'
 import { LeadsTable } from '@/src/components/admin/LeadsTable'
 import { getLeads } from '@/src/lib/actions/crm.actions'
+import { Lead } from '@/src/types/crm'
 
 export default async function CRMPage(): Promise<React.JSX.Element> {
   const t = await getTranslations('Admin.crm')
@@ -19,14 +20,14 @@ export default async function CRMPage(): Promise<React.JSX.Element> {
     },
     {
       label: t('stats.converted'),
-      value: leads.filter((l) => l.status === 'CONVERTIDO').length,
+      value: leads.filter((l: Lead) => l.status === 'CONVERTIDO').length,
       icon: Target,
       color: 'text-green-500',
       bg: 'bg-green-500/10',
     },
     {
       label: t('stats.negotiation'),
-      value: leads.filter((l) => l.status === 'NEGOCIACAO').length,
+      value: leads.filter((l: Lead) => l.status === 'NEGOCIACAO').length,
       icon: ChartLineUp,
       color: 'text-orange-500',
       bg: 'bg-orange-500/10',

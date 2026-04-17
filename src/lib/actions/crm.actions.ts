@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import prisma from '@/src/lib/prisma'
 import { LeadStatus } from '@/src/generated/client'
 import { z } from 'zod'
+import { Lead } from '@/src/types/crm'
 
 const LeadSchema = z.object({
   companyName: z.string().min(2),
@@ -63,8 +64,10 @@ export async function deleteLead(id: string): Promise<{ success: boolean; error?
   }
 }
 
-export async function getLeads(): Promise<unknown[]> {
-  return prisma.lead.findMany({
+export async function getLeads(): Promise<Lead[]> {
+  const leads = await prisma.lead.findMany({
     orderBy: { createdAt: 'desc' },
   })
+  
+  return leads as unknown as Lead[]
 }

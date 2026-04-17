@@ -56,11 +56,11 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
     "QA",
     "LAUNCHED",
   ]
-  const currentStatusIndex = statusSteps.indexOf(project.status)
+  const currentStatusIndex = statusSteps.indexOf(project.status as string)
 
   return (
     <div className="flex flex-col gap-12 w-full">
-      <ActionItemsWidget items={(project as any).actionItems || []} />
+      <ActionItemsWidget items={project.actionItems || []} />
       {/* Protocol Status Bar */}
       <section className="flex flex-col gap-8 rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm lg:p-12">
         <div className="flex items-center justify-between gap-4 flex-wrap">
@@ -71,7 +71,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
             <p className="text-xs font-medium text-muted-foreground/40">
               Fase atual:{" "}
               <span className="text-brand-primary font-bold uppercase">
-                {project.status}
+                {project.status as string}
               </span>
             </p>
           </div>
@@ -145,7 +145,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                     Categoria
                   </span>
                   <span className="font-heading text-base font-black uppercase tracking-tight text-foreground">
-                    {project.category}
+                    {project.category as string}
                   </span>
                 </div>
               </div>
@@ -159,7 +159,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                     Prioridade
                   </span>
                   <span className="font-heading text-base font-black uppercase tracking-tight text-foreground">
-                    {project.priority}
+                    {project.priority as string}
                   </span>
                 </div>
               </div>
@@ -318,7 +318,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
           </section>
 
           {/* Versions and Performance */}
-          <VersionsLog versions={(project as any).versions || []} />
+          <VersionsLog versions={project.versions || []} />
         </div>
 
         {/* Project Assets (Client View) */}

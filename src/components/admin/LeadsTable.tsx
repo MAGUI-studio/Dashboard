@@ -40,9 +40,10 @@ import { Badge } from '@/src/components/ui/badge'
 import { Input } from '@/src/components/ui/input'
 import { Card } from '@/src/components/ui/card'
 import { updateLeadStatus, deleteLead } from '@/src/lib/actions/crm.actions'
+import { Lead } from '@/src/types/crm'
 
 interface LeadsTableProps {
-  leads: any[]
+  leads: Lead[]
 }
 
 type SortConfig = {
