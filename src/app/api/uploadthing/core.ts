@@ -20,10 +20,7 @@ export const ourFileRouter = {
       return { userId }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      logger.info(
-        { userId: metadata.userId, url: file.url },
-        "Upload complete"
-      )
+      logger.info({ userId: metadata.userId, url: file.url }, "Upload complete")
 
       return { uploadedBy: metadata.userId }
     }),

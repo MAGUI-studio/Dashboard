@@ -259,6 +259,42 @@
     "step": "Step {current} of {total}",
     "submit": "Submit Briefing",
     "success": "Briefing submitted! Our team will analyze the data.",
+    "success_description": "The briefing has entered the team's strategic radar.",
+    "onboarding_protocol": "Onboarding Protocol",
+    "step_strategy": "Strategic step",
+    "answer_label": "Answer",
+    "back_button": "Back",
+    "next_step": "Next Step",
+    "creative_direction": "Creative Direction",
+    "briefing_map": "Briefing map",
+    "live": "Live",
+    "step_number": "Step {number}",
+    "steps": {
+      "brandTone": {
+        "label": "Brand Essence",
+        "placeholder": "How should the brand sound and behave? Ex: sophisticated, precise, warm, strategic."
+      },
+      "visualReferences": {
+        "label": "Visual References",
+        "placeholder": "Paste links separated by space or line break with examples of websites, campaigns or interfaces."
+      },
+      "businessGoals": {
+        "label": "Business Goals",
+        "placeholder": "What results does this project need to generate in the coming months?"
+      },
+      "primaryCta": {
+        "label": "Primary Conversion",
+        "placeholder": "What is the most important action the visitor needs to perform?"
+      },
+      "targetAudience": {
+        "label": "Target Audience",
+        "placeholder": "Who is the ideal customer and what do they value when deciding?"
+      },
+      "differentiators": {
+        "label": "Differentiators",
+        "placeholder": "What makes the operation, the offer or the brand unique compared to the competition?"
+      }
+    },
     "questions": {
       "tone": "What is the brand's tone of voice?",
       "references": "References (links to websites you like)",
@@ -297,7 +333,20 @@
     "actions": {
       "approve": "Approve Version",
       "reject": "Request Adjustments",
-      "feedback_placeholder": "Describe the necessary adjustments..."
+      "feedback_placeholder": "Describe the necessary adjustments...",
+      "cancel": "Cancel",
+      "send_feedback": "Send feedback"
+    },
+    "toast": {
+      "approve_success": "Approval successfully registered.",
+      "reject_success": "Feedback sent to the team.",
+      "error_approve": "Error approving",
+      "error_reject": "Error rejecting"
+    },
+    "dialog": {
+      "title": "Milestone feedback",
+      "description": "Clearly explain what needs to be adjusted so the team can return the delivery in the next round.",
+      "placeholder": "Ex: we need to review visual hierarchy, main CTA, and clarity of the proposal."
     }
   },
   "Sidebar": {
@@ -323,6 +372,12 @@
     "eyebrow": "Client Panel",
     "admin_eyebrow": "Project Management",
     "admin_title": "Studio Overview",
+    "admin_overview": "Overview",
+    "admin_description": "Administrative control panel",
+    "select_project": "Select Project",
+    "track_evolution": "Track your project's evolution in real time.",
+    "filter_projects": "Filter projects...",
+    "no_project_found": "No projects found.",
     "greetings": {
       "morning": "Good morning {name}, have a great day.",
       "afternoon": "Good afternoon {name}, have an excellent afternoon.",
@@ -344,7 +399,21 @@
     },
     "timeline": {
       "title": "Execution Timeline",
-      "milestone": "Milestone Achieved"
-    }
+      "milestone": "Milestone Achieved",
+      "description": "Live line of project deliveries, validations, and decisions."
+    },
+    "rhythm_delivery": "Project in delivery rhythm",
+    "current_phase": "Current phase:",
+    "progress_label": "progress",
+    "production_environment": "Production environment",
+    "source_code": "Source code",
+    "unavailable": "Still unavailable",
+    "private_repo": "Private repository",
+    "feedback_sent": "Feedback sent",
+    "assets_repository": "Assets repository",
+    "waiting_files": "Waiting for file upload.",
+    "view_document": "View document",
+    "category_label": "Category",
+    "priority_label": "Priority"
   }
 }

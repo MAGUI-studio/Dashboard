@@ -59,9 +59,9 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
     setIsApproving(updateId)
     const result = await approveUpdateAction(updateId, project.id)
     if (result.success) {
-      toast.success("Aprovação registrada com sucesso.")
+      toast.success(tApp("toast.approve_success"))
     } else {
-      toast.error(result.error ?? "Erro ao aprovar")
+      toast.error(result.error ?? tApp("toast.error_approve"))
     }
     setIsApproving(null)
   }
@@ -75,10 +75,10 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
     })
 
     if (result.success) {
-      toast.success("Feedback enviado para o time.")
+      toast.success(tApp("toast.reject_success"))
       setFeedback("")
     } else {
-      toast.error(result.error ?? "Erro ao reprovar")
+      toast.error(result.error ?? tApp("toast.error_reject"))
     }
 
     setIsRejecting(null)
@@ -104,18 +104,18 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                 {t("status.title")}
               </p>
               <h3 className="mt-3 font-heading text-3xl font-black uppercase tracking-tight text-foreground">
-                Projeto em ritmo de entrega
+                {t("rhythm_delivery")}
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground/70">
-                Fase atual:{" "}
+                {t("current_phase")}{" "}
                 <span className="font-black uppercase text-brand-primary">
-                  {project.status as string}
+                  {tStatus(project.status as ProjectStatus)}
                 </span>
               </p>
             </div>
             <div className="rounded-[1.5rem] border border-brand-primary/20 bg-brand-primary/10 px-5 py-4">
               <p className="text-[10px] font-black uppercase tracking-[0.25em] text-brand-primary">
-                progresso
+                {t("progress_label")}
               </p>
               <p className="mt-1 text-3xl font-black tracking-tight text-foreground">
                 {project.progress}%
@@ -191,7 +191,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                   </div>
                   <div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Categoria
+                      {t("category_label")}
                     </span>
                     <p className="font-heading text-base font-black uppercase tracking-tight">
                       {project.category as string}
@@ -205,7 +205,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                   </div>
                   <div>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Prioridade
+                      {t("priority_label")}
                     </span>
                     <p className="font-heading text-base font-black uppercase tracking-tight">
                       {project.priority as string}
@@ -219,7 +219,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
               <div className="space-y-6">
                 <div>
                   <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                    Ambiente de produção
+                    {t("production_environment")}
                   </span>
                   {project.liveUrl ? (
                     <a
@@ -235,14 +235,14 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                     </a>
                   ) : (
                     <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/35">
-                      Ainda indisponível
+                      {t("unavailable")}
                     </p>
                   )}
                 </div>
 
                 <div>
                   <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                    Código-fonte
+                    {t("source_code")}
                   </span>
                   {project.repositoryUrl ? (
                     <a
@@ -258,7 +258,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                     </a>
                   ) : (
                     <p className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/35">
-                      Repositório privado
+                      {t("private_repo")}
                     </p>
                   )}
                 </div>
@@ -272,7 +272,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                 {t("timeline.title")}
               </h3>
               <p className="text-sm text-muted-foreground/60">
-                Linha viva de entregas, validações e decisões do projeto.
+                {t("timeline.description")}
               </p>
             </div>
 
@@ -356,18 +356,16 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                                   className="rounded-full border-foreground/15 bg-background/80 px-7 text-[10px] font-black uppercase tracking-[0.22em]"
                                 >
                                   <NotePencil className="mr-2 size-4" />
-                                  Solicitar ajuste
+                                  {tApp("actions.reject")}
                                 </Button>
                               </DialogTrigger>
                               <DialogContent className="max-w-xl rounded-[2rem] border-border/30 bg-background/95 p-8">
                                 <DialogHeader>
                                   <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                                    Feedback da milestone
+                                    {tApp("dialog.title")}
                                   </DialogTitle>
                                   <DialogDescription>
-                                    Explique com clareza o que precisa ser
-                                    ajustado para o time devolver a entrega na
-                                    próxima rodada.
+                                    {tApp("dialog.description")}
                                   </DialogDescription>
                                 </DialogHeader>
 
@@ -377,7 +375,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                                     setFeedback(event.target.value)
                                   }
                                   className="min-h-[180px] rounded-[1.5rem] border-border/40 bg-muted/10 p-5"
-                                  placeholder="Ex: precisamos revisar hierarquia visual, CTA principal e clareza da proposta."
+                                  placeholder={tApp("dialog.placeholder")}
                                 />
 
                                 <DialogFooter>
@@ -385,7 +383,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                                     variant="outline"
                                     className="rounded-full"
                                   >
-                                    Cancelar
+                                    {tApp("actions.cancel")}
                                   </Button>
                                   <Button
                                     onClick={() => handleReject(update.id)}
@@ -395,7 +393,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                                     {isRejecting === update.id ? (
                                       <CircleNotch className="mr-2 size-4 animate-spin" />
                                     ) : null}
-                                    Enviar feedback
+                                    {tApp("actions.send_feedback")}
                                   </Button>
                                 </DialogFooter>
                               </DialogContent>
@@ -434,7 +432,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                           {update.requiresApproval &&
                             update.approvalStatus === "REJECTED" && (
                               <span className="text-[8px] font-bold uppercase tracking-widest text-amber-500">
-                                Ajustes solicitados
+                                {tApp("status.REJECTED")}
                               </span>
                             )}
                         </h4>
@@ -448,7 +446,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                         {update.feedback && (
                           <div className="mt-4 rounded-2xl border border-amber-500/20 bg-amber-500/8 p-4">
                             <p className="text-[10px] font-black uppercase tracking-[0.25em] text-amber-600">
-                              Feedback enviado
+                              {t("feedback_sent")}
                             </p>
                             <p className="mt-2 text-sm leading-relaxed text-foreground/75">
                               {update.feedback}
@@ -469,13 +467,13 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
 
         <aside className="flex flex-col gap-8">
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            Repositório de ativos
+            {t("assets_repository")}
           </h3>
 
           {project.assets.length === 0 ? (
             <div className="rounded-[2rem] border border-dashed border-border/40 bg-muted/10 p-12 text-center">
               <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/30 italic">
-                Aguardando envio de arquivos.
+                {t("waiting_files")}
               </p>
             </div>
           ) : (
@@ -496,7 +494,7 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                       {asset.name}
                     </span>
                     <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Visualizar documento
+                      {t("view_document")}
                     </span>
                   </div>
                 </a>

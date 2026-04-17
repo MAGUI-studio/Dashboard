@@ -71,7 +71,7 @@ export default async function DashboardPage({
           <DashboardSummary
             project={
               {
-                name: "Visão Geral",
+                name: t("admin_overview"),
                 status: "STRATEGY",
                 progress: 0,
                 category: "WEB_APP",
@@ -91,7 +91,7 @@ export default async function DashboardPage({
                 startDate: new Date(),
                 deadline: null,
                 budget: null,
-                description: "Painel de controle administrativo",
+                description: t("admin_description"),
                 client: {
                   id: "admin",
                   name: "Admin",
@@ -262,7 +262,7 @@ export default async function DashboardPage({
           {projects.length > 1 && (
             <div className="flex flex-col gap-2">
               <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                Selecione o Projeto
+                {t("select_project")}
               </span>
               <ProjectSwitcher
                 projects={projects}

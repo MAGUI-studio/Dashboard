@@ -29,48 +29,30 @@ interface BriefingFormProps {
   projectId: string
 }
 
-const steps = [
+const stepsConfig = [
   {
     id: "brandTone",
     icon: Sparkle,
-    label: "Essência da Marca",
-    placeholder:
-      "Como a marca deve soar e se comportar? Ex: sofisticada, precisa, calorosa, estratégica.",
   },
   {
     id: "visualReferences",
     icon: LinkIcon,
-    label: "Referências Visuais",
-    placeholder:
-      "Cole links separados por espaço ou quebra de linha com exemplos de sites, campanhas ou interfaces.",
   },
   {
     id: "businessGoals",
     icon: Target,
-    label: "Metas de Negócio",
-    placeholder:
-      "Quais resultados esse projeto precisa gerar nos próximos meses?",
   },
   {
     id: "primaryCta",
     icon: Compass,
-    label: "Conversão Principal",
-    placeholder:
-      "Qual é a ação mais importante que o visitante precisa realizar?",
   },
   {
     id: "targetAudience",
     icon: UsersThree,
-    label: "Público-Alvo",
-    placeholder:
-      "Quem é o cliente ideal e o que ele valoriza na hora de decidir?",
   },
   {
     id: "differentiators",
     icon: Sparkle,
-    label: "Diferenciais",
-    placeholder:
-      "O que torna a operação, a oferta ou a marca única frente à concorrência?",
   },
 ] as const
 
@@ -91,18 +73,18 @@ export function BriefingForm({
     differentiators: "",
   })
 
-  const currentStep = steps[step]
-  const progress = ((step + 1) / steps.length) * 100
+  const currentStepConfig = stepsConfig[step]
+  const progress = ((step + 1) / stepsConfig.length) * 100
 
   const setValue = (value: string) => {
     setFormData((previous) => ({
       ...previous,
-      [currentStep.id]: value,
+      [currentStepConfig.id]: value,
     }))
   }
 
   const handleNext = () => {
-    if (step < steps.length - 1) {
+    if (step < stepsConfig.length - 1) {
       setStep((previous) => previous + 1)
     }
   }
@@ -141,7 +123,7 @@ export function BriefingForm({
 
   if (isFinished) {
     return (
-      <div className="mx-auto flex max-w-3xl flex-col items-center justify-center gap-6 rounded-[2rem] border border-brand-primary/20 bg-[radial-gradient(circle_at_top,rgba(190,242,100,0.16),transparent_45%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-12 text-center shadow-2xl shadow-brand-primary/10 backdrop-blur-xl">
+      <div className="flex w-full flex-col items-center justify-center gap-6 rounded-[2rem] border border-brand-primary/20 bg-[radial-gradient(circle_at_top,rgba(190,242,100,0.16),transparent_45%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-12 text-center shadow-2xl shadow-brand-primary/10 backdrop-blur-xl">
         <div className="flex size-20 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
           <CheckCircle size={42} weight="fill" className="animate-bounce" />
         </div>
@@ -150,7 +132,7 @@ export function BriefingForm({
             {t("success")}
           </h2>
           <p className="text-sm text-muted-foreground">
-            O briefing entrou no radar estratégico do time.
+            {t("success_description")}
           </p>
         </div>
       </div>
@@ -158,13 +140,13 @@ export function BriefingForm({
   }
 
   return (
-    <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-[1.1fr_0.9fr]">
+    <div className="grid w-full gap-8 lg:grid-cols-[1.1fr_0.9fr]">
       <section className="overflow-hidden rounded-[2rem] border border-border/40 bg-[radial-gradient(circle_at_top_left,rgba(190,242,100,0.12),transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-8 shadow-2xl shadow-black/5 backdrop-blur-xl md:p-10">
         <header className="border-b border-border/30 pb-8">
           <div className="flex items-center gap-2">
             <div className="size-2 rounded-full bg-brand-primary" />
             <span className="text-[10px] font-black uppercase tracking-[0.35em] text-brand-primary">
-              Onboarding Protocol
+              {t("onboarding_protocol")}
             </span>
           </div>
           <h2 className="mt-4 font-heading text-4xl font-black uppercase tracking-tight">
@@ -182,7 +164,7 @@ export function BriefingForm({
               />
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/50">
-              {step + 1}/{steps.length}
+              {step + 1}/{stepsConfig.length}
             </span>
           </div>
         </header>
@@ -190,31 +172,31 @@ export function BriefingForm({
         <div className="pt-8">
           <div className="mb-6 flex items-center gap-4">
             <div className="flex size-14 items-center justify-center rounded-3xl bg-brand-primary/12 text-brand-primary">
-              <currentStep.icon size={28} weight="duotone" />
+              <currentStepConfig.icon size={28} weight="duotone" />
             </div>
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/45">
-                Etapa estratégica
+                {t("step_strategy")}
               </p>
               <h3 className="mt-2 font-heading text-2xl font-black uppercase tracking-tight">
-                {currentStep.label}
+                {t(`steps.${currentStepConfig.id}.label`)}
               </h3>
             </div>
           </div>
 
           <div className="animate-in fade-in slide-in-from-right-4 duration-300">
             <Label
-              htmlFor={currentStep.id}
+              htmlFor={currentStepConfig.id}
               className="mb-3 block text-xs font-black uppercase tracking-[0.25em] text-muted-foreground/55"
             >
-              Resposta
+              {t("answer_label")}
             </Label>
             <Textarea
-              id={currentStep.id}
-              value={formData[currentStep.id]}
+              id={currentStepConfig.id}
+              value={formData[currentStepConfig.id]}
               onChange={(event) => setValue(event.target.value)}
               className="min-h-[220px] rounded-[1.75rem] border-border/40 bg-background/40 p-6 text-base leading-relaxed shadow-inner shadow-black/5 focus:bg-background/60"
-              placeholder={currentStep.placeholder}
+              placeholder={t(`steps.${currentStepConfig.id}.placeholder`)}
             />
           </div>
         </div>
@@ -227,15 +209,15 @@ export function BriefingForm({
             className="rounded-full px-6"
           >
             <ArrowLeft size={18} className="mr-2" />
-            Voltar
+            {t("back_button")}
           </Button>
 
-          {step < steps.length - 1 ? (
+          {step < stepsConfig.length - 1 ? (
             <Button
               onClick={handleNext}
               className="rounded-full bg-brand-primary px-8 text-[10px] font-black uppercase tracking-[0.25em] shadow-xl shadow-brand-primary/20"
             >
-              Próxima Etapa
+              {t("next_step")}
               <ArrowRight size={18} className="ml-2" />
             </Button>
           ) : (
@@ -257,19 +239,19 @@ export function BriefingForm({
         <div className="flex items-center justify-between gap-3">
           <div>
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
-              Direção Criativa
+              {t("creative_direction")}
             </p>
             <h3 className="mt-2 font-heading text-2xl font-black uppercase tracking-tight">
-              Mapa do briefing
+              {t("briefing_map")}
             </h3>
           </div>
           <div className="rounded-full border border-brand-primary/20 bg-brand-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary">
-            Vivo
+            {t("live")}
           </div>
         </div>
 
         <div className="mt-6 space-y-3">
-          {steps.map((item, index) => {
+          {stepsConfig.map((item, index) => {
             const isCurrent = index === step
             const isCompleted = index < step
 
@@ -296,10 +278,10 @@ export function BriefingForm({
                   </div>
                   <div className="min-w-0">
                     <p className="text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/45">
-                      Etapa {index + 1}
+                      {t("step_number", { number: index + 1 })}
                     </p>
                     <h4 className="mt-1 text-sm font-black uppercase tracking-tight text-foreground">
-                      {item.label}
+                      {t(`steps.${item.id}.label`)}
                     </h4>
                   </div>
                 </div>

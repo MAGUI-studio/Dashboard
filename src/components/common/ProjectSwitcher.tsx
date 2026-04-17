@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
 import { useRouter, useSearchParams } from "next/navigation"
 
 import { CaretUpDown, Check, ProjectorScreen } from "@phosphor-icons/react"
@@ -32,6 +33,7 @@ interface ProjectSwitcherProps {
 }
 
 export function ProjectSwitcher({ projects, activeId }: ProjectSwitcherProps) {
+  const t = useTranslations("Dashboard")
   const [open, setOpen] = React.useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -70,12 +72,12 @@ export function ProjectSwitcher({ projects, activeId }: ProjectSwitcherProps) {
       <PopoverContent className="w-[var(--radix-popover-trigger-width)] p-0 rounded-2xl border-border/40 bg-background/95 backdrop-blur-xl shadow-2xl md:w-[240px]">
         <Command className="rounded-2xl">
           <CommandInput
-            placeholder="Filtrar projetos..."
+            placeholder={t("filter_projects")}
             className="h-10 border-none"
           />
           <CommandList className="max-h-48 scrollbar-hide">
             <CommandEmpty className="py-4 text-center text-[10px] font-bold uppercase tracking-widest opacity-40">
-              Nenhum projeto encontrado.
+              {t("no_project_found")}
             </CommandEmpty>
             <CommandGroup className="p-1">
               {projects.map((project) => (

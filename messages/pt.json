@@ -259,6 +259,42 @@
     "step": "Passo {current} de {total}",
     "submit": "Enviar Briefing",
     "success": "Briefing enviado! Nossa equipe analisará os dados.",
+    "success_description": "O briefing entrou no radar estratégico do time.",
+    "onboarding_protocol": "Onboarding Protocol",
+    "step_strategy": "Etapa estratégica",
+    "answer_label": "Resposta",
+    "back_button": "Voltar",
+    "next_step": "Próxima Etapa",
+    "creative_direction": "Direção Criativa",
+    "briefing_map": "Mapa do briefing",
+    "live": "Vivo",
+    "step_number": "Etapa {number}",
+    "steps": {
+      "brandTone": {
+        "label": "Essência da Marca",
+        "placeholder": "Como a marca deve soar e se comportar? Ex: sofisticada, precisa, calorosa, estratégica."
+      },
+      "visualReferences": {
+        "label": "Referências Visuais",
+        "placeholder": "Cole links separados por espaço ou quebra de linha com exemplos de sites, campanhas ou interfaces."
+      },
+      "businessGoals": {
+        "label": "Metas de Negócio",
+        "placeholder": "Quais resultados esse projeto precisa gerar nos próximos meses?"
+      },
+      "primaryCta": {
+        "label": "Conversão Principal",
+        "placeholder": "Qual é a ação mais importante que o visitante precisa realizar?"
+      },
+      "targetAudience": {
+        "label": "Público-Alvo",
+        "placeholder": "Quem é o cliente ideal e o que ele valoriza na hora de decidir?"
+      },
+      "differentiators": {
+        "label": "Diferenciais",
+        "placeholder": "O que torna a operação, a oferta ou a marca única frente à concorrência?"
+      }
+    },
     "questions": {
       "tone": "Qual o tom de voz da marca?",
       "references": "Referências (links de sites que você gosta)",
@@ -297,7 +333,20 @@
     "actions": {
       "approve": "Aprovar Versão",
       "reject": "Solicitar Ajustes",
-      "feedback_placeholder": "Descreva os ajustes necessários..."
+      "feedback_placeholder": "Descreva os ajustes necessários...",
+      "cancel": "Cancelar",
+      "send_feedback": "Enviar feedback"
+    },
+    "toast": {
+      "approve_success": "Aprovação registrada com sucesso.",
+      "reject_success": "Feedback enviado para o time.",
+      "error_approve": "Erro ao aprovar",
+      "error_reject": "Erro ao reprovar"
+    },
+    "dialog": {
+      "title": "Feedback da milestone",
+      "description": "Explique com clareza o que precisa ser ajustado para o time devolver a entrega na próxima rodada.",
+      "placeholder": "Ex: precisamos revisar hierarquia visual, CTA principal e clareza da proposta."
     }
   },
   "Sidebar": {
@@ -323,6 +372,12 @@
     "eyebrow": "Painel do Cliente",
     "admin_eyebrow": "Gestão de Projetos",
     "admin_title": "Visão Geral do Estúdio",
+    "admin_overview": "Visão Geral",
+    "admin_description": "Painel de controle administrativo",
+    "select_project": "Selecione o Projeto",
+    "track_evolution": "Acompanhe a evolução do seu projeto em tempo real.",
+    "filter_projects": "Filtrar projetos...",
+    "no_project_found": "Nenhum projeto encontrado.",
     "greetings": {
       "morning": "Bom dia {name}, tenha um ótimo dia.",
       "afternoon": "Boa tarde {name}, tenha uma excelente tarde.",
@@ -344,7 +399,21 @@
     },
     "timeline": {
       "title": "Timeline de Execução",
-      "milestone": "Marco Alcançado"
-    }
+      "milestone": "Marco Alcançado",
+      "description": "Linha viva de entregas, validações e decisões do projeto."
+    },
+    "rhythm_delivery": "Projeto em ritmo de entrega",
+    "current_phase": "Fase atual:",
+    "progress_label": "progresso",
+    "production_environment": "Ambiente de produção",
+    "source_code": "Código-fonte",
+    "unavailable": "Ainda indisponível",
+    "private_repo": "Repositório privado",
+    "feedback_sent": "Feedback enviado",
+    "assets_repository": "Repositório de ativos",
+    "waiting_files": "Aguardando envio de arquivos.",
+    "view_document": "Visualizar documento",
+    "category_label": "Categoria",
+    "priority_label": "Prioridade"
   }
 }

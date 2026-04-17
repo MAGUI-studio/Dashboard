@@ -119,7 +119,7 @@ export default async function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="mx-auto w-full max-w-440">
+      <body className="mx-auto w-full">
         <ClerkProvider
           localization={clerkLocalization}
           publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}

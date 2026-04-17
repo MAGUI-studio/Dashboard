@@ -31,7 +31,7 @@ export function Greetings({ name }: GreetingsProps) {
         {t(key, { name: name || "User" })}
       </h2>
       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40 leading-relaxed">
-        Acompanhe a evolução do seu projeto em tempo real.
+        {t("track_evolution")}
       </p>
     </div>
   )
