@@ -375,13 +375,13 @@
     "admin_overview": "Overview",
     "admin_description": "Administrative control panel",
     "select_project": "Select Project",
-    "track_evolution": "Track your project's evolution in real time.",
     "filter_projects": "Filter projects...",
     "no_project_found": "No projects found.",
     "greetings": {
       "morning": "Good morning {name}, have a great day.",
       "afternoon": "Good afternoon {name}, have an excellent afternoon.",
-      "evening": "Good evening {name}, ending the day with mastery."
+      "evening": "Good evening {name}, ending the day with mastery.",
+      "track_evolution": "Track your project's evolution in real time."
     },
     "global_timeline_title": "Global Evolution Timeline",
     "active_projects_count": "{count} active projects",

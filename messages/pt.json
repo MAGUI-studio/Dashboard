@@ -375,13 +375,13 @@
     "admin_overview": "Visão Geral",
     "admin_description": "Painel de controle administrativo",
     "select_project": "Selecione o Projeto",
-    "track_evolution": "Acompanhe a evolução do seu projeto em tempo real.",
     "filter_projects": "Filtrar projetos...",
     "no_project_found": "Nenhum projeto encontrado.",
     "greetings": {
       "morning": "Bom dia {name}, tenha um ótimo dia.",
       "afternoon": "Boa tarde {name}, tenha uma excelente tarde.",
-      "evening": "Boa noite {name}, finalizando o dia com maestria."
+      "evening": "Boa noite {name}, finalizando o dia com maestria.",
+      "track_evolution": "Acompanhe a evolução do seu projeto em tempo real."
     },
     "global_timeline_title": "Timeline Global de Evolução",
     "active_projects_count": "{count} projetos em execução",
