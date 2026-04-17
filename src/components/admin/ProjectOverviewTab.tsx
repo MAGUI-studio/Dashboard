@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { DashboardProject } from "@/src/types/dashboard"
 import {
   Buildings,
   EnvelopeSimple,
@@ -14,20 +15,7 @@ import {
 } from "@phosphor-icons/react"
 
 interface ProjectOverviewTabProps {
-  project: {
-    client: {
-      name: string | null
-      email: string
-      companyName: string | null
-      phone: string | null
-      position: string | null
-    }
-    description: string | null
-    liveUrl: string | null
-    repositoryUrl: string | null
-    category: string
-    priority: string
-  }
+  project: DashboardProject
 }
 
 export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {

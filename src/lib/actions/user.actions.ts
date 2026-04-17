@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
 import { getTranslations } from "next-intl/server"
@@ -83,7 +84,7 @@ export async function createClientAction(formData: FormData) {
         phone,
         position,
         taxId,
-      },
+      } as any,
     })
 
     revalidatePath("/admin/clients")

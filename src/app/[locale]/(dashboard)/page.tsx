@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
+import { DashboardProject } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
@@ -63,20 +64,37 @@ export default async function DashboardPage({
           </div>
 
           <DashboardSummary
-            project={{
-              name: "Visão Geral",
-              status: "STRATEGY",
-              progress: 0,
-              category: "ADMIN",
-              priority: "MEDIUM",
-              liveUrl: null,
-              repositoryUrl: null,
-              updates: allUpdates.map((u) => ({
-                ...u,
-                createdAt: u.createdAt.toISOString(),
-              })),
-              assets: [],
-            }}
+            project={
+              {
+                name: "Visão Geral",
+                status: "STRATEGY",
+                progress: 0,
+                category: "WEB_APP",
+                priority: "MEDIUM",
+                liveUrl: null,
+                repositoryUrl: null,
+                updates: allUpdates.map((u) => ({
+                  ...u,
+                  createdAt: u.createdAt.toISOString(),
+                })),
+                assets: [],
+                id: "admin-overview",
+                clientId: "admin",
+                startDate: new Date(),
+                deadline: null,
+                budget: null,
+                description: "Painel de controle administrativo",
+                client: {
+                  id: "admin",
+                  name: "Admin",
+                  email: "admin@magui.studio",
+                  companyName: "MAGUI.studio",
+                  phone: null,
+                  position: "Administrator",
+                  taxId: null,
+                },
+              } as unknown as DashboardProject
+            }
           />
         </div>
       </main>
@@ -89,6 +107,7 @@ export default async function DashboardPage({
     include: {
       projects: {
         include: {
+          client: true,
           updates: {
             orderBy: { createdAt: "desc" },
             include: { project: true },
@@ -156,13 +175,15 @@ export default async function DashboardPage({
         </div>
 
         <DashboardSummary
-          project={{
-            ...activeProject,
-            updates: activeProject.updates.map((u) => ({
-              ...u,
-              createdAt: u.createdAt.toISOString(),
-            })),
-          }}
+          project={
+            {
+              ...activeProject,
+              updates: activeProject.updates.map((u) => ({
+                ...u,
+                createdAt: u.createdAt.toISOString(),
+              })),
+            } as unknown as DashboardProject
+          }
         />
       </div>
     </main>

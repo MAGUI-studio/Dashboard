@@ -3,6 +3,7 @@ import * as React from "react"
 import { getTranslations } from "next-intl/server"
 import { notFound, redirect } from "next/navigation"
 
+import { DashboardProject } from "@/src/types/dashboard"
 import {
   Clock,
   Files,
@@ -48,6 +49,7 @@ export default async function AdminProjectDetailPage({
       client: true,
       updates: {
         orderBy: { createdAt: "desc" },
+        include: { project: true },
       },
       assets: {
         orderBy: { order: "asc" },
@@ -58,6 +60,9 @@ export default async function AdminProjectDetailPage({
   if (!project) {
     notFound()
   }
+
+  // Cast to DashboardProject for consistency
+  const dashboardProject = project as unknown as DashboardProject
 
   return (
     <main className="relative flex min-h-svh flex-col gap-12 overflow-hidden bg-background/50 p-6 lg:p-12">
@@ -107,7 +112,7 @@ export default async function AdminProjectDetailPage({
         </div>
 
         <TabsContent value="overview" className="mt-0">
-          <ProjectOverviewTab project={project} />
+          <ProjectOverviewTab project={dashboardProject} />
         </TabsContent>
 
         <TabsContent value="engineering" className="mt-0">

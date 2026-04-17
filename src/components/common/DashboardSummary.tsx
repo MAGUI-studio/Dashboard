@@ -5,6 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { ProjectStatus } from "@/src/generated/client"
+import { DashboardProject } from "@/src/types/dashboard"
 import {
   CheckCircle,
   Clock,
@@ -18,29 +19,7 @@ import {
 import { cn, formatLocalTime } from "@/src/lib/utils/utils"
 
 interface DashboardSummaryProps {
-  project: {
-    name: string
-    status: string
-    progress: number
-    category: string
-    priority: string
-    liveUrl: string | null
-    repositoryUrl: string | null
-    updates: Array<{
-      id: string
-      title: string
-      description: string | null
-      createdAt: Date | string
-      timezone: string
-      isMilestone: boolean
-      project: { name: string }
-    }>
-    assets: Array<{
-      id: string
-      name: string
-      url: string
-    }>
-  }
+  project: DashboardProject
 }
 
 export function DashboardSummary({ project }: DashboardSummaryProps) {

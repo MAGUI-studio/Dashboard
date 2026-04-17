@@ -35,7 +35,7 @@ export function Logo({
         width={width}
         height={height}
         priority={priority}
-        className={cn("h-auto w-auto opacity-20 grayscale", className)}
+        className={cn("opacity-20 grayscale", className)}
       />
     )
   }
@@ -52,7 +52,7 @@ export function Logo({
       width={width}
       height={height}
       priority={priority}
-      className={cn("h-auto w-auto", className)}
+      className={className}
     />
   )
 }
