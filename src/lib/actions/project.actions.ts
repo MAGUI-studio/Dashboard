@@ -5,11 +5,11 @@ import { revalidatePath } from "next/cache"
 
 import {
   AssetType,
+  Prisma,
   Priority,
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client"
-import { InputJsonValue } from "@/src/generated/client/runtime/library"
 import { UTApi } from "uploadthing/server"
 
 import { logger } from "@/src/lib/logger"
@@ -217,7 +217,7 @@ export async function approveUpdateAction(
 
 export async function updateProjectBriefingAction(
   projectId: string,
-  briefing: InputJsonValue
+  briefing: Prisma.InputJsonValue
 ): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("client")

@@ -21,7 +21,7 @@ const pool = new pg.Pool({
 })
 
 pool.on("error", (err: Error) => {
-  logger.error("Unexpected error on idle client", { err })
+  logger.error({ err }, "Unexpected error on idle client")
 })
 
 const adapter = new PrismaPg(pool)

@@ -43,14 +43,32 @@ export function LanguageSwitcher(): React.JSX.Element {
   }, [])
 
   const pathname = usePathname()
-  const params = useParams()
+  const params = useParams<{ id?: string }>()
 
   const handleLocaleChange = (newLocale: string): void => {
     if (newLocale === currentLocale) return
 
     Cookies.set("NEXT_LOCALE", newLocale, { expires: 365 })
 
-    router.replace({ pathname, params }, { locale: newLocale })
+    if (
+      pathname === "/admin/projects/[id]" ||
+      pathname === "/admin/projects/[id]/assets"
+    ) {
+      if (typeof params.id !== "string") {
+        return
+      }
+
+      router.replace(
+        {
+          pathname,
+          params: { id: params.id },
+        },
+        { locale: newLocale }
+      )
+      return
+    }
+
+    router.replace(pathname, { locale: newLocale })
   }
 
   if (!mounted) {

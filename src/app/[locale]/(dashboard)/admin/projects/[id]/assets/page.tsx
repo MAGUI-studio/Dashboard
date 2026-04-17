@@ -46,16 +46,22 @@ export default async function ProjectAssetsPage({
 
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-6">
-          <Link href={`/admin/projects/${project.id}`}>
-            <Button
-              variant="ghost"
-              className="-ml-4 w-max gap-2 text-muted-foreground/60 hover:text-foreground"
-              size="sm"
+          <Button
+            asChild
+            variant="ghost"
+            className="-ml-4 w-max gap-2 text-muted-foreground/60 hover:text-foreground"
+            size="sm"
+          >
+            <Link
+              href={{
+                pathname: "/admin/projects/[id]",
+                params: { id: project.id },
+              }}
             >
               <ArrowLeft weight="bold" className="size-3" />
               {t("back_button")}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
 
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-3">

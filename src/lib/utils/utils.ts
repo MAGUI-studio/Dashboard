@@ -43,7 +43,7 @@ export function formatLocalTime(date: Date, timezone: string): string {
 
     return `${day}/${month}/${year}, ${hour}:${minute} (${gmt})`
   } catch (error) {
-    logger.error("Format error for timezone:", { timezone, error })
+    logger.error({ timezone, error }, "Format error for timezone:")
     return new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
