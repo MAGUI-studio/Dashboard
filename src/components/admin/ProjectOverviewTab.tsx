@@ -24,7 +24,6 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
   return (
     <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
       <div className="flex flex-col gap-8 lg:col-span-2">
-        {/* Project Technical Details */}
         <section className="rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm lg:p-12">
           <h3 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
             {t("project_info_title", { fallback: "Informações Estratégicas" })}
@@ -123,7 +122,6 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
       </div>
 
       <div className="flex flex-col gap-8">
-        {/* Professional Client Card */}
         <section className="rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm">
           <h3 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
             {t("client_card_title")}

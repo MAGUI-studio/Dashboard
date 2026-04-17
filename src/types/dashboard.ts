@@ -1,18 +1,25 @@
+import {
+  AssetType,
+  Priority,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client"
+
 export interface DashboardProject {
   id: string
   name: string
   description: string | null
-  status: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  status: ProjectStatus
   progress: number
   budget: string | null
   deadline: Date | null
   startDate: Date
   liveUrl: string | null
   repositoryUrl: string | null
-  category: any // eslint-disable-line @typescript-eslint/no-explicit-any
-  priority: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  category: ProjectCategory
+  priority: Priority
   clientId: string
-  briefing: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  briefing: Record<string, unknown> | null
   client: {
     id: string
     name: string | null
@@ -51,7 +58,7 @@ export interface DashboardAsset {
   name: string
   url: string
   key: string
-  type: any // eslint-disable-line @typescript-eslint/no-explicit-any
+  type: AssetType
   order: number
   timezone: string
   projectId: string

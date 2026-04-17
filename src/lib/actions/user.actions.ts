@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
 import { getTranslations } from "next-intl/server"
@@ -7,6 +6,7 @@ import { revalidatePath } from "next/cache"
 import { clerkClient } from "@clerk/nextjs/server"
 import { z } from "zod"
 
+import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 
@@ -23,10 +23,11 @@ const createUserSchema = z.object({
   taxId: z.string().optional(),
 })
 
-export async function createClientAction(formData: FormData) {
+export async function createClientAction(
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
   const t = await getTranslations("Admin.clients.form.errors")
 
-  // Server-side role protection
   await protect("admin")
 
   const validatedFields = createUserSchema.safeParse({
@@ -73,24 +74,23 @@ export async function createClientAction(formData: FormData) {
       publicMetadata: { role },
     })
 
-    // Sincronizar com Prisma
     await prisma.user.create({
       data: {
         clerkId: clerkUser.id,
         email,
         name: `${firstName} ${lastName}`,
         role: role.toUpperCase(),
-        companyName,
-        phone,
-        position,
-        taxId,
-      } as any,
+        companyName: companyName ?? null,
+        phone: phone ?? null,
+        position: position ?? null,
+        taxId: taxId ?? null,
+      },
     })
 
     revalidatePath("/admin/clients")
     return { success: true }
   } catch (error) {
-    console.error("Clerk Error:", error)
+    logger.error({ error }, "Clerk Error:")
 
     const clerkError =
       error instanceof Object && "errors" in error

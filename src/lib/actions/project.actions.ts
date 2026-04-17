@@ -1,11 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use server"
 
 import { getTranslations } from "next-intl/server"
 import { revalidatePath } from "next/cache"
 
+import {
+  AssetType,
+  Priority,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client"
+import { InputJsonValue } from "@/src/generated/client/runtime/library"
 import { UTApi } from "uploadthing/server"
 
+import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import {
@@ -14,7 +21,9 @@ import {
   updateProjectStatusSchema,
 } from "@/src/lib/validations/project"
 
-export async function createProjectAction(formData: FormData) {
+export async function createProjectAction(
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
   const t = await getTranslations("Admin.projects.form.errors")
 
   try {
@@ -49,20 +58,18 @@ export async function createProjectAction(formData: FormData) {
       const project = await tx.project.create({
         data: {
           name: data.projectName,
-          description: data.projectDescription,
-          budget: data.budget,
+          description: data.projectDescription ?? null,
+          budget: data.budget ?? null,
           deadline: data.deadline ? new Date(data.deadline) : null,
-          startDate: (data.startDate
-            ? new Date(data.startDate)
-            : new Date()) as any,
-          liveUrl: data.liveUrl as any,
-          repositoryUrl: data.repositoryUrl as any,
-          category: data.category as any,
-          priority: data.priority as any,
+          startDate: data.startDate ? new Date(data.startDate) : new Date(),
+          liveUrl: data.liveUrl || null,
+          repositoryUrl: data.repositoryUrl || null,
+          category: data.category as ProjectCategory,
+          priority: data.priority as Priority,
           clientId: data.clientId,
           status: "STRATEGY",
           progress: 0,
-        } as any,
+        },
       })
 
       await tx.update.create({
@@ -72,21 +79,23 @@ export async function createProjectAction(formData: FormData) {
           projectId: project.id,
           isMilestone: true,
           timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
-        } as any,
+        },
       })
     })
 
     revalidatePath("/admin/projects")
     return { success: true }
   } catch (error) {
-    console.error("Create Project Error:", error)
+    logger.error({ error }, "Create Project Error:")
     const message =
       error instanceof Error ? error.message : "Erro ao criar o projeto"
     return { error: message }
   }
 }
 
-export async function updateProjectStatusAction(formData: FormData) {
+export async function updateProjectStatusAction(
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -109,21 +118,23 @@ export async function updateProjectStatusAction(formData: FormData) {
     await prisma.project.update({
       where: { id },
       data: {
-        status: status as any,
+        status: status as ProjectStatus,
         progress,
-      } as any,
+      },
     })
 
     revalidatePath(`/admin/projects/${id}`)
     revalidatePath("/admin/projects")
     return { success: true }
   } catch (error) {
-    console.error("Update Project Error:", error)
+    logger.error({ error }, "Update Project Error:")
     return { error: "Erro ao atualizar o projeto" }
   }
 }
 
-export async function addProjectTimelineAction(formData: FormData) {
+export async function addProjectTimelineAction(
+  formData: FormData
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -159,24 +170,27 @@ export async function addProjectTimelineAction(formData: FormData) {
       data: {
         projectId,
         title,
-        description,
+        description: description ?? null,
         isMilestone,
         requiresApproval,
         approvalStatus: requiresApproval ? "PENDING" : "APPROVED",
-        imageUrl: imageUrl as any,
+        imageUrl: imageUrl || null,
         timezone,
-      } as any,
+      },
     })
 
     revalidatePath(`/admin/projects/${projectId}`)
     return { success: true }
   } catch (error) {
-    console.error("Add Timeline Error:", error)
+    logger.error({ error }, "Add Timeline Error:")
     return { error: "Erro ao adicionar atualização" }
   }
 }
 
-export async function approveUpdateAction(updateId: string, projectId: string) {
+export async function approveUpdateAction(
+  updateId: string,
+  projectId: string
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("client")
   } catch {
@@ -196,12 +210,15 @@ export async function approveUpdateAction(updateId: string, projectId: string) {
     revalidatePath("/")
     return { success: true }
   } catch (error) {
-    console.error("Approve Update Error:", error)
+    logger.error({ error }, "Approve Update Error:")
     return { error: "Erro ao aprovar atualização" }
   }
 }
 
-export async function updateProjectBriefingAction(projectId: string, briefing: any) {
+export async function updateProjectBriefingAction(
+  projectId: string,
+  briefing: InputJsonValue
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("client")
   } catch {
@@ -211,19 +228,21 @@ export async function updateProjectBriefingAction(projectId: string, briefing: a
   try {
     await prisma.project.update({
       where: { id: projectId },
-      data: { briefing },
+      data: { briefing: briefing || {} },
     })
 
     revalidatePath(`/dashboard/projects/${projectId}`)
     revalidatePath("/")
     return { success: true }
   } catch (error) {
-    console.error("Update Briefing Error:", error)
+    logger.error({ error }, "Update Briefing Error:")
     return { error: "Erro ao atualizar briefing" }
   }
 }
 
-export async function deleteProjectAction(id: string) {
+export async function deleteProjectAction(
+  id: string
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -238,7 +257,7 @@ export async function deleteProjectAction(id: string) {
     revalidatePath("/admin/projects")
     return { success: true }
   } catch (error) {
-    console.error("Delete Project Error:", error)
+    logger.error({ error }, "Delete Project Error:")
     return { error: "Erro ao deletar o projeto" }
   }
 }
@@ -248,9 +267,9 @@ export async function createProjectAssetAction(data: {
   name: string
   url: string
   key: string
-  type: any
+  type: AssetType
   timezone?: string
-}) {
+}): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -258,7 +277,6 @@ export async function createProjectAssetAction(data: {
   }
 
   try {
-    // Get current max order to append at the end
     const lastAsset = await prisma.asset.findFirst({
       where: { projectId: data.projectId },
       orderBy: { order: "desc" },
@@ -282,7 +300,7 @@ export async function createProjectAssetAction(data: {
     revalidatePath(`/admin/projects/${data.projectId}/assets`)
     return { success: true }
   } catch (error) {
-    console.error("Create Asset Error:", error)
+    logger.error({ error }, "Create Asset Error:")
     return { error: "Erro ao registrar arquivo" }
   }
 }
@@ -290,7 +308,7 @@ export async function createProjectAssetAction(data: {
 export async function updateProjectAssetsOrderAction(
   projectId: string,
   assetIds: string[]
-) {
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -310,7 +328,7 @@ export async function updateProjectAssetsOrderAction(
     revalidatePath(`/admin/projects/${projectId}/assets`)
     return { success: true }
   } catch (error) {
-    console.error("Update Assets Order Error:", error)
+    logger.error({ error }, "Update Assets Order Error:")
     return { error: "Erro ao atualizar ordem dos arquivos" }
   }
 }
@@ -319,7 +337,7 @@ export async function deleteProjectAssetAction(
   id: string,
   projectId: string,
   key: string
-) {
+): Promise<{ error?: string; success?: boolean }> {
   try {
     await protect("admin")
   } catch {
@@ -329,10 +347,8 @@ export async function deleteProjectAssetAction(
   const utapi = new UTApi()
 
   try {
-    // Delete from UploadThing storage
     await utapi.deleteFiles(key)
 
-    // Delete from Database
     await prisma.asset.delete({
       where: { id },
     })
@@ -341,7 +357,7 @@ export async function deleteProjectAssetAction(
     revalidatePath(`/admin/projects/${projectId}/assets`)
     return { success: true }
   } catch (error) {
-    console.error("Delete Asset Error:", error)
+    logger.error({ error }, "Delete Asset Error:")
     return { error: "Erro ao deletar arquivo" }
   }
 }

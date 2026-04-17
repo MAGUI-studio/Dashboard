@@ -1,6 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+import { logger } from "@/src/lib/logger"
+
 export function cn(...inputs: ClassValue[]): string {
   return twMerge(clsx(inputs))
 }
@@ -19,7 +21,6 @@ export function formatLocalTime(date: Date, timezone: string): string {
   try {
     const tz = timezone || "America/Sao_Paulo"
 
-    // Formatter para as partes da data/hora
     const parts = new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",
@@ -30,7 +31,7 @@ export function formatLocalTime(date: Date, timezone: string): string {
       timeZoneName: "shortOffset",
     }).formatToParts(date)
 
-    const getPart = (type: string) =>
+    const getPart = (type: string): string =>
       parts.find((p) => p.type === type)?.value || ""
 
     const day = getPart("day")
@@ -38,11 +39,11 @@ export function formatLocalTime(date: Date, timezone: string): string {
     const year = getPart("year")
     const hour = getPart("hour")
     const minute = getPart("minute")
-    const gmt = getPart("timeZoneName") // Retorna "GMT-3", "GMT+1", etc.
+    const gmt = getPart("timeZoneName")
 
     return `${day}/${month}/${year}, ${hour}:${minute} (${gmt})`
   } catch (error) {
-    console.error("Format error for timezone:", timezone, error)
+    logger.error("Format error for timezone:", { timezone, error })
     return new Intl.DateTimeFormat("pt-BR", {
       day: "2-digit",
       month: "2-digit",

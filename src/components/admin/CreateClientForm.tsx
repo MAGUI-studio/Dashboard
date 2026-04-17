@@ -56,7 +56,6 @@ export function CreateClientForm() {
         obrigatórios.
       </p>
 
-      {/* Section: Professional Identity */}
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">
@@ -201,7 +200,6 @@ export function CreateClientForm() {
 
       <Separator className="bg-border/20" />
 
-      {/* Section: System Credentials */}
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-3">

@@ -48,12 +48,8 @@ export function LanguageSwitcher(): React.JSX.Element {
   const handleLocaleChange = (newLocale: string): void => {
     if (newLocale === currentLocale) return
 
-    // Explicitly set cookie for middleware
     Cookies.set("NEXT_LOCALE", newLocale, { expires: 365 })
 
-    // Use the localized router to replace the pathname with the new locale
-    // This will correctly translate pathnames without prefixing
-    // @ts-expect-error - next-intl type complexity with dynamic params
     router.replace({ pathname, params }, { locale: newLocale })
   }
 

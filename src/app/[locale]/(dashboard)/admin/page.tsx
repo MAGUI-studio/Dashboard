@@ -13,7 +13,6 @@ import { Logo } from "@/src/components/common/logo"
 import { isAdmin } from "@/src/lib/permissions"
 
 export default async function AdminPage(): Promise<React.JSX.Element> {
-  // Defense-in-depth: Secure server-side role check
   if (!(await isAdmin())) {
     redirect("/")
   }

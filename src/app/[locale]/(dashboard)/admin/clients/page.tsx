@@ -25,7 +25,6 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
     limit: 100,
   })
 
-  // Map to serializable data for Client Component
   const serializableUsers = allUsers.map((user) => ({
     id: user.id,
     imageUrl: user.imageUrl,

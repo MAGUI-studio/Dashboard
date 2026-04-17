@@ -9,7 +9,6 @@ import prisma from "@/src/lib/prisma"
 export default async function CreateProjectPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.projects")
 
-  // Fetch existing clients to populate the dropdown
   const clients = await prisma.user.findMany({
     where: { role: "CLIENT" },
     select: {
@@ -22,7 +21,6 @@ export default async function CreateProjectPage(): Promise<React.JSX.Element> {
 
   return (
     <main className="relative flex min-h-svh flex-col bg-background/50 p-6 lg:p-12 overflow-hidden">
-      {/* Background decorative elements */}
       <div className="absolute top-0 right-0 -z-10 size-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
       <div className="absolute bottom-0 left-0 -z-10 size-96 -translate-x-1/2 translate-y-1/2 rounded-full bg-brand-primary/10 blur-3xl opacity-30" />
 

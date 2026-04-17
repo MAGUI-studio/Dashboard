@@ -53,7 +53,6 @@ export function ClientsTable({ initialUsers }: ClientsTableProps) {
     direction: null,
   })
 
-  // Debounce search: 2 seconds
   React.useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearch(search)

@@ -114,7 +114,6 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
           obrigatórios.
         </p>
 
-        {/* Section: Client Protocol */}
         <FieldSet>
           <div className="mb-6 flex flex-col gap-1">
             <FieldLegend className="font-heading text-xl font-black uppercase tracking-tight text-foreground">
@@ -212,7 +211,6 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
           </Field>
         </FieldSet>
 
-        {/* Section: Project Engineering */}
         <FieldSet>
           <div className="mb-6 flex flex-col gap-1">
             <FieldLegend className="font-heading text-xl font-black uppercase tracking-tight text-foreground">
@@ -474,7 +472,6 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
           </Field>
         </FieldSet>
 
-        {/* Submission Terminal */}
         <div className="mt-8 flex flex-col gap-6 rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm">
           {state.error && (
             <div className="flex items-center gap-4 rounded-xl border border-destructive/20 bg-destructive/5 p-4 animate-in fade-in slide-in-from-top-2">

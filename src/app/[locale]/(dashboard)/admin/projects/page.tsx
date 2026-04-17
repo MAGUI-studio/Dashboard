@@ -20,7 +20,6 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
 
   const t = await getTranslations("Admin.projects")
 
-  // Fetch projects from Prisma
   const projects = await prisma.project.findMany({
     include: {
       client: {
@@ -33,7 +32,6 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
     orderBy: { createdAt: "desc" },
   })
 
-  // Map to serializable data
   const serializableProjects = projects.map((p) => ({
     id: p.id,
     name: p.name,

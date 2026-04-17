@@ -61,7 +61,6 @@ export default async function AdminProjectDetailPage({
     notFound()
   }
 
-  // Cast to DashboardProject for consistency
   const dashboardProject = project as unknown as DashboardProject
 
   return (

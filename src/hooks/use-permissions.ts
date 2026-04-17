@@ -4,17 +4,10 @@ import { useUser } from "@clerk/nextjs"
 
 export type Role = "admin" | "member" | "client"
 
-/**
- * Hook for client-side permission checks.
- * Uses Clerk's useUser for the role in metadata.
- */
 export function usePermissions() {
   const { user, isLoaded } = useUser()
   const userRole = user?.publicMetadata?.role as Role | undefined
 
-  /**
-   * Check if user has a specific role.
-   */
   const hasRole = (role: Role | Role[]): boolean => {
     if (!isLoaded || !userRole) return false
 

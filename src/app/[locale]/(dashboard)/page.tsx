@@ -5,10 +5,10 @@ import { getTranslations } from "next-intl/server"
 import { DashboardProject } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 
+import { BriefingForm } from "@/src/components/common/BriefingForm"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
-import { BriefingForm } from "@/src/components/common/BriefingForm"
 
 import prisma from "@/src/lib/prisma"
 
@@ -48,7 +48,6 @@ export default async function DashboardPage({
     return (
       <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
         <div className="flex flex-col gap-12 w-full">
-          {/* Header */}
           <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <div className="size-2 rounded-full bg-brand-primary animate-pulse" />
@@ -102,7 +101,6 @@ export default async function DashboardPage({
     )
   }
 
-  // CLIENT DASHBOARD
   const userWithProjects = await prisma.user.findUnique({
     where: { clerkId: userId },
     include: {
@@ -147,12 +145,13 @@ export default async function DashboardPage({
   }
 
   const activeProject = project || projects[0]
-  const isBriefingEmpty = !activeProject.briefing || Object.keys(activeProject.briefing as object).length === 0
+  const isBriefingEmpty =
+    !activeProject.briefing ||
+    Object.keys(activeProject.briefing as object).length === 0
 
   return (
     <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="flex flex-col gap-12 w-full">
-        {/* Header & Project Switcher */}
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-3">

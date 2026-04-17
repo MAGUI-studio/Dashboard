@@ -46,8 +46,7 @@ export default async function ProjectAssetsPage({
 
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
         <div className="flex flex-col gap-6">
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          <Link href={`/admin/projects/${project.id}` as any}>
+          <Link href={`/admin/projects/${project.id}`}>
             <Button
               variant="ghost"
               className="-ml-4 w-max gap-2 text-muted-foreground/60 hover:text-foreground"
