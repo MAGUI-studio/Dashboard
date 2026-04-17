@@ -273,26 +273,32 @@
     "steps": {
       "brandTone": {
         "label": "Essência da Marca",
+        "slug": "essencia-da-marca",
         "placeholder": "Como a marca deve soar e se comportar? Ex: sofisticada, precisa, calorosa, estratégica."
       },
       "visualReferences": {
         "label": "Referências Visuais",
+        "slug": "referencias-visuais",
         "placeholder": "Cole links separados por espaço ou quebra de linha com exemplos de sites, campanhas ou interfaces."
       },
       "businessGoals": {
         "label": "Metas de Negócio",
+        "slug": "metas-de-negocio",
         "placeholder": "Quais resultados esse projeto precisa gerar nos próximos meses?"
       },
       "primaryCta": {
         "label": "Conversão Principal",
+        "slug": "conversao-principal",
         "placeholder": "Qual é a ação mais importante que o visitante precisa realizar?"
       },
       "targetAudience": {
         "label": "Público-Alvo",
+        "slug": "publico-alvo",
         "placeholder": "Quem é o cliente ideal e o que ele valoriza na hora de decidir?"
       },
       "differentiators": {
         "label": "Diferenciais",
+        "slug": "diferenciais",
         "placeholder": "O que torna a operação, a oferta ou a marca única frente à concorrência?"
       }
     },

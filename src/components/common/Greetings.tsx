@@ -6,24 +6,24 @@ import { useTranslations } from "next-intl"
 
 interface GreetingsProps {
   name: string | null | undefined
+  compact?: boolean
 }
 
-export function Greetings({ name }: GreetingsProps) {
+export function Greetings({ name, compact = false }: GreetingsProps) {
   const t = useTranslations("Dashboard.greetings")
-  const [key, setKey] = React.useState<"morning" | "afternoon" | "evening">(
-    "morning"
-  )
+  const hour = new Date().getHours()
 
-  React.useEffect(() => {
-    const hour = new Date().getHours()
-    if (hour >= 5 && hour < 12) {
-      setKey("morning")
-    } else if (hour >= 12 && hour < 18) {
-      setKey("afternoon")
-    } else {
-      setKey("evening")
-    }
-  }, [])
+  let key = "morning"
+  if (hour >= 12 && hour < 18) key = "afternoon"
+  if (hour >= 18 || hour < 5) key = "evening"
+
+  if (compact) {
+    return (
+      <span className="text-muted-foreground/60">
+        {t(key, { name: name || "User" })}
+      </span>
+    )
+  }
 
   return (
     <div className="flex flex-col gap-1">

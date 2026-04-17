@@ -273,26 +273,32 @@
     "steps": {
       "brandTone": {
         "label": "Brand Essence",
+        "slug": "brand-essence",
         "placeholder": "How should the brand sound and behave? Ex: sophisticated, precise, warm, strategic."
       },
       "visualReferences": {
         "label": "Visual References",
+        "slug": "visual-references",
         "placeholder": "Paste links separated by space or line break with examples of websites, campaigns or interfaces."
       },
       "businessGoals": {
         "label": "Business Goals",
+        "slug": "business-goals",
         "placeholder": "What results does this project need to generate in the coming months?"
       },
       "primaryCta": {
         "label": "Primary Conversion",
+        "slug": "primary-conversion",
         "placeholder": "What is the most important action the visitor needs to perform?"
       },
       "targetAudience": {
         "label": "Target Audience",
+        "slug": "target-audience",
         "placeholder": "Who is the ideal customer and what do they value when deciding?"
       },
       "differentiators": {
         "label": "Differentiators",
+        "slug": "differentiators",
         "placeholder": "What makes the operation, the offer or the brand unique compared to the competition?"
       }
     },
