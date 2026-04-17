@@ -1,7 +1,6 @@
 import { Metadata, Viewport } from "next"
 import { NextIntlClientProvider } from "next-intl"
 import { getMessages, getTranslations } from "next-intl/server"
-import { Toaster } from "sonner"
 
 import { enUS, ptBR } from "@clerk/localizations"
 import { ClerkProvider } from "@clerk/nextjs"
@@ -10,6 +9,8 @@ import "@clerk/ui/themes/shadcn.css"
 import { GoogleAnalytics } from "@next/third-parties/google"
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin"
 import { extractRouterConfig } from "uploadthing/server"
+
+import { Toaster } from "@/src/components/ui/sonner"
 
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
@@ -136,7 +137,7 @@ export default async function RootLayout({
             <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <ThemeProvider>
               {children}
-              <Toaster position="top-right" richColors closeButton />
+              <Toaster />
             </ThemeProvider>
           </NextIntlClientProvider>
         </ClerkProvider>

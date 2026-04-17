@@ -1,5 +1,9 @@
 DO $$
 BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'UserRole') THEN
+    CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'MEMBER', 'CLIENT');
+  END IF;
+
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'LeadSource') THEN
     CREATE TYPE "LeadSource" AS ENUM (
       'REFERRAL',
@@ -27,6 +31,34 @@ BEGIN
 
   IF NOT EXISTS (SELECT 1 FROM pg_type WHERE typname = 'AuditActorType') THEN
     CREATE TYPE "AuditActorType" AS ENUM ('SYSTEM', 'USER');
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1
+    FROM information_schema.columns
+    WHERE table_schema = 'public'
+      AND table_name = 'User'
+      AND column_name = 'role'
+      AND udt_name = 'text'
+  ) THEN
+    ALTER TABLE "User"
+      ALTER COLUMN "role" DROP DEFAULT;
+
+    ALTER TABLE "User"
+      ALTER COLUMN "role" TYPE "UserRole"
+      USING (
+        CASE UPPER(COALESCE("role", 'CLIENT'))
+          WHEN 'ADMIN' THEN 'ADMIN'::"UserRole"
+          WHEN 'MEMBER' THEN 'MEMBER'::"UserRole"
+          ELSE 'CLIENT'::"UserRole"
+        END
+      );
+
+    ALTER TABLE "User"
+      ALTER COLUMN "role" SET DEFAULT 'CLIENT'::"UserRole";
   END IF;
 END $$;
 

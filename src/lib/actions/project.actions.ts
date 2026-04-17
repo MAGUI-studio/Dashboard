@@ -72,69 +72,63 @@ export async function createProjectAction(
   const actor = await getCurrentAppUser()
 
   try {
-    await prisma.$transaction(async (tx) => {
-      const project = await tx.project.create({
-        data: {
-          name: data.projectName,
-          description: data.projectDescription ?? null,
-          budget: data.budget ?? null,
-          deadline: data.deadline ? new Date(data.deadline) : null,
-          startDate: data.startDate ? new Date(data.startDate) : new Date(),
-          liveUrl: data.liveUrl || null,
-          repositoryUrl: data.repositoryUrl || null,
-          category: data.category as ProjectCategory,
-          priority: data.priority as Priority,
-          clientId: data.clientId,
-          status: ProjectStatus.STRATEGY,
-          progress: 0,
-        },
-        include: {
-          client: {
-            select: {
-              id: true,
-              name: true,
-            },
+    const project = await prisma.project.create({
+      data: {
+        name: data.projectName,
+        description: data.projectDescription ?? null,
+        budget: data.budget ?? null,
+        deadline: data.deadline ? new Date(data.deadline) : null,
+        startDate: data.startDate ? new Date(data.startDate) : new Date(),
+        liveUrl: data.liveUrl || null,
+        repositoryUrl: data.repositoryUrl || null,
+        category: data.category as ProjectCategory,
+        priority: data.priority as Priority,
+        clientId: data.clientId,
+        status: ProjectStatus.STRATEGY,
+        progress: 0,
+      },
+      include: {
+        client: {
+          select: {
+            id: true,
+            name: true,
           },
         },
-      })
+      },
+    })
 
-      const initialUpdate = await tx.update.create({
-        data: {
-          title: "Projeto iniciado",
-          description: "Fase de estratégia iniciada com sucesso.",
-          projectId: project.id,
-          isMilestone: true,
-          timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
-        },
-      })
+    const initialUpdate = await prisma.update.create({
+      data: {
+        title: "Projeto iniciado",
+        description: "Fase de estratégia iniciada com sucesso.",
+        projectId: project.id,
+        isMilestone: true,
+        timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
+      },
+    })
 
-      await tx.auditLog.create({
-        data: {
-          action: "project.created",
-          entityType: "Project",
-          entityId: project.id,
-          summary: `Projeto ${project.name} criado para ${project.client.name ?? "cliente"}.`,
-          actorId: actor?.id,
-          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-          projectId: project.id,
-          metadata: {
-            category: project.category,
-            priority: project.priority,
-            initialUpdateId: initialUpdate.id,
-          },
-        },
-      })
+    await createAuditLog({
+      action: "project.created",
+      entityType: "Project",
+      entityId: project.id,
+      summary: `Projeto ${project.name} criado para ${project.client.name ?? "cliente"}.`,
+      actorId: actor?.id,
+      actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+      projectId: project.id,
+      metadata: {
+        category: project.category,
+        priority: project.priority,
+        initialUpdateId: initialUpdate.id,
+      },
+    })
 
-      await tx.notification.create({
-        data: {
-          userId: project.clientId,
-          projectId: project.id,
-          type: NotificationType.PROJECT_STATUS_CHANGED,
-          title: "Novo projeto liberado no painel",
-          message: `O projeto ${project.name} já está disponível para acompanhamento.`,
-          ctaPath: getDashboardPath(project.id),
-        },
-      })
+    await createNotification({
+      userId: data.clientId,
+      projectId: project.id,
+      type: NotificationType.PROJECT_STATUS_CHANGED,
+      title: "Novo projeto liberado no painel",
+      message: `O projeto ${project.name} já está disponível para acompanhamento.`,
+      ctaPath: getDashboardPath(project.id),
     })
 
     revalidatePath("/admin/projects")

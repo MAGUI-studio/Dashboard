@@ -2,6 +2,8 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
+import { UserRole } from "@/src/generated/client/enums"
+
 import { CreateProjectForm } from "@/src/components/admin/CreateProjectForm"
 
 import prisma from "@/src/lib/prisma"
@@ -10,7 +12,7 @@ export default async function CreateProjectPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.projects")
 
   const clients = await prisma.user.findMany({
-    where: { role: "CLIENT" },
+    where: { role: UserRole.CLIENT },
     select: {
       id: true,
       name: true,

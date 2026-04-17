@@ -3,13 +3,30 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 
 import { Link } from "@/src/i18n/navigation"
-import { MagnifyingGlass, ProjectorScreen } from "@phosphor-icons/react"
+import {
+  MagnifyingGlass,
+  ProjectorScreen,
+  Trash,
+  WarningOctagon,
+} from "@phosphor-icons/react"
+import { toast } from "sonner"
 
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
 import { Card } from "@/src/components/ui/card"
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/src/components/ui/dialog"
 import { Input } from "@/src/components/ui/input"
 import {
   Table,
@@ -19,6 +36,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/src/components/ui/table"
+
+import { deleteProjectAction } from "@/src/lib/actions/project.actions"
 
 export interface ProjectData {
   id: string
@@ -39,7 +58,9 @@ interface ProjectsTableProps {
 export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
   const t = useTranslations("Dashboard.status")
   const commonT = useTranslations("Admin.clients.table")
+  const router = useRouter()
   const [search, setSearch] = React.useState("")
+  const [pendingDeletion, startDeletion] = React.useTransition()
 
   const filteredProjects = React.useMemo(() => {
     if (!search) return initialProjects
@@ -51,6 +72,20 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
         p.client.email.toLowerCase().includes(query)
     )
   }, [initialProjects, search])
+
+  const handleDelete = (projectId: string) => {
+    startDeletion(async () => {
+      const result = await deleteProjectAction(projectId)
+
+      if (result.success) {
+        toast.success("Projeto removido com sucesso.")
+        router.refresh()
+        return
+      }
+
+      toast.error(result.error ?? "Nao foi possivel remover o projeto.")
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -149,21 +184,84 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                     </div>
                   </TableCell>
                   <TableCell className="px-8 py-6 text-right">
-                    <Button
-                      asChild
-                      variant="ghost"
-                      size="sm"
-                      className="h-10 rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
-                    >
-                      <Link
-                        href={{
-                          pathname: "/admin/projects/[id]",
-                          params: { id: project.id },
-                        }}
+                    <div className="flex justify-end gap-2">
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="sm"
+                        className="h-10 rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
                       >
-                        {commonT("inspect")}
-                      </Link>
-                    </Button>
+                        <Link
+                          href={{
+                            pathname: "/admin/projects/[id]",
+                            params: { id: project.id },
+                          }}
+                        >
+                          {commonT("inspect")}
+                        </Link>
+                      </Button>
+
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-10 rounded-full border-red-500/20 px-5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10"
+                          >
+                            <Trash className="mr-2 size-4" weight="bold" />
+                            Excluir
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-xl rounded-[2rem]">
+                          <DialogHeader>
+                            <div className="mb-2 flex size-12 items-center justify-center rounded-2xl bg-red-500/10 text-red-500">
+                              <WarningOctagon
+                                className="size-6"
+                                weight="fill"
+                              />
+                            </div>
+                            <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight">
+                              Remover projeto
+                            </DialogTitle>
+                            <DialogDescription>
+                              Essa acao remove o projeto e todos os registros
+                              vinculados por cascata, incluindo updates, assets,
+                              action items, versoes, notificacoes e logs.
+                            </DialogDescription>
+                          </DialogHeader>
+
+                          <div className="rounded-2xl border border-red-500/20 bg-red-500/5 p-4 text-sm leading-relaxed text-foreground/75">
+                            Projeto:{" "}
+                            <span className="font-black uppercase">
+                              {project.name}
+                            </span>
+                            <br />
+                            Cliente:{" "}
+                            <span className="font-black">
+                              {project.client.name || project.client.email}
+                            </span>
+                          </div>
+
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button
+                                variant="outline"
+                                className="rounded-full"
+                              >
+                                Cancelar
+                              </Button>
+                            </DialogClose>
+                            <Button
+                              onClick={() => handleDelete(project.id)}
+                              disabled={pendingDeletion}
+                              className="rounded-full bg-red-500 hover:bg-red-500/90"
+                            >
+                              Confirmar exclusao
+                            </Button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))

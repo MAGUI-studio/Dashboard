@@ -1,3 +1,8 @@
+import {
+  Priority,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client/enums"
 import { z } from "zod"
 
 import { briefingSchema } from "@/src/lib/validations/briefing"
@@ -19,29 +24,15 @@ export const createProjectSchema = z.object({
     .url("URL do repositório inválida")
     .optional()
     .or(z.literal("")),
-  category: z.enum([
-    "WEB_APP",
-    "MOBILE_APP",
-    "BRANDING",
-    "LANDING_PAGE",
-    "E_COMMERCE",
-    "UI_UX_DESIGN",
-  ]),
-  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
+  category: z.nativeEnum(ProjectCategory),
+  priority: z.nativeEnum(Priority),
 })
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>
 
 export const updateProjectStatusSchema = z.object({
   id: z.string(),
-  status: z.enum([
-    "STRATEGY",
-    "ARCHITECTURE",
-    "DESIGN",
-    "ENGINEERING",
-    "QA",
-    "LAUNCHED",
-  ]),
+  status: z.nativeEnum(ProjectStatus),
   progress: z.number().min(0).max(100),
 })
 
