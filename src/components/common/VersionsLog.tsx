@@ -24,78 +24,61 @@ export function VersionsLog({ versions }: VersionsLogProps): React.JSX.Element {
   if (versions.length === 0) return <div />
 
   const getScoreColor = (score: number) => {
-    if (score >= 90) return "text-green-500"
+    if (score >= 90) return "text-brand-primary"
     if (score >= 50) return "text-orange-500"
     return "text-red-500"
   }
 
-  const getScoreBg = (score: number) => {
-    if (score >= 90) return "bg-green-500/10 border-green-500/20"
-    if (score >= 50) return "bg-orange-500/10 border-orange-500/20"
-    return "bg-red-500/10 border-red-500/20"
-  }
-
   return (
-    <section className="flex flex-col gap-8">
-      <div className="flex flex-col gap-1">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+    <section className="space-y-10">
+      <div className="flex items-center gap-4">
+        <div className="h-[1px] w-12 bg-border/40" />
+        <h3 className="font-heading text-2xl font-black uppercase tracking-tight text-foreground/90">
           {t("title")}
         </h3>
-        <p className="text-xs text-muted-foreground/40">{t("description")}</p>
       </div>
 
-      <div className="flex flex-col gap-6">
+      <div className="space-y-12">
         {versions.map((version) => (
-          <div
-            key={version.id}
-            className="flex flex-col gap-6 p-8 rounded-3xl border border-border/40 bg-muted/5 backdrop-blur-sm overflow-hidden"
-          >
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
-                  <Rocket weight="duotone" size={24} />
+          <div key={version.id} className="group relative">
+            <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">
+              <div className="flex-1 space-y-4">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/5 text-brand-primary">
+                    <Rocket weight="duotone" size={20} />
+                  </div>
+                  <div>
+                    <h4 className="font-heading text-xl font-black uppercase tracking-tight text-foreground">
+                      {version.name}
+                    </h4>
+                    <span className="font-mono text-[9px] font-bold text-muted-foreground/30 uppercase tracking-widest">
+                      Lançamento:{" "}
+                      {new Date(version.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex flex-col">
-                  <h4 className="font-heading text-xl font-black uppercase tracking-tight text-foreground">
-                    {version.name}
-                  </h4>
-                  <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
-                    Lançada em{" "}
-                    {new Date(version.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
+
+                {version.description && (
+                  <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/60 border-l border-border/40 pl-5">
+                    {version.description}
+                  </p>
+                )}
               </div>
 
-              {version.deployUrl && (
-                <a
-                  href={version.deployUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-full bg-foreground text-background px-6 py-2 text-[10px] font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-foreground/10"
-                >
-                  Visualizar Preview
-                  <ArrowSquareOut size={14} weight="bold" />
-                </a>
-              )}
-            </div>
+              <div className="flex flex-col gap-6 md:items-end">
+                {version.deployUrl && (
+                  <a
+                    href={version.deployUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-brand-primary hover:opacity-70 transition-all"
+                  >
+                    Abrir Preview
+                    <ArrowSquareOut size={14} weight="bold" />
+                  </a>
+                )}
 
-            {version.description && (
-              <p className="text-sm font-medium leading-relaxed text-muted-foreground/70 border-l-2 border-border/60 pl-6">
-                {version.description}
-              </p>
-            )}
-
-            {(version.scorePerformance ||
-              version.scoreAccessibility ||
-              version.scoreBestPractices ||
-              version.scoreSEO) && (
-              <div className="flex flex-col gap-4 pt-4 border-t border-border/40">
-                <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 flex items-center gap-2">
-                  <ChartBar size={14} weight="bold" />
-                  {t("performance_title")}
-                </span>
-
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="flex gap-4">
                   {[
                     {
                       key: "performance",
@@ -118,22 +101,17 @@ export function VersionsLog({ versions }: VersionsLogProps): React.JSX.Element {
                       item.score !== null && (
                         <div
                           key={item.key}
-                          className={cn(
-                            "flex flex-col items-center justify-center gap-2 p-4 rounded-2xl border transition-all",
-                            getScoreBg(item.score || 0)
-                          )}
+                          className="flex flex-col items-center gap-1 opacity-60 hover:opacity-100 transition-opacity"
+                          title={t(`scores.${item.key}`)}
                         >
                           <item.icon
-                            size={20}
+                            size={16}
                             weight="duotone"
                             className={getScoreColor(item.score || 0)}
                           />
-                          <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                            {t(`scores.${item.key}`)}
-                          </span>
                           <span
                             className={cn(
-                              "text-2xl font-black tracking-tighter",
+                              "font-mono text-[10px] font-black",
                               getScoreColor(item.score || 0)
                             )}
                           >
@@ -144,7 +122,8 @@ export function VersionsLog({ versions }: VersionsLogProps): React.JSX.Element {
                   )}
                 </div>
               </div>
-            )}
+            </div>
+            <div className="mt-12 h-[1px] w-full bg-border/20 group-last:hidden" />
           </div>
         ))}
       </div>

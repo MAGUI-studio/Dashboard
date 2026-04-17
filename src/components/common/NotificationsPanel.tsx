@@ -20,77 +20,73 @@ export function NotificationsPanel({
 }: NotificationsPanelProps): React.JSX.Element {
   if (notifications.length === 0) {
     return (
-      <section className="rounded-[2rem] border border-dashed border-border/40 bg-muted/10 p-8">
-        <div className="flex items-center gap-3 text-muted-foreground/50">
-          <BellRinging className="size-5" weight="duotone" />
-          <p className="text-xs font-bold uppercase tracking-[0.2em]">
-            Nenhuma notificação recente
-          </p>
+      <section className="rounded-4xl border border-dashed border-border/40 bg-muted/5 p-10 flex flex-col items-center justify-center text-center">
+        <div className="flex size-12 items-center justify-center rounded-2xl bg-muted/20 text-muted-foreground/30 mb-4">
+          <BellRinging className="size-6" weight="duotone" />
         </div>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
+          Sem notificações
+        </p>
       </section>
     )
   }
 
+  const unreadCount = notifications.filter((n) => !n.readAt).length
+
   return (
-    <section className="rounded-[2rem] border border-border/40 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0))] p-6 backdrop-blur-sm">
-      <div className="mb-5 flex items-center justify-between gap-4">
+    <section className="rounded-4xl border border-border/30 bg-background/20 p-8 backdrop-blur-xl shadow-2xl shadow-black/5">
+      <div className="mb-8 flex items-center justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
-            Radar do Cliente
+          <p className="font-mono text-[9px] font-bold uppercase tracking-[0.4em] text-brand-primary">
+            Sinais
           </p>
-          <h3 className="mt-2 font-heading text-2xl font-black uppercase tracking-tight">
-            Sinais do projeto
+          <h3 className="mt-1 font-heading text-xl font-black uppercase tracking-tight text-foreground/90">
+            Radar
           </h3>
         </div>
-        <div className="rounded-full border border-brand-primary/20 bg-brand-primary/10 px-3 py-1 text-[10px] font-black uppercase tracking-[0.25em] text-brand-primary">
-          {notifications.length} eventos
-        </div>
+        {unreadCount > 0 && (
+          <div className="rounded-full bg-brand-primary px-2.5 py-0.5 text-[8px] font-black uppercase tracking-widest text-white animate-pulse">
+            {unreadCount} novos
+          </div>
+        )}
       </div>
 
-      <div className="grid gap-3">
+      <div className="space-y-4">
         {notifications.map((notification) => (
           <div
             key={notification.id}
             className={cn(
-              "rounded-3xl border p-4 transition-all",
-              notification.readAt
-                ? "border-border/30 bg-muted/10"
-                : "border-brand-primary/30 bg-brand-primary/5"
+              "group relative overflow-hidden transition-all",
+              !notification.readAt &&
+                "after:absolute after:left-0 after:top-0 after:h-full after:w-0.5 after:bg-brand-primary"
             )}
           >
-            <div className="flex items-start gap-3">
-              <div
-                className={cn(
-                  "mt-0.5 flex size-10 items-center justify-center rounded-2xl",
-                  notification.readAt
-                    ? "bg-muted text-muted-foreground"
-                    : "bg-brand-primary/15 text-brand-primary"
-                )}
-              >
-                {notification.readAt ? (
-                  <CheckCircle className="size-5" weight="duotone" />
-                ) : (
-                  <BellRinging className="size-5" weight="duotone" />
-                )}
-              </div>
+            <div className="flex items-start gap-4">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center justify-between gap-3">
-                  <h4 className="text-sm font-black uppercase tracking-tight text-foreground">
+                  <h4
+                    className={cn(
+                      "text-[11px] font-black uppercase tracking-tight transition-colors",
+                      notification.readAt
+                        ? "text-muted-foreground/60"
+                        : "text-foreground"
+                    )}
+                  >
                     {notification.title}
                   </h4>
-                  <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                    <ClockCounterClockwise className="size-3" weight="bold" />
+                  <span className="shrink-0 font-mono text-[8px] font-bold uppercase text-muted-foreground/30">
                     {formatLocalTime(
                       new Date(notification.createdAt),
                       "America/Sao_Paulo"
                     )}
                   </span>
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground/70">
+                <p className="mt-1.5 text-xs font-medium leading-relaxed text-muted-foreground/50 line-clamp-2">
                   {notification.message}
                 </p>
               </div>
             </div>
+            <div className="mt-4 h-[1px] w-full bg-border/20 group-last:hidden" />
           </div>
         ))}
       </div>
