@@ -273,14 +273,12 @@ export default async function DashboardPage({
         </header>
 
         {isBriefingEmpty ? (
-          <div className="py-12">
-            <BriefingForm
-              projectId={activeProject.id}
-              initialData={
-                activeProject.briefing as Record<string, unknown> | null
-              }
-            />
-          </div>
+          <BriefingForm
+            projectId={activeProject.id}
+            initialData={
+              activeProject.briefing as Record<string, unknown> | null
+            }
+          />
         ) : (
           <DashboardSummary
             project={

@@ -279,7 +279,7 @@
       "visualReferences": {
         "label": "Visual References",
         "slug": "visual-references",
-        "placeholder": "Paste links separated by space or line break with examples of websites, campaigns or interfaces."
+        "placeholder": "Add links to examples of sites, campaigns or interfaces that reflect the vision of the project."
       },
       "businessGoals": {
         "label": "Business Goals",

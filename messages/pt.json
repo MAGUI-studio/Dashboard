@@ -279,7 +279,7 @@
       "visualReferences": {
         "label": "Referências Visuais",
         "slug": "referencias-visuais",
-        "placeholder": "Cole links separados por espaço ou quebra de linha com exemplos de sites, campanhas ou interfaces."
+        "placeholder": "Adicione links de exemplos de sites, campanhas ou interfaces que refletem a visão do projeto."
       },
       "businessGoals": {
         "label": "Metas de Negócio",

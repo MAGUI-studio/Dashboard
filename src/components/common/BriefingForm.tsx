@@ -10,26 +10,20 @@ import {
   ArrowRight,
   CheckCircle,
   CircleNotch,
-  Compass,
-  Link as LinkIcon,
   Plus,
-  Sparkle,
-  Target,
   Trash,
-  UsersThree,
+  WarningCircle,
 } from "@phosphor-icons/react"
 import { parseAsString, useQueryState } from "nuqs"
 import { toast } from "sonner"
 
 import { Button } from "@/src/components/ui/button"
-import { Input } from "@/src/components/ui/input"
-import { Label } from "@/src/components/ui/label"
-import { Textarea } from "@/src/components/ui/textarea"
 
 import {
   savePartialBriefingAction,
   updateProjectBriefingAction,
 } from "@/src/lib/actions/project.actions"
+import { cn } from "@/src/lib/utils/utils"
 import { briefingSchema } from "@/src/lib/validations/project"
 
 interface BriefingFormProps {
@@ -38,30 +32,12 @@ interface BriefingFormProps {
 }
 
 const stepsConfig = [
-  {
-    id: "brandTone",
-    icon: Sparkle,
-  },
-  {
-    id: "visualReferences",
-    icon: LinkIcon,
-  },
-  {
-    id: "businessGoals",
-    icon: Target,
-  },
-  {
-    id: "primaryCta",
-    icon: Compass,
-  },
-  {
-    id: "targetAudience",
-    icon: UsersThree,
-  },
-  {
-    id: "differentiators",
-    icon: Sparkle,
-  },
+  { id: "brandTone", min: 100 },
+  { id: "visualReferences", min: 0 }, // Optional
+  { id: "businessGoals", min: 100 },
+  { id: "primaryCta", min: 3 }, // Mantendo 3 por ser CTA curto, mas posso subir se desejar
+  { id: "targetAudience", min: 100 },
+  { id: "differentiators", min: 100 },
 ] as const
 
 type StepId = (typeof stepsConfig)[number]["id"]
@@ -72,6 +48,7 @@ export function BriefingForm({
 }: BriefingFormProps): React.JSX.Element {
   const t = useTranslations("Briefing")
   const router = useRouter()
+  const inputRef = React.useRef<HTMLTextAreaElement | HTMLInputElement>(null)
 
   const idToSlug = React.useMemo(() => {
     return Object.fromEntries(
@@ -85,14 +62,23 @@ export function BriefingForm({
     ) as Record<string, StepId>
   }, [t])
 
+  const firstMissingStepId = React.useMemo(() => {
+    const missing = stepsConfig.find((config) => {
+      if (config.min === 0) return false
+      const val = initialData?.[config.id]
+      return typeof val !== "string" || val.trim().length < config.min
+    })
+    return missing?.id || stepsConfig[0].id
+  }, [initialData])
+
   const [currentSlug, setCurrentSlug] = useQueryState(
     "step",
-    parseAsString.withDefault(idToSlug[stepsConfig[0].id])
+    parseAsString.withDefault(idToSlug[firstMissingStepId])
   )
 
   const currentStepId = React.useMemo(() => {
-    return slugToId[currentSlug] || stepsConfig[0].id
-  }, [currentSlug, slugToId])
+    return slugToId[currentSlug] || firstMissingStepId
+  }, [currentSlug, slugToId, firstMissingStepId])
 
   const currentStepIndex = React.useMemo(() => {
     const index = stepsConfig.findIndex((s) => s.id === currentStepId)
@@ -101,6 +87,7 @@ export function BriefingForm({
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [isFinished, setIsFinished] = React.useState(false)
+  const [showErrors, setShowErrors] = React.useState(false)
 
   const initialReferences = Array.isArray(initialData?.visualReferences)
     ? initialData.visualReferences
@@ -118,7 +105,6 @@ export function BriefingForm({
   })
 
   const currentStepConfig = stepsConfig[currentStepIndex]
-  const progress = ((currentStepIndex + 1) / stepsConfig.length) * 100
 
   const setValue = (value: string | string[]) => {
     setFormData((previous) => ({
@@ -126,6 +112,24 @@ export function BriefingForm({
       [currentStepConfig.id]: value,
     }))
   }
+
+  const isFieldMissing = React.useCallback(
+    (id: string) => {
+      const config = stepsConfig.find((s) => s.id === id)
+      if (!config || config.min === 0) return false
+
+      const value = formData[id as keyof typeof formData]
+      if (typeof value === "string") {
+        return value.trim().length < config.min
+      }
+      return false
+    },
+    [formData]
+  )
+
+  const canSubmit = React.useMemo(() => {
+    return stepsConfig.every((s) => !isFieldMissing(s.id))
+  }, [isFieldMissing])
 
   const saveCurrentStep = async () => {
     const currentField = currentStepConfig.id
@@ -164,11 +168,24 @@ export function BriefingForm({
   }
 
   const handleSubmit = async () => {
+    if (!canSubmit) {
+      setShowErrors(true)
+      const firstMissing = stepsConfig.find((s) => isFieldMissing(s.id))
+      if (firstMissing) {
+        setCurrentSlug(idToSlug[firstMissing.id])
+      }
+      toast.error(
+        "Por favor, preencha todos os campos obrigatórios com o mínimo de caracteres."
+      )
+      return
+    }
+
     setIsLoading(true)
 
     const parsed = briefingSchema.safeParse(formData)
 
     if (!parsed.success) {
+      setShowErrors(true)
       toast.error(parsed.error.issues[0]?.message ?? "Briefing inválido")
       setIsLoading(false)
       return
@@ -218,20 +235,43 @@ export function BriefingForm({
     })
   }
 
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key === "Enter" &&
+        currentStepIndex < stepsConfig.length - 1
+      ) {
+        handleNext()
+      } else if (
+        (e.ctrlKey || e.metaKey) &&
+        e.key === "Enter" &&
+        currentStepIndex === stepsConfig.length - 1
+      ) {
+        handleSubmit()
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [currentStepIndex, formData, canSubmit])
+
+  React.useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [currentStepId, isFinished])
+
   if (isFinished) {
     return (
-      <div className="flex w-full flex-col items-center justify-center gap-8 rounded-4xl border border-brand-primary/20 bg-background/40 p-20 text-center shadow-2xl shadow-black/5 backdrop-blur-xl">
-        <div className="relative">
-          <div className="absolute inset-0 scale-150 rounded-full bg-brand-primary/20 blur-2xl animate-pulse" />
-          <div className="relative flex size-24 items-center justify-center rounded-full bg-brand-primary text-white shadow-xl shadow-brand-primary/20">
-            <CheckCircle size={56} weight="fill" />
-          </div>
+      <div className="flex w-full min-h-[60vh] flex-col items-center justify-center gap-8 py-20 text-center">
+        <div className="flex size-24 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
+          <CheckCircle size={48} weight="fill" />
         </div>
-        <div className="max-w-md space-y-4">
-          <h2 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground">
+        <div className="max-w-lg space-y-4">
+          <h2 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground md:text-5xl">
             {t("success")}
           </h2>
-          <p className="text-base text-muted-foreground/70">
+          <p className="text-lg text-muted-foreground/60">
             {t("success_description")}
           </p>
         </div>
@@ -239,120 +279,166 @@ export function BriefingForm({
     )
   }
 
+  const currentVal = formData[currentStepId as keyof typeof formData]
+  const currentLength =
+    typeof currentVal === "string" ? currentVal.trim().length : 0
+  const showCounter =
+    currentStepConfig.min > 0 && currentLength < currentStepConfig.min
+
   return (
-    <div className="grid w-full gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-      <section className="relative overflow-hidden rounded-4xl border border-border/30 bg-background/20 p-8 shadow-2xl shadow-black/5 backdrop-blur-xl md:p-14">
-        {/* Visual Decoration */}
-        <div className="absolute -right-20 -top-20 size-80 rounded-full bg-brand-primary/5 blur-3xl" />
-        <div className="absolute -left-10 bottom-20 size-64 rounded-full bg-brand-primary/3 blur-3xl" />
+    <div className="flex flex-col xl:flex-row w-full gap-16 xl:gap-32 py-10">
+      <aside className="w-full xl:w-64 shrink-0 flex flex-col gap-12">
+        <div className="space-y-2">
+          <p className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-brand-primary">
+            {t("onboarding_protocol")}
+          </p>
+          <p className="text-xs font-medium text-muted-foreground/50 leading-relaxed">
+            {t("description")}
+          </p>
+        </div>
 
-        <header className="relative z-10 space-y-8 pb-12">
-          <div className="flex items-center gap-4">
-            <div className="h-[1px] w-12 bg-brand-primary/30" />
-            <span className="font-decorative text-[10px] font-bold uppercase tracking-[0.5em] text-brand-primary">
-              {t("onboarding_protocol")}
-            </span>
-          </div>
+        <nav className="relative flex flex-col gap-6">
+          <div className="absolute left-1.5 top-2 bottom-2 w-[1px] bg-border/40" />
 
-          <div className="grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
-            <div>
-              <h2 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl">
-                {t("title")}
-              </h2>
-              <p className="mt-4 max-w-xl text-base font-medium leading-relaxed text-muted-foreground/60">
-                {t("description")}
-              </p>
-            </div>
+          {stepsConfig.map((item, index) => {
+            const isCurrent = item.id === currentStepId
+            const isCompleted = currentStepIndex > index
+            const isMissing = isFieldMissing(item.id)
 
-            <div className="flex flex-col items-end gap-2">
-              <span className="font-mono text-[10px] font-bold uppercase tracking-widest text-muted-foreground/30">
-                Processo Estratégico
-              </span>
-              <div className="flex h-1.5 w-32 overflow-hidden rounded-full bg-muted/30">
+            return (
+              <button
+                key={item.id}
+                onClick={() => onStepClick(item.id)}
+                className="group relative flex items-center gap-5 text-left transition-all"
+              >
                 <div
-                  className="h-full rounded-full bg-brand-primary transition-all duration-700 ease-out"
-                  style={{ width: `${progress}%` }}
+                  className={cn(
+                    "relative z-10 flex size-3 items-center justify-center rounded-full transition-all duration-500",
+                    isCurrent
+                      ? "bg-brand-primary ring-4 ring-brand-primary/20 scale-125"
+                      : isCompleted
+                        ? "bg-brand-primary"
+                        : "bg-muted-foreground/20 group-hover:bg-muted-foreground/40",
+                    showErrors &&
+                      isMissing &&
+                      !isCurrent &&
+                      "bg-destructive ring-destructive/20"
+                  )}
                 />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary">
-                {Math.round(progress)}% completo
-              </span>
-            </div>
-          </div>
-        </header>
-
-        <div className="relative z-10">
-          <div className="mb-10 flex items-start gap-6">
-            <div className="relative">
-              <div className="absolute inset-0 scale-125 rounded-3xl bg-brand-primary/10 blur-xl transition-all" />
-              <div className="relative flex size-20 items-center justify-center rounded-3xl border border-brand-primary/20 bg-background/50 text-brand-primary shadow-lg">
-                <currentStepConfig.icon size={36} weight="duotone" />
-              </div>
-            </div>
-            <div className="pt-2">
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-[10px] font-bold text-brand-primary/40">
-                  {String(currentStepIndex + 1).padStart(2, "0")}
-                </span>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/40">
-                  {t("step_strategy")}
-                </p>
-              </div>
-              <h3 className="mt-2 font-heading text-3xl font-black uppercase tracking-tight text-foreground">
-                {t(`steps.${currentStepConfig.id}.label`)}
-              </h3>
-            </div>
-          </div>
-
-          <div className="animate-in fade-in slide-in-from-right-8 duration-700 ease-out">
-            <Label
-              htmlFor={currentStepConfig.id}
-              className="mb-5 block font-decorative text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40"
-            >
-              {t("answer_label")}
-            </Label>
-
-            {currentStepConfig.id === "visualReferences" ? (
-              <div className="space-y-4">
-                {formData.visualReferences.map((ref, index) => (
-                  <div key={index} className="group flex gap-3">
-                    <div className="relative flex-1">
-                      <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground/30 transition-colors group-focus-within:text-brand-primary">
-                        <LinkIcon size={16} weight="bold" />
-                      </div>
-                      <Input
-                        value={ref}
-                        onChange={(e) => updateReference(index, e.target.value)}
-                        placeholder="https://exemplo.com"
-                        className="h-14 rounded-2xl border-border/40 bg-background/40 pl-12 text-sm transition-all focus:border-brand-primary/30 focus:bg-background/60 focus:ring-0"
+                <div className="flex flex-col flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span
+                      className={cn(
+                        "font-mono text-[9px] font-bold uppercase tracking-[0.3em] transition-colors duration-500",
+                        isCurrent || isCompleted
+                          ? "text-brand-primary"
+                          : "text-muted-foreground/30 group-hover:text-muted-foreground/50",
+                        showErrors &&
+                          isMissing &&
+                          !isCurrent &&
+                          "text-destructive"
+                      )}
+                    >
+                      0{index + 1}
+                    </span>
+                    {showErrors && isMissing && (
+                      <WarningCircle
+                        size={14}
+                        weight="fill"
+                        className="text-destructive animate-pulse"
                       />
-                    </div>
+                    )}
+                  </div>
+                  <span
+                    className={cn(
+                      "text-xs font-black uppercase tracking-widest transition-colors duration-500 mt-1 truncate",
+                      isCurrent
+                        ? "text-foreground"
+                        : isCompleted
+                          ? "text-muted-foreground/60"
+                          : "text-muted-foreground/30 group-hover:text-muted-foreground/50",
+                      showErrors &&
+                        isMissing &&
+                        !isCurrent &&
+                        "text-destructive/70"
+                    )}
+                  >
+                    {t(`steps.${item.id}.label`)}
+                  </span>
+                </div>
+              </button>
+            )
+          })}
+        </nav>
+      </aside>
+
+      <section className="flex-1 flex flex-col min-w-0 pb-32 xl:pb-0">
+        <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 ease-out flex-1">
+          <div className="mb-12">
+            <h2 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground md:text-6xl xl:text-[5rem] xl:leading-[1.1]">
+              {t(`steps.${currentStepConfig.id}.label`)}
+            </h2>
+            <div className="mt-6 flex items-start justify-between gap-8">
+              <p className="text-base font-medium md:text-lg text-muted-foreground/60 max-w-2xl leading-relaxed border-l-2 border-brand-primary/30 pl-4">
+                {t(`steps.${currentStepConfig.id}.placeholder`)}
+              </p>
+
+              {showCounter && (
+                <div className="shrink-0 flex flex-col items-end">
+                  <span className="font-mono text-[10px] font-bold text-brand-primary tracking-widest">
+                    {currentLength}/{currentStepConfig.min}
+                  </span>
+                  <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/30 mt-1">
+                    mínimo exigido
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="w-full">
+            {currentStepConfig.id === "visualReferences" ? (
+              <div className="space-y-6">
+                {formData.visualReferences.map((ref, index) => (
+                  <div key={index} className="group relative flex items-center">
+                    <span className="absolute left-0 font-mono text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest select-none">
+                      REF
+                    </span>
+                    <input
+                      ref={
+                        index === 0
+                          ? (inputRef as React.RefObject<HTMLInputElement>)
+                          : undefined
+                      }
+                      type="url"
+                      value={ref}
+                      onChange={(e) => updateReference(index, e.target.value)}
+                      placeholder="https://..."
+                      className="w-full bg-transparent border-b border-border/30 pl-12 pr-12 py-6 text-xl text-foreground font-medium transition-all placeholder:text-muted-foreground/20 focus:border-brand-primary focus:outline-none"
+                    />
                     {formData.visualReferences.length > 1 && (
-                      <Button
-                        variant="ghost"
-                        size="icon"
+                      <button
                         onClick={() => removeReference(index)}
-                        className="size-14 shrink-0 rounded-2xl border border-transparent text-muted-foreground/30 hover:border-destructive/20 hover:bg-destructive/5 hover:text-destructive"
+                        className="absolute right-0 flex size-10 items-center justify-center text-muted-foreground/20 transition-colors hover:text-destructive"
                       >
-                        <Trash size={20} />
-                      </Button>
+                        <Trash size={20} weight="fill" />
+                      </button>
                     )}
                   </div>
                 ))}
-                <Button
-                  variant="outline"
+                <button
                   onClick={addReference}
-                  className="group h-14 w-full rounded-2xl border-dashed border-border/60 bg-muted/5 font-decorative text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 hover:text-brand-primary"
+                  className="group mt-8 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-brand-primary transition-all hover:opacity-70"
                 >
-                  <Plus
-                    size={16}
-                    className="mr-2 transition-transform group-hover:rotate-90"
-                  />
+                  <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10">
+                    <Plus size={14} weight="bold" />
+                  </div>
                   {t("add_reference")}
-                </Button>
+                </button>
               </div>
             ) : (
-              <Textarea
+              <textarea
+                ref={inputRef as React.RefObject<HTMLTextAreaElement>}
                 id={currentStepConfig.id}
                 value={
                   formData[
@@ -360,137 +446,64 @@ export function BriefingForm({
                   ] as string
                 }
                 onChange={(event) => setValue(event.target.value)}
-                className="min-h-[240px] rounded-4xl border-border/40 bg-background/40 p-8 text-base leading-relaxed shadow-inner shadow-black/5 transition-all focus:border-brand-primary/30 focus:bg-background/60 focus:ring-0"
-                placeholder={t(`steps.${currentStepConfig.id}.placeholder`)}
+                className="w-full min-h-[300px] resize-none bg-transparent text-2xl font-medium leading-relaxed text-foreground placeholder:text-muted-foreground/20 focus:outline-none xl:text-3xl"
+                placeholder="Escreva sua resposta aqui..."
               />
             )}
           </div>
         </div>
 
-        <footer className="relative z-10 mt-12 flex items-center justify-between border-t border-border/30 pt-10">
-          <Button
-            variant="ghost"
+        <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-border/20 pt-8">
+          <button
             onClick={handleBack}
             disabled={currentStepIndex === 0 || isLoading}
-            className="h-12 rounded-full px-8 font-decorative text-[10px] font-bold uppercase tracking-[0.2em] transition-all hover:bg-brand-primary/5 hover:text-brand-primary"
+            className="group flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 transition-all disabled:opacity-30 hover:text-foreground"
           >
-            <ArrowLeft size={18} className="mr-2" />
+            <ArrowLeft
+              size={16}
+              className="transition-transform group-hover:-translate-x-1"
+            />
             {t("back_button")}
-          </Button>
+          </button>
 
-          {currentStepIndex < stepsConfig.length - 1 ? (
-            <Button
-              onClick={handleNext}
-              className="h-12 rounded-full bg-brand-primary px-10 font-decorative text-[10px] font-bold uppercase tracking-[0.3em] text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95"
-            >
-              {t("next_step")}
-              <ArrowRight size={18} className="ml-2" />
-            </Button>
-          ) : (
-            <Button
-              onClick={handleSubmit}
-              disabled={isLoading}
-              className="h-12 rounded-full bg-brand-primary px-12 font-decorative text-[10px] font-bold uppercase tracking-[0.3em] text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95"
-            >
-              {isLoading ? (
-                <CircleNotch size={18} className="mr-2 animate-spin" />
-              ) : null}
-              {t("submit")}
-            </Button>
-          )}
-        </footer>
+          <div className="flex items-center gap-4">
+            <span className="hidden font-mono text-[9px] uppercase tracking-widest text-muted-foreground/30 sm:inline-block">
+              Pressione{" "}
+              <kbd className="rounded border border-border/40 bg-muted/20 px-1 font-sans">
+                Ctrl
+              </kbd>{" "}
+              +{" "}
+              <kbd className="rounded border border-border/40 bg-muted/20 px-1 font-sans">
+                Enter
+              </kbd>{" "}
+              para avançar
+            </span>
+
+            {currentStepIndex < stepsConfig.length - 1 ? (
+              <Button
+                onClick={handleNext}
+                className="h-14 rounded-none bg-foreground px-10 font-mono text-[10px] font-black uppercase tracking-[0.3em] text-background transition-all hover:bg-brand-primary hover:text-white"
+              >
+                {t("next_step")}
+                <ArrowRight size={16} className="ml-3" />
+              </Button>
+            ) : (
+              <Button
+                onClick={handleSubmit}
+                disabled={isLoading}
+                className={cn(
+                  "h-14 rounded-none px-12 font-mono text-[10px] font-black uppercase tracking-[0.3em] transition-all bg-brand-primary text-white hover:opacity-90"
+                )}
+              >
+                {isLoading ? (
+                  <CircleNotch size={16} className="mr-3 animate-spin" />
+                ) : null}
+                {t("submit")}
+              </Button>
+            )}
+          </div>
+        </div>
       </section>
-
-      <aside className="flex flex-col gap-8">
-        <div className="rounded-4xl border border-border/30 bg-background/30 p-8 backdrop-blur-xl shadow-2xl shadow-black/5">
-          <div className="mb-10 flex items-center justify-between">
-            <div>
-              <p className="font-decorative text-[10px] font-bold uppercase tracking-[0.4em] text-brand-primary">
-                {t("creative_direction")}
-              </p>
-              <h3 className="mt-2 font-heading text-2xl font-black uppercase tracking-tight text-foreground">
-                {t("briefing_map")}
-              </h3>
-            </div>
-            <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-brand-primary/20 bg-brand-primary/5 text-brand-primary">
-              <Sparkle weight="fill" size={20} className="animate-pulse" />
-            </div>
-          </div>
-
-          <div className="space-y-3">
-            {stepsConfig.map((item, index) => {
-              const isCurrent = item.id === currentStepId
-              const isCompleted = currentStepIndex > index
-
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => onStepClick(item.id)}
-                  className={`group w-full overflow-hidden rounded-3xl border p-5 transition-all ${
-                    isCurrent
-                      ? "border-brand-primary/30 bg-background shadow-xl shadow-black/5"
-                      : isCompleted
-                        ? "border-border/30 bg-background/20 opacity-60"
-                        : "border-transparent bg-transparent hover:bg-muted/10 opacity-40 hover:opacity-100"
-                  }`}
-                >
-                  <div className="flex items-center gap-5">
-                    <div
-                      className={`flex size-12 items-center justify-center rounded-2xl transition-all duration-500 ${
-                        isCurrent || isCompleted
-                          ? "bg-brand-primary/10 text-brand-primary scale-110"
-                          : "bg-muted/30 text-muted-foreground/30"
-                      }`}
-                    >
-                      <item.icon
-                        size={24}
-                        weight={isCurrent ? "fill" : "duotone"}
-                      />
-                    </div>
-                    <div className="min-w-0 flex-1 text-left">
-                      <div className="flex items-center justify-between">
-                        <p
-                          className={`font-mono text-[9px] font-bold uppercase tracking-[0.2em] ${isCurrent ? "text-brand-primary" : "text-muted-foreground/40"}`}
-                        >
-                          Fase {index + 1}
-                        </p>
-                        {isCompleted && (
-                          <CheckCircle
-                            size={14}
-                            weight="fill"
-                            className="text-brand-primary"
-                          />
-                        )}
-                      </div>
-                      <h4
-                        className={`mt-1 truncate text-[13px] font-black uppercase tracking-tight transition-colors ${isCurrent ? "text-foreground" : "text-muted-foreground/60"}`}
-                      >
-                        {t(`steps.${item.id}.label`)}
-                      </h4>
-                    </div>
-                  </div>
-                </button>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Studio DNA Quote */}
-        <div className="relative overflow-hidden rounded-4xl border border-border/20 bg-muted/5 p-10">
-          <div className="relative z-10">
-            <p className="font-decorative text-[10px] font-bold uppercase tracking-[0.6em] text-brand-primary opacity-50">
-              Padrão MAGUI
-            </p>
-            <blockquote className="mt-4 font-heading text-xl font-light italic leading-relaxed text-muted-foreground/70">
-              &quot;A excelência não é um ato, mas um hábito enraizado no rigor
-              técnico.&quot;
-            </blockquote>
-          </div>
-          <div className="absolute -bottom-10 -right-10 text-[120px] font-black text-brand-primary/5 select-none pointer-events-none uppercase">
-            Studio
-          </div>
-        </div>
-      </aside>
     </div>
   )
 }
