@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { AssetType } from "@/src/generated/client/enums"
 import {
   CheckCircle,
   File,
@@ -23,7 +24,6 @@ import { InputGroup, InputGroupInput } from "@/src/components/ui/input-group"
 import { Switch } from "@/src/components/ui/switch"
 import { Textarea } from "@/src/components/ui/textarea"
 
-import { AssetType } from "@/src/generated/client/enums"
 import { addProjectTimelineAction } from "@/src/lib/actions/project.actions"
 import { useUploadThing } from "@/src/lib/uploadthing"
 

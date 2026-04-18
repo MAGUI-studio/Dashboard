@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
+import { getCurrentAppUser } from "@/src/lib/project-governance"
 
 async function getCurrentNotificationUserId(): Promise<string | null> {
   const { userId } = await auth()
@@ -14,10 +15,7 @@ async function getCurrentNotificationUserId(): Promise<string | null> {
     return null
   }
 
-  const user = await prisma.user.findUnique({
-    where: { clerkId: userId },
-    select: { id: true },
-  })
+  const user = await getCurrentAppUser()
 
   return user?.id ?? null
 }
@@ -49,11 +47,17 @@ export async function markNotificationsAsReadAction(
       },
     })
 
-    revalidatePath("/")
+    revalidatePath("/", "layout")
     revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Mark Notifications As Read Error:")
     return { error: "Erro ao atualizar notificações" }
   }
+}
+
+export async function markNotificationAsReadAction(
+  notificationId: string
+): Promise<{ error?: string; success?: boolean }> {
+  return markNotificationsAsReadAction([notificationId])
 }

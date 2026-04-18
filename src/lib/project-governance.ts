@@ -1,12 +1,69 @@
+import { revalidatePath } from "next/cache"
+
 import { Prisma } from "@/src/generated/client/client"
 import {
   AuditActorType,
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
-import { auth } from "@clerk/nextjs/server"
+import { auth, clerkClient } from "@clerk/nextjs/server"
 
 import prisma from "@/src/lib/prisma"
+
+const clerkRoleMap = {
+  admin: UserRole.ADMIN,
+  member: UserRole.MEMBER,
+  client: UserRole.CLIENT,
+} as const
+
+function normalizeClerkRole(rawRole: unknown): UserRole {
+  if (typeof rawRole !== "string") {
+    return UserRole.CLIENT
+  }
+
+  return (
+    clerkRoleMap[rawRole.toLowerCase() as keyof typeof clerkRoleMap] ??
+    UserRole.CLIENT
+  )
+}
+
+async function upsertUserFromClerk(clerkUserId: string) {
+  const client = await clerkClient()
+  const clerkUser = await client.users.getUser(clerkUserId)
+  const primaryEmail =
+    clerkUser.emailAddresses.find(
+      (email) => email.id === clerkUser.primaryEmailAddressId
+    )?.emailAddress ?? clerkUser.emailAddresses[0]?.emailAddress
+
+  if (!primaryEmail) {
+    throw new Error("Clerk user is missing a primary email")
+  }
+
+  return prisma.user.upsert({
+    where: { clerkId: clerkUser.id },
+    update: {
+      email: primaryEmail,
+      name:
+        [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
+        clerkUser.fullName ||
+        clerkUser.username ||
+        primaryEmail,
+      role: normalizeClerkRole(clerkUser.publicMetadata?.role),
+      avatarUrl: clerkUser.imageUrl ?? null,
+    },
+    create: {
+      clerkId: clerkUser.id,
+      email: primaryEmail,
+      name:
+        [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
+        clerkUser.fullName ||
+        clerkUser.username ||
+        primaryEmail,
+      role: normalizeClerkRole(clerkUser.publicMetadata?.role),
+      avatarUrl: clerkUser.imageUrl ?? null,
+    },
+  })
+}
 
 export async function getCurrentAppUser() {
   const { userId } = await auth()
@@ -15,9 +72,29 @@ export async function getCurrentAppUser() {
     return null
   }
 
-  return prisma.user.findUnique({
-    where: { clerkId: userId },
+  return upsertUserFromClerk(userId)
+}
+
+export async function getInternalNotificationRecipients(): Promise<
+  Array<{ id: string }>
+> {
+  const client = await clerkClient()
+  const clerkUsers = await client.users.getUserList({ limit: 100 })
+
+  const internalUsers = clerkUsers.data.filter((user) => {
+    const role = normalizeClerkRole(user.publicMetadata?.role)
+    return role === UserRole.ADMIN || role === UserRole.MEMBER
   })
+
+  if (internalUsers.length === 0) {
+    return []
+  }
+
+  const syncedUsers = await Promise.all(
+    internalUsers.map((user) => upsertUserFromClerk(user.id))
+  )
+
+  return syncedUsers.map((user) => ({ id: user.id }))
 }
 
 export async function ensureProjectAccess(
@@ -105,4 +182,12 @@ export async function createNotification(data: {
       projectId: data.projectId ?? null,
     },
   })
+
+  revalidatePath("/", "layout")
+  revalidatePath("/admin")
+  revalidatePath("/admin/projects")
+  if (data.projectId) {
+    revalidatePath(`/admin/projects/${data.projectId}`)
+  }
+  revalidatePath("/notifications")
 }

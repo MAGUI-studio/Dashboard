@@ -25,6 +25,7 @@ import {
   createNotification,
   ensureProjectAccess,
   getCurrentAppUser,
+  getInternalNotificationRecipients,
 } from "@/src/lib/project-governance"
 import {
   addProjectTimelineSchema,
@@ -419,12 +420,7 @@ export async function approveUpdateAction(
       projectId,
     })
 
-    const admins = await prisma.user.findMany({
-      where: {
-        role: { in: [UserRole.ADMIN, UserRole.MEMBER] },
-      },
-      select: { id: true },
-    })
+    const admins = await getInternalNotificationRecipients()
 
     await Promise.all(
       admins.map((admin) =>
@@ -441,6 +437,8 @@ export async function approveUpdateAction(
     )
 
     revalidatePath("/")
+    revalidatePath("/admin")
+    revalidatePath("/admin/projects")
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/notifications")
     return { success: true }
@@ -490,12 +488,7 @@ export async function rejectUpdateAction(input: {
       metadata: { feedback: validated.data.feedback },
     })
 
-    const admins = await prisma.user.findMany({
-      where: {
-        role: { in: [UserRole.ADMIN, UserRole.MEMBER] },
-      },
-      select: { id: true },
-    })
+    const admins = await getInternalNotificationRecipients()
 
     await Promise.all(
       admins.map((admin) =>
@@ -515,6 +508,8 @@ export async function rejectUpdateAction(input: {
     )
 
     revalidatePath("/")
+    revalidatePath("/admin")
+    revalidatePath("/admin/projects")
     revalidatePath(`/admin/projects/${validated.data.projectId}`)
     revalidatePath("/notifications")
     return { success: true }

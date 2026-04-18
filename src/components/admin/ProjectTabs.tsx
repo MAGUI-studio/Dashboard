@@ -15,7 +15,6 @@ import {
 } from "@phosphor-icons/react"
 import { parseAsString, useQueryState } from "nuqs"
 
-import { ProjectBriefingTab } from "@/src/components/admin/ProjectBriefingTab"
 import {
   Tabs,
   TabsContent,
@@ -24,6 +23,7 @@ import {
 } from "@/src/components/ui/tabs"
 
 import { ProjectAssetsTab } from "@/src/components/admin/ProjectAssetsTab"
+import { ProjectBriefingTab } from "@/src/components/admin/ProjectBriefingTab"
 import { ProjectEngineeringTab } from "@/src/components/admin/ProjectEngineeringTab"
 import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
 import { ProjectSettingsTab } from "@/src/components/admin/ProjectSettingsTab"

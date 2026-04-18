@@ -20,11 +20,15 @@ const briefingFields = [
   { id: "differentiators", type: "text" },
 ] as const
 
+const emptyTitle = "Sem briefing enviado"
+const emptyDescription =
+  "Quando o cliente concluir o briefing, as respostas aparecerão aqui para consulta do time."
+const notAnsweredLabel = "Sem resposta registrada."
+
 export function ProjectBriefingTab({
   briefing,
 }: ProjectBriefingTabProps): React.JSX.Element {
   const t = useTranslations("Briefing")
-  const tAdmin = useTranslations("Admin.projects.details")
 
   const hasBriefing =
     briefing &&
@@ -39,13 +43,10 @@ export function ProjectBriefingTab({
           <NoteBlank weight="duotone" className="size-8" />
         </div>
         <h3 className="font-heading text-2xl font-black uppercase tracking-tight text-foreground">
-          {tAdmin("briefing_empty_title", { fallback: "Sem briefing enviado" })}
+          {emptyTitle}
         </h3>
         <p className="mt-3 max-w-xl text-sm font-medium leading-relaxed text-muted-foreground/60">
-          {tAdmin("briefing_empty_description", {
-            fallback:
-              "Quando o cliente concluir o briefing, as respostas aparecerão aqui para consulta do time.",
-          })}
+          {emptyDescription}
         </p>
       </section>
     )
@@ -93,9 +94,7 @@ export function ProjectBriefingTab({
                 </div>
               ) : (
                 <p className="text-sm font-medium text-muted-foreground/40">
-                  {tAdmin("briefing_not_answered", {
-                    fallback: "Sem resposta registrada.",
-                  })}
+                  {notAnsweredLabel}
                 </p>
               )}
             </section>
@@ -122,9 +121,7 @@ export function ProjectBriefingTab({
               <p className="whitespace-pre-wrap text-sm font-medium leading-relaxed text-foreground/80">
                 {typeof value === "string" && value.trim().length > 0
                   ? value
-                  : tAdmin("briefing_not_answered", {
-                      fallback: "Sem resposta registrada.",
-                    })}
+                  : notAnsweredLabel}
               </p>
             </div>
           </section>

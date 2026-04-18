@@ -5,7 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { DashboardNotification } from "@/src/types/dashboard"
-import { BellRinging, Check, ArrowUpRight } from "@phosphor-icons/react"
+import { ArrowUpRight, BellRinging, Check } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
 import { markNotificationsAsReadAction } from "@/src/lib/actions/notification.actions"
@@ -102,7 +102,9 @@ export function NotificationsInbox({
                   <p
                     className={cn(
                       "text-[11px] font-black uppercase tracking-tight",
-                      notification.readAt ? "text-foreground/70" : "text-foreground"
+                      notification.readAt
+                        ? "text-foreground/70"
+                        : "text-foreground"
                     )}
                   >
                     {notification.title}
