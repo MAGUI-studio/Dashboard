@@ -157,7 +157,8 @@ export async function updateProjectStatusAction(
   })
 
   if (!validatedFields.success) {
-    return { error: "Dados inválidos" }
+    const error = validatedFields.error.issues[0]?.message ?? "Dados inválidos"
+    return { error }
   }
 
   const { id, status, progress } = validatedFields.data
@@ -219,18 +220,27 @@ export async function addProjectTimelineAction(
     return { error: "Unauthorized" }
   }
 
+  const isMilestoneRaw = formData.get("isMilestone")
+  const requiresApprovalRaw = formData.get("requiresApproval")
+
   const validatedFields = addProjectTimelineSchema.safeParse({
     projectId: formData.get("projectId"),
     title: formData.get("title"),
-    description: formData.get("description"),
-    isMilestone: formData.get("isMilestone") === "true",
-    requiresApproval: formData.get("requiresApproval") === "true",
-    imageUrl: formData.get("imageUrl"),
+    description: formData.get("description") || undefined,
+    isMilestone: isMilestoneRaw === "true" || isMilestoneRaw === "on",
+    requiresApproval:
+      requiresApprovalRaw === "true" || requiresApprovalRaw === "on",
+    imageUrl: formData.get("imageUrl") || undefined,
     timezone: formData.get("timezone"),
   })
 
   if (!validatedFields.success) {
-    return { error: "Dados inválidos" }
+    const error = validatedFields.error.issues[0]?.message ?? "Dados inválidos"
+    logger.error(
+      { errors: validatedFields.error.flatten() },
+      "Validation Error in addProjectTimelineAction"
+    )
+    return { error }
   }
 
   const actor = await getCurrentAppUser()
@@ -267,30 +277,38 @@ export async function addProjectTimelineAction(
       },
     })
 
-    await createAuditLog({
-      action: "update.created",
-      entityType: "Update",
-      entityId: update.id,
-      summary: `Atualização "${update.title}" registrada no projeto ${update.project.name}.`,
-      actorId: actor?.id,
-      actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-      projectId,
-      metadata: {
-        requiresApproval,
-        isMilestone,
-      },
-    })
-
-    if (requiresApproval) {
-      await createNotification({
-        userId: update.project.clientId,
+    // Governance tasks should not block the response if they fail
+    try {
+      await createAuditLog({
+        action: "update.created",
+        entityType: "Update",
+        entityId: update.id,
+        summary: `Atualização "${update.title}" registrada no projeto ${update.project.name}.`,
+        actorId: actor?.id,
+        actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
         projectId,
-        type: NotificationType.UPDATE_PENDING_APPROVAL,
-        title: "Nova aprovação pendente",
-        message: `A atualização "${update.title}" está pronta para sua validação.`,
-        ctaPath: getDashboardPath(projectId),
-        metadata: { updateId: update.id },
+        metadata: {
+          requiresApproval,
+          isMilestone,
+        },
       })
+
+      if (requiresApproval) {
+        await createNotification({
+          userId: update.project.clientId,
+          projectId,
+          type: NotificationType.UPDATE_PENDING_APPROVAL,
+          title: "Nova aprovação pendente",
+          message: `A atualização "${update.title}" está pronta para sua validação.`,
+          ctaPath: getDashboardPath(projectId),
+          metadata: { updateId: update.id },
+        })
+      }
+    } catch (govError) {
+      logger.error(
+        { govError },
+        "Add Timeline Governance Error (Non-blocking):"
+      )
     }
 
     revalidatePath(`/admin/projects/${projectId}`)
@@ -298,7 +316,7 @@ export async function addProjectTimelineAction(
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Add Timeline Error:")
-    return { error: "Erro ao adicionar atualização" }
+    return { error: "Erro ao adicionar atualização no banco de dados" }
   }
 }
 

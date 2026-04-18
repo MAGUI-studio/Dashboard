@@ -5,6 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { CheckCircle, PlusCircle, Spinner, Star } from "@phosphor-icons/react"
+import { toast } from "sonner"
 
 import { Button } from "@/src/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/src/components/ui/field"
@@ -36,9 +37,12 @@ export function AddTimelineForm({ projectId }: AddTimelineFormProps) {
 
     const result = await addProjectTimelineAction(formData)
     if (result.success) {
+      toast.success("Evolução registrada com sucesso!")
       formRef.current?.reset()
       setIsMilestone(false)
       setRequiresApproval(false)
+    } else {
+      toast.error(result.error || "Erro ao registrar evolução")
     }
     setIsPending(false)
   }
