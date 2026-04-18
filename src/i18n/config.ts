@@ -3,6 +3,10 @@ export const defaultLocale = "pt" as const
 
 export const pathnames = {
   "/": "/",
+  "/notifications": {
+    pt: "/notificacoes",
+    en: "/notifications",
+  },
   "/admin": {
     pt: "/admin",
     en: "/admin",

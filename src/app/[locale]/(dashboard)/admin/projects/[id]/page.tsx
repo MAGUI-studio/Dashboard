@@ -27,7 +27,11 @@ export default async function AdminProjectDetailPage({
       client: true,
       updates: {
         orderBy: { createdAt: "desc" },
-        include: { project: true },
+        include: {
+          attachments: {
+            orderBy: { createdAt: "asc" },
+          },
+        },
       },
       assets: {
         orderBy: { order: "asc" },

@@ -5,9 +5,17 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { DashboardProject } from "@/src/types/dashboard"
-import { Clock, Files, Info, Sliders, Terminal } from "@phosphor-icons/react"
+import {
+  Clock,
+  Files,
+  Info,
+  NoteBlank,
+  Sliders,
+  Terminal,
+} from "@phosphor-icons/react"
 import { parseAsString, useQueryState } from "nuqs"
 
+import { ProjectBriefingTab } from "@/src/components/admin/ProjectBriefingTab"
 import {
   Tabs,
   TabsContent,
@@ -59,6 +67,13 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
             {t("tabs.timeline")}
           </TabsTrigger>
           <TabsTrigger
+            value="briefing"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <NoteBlank weight="duotone" className="mr-2 size-4" />
+            {t("tabs.briefing", { fallback: "Briefing" })}
+          </TabsTrigger>
+          <TabsTrigger
             value="assets"
             className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
           >
@@ -88,6 +103,10 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
 
       <TabsContent value="timeline" className="mt-0 focus-visible:outline-none">
         <ProjectTimelineTab projectId={projectId} updates={project.updates} />
+      </TabsContent>
+
+      <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">
+        <ProjectBriefingTab briefing={project.briefing} />
       </TabsContent>
 
       <TabsContent value="assets" className="mt-0 focus-visible:outline-none">

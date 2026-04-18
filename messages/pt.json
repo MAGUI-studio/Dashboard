@@ -189,6 +189,7 @@
           "overview": "Visão Geral",
           "engineering": "Status",
           "timeline": "Timeline",
+          "briefing": "Briefing",
           "assets": "Ativos",
           "settings": "Configurações"
         },
@@ -241,6 +242,10 @@
         "uploading": "Carregando...",
         "upload_hint": "PDF, Imagens, Documentos (Max 32MB)",
         "timeline_form": {
+          "attachments": "Anexos da evolução",
+          "attachments_hint": "PDF e imagens para apoiar a entrega",
+          "attachments_button": "Adicionar arquivos",
+          "attachments_empty": "Nenhum anexo selecionado",
           "title": "Título do Marco",
           "title_placeholder": "Ex: Wireframes Finalizados",
           "description": "Descrição detalhada (opcional)",
@@ -359,6 +364,7 @@
   "Sidebar": {
     "menu": "Menu",
     "dashboard": "Dashboard",
+    "notifications": "Notificações",
     "clients": {
       "title": "Clientes",
       "list": "Todos os Clientes",
@@ -422,5 +428,16 @@
     "view_document": "Visualizar documento",
     "category_label": "Categoria",
     "priority_label": "Prioridade"
+  },
+  "Notifications": {
+    "eyebrow": "Central de sinais",
+    "title": "Notificações",
+    "description": "Acompanhe aprovações, solicitações de ajustes e novas publicações do projeto.",
+    "empty": "Nenhuma notificação registrada",
+    "mark_all": "Marcar todas como lidas",
+    "mark_all_success": "Notificações atualizadas.",
+    "mark_all_error": "Não foi possível atualizar as notificações.",
+    "new": "Novo",
+    "open": "Abrir"
   }
 }

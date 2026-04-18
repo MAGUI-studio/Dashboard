@@ -1,4 +1,5 @@
 import {
+  AssetType,
   Priority,
   ProjectCategory,
   ProjectStatus,
@@ -36,6 +37,16 @@ export const updateProjectStatusSchema = z.object({
   progress: z.number().min(0).max(100),
 })
 
+const updateAttachmentSchema = z.object({
+  name: z.string().min(1),
+  url: z.string().url(),
+  key: z.string().min(1),
+  customId: z.string().nullable().optional(),
+  type: z.nativeEnum(AssetType),
+  mimeType: z.string().nullable().optional(),
+  size: z.number().int().positive().nullable().optional(),
+})
+
 export const addProjectTimelineSchema = z.object({
   projectId: z.string(),
   title: z.string().min(2, "Título é obrigatório"),
@@ -43,6 +54,7 @@ export const addProjectTimelineSchema = z.object({
   isMilestone: z.boolean().default(false),
   requiresApproval: z.boolean().default(false),
   imageUrl: z.string().url().optional().or(z.literal("")),
+  attachments: z.array(updateAttachmentSchema).default([]),
   timezone: z.string(),
 })
 

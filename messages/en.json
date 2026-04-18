@@ -189,6 +189,7 @@
           "overview": "Overview",
           "engineering": "Status",
           "timeline": "Timeline",
+          "briefing": "Briefing",
           "assets": "Assets",
           "settings": "Settings"
         },
@@ -241,6 +242,10 @@
         "uploading": "Loading...",
         "upload_hint": "PDF, Images, Documents (Max 32MB)",
         "timeline_form": {
+          "attachments": "Timeline attachments",
+          "attachments_hint": "PDFs and images to support this delivery",
+          "attachments_button": "Add files",
+          "attachments_empty": "No attachments selected",
           "title": "Milestone Title",
           "title_placeholder": "Ex: Home Design Finished",
           "description": "Detailed description (optional)",
@@ -359,6 +364,7 @@
   "Sidebar": {
     "menu": "Menu",
     "dashboard": "Dashboard",
+    "notifications": "Notifications",
     "clients": {
       "title": "Clients",
       "list": "All Clients",
@@ -422,5 +428,16 @@
     "view_document": "View document",
     "category_label": "Category",
     "priority_label": "Priority"
+  },
+  "Notifications": {
+    "eyebrow": "Signals center",
+    "title": "Notifications",
+    "description": "Track approvals, change requests, and newly published project updates.",
+    "empty": "No notifications yet",
+    "mark_all": "Mark all as read",
+    "mark_all_success": "Notifications updated.",
+    "mark_all_error": "Could not update notifications.",
+    "new": "New",
+    "open": "Open"
   }
 }

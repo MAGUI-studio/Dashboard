@@ -40,6 +40,7 @@ import { Textarea } from "../ui/textarea"
 import { ActionItemsWidget } from "./ActionItemsWidget"
 import { AuditTrail } from "./AuditTrail"
 import { NotificationsPanel } from "./NotificationsPanel"
+import { UpdateAttachmentsList } from "./UpdateAttachmentsList"
 import { VersionsLog } from "./VersionsLog"
 
 interface DashboardSummaryProps {
@@ -280,6 +281,12 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                             {update.description}
                           </p>
                         )}
+                        <div className="mt-6">
+                          <UpdateAttachmentsList
+                            attachments={update.attachments}
+                            compact
+                          />
+                        </div>
                         <div className="mt-8 flex flex-wrap items-center gap-4">
                           <Button
                             onClick={() => handleApprove(update.id)}
@@ -365,7 +372,24 @@ export function DashboardSummary({ project }: DashboardSummaryProps) {
                           </p>
                         )}
 
+                        <UpdateAttachmentsList
+                          attachments={update.attachments}
+                          compact
+                        />
+
                         <div className="flex items-center gap-4">
+                          {update.requiresApproval &&
+                            update.approvalStatus === "PENDING" && (
+                              <div className="flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 px-3 py-1">
+                                <Clock
+                                  weight="fill"
+                                  className="size-3 text-brand-primary"
+                                />
+                                <span className="text-[8px] font-black uppercase tracking-widest text-brand-primary">
+                                  Pendente
+                                </span>
+                              </div>
+                            )}
                           {update.approvalStatus === "APPROVED" && (
                             <div className="flex items-center gap-2 rounded-full border border-green-500/20 bg-green-500/5 px-3 py-1">
                               <CheckCircle

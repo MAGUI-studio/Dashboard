@@ -1,10 +1,21 @@
 import { auth } from "@clerk/nextjs/server"
 import { type FileRouter, createUploadthing } from "uploadthing/next"
-import { UploadThingError } from "uploadthing/server"
+import { UTFiles, UploadThingError } from "uploadthing/server"
+import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
+import prisma from "@/src/lib/prisma"
 
 const f = createUploadthing()
+
+function toSlug(value: string): string {
+  return value
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-zA-Z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase()
+}
 
 export const ourFileRouter = {
   projectAsset: f({
@@ -12,15 +23,67 @@ export const ourFileRouter = {
     image: { maxFileSize: "32MB" },
     blob: { maxFileSize: "32MB" },
   })
-    .middleware(async () => {
+    .input(
+      z
+        .object({
+          projectId: z.string().min(1).optional(),
+          scope: z.enum(["assets", "timeline"]).optional(),
+        })
+        .optional()
+    )
+    .middleware(async ({ input, files }) => {
       const { userId } = await auth()
 
       if (!userId) throw new UploadThingError("Unauthorized")
 
-      return { userId }
+      if (!input?.projectId) {
+        return { userId }
+      }
+
+      const project = await prisma.project.findUnique({
+        where: { id: input.projectId },
+        select: {
+          id: true,
+          name: true,
+          client: {
+            select: {
+              id: true,
+              name: true,
+              companyName: true,
+            },
+          },
+        },
+      })
+
+      if (!project) {
+        throw new UploadThingError("Project not found")
+      }
+
+      const clientLabel =
+        project.client.companyName ?? project.client.name ?? project.client.id
+      const clientSlug = toSlug(clientLabel)
+      const projectSlug = toSlug(project.name)
+      const scope = input.scope ?? "assets"
+
+      return {
+        userId,
+        projectId: project.id,
+        [UTFiles]: files.map((file, index) => ({
+          ...file,
+          customId: `${clientSlug}/${projectSlug}/${scope}/${Date.now()}-${index}-${toSlug(file.name)}`,
+        })),
+      }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      logger.info({ userId: metadata.userId, url: file.url }, "Upload complete")
+      logger.info(
+        {
+          userId: metadata.userId,
+          projectId: metadata.projectId,
+          url: file.url,
+          customId: file.customId,
+        },
+        "Upload complete"
+      )
 
       return { uploadedBy: metadata.userId }
     }),

@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { SignOutButton, useUser } from "@clerk/nextjs"
 import {
+  BellSimple,
   ChartLineUp,
   ChartPie,
   Gear,
@@ -70,6 +71,21 @@ export function Header(): React.JSX.Element {
               <Link href="/">
                 <ChartPie weight="duotone" className="mr-1.5 size-3.5" />
                 {t("dashboard")}
+              </Link>
+            </Button>
+
+            <Button
+              variant="ghost"
+              asChild
+              className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                pathname === "/notifications"
+                  ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                  : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
+              }`}
+            >
+              <Link href="/notifications">
+                <BellSimple weight="duotone" className="mr-1.5 size-3.5" />
+                {t("notifications")}
               </Link>
             </Button>
 
@@ -290,6 +306,20 @@ export function Header(): React.JSX.Element {
                       asChild
                       className="rounded-xl px-4 py-3 outline-none focus:ring-0"
                     >
+                      <Link href="/notifications" className="flex items-center">
+                        <BellSimple
+                          weight="duotone"
+                          className="mr-3 size-4 text-brand-primary/60"
+                        />
+                        <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                          {t("notifications")}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      asChild
+                      className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                    >
                       <Link href="/" className="flex items-center">
                         <ChartPie
                           weight="duotone"
@@ -303,6 +333,20 @@ export function Header(): React.JSX.Element {
                   </div>
 
                   <div className="grid gap-1 mt-1">
+                    <DropdownMenuItem
+                      asChild
+                      className="rounded-xl px-4 py-2.5 cursor-pointer transition-all hover:bg-brand-primary/5 focus:bg-brand-primary/5 group/item outline-none focus:ring-0"
+                    >
+                      <Link href="/notifications" className="flex items-center">
+                        <BellSimple
+                          weight="duotone"
+                          className="size-5 text-brand-primary/60 group-hover/item:text-brand-primary"
+                        />
+                        <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                          {t("notifications")}
+                        </span>
+                      </Link>
+                    </DropdownMenuItem>
                     <DropdownMenuItem className="rounded-xl px-4 py-2.5 cursor-pointer transition-all hover:bg-brand-primary/5 focus:bg-brand-primary/5 group/item outline-none focus:ring-0">
                       <UserCircle
                         weight="duotone"

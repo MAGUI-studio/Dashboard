@@ -38,6 +38,36 @@ function getDashboardPath(projectId: string): string {
   return `/?project=${projectId}`
 }
 
+function getAdminProjectPath(projectId: string): string {
+  return `/admin/projects/${projectId}`
+}
+
+type TimelineAttachmentInput = {
+  name: string
+  url: string
+  key: string
+  customId?: string | null
+  type: AssetType
+  mimeType?: string | null
+  size?: number | null
+}
+
+function parseTimelineAttachments(
+  rawValue: FormDataEntryValue | null
+): TimelineAttachmentInput[] {
+  if (typeof rawValue !== "string" || rawValue.length === 0) {
+    return []
+  }
+
+  try {
+    const parsed = JSON.parse(rawValue) as TimelineAttachmentInput[]
+    return Array.isArray(parsed) ? parsed : []
+  } catch (error) {
+    logger.error({ error }, "Invalid timeline attachments payload")
+    return []
+  }
+}
+
 export async function createProjectAction(
   formData: FormData
 ): Promise<{ error?: string; success?: boolean }> {
@@ -231,6 +261,7 @@ export async function addProjectTimelineAction(
     requiresApproval:
       requiresApprovalRaw === "true" || requiresApprovalRaw === "on",
     imageUrl: formData.get("imageUrl") || undefined,
+    attachments: parseTimelineAttachments(formData.get("attachments")),
     timezone: formData.get("timezone"),
   })
 
@@ -251,10 +282,15 @@ export async function addProjectTimelineAction(
     isMilestone,
     requiresApproval,
     imageUrl,
+    attachments,
     timezone,
   } = validatedFields.data
 
   try {
+    const coverImage =
+      imageUrl ||
+      attachments.find((attachment) => attachment.type === AssetType.IMAGE)?.url
+
     const update = await prisma.update.create({
       data: {
         projectId,
@@ -263,8 +299,22 @@ export async function addProjectTimelineAction(
         isMilestone,
         requiresApproval,
         approvalStatus: requiresApproval ? "PENDING" : "APPROVED",
-        imageUrl: imageUrl || null,
+        approvedAt: requiresApproval ? null : new Date(),
+        imageUrl: coverImage || null,
         timezone,
+        attachments: attachments.length
+          ? {
+              create: attachments.map((attachment) => ({
+                name: attachment.name,
+                url: attachment.url,
+                key: attachment.key,
+                customId: attachment.customId ?? null,
+                type: attachment.type,
+                mimeType: attachment.mimeType ?? null,
+                size: attachment.size ?? null,
+              })),
+            }
+          : undefined,
       },
       include: {
         project: {
@@ -274,6 +324,7 @@ export async function addProjectTimelineAction(
             clientId: true,
           },
         },
+        attachments: true,
       },
     })
 
@@ -290,6 +341,7 @@ export async function addProjectTimelineAction(
         metadata: {
           requiresApproval,
           isMilestone,
+          attachmentsCount: update.attachments.length,
         },
       })
 
@@ -301,7 +353,23 @@ export async function addProjectTimelineAction(
           title: "Nova aprovação pendente",
           message: `A atualização "${update.title}" está pronta para sua validação.`,
           ctaPath: getDashboardPath(projectId),
-          metadata: { updateId: update.id },
+          metadata: {
+            updateId: update.id,
+            attachmentsCount: update.attachments.length,
+          },
+        })
+      } else {
+        await createNotification({
+          userId: update.project.clientId,
+          projectId,
+          type: NotificationType.UPDATE_PUBLISHED,
+          title: "Nova evolução publicada",
+          message: `A atualização "${update.title}" foi adicionada na timeline do projeto.`,
+          ctaPath: getDashboardPath(projectId),
+          metadata: {
+            updateId: update.id,
+            attachmentsCount: update.attachments.length,
+          },
         })
       }
     } catch (govError) {
@@ -313,6 +381,7 @@ export async function addProjectTimelineAction(
 
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
+    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Add Timeline Error:")
@@ -365,7 +434,7 @@ export async function approveUpdateAction(
           type: NotificationType.UPDATE_APPROVED,
           title: "Milestone aprovada",
           message: `${project.client.name ?? "O cliente"} aprovou "${update.title}".`,
-          ctaPath: `/admin/projects/${projectId}`,
+          ctaPath: getAdminProjectPath(projectId),
           metadata: { updateId: update.id },
         })
       )
@@ -373,6 +442,7 @@ export async function approveUpdateAction(
 
     revalidatePath("/")
     revalidatePath(`/admin/projects/${projectId}`)
+    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Approve Update Error:")
@@ -435,7 +505,7 @@ export async function rejectUpdateAction(input: {
           type: NotificationType.UPDATE_REJECTED,
           title: "Milestone precisa de ajustes",
           message: `${project.client.name ?? "O cliente"} enviou feedback em "${update.title}".`,
-          ctaPath: `/admin/projects/${validated.data.projectId}`,
+          ctaPath: getAdminProjectPath(validated.data.projectId),
           metadata: {
             updateId: update.id,
             feedback: validated.data.feedback,
@@ -446,6 +516,7 @@ export async function rejectUpdateAction(input: {
 
     revalidatePath("/")
     revalidatePath(`/admin/projects/${validated.data.projectId}`)
+    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Reject Update Error:")
@@ -655,6 +726,7 @@ export async function createProjectAssetAction(data: {
     revalidatePath(`/admin/projects/${data.projectId}`)
     revalidatePath(`/admin/projects/${data.projectId}/assets`)
     revalidatePath("/")
+    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Create Asset Error:")

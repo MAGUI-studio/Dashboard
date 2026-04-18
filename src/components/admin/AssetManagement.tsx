@@ -426,7 +426,12 @@ export function AssetManagement({
               </Button>
               <Button
                 className="h-16 rounded-[1.25rem] bg-brand-primary font-sans font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:brightness-110 active:scale-[0.98]"
-                onClick={() => startUpload(selectedFiles)}
+                onClick={() =>
+                  startUpload(selectedFiles, {
+                    projectId,
+                    scope: "assets",
+                  } as never)
+                }
                 disabled={isUploading}
               >
                 {isUploading ? (

@@ -62,6 +62,19 @@ export interface DashboardUpdate {
   approvalStatus: "PENDING" | "APPROVED" | "REJECTED"
   approvedAt: Date | string | null
   feedback: string | null
+  attachments?: DashboardUpdateAttachment[]
+}
+
+export interface DashboardUpdateAttachment {
+  id: string
+  name: string
+  url: string
+  key: string
+  customId: string | null
+  type: AssetType
+  mimeType: string | null
+  size: number | null
+  createdAt: Date | string
 }
 
 export interface DashboardNotification {
@@ -72,6 +85,10 @@ export interface DashboardNotification {
   ctaPath: string | null
   readAt: Date | string | null
   createdAt: Date | string
+  project?: {
+    id: string
+    name: string
+  } | null
 }
 
 export interface DashboardAuditLog {

@@ -45,6 +45,7 @@ export default async function DashboardPage({
     const allUpdates = await prisma.update.findMany({
       include: {
         project: true,
+        attachments: true,
       },
       orderBy: { createdAt: "desc" },
       take: 20,
@@ -141,6 +142,10 @@ export default async function DashboardPage({
               approvalStatus: true,
               approvedAt: true,
               feedback: true,
+              timezone: true,
+              attachments: {
+                orderBy: { createdAt: "asc" },
+              },
               project: {
                 select: {
                   name: true,
@@ -219,6 +224,14 @@ export default async function DashboardPage({
       userId: user.id,
       projectId: activeProject.id,
     },
+    include: {
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
     take: 8,
   })
@@ -292,7 +305,6 @@ export default async function DashboardPage({
                 auditLogs: projectAuditLogs,
                 updates: activeProject.updates.map((u) => ({
                   ...u,
-                  timezone: "America/Sao_Paulo",
                   createdAt: u.createdAt.toISOString(),
                 })),
               } as unknown as DashboardProject

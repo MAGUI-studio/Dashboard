@@ -5,8 +5,7 @@ import * as React from "react"
 import { DashboardNotification } from "@/src/types/dashboard"
 import {
   BellRinging,
-  CheckCircle,
-  ClockCounterClockwise,
+  ArrowUpRight,
 } from "@phosphor-icons/react"
 
 import { cn, formatLocalTime } from "@/src/lib/utils/utils"
@@ -61,31 +60,78 @@ export function NotificationsPanel({
                 "after:absolute after:left-0 after:top-0 after:h-full after:w-0.5 after:bg-brand-primary"
             )}
           >
-            <div className="flex items-start gap-4">
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-3">
-                  <h4
-                    className={cn(
-                      "text-[11px] font-black uppercase tracking-tight transition-colors",
-                      notification.readAt
-                        ? "text-muted-foreground/60"
-                        : "text-foreground"
+            {notification.ctaPath ? (
+              <a
+                href={notification.ctaPath}
+                target="_self"
+                className="block rounded-2xl transition-all hover:bg-brand-primary/5"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center justify-between gap-3">
+                      <h4
+                        className={cn(
+                          "text-[11px] font-black uppercase tracking-tight transition-colors",
+                          notification.readAt
+                            ? "text-muted-foreground/60"
+                            : "text-foreground"
+                        )}
+                      >
+                        {notification.title}
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <span className="shrink-0 font-mono text-[8px] font-bold uppercase text-muted-foreground/30">
+                          {formatLocalTime(
+                            new Date(notification.createdAt),
+                            "America/Sao_Paulo"
+                          )}
+                        </span>
+                        <ArrowUpRight className="size-3 text-muted-foreground/30" />
+                      </div>
+                    </div>
+                    <p className="mt-1.5 text-xs font-medium leading-relaxed text-muted-foreground/50 line-clamp-2">
+                      {notification.message}
+                    </p>
+                    {notification.project?.name && (
+                      <p className="mt-2 text-[8px] font-black uppercase tracking-[0.2em] text-brand-primary/50">
+                        {notification.project.name}
+                      </p>
                     )}
-                  >
-                    {notification.title}
-                  </h4>
-                  <span className="shrink-0 font-mono text-[8px] font-bold uppercase text-muted-foreground/30">
-                    {formatLocalTime(
-                      new Date(notification.createdAt),
-                      "America/Sao_Paulo"
-                    )}
-                  </span>
+                  </div>
                 </div>
-                <p className="mt-1.5 text-xs font-medium leading-relaxed text-muted-foreground/50 line-clamp-2">
-                  {notification.message}
-                </p>
+              </a>
+            ) : (
+              <div className="flex items-start gap-4">
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-3">
+                    <h4
+                      className={cn(
+                        "text-[11px] font-black uppercase tracking-tight transition-colors",
+                        notification.readAt
+                          ? "text-muted-foreground/60"
+                          : "text-foreground"
+                      )}
+                    >
+                      {notification.title}
+                    </h4>
+                    <span className="shrink-0 font-mono text-[8px] font-bold uppercase text-muted-foreground/30">
+                      {formatLocalTime(
+                        new Date(notification.createdAt),
+                        "America/Sao_Paulo"
+                      )}
+                    </span>
+                  </div>
+                  <p className="mt-1.5 text-xs font-medium leading-relaxed text-muted-foreground/50 line-clamp-2">
+                    {notification.message}
+                  </p>
+                  {notification.project?.name && (
+                    <p className="mt-2 text-[8px] font-black uppercase tracking-[0.2em] text-brand-primary/50">
+                      {notification.project.name}
+                    </p>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
             <div className="mt-4 h-[1px] w-full bg-border/20 group-last:hidden" />
           </div>
         ))}

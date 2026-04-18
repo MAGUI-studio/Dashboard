@@ -80,6 +80,7 @@ enum LeadSource {
 
 enum NotificationType {
   UPDATE_PENDING_APPROVAL
+  UPDATE_PUBLISHED
   UPDATE_APPROVED
   UPDATE_REJECTED
   BRIEFING_SUBMITTED
@@ -190,11 +191,31 @@ model Update {
 
   projectId      String
   project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  attachments    UpdateAttachment[]
 
   createdAt      DateTime       @default(now())
 
   @@index([projectId])
   @@index([approvalStatus])
+  @@index([createdAt])
+}
+
+model UpdateAttachment {
+  id         String    @id @default(cuid())
+  name       String
+  url        String
+  key        String
+  customId   String?
+  type       AssetType @default(DOCUMENT)
+  mimeType   String?
+  size       Int?
+
+  updateId   String
+  update     Update    @relation(fields: [updateId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime  @default(now())
+
+  @@index([updateId])
   @@index([createdAt])
 }
 
