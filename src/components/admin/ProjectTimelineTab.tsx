@@ -14,7 +14,7 @@ interface ProjectTimelineTabProps {
     id: string
     title: string
     description: string | null
-    createdAt: Date
+    createdAt: Date | string
     timezone: string
   }>
 }
