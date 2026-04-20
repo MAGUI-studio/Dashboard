@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { addDays, isAfter, isBefore, startOfDay } from "date-fns"
 import { getTranslations } from "next-intl/server"
 
 import {
@@ -8,8 +9,8 @@ import {
   ProjectStatus,
   UserRole,
 } from "@/src/generated/client/enums"
-import { DashboardProject } from "@/src/types/dashboard"
 import { Link } from "@/src/i18n/navigation"
+import { DashboardProject } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import {
   ArrowRight,
@@ -21,6 +22,9 @@ import {
   Users,
 } from "@phosphor-icons/react/dist/ssr"
 
+import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
+import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
+import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
 import { BriefingForm } from "@/src/components/common/BriefingForm"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
@@ -35,6 +39,7 @@ import {
 } from "@/src/components/ui/card"
 
 import prisma from "@/src/lib/prisma"
+import { getProjectHealth } from "@/src/lib/utils/project-health"
 
 export default async function DashboardPage({
   searchParams,
@@ -55,20 +60,41 @@ export default async function DashboardPage({
     return <div />
   }
 
-  const isAdmin = user?.role === UserRole.ADMIN
+  const isAdmin = user.role === UserRole.ADMIN
 
   if (isAdmin) {
+    const today = startOfDay(new Date())
+    const nextSevenDays = addDays(today, 7)
+
     const [
       allProjects,
       pendingApprovals,
       recentUpdates,
-      recentLeads,
+      allLeads,
       totalClients,
       unreadNotifications,
+      dueActionItems,
     ] = await Promise.all([
       prisma.project.findMany({
         include: {
           client: true,
+          updates: {
+            select: {
+              createdAt: true,
+              requiresApproval: true,
+              approvalStatus: true,
+            },
+            orderBy: { createdAt: "desc" },
+          },
+          actionItems: {
+            select: {
+              id: true,
+              title: true,
+              dueDate: true,
+              status: true,
+            },
+            orderBy: { dueDate: "asc" },
+          },
         },
         orderBy: { updatedAt: "desc" },
       }),
@@ -107,7 +133,6 @@ export default async function DashboardPage({
           },
         },
         orderBy: { updatedAt: "desc" },
-        take: 6,
       }),
       prisma.user.count({
         where: {
@@ -119,26 +144,201 @@ export default async function DashboardPage({
           readAt: null,
         },
       }),
+      prisma.actionItem.findMany({
+        where: {
+          dueDate: {
+            not: null,
+          },
+          status: {
+            not: "COMPLETED",
+          },
+        },
+        include: {
+          project: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: { dueDate: "asc" },
+        take: 12,
+      }),
     ])
 
     const activeProjects = allProjects.filter(
       (project) => project.status !== ProjectStatus.LAUNCHED
     )
-    const activeLeads = recentLeads.filter(
+    const recentLeads = allLeads.slice(0, 6)
+    const activeLeads = allLeads.filter(
       (lead) => lead.status !== LeadStatus.CONVERTIDO
     )
     const convertedProjects = allProjects.filter(
       (project) => project.status === ProjectStatus.LAUNCHED
     )
 
+    const deadlineProjects = activeProjects
+      .filter(
+        (project) =>
+          project.deadline &&
+          isAfter(new Date(project.deadline), today) &&
+          isBefore(new Date(project.deadline), nextSevenDays)
+      )
+      .slice(0, 2)
+
+    const stagnantLeads = allLeads
+      .filter((lead) => {
+        const staleLimit = addDays(startOfDay(new Date(lead.updatedAt)), 4)
+
+        return (
+          (lead.status === LeadStatus.GARIMPAGEM ||
+            lead.status === LeadStatus.CONTATO_REALIZADO) &&
+          isBefore(staleLimit, today)
+        )
+      })
+      .slice(0, 2)
+
+    const projectsNeedingUpdates = activeProjects
+      .filter((project) => {
+        const lastUpdateAt = project.updates[0]?.createdAt ?? project.updatedAt
+        return isBefore(addDays(startOfDay(new Date(lastUpdateAt)), 8), today)
+      })
+      .slice(0, 2)
+
+    const attentionItems = [
+      ...pendingApprovals.slice(0, 2).map((approval) => ({
+        id: `approval-${approval.id}`,
+        title: approval.title,
+        description: `${approval.project.name} esta aguardando validacao do time.`,
+        href: {
+          pathname: "/admin/projects/[id]" as const,
+          params: { id: approval.project.id },
+        },
+        kind: "approval" as const,
+        priority: "high" as const,
+      })),
+      ...deadlineProjects.map((project) => ({
+        id: `deadline-${project.id}`,
+        title: `Prazo proximo: ${project.name}`,
+        description: `Entrega prevista para ${new Date(project.deadline!).toLocaleDateString("pt-BR")}.`,
+        href: {
+          pathname: "/admin/projects/[id]" as const,
+          params: { id: project.id },
+        },
+        kind: "deadline" as const,
+        priority: "high" as const,
+      })),
+      ...stagnantLeads.map((lead) => ({
+        id: `lead-${lead.id}`,
+        title: `${lead.companyName} sem retorno recente`,
+        description: `Lead parado desde ${new Date(lead.updatedAt).toLocaleDateString("pt-BR")} na etapa ${lead.status}.`,
+        href: "/admin/crm" as const,
+        kind: "lead" as const,
+        priority: "medium" as const,
+      })),
+      ...projectsNeedingUpdates.map((project) => ({
+        id: `project-${project.id}`,
+        title: `${project.name} sem update recente`,
+        description: `Nao houve nova atualizacao publicada recentemente para ${project.client.name || project.client.email}.`,
+        href: {
+          pathname: "/admin/projects/[id]" as const,
+          params: { id: project.id },
+        },
+        kind: "project" as const,
+        priority: "medium" as const,
+      })),
+    ].slice(0, 6)
+
+    const agendaItems = [
+      ...deadlineProjects.map((project) => ({
+        id: `agenda-deadline-${project.id}`,
+        title: project.name,
+        dateLabel: `Prazo • ${new Date(project.deadline!).toLocaleDateString("pt-BR")}`,
+        context: `${project.client.name || project.client.email} • ${project.progress}% de progresso declarado`,
+        href: {
+          pathname: "/admin/projects/[id]" as const,
+          params: { id: project.id },
+        },
+      })),
+      ...dueActionItems
+        .filter(
+          (item) =>
+            item.dueDate &&
+            isAfter(new Date(item.dueDate), today) &&
+            isBefore(new Date(item.dueDate), nextSevenDays)
+        )
+        .slice(0, 4)
+        .map((item) => ({
+          id: `agenda-action-${item.id}`,
+          title: item.title,
+          dateLabel: `Action item • ${new Date(item.dueDate!).toLocaleDateString("pt-BR")}`,
+          context: item.project.name,
+          href: {
+            pathname: "/admin/projects/[id]" as const,
+            params: { id: item.project.id },
+          },
+        })),
+      ...allLeads
+        .filter(
+          (lead) =>
+            lead.nextActionAt &&
+            isAfter(new Date(lead.nextActionAt), today) &&
+            isBefore(new Date(lead.nextActionAt), nextSevenDays)
+        )
+        .slice(0, 4)
+        .map((lead) => ({
+          id: `agenda-lead-${lead.id}`,
+          title: lead.companyName,
+          dateLabel: `Retomar contato • ${new Date(lead.nextActionAt!).toLocaleDateString("pt-BR")}`,
+          context: lead.contactName || "Lead sem contato principal definido",
+          href: "/admin/crm" as const,
+        })),
+    ].slice(0, 6)
+
+    const projectHealthItems = activeProjects
+      .map((project) => {
+        const pendingApprovalCount = project.updates.filter(
+          (update) =>
+            update.requiresApproval &&
+            update.approvalStatus === ApprovalStatus.PENDING
+        ).length
+
+        const overdueActionItemCount = project.actionItems.filter(
+          (item) =>
+            item.status !== "COMPLETED" &&
+            item.dueDate &&
+            isBefore(new Date(item.dueDate), today)
+        ).length
+
+        const health = getProjectHealth({
+          status: project.status,
+          progress: project.progress,
+          deadline: project.deadline,
+          updatedAt: project.updatedAt,
+          lastUpdateAt: project.updates[0]?.createdAt ?? null,
+          pendingApprovalCount,
+          overdueActionItemCount,
+        })
+
+        return {
+          id: project.id,
+          name: project.name,
+          clientName: project.client.name || project.client.email,
+          progress: project.progress,
+          ...health,
+        }
+      })
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 5)
+
     return (
       <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
-        <div className="flex flex-col gap-10 w-full">
-          <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border/20 pb-8">
+        <div className="flex w-full flex-col gap-10">
+          <header className="flex flex-col justify-between gap-6 border-b border-border/20 pb-8 md:flex-row md:items-center">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2.5">
-                <div className="size-1.5 rounded-full bg-brand-primary animate-pulse" />
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 flex items-center gap-2">
+                <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
+                <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
                   {t("admin_eyebrow")}
                 </p>
               </div>
@@ -146,14 +346,23 @@ export default async function DashboardPage({
                 {t("admin_title")}
               </h1>
               <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/75">
-                Painel diario para acompanhar operacao, aprovacoes, comercial e execucao sem precisar abrir cada modulo.
+                Painel diario para acompanhar operacao, aprovacoes, comercial e
+                execucao sem precisar abrir cada modulo.
               </p>
             </div>
+
             <div className="flex flex-wrap gap-3">
-              <Button asChild variant="outline" className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]">
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
+              >
                 <Link href="/admin/projects">Projetos</Link>
               </Button>
-              <Button asChild className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]">
+              <Button
+                asChild
+                className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
+              >
                 <Link href="/admin/crm">Comercial</Link>
               </Button>
             </div>
@@ -210,7 +419,14 @@ export default async function DashboardPage({
             ))}
           </section>
 
-          <section className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
+          <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+            <AdminAttentionPanel items={attentionItems} />
+            <AdminOperationsAgenda items={agendaItems} />
+          </section>
+
+          <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+            <AdminProjectHealthList items={projectHealthItems} />
+
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
@@ -239,7 +455,12 @@ export default async function DashboardPage({
                           {approval.project.name}
                         </p>
                       </div>
-                      <Button asChild variant="outline" className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]">
+
+                      <Button
+                        asChild
+                        variant="outline"
+                        className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
+                      >
                         <Link
                           href={{
                             pathname: "/admin/projects/[id]",
@@ -254,7 +475,96 @@ export default async function DashboardPage({
                 )}
               </CardContent>
             </Card>
+          </section>
 
+          <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
+            <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
+              <CardHeader className="border-b border-border/20">
+                <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
+                  Atualizacoes recentes
+                </CardTitle>
+                <CardDescription>
+                  O que mudou mais recentemente nos projetos.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4 pt-6">
+                {recentUpdates.map((update) => (
+                  <div
+                    key={update.id}
+                    className="rounded-[1.5rem] border border-border/30 bg-background/60 p-5"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="grid gap-1">
+                        <p className="text-base font-black tracking-tight text-foreground">
+                          {update.title}
+                        </p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
+                          {update.project.name}
+                        </p>
+                      </div>
+                      {update.approvalStatus === ApprovalStatus.APPROVED ? (
+                        <CheckCircle
+                          className="size-5 text-emerald-500"
+                          weight="fill"
+                        />
+                      ) : (
+                        <NotePencil
+                          className="size-5 text-brand-primary"
+                          weight="duotone"
+                        />
+                      )}
+                    </div>
+
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground/75">
+                      {update.description ||
+                        "Sem descricao detalhada para esta atualizacao."}
+                    </p>
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
+              <CardHeader className="border-b border-border/20">
+                <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
+                  Action items proximos
+                </CardTitle>
+                <CardDescription>
+                  Tarefas operacionais com prazo mais imediato.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4 pt-6">
+                {dueActionItems.length === 0 ? (
+                  <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
+                    Nenhuma tarefa com prazo definido.
+                  </div>
+                ) : (
+                  dueActionItems.slice(0, 6).map((item) => (
+                    <div
+                      key={item.id}
+                      className="flex items-center justify-between gap-4 rounded-[1.5rem] border border-border/30 bg-background/60 p-5"
+                    >
+                      <div className="grid gap-1">
+                        <p className="text-base font-black tracking-tight text-foreground">
+                          {item.title}
+                        </p>
+                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
+                          {item.project.name}
+                        </p>
+                      </div>
+                      <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55">
+                        {item.dueDate
+                          ? new Date(item.dueDate).toLocaleDateString("pt-BR")
+                          : "Sem data"}
+                      </span>
+                    </div>
+                  ))
+                )}
+              </CardContent>
+            </Card>
+          </section>
+
+          <section className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
@@ -282,12 +592,18 @@ export default async function DashboardPage({
                         {lead.contactName || "Sem contato"} • {lead.status}
                       </p>
                       <p className="text-sm text-muted-foreground/75">
-                        Atualizado em {new Date(lead.updatedAt).toLocaleDateString("pt-BR")}
+                        Atualizado em{" "}
+                        {new Date(lead.updatedAt).toLocaleDateString("pt-BR")}
                       </p>
                     </div>
                   ))
                 )}
-                <Button asChild variant="outline" className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]">
+
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
+                >
                   <Link href="/admin/crm">
                     Abrir Comercial
                     <ArrowRight className="ml-2 size-4" />
@@ -295,9 +611,7 @@ export default async function DashboardPage({
                 </Button>
               </CardContent>
             </Card>
-          </section>
 
-          <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
@@ -309,56 +623,22 @@ export default async function DashboardPage({
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
                 {activeProjects.slice(0, 5).map((project) => (
-                  <div key={project.id} className="flex items-center justify-between gap-4 border-b border-border/15 pb-4 last:border-b-0 last:pb-0">
+                  <div
+                    key={project.id}
+                    className="flex items-center justify-between gap-4 border-b border-border/15 pb-4 last:border-b-0 last:pb-0"
+                  >
                     <div className="grid gap-1">
                       <p className="text-sm font-black uppercase tracking-tight text-foreground">
                         {project.name}
                       </p>
                       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                        {project.client.name || project.client.email} • {project.status}
+                        {project.client.name || project.client.email} •{" "}
+                        {project.status}
                       </p>
                     </div>
                     <span className="text-sm font-black text-foreground/75">
                       {project.progress}%
                     </span>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
-              <CardHeader className="border-b border-border/20">
-                <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Atualizacoes recentes
-                </CardTitle>
-                <CardDescription>
-                  O que mudou mais recentemente nos projetos.
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="grid gap-4 pt-6">
-                {recentUpdates.map((update) => (
-                  <div
-                    key={update.id}
-                    className="rounded-[1.5rem] border border-border/30 bg-background/60 p-5"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="grid gap-1">
-                        <p className="text-base font-black tracking-tight text-foreground">
-                          {update.title}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                          {update.project.name}
-                        </p>
-                      </div>
-                      {update.approvalStatus === ApprovalStatus.APPROVED ? (
-                        <CheckCircle className="size-5 text-emerald-500" weight="fill" />
-                      ) : (
-                        <NotePencil className="size-5 text-brand-primary" weight="duotone" />
-                      )}
-                    </div>
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground/75">
-                      {update.description || "Sem descricao detalhada para esta atualizacao."}
-                    </p>
                   </div>
                 ))}
               </CardContent>
@@ -462,7 +742,7 @@ export default async function DashboardPage({
 
   const projects = userWithProjects?.projects || []
   const project = selectedProjectId
-    ? projects.find((p) => p.id === selectedProjectId)
+    ? projects.find((item) => item.id === selectedProjectId)
     : projects[0]
 
   if (projects.length === 0) {
@@ -477,16 +757,16 @@ export default async function DashboardPage({
 
   const activeProject = project || projects[0]
   const briefingData = activeProject.briefing as Record<string, unknown> | null
-  const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6 // We have 6 steps in briefingSchema
+  const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6
 
   return (
     <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
-      <div className="flex flex-col gap-10 w-full">
-        <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border/20 pb-8">
+      <div className="flex w-full flex-col gap-10">
+        <header className="flex flex-col justify-between gap-6 border-b border-border/20 pb-8 md:flex-row md:items-center">
           <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2.5">
-              <div className="size-1.5 rounded-full bg-brand-primary animate-pulse" />
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 flex items-center gap-2">
+              <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
+              <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
                 {t("eyebrow")}
                 <span className="opacity-30">•</span>
                 <Greetings name={userName} compact />
@@ -497,7 +777,7 @@ export default async function DashboardPage({
             </h1>
           </div>
 
-          {projects.length > 1 && (
+          {projects.length > 1 ? (
             <div className="flex flex-col gap-1.5 md:items-end">
               <span className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/30">
                 {t("select_project")}
@@ -507,7 +787,7 @@ export default async function DashboardPage({
                 activeId={activeProject.id}
               />
             </div>
-          )}
+          ) : null}
         </header>
 
         {isBriefingEmpty ? (
@@ -526,9 +806,9 @@ export default async function DashboardPage({
                   ...asset,
                   timezone: "America/Sao_Paulo",
                 })),
-                updates: activeProject.updates.map((u) => ({
-                  ...u,
-                  createdAt: u.createdAt.toISOString(),
+                updates: activeProject.updates.map((update) => ({
+                  ...update,
+                  createdAt: update.createdAt.toISOString(),
                 })),
               } as unknown as DashboardProject
             }
