@@ -5,6 +5,11 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import {
+  AssetOrigin,
+  AssetType,
+  AssetVisibility,
+} from "@/src/generated/client/enums"
+import {
   DndContext,
   DragEndEvent,
   KeyboardSensor,
@@ -24,22 +29,23 @@ import { CSS } from "@dnd-kit/utilities"
 import {
   Clock,
   DotsSixVertical,
+  Eye,
+  EyeSlash,
   File,
-  FilePdf,
-  Image as ImageIcon,
   Plus,
   Trash,
   UploadSimple,
+  User,
   Warning,
   X,
 } from "@phosphor-icons/react"
+import { toast } from "sonner"
 
 import { Button } from "@/src/components/ui/button"
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -58,10 +64,12 @@ interface Asset {
   name: string
   url: string
   key: string
-  type: string
+  type: AssetType
   order: number
   timezone: string
-  createdAt: Date
+  origin: AssetOrigin
+  visibility: AssetVisibility
+  createdAt: Date | string
 }
 
 interface AssetManagementProps {
@@ -121,10 +129,30 @@ function SortableAssetItem({
               {index + 1}
             </div>
           </div>
-          <div className="flex flex-col overflow-hidden gap-0.5">
+          <div className="flex flex-col overflow-hidden gap-1">
             <span className="truncate text-xs font-black uppercase tracking-tight text-foreground">
               {asset.name}
             </span>
+            <div className="flex items-center gap-2">
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[7px] font-black uppercase tracking-widest ${asset.origin === AssetOrigin.CLIENT ? "bg-amber-500/10 text-amber-600" : "bg-brand-primary/10 text-brand-primary"}`}
+              >
+                <User weight="fill" className="size-2.5" />
+                {asset.origin === AssetOrigin.CLIENT ? "Cliente" : "Time"}
+              </span>
+              <span
+                className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[7px] font-black uppercase tracking-widest ${asset.visibility === AssetVisibility.CLIENT ? "bg-green-500/10 text-green-600" : "bg-muted/20 text-muted-foreground"}`}
+              >
+                {asset.visibility === AssetVisibility.CLIENT ? (
+                  <Eye weight="fill" className="size-2.5" />
+                ) : (
+                  <EyeSlash weight="fill" className="size-2.5" />
+                )}
+                {asset.visibility === AssetVisibility.CLIENT
+                  ? "Publico"
+                  : "Interno"}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -227,6 +255,8 @@ export function AssetManagement({
   const [isDeleting, setIsDeleting] = React.useState<string | null>(null)
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([])
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
+  const [uploadVisibility, setUploadVisibility] =
+    React.useState<AssetVisibility>(AssetVisibility.CLIENT)
 
   React.useEffect(() => {
     setAssets(initialAssets)
@@ -248,12 +278,15 @@ export function AssetManagement({
             name: file.name,
             url: file.url,
             key: file.key,
-            type: "DOCUMENT",
+            type: AssetType.DOCUMENT,
+            origin: AssetOrigin.ADMIN,
+            visibility: uploadVisibility,
             timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           })
         }
         setSelectedFiles([])
         setIsPreviewOpen(false)
+        toast.success("Upload concluido.")
       }
     },
   })
@@ -371,10 +404,39 @@ export function AssetManagement({
           </div>
 
           <div className="p-10 pt-6">
-            <p className="mb-8 text-base font-medium leading-relaxed text-muted-foreground/80">
-              Revise os arquivos selecionados antes de enviar para o servidor de
-              ativos.
-            </p>
+            <div className="mb-8 flex flex-col gap-4">
+              <p className="text-base font-medium leading-relaxed text-muted-foreground/80">
+                Revise os arquivos selecionados e defina a visibilidade antes de
+                enviar.
+              </p>
+
+              <div className="flex items-center gap-2 rounded-2xl bg-muted/10 p-2">
+                <Button
+                  variant={
+                    uploadVisibility === AssetVisibility.CLIENT
+                      ? "default"
+                      : "ghost"
+                  }
+                  className="flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                  onClick={() => setUploadVisibility(AssetVisibility.CLIENT)}
+                >
+                  <Eye className="mr-2 size-4" />
+                  Visivel p/ Cliente
+                </Button>
+                <Button
+                  variant={
+                    uploadVisibility === AssetVisibility.INTERNAL
+                      ? "default"
+                      : "ghost"
+                  }
+                  className="flex-1 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                  onClick={() => setUploadVisibility(AssetVisibility.INTERNAL)}
+                >
+                  <EyeSlash className="mr-2 size-4" />
+                  Apenas Interno
+                </Button>
+              </div>
+            </div>
 
             <div className="mb-10 flex flex-col gap-3 max-h-[350px] overflow-y-auto pr-2 scrollbar-hide">
               {selectedFiles.map((file, index) => (
@@ -384,20 +446,14 @@ export function AssetManagement({
                 >
                   <div className="flex items-center gap-4 overflow-hidden">
                     <div className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-                      {file.type.startsWith("image/") ? (
-                        <ImageIcon weight="duotone" className="size-6" />
-                      ) : (
-                        <File weight="duotone" className="size-6" />
-                      )}
+                      <File weight="duotone" className="size-6" />
                     </div>
                     <div className="flex flex-col overflow-hidden">
                       <span className="truncate text-xs font-black text-foreground uppercase tracking-tight">
                         {file.name}
                       </span>
                       <span className="text-[10px] font-bold text-muted-foreground/40 uppercase tracking-widest">
-                        {file.size < 1024 * 1024
-                          ? `${(file.size / 1024).toFixed(2)} KB`
-                          : `${(file.size / 1024 / 1024).toFixed(2)} MB`}
+                        {(file.size / 1024 / 1024).toFixed(2)} MB
                       </span>
                     </div>
                   </div>

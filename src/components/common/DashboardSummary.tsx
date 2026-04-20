@@ -43,7 +43,10 @@ import {
 } from "../ui/sheet"
 import { Textarea } from "../ui/textarea"
 import { ActionItemsWidget } from "./ActionItemsWidget"
+import { BriefingNotes } from "./BriefingNotes"
+import { ClientPendingInbox } from "./ClientPendingInbox"
 import { UpdateAttachmentsList } from "./UpdateAttachmentsList"
+import { UpdateComments } from "./UpdateComments"
 import { VersionsLog } from "./VersionsLog"
 
 interface DashboardSummaryProps {
@@ -111,6 +114,7 @@ export function DashboardSummary({
   const [rejectDialogUpdateId, setRejectDialogUpdateId] = React.useState<
     string | null
   >(null)
+  const [approvalComment, setApprovalComment] = React.useState("")
   const [feedback, setFeedback] = React.useState("")
   const [visibleUpdatesCount, setVisibleUpdatesCount] = React.useState(5)
 
@@ -151,10 +155,15 @@ export function DashboardSummary({
 
   const handleApprove = async (updateId: string) => {
     setIsApproving(updateId)
-    const result = await approveUpdateAction(updateId, project.id)
+    const result = await approveUpdateAction(
+      updateId,
+      project.id,
+      approvalComment
+    )
 
     if (result.success) {
       toast.success(tApp("toast.approve_success"))
+      setApprovalComment("")
     } else {
       toast.error(result.error ?? tApp("toast.error_approve"))
     }
@@ -188,6 +197,8 @@ export function DashboardSummary({
       initial="hidden"
       animate="visible"
     >
+      <ClientPendingInbox project={project} />
+
       <div className="grid items-start gap-10 lg:grid-cols-[1fr_340px]">
         <div className="relative space-y-14">
           {/* Vertical Divider */}
@@ -303,6 +314,12 @@ export function DashboardSummary({
                         compact
                       />
 
+                      <UpdateComments
+                        updateId={update.id}
+                        projectId={project.id}
+                        comments={update.comments || []}
+                      />
+
                       {hasFeedback && (
                         <motion.div
                           initial={{ opacity: 0, y: 10 }}
@@ -345,6 +362,15 @@ export function DashboardSummary({
                                 {tApp("dialog.description")}
                               </p>
                             </div>
+
+                            <Textarea
+                              value={approvalComment}
+                              onChange={(e) =>
+                                setApprovalComment(e.target.value)
+                              }
+                              placeholder="Adicionar um comentario opcional..."
+                              className="min-h-[100px] rounded-2xl border-border/40 bg-background/50 text-sm"
+                            />
 
                             <div className="flex flex-wrap items-center gap-4">
                               <motion.div
@@ -529,6 +555,13 @@ export function DashboardSummary({
           <motion.div variants={sectionVariants}>
             <ActionItemsWidget items={project.actionItems || []} />
           </motion.div>
+
+          <motion.div variants={sectionVariants}>
+            <BriefingNotes
+              projectId={project.id}
+              notes={project.briefingNotes || []}
+            />
+          </motion.div>
         </div>
 
         <motion.aside
@@ -659,7 +692,8 @@ export function DashboardSummary({
               />
             </div>
 
-            {project.assets.length === 0 ? (
+            {project.assets.filter((a) => a.visibility === "CLIENT").length ===
+            0 ? (
               <div className="mt-8 flex flex-col items-center justify-center gap-3 rounded-3xl border-2 border-dashed border-border/10 px-6 py-10">
                 <FileText
                   weight="thin"
@@ -671,31 +705,33 @@ export function DashboardSummary({
               </div>
             ) : (
               <div className="mt-8 grid gap-3">
-                {project.assets.map((asset, index) => (
-                  <motion.a
-                    key={asset.id}
-                    href={asset.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    initial={{ opacity: 0, x: 10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 0.3 + index * 0.05, duration: 0.35 }}
-                    whileHover={{ x: 4 }}
-                    className="group flex cursor-pointer items-center gap-4 rounded-2xl bg-muted/20 p-4 transition-all hover:bg-muted/40"
-                  >
-                    <div className="flex size-10 items-center justify-center rounded-xl bg-background text-muted-foreground shadow-sm transition-all duration-300 group-hover:bg-brand-primary/10 group-hover:text-brand-primary">
-                      <FileText weight="fill" className="size-5" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="block truncate text-[10px] font-black uppercase tracking-tight text-foreground/85">
-                        {asset.name}
-                      </span>
-                      <span className="text-[7px] font-bold uppercase tracking-widest text-muted-foreground/50">
-                        {t("view_document")}
-                      </span>
-                    </div>
-                  </motion.a>
-                ))}
+                {project.assets
+                  .filter((a) => a.visibility === "CLIENT")
+                  .map((asset, index) => (
+                    <motion.a
+                      key={asset.id}
+                      href={asset.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.3 + index * 0.05, duration: 0.35 }}
+                      whileHover={{ x: 4 }}
+                      className="group flex cursor-pointer items-center gap-4 rounded-2xl bg-muted/20 p-4 transition-all hover:bg-muted/40"
+                    >
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-background text-muted-foreground shadow-sm transition-all duration-300 group-hover:bg-brand-primary/10 group-hover:text-brand-primary">
+                        <FileText weight="fill" className="size-5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <span className="block truncate text-[10px] font-black uppercase tracking-tight text-foreground/85">
+                          {asset.name}
+                        </span>
+                        <span className="text-[7px] font-bold uppercase tracking-widest text-muted-foreground/50">
+                          {t("view_document")}
+                        </span>
+                      </div>
+                    </motion.a>
+                  ))}
               </div>
             )}
           </motion.section>

@@ -436,14 +436,27 @@
     }
   },
   "Dashboard": {
-    "eyebrow": "Client Panel",
+    "eyebrow": "Client Dashboard",
     "admin_eyebrow": "Project Management",
     "admin_title": "Studio Overview",
     "admin_overview": "Overview",
     "admin_description": "Administrative control panel",
     "select_project": "Select Project",
     "filter_projects": "Filter projects...",
-    "no_project_found": "No projects found.",
+    "no_project_found": "No project found.",
+    "inbox": {
+      "title": "Your Inbox",
+      "description": "Items and actions awaiting your attention.",
+      "pending_approvals": "Awaiting your approval",
+      "required_documents": "Required documents",
+      "pending_feedback": "Pending feedback",
+      "recent_updates": "Recent news",
+      "empty": "You're all set! No critical items pending.",
+      "cta_approve": "Review and Approve",
+      "cta_upload": "Upload File",
+      "cta_feedback": "Respond",
+      "cta_view": "View details"
+    },
     "greetings": {
       "morning": "Good morning, {name}. Let's check how the project is moving.",
       "afternoon": "Good afternoon, {name}. Here is the current progress of your project.",

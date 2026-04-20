@@ -59,6 +59,21 @@ enum ActionStatus {
   COMPLETED
 }
 
+enum ActionTargetRole {
+  ADMIN
+  CLIENT
+}
+
+enum AssetOrigin {
+  ADMIN
+  CLIENT
+}
+
+enum AssetVisibility {
+  INTERNAL
+  CLIENT
+}
+
 enum LeadStatus {
   GARIMPAGEM
   CONTATO_REALIZADO
@@ -112,6 +127,10 @@ model User {
   leadNotes     LeadNote[]     @relation("LeadNoteAuthor")
   notifications Notification[]
   auditLogs     AuditLog[]     @relation("AuditActor")
+
+  comments      UpdateComment[]
+  approvalEvents ApprovalEvent[]
+
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 }
@@ -171,6 +190,7 @@ model Project {
   budget        String?
   
   briefing      Json?           @default("{}")
+  briefingNotes BriefingEntry[]
 
   startDate     DateTime        @default(now())
   deadline      DateTime?
@@ -195,6 +215,22 @@ model Project {
   @@index([updatedAt])
 }
 
+model BriefingEntry {
+  id         String   @id @default(cuid())
+  title      String
+  content    String   @db.Text
+  
+  projectId  String
+  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  
+  createdById String?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([projectId])
+}
+
 model Update {
   id             String         @id @default(cuid())
   title          String
@@ -211,6 +247,8 @@ model Update {
   projectId      String
   project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   attachments    UpdateAttachment[]
+  comments       UpdateComment[]
+  approvalEvents ApprovalEvent[]
 
   createdAt      DateTime       @default(now())
 
@@ -238,12 +276,47 @@ model UpdateAttachment {
   @@index([createdAt])
 }
 
+model UpdateComment {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+  
+  updateId   String
+  update     Update   @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  
+  authorId   String?
+  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([updateId])
+  @@index([authorId])
+}
+
+model ApprovalEvent {
+  id         String         @id @default(cuid())
+  decision   ApprovalStatus
+  comment    String?        @db.Text
+  
+  updateId   String
+  update     Update         @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  
+  actorId    String?
+  actor      User?          @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  
+  createdAt  DateTime       @default(now())
+
+  @@index([updateId])
+  @@index([actorId])
+}
+
 model ActionItem {
   id          String       @id @default(cuid())
   title       String
   description String?      @db.Text
   status      ActionStatus @default(PENDING)
   dueDate     DateTime?
+  targetRole  ActionTargetRole @default(ADMIN)
 
   projectId   String
   project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -254,24 +327,29 @@ model ActionItem {
   @@index([projectId])
   @@index([status])
   @@index([dueDate])
+  @@index([targetRole])
 }
 
 model Asset {
-  id          String    @id @default(cuid())
+  id          String          @id @default(cuid())
   name        String
   url         String
   key         String
-  type        AssetType @default(DOCUMENT)
-  order       Int       @default(0)
-  timezone    String    @default("UTC")
+  type        AssetType       @default(DOCUMENT)
+  order       Int             @default(0)
+  timezone    String          @default("UTC")
+  
+  origin      AssetOrigin     @default(ADMIN)
+  visibility  AssetVisibility @default(CLIENT)
 
   projectId   String
-  project     Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime  @default(now())
+  createdAt   DateTime        @default(now())
 
   @@index([projectId])
   @@index([order])
+  @@index([visibility])
 }
 
 model Version {

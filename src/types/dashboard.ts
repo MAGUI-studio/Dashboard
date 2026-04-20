@@ -1,5 +1,10 @@
 import {
+  ActionStatus,
+  ActionTargetRole,
+  ApprovalStatus,
+  AssetOrigin,
   AssetType,
+  AssetVisibility,
   NotificationType,
   Priority,
   ProjectCategory,
@@ -29,6 +34,7 @@ export interface DashboardProject {
     targetAudience: string
     differentiators: string
   } | null
+  briefingNotes?: DashboardBriefingEntry[]
   client: {
     id: string
     name: string | null
@@ -46,6 +52,16 @@ export interface DashboardProject {
   auditLogs?: DashboardAuditLog[]
 }
 
+export interface DashboardBriefingEntry {
+  id: string
+  title: string
+  content: string
+  projectId: string
+  createdById: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
 export interface DashboardUpdate {
   id: string
   title: string
@@ -59,10 +75,40 @@ export interface DashboardUpdate {
     name: string
   }
   requiresApproval: boolean
-  approvalStatus: "PENDING" | "APPROVED" | "REJECTED"
+  approvalStatus: ApprovalStatus
   approvedAt: Date | string | null
   feedback: string | null
   attachments?: DashboardUpdateAttachment[]
+  comments?: DashboardUpdateComment[]
+  approvalEvents?: DashboardApprovalEvent[]
+}
+
+export interface DashboardUpdateComment {
+  id: string
+  content: string
+  updateId: string
+  authorId: string | null
+  author?: {
+    id: string
+    name: string | null
+    role: UserRole
+  } | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface DashboardApprovalEvent {
+  id: string
+  decision: ApprovalStatus
+  comment: string | null
+  updateId: string
+  actorId: string | null
+  actor?: {
+    id: string
+    name: string | null
+    role: UserRole
+  } | null
+  createdAt: Date | string
 }
 
 export interface DashboardUpdateAttachment {
@@ -114,15 +160,18 @@ export interface DashboardAsset {
   type: AssetType
   order: number
   timezone: string
+  origin: AssetOrigin
+  visibility: AssetVisibility
   projectId: string
-  createdAt: Date
+  createdAt: Date | string
 }
 
 export interface DashboardActionItem {
   id: string
   title: string
   description: string | null
-  status: "PENDING" | "COMPLETED"
+  status: ActionStatus
+  targetRole: ActionTargetRole
   dueDate: Date | string | null
   projectId: string
   createdAt: Date | string

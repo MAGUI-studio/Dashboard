@@ -11,11 +11,12 @@ import {
   ProjectStatus,
 } from "@/src/generated/client/enums"
 import {
+  AssetOrigin,
+  AssetVisibility,
   AuditActorType,
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
-import { UTApi } from "uploadthing/server"
 
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
@@ -392,7 +393,8 @@ export async function addProjectTimelineAction(
 
 export async function approveUpdateAction(
   updateId: string,
-  projectId: string
+  projectId: string,
+  comment?: string
 ): Promise<{ error?: string; success?: boolean }> {
   try {
     const { user, project } = await ensureProjectAccess(projectId, [
@@ -407,6 +409,13 @@ export async function approveUpdateAction(
         approvalStatus: "APPROVED",
         approvedAt: new Date(),
         feedback: null,
+        approvalEvents: {
+          create: {
+            decision: "APPROVED",
+            comment: comment || null,
+            actorId: user.id,
+          },
+        },
       },
     })
 
@@ -418,6 +427,7 @@ export async function approveUpdateAction(
       actorId: user.id,
       actorType: AuditActorType.USER,
       projectId,
+      metadata: { comment },
     })
 
     const admins = await getInternalNotificationRecipients()
@@ -431,7 +441,7 @@ export async function approveUpdateAction(
           title: "Milestone aprovada",
           message: `${project.client.name ?? "O cliente"} aprovou "${update.title}".`,
           ctaPath: getAdminProjectPath(projectId),
-          metadata: { updateId: update.id },
+          metadata: { updateId: update.id, comment },
         })
       )
     )
@@ -474,6 +484,13 @@ export async function rejectUpdateAction(input: {
         approvalStatus: "REJECTED",
         approvedAt: null,
         feedback: validated.data.feedback,
+        approvalEvents: {
+          create: {
+            decision: "REJECTED",
+            comment: validated.data.feedback,
+            actorId: user.id,
+          },
+        },
       },
     })
 
@@ -654,17 +671,14 @@ export async function createProjectAssetAction(data: {
   url: string
   key: string
   type: AssetType
+  origin?: AssetOrigin
+  visibility?: AssetVisibility
   timezone?: string
 }): Promise<{ error?: string; success?: boolean }> {
   try {
-    await protect("admin")
-  } catch {
-    return { error: "Unauthorized" }
-  }
+    const actor = await getCurrentAppUser()
+    const isClient = actor?.role === UserRole.CLIENT
 
-  const actor = await getCurrentAppUser()
-
-  try {
     const project = await prisma.project.findUnique({
       where: { id: data.projectId },
       select: {
@@ -694,6 +708,9 @@ export async function createProjectAssetAction(data: {
         type: data.type,
         timezone: data.timezone || "America/Sao_Paulo",
         order: nextOrder,
+        origin:
+          data.origin || (isClient ? AssetOrigin.CLIENT : AssetOrigin.ADMIN),
+        visibility: data.visibility || AssetVisibility.CLIENT,
       },
     })
 
@@ -702,20 +719,37 @@ export async function createProjectAssetAction(data: {
         action: "asset.created",
         entityType: "Asset",
         entityId: asset.id,
-        summary: `Arquivo ${asset.name} enviado para ${project.name}.`,
+        summary: `Arquivo ${asset.name} enviado para ${project.name} por ${isClient ? "cliente" : "admin"}.`,
         actorId: actor?.id,
         actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
         projectId: data.projectId,
-        metadata: { type: asset.type },
+        metadata: {
+          type: asset.type,
+          origin: asset.origin,
+          visibility: asset.visibility,
+        },
       }),
-      createNotification({
-        userId: project.clientId,
-        projectId: data.projectId,
-        type: NotificationType.ASSET_UPLOADED,
-        title: "Novo arquivo disponível",
-        message: `${asset.name} foi adicionado ao repositório do projeto ${project.name}.`,
-        ctaPath: getDashboardPath(data.projectId),
-      }),
+      ...(isClient
+        ? (await getInternalNotificationRecipients()).map((admin) =>
+            createNotification({
+              userId: admin.id,
+              projectId: data.projectId,
+              type: NotificationType.ASSET_UPLOADED,
+              title: "Cliente enviou novo arquivo",
+              message: `${actor?.name || "O cliente"} enviou "${asset.name}" para o projeto ${project.name}.`,
+              ctaPath: `/admin/projects/${data.projectId}/assets`,
+            })
+          )
+        : [
+            createNotification({
+              userId: project.clientId,
+              projectId: data.projectId,
+              type: NotificationType.ASSET_UPLOADED,
+              title: "Novo arquivo disponível",
+              message: `${asset.name} foi adicionado ao repositório do projeto ${project.name}.`,
+              ctaPath: getDashboardPath(data.projectId),
+            }),
+          ]),
     ])
 
     revalidatePath(`/admin/projects/${data.projectId}`)
@@ -757,31 +791,58 @@ export async function updateProjectAssetsOrderAction(
   }
 }
 
-export async function deleteProjectAssetAction(
-  id: string,
-  projectId: string,
-  key: string
-): Promise<{ error?: string; success?: boolean }> {
+export async function createBriefingNoteAction(input: {
+  projectId: string
+  title: string
+  content: string
+}): Promise<{ error?: string; success?: boolean }> {
   try {
-    await protect("admin")
-  } catch {
-    return { error: "Unauthorized" }
-  }
+    const { user, project } = await ensureProjectAccess(input.projectId, [
+      UserRole.CLIENT,
+      UserRole.ADMIN,
+      UserRole.MEMBER,
+    ])
 
-  const utapi = new UTApi()
-
-  try {
-    await utapi.deleteFiles(key)
-
-    await prisma.asset.delete({
-      where: { id },
+    const note = await prisma.briefingEntry.create({
+      data: {
+        projectId: input.projectId,
+        title: input.title,
+        content: input.content,
+        createdById: user.id,
+      },
     })
 
-    revalidatePath(`/admin/projects/${projectId}`)
-    revalidatePath(`/admin/projects/${projectId}/assets`)
+    await createAuditLog({
+      action: "project.briefing_note_added",
+      entityType: "BriefingEntry",
+      entityId: note.id,
+      summary: `Nova nota de briefing "${note.title}" adicionada ao projeto ${project.name}.`,
+      actorId: user.id,
+      actorType: AuditActorType.USER,
+      projectId: input.projectId,
+    })
+
+    if (user.role === UserRole.CLIENT) {
+      const admins = await getInternalNotificationRecipients()
+      await Promise.all(
+        admins.map((admin) =>
+          createNotification({
+            userId: admin.id,
+            projectId: input.projectId,
+            type: NotificationType.BRIEFING_SUBMITTED,
+            title: "Nova especificação de briefing",
+            message: `${user.name || "O cliente"} adicionou uma nova nota ao briefing de ${project.name}.`,
+            ctaPath: `/admin/projects/${input.projectId}`,
+          })
+        )
+      )
+    }
+
+    revalidatePath("/")
+    revalidatePath(`/admin/projects/${input.projectId}`)
     return { success: true }
   } catch (error) {
-    logger.error({ error }, "Delete Asset Error:")
-    return { error: "Erro ao deletar arquivo" }
+    logger.error({ error }, "Create Briefing Note Error:")
+    return { error: "Erro ao adicionar nota de briefing" }
   }
 }

@@ -706,6 +706,18 @@ export default async function DashboardPage({
               attachments: {
                 orderBy: { createdAt: "asc" },
               },
+              comments: {
+                orderBy: { createdAt: "asc" },
+                include: {
+                  author: {
+                    select: {
+                      id: true,
+                      name: true,
+                      role: true,
+                    },
+                  },
+                },
+              },
               project: {
                 select: {
                   name: true,
@@ -722,6 +734,8 @@ export default async function DashboardPage({
               key: true,
               type: true,
               order: true,
+              origin: true,
+              visibility: true,
               projectId: true,
               createdAt: true,
             },
@@ -735,6 +749,7 @@ export default async function DashboardPage({
               status: true,
               dueDate: true,
               projectId: true,
+              targetRole: true,
               createdAt: true,
               updatedAt: true,
             },
@@ -753,6 +768,9 @@ export default async function DashboardPage({
               projectId: true,
               createdAt: true,
             },
+          },
+          briefingNotes: {
+            orderBy: { createdAt: "desc" },
           },
         },
         orderBy: { updatedAt: "desc" },
