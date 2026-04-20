@@ -1,5 +1,12 @@
 import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
 
+export interface LeadNote {
+  id: string
+  content: string
+  authorId: string | null
+  createdAt: string | Date
+}
+
 export interface Lead {
   id: string
   companyName: string
@@ -17,4 +24,5 @@ export interface Lead {
   assignedToId: string | null
   createdAt: string | Date
   updatedAt: string | Date
+  followUpNotes: LeadNote[]
 }

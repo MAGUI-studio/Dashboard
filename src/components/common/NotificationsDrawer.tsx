@@ -128,7 +128,7 @@ export function NotificationsDrawer({
         side="right"
         className="w-[94vw] border-l border-border/30 bg-background/95 p-0 sm:min-w-[38rem] sm:max-w-[40vw]"
       >
-        <SheetHeader className="border-b border-border/20 bg-gradient-to-b from-brand-primary/6 to-transparent px-7 py-7">
+        <SheetHeader className="border-b border-border/20 px-7 py-7">
           <div className="flex items-start justify-between gap-5 pr-10">
             <div className="max-w-md">
               <p className="text-[9px] font-black uppercase tracking-[0.35em] text-brand-primary/70">
@@ -211,12 +211,12 @@ export function NotificationsDrawer({
                         </span>
 
                         {!notification.readAt && (
-                          <span className="rounded-full bg-white/10 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.24em] text-white">
+                          <span className="rounded-full bg-brand-primary/10 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.24em] text-brand-primary dark:bg-white/10 dark:text-white">
                             {t("new")}
                           </span>
                         )}
 
-                        <span className="ml-auto text-[8px] font-black uppercase tracking-[0.24em] text-muted-foreground/35">
+                        <span className="ml-auto text-[8px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
                           {formatLocalTime(
                             new Date(notification.createdAt),
                             "America/Sao_Paulo"
@@ -254,8 +254,8 @@ export function NotificationsDrawer({
                           className={cn(
                             "text-[8px] font-black uppercase tracking-[0.24em]",
                             presentation.requiresAction
-                              ? "text-amber-200/80"
-                              : "text-muted-foreground/30"
+                              ? "text-amber-700 dark:text-amber-200/80"
+                              : "text-muted-foreground/45"
                           )}
                         >
                           {presentation.requiresAction

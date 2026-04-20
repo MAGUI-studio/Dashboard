@@ -123,9 +123,9 @@
       }
     },
     "crm": {
-      "eyebrow": "Funil de Vendas",
-      "title": "Prospecção",
-      "description": "Gerencie leads e oportunidades de novos projetos. Acompanhe cada etapa do funil comercial com rigor técnico.",
+      "eyebrow": "Operação Comercial",
+      "title": "Comercial",
+      "description": "Gerencie leads, histórico de follow-up e movimentação do pipeline com a mesma disciplina operacional do restante da dashboard.",
       "create": "Novo Lead",
       "stats": {
         "total": "Total de Leads",
@@ -150,6 +150,16 @@
         "NEGOCIACAO": "Negociação",
         "CONVERTIDO": "Convertido",
         "DESCARTADO": "Descartado"
+      },
+      "source": {
+        "REFERRAL": "Indicação",
+        "ORGANIC": "Orgânico",
+        "INSTAGRAM": "Instagram",
+        "LINKEDIN": "LinkedIn",
+        "WEBSITE": "Site",
+        "OUTBOUND": "Outbound",
+        "EVENT": "Evento",
+        "OTHER": "Outro"
       },
       "form": {
         "company": "Nome da Empresa",
@@ -411,6 +421,11 @@
       "title": "Projetos",
       "list": "Todos os Projetos",
       "create": "Iniciar Projeto"
+    },
+    "commercial": {
+      "title": "Comercial",
+      "list": "Leads",
+      "kanban": "Kanban"
     },
     "user": {
       "profile": "Meu Perfil",

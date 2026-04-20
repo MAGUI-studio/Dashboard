@@ -123,9 +123,9 @@
       }
     },
     "crm": {
-      "eyebrow": "Sales Funnel",
-      "title": "Prospecting",
-      "description": "Manage leads and opportunities for new projects. Track each stage of the sales funnel with technical rigor.",
+      "eyebrow": "Commercial Operations",
+      "title": "Commercial",
+      "description": "Manage leads, follow-up history, and pipeline movement with the same operational discipline as the rest of the dashboard.",
       "create": "New Lead",
       "stats": {
         "total": "Total Leads",
@@ -150,6 +150,16 @@
         "NEGOCIACAO": "Negotiation",
         "CONVERTIDO": "Converted",
         "DESCARTADO": "Discarded"
+      },
+      "source": {
+        "REFERRAL": "Referral",
+        "ORGANIC": "Organic",
+        "INSTAGRAM": "Instagram",
+        "LINKEDIN": "LinkedIn",
+        "WEBSITE": "Website",
+        "OUTBOUND": "Outbound",
+        "EVENT": "Event",
+        "OTHER": "Other"
       },
       "form": {
         "company": "Company Name",
@@ -411,6 +421,11 @@
       "title": "Projects",
       "list": "All Projects",
       "create": "Start Project"
+    },
+    "commercial": {
+      "title": "Commercial",
+      "list": "Leads",
+      "kanban": "Kanban"
     },
     "user": {
       "profile": "My Profile",

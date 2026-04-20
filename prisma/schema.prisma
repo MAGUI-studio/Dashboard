@@ -109,6 +109,7 @@ model User {
 
   projects      Project[]
   ownedLeads    Lead[]         @relation("LeadOwner")
+  leadNotes     LeadNote[]     @relation("LeadNoteAuthor")
   notifications Notification[]
   auditLogs     AuditLog[]     @relation("AuditActor")
   createdAt     DateTime       @default(now())
@@ -132,6 +133,7 @@ model Lead {
 
   assignedToId  String?
   assignedTo    User?       @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
+  followUpNotes LeadNote[]
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -139,6 +141,23 @@ model Lead {
   @@index([status])
   @@index([assignedToId])
   @@index([nextActionAt])
+}
+
+model LeadNote {
+  id         String   @id @default(cuid())
+  content    String   @db.Text
+
+  leadId     String
+  lead       Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  authorId   String?
+  author     User?    @relation("LeadNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  createdAt  DateTime @default(now())
+
+  @@index([leadId])
+  @@index([authorId])
+  @@index([createdAt])
 }
 
 model Project {

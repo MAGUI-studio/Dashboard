@@ -92,6 +92,8 @@ export function Header({
   const lastRefreshAtRef = React.useRef(0)
 
   const [isClientsMenuOpen, setIsClientsMenuOpen] = React.useState(false)
+  const [isCommercialMenuOpen, setIsCommercialMenuOpen] =
+    React.useState(false)
   const [isProjectsMenuOpen, setIsProjectsMenuOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
 
@@ -234,20 +236,54 @@ export function Header({
 
             {viewer?.isAdmin && (
               <>
-                <Button
-                  variant="ghost"
-                  asChild
-                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                    pathname.startsWith("/admin/crm")
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-                  }`}
+                <div
+                  onMouseEnter={() => setIsCommercialMenuOpen(true)}
+                  onMouseLeave={() => setIsCommercialMenuOpen(false)}
                 >
-                  <Link href="/admin/crm">
-                    <ChartLineUp weight="duotone" className="mr-1.5 size-3.5" />
-                    CRM
-                  </Link>
-                </Button>
+                  <DropdownMenu
+                    modal={false}
+                    open={isCommercialMenuOpen}
+                    onOpenChange={setIsCommercialMenuOpen}
+                  >
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                          pathname.startsWith("/admin/crm")
+                            ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                            : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
+                        }`}
+                      >
+                        <ChartLineUp
+                          weight="duotone"
+                          className="mr-1.5 size-3.5"
+                        />
+                        {t("commercial.title")}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent
+                      align="start"
+                      className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+                    >
+                      <DropdownMenuGroup className="grid gap-0.5">
+                        <DropdownMenuItem
+                          asChild
+                          className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                        >
+                          <Link href="/admin/crm" className="flex items-center">
+                            <ChartLineUp
+                              weight="bold"
+                              className="mr-2.5 size-3.5 text-brand-primary/60"
+                            />
+                            <span className="font-bold uppercase tracking-tight text-[10px]">
+                              {t("commercial.kanban")}
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
 
                 <div
                   onMouseEnter={() => setIsClientsMenuOpen(true)}
@@ -445,6 +481,22 @@ export function Header({
                     </div>
 
                     <div className="lg:hidden p-2 grid gap-1 border-b border-border/10 mb-2">
+                      {viewer?.isAdmin && (
+                        <DropdownMenuItem
+                          asChild
+                          className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                        >
+                          <Link href="/admin/crm" className="flex items-center">
+                            <ChartLineUp
+                              weight="duotone"
+                              className="mr-3 size-4 text-brand-primary/60"
+                            />
+                            <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                              {t("commercial.title")}
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem
                         asChild
                         className="rounded-xl px-4 py-3 outline-none focus:ring-0"
