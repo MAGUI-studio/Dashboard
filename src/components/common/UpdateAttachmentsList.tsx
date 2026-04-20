@@ -3,6 +3,7 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
+import Image from "next/image"
 
 import { DashboardUpdateAttachment } from "@/src/types/dashboard"
 import {
@@ -112,10 +113,11 @@ export function UpdateAttachmentsList({
                 className={`${itemClassName} text-left`}
               >
                 <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-brand-primary/10 text-brand-primary">
-                  <img
+                  <Image
                     src={attachment.url}
                     alt={attachment.name}
-                    className="size-full object-cover"
+                    fill
+                    className="object-cover"
                   />
                 </div>
 
@@ -207,11 +209,15 @@ export function UpdateAttachmentsList({
                 </Button>
               )}
 
-              <img
-                src={activeImage.url}
-                alt={activeImage.name}
-                className="max-h-[70svh] w-auto max-w-[70vw] object-contain"
-              />
+              <div className="relative flex h-[70svh] w-full max-w-4xl items-center justify-center">
+                <Image
+                  src={activeImage.url}
+                  alt={activeImage.name}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
 
               {imageAttachments.length > 1 && (
                 <Button

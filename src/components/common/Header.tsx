@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { DashboardNotification } from "@/src/types/dashboard"
@@ -85,7 +85,6 @@ export function Header({
   viewer = null,
 }: HeaderProps): React.JSX.Element {
   const router = useRouter()
-  const searchParams = useSearchParams()
   const t = useTranslations("Sidebar")
   const tDashboard = useTranslations("Dashboard")
   const tApp = useTranslations("Approvals")
@@ -101,8 +100,6 @@ export function Header({
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [feedback, setFeedback] = React.useState("")
   const [currentApprovalIndex, setCurrentApprovalIndex] = React.useState(0)
-
-  const selectedProjectId = searchParams.get("project")
 
   // Reset index if pendingApprovals changes
   React.useEffect(() => {
@@ -544,7 +541,7 @@ export function Header({
                   </div>
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="shrink-0 rounded bg-amber-600/40 px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider text-white ring-1 ring-amber-500/50">
+                      <span className="shrink-0 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wider text-white/90">
                         {tApp("status.PENDING")}
                       </span>
                       <p className="truncate font-heading text-[10px] font-black uppercase leading-none tracking-widest text-white/60">

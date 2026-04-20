@@ -19,8 +19,8 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }))
 
-vi.mock("framer-motion", () => {
-  const React = require("react")
+vi.mock("framer-motion", async () => {
+  const React = await import("react")
   const motion = new Proxy(
     {},
     {
@@ -31,7 +31,7 @@ vi.mock("framer-motion", () => {
         }: {
           children?: React.ReactNode
         } & Record<string, unknown>) =>
-          React.createElement(key, props, children)
+          React.createElement(key as string, props, children)
       },
     }
   )

@@ -5,8 +5,6 @@ import { useTranslations } from "next-intl"
 import { DashboardActionItem } from "@/src/types/dashboard"
 import { ArrowRight, Clock, WarningCircle } from "@phosphor-icons/react"
 
-import { cn } from "@/src/lib/utils/utils"
-
 interface ActionItemsWidgetProps {
   items: DashboardActionItem[]
 }

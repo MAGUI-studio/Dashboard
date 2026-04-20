@@ -210,12 +210,8 @@ export function DashboardSummary({
 
             <motion.div className="space-y-8" variants={listVariants}>
               {visibleUpdates.map((update) => {
-                const {
-                  isApproved,
-                  hasFeedback,
-                  isPendingApproval,
-                  isPublished,
-                } = getUpdateFlags(update)
+                const { isApproved, hasFeedback, isPendingApproval } =
+                  getUpdateFlags(update)
 
                 const statusLabel = isPendingApproval
                   ? tApp("status.PENDING")
