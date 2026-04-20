@@ -2,6 +2,11 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
+
+import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
+import { Lead } from "@/src/types/crm"
 import {
   CaretDown,
   ChatCircleText,
@@ -16,21 +21,8 @@ import {
   Warning,
   WhatsappLogo,
 } from "@phosphor-icons/react"
-import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 import { toast } from "sonner"
 
-import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
-import {
-  addLeadNote,
-  deleteLead,
-  updateLead,
-  updateLeadStatus,
-} from "@/src/lib/actions/crm.actions"
-import { getLeadWhatsappLinks } from "@/src/lib/utils/crm"
-import { Lead } from "@/src/types/crm"
-
-import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 import { Button } from "@/src/components/ui/button"
 import {
   Collapsible,
@@ -64,6 +56,16 @@ import {
   SheetTrigger,
 } from "@/src/components/ui/sheet"
 import { Textarea } from "@/src/components/ui/textarea"
+
+import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
+
+import {
+  addLeadNote,
+  deleteLead,
+  updateLead,
+  updateLeadStatus,
+} from "@/src/lib/actions/crm.actions"
+import { getLeadWhatsappLinks } from "@/src/lib/utils/crm"
 
 function formatDateTime(value: string | Date): string {
   return new Intl.DateTimeFormat("pt-BR", {
@@ -100,26 +102,28 @@ export function LeadDetailsDrawer({
   lead,
   children,
   onOpenChange,
+  open: controlledOpen,
 }: {
   lead: Lead
   children: React.ReactNode
   onOpenChange?: (open: boolean) => void
+  open?: boolean
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const router = useRouter()
-  const [open, setOpen] = React.useState(false)
+  const [uncontrolledOpen, setUncontrolledOpen] = React.useState(false)
   const [note, setNote] = React.useState("")
   const [isEditing, setIsEditing] = React.useState(false)
   const [isSavingNote, setIsSavingNote] = React.useState(false)
   const [isSavingLead, setIsSavingLead] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
-  const [isUpdatingStatus, setIsUpdatingStatus] = React.useState<LeadStatus | null>(
-    null
-  )
+  const [isUpdatingStatus, setIsUpdatingStatus] =
+    React.useState<LeadStatus | null>(null)
   const [quickActionsOpen, setQuickActionsOpen] = React.useState(false)
   const [confirmValue, setConfirmValue] = React.useState("")
   const [deleteError, setDeleteError] = React.useState(false)
   const [form, setForm] = React.useState(() => getInitialFormState(lead))
+  const open = controlledOpen ?? uncontrolledOpen
 
   React.useEffect(() => {
     setForm(getInitialFormState(lead))
@@ -135,7 +139,12 @@ export function LeadDetailsDrawer({
           ? {
               label: "Contato",
               value: lead.contactName,
-              icon: <ChatCircleText size={16} className="text-muted-foreground/55" />,
+              icon: (
+                <ChatCircleText
+                  size={16}
+                  className="text-muted-foreground/55"
+                />
+              ),
             }
           : null,
         lead.phone
@@ -149,7 +158,12 @@ export function LeadDetailsDrawer({
           ? {
               label: "E-mail",
               value: lead.email,
-              icon: <EnvelopeSimple size={16} className="text-muted-foreground/55" />,
+              icon: (
+                <EnvelopeSimple
+                  size={16}
+                  className="text-muted-foreground/55"
+                />
+              ),
             }
           : null,
         {
@@ -161,7 +175,9 @@ export function LeadDetailsDrawer({
           ? {
               label: "Instagram",
               value: lead.instagram,
-              icon: <InstagramLogo size={16} className="text-muted-foreground/55" />,
+              icon: (
+                <InstagramLogo size={16} className="text-muted-foreground/55" />
+              ),
             }
           : null,
         lead.website
@@ -201,7 +217,8 @@ export function LeadDetailsDrawer({
     ]
 
     return entries.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
     )
   }, [lead])
 
@@ -222,7 +239,7 @@ export function LeadDetailsDrawer({
       : "https://"
 
   const handleSheetOpenChange = (nextOpen: boolean): void => {
-    setOpen(nextOpen)
+    setUncontrolledOpen(nextOpen)
     onOpenChange?.(nextOpen)
 
     if (!nextOpen) {
@@ -305,7 +322,7 @@ export function LeadDetailsDrawer({
 
     if (result.success) {
       toast.success("Lead removido.")
-      setOpen(false)
+      setUncontrolledOpen(false)
       onOpenChange?.(false)
       router.refresh()
     } else {
@@ -338,7 +355,8 @@ export function LeadDetailsDrawer({
                   {lead.companyName}
                 </SheetTitle>
                 <SheetDescription className="text-sm leading-relaxed text-muted-foreground/65">
-                  {t(`source.${lead.source}`)} • {lead.followUpNotes.length} nota(s)
+                  {t(`source.${lead.source}`)} • {lead.followUpNotes.length}{" "}
+                  nota(s)
                 </SheetDescription>
               </div>
 
@@ -457,7 +475,8 @@ export function LeadDetailsDrawer({
                           value === "WEBSITE" || value === "LINKEDIN"
                             ? current.website
                             : "",
-                        instagram: value === "INSTAGRAM" ? current.instagram : "",
+                        instagram:
+                          value === "INSTAGRAM" ? current.instagram : "",
                       }))
                     }
                   >
@@ -465,11 +484,21 @@ export function LeadDetailsDrawer({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="REFERRAL">{t("source.REFERRAL")}</SelectItem>
-                      <SelectItem value="ORGANIC">{t("source.ORGANIC")}</SelectItem>
-                      <SelectItem value="INSTAGRAM">{t("source.INSTAGRAM")}</SelectItem>
-                      <SelectItem value="LINKEDIN">{t("source.LINKEDIN")}</SelectItem>
-                      <SelectItem value="WEBSITE">{t("source.WEBSITE")}</SelectItem>
+                      <SelectItem value="REFERRAL">
+                        {t("source.REFERRAL")}
+                      </SelectItem>
+                      <SelectItem value="ORGANIC">
+                        {t("source.ORGANIC")}
+                      </SelectItem>
+                      <SelectItem value="INSTAGRAM">
+                        {t("source.INSTAGRAM")}
+                      </SelectItem>
+                      <SelectItem value="LINKEDIN">
+                        {t("source.LINKEDIN")}
+                      </SelectItem>
+                      <SelectItem value="WEBSITE">
+                        {t("source.WEBSITE")}
+                      </SelectItem>
                       <SelectItem value="OTHER">{t("source.OTHER")}</SelectItem>
                     </SelectContent>
                   </Select>
@@ -592,7 +621,10 @@ export function LeadDetailsDrawer({
           </section>
 
           <section className="grid gap-4 border-b border-border/15 pb-8">
-            <Collapsible open={quickActionsOpen} onOpenChange={setQuickActionsOpen}>
+            <Collapsible
+              open={quickActionsOpen}
+              onOpenChange={setQuickActionsOpen}
+            >
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
@@ -640,7 +672,11 @@ export function LeadDetailsDrawer({
                             variant="outline"
                             className="justify-center rounded-full text-[10px] font-black uppercase tracking-[0.18em] sm:ml-auto sm:w-auto"
                           >
-                            <a href={action.href} target="_blank" rel="noreferrer">
+                            <a
+                              href={action.href}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
                               Abrir WhatsApp
                             </a>
                           </Button>
@@ -663,7 +699,8 @@ export function LeadDetailsDrawer({
                 Registrar nota
               </p>
               <p className="mt-1 text-sm text-muted-foreground/70">
-                Salve respostas, contexto da conversa ou qualquer observacao importante.
+                Salve respostas, contexto da conversa ou qualquer observacao
+                importante.
               </p>
             </div>
 
@@ -707,7 +744,10 @@ export function LeadDetailsDrawer({
             ) : (
               <div className="grid gap-4">
                 {timeline.map((item) => (
-                  <div key={item.id} className="grid gap-3 border-l border-border/40 pl-4">
+                  <div
+                    key={item.id}
+                    className="grid gap-3 border-l border-border/40 pl-4"
+                  >
                     <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
                       <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
                         {item.title}
@@ -771,7 +811,8 @@ export function LeadDetailsDrawer({
 
                 <div className="p-10 pt-6">
                   <p className="mb-10 text-base font-medium leading-relaxed text-muted-foreground/80">
-                    Essa acao remove {lead.companyName} do Comercial em definitivo.
+                    Essa acao remove {lead.companyName} do Comercial em
+                    definitivo.
                   </p>
 
                   <div className="flex flex-col gap-8">
@@ -818,7 +859,9 @@ export function LeadDetailsDrawer({
                     <Button
                       className="h-16 rounded-[1.25rem] bg-red-600 font-black uppercase tracking-widest text-white shadow-xl shadow-red-600/20 hover:bg-red-700"
                       onClick={handleDelete}
-                      disabled={isDeleting || confirmValue.toUpperCase() !== confirmCode}
+                      disabled={
+                        isDeleting || confirmValue.toUpperCase() !== confirmCode
+                      }
                     >
                       {isDeleting ? (
                         <div className="flex items-center gap-3">

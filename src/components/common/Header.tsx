@@ -50,6 +50,7 @@ import {
 } from "@/src/components/ui/sheet"
 import { Textarea } from "@/src/components/ui/textarea"
 
+import { GlobalSearch } from "@/src/components/common/GlobalSearch"
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
 import { NotificationsDrawer } from "@/src/components/common/NotificationsDrawer"
@@ -92,8 +93,7 @@ export function Header({
   const lastRefreshAtRef = React.useRef(0)
 
   const [isClientsMenuOpen, setIsClientsMenuOpen] = React.useState(false)
-  const [isCommercialMenuOpen, setIsCommercialMenuOpen] =
-    React.useState(false)
+  const [isCommercialMenuOpen, setIsCommercialMenuOpen] = React.useState(false)
   const [isProjectsMenuOpen, setIsProjectsMenuOpen] = React.useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = React.useState(false)
 
@@ -446,6 +446,7 @@ export function Header({
             <div className="size-8 rounded-full bg-muted/20 animate-pulse" />
           ) : (
             <div className="flex items-center gap-3">
+              {viewer.isAdmin ? <GlobalSearch /> : null}
               <NotificationsDrawer notifications={notifications} />
 
               <div
@@ -509,7 +510,10 @@ export function Header({
                             asChild
                             className="rounded-xl px-4 py-3 outline-none focus:ring-0"
                           >
-                            <Link href="/admin/crm" className="flex items-center">
+                            <Link
+                              href="/admin/crm"
+                              className="flex items-center"
+                            >
                               <ChartLineUp
                                 weight="duotone"
                                 className="mr-3 size-4 text-brand-primary/60"

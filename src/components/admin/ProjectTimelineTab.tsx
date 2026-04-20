@@ -12,6 +12,7 @@ import {
   HourglassSimple,
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr"
+import { parseAsString, useQueryState } from "nuqs"
 
 import { AddTimelineForm } from "@/src/components/admin/AddTimelineForm"
 import { UpdateAttachmentsList } from "@/src/components/common/UpdateAttachmentsList"
@@ -68,9 +69,29 @@ export function ProjectTimelineTab({
   updates,
 }: ProjectTimelineTabProps) {
   const t = useTranslations("Admin.projects.details")
+  const [highlightedId] = useQueryState("highlight", parseAsString)
   const [visibleUpdatesCount, setVisibleUpdatesCount] = React.useState(5)
-  const visibleUpdates = updates.slice(0, visibleUpdatesCount)
-  const hasMoreUpdates = visibleUpdatesCount < updates.length
+
+  const visibleUpdates = React.useMemo(() => {
+    if (highlightedId) {
+      const highlightedIndex = updates.findIndex((u) => u.id === highlightedId)
+      if (highlightedIndex >= visibleUpdatesCount) {
+        return updates.slice(0, highlightedIndex + 1)
+      }
+    }
+    return updates.slice(0, visibleUpdatesCount)
+  }, [updates, highlightedId, visibleUpdatesCount])
+
+  const hasMoreUpdates = visibleUpdates.length < updates.length
+
+  React.useEffect(() => {
+    if (highlightedId) {
+      const element = document.getElementById(`update-${highlightedId}`)
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "center" })
+      }
+    }
+  }, [highlightedId])
 
   return (
     <div className="flex flex-col gap-12">
@@ -83,7 +104,15 @@ export function ProjectTimelineTab({
 
         <div className="ml-4 flex flex-col gap-0 border-l border-border/40">
           {visibleUpdates.map((update) => (
-            <div key={update.id} className="relative pb-12 pl-12 last:pb-0">
+            <div
+              key={update.id}
+              id={`update-${update.id}`}
+              className={`relative pb-12 pl-12 transition-colors duration-1000 last:pb-0 ${
+                highlightedId === update.id
+                  ? "bg-brand-primary/5 ring-1 ring-brand-primary/20"
+                  : ""
+              }`}
+            >
               <div className="absolute -left-[9px] top-0 size-4 rounded-full border-4 border-background bg-brand-primary shadow-sm shadow-brand-primary/20" />
               <div className="flex flex-col gap-4">
                 <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-tighter text-muted-foreground/40">
@@ -149,7 +178,7 @@ export function ProjectTimelineTab({
           <div className="flex justify-center">
             <button
               type="button"
-              onClick={() => setVisibleUpdatesCount((current) => current + 5)}
+              onClick={() => setVisibleUpdatesCount(visibleUpdates.length + 5)}
               className="rounded-full border border-border/30 bg-background/60 px-6 py-3 font-mono text-[10px] font-black uppercase tracking-[0.26em] text-foreground/80 transition hover:border-brand-primary/30 hover:text-brand-primary"
             >
               Ver Mais

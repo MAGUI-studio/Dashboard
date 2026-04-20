@@ -24,6 +24,7 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
     include: {
       client: {
         select: {
+          clerkId: true,
           name: true,
           email: true,
         },
@@ -37,7 +38,11 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
     name: p.name,
     status: p.status,
     progress: p.progress,
-    client: p.client,
+    client: {
+      id: p.client.clerkId,
+      name: p.client.name,
+      email: p.client.email,
+    },
     createdAt: p.createdAt.toISOString(),
   }))
 

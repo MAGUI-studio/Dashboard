@@ -2,18 +2,23 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+import { usePathname, useRouter } from "next/navigation"
+
+import { LeadStatus } from "@/src/generated/client/enums"
+import { Lead } from "@/src/types/crm"
 import {
-  closestCorners,
   DndContext,
+  type DragEndEvent,
+  type DragOverEvent,
   DragOverlay,
+  type DragStartEvent,
+  type DraggableAttributes,
   PointerSensor,
+  closestCorners,
   useDroppable,
   useSensor,
   useSensors,
-  type DraggableAttributes,
-  type DragEndEvent,
-  type DragOverEvent,
-  type DragStartEvent,
 } from "@dnd-kit/core"
 import {
   SortableContext,
@@ -29,10 +34,13 @@ import {
   Phone,
 } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
-import { useTranslations } from "next-intl"
 import { toast } from "sonner"
 
-import { LeadStatus } from "@/src/generated/client/enums"
+import { Button } from "@/src/components/ui/button"
+import { Input } from "@/src/components/ui/input"
+
+import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
+
 import { updateLeadStatus } from "@/src/lib/actions/crm.actions"
 import {
   CRM_STATUS_ORDER,
@@ -40,16 +48,14 @@ import {
   getLeadDaysWithoutMovement,
   isLeadStagnant,
 } from "@/src/lib/utils/crm"
-import { Lead } from "@/src/types/crm"
-
-import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
-import { Button } from "@/src/components/ui/button"
-import { Input } from "@/src/components/ui/input"
 
 type LeadMap = Record<string, Lead>
 type ColumnMap = Record<LeadStatus, string[]>
 
-function buildBoardState(leads: Lead[]): { leadMap: LeadMap; columnMap: ColumnMap } {
+function buildBoardState(leads: Lead[]): {
+  leadMap: LeadMap
+  columnMap: ColumnMap
+} {
   const orderedLeads = [...leads].sort(
     (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
   )
@@ -69,7 +75,10 @@ function buildBoardState(leads: Lead[]): { leadMap: LeadMap; columnMap: ColumnMa
   return { leadMap, columnMap }
 }
 
-function findContainer(id: string, columnMap: ColumnMap): LeadStatus | undefined {
+function findContainer(
+  id: string,
+  columnMap: ColumnMap
+): LeadStatus | undefined {
   if (CRM_STATUS_ORDER.includes(id as LeadStatus)) {
     return id as LeadStatus
   }
@@ -120,6 +129,7 @@ function LeadCard({
   dragRef,
   dragStyle,
   onDrawerOpenChange,
+  open,
 }: {
   lead: Lead
   dragging?: boolean
@@ -128,6 +138,7 @@ function LeadCard({
   dragRef?: (node: HTMLElement | null) => void
   dragStyle?: React.CSSProperties
   onDrawerOpenChange?: (open: boolean) => void
+  open?: boolean
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const stagnant = isLeadStagnant(lead)
@@ -185,7 +196,10 @@ function LeadCard({
             ) : null}
             {lead.phone ? (
               <div className="flex items-center gap-2 truncate">
-                <Phone size={14} className="shrink-0 text-muted-foreground/55" />
+                <Phone
+                  size={14}
+                  className="shrink-0 text-muted-foreground/55"
+                />
                 <span className="truncate">{lead.phone}</span>
               </div>
             ) : null}
@@ -199,7 +213,11 @@ function LeadCard({
           {lead.followUpNotes.length} nota(s)
         </span>
 
-        <LeadDetailsDrawer lead={lead} onOpenChange={onDrawerOpenChange}>
+        <LeadDetailsDrawer
+          lead={lead}
+          onOpenChange={onDrawerOpenChange}
+          open={open}
+        >
           <Button
             type="button"
             variant="outline"
@@ -218,10 +236,12 @@ function SortableLeadCardWithDrawerState({
   lead,
   dragDisabled,
   onDrawerOpenChange = () => undefined,
+  isOpen = false,
 }: {
   lead: Lead
   dragDisabled: boolean
-  onDrawerOpenChange?: (open: boolean) => void
+  onDrawerOpenChange?: (leadId: string, open: boolean) => void
+  isOpen?: boolean
 }): React.JSX.Element {
   const {
     attributes,
@@ -246,7 +266,8 @@ function SortableLeadCardWithDrawerState({
         transform: CSS.Transform.toString(transform),
         transition,
       }}
-      onDrawerOpenChange={onDrawerOpenChange}
+      onDrawerOpenChange={(open) => onDrawerOpenChange(lead.id, open)}
+      open={isOpen}
     />
   )
 }
@@ -257,12 +278,14 @@ function KanbanColumn({
   leadMap,
   dragDisabled,
   onDrawerOpenChange,
+  selectedLeadId,
 }: {
   status: LeadStatus
   leadIds: string[]
   leadMap: LeadMap
   dragDisabled: boolean
-  onDrawerOpenChange: (open: boolean) => void
+  onDrawerOpenChange: (leadId: string, open: boolean) => void
+  selectedLeadId: string | null
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const { setNodeRef, isOver } = useDroppable({ id: status })
@@ -300,6 +323,7 @@ function KanbanColumn({
               lead={lead}
               dragDisabled={dragDisabled}
               onDrawerOpenChange={onDrawerOpenChange}
+              isOpen={selectedLeadId === lead.id}
             />
           ))}
 
@@ -314,12 +338,25 @@ function KanbanColumn({
   )
 }
 
-export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
+export function KanbanBoard({
+  leads,
+  initialLeadId = null,
+}: {
+  leads: Lead[]
+  initialLeadId?: string | null
+}): React.JSX.Element {
   const [search, setSearch] = React.useState("")
-  const [boardState, setBoardState] = React.useState(() => buildBoardState(leads))
+  const [boardState, setBoardState] = React.useState(() =>
+    buildBoardState(leads)
+  )
   const [activeLeadId, setActiveLeadId] = React.useState<string | null>(null)
   const [hasOpenDrawer, setHasOpenDrawer] = React.useState(false)
+  const [selectedLeadId, setSelectedLeadId] = React.useState<string | null>(
+    initialLeadId
+  )
   const lastCommittedStatusRef = React.useRef<LeadStatus | null>(null)
+  const router = useRouter()
+  const pathname = usePathname()
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -332,6 +369,33 @@ export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
   React.useEffect(() => {
     setBoardState(buildBoardState(leads))
   }, [leads])
+
+  React.useEffect(() => {
+    if (!initialLeadId) {
+      const storedLeadId = window.sessionStorage.getItem("crm-open-lead")
+
+      if (!storedLeadId) {
+        return
+      }
+
+      const hasStoredLead = leads.some((lead) => lead.id === storedLeadId)
+
+      if (hasStoredLead) {
+        setSelectedLeadId(storedLeadId)
+        setHasOpenDrawer(true)
+      }
+
+      window.sessionStorage.removeItem("crm-open-lead")
+      return
+    }
+
+    const hasMatchingLead = leads.some((lead) => lead.id === initialLeadId)
+
+    if (hasMatchingLead) {
+      setSelectedLeadId(initialLeadId)
+      setHasOpenDrawer(true)
+    }
+  }, [initialLeadId, leads])
 
   const { leadMap, columnMap } = boardState
 
@@ -361,14 +425,32 @@ export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
 
   const filteredColumnMap = React.useMemo(
     () =>
-      CRM_STATUS_ORDER.reduce<Record<LeadStatus, string[]>>((acc, status) => {
-        acc[status] = columnMap[status].filter((id) => visibleLeadIds.has(id))
-        return acc
-      }, {} as Record<LeadStatus, string[]>),
+      CRM_STATUS_ORDER.reduce<Record<LeadStatus, string[]>>(
+        (acc, status) => {
+          acc[status] = columnMap[status].filter((id) => visibleLeadIds.has(id))
+          return acc
+        },
+        {} as Record<LeadStatus, string[]>
+      ),
     [columnMap, visibleLeadIds]
   )
 
   const activeLead = activeLeadId ? leadMap[activeLeadId] : null
+
+  const handleDrawerOpenChange = React.useCallback(
+    (leadId: string, open: boolean) => {
+      setHasOpenDrawer(open)
+      setSelectedLeadId(open ? leadId : null)
+      if (!open) {
+        window.sessionStorage.removeItem("crm-open-lead")
+      }
+
+      if (!open && initialLeadId) {
+        router.replace(pathname, { scroll: false })
+      }
+    },
+    [initialLeadId, pathname, router]
+  )
 
   const handleDragStart = (event: DragStartEvent): void => {
     setActiveLeadId(String(event.active.id))
@@ -385,7 +467,11 @@ export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
     const activeContainer = findContainer(activeId, boardState.columnMap)
     const overContainer = findContainer(overId, boardState.columnMap)
 
-    if (!activeContainer || !overContainer || activeContainer === overContainer) {
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeContainer === overContainer
+    ) {
       return
     }
 
@@ -419,7 +505,8 @@ export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
     }
 
     if (activeContainer === overContainer) {
-      const activeIndex = boardState.columnMap[activeContainer].indexOf(activeId)
+      const activeIndex =
+        boardState.columnMap[activeContainer].indexOf(activeId)
       const overIndex =
         overId === overContainer
           ? boardState.columnMap[activeContainer].length - 1
@@ -487,7 +574,8 @@ export function KanbanBoard({ leads }: { leads: Lead[] }): React.JSX.Element {
               leadIds={filteredColumnMap[status]}
               leadMap={leadMap}
               dragDisabled={hasOpenDrawer}
-              onDrawerOpenChange={setHasOpenDrawer}
+              onDrawerOpenChange={handleDrawerOpenChange}
+              selectedLeadId={selectedLeadId}
             />
           ))}
         </div>

@@ -5,14 +5,21 @@ import { getTranslations } from "next-intl/server"
 import { Link } from "@/src/i18n/navigation"
 import { Plus } from "@phosphor-icons/react/dist/ssr"
 
-import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 import { Button } from "@/src/components/ui/button"
+
+import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
 import { getLeads } from "@/src/lib/actions/crm.actions"
 
-export default async function CRMPage(): Promise<React.JSX.Element> {
+export default async function CRMPage({
+  searchParams,
+}: {
+  searchParams?: Promise<{ lead?: string }>
+}): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.crm")
   const leads = await getLeads()
+  const resolvedSearchParams = searchParams ? await searchParams : undefined
+  const selectedLeadId = resolvedSearchParams?.lead ?? null
 
   return (
     <main className="relative flex flex-col gap-10 overflow-hidden bg-background/50 p-6 lg:p-12">
@@ -49,7 +56,7 @@ export default async function CRMPage(): Promise<React.JSX.Element> {
         </Button>
       </div>
 
-      <KanbanBoard leads={leads} />
+      <KanbanBoard leads={leads} initialLeadId={selectedLeadId} />
     </main>
   )
 }

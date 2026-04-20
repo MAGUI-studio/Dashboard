@@ -5,11 +5,14 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
+import { Link } from "@/src/i18n/navigation"
 import {
   ArrowLeft,
+  ArrowSquareOut,
   Calendar,
   CurrencyDollar,
   ProjectorScreen,
+  UserCircle,
 } from "@phosphor-icons/react"
 import dayjs from "dayjs"
 
@@ -21,6 +24,11 @@ interface ProjectDetailsHeaderProps {
     name: string
     budget: string | null
     deadline: Date | null
+    client: {
+      id: string
+      name: string | null
+      email: string
+    }
   }
 }
 
@@ -62,9 +70,33 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
             <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
               <ProjectorScreen weight="duotone" className="size-6" />
             </div>
-            <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl lg:text-7xl">
-              {project.name}
-            </h1>
+            <div className="grid gap-2">
+              <h1 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl lg:text-7xl">
+                {project.name}
+              </h1>
+              <div className="flex flex-wrap items-center gap-3 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55">
+                <span className="inline-flex items-center gap-2">
+                  <UserCircle className="size-4 text-brand-primary/70" />
+                  {project.client.name || project.client.email}
+                </span>
+                <Button
+                  asChild
+                  variant="ghost"
+                  size="sm"
+                  className="h-8 rounded-full px-3 text-[9px] font-black uppercase tracking-[0.18em] text-brand-primary hover:bg-brand-primary/8 hover:text-brand-primary"
+                >
+                  <Link
+                    href={{
+                      pathname: "/admin/clients/[id]",
+                      params: { id: project.client.id },
+                    }}
+                  >
+                    <ArrowSquareOut className="mr-2 size-3.5" />
+                    {t("open_client", { fallback: "Abrir cliente" })}
+                  </Link>
+                </Button>
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-8 pl-1">

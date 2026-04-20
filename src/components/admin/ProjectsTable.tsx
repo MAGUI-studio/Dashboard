@@ -45,6 +45,7 @@ export interface ProjectData {
   status: string
   progress: number
   client: {
+    id: string
     name: string | null
     email: string
   }
@@ -185,6 +186,22 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                   </TableCell>
                   <TableCell className="px-8 py-6 text-right">
                     <div className="flex justify-end gap-2">
+                      <Button
+                        asChild
+                        variant="outline"
+                        size="sm"
+                        className="h-10 rounded-full px-5 text-[10px] font-black uppercase tracking-widest"
+                      >
+                        <Link
+                          href={{
+                            pathname: "/admin/clients/[id]",
+                            params: { id: project.client.id },
+                          }}
+                        >
+                          Cliente
+                        </Link>
+                      </Button>
+
                       <Button
                         asChild
                         variant="ghost"

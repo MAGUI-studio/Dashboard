@@ -9,13 +9,19 @@ import {
   ArrowLeft,
   EnvelopeSimple,
   FolderOpen,
+  Plus,
   ShieldCheck,
   UserCircle,
 } from "@phosphor-icons/react/dist/ssr"
 
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -58,7 +64,9 @@ export default async function ClientDetailsPage({
   })
 
   const projects = localUser?.projects ?? []
-  const activeProjects = projects.filter((project) => project.status !== "LAUNCHED")
+  const activeProjects = projects.filter(
+    (project) => project.status !== "LAUNCHED"
+  )
   const email = clerkUser.emailAddresses[0]?.emailAddress ?? "Sem e-mail"
   const fullName =
     [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
@@ -72,26 +80,43 @@ export default async function ClientDetailsPage({
       <div className="absolute bottom-0 left-0 -z-10 size-96 -translate-x-1/2 translate-y-1/2 rounded-full bg-brand-primary/10 blur-3xl opacity-30" />
 
       <div className="flex flex-col gap-6">
-        <Button asChild variant="ghost" className="w-fit rounded-full px-0 text-[10px] font-black uppercase tracking-[0.2em]">
+        <Button
+          asChild
+          variant="ghost"
+          className="w-fit rounded-full px-0 text-[10px] font-black uppercase tracking-[0.2em]"
+        >
           <Link href="/admin/clients">
             <ArrowLeft className="mr-2 size-4" />
             Voltar para clientes
           </Link>
         </Button>
 
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-2">
-            <div className="size-2 rounded-full bg-brand-primary animate-pulse" />
-            <p className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary">
-              {t("eyebrow")}
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <div className="size-2 rounded-full bg-brand-primary animate-pulse" />
+              <p className="text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary">
+                {t("eyebrow")}
+              </p>
+            </div>
+            <h1 className="font-heading text-4xl font-black uppercase tracking-[-0.05em] sm:text-6xl">
+              {fullName}
+            </h1>
+            <p className="max-w-xl text-sm font-medium leading-relaxed text-muted-foreground/80">
+              Visao consolidada do cadastro, papel de acesso e projetos
+              vinculados.
             </p>
           </div>
-          <h1 className="font-heading text-4xl font-black uppercase tracking-[-0.05em] sm:text-6xl">
-            {fullName}
-          </h1>
-          <p className="max-w-xl text-sm font-medium leading-relaxed text-muted-foreground/80">
-            Visao consolidada do cadastro, papel de acesso e projetos vinculados.
-          </p>
+
+          <Button
+            asChild
+            className="h-12 rounded-full px-7 text-[10px] font-black uppercase tracking-[0.2em]"
+          >
+            <Link href="/admin/projects/register">
+              <Plus className="mr-2 size-4" />
+              Iniciar projeto
+            </Link>
+          </Button>
         </div>
       </div>
 
@@ -105,11 +130,15 @@ export default async function ClientDetailsPage({
           <CardContent className="grid gap-3">
             <div className="flex items-center gap-3">
               <UserCircle className="size-5 text-brand-primary" />
-              <span className="text-sm font-semibold text-foreground/85">{fullName}</span>
+              <span className="text-sm font-semibold text-foreground/85">
+                {fullName}
+              </span>
             </div>
             <div className="flex items-center gap-3">
               <EnvelopeSimple className="size-5 text-brand-primary" />
-              <span className="text-sm font-semibold text-foreground/85">{email}</span>
+              <span className="text-sm font-semibold text-foreground/85">
+                {email}
+              </span>
             </div>
           </CardContent>
         </Card>
@@ -178,10 +207,15 @@ export default async function ClientDetailsPage({
                     {project.name}
                   </p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                    {project.client.name || project.client.email} • {project.status}
+                    {project.client.name || project.client.email} •{" "}
+                    {project.status}
                   </p>
                 </div>
-                <Button asChild variant="outline" className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]">
+                <Button
+                  asChild
+                  variant="outline"
+                  className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
+                >
                   <Link
                     href={{
                       pathname: "/admin/projects/[id]",

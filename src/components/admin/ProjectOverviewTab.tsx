@@ -4,8 +4,10 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { Link } from "@/src/i18n/navigation"
 import { DashboardProject } from "@/src/types/dashboard"
 import {
+  ArrowSquareOut,
   Buildings,
   EnvelopeSimple,
   GithubLogo,
@@ -13,6 +15,8 @@ import {
   Phone,
   Tag,
 } from "@phosphor-icons/react"
+
+import { Button } from "@/src/components/ui/button"
 
 interface ProjectOverviewTabProps {
   project: DashboardProject
@@ -172,6 +176,22 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
                 </div>
               )}
             </div>
+
+            <Button
+              asChild
+              variant="outline"
+              className="rounded-full text-[10px] font-black uppercase tracking-[0.18em]"
+            >
+              <Link
+                href={{
+                  pathname: "/admin/clients/[id]",
+                  params: { id: project.client.id },
+                }}
+              >
+                <ArrowSquareOut className="mr-2 size-4" />
+                {t("open_client", { fallback: "Abrir cliente" })}
+              </Link>
+            </Button>
           </div>
         </section>
       </div>

@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { addDays, isAfter, isBefore, startOfDay } from "date-fns"
 import { getTranslations } from "next-intl/server"
 
 import {
@@ -21,14 +20,8 @@ import {
   NotePencil,
   Users,
 } from "@phosphor-icons/react/dist/ssr"
+import { addDays, isAfter, isBefore, startOfDay } from "date-fns"
 
-import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
-import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
-import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
-import { BriefingForm } from "@/src/components/common/BriefingForm"
-import { DashboardSummary } from "@/src/components/common/DashboardSummary"
-import { Greetings } from "@/src/components/common/Greetings"
-import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 import { Button } from "@/src/components/ui/button"
 import {
   Card,
@@ -37,6 +30,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/src/components/ui/card"
+
+import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
+import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
+import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
+import { BriefingForm } from "@/src/components/common/BriefingForm"
+import { DashboardSummary } from "@/src/components/common/DashboardSummary"
+import { Greetings } from "@/src/components/common/Greetings"
+import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 
 import prisma from "@/src/lib/prisma"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
@@ -205,6 +206,10 @@ export default async function DashboardPage({
       })
       .slice(0, 2)
 
+    const overdueActionItems = dueActionItems
+      .filter((item) => item.dueDate && isBefore(new Date(item.dueDate), today))
+      .slice(0, 2)
+
     const attentionItems = [
       ...pendingApprovals.slice(0, 2).map((approval) => ({
         id: `approval-${approval.id}`,
@@ -213,6 +218,7 @@ export default async function DashboardPage({
         href: {
           pathname: "/admin/projects/[id]" as const,
           params: { id: approval.project.id },
+          query: { tab: "timeline", highlight: approval.id },
         },
         kind: "approval" as const,
         priority: "high" as const,
@@ -232,9 +238,20 @@ export default async function DashboardPage({
         id: `lead-${lead.id}`,
         title: `${lead.companyName} sem retorno recente`,
         description: `Lead parado desde ${new Date(lead.updatedAt).toLocaleDateString("pt-BR")} na etapa ${lead.status}.`,
-        href: "/admin/crm" as const,
+        href: `/admin/crm?lead=${lead.id}`,
         kind: "lead" as const,
         priority: "medium" as const,
+      })),
+      ...overdueActionItems.map((item) => ({
+        id: `task-${item.id}`,
+        title: `${item.title} esta vencida`,
+        description: `${item.project.name} tinha prazo em ${new Date(item.dueDate!).toLocaleDateString("pt-BR")}.`,
+        href: {
+          pathname: "/admin/projects/[id]" as const,
+          params: { id: item.project.id },
+        },
+        kind: "task" as const,
+        priority: "high" as const,
       })),
       ...projectsNeedingUpdates.map((project) => ({
         id: `project-${project.id}`,
@@ -254,7 +271,9 @@ export default async function DashboardPage({
         id: `agenda-deadline-${project.id}`,
         title: project.name,
         dateLabel: `Prazo • ${new Date(project.deadline!).toLocaleDateString("pt-BR")}`,
+        dateValue: project.deadline!,
         context: `${project.client.name || project.client.email} • ${project.progress}% de progresso declarado`,
+        kind: "deadline" as const,
         href: {
           pathname: "/admin/projects/[id]" as const,
           params: { id: project.id },
@@ -272,7 +291,9 @@ export default async function DashboardPage({
           id: `agenda-action-${item.id}`,
           title: item.title,
           dateLabel: `Action item • ${new Date(item.dueDate!).toLocaleDateString("pt-BR")}`,
+          dateValue: item.dueDate!,
           context: item.project.name,
+          kind: "task" as const,
           href: {
             pathname: "/admin/projects/[id]" as const,
             params: { id: item.project.id },
@@ -290,10 +311,12 @@ export default async function DashboardPage({
           id: `agenda-lead-${lead.id}`,
           title: lead.companyName,
           dateLabel: `Retomar contato • ${new Date(lead.nextActionAt!).toLocaleDateString("pt-BR")}`,
+          dateValue: lead.nextActionAt!,
           context: lead.contactName || "Lead sem contato principal definido",
-          href: "/admin/crm" as const,
+          kind: "lead" as const,
+          href: `/admin/crm?lead=${lead.id}`,
         })),
-    ].slice(0, 6)
+    ].slice(0, 10) // Increased limit to allow filtering to be useful
 
     const projectHealthItems = activeProjects
       .map((project) => {

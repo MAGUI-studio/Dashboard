@@ -246,6 +246,7 @@
         "progress_label": "Progresso de Execução",
         "client_name_label": "Nome do Cliente",
         "client_email_label": "E-mail de Contato",
+        "open_client": "Abrir cliente",
         "not_available": "N/A",
         "no_budget": "Sem orçamento",
         "no_deadline": "Sem prazo definido",
