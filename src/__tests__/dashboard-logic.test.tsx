@@ -5,7 +5,7 @@ import { describe, expect, it, vi, beforeEach } from "vitest"
 
 import { Header } from "@/src/components/common/Header"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
-import { approveUpdateAction } from "@/src/lib/actions/project.actions"
+import { approveUpdateAction, rejectUpdateAction } from "@/src/lib/actions/project.actions"
 
 // Mocks robustos para Vitest
 vi.mock("next-intl", () => ({
@@ -66,19 +66,16 @@ describe("Dashboard Logic", () => {
       expect(screen.getByText("Delivery One")).toBeInTheDocument()
 
       const buttons = screen.getAllByRole("button")
-      // No header, temos botões de menu e as setas. 
-      // Em Vitest sem CSS complexo, pegamos pela ordem ou ícone se possível.
       fireEvent.click(buttons[1]) // Botão Next (seta direita)
       
       expect(screen.getByText("Beta Project")).toBeInTheDocument()
     })
 
-    it("opens drawer and handles approval", async () => {
+    it("handles approval flow", async () => {
       render(<Header pendingApprovals={mockPendingApprovals} />)
       
       fireEvent.click(screen.getByText("cta"))
       
-      // O botão tem o texto 'approve'. Como há um h4 com o mesmo texto, usamos role.
       const approveBtn = screen.getByRole("button", { name: /approve/i })
       fireEvent.click(approveBtn)
       
@@ -86,9 +83,30 @@ describe("Dashboard Logic", () => {
         expect(approveUpdateAction).toHaveBeenCalledWith("u1", "p1")
       })
     })
+
+    it("handles rejection flow with feedback", async () => {
+      render(<Header pendingApprovals={mockPendingApprovals} />)
+      
+      fireEvent.click(screen.getByText("cta"))
+      
+      // Feedback required for rejection
+      const textarea = screen.getByPlaceholderText(/placeholder/)
+      fireEvent.change(textarea, { target: { value: "Needs more contrast." } })
+      
+      const rejectBtn = screen.getByText("send_feedback")
+      fireEvent.click(rejectBtn)
+      
+      await waitFor(() => {
+        expect(rejectUpdateAction).toHaveBeenCalledWith({
+          updateId: "u1",
+          projectId: "p1",
+          feedback: "Needs more contrast.",
+        })
+      })
+    })
   })
 
-  describe("Feed Expansion", () => {
+  describe("Dashboard Summary & Feed", () => {
     const mockProject = {
       id: "p1",
       name: "Test",
@@ -104,7 +122,7 @@ describe("Dashboard Logic", () => {
       assets: []
     }
 
-    it("shows 5 items initially and expands on click", () => {
+    it("handles feed expansion", () => {
       render(<DashboardSummary project={mockProject as any} />)
       
       expect(screen.getByText("Update 4")).toBeInTheDocument()
@@ -115,6 +133,20 @@ describe("Dashboard Logic", () => {
 
       fireEvent.click(screen.getByText(/see_less/))
       expect(screen.queryByText("Update 5")).not.toBeInTheDocument()
+    })
+
+    it("renders assets list and empty state", () => {
+      // Empty state
+      const { rerender } = render(<DashboardSummary project={mockProject as any} />)
+      expect(screen.getByText("waiting_files")).toBeInTheDocument()
+
+      // List state
+      const projectWithAssets = {
+        ...mockProject,
+        assets: [{ id: "a1", name: "Brand.pdf", url: "#" }]
+      }
+      rerender(<DashboardSummary project={projectWithAssets as any} />)
+      expect(screen.getByText("Brand.pdf")).toBeInTheDocument()
     })
   })
 })
