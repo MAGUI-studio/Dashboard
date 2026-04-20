@@ -271,12 +271,29 @@ export function Header({
                           className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
                         >
                           <Link href="/admin/crm" className="flex items-center">
-                            <ChartLineUp
+                            <List
                               weight="bold"
                               className="mr-2.5 size-3.5 text-brand-primary/60"
                             />
                             <span className="font-bold uppercase tracking-tight text-[10px]">
-                              {t("commercial.kanban")}
+                              {t("commercial.list")}
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          asChild
+                          className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                        >
+                          <Link
+                            href="/admin/crm/register"
+                            className="flex items-center"
+                          >
+                            <Plus
+                              weight="bold"
+                              className="mr-2.5 size-3.5 text-brand-primary/60"
+                            />
+                            <span className="font-bold uppercase tracking-tight text-[10px]">
+                              {t("commercial.create")}
                             </span>
                           </Link>
                         </DropdownMenuItem>
@@ -451,9 +468,14 @@ export function Header({
                           {viewer.fullName?.charAt(0) || "U"}
                         </AvatarFallback>
                       </Avatar>
-                      <span className="hidden lg:block truncate text-[9px] font-black uppercase tracking-[0.2em] text-foreground/30 group-hover:text-foreground/80 transition-colors">
-                        {viewer.firstName || viewer.fullName?.split(" ")[0]}
-                      </span>
+                      <div className="hidden lg:grid text-left leading-tight">
+                        <span className="max-w-40 truncate text-[9px] font-black uppercase tracking-[0.2em] text-foreground/55 group-hover:text-foreground/85 transition-colors">
+                          {viewer.firstName || viewer.fullName?.split(" ")[0]}
+                        </span>
+                        <span className="max-w-40 truncate text-[8px] font-bold tracking-[0.12em] text-muted-foreground/60 transition-colors group-hover:text-muted-foreground/80">
+                          {viewer.email}
+                        </span>
+                      </div>
                     </button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent
@@ -482,20 +504,39 @@ export function Header({
 
                     <div className="lg:hidden p-2 grid gap-1 border-b border-border/10 mb-2">
                       {viewer?.isAdmin && (
-                        <DropdownMenuItem
-                          asChild
-                          className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-                        >
-                          <Link href="/admin/crm" className="flex items-center">
-                            <ChartLineUp
-                              weight="duotone"
-                              className="mr-3 size-4 text-brand-primary/60"
-                            />
-                            <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                              {t("commercial.title")}
-                            </span>
-                          </Link>
-                        </DropdownMenuItem>
+                        <>
+                          <DropdownMenuItem
+                            asChild
+                            className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                          >
+                            <Link href="/admin/crm" className="flex items-center">
+                              <ChartLineUp
+                                weight="duotone"
+                                className="mr-3 size-4 text-brand-primary/60"
+                              />
+                              <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                                {t("commercial.list")}
+                              </span>
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            asChild
+                            className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                          >
+                            <Link
+                              href="/admin/crm/register"
+                              className="flex items-center"
+                            >
+                              <Plus
+                                weight="duotone"
+                                className="mr-3 size-4 text-brand-primary/60"
+                              />
+                              <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                                {t("commercial.create")}
+                              </span>
+                            </Link>
+                          </DropdownMenuItem>
+                        </>
                       )}
                       <DropdownMenuItem
                         asChild

@@ -19,9 +19,17 @@ export const pathnames = {
     pt: "/admin/clientes/cadastrar",
     en: "/admin/clients/register",
   },
+  "/admin/clients/[id]": {
+    pt: "/admin/clientes/[id]",
+    en: "/admin/clients/[id]",
+  },
   "/admin/crm": {
     pt: "/admin/prospeccao",
     en: "/admin/crm",
+  },
+  "/admin/crm/register": {
+    pt: "/admin/prospeccao/cadastrar",
+    en: "/admin/crm/register",
   },
   "/admin/crm/kanban": {
     pt: "/admin/prospeccao/kanban",

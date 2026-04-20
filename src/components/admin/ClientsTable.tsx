@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { Link } from "@/src/i18n/navigation"
 import {
   CaretDown,
   CaretUp,
@@ -330,11 +331,19 @@ export function ClientsTable({
                     <TableCell className="px-8 py-6 text-right">
                       <div className="flex justify-end gap-2">
                         <Button
+                          asChild
                           variant="ghost"
                           size="sm"
                           className="rounded-full h-10 px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
                         >
-                          {t("table.inspect")}
+                          <Link
+                            href={{
+                              pathname: "/admin/clients/[id]",
+                              params: { id: user.id },
+                            }}
+                          >
+                            {t("table.inspect")}
+                          </Link>
                         </Button>
 
                         {!isAdmin && (

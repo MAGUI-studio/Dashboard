@@ -3,8 +3,8 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 
+import { useRouter } from "@/src/i18n/navigation"
 import {
   Building,
   CircleNotch,
@@ -14,7 +14,6 @@ import {
   InstagramLogo,
   Note,
   Phone,
-  Plus,
   User,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -29,14 +28,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/src/components/ui/select"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/src/components/ui/sheet"
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createLead } from "@/src/lib/actions/crm.actions"
@@ -51,7 +42,6 @@ type LeadSourceValue =
 
 export function CreateLeadForm(): React.JSX.Element {
   const t = useTranslations("Admin.crm")
-  const [open, setOpen] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(false)
   const [source, setSource] = React.useState<LeadSourceValue>("OTHER")
   const router = useRouter()
@@ -71,25 +61,19 @@ export function CreateLeadForm(): React.JSX.Element {
       ? "https://linkedin.com/in/usuario"
       : "https://"
 
-  const handleOpenChange = (nextOpen: boolean): void => {
-    setOpen(nextOpen)
-    if (!nextOpen) {
-      setSource("OTHER")
-    }
-  }
-
   const handleSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault()
     setIsLoading(true)
 
-    const formData = new FormData(event.currentTarget)
+    const formElement = event.currentTarget
+    const formData = new FormData(formElement)
 
     const websiteValue = (formData.get("website") as string) || ""
     const instagramValue = (formData.get("instagram") as string) || ""
 
-    const data = {
+    const result = await createLead({
       companyName: formData.get("companyName") as string,
       contactName: formData.get("contactName") as string,
       email: formData.get("email") as string,
@@ -99,14 +83,13 @@ export function CreateLeadForm(): React.JSX.Element {
       notes: formData.get("notes") as string,
       value: "",
       source,
-    }
-
-    const result = await createLead(data)
+    })
 
     if (result.success) {
       toast.success(t("form.success"))
-      setOpen(false)
+      formElement.reset()
       setSource("OTHER")
+      router.push("/admin/crm")
       router.refresh()
     } else {
       toast.error(t("form.error"))
@@ -116,284 +99,249 @@ export function CreateLeadForm(): React.JSX.Element {
   }
 
   return (
-    <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetTrigger asChild>
-        <Button className="group relative h-14 overflow-hidden rounded-full px-10 font-sans font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-primary/20">
-          <Plus className="mr-2" size={18} weight="bold" />
-          {t("create")}
-        </Button>
-      </SheetTrigger>
-      <SheetContent
-        side="right"
-        className="flex w-[94vw] flex-col border-l border-border/30 bg-background/95 p-0 sm:min-w-[38rem] sm:max-w-[40vw]"
-      >
-        <SheetHeader className="border-b border-border/20 px-8 py-8 text-left">
-          <div className="mb-3 flex items-center gap-2">
-            <div className="size-2 rounded-full bg-brand-primary animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
-              Cadastro Comercial
-            </span>
-          </div>
-          <SheetTitle className="font-heading text-3xl font-black uppercase tracking-tight text-foreground">
-            {t("create")}
-          </SheetTitle>
-          <SheetDescription className="mt-3 text-left text-sm font-medium leading-relaxed text-muted-foreground/60">
-            {t("description")}
-          </SheetDescription>
-        </SheetHeader>
+    <form onSubmit={handleSubmit} className="grid gap-8">
+      <div className="grid gap-6">
+        <div className="space-y-4">
+          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+            Empresa
+          </h3>
 
-        <form onSubmit={handleSubmit} className="flex min-h-0 flex-1 flex-col">
-          <div className="flex-1 space-y-8 overflow-y-auto p-8">
-            <div className="grid gap-6">
-              <div className="space-y-4">
-                <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                  Empresa
-                </h3>
-
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="companyName"
-                      className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t("form.company")}{" "}
-                      <span className="text-brand-primary">*</span>
-                    </Label>
-                    <div className="group relative">
-                      <Building
-                        className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                        size={18}
-                      />
-                      <Input
-                        id="companyName"
-                        name="companyName"
-                        required
-                        placeholder="Ex: Nome da Empresa Ltda"
-                        className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10 focus:ring-brand-primary/20"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="contactName"
-                      className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t("form.contact")}
-                    </Label>
-                    <div className="group relative">
-                      <User
-                        className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                        size={18}
-                      />
-                      <Input
-                        id="contactName"
-                        name="contactName"
-                        placeholder="Nome da pessoa"
-                        className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                      />
-                    </div>
-                  </div>
-                </div>
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <Label
+                htmlFor="companyName"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                {t("form.company")} <span className="text-brand-primary">*</span>
+              </Label>
+              <div className="group relative">
+                <Building
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                  size={18}
+                />
+                <Input
+                  id="companyName"
+                  name="companyName"
+                  required
+                  placeholder="Ex: Nome da Empresa Ltda"
+                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10 focus:ring-brand-primary/20"
+                />
               </div>
+            </div>
 
-              <div className="space-y-4 pt-4">
-                <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                  Contato
-                </h3>
-
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="email"
-                      className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t("form.email")}
-                    </Label>
-                    <div className="group relative">
-                      <Envelope
-                        className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                        size={18}
-                      />
-                      <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="contato@empresa.com"
-                        className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label
-                      htmlFor="phone"
-                      className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                    >
-                      {t("form.phone")}
-                    </Label>
-                    <div className="group relative">
-                      <Phone
-                        className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                        size={18}
-                      />
-                      <Input
-                        id="phone"
-                        name="phone"
-                        placeholder="(00) 00000-0000"
-                        className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-4">
-                <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                  Origem
-                </h3>
-
-                <div className="grid gap-4">
-                  <div className="space-y-2">
-                    <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
-                      Origem
-                    </Label>
-                    <div className="relative">
-                      <Funnel
-                        className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-muted-foreground/40"
-                        size={18}
-                      />
-                      <Select
-                        name="source"
-                        value={source}
-                        onValueChange={(value) => setSource(value as LeadSourceValue)}
-                      >
-                        <SelectTrigger
-                          size="lg"
-                          className="h-12 w-full rounded-xl border-border/40 bg-muted/5 pl-12 text-left"
-                        >
-                          <SelectValue placeholder="Selecione a origem" />
-                        </SelectTrigger>
-                        <SelectContent
-                          position="popper"
-                          className="border border-border/60 bg-background shadow-2xl"
-                        >
-                          <SelectItem value="REFERRAL">Indicação</SelectItem>
-                          <SelectItem value="ORGANIC">Orgânico</SelectItem>
-                          <SelectItem value="INSTAGRAM">Instagram</SelectItem>
-                          <SelectItem value="LINKEDIN">LinkedIn</SelectItem>
-                          <SelectItem value="WEBSITE">Site</SelectItem>
-                          <SelectItem value="OTHER">Outro</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-
-                  {showInstagramField ? (
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="instagram"
-                        className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                      >
-                        {sourceFieldLabel}
-                      </Label>
-                      <div className="group relative">
-                        <InstagramLogo
-                          className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                          size={18}
-                        />
-                        <Input
-                          id="instagram"
-                          name="instagram"
-                          placeholder={sourceFieldPlaceholder}
-                          className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                        />
-                      </div>
-                    </div>
-                  ) : null}
-
-                  {showWebsiteField ? (
-                    <div className="space-y-2">
-                      <Label
-                        htmlFor="website"
-                        className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                      >
-                        {sourceFieldLabel}
-                      </Label>
-                      <div className="group relative">
-                        <Globe
-                          className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                          size={18}
-                        />
-                        <Input
-                          id="website"
-                          name="website"
-                          type="url"
-                          placeholder={sourceFieldPlaceholder}
-                          className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                        />
-                      </div>
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="space-y-4 pt-4">
-                <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                  Observações
-                </h3>
-
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="notes"
-                    className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-                  >
-                    {t("form.notes")}
-                  </Label>
-                  <div className="group relative">
-                    <Note
-                      className="absolute top-4 left-4 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                      size={18}
-                    />
-                    <Textarea
-                      id="notes"
-                      name="notes"
-                      placeholder="Anote o contexto do possível cliente, o que chamou atenção e onde está a conversa."
-                      className="min-h-[120px] rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                    />
-                  </div>
-                </div>
+            <div className="space-y-2">
+              <Label
+                htmlFor="contactName"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                {t("form.contact")}
+              </Label>
+              <div className="group relative">
+                <User
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                  size={18}
+                />
+                <Input
+                  id="contactName"
+                  name="contactName"
+                  placeholder="Nome da pessoa"
+                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                />
               </div>
             </div>
           </div>
+        </div>
 
-          <div className="flex items-center justify-end gap-4 border-t border-border/40 bg-background/95 px-8 py-6">
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setOpen(false)}
-              disabled={isLoading}
-              className="rounded-full px-6 text-[10px] font-bold uppercase tracking-widest"
-            >
-              {t("details.cancel")}
-            </Button>
-            <Button
-              type="submit"
-              disabled={isLoading}
-              className="h-12 rounded-full bg-brand-primary px-12 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95 hover:bg-brand-primary/90"
-            >
-              {isLoading ? (
-                <CircleNotch
-                  className="mr-2 animate-spin"
+        <div className="space-y-4 pt-4">
+          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+            Contato
+          </h3>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label
+                htmlFor="email"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                {t("form.email")}
+              </Label>
+              <div className="group relative">
+                <Envelope
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
                   size={18}
-                  weight="bold"
                 />
-              ) : null}
-              {t("form.submit")}
-            </Button>
+                <Input
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="contato@empresa.com"
+                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <Label
+                htmlFor="phone"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                {t("form.phone")}
+              </Label>
+              <div className="group relative">
+                <Phone
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                  size={18}
+                />
+                <Input
+                  id="phone"
+                  name="phone"
+                  placeholder="(00) 00000-0000"
+                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                />
+              </div>
+            </div>
           </div>
-        </form>
-      </SheetContent>
-    </Sheet>
+        </div>
+
+        <div className="space-y-4 pt-4">
+          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+            Origem
+          </h3>
+
+          <div className="grid gap-4">
+            <div className="space-y-2">
+              <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
+                Origem
+              </Label>
+              <div className="relative">
+                <Funnel
+                  className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-muted-foreground/40"
+                  size={18}
+                />
+                <Select
+                  name="source"
+                  value={source}
+                  onValueChange={(value) => setSource(value as LeadSourceValue)}
+                >
+                  <SelectTrigger
+                    size="lg"
+                    className="h-12 w-full rounded-xl border-border/40 bg-muted/5 pl-12 text-left"
+                  >
+                    <SelectValue placeholder="Selecione a origem" />
+                  </SelectTrigger>
+                  <SelectContent
+                    position="popper"
+                    className="border border-border/60 bg-background shadow-2xl"
+                  >
+                    <SelectItem value="REFERRAL">Indicacao</SelectItem>
+                    <SelectItem value="ORGANIC">Organico</SelectItem>
+                    <SelectItem value="INSTAGRAM">Instagram</SelectItem>
+                    <SelectItem value="LINKEDIN">LinkedIn</SelectItem>
+                    <SelectItem value="WEBSITE">Site</SelectItem>
+                    <SelectItem value="OTHER">Outro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            {showInstagramField ? (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="instagram"
+                  className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                >
+                  {sourceFieldLabel}
+                </Label>
+                <div className="group relative">
+                  <InstagramLogo
+                    className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                    size={18}
+                  />
+                  <Input
+                    id="instagram"
+                    name="instagram"
+                    placeholder={sourceFieldPlaceholder}
+                    className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                  />
+                </div>
+              </div>
+            ) : null}
+
+            {showWebsiteField ? (
+              <div className="space-y-2">
+                <Label
+                  htmlFor="website"
+                  className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+                >
+                  {sourceFieldLabel}
+                </Label>
+                <div className="group relative">
+                  <Globe
+                    className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                    size={18}
+                  />
+                  <Input
+                    id="website"
+                    name="website"
+                    type="url"
+                    placeholder={sourceFieldPlaceholder}
+                    className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                  />
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="space-y-4 pt-4">
+          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+            Observacoes
+          </h3>
+
+          <div className="space-y-2">
+            <Label
+              htmlFor="notes"
+              className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+            >
+              {t("form.notes")}
+            </Label>
+            <div className="group relative">
+              <Note
+                className="absolute top-4 left-4 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                size={18}
+              />
+              <Textarea
+                id="notes"
+                name="notes"
+                placeholder="Anote o contexto do possivel cliente, o que chamou atencao e onde esta a conversa."
+                className="min-h-[120px] rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="flex items-center justify-end gap-4 border-t border-border/40 pt-6">
+        <Button
+          type="button"
+          variant="ghost"
+          onClick={() => router.push("/admin/crm")}
+          disabled={isLoading}
+          className="rounded-full px-6 text-[10px] font-bold uppercase tracking-widest"
+        >
+          {t("details.cancel")}
+        </Button>
+        <Button
+          type="submit"
+          disabled={isLoading}
+          className="h-12 rounded-full bg-brand-primary px-12 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95 hover:bg-brand-primary/90"
+        >
+          {isLoading ? (
+            <CircleNotch className="mr-2 animate-spin" size={18} weight="bold" />
+          ) : null}
+          {t("form.submit")}
+        </Button>
+      </div>
+    </form>
   )
 }

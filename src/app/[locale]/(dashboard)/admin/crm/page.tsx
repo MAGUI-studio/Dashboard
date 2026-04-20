@@ -2,8 +2,11 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
-import { CreateLeadForm } from "@/src/components/admin/CreateLeadForm"
+import { Link } from "@/src/i18n/navigation"
+import { Plus } from "@phosphor-icons/react/dist/ssr"
+
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
+import { Button } from "@/src/components/ui/button"
 
 import { getLeads } from "@/src/lib/actions/crm.actions"
 
@@ -32,7 +35,18 @@ export default async function CRMPage(): Promise<React.JSX.Element> {
           </p>
         </div>
 
-        <CreateLeadForm />
+        <Button
+          asChild
+          className="group relative h-14 overflow-hidden rounded-full px-10 font-sans font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-primary/20"
+        >
+          <Link href="/admin/crm/register" className="flex items-center gap-3">
+            <Plus
+              weight="duotone"
+              className="size-5 transition-transform group-hover:rotate-12"
+            />
+            <span>{t("create")}</span>
+          </Link>
+        </Button>
       </div>
 
       <KanbanBoard leads={leads} />

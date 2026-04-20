@@ -424,8 +424,9 @@
     },
     "commercial": {
       "title": "Comercial",
-      "list": "Leads",
-      "kanban": "Kanban"
+      "list": "Todos os Leads",
+      "kanban": "Kanban",
+      "create": "Novo Lead"
     },
     "user": {
       "profile": "Meu Perfil",

@@ -51,6 +51,7 @@ export function LanguageSwitcher(): React.JSX.Element {
     Cookies.set("NEXT_LOCALE", newLocale, { expires: 365 })
 
     if (
+      pathname === "/admin/clients/[id]" ||
       pathname === "/admin/projects/[id]" ||
       pathname === "/admin/projects/[id]/assets"
     ) {
