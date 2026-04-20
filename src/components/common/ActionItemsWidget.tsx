@@ -62,7 +62,9 @@ export function ActionItemsWidget({
                       className="text-brand-primary/40"
                     />
                     <span className="font-mono text-[9px] font-bold text-brand-primary/60 uppercase tracking-widest">
-                      Prazo: {new Date(item.dueDate).toLocaleDateString()}
+                      {t("due_date", {
+                        date: new Date(item.dueDate).toLocaleDateString(),
+                      })}
                     </span>
                   </div>
                 )}

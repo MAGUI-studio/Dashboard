@@ -37,7 +37,7 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
               <div className="flex items-center gap-3">
                 <Tag weight="duotone" className="size-5 text-brand-primary" />
                 <span className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
-                  {project.category}
+                  {t(`categories.${project.category}`)}
                 </span>
               </div>
             </div>
@@ -51,7 +51,7 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
                   className={`size-2 rounded-full ${project.priority === "URGENT" ? "bg-red-500 animate-pulse" : "bg-brand-primary"}`}
                 />
                 <span className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
-                  {project.priority}
+                  {t(`priorities.${project.priority}`)}
                 </span>
               </div>
             </div>
@@ -109,14 +109,12 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
                 fallback: "Visão Geral do Escopo",
               })}
             </span>
-            <div className="rounded-2xl border border-border/40 bg-muted/5 p-6">
-              <p className="font-sans text-base font-medium leading-relaxed text-foreground/80 whitespace-pre-wrap">
-                {project.description ||
-                  t("no_description", {
-                    fallback: "Sem descrição detalhada disponível.",
-                  })}
-              </p>
-            </div>
+            <p className="font-sans text-base font-medium leading-relaxed text-foreground/80 whitespace-pre-wrap">
+              {project.description ||
+                t("no_description", {
+                  fallback: "Sem descrição detalhada disponível.",
+                })}
+            </p>
           </div>
         </section>
       </div>

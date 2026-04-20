@@ -299,8 +299,8 @@ export async function addProjectTimelineAction(
         description: description ?? null,
         isMilestone,
         requiresApproval,
-        approvalStatus: requiresApproval ? "PENDING" : "APPROVED",
-        approvedAt: requiresApproval ? null : new Date(),
+        approvalStatus: "PENDING",
+        approvedAt: null,
         imageUrl: coverImage || null,
         timezone,
         attachments: attachments.length

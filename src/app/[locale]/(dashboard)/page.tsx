@@ -52,7 +52,7 @@ export default async function DashboardPage({
     })
 
     return (
-      <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
+      <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
         <div className="flex flex-col gap-10 w-full">
           <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border/20 pb-8">
             <div className="flex flex-col gap-2">
@@ -210,7 +210,7 @@ export default async function DashboardPage({
 
   if (projects.length === 0) {
     return (
-      <main className="flex min-h-svh flex-col items-center justify-center p-6 text-center">
+      <main className="flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-heading text-2xl font-black uppercase tracking-tight opacity-20">
           {t("no_project")}
         </h2>
@@ -219,43 +219,11 @@ export default async function DashboardPage({
   }
 
   const activeProject = project || projects[0]
-  const projectNotifications = await prisma.notification.findMany({
-    where: {
-      userId: user.id,
-      projectId: activeProject.id,
-    },
-    include: {
-      project: {
-        select: {
-          id: true,
-          name: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-  })
-  const projectAuditLogs = await prisma.auditLog.findMany({
-    where: {
-      projectId: activeProject.id,
-    },
-    orderBy: { createdAt: "desc" },
-    take: 8,
-    include: {
-      actor: {
-        select: {
-          id: true,
-          name: true,
-          role: true,
-        },
-      },
-    },
-  })
   const briefingData = activeProject.briefing as Record<string, unknown> | null
   const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6 // We have 6 steps in briefingSchema
 
   return (
-    <main className="relative flex min-h-svh flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
+    <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="flex flex-col gap-10 w-full">
         <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-border/20 pb-8">
           <div className="flex flex-col gap-2">
@@ -301,8 +269,6 @@ export default async function DashboardPage({
                   ...asset,
                   timezone: "America/Sao_Paulo",
                 })),
-                notifications: projectNotifications,
-                auditLogs: projectAuditLogs,
                 updates: activeProject.updates.map((u) => ({
                   ...u,
                   createdAt: u.createdAt.toISOString(),

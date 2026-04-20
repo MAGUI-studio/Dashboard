@@ -21,7 +21,7 @@ export default async function AdminPage(): Promise<React.JSX.Element> {
   const { sessionClaims } = await auth()
 
   return (
-    <main className="flex min-h-svh flex-col items-center justify-center gap-12 bg-background px-6">
+    <main className="flex flex-col items-center justify-center gap-12 bg-background px-6">
       <Logo width={200} />
 
       <div className="flex flex-col items-center gap-4 text-center">

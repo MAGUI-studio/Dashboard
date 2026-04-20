@@ -1,5 +1,7 @@
 import { NotificationType } from "@/src/generated/client/enums"
 
+type NotificationCopy = (key: string) => string
+
 export type NotificationPresentation = {
   categoryLabel: string
   emphasisLabel: string
@@ -10,13 +12,14 @@ export type NotificationPresentation = {
 }
 
 export function getNotificationPresentation(
+  t: NotificationCopy,
   type: NotificationType
 ): NotificationPresentation {
   switch (type) {
     case NotificationType.UPDATE_PENDING_APPROVAL:
       return {
-        categoryLabel: "Ação do cliente",
-        emphasisLabel: "Requer aprovação",
+        categoryLabel: t("client_action"),
+        emphasisLabel: t("requires_approval"),
         requiresAction: true,
         cardClassName:
           "border-amber-400/25 bg-[linear-gradient(135deg,rgba(245,158,11,0.12),rgba(10,10,10,0.78))] shadow-lg shadow-amber-500/10",
@@ -26,8 +29,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.UPDATE_REJECTED:
       return {
-        categoryLabel: "Ação do admin",
-        emphasisLabel: "Ajustes solicitados",
+        categoryLabel: t("admin_action"),
+        emphasisLabel: t("adjustments_requested"),
         requiresAction: true,
         cardClassName:
           "border-orange-400/25 bg-[linear-gradient(135deg,rgba(251,146,60,0.12),rgba(10,10,10,0.78))] shadow-lg shadow-orange-500/10",
@@ -37,8 +40,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.BRIEFING_SUBMITTED:
       return {
-        categoryLabel: "Novo briefing",
-        emphasisLabel: "Revisar conteúdo",
+        categoryLabel: t("new_briefing"),
+        emphasisLabel: t("review_content"),
         requiresAction: true,
         cardClassName:
           "border-sky-400/25 bg-[linear-gradient(135deg,rgba(56,189,248,0.12),rgba(10,10,10,0.78))] shadow-lg shadow-sky-500/10",
@@ -48,8 +51,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.UPDATE_APPROVED:
       return {
-        categoryLabel: "Validação concluída",
-        emphasisLabel: "Aprovado",
+        categoryLabel: t("approved"),
+        emphasisLabel: t("status_approved"),
         requiresAction: false,
         cardClassName:
           "border-emerald-400/20 bg-[linear-gradient(135deg,rgba(16,185,129,0.10),rgba(10,10,10,0.76))]",
@@ -59,8 +62,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.UPDATE_PUBLISHED:
       return {
-        categoryLabel: "Atualização",
-        emphasisLabel: "Informativo",
+        categoryLabel: t("update"),
+        emphasisLabel: t("informational"),
         requiresAction: false,
         cardClassName:
           "border-brand-primary/20 bg-[linear-gradient(135deg,rgba(0,149,255,0.10),rgba(10,10,10,0.76))]",
@@ -70,8 +73,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.PROJECT_STATUS_CHANGED:
       return {
-        categoryLabel: "Projeto",
-        emphasisLabel: "Status atualizado",
+        categoryLabel: t("project"),
+        emphasisLabel: t("status_updated"),
         requiresAction: false,
         cardClassName: "border-border/30 bg-background/40",
         categoryClassName:
@@ -80,8 +83,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.ASSET_UPLOADED:
       return {
-        categoryLabel: "Arquivo",
-        emphasisLabel: "Novo material",
+        categoryLabel: t("file"),
+        emphasisLabel: t("new_material"),
         requiresAction: false,
         cardClassName: "border-border/30 bg-background/40",
         categoryClassName:
@@ -90,8 +93,8 @@ export function getNotificationPresentation(
       }
     case NotificationType.LEAD_ASSIGNED:
       return {
-        categoryLabel: "CRM",
-        emphasisLabel: "Lead atribuído",
+        categoryLabel: t("crm"),
+        emphasisLabel: t("lead_assigned"),
         requiresAction: true,
         cardClassName:
           "border-fuchsia-400/20 bg-[linear-gradient(135deg,rgba(217,70,239,0.10),rgba(10,10,10,0.78))]",
@@ -101,8 +104,8 @@ export function getNotificationPresentation(
       }
     default:
       return {
-        categoryLabel: "Notificação",
-        emphasisLabel: "Informativo",
+        categoryLabel: t("notification"),
+        emphasisLabel: t("informational"),
         requiresAction: false,
         cardClassName: "border-border/30 bg-background/40",
         categoryClassName:

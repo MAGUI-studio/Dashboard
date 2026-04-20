@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { DashboardNotification } from "@/src/types/dashboard"
 import { BellRinging } from "@phosphor-icons/react"
 
@@ -16,6 +18,9 @@ interface NotificationsPanelProps {
 export function NotificationsPanel({
   notifications,
 }: NotificationsPanelProps): React.JSX.Element {
+  const t = useTranslations("Notifications")
+  const tPresentation = useTranslations("Notifications.presentation")
+
   if (notifications.length === 0) {
     return (
       <section className="rounded-4xl border border-dashed border-border/40 bg-muted/5 p-10 flex flex-col items-center justify-center text-center">
@@ -23,7 +28,7 @@ export function NotificationsPanel({
           <BellRinging className="size-6" weight="duotone" />
         </div>
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-          Sem notificações
+          {t("empty")}
         </p>
       </section>
     )
@@ -51,7 +56,10 @@ export function NotificationsPanel({
 
       <div className="space-y-4">
         {notifications.map((notification) => {
-          const presentation = getNotificationPresentation(notification.type)
+          const presentation = getNotificationPresentation(
+            tPresentation,
+            notification.type
+          )
 
           return (
             <div
@@ -97,7 +105,7 @@ export function NotificationsPanel({
 
               {notification.project?.name && (
                 <p className="mt-3 text-[8px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
-                  Projeto {notification.project.name}
+                  {t("project_label", { name: notification.project.name })}
                 </p>
               )}
             </div>

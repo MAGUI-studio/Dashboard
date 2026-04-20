@@ -36,6 +36,7 @@ export function NotificationsDrawer({
   notifications,
 }: NotificationsDrawerProps): React.JSX.Element {
   const t = useTranslations("Notifications")
+  const tPresentation = useTranslations("Notifications.presentation")
   const router = useRouter()
   const [isSubmitting, startTransition] = React.useTransition()
   const [open, setOpen] = React.useState(false)
@@ -174,6 +175,7 @@ export function NotificationsDrawer({
             <div className="grid gap-4">
               {storeNotifications.map((notification) => {
                 const presentation = getNotificationPresentation(
+                  tPresentation,
                   notification.type
                 )
 
@@ -224,7 +226,9 @@ export function NotificationsDrawer({
 
                       {notification.project?.name && (
                         <p className="text-[8px] font-black uppercase tracking-[0.28em] text-muted-foreground/45">
-                          Projeto {notification.project.name}
+                          {t("project_label", {
+                            name: notification.project.name,
+                          })}
                         </p>
                       )}
 
@@ -255,10 +259,10 @@ export function NotificationsDrawer({
                           )}
                         >
                           {presentation.requiresAction
-                            ? "Requer atenção"
+                            ? t("state.requires_attention")
                             : notification.readAt
-                              ? "Lida"
-                              : "Não visualizada"}
+                              ? t("state.read")
+                              : t("state.unread")}
                         </span>
                       </div>
                     </div>

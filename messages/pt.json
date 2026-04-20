@@ -11,11 +11,13 @@
     "pt": "Português"
   },
   "LanguageSwitcher": {
-    "switch_to": "Mudar para {lang}"
+    "switch_to": "Mudar para {lang}",
+    "label": "Idioma"
   },
   "ThemeToggle": {
     "light": "Claro",
-    "dark": "Escuro"
+    "dark": "Escuro",
+    "label": "Aparência"
   },
   "Config": {
     "name": "MAGUI.studio",
@@ -101,6 +103,22 @@
           "password_too_short": "A senha deve ter no mínimo 8 caracteres.",
           "username_invalid": "O nome de usuário não atende aos requisitos do sistema.",
           "general": "Ocorreu um erro ao processar sua solicitação."
+        },
+        "categories": {
+          "WEB_APP": "Web App",
+          "MOBILE_APP": "App Mobile",
+          "BRANDING": "Branding",
+          "LANDING_PAGE": "Landing Page",
+          "SALES_PAGE": "Página de Vendas",
+          "INSTITUTIONAL_SITE": "Site Institucional",
+          "E_COMMERCE": "E-commerce",
+          "UI_UX_DESIGN": "Design UI/UX"
+        },
+        "priorities": {
+          "LOW": "Baixa",
+          "MEDIUM": "Média",
+          "HIGH": "Alta",
+          "URGENT": "Urgente"
         }
       }
     },
@@ -189,6 +207,7 @@
           "overview": "Visão Geral",
           "engineering": "Status",
           "timeline": "Timeline",
+          "audit": "Auditoria",
           "briefing": "Briefing",
           "assets": "Ativos",
           "settings": "Configurações"
@@ -254,6 +273,22 @@
           "requires_approval": "Solicitar Aprovação Formal",
           "requires_approval_desc": "O cliente precisará aprovar este item para prosseguir",
           "submit": "Registrar Evolução"
+        },
+        "categories": {
+          "WEB_APP": "Web App",
+          "MOBILE_APP": "App Mobile",
+          "BRANDING": "Branding",
+          "LANDING_PAGE": "Landing Page",
+          "SALES_PAGE": "Página de Vendas",
+          "INSTITUTIONAL_SITE": "Site Institucional",
+          "E_COMMERCE": "E-commerce",
+          "UI_UX_DESIGN": "Design UI/UX"
+        },
+        "priorities": {
+          "LOW": "Baixa",
+          "MEDIUM": "Média",
+          "HIGH": "Alta",
+          "URGENT": "Urgente"
         }
       }
     }
@@ -318,6 +353,7 @@
     "description": "Pendências que dependem de você para o avanço do projeto.",
     "empty": "Nenhuma pendência ativa.",
     "waiting": "AGUARDANDO VOCÊ",
+    "due_date": "Prazo: {date}",
     "status": {
       "PENDING": "Pendente",
       "COMPLETED": "Concluído"
@@ -356,7 +392,7 @@
       "error_reject": "Erro ao reprovar"
     },
     "dialog": {
-      "title": "Feedback da milestone",
+      "title": "Solicitar ajustes nesta entrega",
       "description": "Explique com clareza o que precisa ser ajustado para o time devolver a entrega na próxima rodada.",
       "placeholder": "Ex: precisamos revisar hierarquia visual, CTA principal e clareza da proposta."
     }
@@ -364,6 +400,7 @@
   "Sidebar": {
     "menu": "Menu",
     "dashboard": "Dashboard",
+    "feed": "Feed",
     "notifications": "Notificações",
     "clients": {
       "title": "Clientes",
@@ -391,10 +428,10 @@
     "filter_projects": "Filtrar projetos...",
     "no_project_found": "Nenhum projeto encontrado.",
     "greetings": {
-      "morning": "Bom dia {name}, tenha um ótimo dia.",
-      "afternoon": "Boa tarde {name}, tenha uma excelente tarde.",
-      "evening": "Boa noite {name}, finalizando o dia com maestria.",
-      "track_evolution": "Acompanhe a evolução do seu projeto em tempo real."
+      "morning": "Bom dia, {name}. Vamos ver como o projeto está andando?",
+      "afternoon": "Boa tarde, {name}. Aqui está o andamento do seu projeto.",
+      "evening": "Boa noite, {name}. Veja o que avançou no projeto hoje.",
+      "track_evolution": "Acompanhe as entregas, validações e próximos passos do projeto."
     },
     "global_timeline_title": "Timeline Global de Evolução",
     "active_projects_count": "{count} projetos em execução",
@@ -403,6 +440,13 @@
     "status": {
       "title": "Status do Projeto",
       "progress": "Progresso Geral",
+      "deadline": "Prazo Final",
+      "no_deadline": "Sem prazo definido",
+      "pending_validations": "{count, plural, one {# validação pendente} other {# validações pendentes}}",
+      "no_pending_validations": "Sem validações pendentes no momento",
+      "current_phase": "Fase Atual",
+      "next_phase": "Próxima Fase",
+      "completed_phase": "Projeto Finalizado",
       "STRATEGY": "Estratégia",
       "ARCHITECTURE": "Arquitetura",
       "DESIGN": "Design",
@@ -411,9 +455,25 @@
       "LAUNCHED": "Finalizado"
     },
     "timeline": {
-      "title": "Timeline de Execução",
+      "title": "Feed do Projeto",
       "milestone": "Marco Alcançado",
-      "description": "Linha viva de entregas, validações e decisões do projeto."
+      "description": "Linha viva de entregas, validações e decisões do projeto.",
+      "approved_on": "Aprovado em",
+      "status_published": "Publicado",
+      "status_approved": "Aprovado",
+      "status_adjustments_requested": "Ajustes Solicitados",
+      "requested_adjustments_title": "Ajustes que você solicitou",
+      "see_more": "Ver Mais",
+      "see_less": "Ver Menos",
+      "posted_at": "Publicado em"
+    },
+    "banner": {
+      "title": "{projectName} tem {count, plural, one {# entrega aguardando sua validação} other {# entregas aguardando sua validação}}",
+      "description": "Aprove a entrega ou solicite ajustes diretamente por aqui.",
+      "cta": "Validar agora"
+    },
+    "footer": {
+      "back_to_top": "Voltar ao Topo"
     },
     "rhythm_delivery": "Projeto em ritmo de entrega",
     "current_phase": "Fase atual:",
@@ -423,9 +483,14 @@
     "unavailable": "Ainda indisponível",
     "private_repo": "Repositório privado",
     "feedback_sent": "Feedback enviado",
-    "assets_repository": "Repositório de ativos",
+    "assets_engine": "Assets Engine",
     "waiting_files": "Aguardando envio de arquivos.",
     "view_document": "Visualizar documento",
+    "attachments": {
+      "open_image": "Clique para abrir imagem",
+      "open_file": "Clique para abrir arquivo",
+      "image_gallery_title": "Galeria de imagens"
+    },
     "category_label": "Categoria",
     "priority_label": "Prioridade"
   },
@@ -438,6 +503,31 @@
     "mark_all_success": "Notificações atualizadas.",
     "mark_all_error": "Não foi possível atualizar as notificações.",
     "new": "Novo",
-    "open": "Abrir"
+    "open": "Abrir",
+    "project_label": "Projeto {name}",
+    "state": {
+      "requires_attention": "Requer atenção",
+      "read": "Lida",
+      "unread": "Não visualizada"
+    },
+    "presentation": {
+      "client_action": "Ação do cliente",
+      "admin_action": "Ação do time",
+      "new_briefing": "Novo briefing",
+      "approved": "Validação concluída",
+      "status_approved": "Aprovado",
+      "update": "Atualização",
+      "project": "Projeto",
+      "file": "Arquivo",
+      "crm": "CRM",
+      "notification": "Notificação",
+      "requires_approval": "Requer aprovação",
+      "adjustments_requested": "Ajustes solicitados",
+      "review_content": "Revisar conteúdo",
+      "status_updated": "Status atualizado",
+      "new_material": "Novo material",
+      "lead_assigned": "Lead atribuído",
+      "informational": "Informativo"
+    }
   }
 }

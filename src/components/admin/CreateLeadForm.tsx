@@ -100,19 +100,19 @@ export function CreateLeadForm(): React.JSX.Element {
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full sm:max-w-xl border-l border-border/60 bg-background/95 backdrop-blur-2xl p-0 overflow-y-auto"
+        className="w-[94vw] border-l border-border/30 bg-background/95 p-0 sm:min-w-[38rem] sm:max-w-[40vw]"
       >
-        <SheetHeader className="p-8 border-b border-border/40 bg-muted/5">
-          <div className="flex items-center gap-2 mb-2">
+        <SheetHeader className="border-b border-border/20 bg-gradient-to-b from-brand-primary/6 to-transparent px-8 py-8 text-left">
+          <div className="flex items-center gap-2 mb-3">
             <div className="size-2 rounded-full bg-brand-primary animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary">
               Protocolo de Prospecção
             </span>
           </div>
-          <SheetTitle className="text-3xl font-black uppercase tracking-tight text-foreground">
+          <SheetTitle className="font-heading text-3xl font-black uppercase tracking-tight text-foreground">
             {t("create")}
           </SheetTitle>
-          <SheetDescription className="text-muted-foreground font-medium">
+          <SheetDescription className="mt-3 text-sm font-medium leading-relaxed text-muted-foreground/60 text-left">
             {t("description")}
           </SheetDescription>
         </SheetHeader>

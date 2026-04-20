@@ -1,9 +1,12 @@
+"use client"
+
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
 import { DashboardUpdate } from "@/src/types/dashboard"
 import {
+  ChatCircleText,
   CheckCircle,
   Clock,
   HourglassSimple,
@@ -25,6 +28,15 @@ function UpdateStatusPill({
 }: {
   update: DashboardUpdate
 }): React.JSX.Element {
+  if (update.feedback) {
+    return (
+      <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-amber-600">
+        <WarningCircle weight="fill" className="size-3" />
+        Ajustes Solicitados
+      </div>
+    )
+  }
+
   if (!update.requiresApproval) {
     return (
       <div className="inline-flex items-center gap-2 rounded-full border border-border/40 bg-muted/10 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60">
@@ -43,15 +55,6 @@ function UpdateStatusPill({
     )
   }
 
-  if (update.approvalStatus === "REJECTED") {
-    return (
-      <div className="inline-flex items-center gap-2 rounded-full border border-amber-500/20 bg-amber-500/5 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-amber-600">
-        <WarningCircle weight="fill" className="size-3" />
-        Ajustes Solicitados
-      </div>
-    )
-  }
-
   return (
     <div className="inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/5 px-3 py-1 text-[8px] font-black uppercase tracking-widest text-brand-primary">
       <HourglassSimple weight="fill" className="size-3" />
@@ -65,6 +68,9 @@ export function ProjectTimelineTab({
   updates,
 }: ProjectTimelineTabProps) {
   const t = useTranslations("Admin.projects.details")
+  const [visibleUpdatesCount, setVisibleUpdatesCount] = React.useState(5)
+  const visibleUpdates = updates.slice(0, visibleUpdatesCount)
+  const hasMoreUpdates = visibleUpdatesCount < updates.length
 
   return (
     <div className="flex flex-col gap-12">
@@ -76,7 +82,7 @@ export function ProjectTimelineTab({
         </h3>
 
         <div className="ml-4 flex flex-col gap-0 border-l border-border/40">
-          {updates.map((update) => (
+          {visibleUpdates.map((update) => (
             <div key={update.id} className="relative pb-12 pl-12 last:pb-0">
               <div className="absolute -left-[9px] top-0 size-4 rounded-full border-4 border-background bg-brand-primary shadow-sm shadow-brand-primary/20" />
               <div className="flex flex-col gap-4">
@@ -115,13 +121,20 @@ export function ProjectTimelineTab({
                   )}
 
                   {update.feedback && (
-                    <div className="max-w-2xl rounded-2xl border border-amber-500/20 bg-amber-500/5 p-4">
-                      <p className="text-[9px] font-black uppercase tracking-[0.2em] text-amber-600">
-                        Feedback do cliente
-                      </p>
-                      <p className="mt-2 text-sm font-medium leading-relaxed text-amber-700/90">
-                        {update.feedback}
-                      </p>
+                    <div className="max-w-2xl rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent p-5 shadow-sm shadow-amber-500/10">
+                      <div className="flex items-start gap-3">
+                        <div className="mt-0.5 flex size-10 shrink-0 items-center justify-center rounded-2xl bg-amber-500/12 text-amber-600">
+                          <ChatCircleText weight="fill" className="size-5" />
+                        </div>
+                        <div className="space-y-2">
+                          <p className="text-[9px] font-black uppercase tracking-[0.24em] text-white/80">
+                            Solicitação de ajustes do cliente
+                          </p>
+                          <p className="text-sm font-medium leading-relaxed text-white">
+                            {update.feedback}
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
 
@@ -131,6 +144,18 @@ export function ProjectTimelineTab({
             </div>
           ))}
         </div>
+
+        {hasMoreUpdates && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => setVisibleUpdatesCount((current) => current + 5)}
+              className="rounded-full border border-border/30 bg-background/60 px-6 py-3 font-mono text-[10px] font-black uppercase tracking-[0.26em] text-foreground/80 transition hover:border-brand-primary/30 hover:text-brand-primary"
+            >
+              Ver Mais
+            </button>
+          </div>
+        )}
       </section>
     </div>
   )

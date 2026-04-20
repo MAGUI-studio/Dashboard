@@ -9,7 +9,7 @@ export default function NotFound(): React.JSX.Element {
   const t = useTranslations("Errors.not_found")
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center p-6 text-center">
+    <div className="flex flex-col items-center justify-center p-6 text-center">
       <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
         {t("title")}
       </h1>

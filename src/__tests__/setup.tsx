@@ -19,18 +19,27 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/",
 }))
 
-vi.mock("framer-motion", () => ({
-  motion: {
-    div: ({
-      children,
-      ...props
-    }: { children?: React.ReactNode } & Record<string, unknown>) =>
-      React.createElement(
-        "div",
-        props as React.HTMLAttributes<HTMLDivElement>,
-        children
-      ),
-  },
-  AnimatePresence: ({ children }: { children?: React.ReactNode }) =>
-    React.createElement(React.Fragment, null, children),
-}))
+vi.mock("framer-motion", () => {
+  const React = require("react")
+  const motion = new Proxy(
+    {},
+    {
+      get: (_target, key) => {
+        return ({
+          children,
+          ...props
+        }: {
+          children?: React.ReactNode
+        } & Record<string, unknown>) =>
+          React.createElement(key, props, children)
+      },
+    }
+  )
+
+  return {
+    motion,
+    m: motion,
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) =>
+      React.createElement(React.Fragment, null, children),
+  }
+})

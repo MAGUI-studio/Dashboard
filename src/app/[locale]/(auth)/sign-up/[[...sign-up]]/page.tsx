@@ -32,7 +32,7 @@ const VARIANTS_FADE_IN_UP: Variants = {
 
 export default function SignUpPage(): React.JSX.Element {
   return (
-    <main className="relative flex min-h-[100dvh] w-full items-center justify-center overflow-hidden bg-background">
+    <main className="relative flex w-full items-center justify-center overflow-hidden bg-background">
       <motion.div
         initial="hidden"
         animate="visible"

@@ -41,7 +41,7 @@ export default async function ProjectAssetsPage({
   }
 
   return (
-    <main className="relative flex min-h-svh flex-col gap-10 overflow-hidden bg-background/50 p-6 lg:p-12">
+    <main className="relative flex flex-col gap-10 overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="absolute top-0 right-0 -z-10 size-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
 
       <div className="flex flex-col gap-8 md:flex-row md:items-start md:justify-between">

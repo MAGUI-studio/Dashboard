@@ -15,7 +15,7 @@ export default function Error({ reset }: ErrorProps): React.JSX.Element {
   const t = useTranslations("Errors.general")
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center p-6 text-center">
+    <div className="flex flex-col items-center justify-center p-6 text-center">
       <h1 className="text-4xl font-bold tracking-tight sm:text-6xl">
         {t("title")}
       </h1>

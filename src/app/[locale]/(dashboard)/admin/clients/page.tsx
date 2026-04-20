@@ -96,7 +96,7 @@ export default async function ClientsPage(): Promise<React.JSX.Element> {
   }
 
   return (
-    <main className="relative flex min-h-svh flex-col gap-10 bg-background/50 p-6 lg:p-12 overflow-hidden">
+    <main className="relative flex flex-col gap-10 bg-background/50 p-6 lg:p-12 overflow-hidden">
       <div className="absolute top-0 right-0 -z-10 size-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
       <div className="absolute bottom-0 left-0 -z-10 size-96 -translate-x-1/2 translate-y-1/2 rounded-full bg-brand-primary/10 blur-3xl opacity-30" />
 

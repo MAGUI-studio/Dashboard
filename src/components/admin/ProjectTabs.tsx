@@ -8,6 +8,7 @@ import { DashboardProject } from "@/src/types/dashboard"
 import {
   Clock,
   Files,
+  Fingerprint,
   Info,
   NoteBlank,
   Sliders,
@@ -23,6 +24,7 @@ import {
 } from "@/src/components/ui/tabs"
 
 import { ProjectAssetsTab } from "@/src/components/admin/ProjectAssetsTab"
+import { ProjectAuditTab } from "@/src/components/admin/ProjectAuditTab"
 import { ProjectBriefingTab } from "@/src/components/admin/ProjectBriefingTab"
 import { ProjectEngineeringTab } from "@/src/components/admin/ProjectEngineeringTab"
 import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
@@ -81,6 +83,13 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
             {t("tabs.assets")}
           </TabsTrigger>
           <TabsTrigger
+            value="audit"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <Fingerprint weight="duotone" className="mr-2 size-4" />
+            {t("tabs.audit", { fallback: "Auditoria" })}
+          </TabsTrigger>
+          <TabsTrigger
             value="settings"
             className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
           >
@@ -111,6 +120,10 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
 
       <TabsContent value="assets" className="mt-0 focus-visible:outline-none">
         <ProjectAssetsTab projectId={projectId} assets={project.assets} />
+      </TabsContent>
+
+      <TabsContent value="audit" className="mt-0 focus-visible:outline-none">
+        <ProjectAuditTab logs={project.auditLogs || []} />
       </TabsContent>
 
       <TabsContent value="settings" className="mt-0 focus-visible:outline-none">
