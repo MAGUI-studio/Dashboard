@@ -130,6 +130,7 @@ function LeadCard({
   dragStyle,
   onDrawerOpenChange,
   open,
+  clients,
 }: {
   lead: Lead
   dragging?: boolean
@@ -139,6 +140,7 @@ function LeadCard({
   dragStyle?: React.CSSProperties
   onDrawerOpenChange?: (open: boolean) => void
   open?: boolean
+  clients: Array<{ id: string; name: string | null; email: string }>
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const stagnant = isLeadStagnant(lead)
@@ -210,13 +212,14 @@ function LeadCard({
       <div className="mt-4 flex items-center justify-between gap-3">
         <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
           <NotePencil size={12} />
-          {lead.followUpNotes.length} nota(s)
+          {lead.followUpNotes?.length || 0} nota(s)
         </span>
 
         <LeadDetailsDrawer
           lead={lead}
           onOpenChange={onDrawerOpenChange}
           open={open}
+          clients={clients}
         >
           <Button
             type="button"
@@ -237,11 +240,13 @@ function SortableLeadCardWithDrawerState({
   dragDisabled,
   onDrawerOpenChange = () => undefined,
   isOpen = false,
+  clients,
 }: {
   lead: Lead
   dragDisabled: boolean
   onDrawerOpenChange?: (leadId: string, open: boolean) => void
   isOpen?: boolean
+  clients: Array<{ id: string; name: string | null; email: string }>
 }): React.JSX.Element {
   const {
     attributes,
@@ -268,6 +273,7 @@ function SortableLeadCardWithDrawerState({
       }}
       onDrawerOpenChange={(open) => onDrawerOpenChange(lead.id, open)}
       open={isOpen}
+      clients={clients}
     />
   )
 }
@@ -279,6 +285,7 @@ function KanbanColumn({
   dragDisabled,
   onDrawerOpenChange,
   selectedLeadId,
+  clients,
 }: {
   status: LeadStatus
   leadIds: string[]
@@ -286,6 +293,7 @@ function KanbanColumn({
   dragDisabled: boolean
   onDrawerOpenChange: (leadId: string, open: boolean) => void
   selectedLeadId: string | null
+  clients: Array<{ id: string; name: string | null; email: string }>
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const { setNodeRef, isOver } = useDroppable({ id: status })
@@ -324,6 +332,7 @@ function KanbanColumn({
               dragDisabled={dragDisabled}
               onDrawerOpenChange={onDrawerOpenChange}
               isOpen={selectedLeadId === lead.id}
+              clients={clients}
             />
           ))}
 
@@ -341,9 +350,11 @@ function KanbanColumn({
 export function KanbanBoard({
   leads,
   initialLeadId = null,
+  clients,
 }: {
   leads: Lead[]
   initialLeadId?: string | null
+  clients: Array<{ id: string; name: string | null; email: string }>
 }): React.JSX.Element {
   const [search, setSearch] = React.useState("")
   const [boardState, setBoardState] = React.useState(() =>
@@ -576,12 +587,15 @@ export function KanbanBoard({
               dragDisabled={hasOpenDrawer}
               onDrawerOpenChange={handleDrawerOpenChange}
               selectedLeadId={selectedLeadId}
+              clients={clients}
             />
           ))}
         </div>
 
         <DragOverlay>
-          {activeLead ? <LeadCard lead={activeLead} dragging /> : null}
+          {activeLead ? (
+            <LeadCard lead={activeLead} dragging clients={clients} />
+          ) : null}
         </DragOverlay>
       </DndContext>
     </div>

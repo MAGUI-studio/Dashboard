@@ -8,6 +8,7 @@ import { useRouter } from "@/src/i18n/navigation"
 import {
   Building,
   CircleNotch,
+  Clock,
   Envelope,
   Funnel,
   Globe,
@@ -81,6 +82,7 @@ export function CreateLeadForm(): React.JSX.Element {
       website: showWebsiteField ? websiteValue : "",
       instagram: showInstagramField ? instagramValue : "",
       notes: formData.get("notes") as string,
+      nextActionAt: formData.get("nextActionAt") as string,
       value: "",
       source,
     })
@@ -112,7 +114,8 @@ export function CreateLeadForm(): React.JSX.Element {
                 htmlFor="companyName"
                 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
-                {t("form.company")} <span className="text-brand-primary">*</span>
+                {t("form.company")}{" "}
+                <span className="text-brand-primary">*</span>
               </Label>
               <div className="group relative">
                 <Building
@@ -205,10 +208,31 @@ export function CreateLeadForm(): React.JSX.Element {
 
         <div className="space-y-4 pt-4">
           <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-            Origem
+            Acompanhamento
           </h3>
 
-          <div className="grid gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="space-y-2">
+              <Label
+                htmlFor="nextActionAt"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                Lembrar de retomar em
+              </Label>
+              <div className="group relative">
+                <Clock
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                  size={18}
+                />
+                <Input
+                  id="nextActionAt"
+                  name="nextActionAt"
+                  type="date"
+                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Origem
@@ -245,7 +269,7 @@ export function CreateLeadForm(): React.JSX.Element {
             </div>
 
             {showInstagramField ? (
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
                 <Label
                   htmlFor="instagram"
                   className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
@@ -268,7 +292,7 @@ export function CreateLeadForm(): React.JSX.Element {
             ) : null}
 
             {showWebsiteField ? (
-              <div className="space-y-2">
+              <div className="space-y-2 md:col-span-2">
                 <Label
                   htmlFor="website"
                   className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
@@ -337,7 +361,11 @@ export function CreateLeadForm(): React.JSX.Element {
           className="h-12 rounded-full bg-brand-primary px-12 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95 hover:bg-brand-primary/90"
         >
           {isLoading ? (
-            <CircleNotch className="mr-2 animate-spin" size={18} weight="bold" />
+            <CircleNotch
+              className="mr-2 animate-spin"
+              size={18}
+              weight="bold"
+            />
           ) : null}
           {t("form.submit")}
         </Button>

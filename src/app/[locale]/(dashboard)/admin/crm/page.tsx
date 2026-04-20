@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
+import { UserRole } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
 import { Plus } from "@phosphor-icons/react/dist/ssr"
 
@@ -10,6 +11,7 @@ import { Button } from "@/src/components/ui/button"
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
 import { getLeads } from "@/src/lib/actions/crm.actions"
+import prisma from "@/src/lib/prisma"
 
 export default async function CRMPage({
   searchParams,
@@ -18,6 +20,12 @@ export default async function CRMPage({
 }): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.crm")
   const leads = await getLeads()
+  const clients = await prisma.user.findMany({
+    where: { role: UserRole.CLIENT },
+    select: { id: true, name: true, email: true },
+    orderBy: { name: "asc" },
+  })
+
   const resolvedSearchParams = searchParams ? await searchParams : undefined
   const selectedLeadId = resolvedSearchParams?.lead ?? null
 
@@ -56,7 +64,11 @@ export default async function CRMPage({
         </Button>
       </div>
 
-      <KanbanBoard leads={leads} initialLeadId={selectedLeadId} />
+      <KanbanBoard
+        leads={leads}
+        initialLeadId={selectedLeadId}
+        clients={clients}
+      />
     </main>
   )
 }

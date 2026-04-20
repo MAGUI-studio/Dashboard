@@ -2,22 +2,13 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { AssetManagement } from "@/src/components/admin/AssetManagement"
+import { DashboardAsset } from "@/src/types/dashboard"
 
-interface Asset {
-  id: string
-  name: string
-  url: string
-  key: string
-  type: string
-  order: number
-  timezone: string
-  createdAt: Date
-}
+import { AssetManagement } from "@/src/components/admin/AssetManagement"
 
 interface ProjectAssetsTabProps {
   projectId: string
-  assets: Asset[]
+  assets: DashboardAsset[]
 }
 
 export function ProjectAssetsTab({ projectId, assets }: ProjectAssetsTabProps) {
@@ -28,7 +19,8 @@ export function ProjectAssetsTab({ projectId, assets }: ProjectAssetsTabProps) {
       <h3 className="mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
         {t("assets_manage_button")}
       </h3>
-      <AssetManagement projectId={projectId} assets={assets} />
+      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+      <AssetManagement projectId={projectId} assets={assets as any} />
     </section>
   )
 }

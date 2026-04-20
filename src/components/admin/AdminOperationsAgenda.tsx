@@ -17,7 +17,7 @@ export interface AdminAgendaItem {
   id: string
   title: string
   dateLabel: string
-  dateValue?: string
+  dateValue?: string | Date
   context: string
   kind: "deadline" | "task" | "lead"
   href:

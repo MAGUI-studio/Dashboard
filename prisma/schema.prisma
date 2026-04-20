@@ -93,6 +93,17 @@ enum LeadSource {
   OTHER
 }
 
+enum LeadActivityType {
+  NOTE_CREATED
+  STATUS_CHANGED
+  SOURCE_UPDATED
+  CONTACT_UPDATED
+  WHATSAPP_LINK_OPENED
+  LEAD_EDITED
+  CONVERTED_TO_PROJECT
+  REMINDER_SET
+}
+
 enum NotificationType {
   UPDATE_PENDING_APPROVAL
   UPDATE_PUBLISHED
@@ -130,6 +141,7 @@ model User {
 
   comments      UpdateComment[]
   approvalEvents ApprovalEvent[]
+  leadActivities LeadActivity[]
 
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -153,6 +165,10 @@ model Lead {
   assignedToId  String?
   assignedTo    User?       @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
   followUpNotes LeadNote[]
+  activities    LeadActivity[]
+
+  convertedProjectId String?
+  convertedAt        DateTime?
 
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
@@ -177,6 +193,51 @@ model LeadNote {
   @@index([leadId])
   @@index([authorId])
   @@index([createdAt])
+}
+
+model LeadActivity {
+  id         String           @id @default(cuid())
+  type       LeadActivityType
+  title      String
+  content    String?          @db.Text
+  metadata   Json?            @default("{}")
+
+  leadId     String
+  lead       Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  authorId   String?
+  author     User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  createdAt  DateTime         @default(now())
+
+  @@index([leadId])
+  @@index([authorId])
+  @@index([createdAt])
+}
+
+model MessageTemplate {
+  id         String   @id @default(cuid())
+  scope      String   @default("LEAD") // LEAD, PROJECT
+  name       String
+  content    String   @db.Text
+  
+  createdById String?
+  
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model SavedView {
+  id          String   @id @default(cuid())
+  userId      String
+  module      String   // CRM, PROJECTS
+  name        String
+  filtersJson Json
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([userId, module])
 }
 
 model Project {

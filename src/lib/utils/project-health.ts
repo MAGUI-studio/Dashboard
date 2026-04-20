@@ -20,9 +20,7 @@ function getDaysUntil(dateValue: Date | string): number {
   const target = new Date(dateValue)
   const now = new Date()
 
-  return Math.ceil(
-    (target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
-  )
+  return Math.ceil((target.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
 }
 
 export function getProjectHealth(

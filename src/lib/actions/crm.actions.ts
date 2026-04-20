@@ -2,10 +2,18 @@
 
 import { revalidatePath } from "next/cache"
 
-import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
+import { Prisma } from "@/src/generated/client/client"
+import {
+  LeadActivityType,
+  LeadSource,
+  LeadStatus,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client/enums"
 import { Lead } from "@/src/types/crm"
 import { z } from "zod"
 
+import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import { getCurrentAppUser } from "@/src/lib/project-governance"
@@ -37,6 +45,27 @@ function revalidateCrmPaths(): void {
   revalidatePath("/admin/crm")
   revalidatePath("/admin/crm/kanban")
   revalidatePath("/admin/crm/list")
+  revalidatePath("/")
+}
+
+async function createLeadActivity(data: {
+  leadId: string
+  type: LeadActivityType
+  title: string
+  content?: string
+  metadata?: Record<string, unknown>
+}) {
+  const actor = await getCurrentAppUser()
+  return prisma.leadActivity.create({
+    data: {
+      leadId: data.leadId,
+      type: data.type,
+      title: data.title,
+      content: data.content,
+      metadata: (data.metadata || {}) as Prisma.InputJsonValue,
+      authorId: actor?.id,
+    },
+  })
 }
 
 export async function createLead(
@@ -47,7 +76,7 @@ export async function createLead(
 
     const validatedData = LeadSchema.parse(data)
 
-    await prisma.lead.create({
+    const lead = await prisma.lead.create({
       data: {
         ...validatedData,
         email: validatedData.email === "" ? null : validatedData.email,
@@ -58,9 +87,17 @@ export async function createLead(
       },
     })
 
+    await createLeadActivity({
+      leadId: lead.id,
+      type: LeadActivityType.LEAD_EDITED, // Initial creation
+      title: "Lead catalogado no sistema",
+      content: `Lead da empresa ${lead.companyName} criado com origem ${lead.source}.`,
+    })
+
     revalidateCrmPaths()
     return { success: true }
-  } catch {
+  } catch (error) {
+    logger.error({ error }, "Create Lead Error")
     return { success: false, error: "Failed to create lead" }
   }
 }
@@ -71,6 +108,9 @@ export async function updateLeadStatus(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await protect("admin")
+
+    const oldLead = await prisma.lead.findUnique({ where: { id } })
+    if (!oldLead) return { success: false, error: "Lead not found" }
 
     await prisma.lead.update({
       where: { id },
@@ -84,9 +124,18 @@ export async function updateLeadStatus(
       },
     })
 
+    await createLeadActivity({
+      leadId: id,
+      type: LeadActivityType.STATUS_CHANGED,
+      title: `Status alterado para ${status}`,
+      content: `O lead foi movido de ${oldLead.status} para ${status}.`,
+      metadata: { from: oldLead.status, to: status },
+    })
+
     revalidateCrmPaths()
     return { success: true }
-  } catch {
+  } catch (error) {
+    logger.error({ error }, "Update Lead Status Error")
     return { success: false, error: "Failed to update lead status" }
   }
 }
@@ -117,9 +166,16 @@ export async function updateLead(
       },
     })
 
+    await createLeadActivity({
+      leadId: validatedData.id,
+      type: LeadActivityType.LEAD_EDITED,
+      title: "Informacoes do lead atualizadas",
+    })
+
     revalidateCrmPaths()
     return { success: true }
-  } catch {
+  } catch (error) {
+    logger.error({ error }, "Update Lead Error")
     return { success: false, error: "Failed to update lead" }
   }
 }
@@ -136,7 +192,8 @@ export async function deleteLead(
 
     revalidateCrmPaths()
     return { success: true }
-  } catch {
+  } catch (error) {
+    logger.error({ error }, "Delete Lead Error")
     return { success: false, error: "Failed to delete lead" }
   }
 }
@@ -166,10 +223,100 @@ export async function addLeadNote(
       }),
     ])
 
+    await createLeadActivity({
+      leadId: validatedData.leadId,
+      type: LeadActivityType.NOTE_CREATED,
+      title: "Nova nota de follow-up",
+      content: validatedData.content,
+    })
+
     revalidateCrmPaths()
     return { success: true }
-  } catch {
+  } catch (error) {
+    logger.error({ error }, "Add Lead Note Error")
     return { success: false, error: "Failed to add lead note" }
+  }
+}
+
+export async function convertLeadToProjectAction(input: {
+  leadId: string
+  userId?: string // If existing user
+  newUserData?: {
+    email: string
+    name: string
+    password?: string
+  }
+  projectData: {
+    name: string
+    category: ProjectCategory
+    budget?: string
+    deadline?: string
+  }
+}): Promise<{ success: boolean; error?: string; projectId?: string }> {
+  try {
+    await protect("admin")
+
+    const lead = await prisma.lead.findUnique({
+      where: { id: input.leadId },
+    })
+
+    if (!lead) return { success: false, error: "Lead not found" }
+
+    const finalUserId = input.userId
+
+    // 1. Handle User creation if needed (simplified for MVP, ideally uses Clerk)
+    if (!finalUserId && input.newUserData) {
+      return {
+        success: false,
+        error:
+          "User creation flow requires Clerk integration. Please select an existing client.",
+      }
+    }
+
+    if (!finalUserId)
+      return { success: false, error: "Client must be selected." }
+
+    const project = await prisma.project.create({
+      data: {
+        name: input.projectData.name,
+        category:
+          (input.projectData.category as ProjectCategory) ||
+          ProjectCategory.WEB_APP,
+        budget: input.projectData.budget || lead.value,
+        deadline: input.projectData.deadline
+          ? new Date(input.projectData.deadline)
+          : null,
+        clientId: finalUserId,
+        status: ProjectStatus.STRATEGY,
+        progress: 0,
+        description: lead.notes,
+      },
+    })
+
+    await prisma.lead.update({
+      where: { id: input.leadId },
+      data: {
+        status: LeadStatus.CONVERTIDO,
+        convertedAt: new Date(),
+        convertedProjectId: project.id,
+      },
+    })
+
+    await createLeadActivity({
+      leadId: input.leadId,
+      type: LeadActivityType.CONVERTED_TO_PROJECT,
+      title: "Lead convertido em projeto",
+      content: `Projeto "${project.name}" criado com sucesso.`,
+      metadata: { projectId: project.id } as unknown as Prisma.InputJsonValue,
+    })
+
+    revalidateCrmPaths()
+    revalidatePath("/admin/projects")
+
+    return { success: true, projectId: project.id }
+  } catch (error) {
+    logger.error({ error }, "Convert Lead Error")
+    return { success: false, error: "Failed to convert lead" }
   }
 }
 
@@ -181,6 +328,14 @@ export async function getLeads(): Promise<Lead[]> {
       },
     },
     include: {
+      activities: {
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: {
+            select: { id: true, name: true },
+          },
+        },
+      },
       followUpNotes: {
         orderBy: {
           createdAt: "desc",

@@ -6,17 +6,21 @@ import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
 import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
+import { Link } from "@/src/i18n/navigation"
 import { Lead } from "@/src/types/crm"
 import {
+  ArrowSquareOut,
   CaretDown,
   ChatCircleText,
   CircleNotch,
+  Clock,
   EnvelopeSimple,
   Globe,
   InstagramLogo,
   LinkSimple,
   PencilSimple,
   Phone,
+  RocketLaunch,
   Trash,
   Warning,
   WhatsappLogo,
@@ -57,6 +61,8 @@ import {
 } from "@/src/components/ui/sheet"
 import { Textarea } from "@/src/components/ui/textarea"
 
+import { ConvertLeadDialog } from "@/src/components/admin/ConvertLeadDialog"
+import { LeadActivityFeed } from "@/src/components/admin/LeadActivityFeed"
 import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 
 import {
@@ -95,6 +101,9 @@ function getInitialFormState(lead: Lead) {
     instagram: lead.instagram ?? "",
     notes: lead.notes ?? "",
     source: lead.source as LeadSourceValue,
+    nextActionAt: lead.nextActionAt
+      ? new Date(lead.nextActionAt).toISOString().split("T")[0]
+      : "",
   }
 }
 
@@ -103,11 +112,13 @@ export function LeadDetailsDrawer({
   children,
   onOpenChange,
   open: controlledOpen,
+  clients,
 }: {
   lead: Lead
   children: React.ReactNode
   onOpenChange?: (open: boolean) => void
   open?: boolean
+  clients: Array<{ id: string; name: string | null; email: string }>
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const router = useRouter()
@@ -122,6 +133,7 @@ export function LeadDetailsDrawer({
   const [quickActionsOpen, setQuickActionsOpen] = React.useState(false)
   const [confirmValue, setConfirmValue] = React.useState("")
   const [deleteError, setDeleteError] = React.useState(false)
+  const [isConvertDialogOpen, setIsConvertDialogOpen] = React.useState(false)
   const [form, setForm] = React.useState(() => getInitialFormState(lead))
   const open = controlledOpen ?? uncontrolledOpen
 
@@ -195,32 +207,6 @@ export function LeadDetailsDrawer({
       ].filter(Boolean),
     [lead, t]
   ) as Array<{ label: string; value: string; icon: React.ReactNode }>
-
-  const timeline = React.useMemo(() => {
-    const entries = [
-      ...(lead.notes
-        ? [
-            {
-              id: `initial-${lead.id}`,
-              title: "Cadastro inicial",
-              content: lead.notes,
-              createdAt: lead.createdAt,
-            },
-          ]
-        : []),
-      ...lead.followUpNotes.map((item) => ({
-        id: item.id,
-        title: "Nota de follow-up",
-        content: item.content,
-        createdAt: item.createdAt,
-      })),
-    ]
-
-    return entries.sort(
-      (a, b) =>
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    )
-  }, [lead])
 
   const showInstagramField = form.source === "INSTAGRAM"
   const showWebsiteField =
@@ -298,6 +284,7 @@ export function LeadDetailsDrawer({
       notes: form.notes,
       value: "",
       source: form.source,
+      nextActionAt: form.nextActionAt || undefined,
     })
 
     if (result.success) {
@@ -351,12 +338,15 @@ export function LeadDetailsDrawer({
           <div className="space-y-3">
             <div className="flex items-start justify-between gap-4">
               <div className="space-y-2">
-                <SheetTitle className="font-heading text-3xl font-black tracking-tight text-foreground">
-                  {lead.companyName}
-                </SheetTitle>
+                <div className="flex items-center gap-3">
+                  <SheetTitle className="font-heading text-3xl font-black tracking-tight text-foreground">
+                    {lead.companyName}
+                  </SheetTitle>
+                  <LeadStatusBadge status={lead.status} />
+                </div>
                 <SheetDescription className="text-sm leading-relaxed text-muted-foreground/65">
-                  {t(`source.${lead.source}`)} • {lead.followUpNotes.length}{" "}
-                  nota(s)
+                  {t(`source.${lead.source}`)} • {lead.activities?.length || 0}{" "}
+                  atividades
                 </SheetDescription>
               </div>
 
@@ -364,20 +354,60 @@ export function LeadDetailsDrawer({
                 <p className="pt-1 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
                   Atualizado em {formatDateTime(lead.updatedAt)}
                 </p>
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setIsEditing((current) => !current)
-                    setForm(getInitialFormState(lead))
-                  }}
-                  className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
-                >
-                  <PencilSimple className="mr-2 size-4" />
-                  {isEditing ? "Cancelar edicao" : "Editar lead"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => {
+                      setIsEditing((current) => !current)
+                      setForm(getInitialFormState(lead))
+                    }}
+                    className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
+                  >
+                    <PencilSimple className="mr-2 size-4" />
+                    {isEditing ? "Cancelar" : "Editar"}
+                  </Button>
+
+                  {lead.status !== LeadStatus.CONVERTIDO && (
+                    <Button
+                      onClick={() => setIsConvertDialogOpen(true)}
+                      className="rounded-full px-5 bg-brand-primary text-white text-[10px] font-black uppercase tracking-[0.18em]"
+                    >
+                      <RocketLaunch className="mr-2 size-4" />
+                      Converter
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
+
+            {lead.convertedProjectId && (
+              <div className="flex items-center gap-2 rounded-2xl bg-green-500/10 p-4 border border-green-500/20">
+                <RocketLaunch weight="fill" className="size-5 text-green-600" />
+                <div className="flex-1">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-green-600">
+                    Lead convertido com sucesso
+                  </p>
+                  <p className="text-xs font-medium text-green-700/80">
+                    Este lead agora e um projeto oficial.
+                  </p>
+                </div>
+                <Button
+                  asChild
+                  size="sm"
+                  variant="ghost"
+                  className="rounded-full text-[10px] font-black uppercase tracking-widest text-green-600 hover:bg-green-500/20"
+                >
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <Link
+                    href={`/admin/projects/${lead.convertedProjectId}` as any}
+                  >
+                    Abrir Projeto
+                    <ArrowSquareOut className="ml-2 size-4" />
+                  </Link>
+                </Button>
+              </div>
+            )}
 
             {lead.contactName ? (
               <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground/75">
@@ -455,6 +485,23 @@ export function LeadDetailsDrawer({
                       setForm((current) => ({
                         ...current,
                         email: event.target.value,
+                      }))
+                    }
+                    className="h-12 rounded-[1rem]"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55">
+                    Lembrar de retomar em
+                  </Label>
+                  <Input
+                    type="date"
+                    value={form.nextActionAt}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        nextActionAt: event.target.value,
                       }))
                     }
                     className="h-12 rounded-[1rem]"
@@ -573,23 +620,35 @@ export function LeadDetailsDrawer({
             </section>
           ) : null}
 
-          {visibleInfoItems.length > 0 ? (
-            <section className="grid gap-x-6 gap-y-4 border-b border-border/15 pb-8 md:grid-cols-2">
-              {visibleInfoItems.map((item) => (
-                <div key={item.label} className="grid gap-2">
-                  <div className="flex items-center gap-2">
-                    {item.icon}
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
-                      {item.label}
-                    </p>
-                  </div>
-                  <p className="break-words pl-6 text-sm font-semibold leading-relaxed text-foreground/85">
-                    {item.value}
+          <section className="grid gap-x-6 gap-y-4 border-b border-border/15 pb-8 md:grid-cols-2">
+            {lead.nextActionAt && (
+              <div className="grid gap-2 md:col-span-2 bg-brand-primary/[0.03] p-4 rounded-2xl border border-brand-primary/10 mb-2">
+                <div className="flex items-center gap-2">
+                  <Clock size={16} className="text-brand-primary" />
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary/70">
+                    Lembrete de Acompanhamento
                   </p>
                 </div>
-              ))}
-            </section>
-          ) : null}
+                <p className="pl-6 text-sm font-bold text-foreground/90">
+                  Retomar contato em{" "}
+                  {new Date(lead.nextActionAt).toLocaleDateString("pt-BR")}
+                </p>
+              </div>
+            )}
+            {visibleInfoItems.map((item) => (
+              <div key={item.label} className="grid gap-2">
+                <div className="flex items-center gap-2">
+                  {item.icon}
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+                    {item.label}
+                  </p>
+                </div>
+                <p className="break-words pl-6 text-sm font-semibold leading-relaxed text-foreground/85">
+                  {item.value}
+                </p>
+              </div>
+            ))}
+          </section>
 
           <section className="grid gap-4 border-b border-border/15 pb-8">
             <div>
@@ -699,8 +758,7 @@ export function LeadDetailsDrawer({
                 Registrar nota
               </p>
               <p className="mt-1 text-sm text-muted-foreground/70">
-                Salve respostas, contexto da conversa ou qualquer observacao
-                importante.
+                Salve contexto da conversa. Isso gerara uma atividade no feed.
               </p>
             </div>
 
@@ -727,50 +785,25 @@ export function LeadDetailsDrawer({
             </div>
           </section>
 
-          <section className="grid gap-4 border-b border-border/15 pb-8">
+          <section className="grid gap-6">
             <div>
               <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-                Historico
+                Linha do Tempo
               </p>
               <p className="mt-1 text-sm text-muted-foreground/70">
-                Linha do tempo com tudo o que ja foi registrado para este lead.
+                Historico estruturado de acoes e contatos.
               </p>
             </div>
 
-            {timeline.length === 0 ? (
-              <div className="rounded-[1.25rem] border border-dashed border-border/30 bg-background/40 px-5 py-8 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/45">
-                Ainda nao ha historico registrado.
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {timeline.map((item) => (
-                  <div
-                    key={item.id}
-                    className="grid gap-3 border-l border-border/40 pl-4"
-                  >
-                    <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
-                      <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
-                        {item.title}
-                      </p>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {formatDateTime(item.createdAt)}
-                      </p>
-                    </div>
-                    <p className="text-sm leading-relaxed text-foreground/85">
-                      {item.content}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            )}
+            <LeadActivityFeed activities={lead.activities || []} />
           </section>
 
-          <section className="grid gap-3">
+          <section className="grid gap-3 pt-8 border-t border-border/15">
             <p className="text-[10px] font-black uppercase tracking-[0.22em] text-red-700 dark:text-red-300">
               Remover lead
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground/70">
-              Use esta acao apenas quando quiser apagar este lead em definitivo.
+              Acao irreversivel para leads descartados.
             </p>
 
             <Dialog
@@ -878,6 +911,13 @@ export function LeadDetailsDrawer({
             </Dialog>
           </section>
         </div>
+
+        <ConvertLeadDialog
+          lead={lead}
+          open={isConvertDialogOpen}
+          onOpenChange={setIsConvertDialogOpen}
+          clients={clients}
+        />
       </SheetContent>
     </Sheet>
   )

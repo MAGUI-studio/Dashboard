@@ -17,6 +17,7 @@ import {
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
+import { UTApi } from "uploadthing/server"
 
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
@@ -665,6 +666,35 @@ export async function deleteProjectAction(
   }
 }
 
+export async function deleteProjectAssetAction(
+  id: string,
+  projectId: string,
+  key: string
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    await protect("admin")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  const utapi = new UTApi()
+
+  try {
+    await utapi.deleteFiles(key)
+
+    await prisma.asset.delete({
+      where: { id },
+    })
+
+    revalidatePath(`/admin/projects/${projectId}`)
+    revalidatePath(`/admin/projects/${projectId}/assets`)
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Delete Asset Error:")
+    return { error: "Erro ao deletar arquivo" }
+  }
+}
+
 export async function createProjectAssetAction(data: {
   projectId: string
   name: string
@@ -788,6 +818,70 @@ export async function updateProjectAssetsOrderAction(
   } catch (error) {
     logger.error({ error }, "Update Assets Order Error:")
     return { error: "Erro ao atualizar ordem dos arquivos" }
+  }
+}
+
+export async function createUpdateCommentAction(input: {
+  updateId: string
+  projectId: string
+  content: string
+}): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const { user } = await ensureProjectAccess(input.projectId, [
+      UserRole.CLIENT,
+      UserRole.ADMIN,
+      UserRole.MEMBER,
+    ])
+
+    const comment = await prisma.updateComment.create({
+      data: {
+        updateId: input.updateId,
+        authorId: user.id,
+        content: input.content,
+      },
+      include: {
+        update: {
+          select: {
+            title: true,
+          },
+        },
+      },
+    })
+
+    await createAuditLog({
+      action: "update.comment_created",
+      entityType: "UpdateComment",
+      entityId: comment.id,
+      summary: `Novo comentário na atualização "${comment.update.title}".`,
+      actorId: user.id,
+      actorType: AuditActorType.USER,
+      projectId: input.projectId,
+    })
+
+    const admins = await getInternalNotificationRecipients()
+
+    // Notify admins if a client comments
+    if (user.role === UserRole.CLIENT) {
+      await Promise.all(
+        admins.map((admin) =>
+          createNotification({
+            userId: admin.id,
+            projectId: input.projectId,
+            type: NotificationType.UPDATE_PUBLISHED, // Reusing existing type or could add new one
+            title: "Novo comentário do cliente",
+            message: `O cliente comentou em "${comment.update.title}": ${input.content.slice(0, 50)}...`,
+            ctaPath: getAdminProjectPath(input.projectId),
+          })
+        )
+      )
+    }
+
+    revalidatePath("/")
+    revalidatePath(`/admin/projects/${input.projectId}`)
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Create Comment Error:")
+    return { error: "Erro ao enviar comentário" }
   }
 }
 

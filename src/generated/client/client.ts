@@ -62,6 +62,21 @@ export type Lead = Prisma.LeadModel
  */
 export type LeadNote = Prisma.LeadNoteModel
 /**
+ * Model LeadActivity
+ *
+ */
+export type LeadActivity = Prisma.LeadActivityModel
+/**
+ * Model MessageTemplate
+ *
+ */
+export type MessageTemplate = Prisma.MessageTemplateModel
+/**
+ * Model SavedView
+ *
+ */
+export type SavedView = Prisma.SavedViewModel
+/**
  * Model Project
  *
  */

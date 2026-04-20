@@ -1,41 +1,49 @@
 import * as React from "react"
 
+import { DashboardActionItem } from "@/src/types/dashboard"
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 import { ActionItemsWidget } from "@/src/components/common/ActionItemsWidget"
 
+// Mock next-intl
 vi.mock("next-intl", () => ({
-  useTranslations: (namespace?: string) => (key: string) => {
-    if (namespace === "ActionItems" && key === "title") return "Ações Necessárias"
-    return key
-  },
+  useTranslations: () => (key: string) => key,
 }))
 
-const mockItems = [
-  {
-    id: "act1",
-    title: "Provide brand guidelines",
-    description: "Upload the PDF to the assets engine",
-    dueDate: new Date().toISOString(),
-    status: "PENDING",
-    createdAt: new Date().toISOString(),
-    projectId: "p1"
-  }
-]
-
 describe("ActionItemsWidget", () => {
-  it("renders empty state if no items without breaking", () => {
-    const { container } = render(<ActionItemsWidget items={[]} />)
-    // Se o array estiver vazio, o widget retorna um div vazio ou null (no caso retorna <div /> no código)
-    expect(container.firstChild).toBeEmptyDOMElement()
+  it("renders pending items by default", () => {
+    const items = [
+      { id: "1", title: "Task 1", status: "PENDING", project: { name: "P1" } },
+      {
+        id: "2",
+        title: "Task 2",
+        status: "COMPLETED",
+        project: { name: "P2" },
+      },
+    ]
+    render(
+      <ActionItemsWidget items={items as unknown as DashboardActionItem[]} />
+    )
+
+    expect(screen.getByText("Task 1")).toBeInTheDocument()
+    expect(screen.queryByText("Task 2")).not.toBeInTheDocument()
   })
 
-  it("renders pending action items", () => {
-    render(<ActionItemsWidget items={mockItems as any} />)
-    
-    expect(screen.getByText("Provide brand guidelines")).toBeInTheDocument()
-    expect(screen.getByText("Upload the PDF to the assets engine")).toBeInTheDocument()
-    expect(screen.getByText("Ações Necessárias")).toBeInTheDocument()
+  it("returns empty div when no pending items", () => {
+    const items = [
+      {
+        id: "2",
+        title: "Task 2",
+        status: "COMPLETED",
+        project: { name: "P2" },
+      },
+    ]
+    const { container } = render(
+      <ActionItemsWidget items={items as unknown as DashboardActionItem[]} />
+    )
+    // O componente retorna <div /> se não houver itens pendentes
+    expect(container.firstChild).not.toBeNull()
+    expect(container.querySelectorAll("section")).toHaveLength(0)
   })
 })

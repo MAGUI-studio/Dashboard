@@ -1,11 +1,8 @@
-import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
-
-export interface LeadNote {
-  id: string
-  content: string
-  authorId: string | null
-  createdAt: string | Date
-}
+import {
+  LeadActivityType,
+  LeadSource,
+  LeadStatus,
+} from "@/src/generated/client/enums"
 
 export interface Lead {
   id: string
@@ -19,10 +16,63 @@ export interface Lead {
   source: LeadSource
   notes: string | null
   value: string | null
-  lastContactAt: string | Date | null
-  nextActionAt: string | Date | null
+  lastContactAt: Date | string | null
+  nextActionAt: Date | string | null
   assignedToId: string | null
-  createdAt: string | Date
-  updatedAt: string | Date
-  followUpNotes: LeadNote[]
+
+  convertedProjectId: string | null
+  convertedAt: Date | string | null
+
+  activities?: LeadActivity[]
+  followUpNotes?: LeadNote[]
+
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface LeadNote {
+  id: string
+  content: string
+  leadId: string
+  authorId: string | null
+  author?: {
+    id: string
+    name: string | null
+  } | null
+  createdAt: Date | string
+}
+
+export interface LeadActivity {
+  id: string
+  type: LeadActivityType
+  title: string
+  content: string | null
+  metadata: Record<string, unknown>
+  leadId: string
+  authorId: string | null
+  author?: {
+    id: string
+    name: string | null
+  } | null
+  createdAt: Date | string
+}
+
+export interface MessageTemplate {
+  id: string
+  scope: string
+  name: string
+  content: string
+  createdById: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface SavedView {
+  id: string
+  userId: string
+  module: string
+  name: string
+  filtersJson: Record<string, unknown>
+  createdAt: Date | string
+  updatedAt: Date | string
 }

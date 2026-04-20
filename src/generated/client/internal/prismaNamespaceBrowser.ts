@@ -56,6 +56,9 @@ export const ModelName = {
   User: "User",
   Lead: "Lead",
   LeadNote: "LeadNote",
+  LeadActivity: "LeadActivity",
+  MessageTemplate: "MessageTemplate",
+  SavedView: "SavedView",
   Project: "Project",
   BriefingEntry: "BriefingEntry",
   Update: "Update",
@@ -118,6 +121,8 @@ export const LeadScalarFieldEnum = {
   lastContactAt: "lastContactAt",
   nextActionAt: "nextActionAt",
   assignedToId: "assignedToId",
+  convertedProjectId: "convertedProjectId",
+  convertedAt: "convertedAt",
   createdAt: "createdAt",
   updatedAt: "updatedAt",
 } as const
@@ -135,6 +140,46 @@ export const LeadNoteScalarFieldEnum = {
 
 export type LeadNoteScalarFieldEnum =
   (typeof LeadNoteScalarFieldEnum)[keyof typeof LeadNoteScalarFieldEnum]
+
+export const LeadActivityScalarFieldEnum = {
+  id: "id",
+  type: "type",
+  title: "title",
+  content: "content",
+  metadata: "metadata",
+  leadId: "leadId",
+  authorId: "authorId",
+  createdAt: "createdAt",
+} as const
+
+export type LeadActivityScalarFieldEnum =
+  (typeof LeadActivityScalarFieldEnum)[keyof typeof LeadActivityScalarFieldEnum]
+
+export const MessageTemplateScalarFieldEnum = {
+  id: "id",
+  scope: "scope",
+  name: "name",
+  content: "content",
+  createdById: "createdById",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+} as const
+
+export type MessageTemplateScalarFieldEnum =
+  (typeof MessageTemplateScalarFieldEnum)[keyof typeof MessageTemplateScalarFieldEnum]
+
+export const SavedViewScalarFieldEnum = {
+  id: "id",
+  userId: "userId",
+  module: "module",
+  name: "name",
+  filtersJson: "filtersJson",
+  createdAt: "createdAt",
+  updatedAt: "updatedAt",
+} as const
+
+export type SavedViewScalarFieldEnum =
+  (typeof SavedViewScalarFieldEnum)[keyof typeof SavedViewScalarFieldEnum]
 
 export const ProjectScalarFieldEnum = {
   id: "id",
@@ -323,6 +368,13 @@ export const NullableJsonNullValueInput = {
 
 export type NullableJsonNullValueInput =
   (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+export const JsonNullValueInput = {
+  JsonNull: JsonNull,
+} as const
+
+export type JsonNullValueInput =
+  (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
 export const QueryMode = {
   default: "default",

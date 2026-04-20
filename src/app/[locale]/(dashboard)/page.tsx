@@ -271,7 +271,7 @@ export default async function DashboardPage({
         id: `agenda-deadline-${project.id}`,
         title: project.name,
         dateLabel: `Prazo • ${new Date(project.deadline!).toLocaleDateString("pt-BR")}`,
-        dateValue: project.deadline!,
+        dateValue: project.deadline!.toISOString(),
         context: `${project.client.name || project.client.email} • ${project.progress}% de progresso declarado`,
         kind: "deadline" as const,
         href: {
@@ -291,7 +291,7 @@ export default async function DashboardPage({
           id: `agenda-action-${item.id}`,
           title: item.title,
           dateLabel: `Action item • ${new Date(item.dueDate!).toLocaleDateString("pt-BR")}`,
-          dateValue: item.dueDate!,
+          dateValue: item.dueDate!.toISOString(),
           context: item.project.name,
           kind: "task" as const,
           href: {
@@ -311,7 +311,7 @@ export default async function DashboardPage({
           id: `agenda-lead-${lead.id}`,
           title: lead.companyName,
           dateLabel: `Retomar contato • ${new Date(lead.nextActionAt!).toLocaleDateString("pt-BR")}`,
-          dateValue: lead.nextActionAt!,
+          dateValue: lead.nextActionAt!.toISOString(),
           context: lead.contactName || "Lead sem contato principal definido",
           kind: "lead" as const,
           href: `/admin/crm?lead=${lead.id}`,

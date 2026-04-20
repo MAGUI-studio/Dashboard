@@ -5,18 +5,11 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { Lead } from "@/src/types/crm"
-import {
-  InstagramLogo,
-  MagnifyingGlass,
-  Rows,
-  SealWarning,
-} from "@phosphor-icons/react"
+import { MagnifyingGlass, Rows, SealWarning } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 import { Card } from "@/src/components/ui/card"
 import { Input } from "@/src/components/ui/input"
-import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
-import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 import {
   Table,
   TableBody,
@@ -26,6 +19,9 @@ import {
   TableRow,
 } from "@/src/components/ui/table"
 
+import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
+import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
+
 import {
   formatLeadValue,
   getLeadDaysWithoutMovement,
@@ -34,9 +30,13 @@ import {
 
 interface LeadsTableProps {
   leads: Lead[]
+  clients: Array<{ id: string; name: string | null; email: string }>
 }
 
-export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
+export function LeadsTable({
+  leads,
+  clients,
+}: LeadsTableProps): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const [search, setSearch] = React.useState("")
 
@@ -138,9 +138,7 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
                       <div className="flex items-start gap-4">
                         <span
                           className={`mt-1 h-12 w-1 rounded-full ${
-                            stagnant
-                              ? "bg-amber-500/70"
-                              : "bg-brand-primary/50"
+                            stagnant ? "bg-amber-500/70" : "bg-brand-primary/50"
                           }`}
                         />
                         <div>
@@ -149,7 +147,9 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
                           </div>
                           <div className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/55">
                             {lead.source} • Atualizado em{" "}
-                            {new Date(lead.updatedAt).toLocaleDateString("pt-BR")}
+                            {new Date(lead.updatedAt).toLocaleDateString(
+                              "pt-BR"
+                            )}
                           </div>
                         </div>
                       </div>
@@ -197,7 +197,7 @@ export function LeadsTable({ leads }: LeadsTableProps): React.JSX.Element {
                       </div>
                     </TableCell>
                     <TableCell className="px-8 py-6 text-right">
-                      <LeadDetailsDrawer lead={lead}>
+                      <LeadDetailsDrawer lead={lead} clients={clients}>
                         <Button
                           variant="outline"
                           className="rounded-full border-border/60 bg-background/70 px-4 text-[10px] font-black uppercase tracking-[0.2em]"

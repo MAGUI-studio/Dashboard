@@ -17,32 +17,27 @@ export const LEAD_STATUS_STYLES: Record<
   }
 > = {
   GARIMPAGEM: {
-    badge:
-      "border-border/50 bg-muted/30 text-foreground/75",
+    badge: "border-border/50 bg-muted/30 text-foreground/75",
     accent: "text-foreground/70",
     column: "border-border/40 bg-muted/10",
   },
   CONTATO_REALIZADO: {
-    badge:
-      "border-border/50 bg-muted/30 text-foreground/75",
+    badge: "border-border/50 bg-muted/30 text-foreground/75",
     accent: "text-foreground/70",
     column: "border-border/40 bg-muted/10",
   },
   NEGOCIACAO: {
-    badge:
-      "border-border/50 bg-muted/30 text-foreground/75",
+    badge: "border-border/50 bg-muted/30 text-foreground/75",
     accent: "text-foreground/70",
     column: "border-border/40 bg-muted/10",
   },
   CONVERTIDO: {
-    badge:
-      "border-border/50 bg-muted/30 text-foreground/75",
+    badge: "border-border/50 bg-muted/30 text-foreground/75",
     accent: "text-foreground/70",
     column: "border-border/40 bg-muted/10",
   },
   DESCARTADO: {
-    badge:
-      "border-border/50 bg-muted/30 text-foreground/75",
+    badge: "border-border/50 bg-muted/30 text-foreground/75",
     accent: "text-foreground/70",
     column: "border-border/40 bg-muted/10",
   },
@@ -98,9 +93,10 @@ export function isLeadStagnant(lead: Lead): boolean {
   )
 }
 
-export function getNextActionMeta(
-  dateValue: string | Date | null
-): { label: string; tone: string } {
+export function getNextActionMeta(dateValue: string | Date | null): {
+  label: string
+  tone: string
+} {
   if (!dateValue) {
     return {
       label: "Sem cadência definida",
@@ -124,7 +120,9 @@ export function getNextActionMeta(
   if (diffInDays <= 1) {
     return {
       label:
-        diffInDays === 0 ? "Ação prevista para hoje" : "Ação prevista para amanhã",
+        diffInDays === 0
+          ? "Ação prevista para hoje"
+          : "Ação prevista para amanhã",
       tone: "text-[oklch(0.6_0.11_70)]",
     }
   }

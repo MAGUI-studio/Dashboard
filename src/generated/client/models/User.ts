@@ -250,6 +250,7 @@ export type UserWhereInput = {
   auditLogs?: Prisma.AuditLogListRelationFilter
   comments?: Prisma.UpdateCommentListRelationFilter
   approvalEvents?: Prisma.ApprovalEventListRelationFilter
+  leadActivities?: Prisma.LeadActivityListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -272,6 +273,7 @@ export type UserOrderByWithRelationInput = {
   auditLogs?: Prisma.AuditLogOrderByRelationAggregateInput
   comments?: Prisma.UpdateCommentOrderByRelationAggregateInput
   approvalEvents?: Prisma.ApprovalEventOrderByRelationAggregateInput
+  leadActivities?: Prisma.LeadActivityOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -298,6 +300,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<
     auditLogs?: Prisma.AuditLogListRelationFilter
     comments?: Prisma.UpdateCommentListRelationFilter
     approvalEvents?: Prisma.ApprovalEventListRelationFilter
+    leadActivities?: Prisma.LeadActivityListRelationFilter
   },
   "id" | "clerkId" | "email"
 >
@@ -365,6 +368,7 @@ export type UserCreateInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -387,6 +391,7 @@ export type UserUncheckedCreateInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUpdateInput = {
@@ -409,6 +414,7 @@ export type UserUpdateInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -431,6 +437,7 @@ export type UserUncheckedUpdateInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -605,6 +612,34 @@ export type UserUpdateOneWithoutLeadNotesNestedInput = {
   >
 }
 
+export type UserCreateNestedOneWithoutLeadActivitiesInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedCreateWithoutLeadActivitiesInput
+  >
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLeadActivitiesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutLeadActivitiesNestedInput = {
+  create?: Prisma.XOR<
+    Prisma.UserCreateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedCreateWithoutLeadActivitiesInput
+  >
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutLeadActivitiesInput
+  upsert?: Prisma.UserUpsertWithoutLeadActivitiesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<
+    Prisma.XOR<
+      Prisma.UserUpdateToOneWithWhereWithoutLeadActivitiesInput,
+      Prisma.UserUpdateWithoutLeadActivitiesInput
+    >,
+    Prisma.UserUncheckedUpdateWithoutLeadActivitiesInput
+  >
+}
+
 export type UserCreateNestedOneWithoutProjectsInput = {
   create?: Prisma.XOR<
     Prisma.UserCreateWithoutProjectsInput,
@@ -760,6 +795,7 @@ export type UserCreateWithoutOwnedLeadsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutOwnedLeadsInput = {
@@ -781,6 +817,7 @@ export type UserUncheckedCreateWithoutOwnedLeadsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutOwnedLeadsInput = {
@@ -830,6 +867,7 @@ export type UserUpdateWithoutOwnedLeadsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOwnedLeadsInput = {
@@ -851,6 +889,7 @@ export type UserUncheckedUpdateWithoutOwnedLeadsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutLeadNotesInput = {
@@ -872,6 +911,7 @@ export type UserCreateWithoutLeadNotesInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutLeadNotesInput = {
@@ -893,6 +933,7 @@ export type UserUncheckedCreateWithoutLeadNotesInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutLeadNotesInput = {
@@ -942,6 +983,7 @@ export type UserUpdateWithoutLeadNotesInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutLeadNotesInput = {
@@ -959,6 +1001,123 @@ export type UserUncheckedUpdateWithoutLeadNotesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
   ownedLeads?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutLeadActivitiesInput = {
+  id?: string
+  clerkId: string
+  email: string
+  name?: string | null
+  role?: $Enums.UserRole
+  companyName?: string | null
+  phone?: string | null
+  position?: string | null
+  avatarUrl?: string | null
+  taxId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectCreateNestedManyWithoutClientInput
+  ownedLeads?: Prisma.LeadCreateNestedManyWithoutAssignedToInput
+  leadNotes?: Prisma.LeadNoteCreateNestedManyWithoutAuthorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
+  approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+}
+
+export type UserUncheckedCreateWithoutLeadActivitiesInput = {
+  id?: string
+  clerkId: string
+  email: string
+  name?: string | null
+  role?: $Enums.UserRole
+  companyName?: string | null
+  phone?: string | null
+  position?: string | null
+  avatarUrl?: string | null
+  taxId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  projects?: Prisma.ProjectUncheckedCreateNestedManyWithoutClientInput
+  ownedLeads?: Prisma.LeadUncheckedCreateNestedManyWithoutAssignedToInput
+  leadNotes?: Prisma.LeadNoteUncheckedCreateNestedManyWithoutAuthorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
+  approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+}
+
+export type UserCreateOrConnectWithoutLeadActivitiesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedCreateWithoutLeadActivitiesInput
+  >
+}
+
+export type UserUpsertWithoutLeadActivitiesInput = {
+  update: Prisma.XOR<
+    Prisma.UserUpdateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedUpdateWithoutLeadActivitiesInput
+  >
+  create: Prisma.XOR<
+    Prisma.UserCreateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedCreateWithoutLeadActivitiesInput
+  >
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutLeadActivitiesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<
+    Prisma.UserUpdateWithoutLeadActivitiesInput,
+    Prisma.UserUncheckedUpdateWithoutLeadActivitiesInput
+  >
+}
+
+export type UserUpdateWithoutLeadActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUpdateManyWithoutClientNestedInput
+  ownedLeads?: Prisma.LeadUpdateManyWithoutAssignedToNestedInput
+  leadNotes?: Prisma.LeadNoteUpdateManyWithoutAuthorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
+  approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutLeadActivitiesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  clerkId?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  position?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  avatarUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  projects?: Prisma.ProjectUncheckedUpdateManyWithoutClientNestedInput
+  ownedLeads?: Prisma.LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+  leadNotes?: Prisma.LeadNoteUncheckedUpdateManyWithoutAuthorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
@@ -984,6 +1143,7 @@ export type UserCreateWithoutProjectsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutProjectsInput = {
@@ -1005,6 +1165,7 @@ export type UserUncheckedCreateWithoutProjectsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutProjectsInput = {
@@ -1054,6 +1215,7 @@ export type UserUpdateWithoutProjectsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -1075,6 +1237,7 @@ export type UserUncheckedUpdateWithoutProjectsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1096,6 +1259,7 @@ export type UserCreateWithoutCommentsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1117,6 +1281,7 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1166,6 +1331,7 @@ export type UserUpdateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1187,6 +1353,7 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutApprovalEventsInput = {
@@ -1208,6 +1375,7 @@ export type UserCreateWithoutApprovalEventsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutApprovalEventsInput = {
@@ -1229,6 +1397,7 @@ export type UserUncheckedCreateWithoutApprovalEventsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutApprovalEventsInput = {
@@ -1278,6 +1447,7 @@ export type UserUpdateWithoutApprovalEventsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutApprovalEventsInput = {
@@ -1299,6 +1469,7 @@ export type UserUncheckedUpdateWithoutApprovalEventsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1320,6 +1491,7 @@ export type UserCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1341,6 +1513,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1390,6 +1563,7 @@ export type UserUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1411,6 +1585,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1432,6 +1607,7 @@ export type UserCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
   comments?: Prisma.UpdateCommentCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1453,6 +1629,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
   comments?: Prisma.UpdateCommentUncheckedCreateNestedManyWithoutAuthorInput
   approvalEvents?: Prisma.ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+  leadActivities?: Prisma.LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1502,6 +1679,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
   comments?: Prisma.UpdateCommentUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1523,6 +1701,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
   comments?: Prisma.UpdateCommentUncheckedUpdateManyWithoutAuthorNestedInput
   approvalEvents?: Prisma.ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+  leadActivities?: Prisma.LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 /**
@@ -1537,6 +1716,7 @@ export type UserCountOutputType = {
   auditLogs: number
   comments: number
   approvalEvents: number
+  leadActivities: number
 }
 
 export type UserCountOutputTypeSelect<
@@ -1550,6 +1730,7 @@ export type UserCountOutputTypeSelect<
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   comments?: boolean | UserCountOutputTypeCountCommentsArgs
   approvalEvents?: boolean | UserCountOutputTypeCountApprovalEventsArgs
+  leadActivities?: boolean | UserCountOutputTypeCountLeadActivitiesArgs
 }
 
 /**
@@ -1635,6 +1816,16 @@ export type UserCountOutputTypeCountApprovalEventsArgs<
   where?: Prisma.ApprovalEventWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountLeadActivitiesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs =
+    runtime.Types.Extensions.DefaultArgs,
+> = {
+  where?: Prisma.LeadActivityWhereInput
+}
+
 export type UserSelect<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
@@ -1659,6 +1850,7 @@ export type UserSelect<
     auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
     comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
     approvalEvents?: boolean | Prisma.User$approvalEventsArgs<ExtArgs>
+    leadActivities?: boolean | Prisma.User$leadActivitiesArgs<ExtArgs>
     _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
   },
   ExtArgs["result"]["user"]
@@ -1750,6 +1942,7 @@ export type UserInclude<
   auditLogs?: boolean | Prisma.User$auditLogsArgs<ExtArgs>
   comments?: boolean | Prisma.User$commentsArgs<ExtArgs>
   approvalEvents?: boolean | Prisma.User$approvalEventsArgs<ExtArgs>
+  leadActivities?: boolean | Prisma.User$leadActivitiesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<
@@ -1774,6 +1967,7 @@ export type $UserPayload<
     auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
     comments: Prisma.$UpdateCommentPayload<ExtArgs>[]
     approvalEvents: Prisma.$ApprovalEventPayload<ExtArgs>[]
+    leadActivities: Prisma.$LeadActivityPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<
     {
@@ -2410,6 +2604,17 @@ export interface Prisma__UserClient<
   ): Prisma.PrismaPromise<
     | runtime.Types.Result.GetResult<
         Prisma.$ApprovalEventPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    | Null
+  >
+  leadActivities<T extends Prisma.User$leadActivitiesArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.User$leadActivitiesArgs<ExtArgs>>
+  ): Prisma.PrismaPromise<
+    | runtime.Types.Result.GetResult<
+        Prisma.$LeadActivityPayload<ExtArgs>,
         T,
         "findMany",
         GlobalOmitOptions
@@ -3122,6 +3327,37 @@ export type User$approvalEventsArgs<
   distinct?:
     | Prisma.ApprovalEventScalarFieldEnum
     | Prisma.ApprovalEventScalarFieldEnum[]
+}
+
+/**
+ * User.leadActivities
+ */
+export type User$leadActivitiesArgs<
+  ExtArgs extends runtime.Types.Extensions.InternalArgs =
+    runtime.Types.Extensions.DefaultArgs,
+> = {
+  /**
+   * Select specific fields to fetch from the LeadActivity
+   */
+  select?: Prisma.LeadActivitySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the LeadActivity
+   */
+  omit?: Prisma.LeadActivityOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.LeadActivityInclude<ExtArgs> | null
+  where?: Prisma.LeadActivityWhereInput
+  orderBy?:
+    | Prisma.LeadActivityOrderByWithRelationInput
+    | Prisma.LeadActivityOrderByWithRelationInput[]
+  cursor?: Prisma.LeadActivityWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?:
+    | Prisma.LeadActivityScalarFieldEnum
+    | Prisma.LeadActivityScalarFieldEnum[]
 }
 
 /**

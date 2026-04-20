@@ -122,6 +122,20 @@ export const LeadSource = {
 
 export type LeadSource = (typeof LeadSource)[keyof typeof LeadSource]
 
+export const LeadActivityType = {
+  NOTE_CREATED: "NOTE_CREATED",
+  STATUS_CHANGED: "STATUS_CHANGED",
+  SOURCE_UPDATED: "SOURCE_UPDATED",
+  CONTACT_UPDATED: "CONTACT_UPDATED",
+  WHATSAPP_LINK_OPENED: "WHATSAPP_LINK_OPENED",
+  LEAD_EDITED: "LEAD_EDITED",
+  CONVERTED_TO_PROJECT: "CONVERTED_TO_PROJECT",
+  REMINDER_SET: "REMINDER_SET",
+} as const
+
+export type LeadActivityType =
+  (typeof LeadActivityType)[keyof typeof LeadActivityType]
+
 export const NotificationType = {
   UPDATE_PENDING_APPROVAL: "UPDATE_PENDING_APPROVAL",
   UPDATE_PUBLISHED: "UPDATE_PUBLISHED",
