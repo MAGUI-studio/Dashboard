@@ -8,9 +8,13 @@ import { Plus } from "@phosphor-icons/react/dist/ssr"
 
 import { Button } from "@/src/components/ui/button"
 
+import { CSVImportDialog } from "@/src/components/admin/CSVImportDialog"
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
-import { getLeads } from "@/src/lib/actions/crm.actions"
+import {
+  getLeads,
+  getMessageTemplatesAction,
+} from "@/src/lib/actions/crm.actions"
 import prisma from "@/src/lib/prisma"
 
 export default async function CRMPage({
@@ -20,6 +24,8 @@ export default async function CRMPage({
 }): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.crm")
   const leads = await getLeads()
+  const templates = await getMessageTemplatesAction()
+
   const clients = await prisma.user.findMany({
     where: { role: UserRole.CLIENT },
     select: { id: true, name: true, email: true },
@@ -50,24 +56,31 @@ export default async function CRMPage({
           </p>
         </div>
 
-        <Button
-          asChild
-          className="group relative h-14 overflow-hidden rounded-full px-10 font-sans font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-primary/20"
-        >
-          <Link href="/admin/crm/register" className="flex items-center gap-3">
-            <Plus
-              weight="duotone"
-              className="size-5 transition-transform group-hover:rotate-12"
-            />
-            <span>{t("create")}</span>
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-3">
+          <CSVImportDialog />
+          <Button
+            asChild
+            className="group relative h-14 overflow-hidden rounded-full px-10 font-sans font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-primary/20"
+          >
+            <Link
+              href="/admin/crm/register"
+              className="flex items-center gap-3"
+            >
+              <Plus
+                weight="duotone"
+                className="size-5 transition-transform group-hover:rotate-12"
+              />
+              <span>{t("create")}</span>
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <KanbanBoard
         leads={leads}
         initialLeadId={selectedLeadId}
         clients={clients}
+        templates={templates}
       />
     </main>
   )

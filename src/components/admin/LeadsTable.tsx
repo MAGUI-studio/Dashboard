@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { Lead } from "@/src/types/crm"
+import { Lead, MessageTemplate } from "@/src/types/crm"
 import { MagnifyingGlass, Rows, SealWarning } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
@@ -31,11 +31,13 @@ import {
 interface LeadsTableProps {
   leads: Lead[]
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }
 
 export function LeadsTable({
   leads,
   clients,
+  templates,
 }: LeadsTableProps): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const [search, setSearch] = React.useState("")
@@ -197,7 +199,11 @@ export function LeadsTable({
                       </div>
                     </TableCell>
                     <TableCell className="px-8 py-6 text-right">
-                      <LeadDetailsDrawer lead={lead} clients={clients}>
+                      <LeadDetailsDrawer
+                        lead={lead}
+                        clients={clients}
+                        templates={templates}
+                      >
                         <Button
                           variant="outline"
                           className="rounded-full border-border/60 bg-background/70 px-4 text-[10px] font-black uppercase tracking-[0.2em]"

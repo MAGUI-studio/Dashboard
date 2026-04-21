@@ -7,19 +7,21 @@ import { useRouter } from "next/navigation"
 
 import { LeadSource, LeadStatus } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
-import { Lead } from "@/src/types/crm"
+import { Lead, MessageTemplate } from "@/src/types/crm"
 import {
   ArrowSquareOut,
   CaretDown,
   ChatCircleText,
   CircleNotch,
   Clock,
+  DeviceMobile,
   EnvelopeSimple,
   Globe,
   InstagramLogo,
   LinkSimple,
   PencilSimple,
   Phone,
+  Plus,
   RocketLaunch,
   Trash,
   Warning,
@@ -68,10 +70,11 @@ import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 import {
   addLeadNote,
   deleteLead,
+  saveMessageTemplateAction,
   updateLead,
   updateLeadStatus,
 } from "@/src/lib/actions/crm.actions"
-import { getLeadWhatsappLinks } from "@/src/lib/utils/crm"
+import { sanitizePhoneForWhatsApp } from "@/src/lib/utils/crm"
 
 function formatDateTime(value: string | Date): string {
   return new Intl.DateTimeFormat("pt-BR", {
@@ -113,12 +116,14 @@ export function LeadDetailsDrawer({
   onOpenChange,
   open: controlledOpen,
   clients,
+  templates,
 }: {
   lead: Lead
   children: React.ReactNode
   onOpenChange?: (open: boolean) => void
   open?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const router = useRouter()
@@ -134,6 +139,10 @@ export function LeadDetailsDrawer({
   const [confirmValue, setConfirmValue] = React.useState("")
   const [deleteError, setDeleteError] = React.useState(false)
   const [isConvertDialogOpen, setIsConvertDialogOpen] = React.useState(false)
+
+  const [customMessage, setCustomMessage] = React.useState("")
+  const [isSavingTemplate, setIsSavingLeadTemplate] = React.useState(false)
+
   const [form, setForm] = React.useState(() => getInitialFormState(lead))
   const open = controlledOpen ?? uncontrolledOpen
 
@@ -142,7 +151,38 @@ export function LeadDetailsDrawer({
   }, [lead])
 
   const confirmCode = lead.id.slice(-6).toUpperCase()
-  const whatsappActions = getLeadWhatsappLinks(lead)
+
+  const personalizeMessage = React.useCallback(
+    (content: string) => {
+      return content
+        .replace(/{contact}/g, lead.contactName || "time")
+        .replace(/{company}/g, lead.companyName)
+    },
+    [lead.contactName, lead.companyName]
+  )
+
+  const handleUseTemplate = (content: string) => {
+    setCustomMessage(personalizeMessage(content))
+  }
+
+  const handleSaveAsTemplate = async () => {
+    if (!customMessage) return
+
+    setIsSavingLeadTemplate(true)
+    const name = `Template ${new Date().toLocaleDateString()}`
+    const result = await saveMessageTemplateAction({
+      name,
+      content: customMessage
+        .replace(lead.companyName, "{company}")
+        .replace(lead.contactName || "time", "{contact}"),
+      scope: "LEAD",
+    })
+
+    if (result.success) {
+      toast.success("Template salvo para uso futuro.")
+    }
+    setIsSavingLeadTemplate(false)
+  }
 
   const visibleInfoItems = React.useMemo(
     () =>
@@ -234,6 +274,7 @@ export function LeadDetailsDrawer({
       setConfirmValue("")
       setDeleteError(false)
       setNote("")
+      setCustomMessage("")
       setForm(getInitialFormState(lead))
     }
   }
@@ -324,6 +365,11 @@ export function LeadDetailsDrawer({
     LeadStatus.NEGOCIACAO,
     LeadStatus.CONVERTIDO,
   ]
+
+  const phone = sanitizePhoneForWhatsApp(lead.phone)
+  const whatsappUrl = phone
+    ? `https://wa.me/${phone}?text=${encodeURIComponent(customMessage)}`
+    : null
 
   return (
     <Sheet open={open} onOpenChange={handleSheetOpenChange}>
@@ -679,7 +725,7 @@ export function LeadDetailsDrawer({
             </div>
           </section>
 
-          <section className="grid gap-4 border-b border-border/15 pb-8">
+          <section className="grid gap-6 border-b border-border/15 pb-8">
             <Collapsible
               open={quickActionsOpen}
               onOpenChange={setQuickActionsOpen}
@@ -687,10 +733,10 @@ export function LeadDetailsDrawer({
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-                    Acoes rapidas
+                    Mensagens e Templates
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground/70">
-                    Mensagens prontas para acelerar o primeiro contato.
+                    Acelere o contato com o cliente usando mensagens prontas.
                   </p>
                 </div>
 
@@ -710,43 +756,74 @@ export function LeadDetailsDrawer({
                 </CollapsibleTrigger>
               </div>
 
-              <CollapsibleContent className="pt-4">
+              <CollapsibleContent className="pt-6 space-y-6">
                 <div className="grid gap-3">
-                  {whatsappActions.map((action) => (
-                    <div
-                      key={action.label}
-                      className="rounded-[1.25rem] border border-border/35 bg-background/70 p-4"
+                  <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">
+                    Templates Disponiveis
+                  </Label>
+                  <div className="flex flex-wrap gap-2">
+                    {templates.map((tpl) => (
+                      <Button
+                        key={tpl.id}
+                        variant="secondary"
+                        size="sm"
+                        onClick={() => handleUseTemplate(tpl.content)}
+                        className="rounded-full text-[9px] font-black uppercase tracking-widest bg-muted/20 border border-border/40"
+                      >
+                        {tpl.name}
+                      </Button>
+                    ))}
+                    {templates.length === 0 && (
+                      <p className="text-[9px] font-medium text-muted-foreground/40 italic p-1">
+                        Nenhum template cadastrado ainda.
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-1">
+                      Mensagem Personalizada
+                    </Label>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      disabled={isSavingTemplate || !customMessage}
+                      onClick={handleSaveAsTemplate}
+                      className="h-7 rounded-full text-[8px] font-black uppercase tracking-widest"
                     >
-                      <div className="grid gap-3">
-                        <div className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.18em] text-foreground/80">
-                          <WhatsappLogo size={16} weight="fill" />
-                          {action.label}
-                        </div>
-                        <p className="text-sm leading-relaxed text-muted-foreground/75">
-                          {action.message}
-                        </p>
-                        {action.href ? (
-                          <Button
-                            asChild
-                            variant="outline"
-                            className="justify-center rounded-full text-[10px] font-black uppercase tracking-[0.18em] sm:ml-auto sm:w-auto"
-                          >
-                            <a
-                              href={action.href}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Abrir WhatsApp
-                            </a>
-                          </Button>
-                        ) : (
-                          <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
-                            Cadastre um telefone para usar
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  ))}
+                      <Plus className="mr-1 size-3" />
+                      Salvar como Template
+                    </Button>
+                  </div>
+                  <Textarea
+                    value={customMessage}
+                    onChange={(e) => setCustomMessage(e.target.value)}
+                    placeholder="Selecione um template acima ou escreva sua mensagem..."
+                    className="min-h-[120px] rounded-2xl border-border/40 bg-background/50 text-sm"
+                  />
+                  <Button
+                    asChild
+                    disabled={!whatsappUrl || !customMessage}
+                    className="w-full h-12 rounded-full bg-green-600 hover:bg-green-700 text-white font-black uppercase tracking-widest text-[10px] shadow-xl shadow-green-600/20"
+                  >
+                    {whatsappUrl && customMessage ? (
+                      <a href={whatsappUrl} target="_blank" rel="noreferrer">
+                        <WhatsappLogo
+                          size={18}
+                          weight="fill"
+                          className="mr-2"
+                        />
+                        Enviar via WhatsApp
+                      </a>
+                    ) : (
+                      <span>
+                        <DeviceMobile size={18} className="mr-2" />
+                        Configure um telefone
+                      </span>
+                    )}
+                  </Button>
                 </div>
               </CollapsibleContent>
             </Collapsible>

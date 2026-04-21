@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 
 import { LeadStatus } from "@/src/generated/client/enums"
-import { Lead } from "@/src/types/crm"
+import { Lead, MessageTemplate } from "@/src/types/crm"
 import {
   DndContext,
   type DragEndEvent,
@@ -48,6 +48,8 @@ import {
   getLeadDaysWithoutMovement,
   isLeadStagnant,
 } from "@/src/lib/utils/crm"
+
+import { CRMFilters, KanbanFilters } from "./KanbanFilters"
 
 type LeadMap = Record<string, Lead>
 type ColumnMap = Record<LeadStatus, string[]>
@@ -131,6 +133,7 @@ function LeadCard({
   onDrawerOpenChange,
   open,
   clients,
+  templates,
 }: {
   lead: Lead
   dragging?: boolean
@@ -141,6 +144,7 @@ function LeadCard({
   onDrawerOpenChange?: (open: boolean) => void
   open?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const stagnant = isLeadStagnant(lead)
@@ -220,6 +224,7 @@ function LeadCard({
           onOpenChange={onDrawerOpenChange}
           open={open}
           clients={clients}
+          templates={templates}
         >
           <Button
             type="button"
@@ -241,12 +246,14 @@ function SortableLeadCardWithDrawerState({
   onDrawerOpenChange = () => undefined,
   isOpen = false,
   clients,
+  templates,
 }: {
   lead: Lead
   dragDisabled: boolean
   onDrawerOpenChange?: (leadId: string, open: boolean) => void
   isOpen?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }): React.JSX.Element {
   const {
     attributes,
@@ -274,6 +281,7 @@ function SortableLeadCardWithDrawerState({
       onDrawerOpenChange={(open) => onDrawerOpenChange(lead.id, open)}
       open={isOpen}
       clients={clients}
+      templates={templates}
     />
   )
 }
@@ -286,6 +294,7 @@ function KanbanColumn({
   onDrawerOpenChange,
   selectedLeadId,
   clients,
+  templates,
 }: {
   status: LeadStatus
   leadIds: string[]
@@ -294,6 +303,7 @@ function KanbanColumn({
   onDrawerOpenChange: (leadId: string, open: boolean) => void
   selectedLeadId: string | null
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const { setNodeRef, isOver } = useDroppable({ id: status })
@@ -333,6 +343,7 @@ function KanbanColumn({
               onDrawerOpenChange={onDrawerOpenChange}
               isOpen={selectedLeadId === lead.id}
               clients={clients}
+              templates={templates}
             />
           ))}
 
@@ -351,12 +362,19 @@ export function KanbanBoard({
   leads,
   initialLeadId = null,
   clients,
+  templates,
 }: {
   leads: Lead[]
   initialLeadId?: string | null
   clients: Array<{ id: string; name: string | null; email: string }>
+  templates: MessageTemplate[]
 }): React.JSX.Element {
   const [search, setSearch] = React.useState("")
+  const [filters, setFilters] = React.useState<CRMFilters>({
+    source: "all",
+    stagnation: "all",
+    hasContact: "all",
+  })
   const [boardState, setBoardState] = React.useState(() =>
     buildBoardState(leads)
   )
@@ -413,26 +431,51 @@ export function KanbanBoard({
   const visibleLeadIds = React.useMemo(() => {
     const query = search.trim().toLowerCase()
 
-    if (!query) {
-      return new Set(Object.keys(leadMap))
-    }
-
     return new Set(
       Object.values(leadMap)
         .filter((lead) => {
-          const haystack = [
-            lead.companyName,
-            lead.contactName ?? "",
-            lead.email ?? "",
-            lead.instagram ?? "",
-            lead.phone ?? "",
-          ]
+          // 1. Text Search
+          if (query) {
+            const haystack = [
+              lead.companyName,
+              lead.contactName ?? "",
+              lead.email ?? "",
+              lead.instagram ?? "",
+              lead.phone ?? "",
+            ]
+            if (
+              !haystack.some((value) => value.toLowerCase().includes(query))
+            ) {
+              return false
+            }
+          }
 
-          return haystack.some((value) => value.toLowerCase().includes(query))
+          // 2. Source Filter
+          if (filters.source !== "all" && lead.source !== filters.source) {
+            return false
+          }
+
+          // 3. Stagnation Filter
+          if (filters.stagnation !== "all") {
+            const days = getLeadDaysWithoutMovement(lead)
+            if (days < parseInt(filters.stagnation)) {
+              return false
+            }
+          }
+
+          // 4. Contact Filter
+          if (filters.hasContact !== "all") {
+            if (filters.hasContact === "phone" && !lead.phone) return false
+            if (filters.hasContact === "instagram" && !lead.instagram)
+              return false
+            if (filters.hasContact === "email" && !lead.email) return false
+          }
+
+          return true
         })
         .map((lead) => lead.id)
     )
-  }, [leadMap, search])
+  }, [leadMap, search, filters])
 
   const filteredColumnMap = React.useMemo(
     () =>
@@ -558,7 +601,13 @@ export function KanbanBoard({
 
   return (
     <div className="grid gap-6">
-      <div className="flex justify-end">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <KanbanFilters
+          filters={filters}
+          onFiltersChange={setFilters}
+          totalCount={leads.length}
+          filteredCount={visibleLeadIds.size}
+        />
         <div className="relative w-full max-w-md">
           <MagnifyingGlass className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/55" />
           <Input
@@ -588,13 +637,19 @@ export function KanbanBoard({
               onDrawerOpenChange={handleDrawerOpenChange}
               selectedLeadId={selectedLeadId}
               clients={clients}
+              templates={templates}
             />
           ))}
         </div>
 
         <DragOverlay>
           {activeLead ? (
-            <LeadCard lead={activeLead} dragging clients={clients} />
+            <LeadCard
+              lead={activeLead}
+              dragging
+              clients={clients}
+              templates={templates}
+            />
           ) : null}
         </DragOverlay>
       </DndContext>

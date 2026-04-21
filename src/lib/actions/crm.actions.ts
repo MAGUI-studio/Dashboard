@@ -10,7 +10,7 @@ import {
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client/enums"
-import { Lead } from "@/src/types/crm"
+import { Lead, MessageTemplate } from "@/src/types/crm"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
@@ -53,7 +53,7 @@ async function createLeadActivity(data: {
   type: LeadActivityType
   title: string
   content?: string
-  metadata?: Record<string, unknown>
+  metadata?: Prisma.InputJsonValue
 }) {
   const actor = await getCurrentAppUser()
   return prisma.leadActivity.create({
@@ -62,7 +62,7 @@ async function createLeadActivity(data: {
       type: data.type,
       title: data.title,
       content: data.content,
-      metadata: (data.metadata || {}) as Prisma.InputJsonValue,
+      metadata: data.metadata || {},
       authorId: actor?.id,
     },
   })
@@ -279,9 +279,7 @@ export async function convertLeadToProjectAction(input: {
     const project = await prisma.project.create({
       data: {
         name: input.projectData.name,
-        category:
-          (input.projectData.category as ProjectCategory) ||
-          ProjectCategory.WEB_APP,
+        category: input.projectData.category || ProjectCategory.WEB_APP,
         budget: input.projectData.budget || lead.value,
         deadline: input.projectData.deadline
           ? new Date(input.projectData.deadline)
@@ -307,7 +305,7 @@ export async function convertLeadToProjectAction(input: {
       type: LeadActivityType.CONVERTED_TO_PROJECT,
       title: "Lead convertido em projeto",
       content: `Projeto "${project.name}" criado com sucesso.`,
-      metadata: { projectId: project.id } as unknown as Prisma.InputJsonValue,
+      metadata: { projectId: project.id },
     })
 
     revalidateCrmPaths()
@@ -320,6 +318,124 @@ export async function convertLeadToProjectAction(input: {
   }
 }
 
+export async function getMessageTemplatesAction(
+  scope: string = "LEAD"
+): Promise<MessageTemplate[]> {
+  try {
+    await protect("admin")
+    const templates = await prisma.messageTemplate.findMany({
+      where: { scope },
+      orderBy: { createdAt: "asc" },
+    })
+    return templates as unknown as MessageTemplate[]
+  } catch (error) {
+    logger.error({ error }, "Get Templates Error")
+    return []
+  }
+}
+
+export async function saveMessageTemplateAction(data: {
+  id?: string
+  name: string
+  content: string
+  scope?: string
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (data.id) {
+      await prisma.messageTemplate.update({
+        where: { id: data.id },
+        data: {
+          name: data.name,
+          content: data.content,
+        },
+      })
+    } else {
+      await prisma.messageTemplate.create({
+        data: {
+          name: data.name,
+          content: data.content,
+          scope: data.scope || "LEAD",
+          createdById: actor?.id,
+        },
+      })
+    }
+
+    revalidateCrmPaths()
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Save Template Error")
+    return { success: false, error: "Failed to save template" }
+  }
+}
+
+export async function deleteMessageTemplateAction(
+  id: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    await prisma.messageTemplate.delete({ where: { id } })
+    revalidateCrmPaths()
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Delete Template Error")
+    return { success: false, error: "Failed to delete template" }
+  }
+}
+
+export async function importLeadsAction(
+  leadsData: Array<{
+    companyName: string
+    contactName?: string
+    email?: string
+    phone?: string
+    website?: string
+    instagram?: string
+    source?: LeadSource
+  }>
+): Promise<{ success: boolean; error?: string; count?: number }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    const createdLeads = await prisma.$transaction(
+      leadsData.map((data) =>
+        prisma.lead.create({
+          data: {
+            companyName: data.companyName,
+            contactName: data.contactName || null,
+            email: data.email || null,
+            phone: data.phone || null,
+            website: data.website || null,
+            instagram: data.instagram || null,
+            source: data.source || LeadSource.OTHER,
+            status: LeadStatus.GARIMPAGEM,
+          },
+        })
+      )
+    )
+
+    // Record activity for all imported leads (could be noisy but structured)
+    await Promise.all(
+      createdLeads.map((lead) =>
+        createLeadActivity({
+          leadId: lead.id,
+          type: LeadActivityType.LEAD_EDITED,
+          title: "Lead importado via CSV",
+          content: `Importado em lote pelo usuario ${actor?.name || "Sistema"}.`,
+        })
+      )
+    )
+
+    revalidateCrmPaths()
+    return { success: true, count: createdLeads.length }
+  } catch (error) {
+    logger.error({ error }, "Import Leads Error")
+    return { success: false, error: "Failed to import leads" }
+  }
+}
 export async function getLeads(): Promise<Lead[]> {
   const leads = await prisma.lead.findMany({
     where: {
