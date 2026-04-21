@@ -113,6 +113,21 @@ enum NotificationType {
   ASSET_UPLOADED
   PROJECT_STATUS_CHANGED
   LEAD_ASSIGNED
+  OPERATIONAL_REMINDER
+}
+
+enum ScheduledReminderType {
+  LEAD_STALLED
+  APPROVAL_PENDING
+  PROJECT_SILENT
+  ACTION_ITEM_OVERDUE
+}
+
+enum ScheduledReminderStatus {
+  PENDING
+  SENT
+  RESOLVED
+  DISMISSED
 }
 
 enum AuditActorType {
@@ -138,6 +153,7 @@ model User {
   leadNotes     LeadNote[]     @relation("LeadNoteAuthor")
   notifications Notification[]
   auditLogs     AuditLog[]     @relation("AuditActor")
+  scheduledReminders ScheduledReminder[]
 
   comments      UpdateComment[]
   approvalEvents ApprovalEvent[]
@@ -453,6 +469,33 @@ model Notification {
   @@index([readAt])
   @@index([createdAt])
   @@index([projectId])
+}
+
+model ScheduledReminder {
+  id              String                  @id @default(cuid())
+  type            ScheduledReminderType
+  status          ScheduledReminderStatus @default(PENDING)
+  entityType      String
+  entityId        String
+  title           String
+  message         String                  @db.Text
+  ctaPath         String?
+  scheduledFor    DateTime
+  sentAt          DateTime?
+  resolvedAt      DateTime?
+  metadata        Json?
+
+  recipientUserId String
+  recipientUser   User                    @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
+
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
+
+  @@index([recipientUserId, status])
+  @@index([type, status])
+  @@index([scheduledFor])
+  @@index([entityType, entityId])
+  @@unique([recipientUserId, type, entityId])
 }
 
 model AuditLog {

@@ -108,6 +108,18 @@ export function getNotificationPresentation(
         emphasisClassName:
           "bg-fuchsia-500/12 text-fuchsia-900 dark:bg-fuchsia-400/15 dark:text-fuchsia-200",
       }
+    case NotificationType.OPERATIONAL_REMINDER:
+      return {
+        categoryLabel: t("operations"),
+        emphasisLabel: t("automatic_reminder"),
+        requiresAction: true,
+        cardClassName:
+          "border-rose-500/20 bg-rose-500/[0.04] dark:border-rose-400/20 dark:bg-[linear-gradient(135deg,rgba(244,63,94,0.10),rgba(10,10,10,0.78))]",
+        categoryClassName:
+          "border border-rose-500/20 bg-rose-500/10 text-rose-800 dark:border-rose-400/20 dark:bg-rose-400/10 dark:text-rose-200",
+        emphasisClassName:
+          "bg-rose-500/12 text-rose-900 dark:bg-rose-400/15 dark:text-rose-200",
+      }
     default:
       return {
         categoryLabel: t("notification"),

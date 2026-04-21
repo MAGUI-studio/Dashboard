@@ -34,12 +34,14 @@ import {
 import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
 import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
 import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
+import { AdminRemindersCard } from "@/src/components/admin/AdminRemindersCard"
 import { BriefingForm } from "@/src/components/common/BriefingForm"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 
 import prisma from "@/src/lib/prisma"
+import { getActiveScheduledReminders } from "@/src/lib/operational-reminders"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
 
 export default async function DashboardPage({
@@ -75,6 +77,7 @@ export default async function DashboardPage({
       totalClients,
       unreadNotifications,
       dueActionItems,
+      scheduledReminders,
     ] = await Promise.all([
       prisma.project.findMany({
         include: {
@@ -165,6 +168,7 @@ export default async function DashboardPage({
         orderBy: { dueDate: "asc" },
         take: 12,
       }),
+      getActiveScheduledReminders(user.id),
     ])
 
     const activeProjects = allProjects.filter(
@@ -445,6 +449,10 @@ export default async function DashboardPage({
           <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
             <AdminAttentionPanel items={attentionItems} />
             <AdminOperationsAgenda items={agendaItems} />
+          </section>
+
+          <section className="grid gap-6">
+            <AdminRemindersCard items={scheduledReminders} />
           </section>
 
           <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">

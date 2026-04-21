@@ -1,0 +1,384 @@
+import { endOfDay, startOfDay, subDays } from "date-fns"
+import { revalidatePath } from "next/cache"
+
+import {
+  ApprovalStatus,
+  LeadStatus,
+  NotificationType,
+  ProjectStatus,
+  ScheduledReminderStatus,
+  ScheduledReminderType,
+} from "@/src/generated/client/enums"
+
+import prisma from "@/src/lib/prisma"
+import { getInternalNotificationRecipients } from "@/src/lib/project-governance"
+
+type ReminderCandidate = {
+  type: ScheduledReminderType
+  entityType: string
+  entityId: string
+  title: string
+  message: string
+  ctaPath: string
+  scheduledFor: Date
+  metadata?: Record<string, string | number | boolean | null>
+}
+
+const activeReminderStatuses: ScheduledReminderStatus[] = [
+  ScheduledReminderStatus.PENDING,
+  ScheduledReminderStatus.SENT,
+]
+
+function getScheduledReminderDelegate() {
+  return (
+    prisma as typeof prisma & {
+      scheduledReminder?: {
+        findMany: typeof prisma.notification.findMany
+        create: typeof prisma.notification.create
+        update: typeof prisma.notification.update
+        updateMany: typeof prisma.notification.updateMany
+      }
+    }
+  ).scheduledReminder
+}
+
+function buildReminderKey(candidate: ReminderCandidate, recipientUserId: string): string {
+  return `${recipientUserId}:${candidate.type}:${candidate.entityId}`
+}
+
+async function getReminderCandidates(): Promise<ReminderCandidate[]> {
+  const now = new Date()
+  const stalledLeadThreshold = subDays(now, 3)
+  const pendingApprovalThreshold = subDays(now, 2)
+  const silentProjectThreshold = subDays(now, 7)
+  const overdueStart = startOfDay(now)
+
+  const [stalledLeads, pendingApprovals, activeProjects, overdueActionItems] =
+    await Promise.all([
+      prisma.lead.findMany({
+        where: {
+          status: {
+            in: [LeadStatus.GARIMPAGEM, LeadStatus.CONTATO_REALIZADO],
+          },
+          updatedAt: {
+            lte: stalledLeadThreshold,
+          },
+        },
+        select: {
+          id: true,
+          companyName: true,
+          status: true,
+          updatedAt: true,
+        },
+        take: 20,
+        orderBy: { updatedAt: "asc" },
+      }),
+      prisma.update.findMany({
+        where: {
+          requiresApproval: true,
+          approvalStatus: ApprovalStatus.PENDING,
+          createdAt: {
+            lte: pendingApprovalThreshold,
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          createdAt: true,
+          project: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        take: 20,
+        orderBy: { createdAt: "asc" },
+      }),
+      prisma.project.findMany({
+        where: {
+          status: {
+            not: ProjectStatus.LAUNCHED,
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          updatedAt: true,
+          client: {
+            select: {
+              name: true,
+              email: true,
+            },
+          },
+          updates: {
+            select: {
+              createdAt: true,
+            },
+            orderBy: { createdAt: "desc" },
+            take: 1,
+          },
+        },
+        take: 50,
+        orderBy: { updatedAt: "asc" },
+      }),
+      prisma.actionItem.findMany({
+        where: {
+          status: "PENDING",
+          dueDate: {
+            lt: overdueStart,
+          },
+        },
+        select: {
+          id: true,
+          title: true,
+          dueDate: true,
+          project: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        take: 20,
+        orderBy: { dueDate: "asc" },
+      }),
+    ])
+
+  const silentProjects = activeProjects.filter((project) => {
+    const lastUpdateAt = project.updates[0]?.createdAt ?? project.updatedAt
+    return lastUpdateAt <= silentProjectThreshold
+  })
+
+  return [
+    ...stalledLeads.map((lead) => ({
+      type: ScheduledReminderType.LEAD_STALLED,
+      entityType: "Lead",
+      entityId: lead.id,
+      title: `${lead.companyName} precisa de retorno`,
+      message: `Lead parado desde ${lead.updatedAt.toLocaleDateString("pt-BR")} na etapa ${lead.status}.`,
+      ctaPath: `/admin/crm?lead=${lead.id}`,
+      scheduledFor: lead.updatedAt,
+      metadata: {
+        status: lead.status,
+      },
+    })),
+    ...pendingApprovals.map((approval) => ({
+      type: ScheduledReminderType.APPROVAL_PENDING,
+      entityType: "Update",
+      entityId: approval.id,
+      title: `"${approval.title}" ainda aguarda aprovacao`,
+      message: `${approval.project.name} segue pendente desde ${approval.createdAt.toLocaleDateString("pt-BR")}.`,
+      ctaPath: `/admin/projects/${approval.project.id}?tab=timeline&update=${approval.id}`,
+      scheduledFor: approval.createdAt,
+      metadata: {
+        projectId: approval.project.id,
+      },
+    })),
+    ...silentProjects.map((project) => {
+      const lastSignal = project.updates[0]?.createdAt ?? project.updatedAt
+      return {
+        type: ScheduledReminderType.PROJECT_SILENT,
+        entityType: "Project",
+        entityId: project.id,
+        title: `${project.name} esta sem update recente`,
+        message: `${project.client.name || project.client.email} esta sem nova atualizacao desde ${lastSignal.toLocaleDateString("pt-BR")}.`,
+        ctaPath: `/admin/projects/${project.id}`,
+        scheduledFor: lastSignal,
+        metadata: {
+          projectId: project.id,
+        },
+      }
+    }),
+    ...overdueActionItems.map((item) => ({
+      type: ScheduledReminderType.ACTION_ITEM_OVERDUE,
+      entityType: "ActionItem",
+      entityId: item.id,
+      title: `${item.title} esta vencida`,
+      message: `${item.project.name} tem uma tarefa vencida desde ${item.dueDate?.toLocaleDateString("pt-BR")}.`,
+      ctaPath: `/admin/projects/${item.project.id}`,
+      scheduledFor: item.dueDate ?? endOfDay(now),
+      metadata: {
+        projectId: item.project.id,
+      },
+    })),
+  ]
+}
+
+export async function syncOperationalReminders(): Promise<void> {
+  const scheduledReminder = getScheduledReminderDelegate()
+
+  if (!scheduledReminder) {
+    return
+  }
+
+  const internalRecipients = await getInternalNotificationRecipients()
+
+  if (internalRecipients.length === 0) {
+    return
+  }
+
+  const candidates = await getReminderCandidates()
+  const recipientIds = internalRecipients.map((recipient) => recipient.id)
+  const existingReminders = await scheduledReminder.findMany({
+    where: {
+      recipientUserId: {
+        in: recipientIds,
+      },
+    },
+    select: {
+      id: true,
+      type: true,
+      entityId: true,
+      recipientUserId: true,
+      status: true,
+    },
+  })
+
+  const activeKeys = new Set<string>()
+  const existingKeys = new Map(
+    existingReminders.map((reminder) => [
+      `${reminder.recipientUserId}:${reminder.type}:${reminder.entityId}`,
+      reminder,
+    ])
+  )
+
+  const createOperations = recipientIds.flatMap((recipientUserId) =>
+    candidates.flatMap((candidate) => {
+      const key = buildReminderKey(candidate, recipientUserId)
+      activeKeys.add(key)
+
+      const existingReminder = existingKeys.get(key)
+
+      if (
+        existingReminder &&
+        activeReminderStatuses.includes(existingReminder.status)
+      ) {
+        return []
+      }
+
+      if (existingReminder) {
+        return [
+          prisma.notification.create({
+            data: {
+              userId: recipientUserId,
+              type: NotificationType.OPERATIONAL_REMINDER,
+              title: candidate.title,
+              message: candidate.message,
+              ctaPath: candidate.ctaPath,
+              metadata: {
+                reminderType: candidate.type,
+                entityType: candidate.entityType,
+                entityId: candidate.entityId,
+                ...candidate.metadata,
+              },
+            },
+          }),
+          scheduledReminder.update({
+            where: {
+              id: existingReminder.id,
+            },
+            data: {
+              status: ScheduledReminderStatus.SENT,
+              title: candidate.title,
+              message: candidate.message,
+              ctaPath: candidate.ctaPath,
+              scheduledFor: candidate.scheduledFor,
+              sentAt: new Date(),
+              resolvedAt: null,
+              metadata: candidate.metadata ?? {},
+            },
+          }),
+        ]
+      }
+
+      return [
+        prisma.notification.create({
+          data: {
+            userId: recipientUserId,
+            type: NotificationType.OPERATIONAL_REMINDER,
+            title: candidate.title,
+            message: candidate.message,
+            ctaPath: candidate.ctaPath,
+            metadata: {
+              reminderType: candidate.type,
+              entityType: candidate.entityType,
+              entityId: candidate.entityId,
+              ...candidate.metadata,
+            },
+          },
+        }),
+        scheduledReminder.create({
+          data: {
+            recipientUserId,
+            type: candidate.type,
+            status: ScheduledReminderStatus.SENT,
+            entityType: candidate.entityType,
+            entityId: candidate.entityId,
+            title: candidate.title,
+            message: candidate.message,
+            ctaPath: candidate.ctaPath,
+            scheduledFor: candidate.scheduledFor,
+            sentAt: new Date(),
+            metadata: candidate.metadata ?? {},
+          },
+        }),
+      ]
+    })
+  )
+
+  const resolvedReminderIds = existingReminders
+    .filter((reminder) => {
+      if (
+        !activeReminderStatuses.includes(reminder.status)
+      ) {
+        return false
+      }
+
+      const key = `${reminder.recipientUserId}:${reminder.type}:${reminder.entityId}`
+      return !activeKeys.has(key)
+    })
+    .map((reminder) => reminder.id)
+
+  await prisma.$transaction([
+    ...createOperations,
+    ...(resolvedReminderIds.length > 0
+      ? [
+          scheduledReminder.updateMany({
+            where: {
+              id: {
+                in: resolvedReminderIds,
+              },
+            },
+            data: {
+              status: ScheduledReminderStatus.RESOLVED,
+              resolvedAt: new Date(),
+            },
+          }),
+        ]
+      : []),
+  ])
+
+  revalidatePath("/", "layout")
+  revalidatePath("/admin")
+  revalidatePath("/notifications")
+}
+
+export async function getActiveScheduledReminders(recipientUserId: string) {
+  const scheduledReminder = getScheduledReminderDelegate()
+
+  if (!scheduledReminder) {
+    return []
+  }
+
+  return scheduledReminder.findMany({
+    where: {
+      recipientUserId,
+      status: {
+        in: [ScheduledReminderStatus.PENDING, ScheduledReminderStatus.SENT],
+      },
+    },
+    orderBy: [{ scheduledFor: "asc" }, { createdAt: "asc" }],
+    take: 8,
+  })
+}

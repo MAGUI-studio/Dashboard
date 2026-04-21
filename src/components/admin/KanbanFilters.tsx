@@ -152,10 +152,10 @@ export function KanbanFilters({
                     }
                   >
                     <SelectTrigger className="rounded-xl border-border/40">
-                      <SelectValue placeholder="Qualquer informacao" />
+                      <SelectValue placeholder="Qualquer informação" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">Qualquer informacao</SelectItem>
+                      <SelectItem value="all">Qualquer informação</SelectItem>
                       <SelectItem value="phone">Tem Telefone</SelectItem>
                       <SelectItem value="instagram">Tem Instagram</SelectItem>
                       <SelectItem value="email">Tem E-mail</SelectItem>

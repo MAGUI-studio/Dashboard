@@ -6,6 +6,7 @@ import { DashboardFooter } from "@/src/components/common/DashboardFooter"
 import { Header } from "@/src/components/common/Header"
 import BackgroundImages from "@/src/components/common/backgroundImages"
 
+import { syncOperationalReminders } from "@/src/lib/operational-reminders"
 import prisma from "@/src/lib/prisma"
 import { getCurrentAppUser } from "@/src/lib/project-governance"
 
@@ -48,6 +49,10 @@ export default async function DashboardLayout({
         fullName: clerkUser?.fullName ?? user.name ?? null,
         imageUrl: clerkUser?.imageUrl ?? null,
         isAdmin: user.role === "ADMIN" || user.role === "MEMBER",
+      }
+
+      if (viewer.isAdmin) {
+        await syncOperationalReminders()
       }
 
       const rawNotifications = await prisma.notification.findMany({
