@@ -32,6 +32,10 @@ import {
 } from "@/src/components/ui/card"
 
 import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
+import {
+  AdminActivityFeed,
+  type ActivityKind,
+} from "@/src/components/admin/AdminActivityFeed"
 import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
 import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
 import { AdminRemindersCard } from "@/src/components/admin/AdminRemindersCard"
@@ -73,6 +77,7 @@ export default async function DashboardPage({
       allProjects,
       pendingApprovals,
       recentUpdates,
+      recentAuditLogs,
       allLeads,
       totalClients,
       unreadNotifications,
@@ -129,6 +134,25 @@ export default async function DashboardPage({
         },
         orderBy: { createdAt: "desc" },
         take: 6,
+      }),
+      prisma.auditLog.findMany({
+        include: {
+          actor: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
+          project: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 12,
       }),
       prisma.lead.findMany({
         where: {
@@ -358,6 +382,43 @@ export default async function DashboardPage({
       .sort((a, b) => a.score - b.score)
       .slice(0, 5)
 
+    const activityItems = recentAuditLogs.map((log) => {
+      const normalizedAction = log.action.toLowerCase()
+      const normalizedEntityType = log.entityType.toLowerCase()
+
+      const kind: ActivityKind =
+        normalizedAction.includes("approved") ||
+        normalizedAction.includes("rejected")
+          ? "approval"
+          : normalizedEntityType.includes("asset")
+            ? "asset"
+            : normalizedEntityType.includes("briefing")
+              ? "briefing"
+              : normalizedEntityType.includes("update")
+                ? "timeline"
+                : normalizedEntityType.includes("project")
+                  ? "project"
+                  : "system"
+
+      return {
+        id: log.id,
+        action: log.action,
+        summary: log.summary,
+        createdAt: log.createdAt,
+        actorName: log.actor?.name ?? null,
+        actorRole: log.actor?.role ?? null,
+        projectName: log.project?.name ?? null,
+        entityType: log.entityType,
+        kind,
+        href: log.projectId
+          ? {
+              pathname: "/admin/projects/[id]" as const,
+              params: { id: log.projectId },
+            }
+          : "/admin/projects",
+      }
+    })
+
     return (
       <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
         <div className="flex w-full flex-col gap-10">
@@ -453,6 +514,10 @@ export default async function DashboardPage({
 
           <section className="grid gap-6">
             <AdminRemindersCard items={scheduledReminders} />
+          </section>
+
+          <section className="grid gap-6">
+            <AdminActivityFeed items={activityItems} />
           </section>
 
           <section className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">

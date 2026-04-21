@@ -3,6 +3,8 @@
 import * as React from "react"
 
 import { useRouter } from "@/src/i18n/navigation"
+import type { GlobalSearchResult } from "@/src/lib/actions/search.actions"
+import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
@@ -10,26 +12,20 @@ import {
   Command,
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
-  CommandItem,
   CommandList,
-  CommandSeparator,
 } from "@/src/components/ui/command"
 
 import {
-  GlobalSearchResult,
-  searchAdminGlobal,
-} from "@/src/lib/actions/search.actions"
+  AdvancedSearchButton,
+  getGroupedResults,
+  SearchResultSection,
+  SEARCH_GROUPS,
+} from "@/src/components/common/global-search-shared"
 
-function getGroupedResults(results: GlobalSearchResult[]) {
-  return {
-    client: results.filter((item) => item.type === "client"),
-    project: results.filter((item) => item.type === "project"),
-    lead: results.filter((item) => item.type === "lead"),
-    update: results.filter((item) => item.type === "update"),
-  }
-}
+const QUICK_GROUPS = SEARCH_GROUPS.filter((group) =>
+  ["client", "project", "lead", "update"].includes(group.key)
+)
 
 export function GlobalSearch(): React.JSX.Element {
   const router = useRouter()
@@ -58,7 +54,7 @@ export function GlobalSearch(): React.JSX.Element {
 
     const timer = window.setTimeout(() => {
       startSearching(async () => {
-        const response = await searchAdminGlobal(query)
+        const response = await searchAdminGlobal(query, "quick")
         setResults(response)
       })
     }, 220)
@@ -67,6 +63,14 @@ export function GlobalSearch(): React.JSX.Element {
   }, [query])
 
   const grouped = getGroupedResults(results)
+
+  const goToAdvancedSearch = React.useCallback(() => {
+    setOpen(false)
+    router.push({
+      pathname: "/admin/search",
+      query: query.trim() ? { q: query.trim() } : undefined,
+    })
+  }, [query, router])
 
   const handleSelect = (result: GlobalSearchResult): void => {
     setOpen(false)
@@ -80,16 +84,22 @@ export function GlobalSearch(): React.JSX.Element {
       return
     }
 
-    if (result.type === "project" || result.type === "update") {
-      router.push({
-        pathname: "/admin/projects/[id]",
-        params: { id: result.targetId },
-      })
+    if (result.type === "lead") {
+      window.sessionStorage.setItem("crm-open-lead", result.targetId)
+      router.push("/admin/crm")
       return
     }
 
-    window.sessionStorage.setItem("crm-open-lead", result.targetId)
-    router.push("/admin/crm")
+    router.push({
+      pathname: "/admin/projects/[id]",
+      params: { id: result.targetId },
+      query: result.targetTab
+        ? {
+            tab: result.targetTab,
+            ...(result.highlightId ? { highlight: result.highlightId } : {}),
+          }
+        : undefined,
+    })
   }
 
   return (
@@ -122,144 +132,66 @@ export function GlobalSearch(): React.JSX.Element {
       <CommandDialog
         open={open}
         onOpenChange={setOpen}
-        title="Busca global"
-        description="Busque clientes, projetos, leads e updates."
-        className="max-w-3xl"
+        title="Busca rápida"
+        description="Busque clientes, projetos, leads e updates. Use a página própria para a busca completa."
+        className="max-w-3xl border border-border/40 bg-background/95 p-0 shadow-2xl"
       >
-        <Command className="rounded-[2rem]">
-          <CommandInput
-            value={query}
-            onValueChange={setQuery}
-            placeholder="Buscar clientes, projetos, leads ou updates..."
-          />
-          <CommandList className="max-h-[28rem] p-2">
-            {query.trim().length < 2 ? (
-              <div className="px-4 py-10 text-center text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
-                Digite pelo menos 2 caracteres para buscar
-              </div>
-            ) : null}
+        <Command className="overflow-hidden rounded-[2rem] bg-transparent p-0">
+          <div className="border-b border-border/20 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.01))] px-5 py-5">
+            <div className="rounded-[1.65rem] border border-border/35 bg-background/70 p-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]">
+              <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-center">
+                <CommandInput
+                  value={query}
+                  onValueChange={setQuery}
+                  placeholder="Buscar clientes, projetos, leads ou updates..."
+                  className="text-sm"
+                />
 
-            {query.trim().length >= 2 &&
-            !isSearching &&
-            results.length === 0 ? (
-              <CommandEmpty className="py-10 text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
-                Nenhum resultado encontrado
+                <AdvancedSearchButton
+                  onClick={goToAdvancedSearch}
+                  label="Busca avançada"
+                />
+              </div>
+            </div>
+          </div>
+
+          <CommandList className="max-h-[28rem] bg-background/30 p-4">
+            {query.trim().length >= 2 && !isSearching && results.length === 0 ? (
+              <CommandEmpty className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/55 py-12 text-center">
+                <div className="space-y-3">
+                  <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
+                    Nenhum resultado rápido encontrado
+                  </p>
+                  <div className="flex justify-center">
+                    <AdvancedSearchButton
+                      onClick={goToAdvancedSearch}
+                      label="Ir para a busca avançada"
+                    />
+                  </div>
+                </div>
               </CommandEmpty>
             ) : null}
 
             {isSearching ? (
-              <div className="px-4 py-10 text-center text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
-                Buscando...
+              <div className="rounded-[1.5rem] border border-border/35 bg-background/55 px-4 py-12 text-center">
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
+                  Buscando resultados...
+                </p>
               </div>
             ) : null}
 
-            {grouped.client.length > 0 ? (
-              <CommandGroup heading="Clientes">
-                {grouped.client.map((result) => (
-                  <CommandItem
-                    key={result.id}
-                    value={`${result.title} ${result.subtitle} ${result.meta}`}
-                    onSelect={() => handleSelect(result)}
-                    className="cursor-pointer rounded-2xl"
-                  >
-                    <div className="grid gap-1">
-                      <p className="text-sm font-black tracking-tight text-foreground">
-                        {result.title}
-                      </p>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
-                        {result.subtitle}
-                      </p>
-                    </div>
-                    <span className="ml-auto text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                      {result.meta}
-                    </span>
-                  </CommandItem>
+            {query.trim().length >= 2 && results.length > 0 ? (
+              <div className="grid gap-4">
+                {QUICK_GROUPS.map((group) => (
+                  <SearchResultSection
+                    key={group.key}
+                    config={group}
+                    results={grouped[group.key]}
+                    onSelect={handleSelect}
+                    compact
+                  />
                 ))}
-              </CommandGroup>
-            ) : null}
-
-            {grouped.project.length > 0 ? (
-              <>
-                <CommandSeparator />
-                <CommandGroup heading="Projetos">
-                  {grouped.project.map((result) => (
-                    <CommandItem
-                      key={result.id}
-                      value={`${result.title} ${result.subtitle} ${result.meta}`}
-                      onSelect={() => handleSelect(result)}
-                      className="cursor-pointer rounded-2xl"
-                    >
-                      <div className="grid gap-1">
-                        <p className="text-sm font-black tracking-tight text-foreground">
-                          {result.title}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
-                          {result.subtitle}
-                        </p>
-                      </div>
-                      <span className="ml-auto text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {result.meta}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </>
-            ) : null}
-
-            {grouped.lead.length > 0 ? (
-              <>
-                <CommandSeparator />
-                <CommandGroup heading="Comercial">
-                  {grouped.lead.map((result) => (
-                    <CommandItem
-                      key={result.id}
-                      value={`${result.title} ${result.subtitle} ${result.meta}`}
-                      onSelect={() => handleSelect(result)}
-                      className="cursor-pointer rounded-2xl"
-                    >
-                      <div className="grid gap-1">
-                        <p className="text-sm font-black tracking-tight text-foreground">
-                          {result.title}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
-                          {result.subtitle}
-                        </p>
-                      </div>
-                      <span className="ml-auto text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {result.meta}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </>
-            ) : null}
-
-            {grouped.update.length > 0 ? (
-              <>
-                <CommandSeparator />
-                <CommandGroup heading="Updates">
-                  {grouped.update.map((result) => (
-                    <CommandItem
-                      key={result.id}
-                      value={`${result.title} ${result.subtitle} ${result.meta}`}
-                      onSelect={() => handleSelect(result)}
-                      className="cursor-pointer rounded-2xl"
-                    >
-                      <div className="grid gap-1">
-                        <p className="text-sm font-black tracking-tight text-foreground">
-                          {result.title}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
-                          {result.subtitle}
-                        </p>
-                      </div>
-                      <span className="ml-auto text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {result.meta}
-                      </span>
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </>
+              </div>
             ) : null}
           </CommandList>
         </Command>

@@ -64,7 +64,7 @@ export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
         <div className="flex items-center gap-3">
           <Fingerprint className="size-4 text-brand-primary" weight="duotone" />
           <h3 className="font-mono text-[9px] font-bold uppercase tracking-[0.4em] text-muted-foreground/40">
-            Trilha de Auditoria
+            Trilha de auditoria
           </h3>
         </div>
 
@@ -82,7 +82,7 @@ export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
       <div className="flex items-center gap-3">
         <Fingerprint className="size-4 text-brand-primary" weight="duotone" />
         <h3 className="font-mono text-[9px] font-bold uppercase tracking-[0.4em] text-muted-foreground/40">
-          Trilha de Auditoria
+          Trilha de auditoria
         </h3>
       </div>
 

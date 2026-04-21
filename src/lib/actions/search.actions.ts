@@ -5,15 +5,28 @@ import prisma from "@/src/lib/prisma"
 
 export type GlobalSearchResult = {
   id: string
-  type: "client" | "project" | "lead" | "update"
+  type:
+    | "client"
+    | "project"
+    | "lead"
+    | "update"
+    | "asset"
+    | "comment"
+    | "activity"
   title: string
   subtitle: string
   meta: string
   targetId: string
+  targetTab?: "timeline" | "assets" | "audit"
+  highlightId?: string
 }
 
+const truncate = (value: string, max = 72) =>
+  value.length > max ? `${value.slice(0, max - 1)}…` : value
+
 export async function searchAdminGlobal(
-  query: string
+  query: string,
+  mode: "quick" | "full" = "full"
 ): Promise<GlobalSearchResult[]> {
   await protect(["admin", "member"])
 
@@ -29,7 +42,12 @@ export async function searchAdminGlobal(
         OR: [
           { name: { contains: normalizedQuery, mode: "insensitive" } },
           { email: { contains: normalizedQuery, mode: "insensitive" } },
-          { companyName: { contains: normalizedQuery, mode: "insensitive" } },
+          {
+            companyName: {
+              contains: normalizedQuery,
+              mode: "insensitive",
+            },
+          },
         ],
       },
       select: {
@@ -118,7 +136,7 @@ export async function searchAdminGlobal(
     }),
   ])
 
-  return [
+  const quickResults: GlobalSearchResult[] = [
     ...users.map((user) => ({
       id: `client-${user.clerkId}`,
       type: "client" as const,
@@ -150,6 +168,139 @@ export async function searchAdminGlobal(
       subtitle: update.project.name,
       meta: "Update",
       targetId: update.project.id,
+      targetTab: "timeline" as const,
+      highlightId: update.id,
     })),
+  ]
+
+  if (mode === "quick") {
+    return quickResults
+  }
+
+  const [assets, comments, activities] = await Promise.all([
+    prisma.asset.findMany({
+      where: {
+        OR: [
+          { name: { contains: normalizedQuery, mode: "insensitive" } },
+          { key: { contains: normalizedQuery, mode: "insensitive" } },
+          {
+            project: {
+              name: { contains: normalizedQuery, mode: "insensitive" },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        name: true,
+        type: true,
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: 5,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.updateComment.findMany({
+      where: {
+        OR: [
+          { content: { contains: normalizedQuery, mode: "insensitive" } },
+          {
+            update: {
+              title: { contains: normalizedQuery, mode: "insensitive" },
+            },
+          },
+          {
+            update: {
+              project: {
+                name: { contains: normalizedQuery, mode: "insensitive" },
+              },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        content: true,
+        update: {
+          select: {
+            id: true,
+            title: true,
+            project: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
+      },
+      take: 5,
+      orderBy: { createdAt: "desc" },
+    }),
+    prisma.auditLog.findMany({
+      where: {
+        OR: [
+          { summary: { contains: normalizedQuery, mode: "insensitive" } },
+          { entityType: { contains: normalizedQuery, mode: "insensitive" } },
+          { action: { contains: normalizedQuery, mode: "insensitive" } },
+          {
+            project: {
+              name: { contains: normalizedQuery, mode: "insensitive" },
+            },
+          },
+        ],
+      },
+      select: {
+        id: true,
+        summary: true,
+        entityType: true,
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      take: 5,
+      orderBy: { createdAt: "desc" },
+    }),
+  ])
+
+  return [
+    ...quickResults,
+    ...assets.map((asset) => ({
+      id: `asset-${asset.id}`,
+      type: "asset" as const,
+      title: asset.name,
+      subtitle: asset.project.name,
+      meta: `Arquivo • ${asset.type}`,
+      targetId: asset.project.id,
+      targetTab: "assets" as const,
+    })),
+    ...comments.map((comment) => ({
+      id: `comment-${comment.id}`,
+      type: "comment" as const,
+      title: truncate(comment.content, 64),
+      subtitle: `${comment.update.project.name} • ${comment.update.title}`,
+      meta: "Comentário",
+      targetId: comment.update.project.id,
+      targetTab: "timeline" as const,
+      highlightId: comment.update.id,
+    })),
+    ...activities
+      .filter((activity) => activity.project)
+      .map((activity) => ({
+        id: `activity-${activity.id}`,
+        type: "activity" as const,
+        title: truncate(activity.summary, 72),
+        subtitle: activity.project!.name,
+        meta: `Atividade • ${activity.entityType}`,
+        targetId: activity.project!.id,
+        targetTab: "audit" as const,
+      })),
   ]
 }
