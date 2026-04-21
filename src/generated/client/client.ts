@@ -82,6 +82,11 @@ export type Project = Prisma.ProjectModel
  */
 export type BriefingEntry = Prisma.BriefingEntryModel
 /**
+ * Model ProjectMember
+ * 
+ */
+export type ProjectMember = Prisma.ProjectMemberModel
+/**
  * Model Update
  * 
  */

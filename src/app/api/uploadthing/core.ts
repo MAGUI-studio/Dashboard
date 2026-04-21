@@ -5,6 +5,7 @@ import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
+import { getCurrentAppUser } from "@/src/lib/project-governance"
 
 const f = createUploadthing()
 
@@ -35,6 +36,7 @@ export const ourFileRouter = {
       const { userId } = await auth()
 
       if (!userId) throw new UploadThingError("Unauthorized")
+      const appUser = await getCurrentAppUser()
 
       if (!input?.projectId) {
         return { userId }
@@ -52,11 +54,29 @@ export const ourFileRouter = {
               companyName: true,
             },
           },
+          members: {
+            where: {
+              userId: appUser?.id ?? "",
+            },
+            select: {
+              id: true,
+            },
+          },
         },
       })
 
       if (!project) {
         throw new UploadThingError("Project not found")
+      }
+
+      const canAccess =
+        appUser?.role === "ADMIN" ||
+        appUser?.role === "MEMBER" ||
+        project.client.id === appUser?.id ||
+        project.members.length > 0
+
+      if (!canAccess) {
+        throw new UploadThingError("Unauthorized")
       }
 
       const clientLabel =

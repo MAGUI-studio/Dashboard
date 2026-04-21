@@ -13,6 +13,11 @@ enum UserRole {
   CLIENT
 }
 
+enum ProjectMemberRole {
+  OWNER
+  COLLABORATOR
+}
+
 enum ProjectStatus {
   STRATEGY
   ARCHITECTURE
@@ -149,6 +154,7 @@ model User {
   taxId         String?
 
   projects      Project[]
+  projectMemberships ProjectMember[]
   ownedLeads    Lead[]         @relation("LeadOwner")
   leadNotes     LeadNote[]     @relation("LeadNoteAuthor")
   notifications Notification[]
@@ -276,6 +282,7 @@ model Project {
 
   clientId      String
   client        User            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  members       ProjectMember[]
   
   updates       Update[]
   assets        Asset[]
@@ -306,6 +313,24 @@ model BriefingEntry {
   updatedAt  DateTime @updatedAt
 
   @@index([projectId])
+}
+
+model ProjectMember {
+  id        String            @id @default(cuid())
+  role      ProjectMemberRole @default(COLLABORATOR)
+
+  projectId String
+  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  userId    String
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+
+  @@unique([projectId, userId])
+  @@index([userId])
+  @@index([projectId, role])
 }
 
 model Update {

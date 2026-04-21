@@ -18,6 +18,8 @@ import dayjs from "dayjs"
 
 import { Button } from "@/src/components/ui/button"
 
+import { ExportProjectSummaryButton } from "@/src/components/admin/ExportProjectSummaryButton"
+
 interface ProjectDetailsHeaderProps {
   project: {
     id: string
@@ -144,6 +146,8 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
             </div>
           </div>
         </div>
+
+        <ExportProjectSummaryButton projectId={project.id} />
       </div>
     </div>
   )

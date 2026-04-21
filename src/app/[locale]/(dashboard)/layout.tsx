@@ -52,7 +52,7 @@ export default async function DashboardLayout({
       }
 
       if (viewer.isAdmin) {
-        await syncOperationalReminders()
+        await syncOperationalReminders({ revalidate: false })
       }
 
       const rawNotifications = await prisma.notification.findMany({
@@ -84,7 +84,16 @@ export default async function DashboardLayout({
             requiresApproval: true,
             approvalStatus: "PENDING",
             project: {
-              clientId: user.id,
+              OR: [
+                { clientId: user.id },
+                {
+                  members: {
+                    some: {
+                      userId: user.id,
+                    },
+                  },
+                },
+              ],
             },
           },
           select: {

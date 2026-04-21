@@ -7,6 +7,7 @@ import {
   AssetVisibility,
   NotificationType,
   Priority,
+  ProjectMemberRole,
   ProjectCategory,
   ProjectStatus,
   UserRole,
@@ -50,6 +51,7 @@ export interface DashboardProject {
   versions?: DashboardVersion[]
   notifications?: DashboardNotification[]
   auditLogs?: DashboardAuditLog[]
+  members?: DashboardProjectMember[]
 }
 
 export interface DashboardBriefingEntry {
@@ -58,6 +60,21 @@ export interface DashboardBriefingEntry {
   content: string
   projectId: string
   createdById: string | null
+  createdAt: Date | string
+  updatedAt: Date | string
+}
+
+export interface DashboardProjectMember {
+  id: string
+  role: ProjectMemberRole
+  projectId: string
+  userId: string
+  user: {
+    id: string
+    name: string | null
+    email: string
+    companyName: string | null
+  }
   createdAt: Date | string
   updatedAt: Date | string
 }

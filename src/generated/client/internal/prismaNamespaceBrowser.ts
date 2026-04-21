@@ -59,6 +59,7 @@ export const ModelName = {
   SavedView: 'SavedView',
   Project: 'Project',
   BriefingEntry: 'BriefingEntry',
+  ProjectMember: 'ProjectMember',
   Update: 'Update',
   UpdateAttachment: 'UpdateAttachment',
   UpdateComment: 'UpdateComment',
@@ -213,6 +214,18 @@ export const BriefingEntryScalarFieldEnum = {
 } as const
 
 export type BriefingEntryScalarFieldEnum = (typeof BriefingEntryScalarFieldEnum)[keyof typeof BriefingEntryScalarFieldEnum]
+
+
+export const ProjectMemberScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  projectId: 'projectId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type ProjectMemberScalarFieldEnum = (typeof ProjectMemberScalarFieldEnum)[keyof typeof ProjectMemberScalarFieldEnum]
 
 
 export const UpdateScalarFieldEnum = {

@@ -205,7 +205,9 @@ async function getReminderCandidates(): Promise<ReminderCandidate[]> {
   ]
 }
 
-export async function syncOperationalReminders(): Promise<void> {
+export async function syncOperationalReminders(options?: {
+  revalidate?: boolean
+}): Promise<void> {
   const scheduledReminder = getScheduledReminderDelegate()
 
   if (!scheduledReminder) {
@@ -359,9 +361,11 @@ export async function syncOperationalReminders(): Promise<void> {
       : []),
   ])
 
-  revalidatePath("/", "layout")
-  revalidatePath("/admin")
-  revalidatePath("/notifications")
+  if (options?.revalidate !== false) {
+    revalidatePath("/", "layout")
+    revalidatePath("/admin")
+    revalidatePath("/notifications")
+  }
 }
 
 export async function getActiveScheduledReminders(recipientUserId: string) {

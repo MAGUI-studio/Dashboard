@@ -255,6 +255,13 @@ export function AssetManagement({
   const [isDeleting, setIsDeleting] = React.useState<string | null>(null)
   const [selectedFiles, setSelectedFiles] = React.useState<File[]>([])
   const [isPreviewOpen, setIsPreviewOpen] = React.useState(false)
+  const [typeFilter, setTypeFilter] = React.useState<AssetType | "ALL">("ALL")
+  const [originFilter, setOriginFilter] = React.useState<AssetOrigin | "ALL">(
+    "ALL"
+  )
+  const [visibilityFilter, setVisibilityFilter] = React.useState<
+    AssetVisibility | "ALL"
+  >("ALL")
   const [uploadVisibility, setUploadVisibility] =
     React.useState<AssetVisibility>(AssetVisibility.CLIENT)
 
@@ -291,6 +298,19 @@ export function AssetManagement({
     },
   })
 
+  const hasActiveFilters =
+    typeFilter !== "ALL" || originFilter !== "ALL" || visibilityFilter !== "ALL"
+
+  const visibleAssets = assets.filter((asset) => {
+    if (typeFilter !== "ALL" && asset.type !== typeFilter) return false
+    if (originFilter !== "ALL" && asset.origin !== originFilter) return false
+    if (visibilityFilter !== "ALL" && asset.visibility !== visibilityFilter) {
+      return false
+    }
+
+    return true
+  })
+
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const files = Array.from(e.target.files)
@@ -306,6 +326,8 @@ export function AssetManagement({
   }
 
   const handleDragEnd = async (event: DragEndEvent) => {
+    if (hasActiveFilters) return
+
     const { active, over } = event
 
     if (over && active.id !== over.id) {
@@ -333,25 +355,75 @@ export function AssetManagement({
 
   return (
     <div className="flex flex-col gap-10">
+      <div className="grid gap-3 rounded-[1.5rem] border border-border/30 bg-background/45 p-4 md:grid-cols-4">
+        <div className="space-y-1 md:col-span-1">
+          <p className="text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
+            Arquivos
+          </p>
+          <p className="text-sm font-medium text-muted-foreground/65">
+            {visibleAssets.length} de {assets.length} exibidos
+          </p>
+        </div>
+
+        <select
+          value={typeFilter}
+          onChange={(event) =>
+            setTypeFilter(event.target.value as AssetType | "ALL")
+          }
+          className="h-11 rounded-full border border-border/35 bg-background px-4 text-xs font-bold outline-none focus:border-brand-primary"
+        >
+          <option value="ALL">Todos os tipos</option>
+          <option value={AssetType.CONTRACT}>Contrato</option>
+          <option value={AssetType.DESIGN_SYSTEM}>Design system</option>
+          <option value={AssetType.IMAGE}>Imagem</option>
+          <option value={AssetType.DOCUMENT}>Documento</option>
+          <option value={AssetType.SOURCE_CODE}>Código-fonte</option>
+        </select>
+
+        <select
+          value={originFilter}
+          onChange={(event) =>
+            setOriginFilter(event.target.value as AssetOrigin | "ALL")
+          }
+          className="h-11 rounded-full border border-border/35 bg-background px-4 text-xs font-bold outline-none focus:border-brand-primary"
+        >
+          <option value="ALL">Todas as origens</option>
+          <option value={AssetOrigin.ADMIN}>Time interno</option>
+          <option value={AssetOrigin.CLIENT}>Cliente</option>
+        </select>
+
+        <select
+          value={visibilityFilter}
+          onChange={(event) =>
+            setVisibilityFilter(event.target.value as AssetVisibility | "ALL")
+          }
+          className="h-11 rounded-full border border-border/35 bg-background px-4 text-xs font-bold outline-none focus:border-brand-primary"
+        >
+          <option value="ALL">Toda visibilidade</option>
+          <option value={AssetVisibility.CLIENT}>Visível ao cliente</option>
+          <option value={AssetVisibility.INTERNAL}>Interno</option>
+        </select>
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
         onDragEnd={handleDragEnd}
       >
         <div className="flex flex-col gap-4">
-          {assets.length === 0 ? (
+          {visibleAssets.length === 0 ? (
             <div className="flex min-h-[200px] items-center justify-center rounded-[2rem] border-2 border-dashed border-border/20 bg-muted/5">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-                {t("no_assets")}
+                {assets.length === 0 ? t("no_assets") : "Nenhum arquivo neste filtro"}
               </p>
             </div>
           ) : (
             <SortableContext
-              items={assets.map((a) => a.id)}
+              items={visibleAssets.map((a) => a.id)}
               strategy={verticalListSortingStrategy}
             >
               <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {assets.map((asset, index) => (
+                {visibleAssets.map((asset, index) => (
                   <SortableAssetItem
                     key={asset.id}
                     asset={asset}

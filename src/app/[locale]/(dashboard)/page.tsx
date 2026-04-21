@@ -903,121 +903,127 @@ export default async function DashboardPage({
     )
   }
 
-  const userWithProjects = await prisma.user.findUnique({
-    where: { clerkId: userId },
-    include: {
-      projects: {
-        include: {
-          client: {
-            select: {
-              id: true,
-              name: true,
-              email: true,
-              companyName: true,
-              phone: true,
-              position: true,
-              taxId: true,
+  const projectsWithAccess = await prisma.project.findMany({
+    where: {
+      OR: [
+        { clientId: user.id },
+        {
+          members: {
+            some: {
+              userId: user.id,
             },
-          },
-          updates: {
-            orderBy: { createdAt: "desc" },
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              isMilestone: true,
-              imageUrl: true,
-              projectId: true,
-              createdAt: true,
-              requiresApproval: true,
-              approvalStatus: true,
-              approvedAt: true,
-              feedback: true,
-              timezone: true,
-              attachments: {
-                orderBy: { createdAt: "asc" },
-              },
-              comments: {
-                orderBy: { createdAt: "asc" },
-                include: {
-                  author: {
-                    select: {
-                      id: true,
-                      name: true,
-                      role: true,
-                    },
-                  },
-                },
-              },
-              project: {
-                select: {
-                  name: true,
-                },
-              },
-            },
-          },
-          assets: {
-            orderBy: { order: "asc" },
-            select: {
-              id: true,
-              name: true,
-              url: true,
-              key: true,
-              type: true,
-              order: true,
-              origin: true,
-              visibility: true,
-              projectId: true,
-              createdAt: true,
-            },
-          },
-          actionItems: {
-            orderBy: { createdAt: "desc" },
-            select: {
-              id: true,
-              title: true,
-              description: true,
-              status: true,
-              dueDate: true,
-              projectId: true,
-              targetRole: true,
-              createdAt: true,
-              updatedAt: true,
-            },
-          },
-          versions: {
-            orderBy: { createdAt: "desc" },
-            select: {
-              id: true,
-              name: true,
-              deployUrl: true,
-              description: true,
-              scorePerformance: true,
-              scoreAccessibility: true,
-              scoreBestPractices: true,
-              scoreSEO: true,
-              projectId: true,
-              createdAt: true,
-            },
-          },
-          briefingNotes: {
-            orderBy: { createdAt: "desc" },
           },
         },
-        orderBy: { updatedAt: "desc" },
+      ],
+    },
+    include: {
+      client: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          companyName: true,
+          phone: true,
+          position: true,
+          taxId: true,
+        },
+      },
+      updates: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          isMilestone: true,
+          imageUrl: true,
+          projectId: true,
+          createdAt: true,
+          requiresApproval: true,
+          approvalStatus: true,
+          approvedAt: true,
+          feedback: true,
+          timezone: true,
+          attachments: {
+            orderBy: { createdAt: "asc" },
+          },
+          comments: {
+            orderBy: { createdAt: "asc" },
+            include: {
+              author: {
+                select: {
+                  id: true,
+                  name: true,
+                  role: true,
+                },
+              },
+            },
+          },
+          project: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      assets: {
+        orderBy: { order: "asc" },
+        select: {
+          id: true,
+          name: true,
+          url: true,
+          key: true,
+          type: true,
+          order: true,
+          origin: true,
+          visibility: true,
+          projectId: true,
+          createdAt: true,
+        },
+      },
+      actionItems: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          status: true,
+          dueDate: true,
+          projectId: true,
+          targetRole: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      },
+      versions: {
+        orderBy: { createdAt: "desc" },
+        select: {
+          id: true,
+          name: true,
+          deployUrl: true,
+          description: true,
+          scorePerformance: true,
+          scoreAccessibility: true,
+          scoreBestPractices: true,
+          scoreSEO: true,
+          projectId: true,
+          createdAt: true,
+        },
+      },
+      briefingNotes: {
+        orderBy: { createdAt: "desc" },
       },
     },
+    orderBy: { updatedAt: "desc" },
   })
 
   const clerkUser = await currentUser()
   const userName = clerkUser?.firstName || clerkUser?.username || user.name
 
-  const projects = userWithProjects?.projects || []
   const project = selectedProjectId
-    ? projects.find((item) => item.id === selectedProjectId)
-    : projects[0]
+    ? projectsWithAccess.find((item) => item.id === selectedProjectId)
+    : projectsWithAccess[0]
 
-  if (projects.length === 0) {
+  if (projectsWithAccess.length === 0) {
     return (
       <main className="flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-heading text-2xl font-black uppercase tracking-tight opacity-20">
@@ -1027,7 +1033,7 @@ export default async function DashboardPage({
     )
   }
 
-  const activeProject = project || projects[0]
+  const activeProject = project || projectsWithAccess[0]
   const briefingData = activeProject.briefing as Record<string, unknown> | null
   const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6
 
@@ -1049,13 +1055,13 @@ export default async function DashboardPage({
             </h1>
           </div>
 
-          {projects.length > 1 ? (
+          {projectsWithAccess.length > 1 ? (
             <div className="flex flex-col gap-1.5 md:items-end">
               <span className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/30">
                 {t("select_project")}
               </span>
               <ProjectSwitcher
-                projects={projects as unknown as DashboardProject[]}
+                projects={projectsWithAccess as unknown as DashboardProject[]}
                 selectedProject={activeProject as unknown as DashboardProject}
                 onProjectSelect={(id) => {
                   window.location.search = `?project=${id}`

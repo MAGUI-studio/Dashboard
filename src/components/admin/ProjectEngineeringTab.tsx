@@ -4,13 +4,17 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { DashboardVersion } from "@/src/types/dashboard"
+
 import { UpdateStatusForm } from "@/src/components/admin/UpdateStatusForm"
+import { VersionComparisonPanel } from "@/src/components/admin/VersionComparisonPanel"
 
 interface ProjectEngineeringTabProps {
   project: {
     id: string
     status: string
     progress: number
+    versions?: DashboardVersion[]
   }
 }
 
@@ -36,6 +40,8 @@ export function ProjectEngineeringTab({ project }: ProjectEngineeringTabProps) {
           currentProgress={project.progress}
         />
       </section>
+
+      <VersionComparisonPanel versions={project.versions || []} />
     </div>
   )
 }

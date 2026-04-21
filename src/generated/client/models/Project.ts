@@ -302,6 +302,7 @@ export type ProjectWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   briefingNotes?: Prisma.BriefingEntryListRelationFilter
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  members?: Prisma.ProjectMemberListRelationFilter
   updates?: Prisma.UpdateListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   actionItems?: Prisma.ActionItemListRelationFilter
@@ -329,6 +330,7 @@ export type ProjectOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   briefingNotes?: Prisma.BriefingEntryOrderByRelationAggregateInput
   client?: Prisma.UserOrderByWithRelationInput
+  members?: Prisma.ProjectMemberOrderByRelationAggregateInput
   updates?: Prisma.UpdateOrderByRelationAggregateInput
   assets?: Prisma.AssetOrderByRelationAggregateInput
   actionItems?: Prisma.ActionItemOrderByRelationAggregateInput
@@ -359,6 +361,7 @@ export type ProjectWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Project"> | Date | string
   briefingNotes?: Prisma.BriefingEntryListRelationFilter
   client?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  members?: Prisma.ProjectMemberListRelationFilter
   updates?: Prisma.UpdateListRelationFilter
   assets?: Prisma.AssetListRelationFilter
   actionItems?: Prisma.ActionItemListRelationFilter
@@ -431,6 +434,7 @@ export type ProjectCreateInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -457,6 +461,7 @@ export type ProjectUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -483,6 +488,7 @@ export type ProjectUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -509,6 +515,7 @@ export type ProjectUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -732,6 +739,20 @@ export type ProjectUpdateOneRequiredWithoutBriefingNotesNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutBriefingNotesInput, Prisma.ProjectUpdateWithoutBriefingNotesInput>, Prisma.ProjectUncheckedUpdateWithoutBriefingNotesInput>
 }
 
+export type ProjectCreateNestedOneWithoutMembersInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutMembersInput, Prisma.ProjectUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutMembersInput
+  connect?: Prisma.ProjectWhereUniqueInput
+}
+
+export type ProjectUpdateOneRequiredWithoutMembersNestedInput = {
+  create?: Prisma.XOR<Prisma.ProjectCreateWithoutMembersInput, Prisma.ProjectUncheckedCreateWithoutMembersInput>
+  connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutMembersInput
+  upsert?: Prisma.ProjectUpsertWithoutMembersInput
+  connect?: Prisma.ProjectWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.ProjectUpdateToOneWithWhereWithoutMembersInput, Prisma.ProjectUpdateWithoutMembersInput>, Prisma.ProjectUncheckedUpdateWithoutMembersInput>
+}
+
 export type ProjectCreateNestedOneWithoutUpdatesInput = {
   create?: Prisma.XOR<Prisma.ProjectCreateWithoutUpdatesInput, Prisma.ProjectUncheckedCreateWithoutUpdatesInput>
   connectOrCreate?: Prisma.ProjectCreateOrConnectWithoutUpdatesInput
@@ -837,6 +858,7 @@ export type ProjectCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -862,6 +884,7 @@ export type ProjectUncheckedCreateWithoutClientInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -935,6 +958,7 @@ export type ProjectCreateWithoutBriefingNotesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -960,6 +984,7 @@ export type ProjectUncheckedCreateWithoutBriefingNotesInput = {
   clientId: string
   createdAt?: Date | string
   updatedAt?: Date | string
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -1001,6 +1026,7 @@ export type ProjectUpdateWithoutBriefingNotesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -1026,6 +1052,127 @@ export type ProjectUncheckedUpdateWithoutBriefingNotesInput = {
   clientId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+  updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
+  assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
+  actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
+  versions?: Prisma.VersionUncheckedUpdateManyWithoutProjectNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: $Enums.ProjectStatus
+  category?: $Enums.ProjectCategory
+  priority?: $Enums.Priority
+  progress?: number
+  budget?: string | null
+  briefing?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startDate?: Date | string
+  deadline?: Date | string | null
+  liveUrl?: string | null
+  repositoryUrl?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
+  client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
+  assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
+  actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
+  versions?: Prisma.VersionCreateNestedManyWithoutProjectInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectUncheckedCreateWithoutMembersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  status?: $Enums.ProjectStatus
+  category?: $Enums.ProjectCategory
+  priority?: $Enums.Priority
+  progress?: number
+  budget?: string | null
+  briefing?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startDate?: Date | string
+  deadline?: Date | string | null
+  liveUrl?: string | null
+  repositoryUrl?: string | null
+  clientId: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
+  assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
+  actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
+  versions?: Prisma.VersionUncheckedCreateNestedManyWithoutProjectInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutProjectInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutProjectInput
+}
+
+export type ProjectCreateOrConnectWithoutMembersInput = {
+  where: Prisma.ProjectWhereUniqueInput
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutMembersInput, Prisma.ProjectUncheckedCreateWithoutMembersInput>
+}
+
+export type ProjectUpsertWithoutMembersInput = {
+  update: Prisma.XOR<Prisma.ProjectUpdateWithoutMembersInput, Prisma.ProjectUncheckedUpdateWithoutMembersInput>
+  create: Prisma.XOR<Prisma.ProjectCreateWithoutMembersInput, Prisma.ProjectUncheckedCreateWithoutMembersInput>
+  where?: Prisma.ProjectWhereInput
+}
+
+export type ProjectUpdateToOneWithWhereWithoutMembersInput = {
+  where?: Prisma.ProjectWhereInput
+  data: Prisma.XOR<Prisma.ProjectUpdateWithoutMembersInput, Prisma.ProjectUncheckedUpdateWithoutMembersInput>
+}
+
+export type ProjectUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  category?: Prisma.EnumProjectCategoryFieldUpdateOperationsInput | $Enums.ProjectCategory
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
+  progress?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  briefing?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repositoryUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
+  client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
+  assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
+  actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
+  versions?: Prisma.VersionUpdateManyWithoutProjectNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutProjectNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutProjectNestedInput
+}
+
+export type ProjectUncheckedUpdateWithoutMembersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+  category?: Prisma.EnumProjectCategoryFieldUpdateOperationsInput | $Enums.ProjectCategory
+  priority?: Prisma.EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
+  progress?: Prisma.IntFieldUpdateOperationsInput | number
+  budget?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  briefing?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  startDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deadline?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  liveUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  repositoryUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  clientId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -1052,6 +1199,7 @@ export type ProjectCreateWithoutUpdatesInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionCreateNestedManyWithoutProjectInput
@@ -1077,6 +1225,7 @@ export type ProjectUncheckedCreateWithoutUpdatesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionUncheckedCreateNestedManyWithoutProjectInput
@@ -1118,6 +1267,7 @@ export type ProjectUpdateWithoutUpdatesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUpdateManyWithoutProjectNestedInput
@@ -1143,6 +1293,7 @@ export type ProjectUncheckedUpdateWithoutUpdatesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUncheckedUpdateManyWithoutProjectNestedInput
@@ -1168,6 +1319,7 @@ export type ProjectCreateWithoutActionItemsInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionCreateNestedManyWithoutProjectInput
@@ -1193,6 +1345,7 @@ export type ProjectUncheckedCreateWithoutActionItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionUncheckedCreateNestedManyWithoutProjectInput
@@ -1234,6 +1387,7 @@ export type ProjectUpdateWithoutActionItemsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUpdateManyWithoutProjectNestedInput
@@ -1259,6 +1413,7 @@ export type ProjectUncheckedUpdateWithoutActionItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUncheckedUpdateManyWithoutProjectNestedInput
@@ -1284,6 +1439,7 @@ export type ProjectCreateWithoutAssetsInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionCreateNestedManyWithoutProjectInput
@@ -1309,6 +1465,7 @@ export type ProjectUncheckedCreateWithoutAssetsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
   versions?: Prisma.VersionUncheckedCreateNestedManyWithoutProjectInput
@@ -1350,6 +1507,7 @@ export type ProjectUpdateWithoutAssetsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUpdateManyWithoutProjectNestedInput
@@ -1375,6 +1533,7 @@ export type ProjectUncheckedUpdateWithoutAssetsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
   versions?: Prisma.VersionUncheckedUpdateManyWithoutProjectNestedInput
@@ -1400,6 +1559,7 @@ export type ProjectCreateWithoutVersionsInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -1425,6 +1585,7 @@ export type ProjectUncheckedCreateWithoutVersionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -1466,6 +1627,7 @@ export type ProjectUpdateWithoutVersionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -1491,6 +1653,7 @@ export type ProjectUncheckedUpdateWithoutVersionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -1516,6 +1679,7 @@ export type ProjectCreateWithoutNotificationsInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -1541,6 +1705,7 @@ export type ProjectUncheckedCreateWithoutNotificationsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -1582,6 +1747,7 @@ export type ProjectUpdateWithoutNotificationsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -1607,6 +1773,7 @@ export type ProjectUncheckedUpdateWithoutNotificationsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -1632,6 +1799,7 @@ export type ProjectCreateWithoutAuditLogsInput = {
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryCreateNestedManyWithoutProjectInput
   client: Prisma.UserCreateNestedOneWithoutProjectsInput
+  members?: Prisma.ProjectMemberCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemCreateNestedManyWithoutProjectInput
@@ -1657,6 +1825,7 @@ export type ProjectUncheckedCreateWithoutAuditLogsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+  members?: Prisma.ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
   updates?: Prisma.UpdateUncheckedCreateNestedManyWithoutProjectInput
   assets?: Prisma.AssetUncheckedCreateNestedManyWithoutProjectInput
   actionItems?: Prisma.ActionItemUncheckedCreateNestedManyWithoutProjectInput
@@ -1698,6 +1867,7 @@ export type ProjectUpdateWithoutAuditLogsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
   client?: Prisma.UserUpdateOneRequiredWithoutProjectsNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -1723,6 +1893,7 @@ export type ProjectUncheckedUpdateWithoutAuditLogsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -1765,6 +1936,7 @@ export type ProjectUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUpdateManyWithoutProjectNestedInput
@@ -1790,6 +1962,7 @@ export type ProjectUncheckedUpdateWithoutClientInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   briefingNotes?: Prisma.BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+  members?: Prisma.ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
   updates?: Prisma.UpdateUncheckedUpdateManyWithoutProjectNestedInput
   assets?: Prisma.AssetUncheckedUpdateManyWithoutProjectNestedInput
   actionItems?: Prisma.ActionItemUncheckedUpdateManyWithoutProjectNestedInput
@@ -1823,6 +1996,7 @@ export type ProjectUncheckedUpdateManyWithoutClientInput = {
 
 export type ProjectCountOutputType = {
   briefingNotes: number
+  members: number
   updates: number
   assets: number
   actionItems: number
@@ -1833,6 +2007,7 @@ export type ProjectCountOutputType = {
 
 export type ProjectCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   briefingNotes?: boolean | ProjectCountOutputTypeCountBriefingNotesArgs
+  members?: boolean | ProjectCountOutputTypeCountMembersArgs
   updates?: boolean | ProjectCountOutputTypeCountUpdatesArgs
   assets?: boolean | ProjectCountOutputTypeCountAssetsArgs
   actionItems?: boolean | ProjectCountOutputTypeCountActionItemsArgs
@@ -1856,6 +2031,13 @@ export type ProjectCountOutputTypeDefaultArgs<ExtArgs extends runtime.Types.Exte
  */
 export type ProjectCountOutputTypeCountBriefingNotesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.BriefingEntryWhereInput
+}
+
+/**
+ * ProjectCountOutputType without action
+ */
+export type ProjectCountOutputTypeCountMembersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ProjectMemberWhereInput
 }
 
 /**
@@ -1920,6 +2102,7 @@ export type ProjectSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   briefingNotes?: boolean | Prisma.Project$briefingNotesArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.Project$membersArgs<ExtArgs>
   updates?: boolean | Prisma.Project$updatesArgs<ExtArgs>
   assets?: boolean | Prisma.Project$assetsArgs<ExtArgs>
   actionItems?: boolean | Prisma.Project$actionItemsArgs<ExtArgs>
@@ -1992,6 +2175,7 @@ export type ProjectOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
 export type ProjectInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   briefingNotes?: boolean | Prisma.Project$briefingNotesArgs<ExtArgs>
   client?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  members?: boolean | Prisma.Project$membersArgs<ExtArgs>
   updates?: boolean | Prisma.Project$updatesArgs<ExtArgs>
   assets?: boolean | Prisma.Project$assetsArgs<ExtArgs>
   actionItems?: boolean | Prisma.Project$actionItemsArgs<ExtArgs>
@@ -2012,6 +2196,7 @@ export type $ProjectPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     briefingNotes: Prisma.$BriefingEntryPayload<ExtArgs>[]
     client: Prisma.$UserPayload<ExtArgs>
+    members: Prisma.$ProjectMemberPayload<ExtArgs>[]
     updates: Prisma.$UpdatePayload<ExtArgs>[]
     assets: Prisma.$AssetPayload<ExtArgs>[]
     actionItems: Prisma.$ActionItemPayload<ExtArgs>[]
@@ -2432,6 +2617,7 @@ export interface Prisma__ProjectClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   briefingNotes<T extends Prisma.Project$briefingNotesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$briefingNotesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$BriefingEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   client<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  members<T extends Prisma.Project$membersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$membersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ProjectMemberPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   updates<T extends Prisma.Project$updatesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$updatesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$UpdatePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   assets<T extends Prisma.Project$assetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$assetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AssetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   actionItems<T extends Prisma.Project$actionItemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Project$actionItemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ActionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -2905,6 +3091,30 @@ export type Project$briefingNotesArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.BriefingEntryScalarFieldEnum | Prisma.BriefingEntryScalarFieldEnum[]
+}
+
+/**
+ * Project.members
+ */
+export type Project$membersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ProjectMember
+   */
+  select?: Prisma.ProjectMemberSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ProjectMember
+   */
+  omit?: Prisma.ProjectMemberOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ProjectMemberInclude<ExtArgs> | null
+  where?: Prisma.ProjectMemberWhereInput
+  orderBy?: Prisma.ProjectMemberOrderByWithRelationInput | Prisma.ProjectMemberOrderByWithRelationInput[]
+  cursor?: Prisma.ProjectMemberWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ProjectMemberScalarFieldEnum | Prisma.ProjectMemberScalarFieldEnum[]
 }
 
 /**

@@ -18,6 +18,14 @@ export const UserRole = {
 export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
+export const ProjectMemberRole = {
+  OWNER: 'OWNER',
+  COLLABORATOR: 'COLLABORATOR'
+} as const
+
+export type ProjectMemberRole = (typeof ProjectMemberRole)[keyof typeof ProjectMemberRole]
+
+
 export const ProjectStatus = {
   STRATEGY: 'STRATEGY',
   ARCHITECTURE: 'ARCHITECTURE',

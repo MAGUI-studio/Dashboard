@@ -34,9 +34,15 @@ import { ProjectTimelineTab } from "@/src/components/admin/ProjectTimelineTab"
 interface ProjectTabsProps {
   project: DashboardProject
   projectId: string
+  clients: Array<{
+    id: string
+    name: string | null
+    email: string
+    companyName: string | null
+  }>
 }
 
-export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
+export function ProjectTabs({ project, projectId, clients }: ProjectTabsProps) {
   const t = useTranslations("Admin.projects.details")
   const [activeTab, setActiveTab] = useQueryState(
     "tab",
@@ -127,7 +133,11 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
       </TabsContent>
 
       <TabsContent value="settings" className="mt-0 focus-visible:outline-none">
-        <ProjectSettingsTab projectId={projectId} />
+        <ProjectSettingsTab
+          projectId={projectId}
+          members={project.members || []}
+          clients={clients}
+        />
       </TabsContent>
     </Tabs>
   )

@@ -113,6 +113,16 @@ export async function ensureProjectAccess(
       id: true,
       name: true,
       clientId: true,
+      members: {
+        where: {
+          userId: user.id,
+        },
+        select: {
+          id: true,
+          role: true,
+          userId: true,
+        },
+      },
       client: {
         select: {
           id: true,
@@ -129,7 +139,8 @@ export async function ensureProjectAccess(
   const canAccess =
     user.role === UserRole.ADMIN ||
     user.role === UserRole.MEMBER ||
-    project.clientId === user.id
+    project.clientId === user.id ||
+    project.members.length > 0
 
   if (!canAccess) {
     throw new Error("Unauthorized")

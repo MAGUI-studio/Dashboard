@@ -25,6 +25,19 @@ export default async function AdminProjectDetailPage({
     where: { id },
     include: {
       client: true,
+      members: {
+        orderBy: [{ role: "asc" }, { createdAt: "asc" }],
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+              companyName: true,
+            },
+          },
+        },
+      },
       auditLogs: {
         orderBy: { createdAt: "desc" },
         take: 12,
@@ -56,6 +69,17 @@ export default async function AdminProjectDetailPage({
     notFound()
   }
 
+  const clients = await prisma.user.findMany({
+    where: { role: "CLIENT" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      companyName: true,
+    },
+    orderBy: [{ companyName: "asc" }, { name: "asc" }],
+  })
+
   const dashboardProject = JSON.parse(JSON.stringify(project))
 
   return (
@@ -64,7 +88,7 @@ export default async function AdminProjectDetailPage({
 
       <ProjectDetailsHeader project={project} />
 
-      <ProjectTabs project={dashboardProject} projectId={id} />
+      <ProjectTabs project={dashboardProject} projectId={id} clients={clients} />
     </main>
   )
 }

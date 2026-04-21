@@ -16,6 +16,7 @@ import {
   AuditActorType,
   NotificationType,
   ApprovalStatus,
+  ProjectMemberRole,
   UserRole,
 } from "@/src/generated/client/enums"
 import { UTApi } from "uploadthing/server"
@@ -72,6 +73,15 @@ function toBrazilianDate(value: Date | string | null | undefined): string {
     timeStyle: "short",
     timeZone: "America/Sao_Paulo",
   }).format(new Date(value))
+}
+
+function escapeHtml(value: unknown): string {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;")
 }
 
 type TimelineAttachmentInput = {
@@ -166,6 +176,14 @@ export async function createProjectAction(
         projectId: project.id,
         isMilestone: true,
         timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
+      },
+    })
+
+    await prisma.projectMember.create({
+      data: {
+        projectId: project.id,
+        userId: project.client.id,
+        role: ProjectMemberRole.OWNER,
       },
     })
 
@@ -1279,5 +1297,373 @@ export async function exportProjectApprovalsCsvAction(
   } catch (error) {
     logger.error({ error }, "Export Project Approvals CSV Error")
     return { success: false, error: "Erro ao exportar aprovações" }
+  }
+}
+
+export async function exportProjectSummaryHtmlAction(
+  projectId: string
+): Promise<{
+  success: boolean
+  filename?: string
+  html?: string
+  error?: string
+}> {
+  try {
+    await protect("admin")
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      include: {
+        client: {
+          select: {
+            name: true,
+            email: true,
+            companyName: true,
+            phone: true,
+          },
+        },
+        updates: {
+          orderBy: { createdAt: "desc" },
+          take: 8,
+          select: {
+            title: true,
+            description: true,
+            requiresApproval: true,
+            approvalStatus: true,
+            createdAt: true,
+          },
+        },
+        actionItems: {
+          orderBy: { dueDate: "asc" },
+          take: 10,
+          select: {
+            title: true,
+            status: true,
+            dueDate: true,
+            targetRole: true,
+          },
+        },
+        versions: {
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: {
+            name: true,
+            description: true,
+            deployUrl: true,
+            createdAt: true,
+          },
+        },
+      },
+    })
+
+    if (!project) {
+      return { success: false, error: "Projeto não encontrado" }
+    }
+
+    const safeProjectName = project.name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase()
+
+    const html = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Resumo - ${escapeHtml(project.name)}</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: oklch(0.18 0.02 250);
+      --muted: oklch(0.48 0.02 250);
+      --line: oklch(0.9 0.01 250);
+      --paper: oklch(0.99 0.003 250);
+      --soft: oklch(0.96 0.006 250);
+      --brand: oklch(0.57 0.15 245);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    main { max-width: 920px; margin: 0 auto; padding: 56px 40px; }
+    header { border-bottom: 1px solid var(--line); padding-bottom: 28px; margin-bottom: 32px; }
+    .eyebrow { color: var(--brand); font-size: 11px; font-weight: 900; letter-spacing: .24em; text-transform: uppercase; }
+    h1 { margin: 10px 0 12px; font-size: 44px; line-height: .95; letter-spacing: -.05em; text-transform: uppercase; }
+    h2 { margin: 0 0 16px; font-size: 13px; letter-spacing: .22em; text-transform: uppercase; }
+    p { margin: 0; color: var(--muted); }
+    section { border: 1px solid var(--line); border-radius: 24px; padding: 24px; margin-bottom: 18px; background: white; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .metric { border-radius: 18px; background: var(--soft); padding: 16px; }
+    .label { color: var(--muted); font-size: 10px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; }
+    .value { margin-top: 6px; color: var(--ink); font-weight: 800; }
+    .item { padding: 14px 0; border-top: 1px solid var(--line); }
+    .item:first-of-type { border-top: 0; padding-top: 0; }
+    .title { color: var(--ink); font-weight: 850; }
+    .meta { margin-top: 4px; font-size: 12px; }
+    @media print {
+      main { padding: 24px; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div class="eyebrow">Resumo do projeto</div>
+      <h1>${escapeHtml(project.name)}</h1>
+      <p>${escapeHtml(project.description || "Sem descrição cadastrada.")}</p>
+    </header>
+
+    <section>
+      <h2>Dados principais</h2>
+      <div class="grid">
+        <div class="metric"><div class="label">Cliente</div><div class="value">${escapeHtml(project.client.companyName || project.client.name || project.client.email)}</div></div>
+        <div class="metric"><div class="label">Status</div><div class="value">${escapeHtml(project.status)}</div></div>
+        <div class="metric"><div class="label">Progresso</div><div class="value">${project.progress}%</div></div>
+        <div class="metric"><div class="label">Prazo</div><div class="value">${escapeHtml(toBrazilianDate(project.deadline)) || "Sem prazo"}</div></div>
+        <div class="metric"><div class="label">Investimento</div><div class="value">${escapeHtml(project.budget || "Não informado")}</div></div>
+        <div class="metric"><div class="label">Gerado em</div><div class="value">${escapeHtml(toBrazilianDate(new Date()))}</div></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Últimas atualizações</h2>
+      ${project.updates
+        .map(
+          (update) => `<div class="item"><div class="title">${escapeHtml(update.title)}</div><p>${escapeHtml(update.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(update.createdAt))} · ${escapeHtml(update.approvalStatus)}</div></div>`
+        )
+        .join("") || '<p>Nenhuma atualização registrada.</p>'}
+    </section>
+
+    <section>
+      <h2>Pendências</h2>
+      ${project.actionItems
+        .map(
+          (item) => `<div class="item"><div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.status)} · ${escapeHtml(item.targetRole)} · ${escapeHtml(toBrazilianDate(item.dueDate)) || "Sem prazo"}</div></div>`
+        )
+        .join("") || '<p>Nenhuma pendência registrada.</p>'}
+    </section>
+
+    <section>
+      <h2>Versões</h2>
+      ${project.versions
+        .map(
+          (version) => `<div class="item"><div class="title">${escapeHtml(version.name)}</div><p>${escapeHtml(version.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(version.createdAt))}${version.deployUrl ? ` · ${escapeHtml(version.deployUrl)}` : ""}</div></div>`
+        )
+        .join("") || '<p>Nenhuma versão registrada.</p>'}
+    </section>
+  </main>
+  <script>window.addEventListener("load", () => setTimeout(() => window.print(), 250));</script>
+</body>
+</html>`
+
+    return {
+      success: true,
+      filename: `resumo-${safeProjectName || project.id}.html`,
+      html,
+    }
+  } catch (error) {
+    logger.error({ error }, "Export Project Summary HTML Error")
+    return { success: false, error: "Erro ao exportar resumo do projeto" }
+  }
+}
+
+export async function addProjectMemberAction(input: {
+  projectId: string
+  userId: string
+  role?: ProjectMemberRole
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    const [project, user] = await Promise.all([
+      prisma.project.findUnique({
+        where: { id: input.projectId },
+        select: {
+          id: true,
+          name: true,
+          clientId: true,
+        },
+      }),
+      prisma.user.findUnique({
+        where: { id: input.userId },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+        },
+      }),
+    ])
+
+    if (!project) {
+      return { success: false, error: "Projeto não encontrado" }
+    }
+
+    if (!user || user.role !== UserRole.CLIENT) {
+      return { success: false, error: "Selecione um cliente válido" }
+    }
+
+    const role =
+      project.clientId === user.id ? ProjectMemberRole.OWNER : input.role
+
+    await prisma.projectMember.upsert({
+      where: {
+        projectId_userId: {
+          projectId: input.projectId,
+          userId: input.userId,
+        },
+      },
+      update: {
+        role: role ?? ProjectMemberRole.COLLABORATOR,
+      },
+      create: {
+        projectId: input.projectId,
+        userId: input.userId,
+        role: role ?? ProjectMemberRole.COLLABORATOR,
+      },
+    })
+
+    await createAuditLog({
+      action: "project.member_added",
+      entityType: "ProjectMember",
+      entityId: input.userId,
+      summary: `${user.name ?? user.email} adicionado ao projeto ${project.name}.`,
+      actorId: actor?.id,
+      actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+      projectId: input.projectId,
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          role: actor?.role,
+        }),
+        after: {
+          role: role ?? ProjectMemberRole.COLLABORATOR,
+          userId: user.id,
+          email: user.email,
+        },
+        relatedEntities: [
+          {
+            type: "Project",
+            id: project.id,
+            label: project.name,
+          },
+          {
+            type: "User",
+            id: user.id,
+            label: user.name ?? user.email,
+          },
+        ],
+      },
+    })
+
+    revalidatePath(`/admin/projects/${input.projectId}`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Add Project Member Error")
+    return { success: false, error: "Erro ao adicionar colaborador" }
+  }
+}
+
+export async function removeProjectMemberAction(input: {
+  projectId: string
+  userId: string
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    const membership = await prisma.projectMember.findUnique({
+      where: {
+        projectId_userId: {
+          projectId: input.projectId,
+          userId: input.userId,
+        },
+      },
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+            clientId: true,
+          },
+        },
+        user: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
+    })
+
+    if (!membership) {
+      return { success: false, error: "Colaborador não encontrado" }
+    }
+
+    if (membership.project.clientId === input.userId) {
+      return {
+        success: false,
+        error: "O cliente principal não pode ser removido por aqui",
+      }
+    }
+
+    await prisma.projectMember.delete({
+      where: {
+        projectId_userId: {
+          projectId: input.projectId,
+          userId: input.userId,
+        },
+      },
+    })
+
+    await createAuditLog({
+      action: "project.member_removed",
+      entityType: "ProjectMember",
+      entityId: input.userId,
+      summary: `${membership.user.name ?? membership.user.email} removido do projeto ${membership.project.name}.`,
+      actorId: actor?.id,
+      actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+      projectId: input.projectId,
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          role: actor?.role,
+        }),
+        before: {
+          role: membership.role,
+          userId: membership.user.id,
+          email: membership.user.email,
+        },
+        relatedEntities: [
+          {
+            type: "Project",
+            id: membership.project.id,
+            label: membership.project.name,
+          },
+          {
+            type: "User",
+            id: membership.user.id,
+            label: membership.user.name ?? membership.user.email,
+          },
+        ],
+      },
+    })
+
+    revalidatePath(`/admin/projects/${input.projectId}`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Remove Project Member Error")
+    return { success: false, error: "Erro ao remover colaborador" }
   }
 }
