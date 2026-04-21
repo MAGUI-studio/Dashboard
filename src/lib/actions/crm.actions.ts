@@ -45,6 +45,7 @@ function revalidateCrmPaths(): void {
   revalidatePath("/admin/crm")
   revalidatePath("/admin/crm/kanban")
   revalidatePath("/admin/crm/list")
+  revalidatePath("/admin/projects")
   revalidatePath("/")
 }
 
