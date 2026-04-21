@@ -12,7 +12,6 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -24,10 +23,9 @@ import { deleteProjectAction } from "@/src/lib/actions/project.actions"
 
 interface DangerZoneProps {
   projectId: string
-  projectName: string
 }
 
-export function DangerZone({ projectId, projectName }: DangerZoneProps) {
+export function DangerZone({ projectId }: DangerZoneProps) {
   const t = useTranslations("Admin.projects.details")
   const router = useRouter()
   const [isDeleting, setIsDeleting] = React.useState(false)

@@ -6,13 +6,9 @@ import { DangerZone } from "@/src/components/admin/DangerZone"
 
 interface ProjectSettingsTabProps {
   projectId: string
-  projectName: string
 }
 
-export function ProjectSettingsTab({
-  projectId,
-  projectName,
-}: ProjectSettingsTabProps) {
+export function ProjectSettingsTab({ projectId }: ProjectSettingsTabProps) {
   const t = useTranslations("Admin.projects.details")
 
   return (
@@ -29,7 +25,7 @@ export function ProjectSettingsTab({
           </p>
         </div>
 
-        <DangerZone projectId={projectId} projectName={projectName} />
+        <DangerZone projectId={projectId} />
       </section>
     </div>
   )

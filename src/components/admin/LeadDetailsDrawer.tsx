@@ -446,7 +446,9 @@ export function LeadDetailsDrawer({
                 >
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <Link
-                    href={`/admin/projects/${lead.convertedProjectId}` as any}
+                    href={
+                      `/admin/projects/${lead.convertedProjectId as string}` as any
+                    }
                   >
                     Abrir Projeto
                     <ArrowSquareOut className="ml-2 size-4" />

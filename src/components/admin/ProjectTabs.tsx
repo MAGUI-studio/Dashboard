@@ -127,7 +127,7 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
       </TabsContent>
 
       <TabsContent value="settings" className="mt-0 focus-visible:outline-none">
-        <ProjectSettingsTab projectId={projectId} projectName={project.name} />
+        <ProjectSettingsTab projectId={projectId} />
       </TabsContent>
     </Tabs>
   )

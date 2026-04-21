@@ -2,8 +2,6 @@
 
 import * as React from "react"
 
-import { useTranslations } from "next-intl"
-
 import { DashboardUpdateComment } from "@/src/types/dashboard"
 import {
   ChatCircleText,

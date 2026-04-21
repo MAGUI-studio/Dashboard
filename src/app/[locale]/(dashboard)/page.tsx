@@ -824,8 +824,11 @@ export default async function DashboardPage({
                 {t("select_project")}
               </span>
               <ProjectSwitcher
-                projects={projects}
-                activeId={activeProject.id}
+                projects={projects as unknown as DashboardProject[]}
+                selectedProject={activeProject as unknown as DashboardProject}
+                onProjectSelect={(id) => {
+                  window.location.search = `?project=${id}`
+                }}
               />
             </div>
           ) : null}
