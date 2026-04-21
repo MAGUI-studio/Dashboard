@@ -123,7 +123,7 @@ export function ProjectTabs({ project, projectId }: ProjectTabsProps) {
       </TabsContent>
 
       <TabsContent value="audit" className="mt-0 focus-visible:outline-none">
-        <ProjectAuditTab logs={project.auditLogs || []} />
+        <ProjectAuditTab logs={project.auditLogs || []} projectId={projectId} />
       </TabsContent>
 
       <TabsContent value="settings" className="mt-0 focus-visible:outline-none">

@@ -9,6 +9,7 @@ import { Plus } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "@/src/components/ui/button"
 
 import { CSVImportDialog } from "@/src/components/admin/CSVImportDialog"
+import { ExportLeadsButton } from "@/src/components/admin/ExportLeadsButton"
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
 import {
@@ -58,6 +59,7 @@ export default async function CRMPage({
 
         <div className="flex flex-wrap items-center gap-3">
           <CSVImportDialog />
+          <ExportLeadsButton />
           <Button
             asChild
             className="group relative h-14 overflow-hidden rounded-full px-10 font-sans font-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95 shadow-xl shadow-brand-primary/20"

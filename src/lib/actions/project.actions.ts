@@ -15,6 +15,7 @@ import {
   AssetVisibility,
   AuditActorType,
   NotificationType,
+  ApprovalStatus,
   UserRole,
 } from "@/src/generated/client/enums"
 import { UTApi } from "uploadthing/server"
@@ -26,6 +27,7 @@ import {
   createAuditLog,
   createNotification,
   ensureProjectAccess,
+  getAuditOriginLabel,
   getCurrentAppUser,
   getInternalNotificationRecipients,
 } from "@/src/lib/project-governance"
@@ -43,6 +45,33 @@ function getDashboardPath(projectId: string): string {
 
 function getAdminProjectPath(projectId: string): string {
   return `/admin/projects/${projectId}`
+}
+
+const approvalStatusLabels: Record<ApprovalStatus, string> = {
+  PENDING: "Pendente",
+  APPROVED: "Aprovado",
+  REJECTED: "Reprovado",
+}
+
+function toCsvCell(value: unknown): string {
+  if (value === null || value === undefined) {
+    return ""
+  }
+
+  const normalized =
+    value instanceof Date ? value.toISOString() : String(value).trim()
+
+  return `"${normalized.replace(/"/g, '""')}"`
+}
+
+function toBrazilianDate(value: Date | string | null | undefined): string {
+  if (!value) return ""
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date(value))
 }
 
 type TimelineAttachmentInput = {
@@ -149,9 +178,38 @@ export async function createProjectAction(
       actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
       projectId: project.id,
       metadata: {
+        origin: getAuditOriginLabel({
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          role: actor?.role,
+        }),
         category: project.category,
         priority: project.priority,
         initialUpdateId: initialUpdate.id,
+        after: {
+          status: project.status,
+          progress: project.progress,
+          category: project.category,
+          priority: project.priority,
+          budget: project.budget,
+          deadline: project.deadline?.toISOString() ?? null,
+        },
+        relatedEntities: [
+          {
+            type: "Project",
+            id: project.id,
+            label: project.name,
+          },
+          {
+            type: "Client",
+            id: project.client.id,
+            label: project.client.name ?? "Cliente",
+          },
+          {
+            type: "Update",
+            id: initialUpdate.id,
+            label: initialUpdate.title,
+          },
+        ],
       },
     })
 
@@ -198,6 +256,14 @@ export async function updateProjectStatusAction(
   const actor = await getCurrentAppUser()
 
   try {
+    const previousProject = await prisma.project.findUnique({
+      where: { id },
+      select: {
+        status: true,
+        progress: true,
+      },
+    })
+
     const project = await prisma.project.update({
       where: { id },
       data: {
@@ -222,7 +288,29 @@ export async function updateProjectStatusAction(
         actorId: actor?.id,
         actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
         projectId: project.id,
-        metadata: { status, progress },
+        metadata: {
+          origin: getAuditOriginLabel({
+            actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+            role: actor?.role,
+          }),
+          before: previousProject
+            ? {
+                status: previousProject.status,
+                progress: previousProject.progress,
+              }
+            : null,
+          after: {
+            status,
+            progress,
+          },
+          relatedEntities: [
+            {
+              type: "Project",
+              id: project.id,
+              label: project.name,
+            },
+          ],
+        },
       }),
       createNotification({
         userId: project.client.id,
@@ -342,9 +430,30 @@ export async function addProjectTimelineAction(
         actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
         projectId,
         metadata: {
+          origin: getAuditOriginLabel({
+            actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+            role: actor?.role,
+          }),
           requiresApproval,
           isMilestone,
           attachmentsCount: update.attachments.length,
+          after: {
+            requiresApproval,
+            isMilestone,
+            attachmentsCount: update.attachments.length,
+          },
+          relatedEntities: [
+            {
+              type: "Project",
+              id: update.project.id,
+              label: update.project.name,
+            },
+            {
+              type: "Update",
+              id: update.id,
+              label: update.title,
+            },
+          ],
         },
       })
 
@@ -428,7 +537,31 @@ export async function approveUpdateAction(
       actorId: user.id,
       actorType: AuditActorType.USER,
       projectId,
-      metadata: { comment },
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: AuditActorType.USER,
+          role: user.role,
+        }),
+        before: {
+          approvalStatus: "PENDING",
+        },
+        after: {
+          approvalStatus: "APPROVED",
+        },
+        comment,
+        relatedEntities: [
+          {
+            type: "Project",
+            id: project.id,
+            label: project.name,
+          },
+          {
+            type: "Update",
+            id: update.id,
+            label: update.title,
+          },
+        ],
+      },
     })
 
     const admins = await getInternalNotificationRecipients()
@@ -503,7 +636,31 @@ export async function rejectUpdateAction(input: {
       actorId: user.id,
       actorType: AuditActorType.USER,
       projectId: validated.data.projectId,
-      metadata: { feedback: validated.data.feedback },
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: AuditActorType.USER,
+          role: user.role,
+        }),
+        before: {
+          approvalStatus: "PENDING",
+        },
+        after: {
+          approvalStatus: "REJECTED",
+        },
+        feedback: validated.data.feedback,
+        relatedEntities: [
+          {
+            type: "Project",
+            id: project.id,
+            label: project.name,
+          },
+          {
+            type: "Update",
+            id: update.id,
+            label: update.title,
+          },
+        ],
+      },
     })
 
     const admins = await getInternalNotificationRecipients()
@@ -556,6 +713,11 @@ export async function updateProjectBriefingAction(
       UserRole.MEMBER,
     ])
 
+    const previousProject = await prisma.project.findUnique({
+      where: { id: projectId },
+      select: { briefing: true },
+    })
+
     await prisma.project.update({
       where: { id: projectId },
       data: { briefing: validatedBriefing.data },
@@ -570,6 +732,25 @@ export async function updateProjectBriefingAction(
         actorId: user.id,
         actorType: AuditActorType.USER,
         projectId,
+        metadata: {
+          origin: getAuditOriginLabel({
+            actorType: AuditActorType.USER,
+            role: user.role,
+          }),
+          before: {
+            briefing: previousProject?.briefing ?? null,
+          },
+          after: {
+            briefing: validatedBriefing.data,
+          },
+          relatedEntities: [
+            {
+              type: "Project",
+              id: project.id,
+              label: project.name,
+            },
+          ],
+        },
       }),
       ...(user.role === UserRole.CLIENT
         ? (
@@ -754,9 +935,31 @@ export async function createProjectAssetAction(data: {
         actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
         projectId: data.projectId,
         metadata: {
+          origin: getAuditOriginLabel({
+            actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+            role: actor?.role,
+          }),
           type: asset.type,
-          origin: asset.origin,
+          assetOrigin: asset.origin,
           visibility: asset.visibility,
+          after: {
+            type: asset.type,
+            assetOrigin: asset.origin,
+            visibility: asset.visibility,
+            order: asset.order,
+          },
+          relatedEntities: [
+            {
+              type: "Project",
+              id: project.id,
+              label: project.name,
+            },
+            {
+              type: "Asset",
+              id: asset.id,
+              label: asset.name,
+            },
+          ],
         },
       }),
       ...(isClient
@@ -842,6 +1045,7 @@ export async function createUpdateCommentAction(input: {
       include: {
         update: {
           select: {
+            id: true,
             title: true,
           },
         },
@@ -856,6 +1060,28 @@ export async function createUpdateCommentAction(input: {
       actorId: user.id,
       actorType: AuditActorType.USER,
       projectId: input.projectId,
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: AuditActorType.USER,
+          role: user.role,
+        }),
+        comment: input.content,
+        after: {
+          content: input.content,
+        },
+        relatedEntities: [
+          {
+            type: "Update",
+            id: comment.update.id,
+            label: comment.update.title,
+          },
+          {
+            type: "UpdateComment",
+            id: comment.id,
+            label: "Comentário",
+          },
+        ],
+      },
     })
 
     const admins = await getInternalNotificationRecipients()
@@ -914,6 +1140,28 @@ export async function createBriefingNoteAction(input: {
       actorId: user.id,
       actorType: AuditActorType.USER,
       projectId: input.projectId,
+      metadata: {
+        origin: getAuditOriginLabel({
+          actorType: AuditActorType.USER,
+          role: user.role,
+        }),
+        after: {
+          title: note.title,
+          content: note.content,
+        },
+        relatedEntities: [
+          {
+            type: "Project",
+            id: project.id,
+            label: project.name,
+          },
+          {
+            type: "BriefingEntry",
+            id: note.id,
+            label: note.title,
+          },
+        ],
+      },
     })
 
     if (user.role === UserRole.CLIENT) {
@@ -938,5 +1186,98 @@ export async function createBriefingNoteAction(input: {
   } catch (error) {
     logger.error({ error }, "Create Briefing Note Error:")
     return { error: "Erro ao adicionar nota de briefing" }
+  }
+}
+
+export async function exportProjectApprovalsCsvAction(
+  projectId: string
+): Promise<{
+  success: boolean
+  filename?: string
+  csv?: string
+  error?: string
+}> {
+  try {
+    await protect("admin")
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      select: { id: true, name: true },
+    })
+
+    if (!project) {
+      return { success: false, error: "Projeto não encontrado" }
+    }
+
+    const events = await prisma.approvalEvent.findMany({
+      where: {
+        update: {
+          projectId,
+        },
+      },
+      include: {
+        actor: {
+          select: {
+            name: true,
+            email: true,
+            role: true,
+          },
+        },
+        update: {
+          select: {
+            title: true,
+            approvalStatus: true,
+            requiresApproval: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    })
+
+    const headers = [
+      "Projeto",
+      "Entrega",
+      "Decisão",
+      "Comentário",
+      "Responsável",
+      "Email",
+      "Perfil",
+      "Status atual",
+      "Data",
+    ]
+
+    const rows = events.map((event) => [
+      project.name,
+      event.update.title,
+      approvalStatusLabels[event.decision],
+      event.comment,
+      event.actor?.name ?? "Sistema",
+      event.actor?.email ?? "",
+      event.actor?.role ?? "",
+      approvalStatusLabels[event.update.approvalStatus],
+      toBrazilianDate(event.createdAt),
+    ])
+
+    const csv = [
+      headers.map(toCsvCell).join(","),
+      ...rows.map((row) => row.map(toCsvCell).join(",")),
+    ].join("\r\n")
+
+    const safeProjectName = project.name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase()
+    const date = new Date().toISOString().slice(0, 10)
+
+    return {
+      success: true,
+      filename: `aprovacoes-${safeProjectName || project.id}-${date}.csv`,
+      csv: `\uFEFF${csv}`,
+    }
+  } catch (error) {
+    logger.error({ error }, "Export Project Approvals CSV Error")
+    return { success: false, error: "Erro ao exportar aprovações" }
   }
 }

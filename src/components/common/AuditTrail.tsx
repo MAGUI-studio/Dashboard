@@ -57,6 +57,44 @@ function getAuditPresentation(action: string): {
   }
 }
 
+function formatOrigin(origin: string | undefined): string | null {
+  switch (origin) {
+    case "admin_panel":
+      return "Painel admin"
+    case "operations_panel":
+      return "Painel operacional"
+    case "client_portal":
+      return "Portal do cliente"
+    case "system":
+      return "Sistema"
+    default:
+      return null
+  }
+}
+
+function formatKeyLabel(key: string): string {
+  return key
+    .replace(/([A-Z])/g, " $1")
+    .replace(/_/g, " ")
+    .trim()
+}
+
+function stringifyValue(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "—"
+  }
+
+  if (typeof value === "string" || typeof value === "number") {
+    return String(value)
+  }
+
+  if (typeof value === "boolean") {
+    return value ? "Sim" : "Não"
+  }
+
+  return JSON.stringify(value)
+}
+
 export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
   if (logs.length === 0) {
     return (
@@ -89,6 +127,7 @@ export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
       <div className="space-y-3">
         {logs.map((log) => {
           const presentation = getAuditPresentation(log.action)
+          const originLabel = formatOrigin(log.metadata?.origin)
 
           return (
             <article
@@ -103,7 +142,7 @@ export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
                     {presentation.icon}
                   </div>
 
-                  <div className="space-y-2">
+                  <div className="space-y-3">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
                         className={`rounded-full border px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.22em] ${presentation.accentClassName}`}
@@ -113,11 +152,79 @@ export function AuditTrail({ logs }: AuditTrailProps): React.JSX.Element {
                       <span className="text-[8px] font-black uppercase tracking-[0.22em] text-muted-foreground/30">
                         {log.actor?.name || "Sistema"}
                       </span>
+                      {originLabel ? (
+                        <span className="text-[8px] font-black uppercase tracking-[0.22em] text-muted-foreground/30">
+                          {originLabel}
+                        </span>
+                      ) : null}
                     </div>
 
                     <p className="max-w-3xl text-sm font-medium leading-relaxed text-foreground/78">
                       {log.summary}
                     </p>
+
+                    {log.metadata?.relatedEntities?.length ? (
+                      <div className="flex flex-wrap gap-2">
+                        {log.metadata.relatedEntities.map((entity) => (
+                          <span
+                            key={`${entity.type}-${entity.id}`}
+                            className="rounded-full border border-border/25 bg-background/60 px-2.5 py-1 text-[8px] font-black uppercase tracking-[0.18em] text-muted-foreground/55"
+                          >
+                            {entity.type}: {entity.label || entity.id}
+                          </span>
+                        ))}
+                      </div>
+                    ) : null}
+
+                    {log.metadata?.before || log.metadata?.after ? (
+                      <div className="grid gap-3 rounded-2xl border border-border/20 bg-background/50 p-4 md:grid-cols-2">
+                        {log.metadata.before ? (
+                          <div className="grid gap-2">
+                            <p className="text-[8px] font-black uppercase tracking-[0.22em] text-muted-foreground/40">
+                              Antes
+                            </p>
+                            {Object.entries(log.metadata.before).map(
+                              ([key, value]) => (
+                                <div
+                                  key={`before-${key}`}
+                                  className="flex items-start justify-between gap-3 text-[10px]"
+                                >
+                                  <span className="font-bold uppercase tracking-[0.12em] text-muted-foreground/50">
+                                    {formatKeyLabel(key)}
+                                  </span>
+                                  <span className="text-right text-foreground/75">
+                                    {stringifyValue(value)}
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : null}
+
+                        {log.metadata.after ? (
+                          <div className="grid gap-2">
+                            <p className="text-[8px] font-black uppercase tracking-[0.22em] text-muted-foreground/40">
+                              Depois
+                            </p>
+                            {Object.entries(log.metadata.after).map(
+                              ([key, value]) => (
+                                <div
+                                  key={`after-${key}`}
+                                  className="flex items-start justify-between gap-3 text-[10px]"
+                                >
+                                  <span className="font-bold uppercase tracking-[0.12em] text-muted-foreground/50">
+                                    {formatKeyLabel(key)}
+                                  </span>
+                                  <span className="text-right text-foreground/75">
+                                    {stringifyValue(value)}
+                                  </span>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        ) : null}
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 

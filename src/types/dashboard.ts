@@ -143,6 +143,19 @@ export interface DashboardAuditLog {
   entityType: string
   entityId: string
   summary: string
+  metadata?: {
+    origin?: string
+    before?: Record<string, unknown> | null
+    after?: Record<string, unknown> | null
+    relatedEntities?: Array<{
+      type: string
+      id: string
+      label?: string
+    }>
+    comment?: string | null
+    feedback?: string | null
+    [key: string]: unknown
+  } | null
   createdAt: Date | string
   actorType: "SYSTEM" | "USER"
   actor: {

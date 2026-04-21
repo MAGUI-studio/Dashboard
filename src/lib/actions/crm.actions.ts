@@ -49,6 +49,46 @@ function revalidateCrmPaths(): void {
   revalidatePath("/")
 }
 
+const leadStatusLabels: Record<LeadStatus, string> = {
+  GARIMPAGEM: "Possível cliente",
+  CONTATO_REALIZADO: "Mensagem enviada",
+  NEGOCIACAO: "Conversando",
+  CONVERTIDO: "Convertido",
+  DESCARTADO: "Descartado",
+}
+
+const leadSourceLabels: Record<LeadSource, string> = {
+  REFERRAL: "Indicação",
+  ORGANIC: "Orgânico",
+  INSTAGRAM: "Instagram",
+  LINKEDIN: "LinkedIn",
+  WEBSITE: "Site",
+  OUTBOUND: "Busca ativa",
+  EVENT: "Evento",
+  OTHER: "Outro",
+}
+
+function toCsvCell(value: unknown): string {
+  if (value === null || value === undefined) {
+    return ""
+  }
+
+  const normalized =
+    value instanceof Date ? value.toISOString() : String(value).trim()
+
+  return `"${normalized.replace(/"/g, '""')}"`
+}
+
+function toBrazilianDate(value: Date | string | null | undefined): string {
+  if (!value) return ""
+
+  return new Intl.DateTimeFormat("pt-BR", {
+    dateStyle: "short",
+    timeStyle: "short",
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date(value))
+}
+
 async function createLeadActivity(data: {
   leadId: string
   type: LeadActivityType
@@ -469,4 +509,96 @@ export async function getLeads(): Promise<Lead[]> {
   })
 
   return leads as unknown as Lead[]
+}
+
+export async function exportLeadsCsvAction(): Promise<{
+  success: boolean
+  filename?: string
+  csv?: string
+  error?: string
+}> {
+  try {
+    await protect("admin")
+
+    const leads = await prisma.lead.findMany({
+      where: {
+        status: {
+          not: LeadStatus.DESCARTADO,
+        },
+      },
+      include: {
+        followUpNotes: {
+          orderBy: { createdAt: "desc" },
+          select: {
+            content: true,
+            createdAt: true,
+          },
+        },
+        activities: {
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: {
+            title: true,
+            createdAt: true,
+          },
+        },
+      },
+      orderBy: [{ status: "asc" }, { updatedAt: "desc" }],
+    })
+
+    const headers = [
+      "Empresa",
+      "Contato",
+      "Email",
+      "Telefone",
+      "Instagram",
+      "Site",
+      "Origem",
+      "Status",
+      "Observações",
+      "Notas",
+      "Última atividade",
+      "Criado em",
+      "Atualizado em",
+    ]
+
+    const rows = leads.map((lead) => [
+      lead.companyName,
+      lead.contactName,
+      lead.email,
+      lead.phone,
+      lead.instagram,
+      lead.website,
+      leadSourceLabels[lead.source],
+      leadStatusLabels[lead.status],
+      lead.notes,
+      lead.followUpNotes
+        .map(
+          (note) =>
+            `${toBrazilianDate(note.createdAt)} - ${note.content.replace(/\s+/g, " ")}`
+        )
+        .join("\n"),
+      lead.activities[0]
+        ? `${toBrazilianDate(lead.activities[0].createdAt)} - ${lead.activities[0].title}`
+        : "",
+      toBrazilianDate(lead.createdAt),
+      toBrazilianDate(lead.updatedAt),
+    ])
+
+    const csv = [
+      headers.map(toCsvCell).join(","),
+      ...rows.map((row) => row.map(toCsvCell).join(",")),
+    ].join("\r\n")
+
+    const date = new Date().toISOString().slice(0, 10)
+
+    return {
+      success: true,
+      filename: `leads-magui-${date}.csv`,
+      csv: `\uFEFF${csv}`,
+    }
+  } catch (error) {
+    logger.error({ error }, "Export Leads CSV Error")
+    return { success: false, error: "Failed to export leads" }
+  }
 }

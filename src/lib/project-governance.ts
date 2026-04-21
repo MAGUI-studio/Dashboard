@@ -162,6 +162,25 @@ export async function createAuditLog(data: {
   })
 }
 
+export function getAuditOriginLabel(input: {
+  actorType?: AuditActorType
+  role?: UserRole | null
+}): string {
+  if (input.actorType === AuditActorType.SYSTEM) {
+    return "system"
+  }
+
+  if (input.role === UserRole.ADMIN) {
+    return "admin_panel"
+  }
+
+  if (input.role === UserRole.MEMBER) {
+    return "operations_panel"
+  }
+
+  return "client_portal"
+}
+
 export async function createNotification(data: {
   userId: string
   type: NotificationType
