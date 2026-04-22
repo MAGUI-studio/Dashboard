@@ -444,11 +444,11 @@ export function LeadDetailsDrawer({
                   variant="ghost"
                   className="rounded-full text-[10px] font-black uppercase tracking-widest text-green-600 hover:bg-green-500/20"
                 >
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                   <Link
-                    href={
-                      `/admin/projects/${lead.convertedProjectId as string}` as any
-                    }
+                    href={{
+                      pathname: "/admin/projects/[id]",
+                      params: { id: lead.convertedProjectId },
+                    }}
                   >
                     Abrir Projeto
                     <ArrowSquareOut className="ml-2 size-4" />

@@ -1,4 +1,4 @@
-export default function (plop) {
+export default function configurePlop(plop) {
   plop.setGenerator("component", {
     description: "Create a new component or section",
     prompts: [

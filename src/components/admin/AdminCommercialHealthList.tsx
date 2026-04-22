@@ -3,7 +3,7 @@
 import * as React from "react"
 
 import { Link } from "@/src/i18n/navigation"
-import { ArrowRight, ChartLineUp, WarningCircle } from "@phosphor-icons/react/dist/ssr"
+import { ArrowRight, ChartLineUp } from "@phosphor-icons/react/dist/ssr"
 
 import { Button } from "@/src/components/ui/button"
 import {
@@ -48,7 +48,8 @@ export function AdminCommercialHealthList({
           Saúde do comercial
         </CardTitle>
         <CardDescription>
-          Leads que pedem cuidado por falta de contexto, atraso ou perda de ritmo.
+          Leads que pedem cuidado por falta de contexto, atraso ou perda de
+          ritmo.
         </CardDescription>
       </CardHeader>
 
