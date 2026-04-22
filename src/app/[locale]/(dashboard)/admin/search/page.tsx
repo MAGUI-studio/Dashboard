@@ -4,8 +4,8 @@ import { redirect } from "next/navigation"
 
 import { AdminSearchPage } from "@/src/components/admin/AdminSearchPage"
 
-import { isAdmin } from "@/src/lib/permissions"
 import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
+import { isAdmin } from "@/src/lib/permissions"
 
 export default async function AdminSearchRoute({
   searchParams,

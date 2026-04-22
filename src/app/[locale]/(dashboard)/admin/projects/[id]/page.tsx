@@ -88,7 +88,11 @@ export default async function AdminProjectDetailPage({
 
       <ProjectDetailsHeader project={project} />
 
-      <ProjectTabs project={dashboardProject} projectId={id} clients={clients} />
+      <ProjectTabs
+        project={dashboardProject}
+        projectId={id}
+        clients={clients}
+      />
     </main>
   )
 }

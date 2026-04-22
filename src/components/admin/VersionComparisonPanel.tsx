@@ -3,7 +3,12 @@
 import * as React from "react"
 
 import { DashboardVersion } from "@/src/types/dashboard"
-import { ArrowRight, GitBranch, TrendDown, TrendUp } from "@phosphor-icons/react"
+import {
+  ArrowRight,
+  GitBranch,
+  TrendDown,
+  TrendUp,
+} from "@phosphor-icons/react"
 
 type ScoreKey =
   | "scorePerformance"
@@ -24,7 +29,10 @@ function formatDate(value: Date | string): string {
   }).format(new Date(value))
 }
 
-function getScoreDelta(current: number | null, previous: number | null): number {
+function getScoreDelta(
+  current: number | null,
+  previous: number | null
+): number {
   return (current ?? 0) - (previous ?? 0)
 }
 
@@ -71,8 +79,8 @@ export function VersionComparisonPanel({
             </h3>
           </div>
           <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/55">
-            Compare a versão atual com a anterior e veja rapidamente o que
-            mudou na entrega.
+            Compare a versão atual com a anterior e veja rapidamente o que mudou
+            na entrega.
           </p>
         </div>
 

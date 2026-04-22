@@ -1,11 +1,14 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
-import { getTranslations } from "next-intl/server"
-import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
-import { DashboardSummary } from "@/src/components/common/DashboardSummary"
+
 import { DashboardProject } from "@/src/types/dashboard"
+import { auth } from "@clerk/nextjs/server"
+
+import { DashboardSummary } from "@/src/components/common/DashboardSummary"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
 
 export default async function ProjectDetailPage({
   params,

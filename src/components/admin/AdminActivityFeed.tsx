@@ -2,8 +2,8 @@
 
 import * as React from "react"
 
-import { Link } from "@/src/i18n/navigation"
 import { UserRole } from "@/src/generated/client/enums"
+import { Link } from "@/src/i18n/navigation"
 import {
   ArrowRight,
   CheckCircle,
@@ -96,8 +96,7 @@ function getActivityPresentation(kind: ActivityKind) {
     case "timeline":
       return {
         icon: NotePencil,
-        iconClassName:
-          "bg-amber-500/10 text-amber-700 dark:text-amber-300",
+        iconClassName: "bg-amber-500/10 text-amber-700 dark:text-amber-300",
         badgeClassName:
           "border-amber-500/20 bg-amber-500/10 text-amber-800 dark:border-amber-400/20 dark:bg-amber-400/10 dark:text-amber-200",
       }

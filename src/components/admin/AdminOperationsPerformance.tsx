@@ -2,7 +2,13 @@
 
 import * as React from "react"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/src/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
 
 type Metric = {
   label: string
@@ -33,8 +39,14 @@ export function AdminOperationsPerformance({
   leadDistribution: DistributionItem[]
   silentProjects: SilentProject[]
 }): React.JSX.Element {
-  const maxProjectValue = Math.max(1, ...projectDistribution.map((item) => item.value))
-  const maxLeadValue = Math.max(1, ...leadDistribution.map((item) => item.value))
+  const maxProjectValue = Math.max(
+    1,
+    ...projectDistribution.map((item) => item.value)
+  )
+  const maxLeadValue = Math.max(
+    1,
+    ...leadDistribution.map((item) => item.value)
+  )
 
   return (
     <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
@@ -43,7 +55,8 @@ export function AdminOperationsPerformance({
           Performance da operação
         </CardTitle>
         <CardDescription>
-          Leituras objetivas para entender ritmo de aprovação, conversão e carga atual.
+          Leituras objetivas para entender ritmo de aprovação, conversão e carga
+          atual.
         </CardDescription>
       </CardHeader>
 
@@ -81,7 +94,9 @@ export function AdminOperationsPerformance({
                 <div className="h-2 rounded-full bg-muted/40">
                   <div
                     className="h-2 rounded-full bg-brand-primary"
-                    style={{ width: `${(item.value / maxProjectValue) * 100}%` }}
+                    style={{
+                      width: `${(item.value / maxProjectValue) * 100}%`,
+                    }}
                   />
                 </div>
               </div>

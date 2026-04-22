@@ -1,14 +1,18 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
+
 import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
+
 import { ClientAssetLibrary } from "@/src/components/client/ClientAssetLibrary"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
 
 export default async function FilesPage({
   params,
 }: {
-  params: any
+  params: Promise<{ id: string }>
 }): Promise<React.JSX.Element> {
   const { id } = await params
   const { userId } = await auth()
@@ -39,7 +43,7 @@ export default async function FilesPage({
         </h1>
       </header>
 
-      <ClientAssetLibrary assets={project.assets as any} />
+      <ClientAssetLibrary assets={project.assets} />
     </div>
   )
 }

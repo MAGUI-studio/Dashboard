@@ -414,7 +414,9 @@ export function AssetManagement({
           {visibleAssets.length === 0 ? (
             <div className="flex min-h-[200px] items-center justify-center rounded-[2rem] border-2 border-dashed border-border/20 bg-muted/5">
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-                {assets.length === 0 ? t("no_assets") : "Nenhum arquivo neste filtro"}
+                {assets.length === 0
+                  ? t("no_assets")
+                  : "Nenhum arquivo neste filtro"}
               </p>
             </div>
           ) : (

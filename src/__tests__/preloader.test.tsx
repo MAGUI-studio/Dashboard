@@ -6,16 +6,12 @@ import { describe, expect, it, vi } from "vitest"
 import { Preloader } from "@/src/components/common/Preloader"
 
 describe("Preloader", () => {
-  it("renders with studio name from translations", () => {
-    render(<Preloader />)
+  it("renders with studio name", () => {
+    render(<Preloader siteName="MAGUI.studio" />)
 
-    // The mock translations return the key "name" or whatever was used
-    // In our setup.tsx, it's mocked to return the key itself
-    // split(".") on "name" gives ["name"]
-    expect(screen.getByText("n")).toBeInTheDocument()
-    expect(screen.getByText("a")).toBeInTheDocument()
-    expect(screen.getByText("m")).toBeInTheDocument()
-    expect(screen.getByText("e")).toBeInTheDocument()
+    expect(screen.getByText("M")).toBeInTheDocument()
+    expect(screen.getByText(".")).toBeInTheDocument()
+    expect(screen.getByText("s")).toBeInTheDocument()
   })
 
   it("calls onComplete after the timeout", async () => {

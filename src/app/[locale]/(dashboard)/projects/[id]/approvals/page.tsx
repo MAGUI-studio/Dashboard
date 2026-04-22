@@ -1,11 +1,14 @@
 import * as React from "react"
-import { notFound } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
 
-import { ClientApprovalList } from "@/src/components/client/ClientApprovalList"
+import { notFound } from "next/navigation"
+
+import { auth } from "@clerk/nextjs/server"
+
 import { ClientApprovalHistory } from "@/src/components/client/ClientApprovalHistory"
+import { ClientApprovalList } from "@/src/components/client/ClientApprovalList"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
 
 export default async function ApprovalsPage({
   params,
@@ -42,8 +45,8 @@ export default async function ApprovalsPage({
       </header>
 
       <div className="grid gap-14">
-        <ClientApprovalList updates={project.updates as any} projectId={id} />
-        <ClientApprovalHistory updates={project.updates as any} />
+        <ClientApprovalList updates={project.updates} projectId={id} />
+        <ClientApprovalHistory updates={project.updates} />
       </div>
     </div>
   )

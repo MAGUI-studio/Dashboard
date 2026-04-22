@@ -1,9 +1,64 @@
-import { DashboardProject, DashboardUpdate, DashboardAsset, DashboardActionItem } from "./dashboard"
+import {
+  Priority,
+  ProjectCategory,
+  ProjectStatus,
+} from "@/src/generated/client/enums"
+
+import {
+  DashboardActionItem,
+  DashboardAsset,
+  DashboardBriefingEntry,
+  DashboardProject,
+  DashboardUpdate,
+  DashboardUpdateAttachment,
+} from "./dashboard"
+
+export type ClientPortalUpdate = Omit<DashboardUpdate, "project"> & {
+  project?: DashboardUpdate["project"]
+  attachments?: DashboardUpdateAttachment[]
+}
+
+export type ClientPortalActionItem = Omit<DashboardActionItem, "project"> & {
+  project?: DashboardActionItem["project"]
+}
+
+export type ClientPortalProject = Omit<
+  DashboardProject,
+  "client" | "updates" | "actionItems" | "briefingNotes"
+> & {
+  updates: ClientPortalUpdate[]
+  actionItems?: ClientPortalActionItem[]
+  briefingNotes?: DashboardBriefingEntry[]
+}
+
+export interface ClientHomeProject {
+  id: string
+  name: string
+  description: string | null
+  status: ProjectStatus
+  progress: number
+  budget: string | null
+  deadline: Date | null
+  startDate: Date
+  liveUrl: string | null
+  repositoryUrl: string | null
+  category: ProjectCategory
+  priority: Priority
+  clientId: string
+  briefing: unknown
+  createdAt: Date
+  updatedAt: Date
+  updates: ClientPortalUpdate[]
+}
 
 export interface ClientHomeData {
-  projects: DashboardProject[]
-  pendingApprovals: DashboardUpdate[]
-  pendingTasks: DashboardActionItem[]
+  projects: ClientHomeProject[]
+  pendingApprovals: Array<
+    ClientPortalUpdate & { project: { id: string; name: string } }
+  >
+  pendingTasks: Array<
+    ClientPortalActionItem & { project: { id: string; name: string } }
+  >
   recentActivity: Array<{
     id: string
     title: string
@@ -18,5 +73,7 @@ export type ClientProjectSummary = Pick<
   DashboardProject,
   "id" | "name" | "status" | "progress" | "deadline" | "updatedAt"
 > & {
-  lastUpdate?: DashboardUpdate
+  lastUpdate?: ClientPortalUpdate
 }
+
+export type ClientPortalAsset = DashboardAsset

@@ -1,14 +1,20 @@
 import * as React from "react"
-import { getTranslations } from "next-intl/server"
-import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjects } from "@/src/lib/client-projects"
+
 import { Link } from "@/src/i18n/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
+import { auth } from "@clerk/nextjs/server"
 import { FolderOpen } from "@phosphor-icons/react/dist/ssr"
 
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
+
+import { getClientProjects } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
+
 export default async function ProjectsPage(): Promise<React.JSX.Element> {
-  const t = await getTranslations("Dashboard")
   const { userId } = await auth()
 
   if (!userId) return <div />
@@ -45,13 +51,22 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
             </div>
           ) : (
             projects.map((project) => (
-              <Link key={project.id} href={{ pathname: "/projects/[id]", params: { id: project.id } }}>
+              <Link
+                key={project.id}
+                href={{
+                  pathname: "/projects/[id]",
+                  params: { id: project.id },
+                }}
+              >
                 <Card className="rounded-[1.75rem] border-border/40 bg-muted/10 transition-colors hover:bg-muted/20">
                   <CardHeader className="flex flex-row items-center justify-between pb-2">
                     <CardTitle className="font-heading text-lg font-black uppercase tracking-tight">
                       {project.name}
                     </CardTitle>
-                    <FolderOpen className="size-5 text-brand-primary" weight="duotone" />
+                    <FolderOpen
+                      className="size-5 text-brand-primary"
+                      weight="duotone"
+                    />
                   </CardHeader>
                   <CardContent>
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/50">

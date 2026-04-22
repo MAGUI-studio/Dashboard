@@ -4,9 +4,8 @@ import * as React from "react"
 
 import { DashboardAuditLog } from "@/src/types/dashboard"
 
-import { AuditTrail } from "@/src/components/common/AuditTrail"
-
 import { ExportProjectApprovalsButton } from "@/src/components/admin/ExportProjectApprovalsButton"
+import { AuditTrail } from "@/src/components/common/AuditTrail"
 
 interface ProjectAuditTabProps {
   logs: DashboardAuditLog[]

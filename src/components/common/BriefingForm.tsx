@@ -131,7 +131,7 @@ export function BriefingForm({
     return stepsConfig.every((s) => !isFieldMissing(s.id))
   }, [isFieldMissing])
 
-  const saveCurrentStep = async () => {
+  const saveCurrentStep = React.useCallback(async () => {
     const currentField = currentStepConfig.id
     const currentValue = formData[currentField as keyof typeof formData]
 
@@ -144,15 +144,15 @@ export function BriefingForm({
         [currentField]: currentValue,
       })
     }
-  }
+  }, [currentStepConfig.id, formData, projectId])
 
-  const handleNext = async () => {
+  const handleNext = React.useCallback(async () => {
     if (currentStepIndex < stepsConfig.length - 1) {
       await saveCurrentStep()
       const nextId = stepsConfig[currentStepIndex + 1].id
       setCurrentSlug(idToSlug[nextId])
     }
-  }
+  }, [currentStepIndex, idToSlug, saveCurrentStep, setCurrentSlug])
 
   const handleBack = () => {
     if (currentStepIndex > 0) {
@@ -167,7 +167,7 @@ export function BriefingForm({
     setCurrentSlug(idToSlug[id])
   }
 
-  const handleSubmit = async () => {
+  const handleSubmit = React.useCallback(async () => {
     if (!canSubmit) {
       setShowErrors(true)
 
@@ -214,7 +214,16 @@ export function BriefingForm({
     }
 
     setIsLoading(false)
-  }
+  }, [
+    canSubmit,
+    formData,
+    idToSlug,
+    isFieldMissing,
+    projectId,
+    router,
+    setCurrentSlug,
+    t,
+  ])
 
   const addReference = () => {
     setFormData((previous) => ({
@@ -263,7 +272,7 @@ export function BriefingForm({
     }
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [currentStepIndex, formData, canSubmit])
+  }, [currentStepIndex, formData, canSubmit, handleNext, handleSubmit])
 
   React.useEffect(() => {
     if (inputRef.current) {

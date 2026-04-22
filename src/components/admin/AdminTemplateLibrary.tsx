@@ -157,7 +157,8 @@ export function AdminTemplateLibrary({
               Novo template
             </p>
             <p className="mt-2 text-sm text-muted-foreground/70">
-              Use este escopo para padronizar mensagens internas e acelerar a operação.
+              Use este escopo para padronizar mensagens internas e acelerar a
+              operação.
             </p>
           </div>
 

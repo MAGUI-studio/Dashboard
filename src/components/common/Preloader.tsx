@@ -2,8 +2,6 @@
 
 import * as React from "react"
 
-import { useTranslations } from "next-intl"
-
 import { AnimatePresence, type Variants, motion } from "framer-motion"
 import { createPortal } from "react-dom"
 
@@ -11,12 +9,15 @@ import { cn } from "@/src/lib/utils/utils"
 
 interface PreloaderProps {
   onComplete?: () => void
+  siteName?: string
 }
 
-export function Preloader({ onComplete }: PreloaderProps): React.JSX.Element {
+export function Preloader({
+  onComplete,
+  siteName = "MAGUI.studio",
+}: PreloaderProps): React.JSX.Element {
   const [mounted, setMounted] = React.useState(false)
   const [isLoading, setIsLoading] = React.useState(true)
-  const configT = useTranslations("Config")
 
   React.useEffect(() => {
     setMounted(true)
@@ -48,7 +49,7 @@ export function Preloader({ onComplete }: PreloaderProps): React.JSX.Element {
     }
   }, [mounted, isLoading])
 
-  const [mainText, studioText] = configT("name").split(".")
+  const [mainText, studioText] = siteName.split(".")
 
   const container: Variants = {
     hidden: { opacity: 0 },

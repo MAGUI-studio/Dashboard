@@ -1,20 +1,26 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
-import { ClientBriefingView } from "@/src/components/client/ClientBriefingView"
-import { ClientBriefingComplement } from "@/src/components/client/ClientBriefingComplement"
-import { BriefingForm } from "@/src/components/common/BriefingForm"
-import { Button } from "@/src/components/ui/button"
-import { NotePencil } from "@phosphor-icons/react/dist/ssr"
+
 import { Link } from "@/src/i18n/navigation"
+import { auth } from "@clerk/nextjs/server"
+import { NotePencil } from "@phosphor-icons/react/dist/ssr"
+
+import { Button } from "@/src/components/ui/button"
+
+import { ClientBriefingComplement } from "@/src/components/client/ClientBriefingComplement"
+import { ClientBriefingView } from "@/src/components/client/ClientBriefingView"
+import { BriefingForm } from "@/src/components/common/BriefingForm"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
+import { toHref } from "@/src/lib/utils/navigation"
 
 export default async function BriefingPage({
   params,
   searchParams,
 }: {
-  params: any
+  params: Promise<{ id: string }>
   searchParams: Promise<{ mode?: string }>
 }): Promise<React.JSX.Element> {
   const { id } = await params
@@ -53,8 +59,12 @@ export default async function BriefingPage({
         </div>
 
         {!isEditing && (
-          <Button asChild variant="outline" className="rounded-full border-border/40 text-[10px] font-black uppercase tracking-widest active:scale-95">
-            <Link href={`/projects/${id}/briefing?mode=edit` as any}>
+          <Button
+            asChild
+            variant="outline"
+            className="rounded-full border-border/40 text-[10px] font-black uppercase tracking-widest active:scale-95"
+          >
+            <Link href={toHref(`/projects/${id}/briefing?mode=edit`)}>
               <NotePencil className="mr-2 size-4" weight="duotone" />
               Editar Briefing
             </Link>
@@ -64,18 +74,21 @@ export default async function BriefingPage({
 
       {isEditing ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-           <BriefingForm projectId={id} initialData={briefingData} />
+          <BriefingForm projectId={id} initialData={briefingData} />
         </div>
       ) : (
         <div className="grid gap-14 lg:grid-cols-[1.2fr_0.8fr]">
           <div className="flex flex-col gap-12">
-             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 px-2">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60 px-2">
               Estrutura de Negócio
             </h2>
-            <ClientBriefingView briefing={project.briefing as any} />
+            <ClientBriefingView briefing={briefingData} />
           </div>
 
-          <ClientBriefingComplement projectId={id} notes={project.briefingNotes as any || []} />
+          <ClientBriefingComplement
+            projectId={id}
+            notes={project.briefingNotes}
+          />
         </div>
       )}
     </div>

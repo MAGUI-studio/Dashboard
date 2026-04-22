@@ -1,18 +1,22 @@
 import * as React from "react"
-import { getTranslations } from "next-intl/server"
-import { DashboardUpdate } from "@/src/types/dashboard"
-import { ClientApprovalCard } from "./ClientApprovalCard"
+
 import { ApprovalStatus } from "@/src/generated/client/enums"
+import { ClientPortalUpdate } from "@/src/types/client-portal"
+
+import { ClientApprovalCard } from "./ClientApprovalCard"
 
 interface ClientApprovalListProps {
-  updates: DashboardUpdate[]
+  updates: ClientPortalUpdate[]
   projectId: string
 }
 
-export async function ClientApprovalList({ updates, projectId }: ClientApprovalListProps) {
-  const t = await getTranslations("Approvals")
-  
-  const pendingUpdates = updates.filter(u => u.requiresApproval && u.approvalStatus === ApprovalStatus.PENDING)
+export async function ClientApprovalList({
+  updates,
+  projectId,
+}: ClientApprovalListProps) {
+  const pendingUpdates = updates.filter(
+    (u) => u.requiresApproval && u.approvalStatus === ApprovalStatus.PENDING
+  )
 
   if (pendingUpdates.length === 0) {
     return (
@@ -27,7 +31,11 @@ export async function ClientApprovalList({ updates, projectId }: ClientApprovalL
   return (
     <div className="flex flex-col gap-8">
       {pendingUpdates.map((update) => (
-        <ClientApprovalCard key={update.id} update={update} projectId={projectId} />
+        <ClientApprovalCard
+          key={update.id}
+          update={update}
+          projectId={projectId}
+        />
       ))}
     </div>
   )

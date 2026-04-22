@@ -2,23 +2,21 @@ import { setupClerkTestingToken } from "@clerk/testing/playwright"
 import { expect, test } from "@playwright/test"
 
 test.describe("Authentication Flow", () => {
-  test("should show sign-in and sign-up buttons on home page when signed out", async ({
+  test("should show sign-in screen and sign-up link when signed out", async ({
     page,
   }) => {
     await page.goto("/")
 
-    const signInButton = page.getByRole("link", { name: /sign in/i })
-    const signUpButton = page.getByRole("link", { name: /sign up/i })
-
-    await expect(signInButton).toBeVisible()
-    await expect(signUpButton).toBeVisible()
+    await expect(page).toHaveURL(/\/sign-in/)
+    await expect(
+      page.getByRole("heading", { name: /sign in to magui\.studio/i })
+    ).toBeVisible()
+    await expect(page.getByRole("link", { name: /sign up/i })).toBeVisible()
   })
 
-  test("should navigate to sign-in page correctly", async ({ page }) => {
+  test("should load sign-in page correctly", async ({ page }) => {
     await setupClerkTestingToken({ page })
-    await page.goto("/")
-
-    await page.getByRole("link", { name: /sign in/i }).click()
+    await page.goto("/sign-in")
 
     await expect(page).toHaveURL(/\/sign-in/)
 
@@ -26,11 +24,9 @@ test.describe("Authentication Flow", () => {
     await expect(clerkComponent).toBeVisible()
   })
 
-  test("should navigate to sign-up page correctly", async ({ page }) => {
+  test("should load sign-up page correctly", async ({ page }) => {
     await setupClerkTestingToken({ page })
-    await page.goto("/")
-
-    await page.getByRole("link", { name: /sign up/i }).click()
+    await page.goto("/sign-up")
 
     await expect(page).toHaveURL(/\/sign-up/)
 

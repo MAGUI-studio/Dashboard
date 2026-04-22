@@ -1,18 +1,24 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
-import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
-import { ClientProjectSidebar } from "@/src/components/client/ClientProjectSidebar"
-import { ScrollArea, ScrollBar } from "@/src/components/ui/scroll-area"
+
 import { Link } from "@/src/i18n/navigation"
+import { auth } from "@clerk/nextjs/server"
+
+import { ScrollArea, ScrollBar } from "@/src/components/ui/scroll-area"
+
+import { ClientProjectSidebar } from "@/src/components/client/ClientProjectSidebar"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
+import { toHref } from "@/src/lib/utils/navigation"
 
 export default async function ProjectLayout({
   children,
   params,
 }: {
   children: React.ReactNode
-  params: any
+  params: Promise<{ id: string }>
 }): Promise<React.JSX.Element> {
   const { id } = await params
   const { userId } = await auth()
@@ -44,7 +50,7 @@ export default async function ProjectLayout({
             ].map((item) => (
               <Link
                 key={item.href}
-                href={item.href as any}
+                href={toHref(item.href)}
                 className="inline-flex h-9 items-center justify-center rounded-full px-5 text-[9px] font-black uppercase tracking-widest text-muted-foreground transition-all active:scale-95"
               >
                 {item.label}

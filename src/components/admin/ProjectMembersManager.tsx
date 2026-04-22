@@ -34,9 +34,7 @@ interface ProjectMembersManagerProps {
 }
 
 function getMemberRoleLabel(role: ProjectMemberRole): string {
-  return role === ProjectMemberRole.OWNER
-    ? "Cliente principal"
-    : "Colaborador"
+  return role === ProjectMemberRole.OWNER ? "Cliente principal" : "Colaborador"
 }
 
 export function ProjectMembersManager({

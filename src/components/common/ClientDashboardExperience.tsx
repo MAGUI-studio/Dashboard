@@ -10,10 +10,12 @@ import { Preloader } from "@/src/components/common/Preloader"
 
 interface ClientDashboardExperienceProps {
   children: React.ReactNode
+  siteName?: string
 }
 
 export function ClientDashboardExperience({
   children,
+  siteName,
 }: ClientDashboardExperienceProps): React.JSX.Element {
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -34,7 +36,7 @@ export function ClientDashboardExperience({
 
   return (
     <React.Fragment key={experienceKey}>
-      <Preloader onComplete={handleComplete} />
+      <Preloader onComplete={handleComplete} siteName={siteName} />
 
       {isReady ? (
         <motion.div

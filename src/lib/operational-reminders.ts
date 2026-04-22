@@ -1,4 +1,3 @@
-import { endOfDay, startOfDay, subDays } from "date-fns"
 import { revalidatePath } from "next/cache"
 
 import {
@@ -9,6 +8,7 @@ import {
   ScheduledReminderStatus,
   ScheduledReminderType,
 } from "@/src/generated/client/enums"
+import { endOfDay, startOfDay, subDays } from "date-fns"
 
 import prisma from "@/src/lib/prisma"
 import { getInternalNotificationRecipients } from "@/src/lib/project-governance"
@@ -42,7 +42,10 @@ function getScheduledReminderDelegate() {
   ).scheduledReminder
 }
 
-function buildReminderKey(candidate: ReminderCandidate, recipientUserId: string): string {
+function buildReminderKey(
+  candidate: ReminderCandidate,
+  recipientUserId: string
+): string {
   return `${recipientUserId}:${candidate.type}:${candidate.entityId}`
 }
 
@@ -331,9 +334,7 @@ export async function syncOperationalReminders(options?: {
 
   const resolvedReminderIds = existingReminders
     .filter((reminder) => {
-      if (
-        !activeReminderStatuses.includes(reminder.status)
-      ) {
+      if (!activeReminderStatuses.includes(reminder.status)) {
         return false
       }
 

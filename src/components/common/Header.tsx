@@ -21,7 +21,6 @@ import {
   HandsClapping,
   House,
   List,
-  NewspaperClipping,
   NotePencil,
   Plus,
   ProjectorScreen,
@@ -114,7 +113,6 @@ export function Header({
   }, [pendingApprovals.length])
 
   const activePendingApproval = pendingApprovals[currentApprovalIndex]
-  const primaryNavLabel = viewer?.isAdmin ? t("dashboard") : t("feed")
 
   const handleNextApproval = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -454,8 +452,6 @@ export function Header({
                     {t("client.projects")}
                   </Link>
                 </Button>
-
-
               </>
             )}
 
@@ -772,8 +768,6 @@ export function Header({
                               </span>
                             </Link>
                           </DropdownMenuItem>
-
-
                         </>
                       )}
 
@@ -842,7 +836,6 @@ export function Header({
           )}
         </div>
       </motion.div>
-
     </motion.header>
   )
 }

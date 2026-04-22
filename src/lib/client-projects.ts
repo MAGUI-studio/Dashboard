@@ -1,4 +1,5 @@
 import { ApprovalStatus, AssetVisibility } from "@/src/generated/client/enums"
+
 import prisma from "@/src/lib/prisma"
 
 export async function getClientProjects(userId: string) {
@@ -218,4 +219,3 @@ export async function getClientNotifications(userId: string) {
     take: 50,
   })
 }
-

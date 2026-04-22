@@ -1,4 +1,9 @@
-import { DashboardNotification, DashboardUpdateAttachment } from "@/src/types/dashboard"
+import { getTranslations } from "next-intl/server"
+
+import {
+  DashboardNotification,
+  DashboardUpdateAttachment,
+} from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 
 import { ClientDashboardExperience } from "@/src/components/common/ClientDashboardExperience"
@@ -33,6 +38,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }): Promise<React.JSX.Element> {
+  const t = await getTranslations("Config")
   const { userId } = await auth()
 
   let notifications: DashboardNotification[] = []
@@ -53,7 +59,11 @@ export default async function DashboardLayout({
       }
 
       if (viewer.isAdmin) {
-        await syncOperationalReminders({ revalidate: false })
+        try {
+          await syncOperationalReminders({ revalidate: false })
+        } catch (error) {
+          console.error("Failed to sync operational reminders", error)
+        }
       }
 
       const rawNotifications = await prisma.notification.findMany({
@@ -143,7 +153,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <ClientDashboardExperience>
+    <ClientDashboardExperience siteName={t("name")}>
       <div className="flex min-h-svh flex-col selection:bg-brand-primary/20 selection:text-brand-primary w-full max-w-440 mx-auto">
         <BackgroundImages />
         <Header

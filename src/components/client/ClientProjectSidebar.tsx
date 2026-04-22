@@ -1,16 +1,20 @@
 "use client"
 
 import * as React from "react"
+
 import { useTranslations } from "next-intl"
+
 import { Link, usePathname } from "@/src/i18n/navigation"
-import { 
-  ProjectorScreen, 
-  ClockCountdown, 
-  CheckCircle, 
-  Files, 
-  NotePencil, 
-  ChatTeardropDots 
+import {
+  ChatTeardropDots,
+  CheckCircle,
+  ClockCountdown,
+  Files,
+  NotePencil,
+  ProjectorScreen,
 } from "@phosphor-icons/react"
+
+import { toHref } from "@/src/lib/utils/navigation"
 
 interface ClientProjectSidebarProps {
   projectId: string
@@ -65,14 +69,17 @@ export function ClientProjectSidebar({ projectId }: ClientProjectSidebarProps) {
         {items.map((item) => (
           <Link
             key={item.href}
-            href={item.href as any}
+            href={toHref(item.href)}
             className={`flex items-center gap-4 rounded-2xl px-5 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
               item.active
                 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
                 : "text-muted-foreground/50 hover:bg-muted/10 hover:text-foreground"
             }`}
           >
-            <item.icon weight={item.active ? "fill" : "duotone"} className="size-5" />
+            <item.icon
+              weight={item.active ? "fill" : "duotone"}
+              className="size-5"
+            />
             {item.label}
           </Link>
         ))}

@@ -1,80 +1,86 @@
-# 🚀 Next.js Elite Landing Page Template
+# Dashboard MAGUI
 
-A high-performance, production-ready, and strictly typed Landing Page template built with the latest web technologies. This project is engineered for speed, scalability, and professional maintenance.
+Sistema interno da MAGUI.studio para operar clientes, projetos, CRM, aprovacoes, briefing, arquivos, notificacoes e portal do cliente.
 
-## 🛠 Tech Stack
+## Stack
 
-- **Framework:** Next.js 16 (App Router)
-- **Library:** React 19
-- **Styling:** Tailwind CSS v4
-- **Components:** shadcn/ui
-- **Internationalization:** next-intl (Prefix-less routing)
-- **Validation:** Zod
-- **Testing:** Vitest + Playwright + React Testing Library
-- **Logging:** Pino (Structured)
-- **CI/CD:** GitHub Actions
-- **Containerization:** Docker (Multi-stage)
-- **Security:** Secretlint
+- Next.js 16 App Router
+- React 19
+- TypeScript
+- Tailwind CSS 4
+- shadcn/ui + Radix UI
+- next-intl
+- Clerk
+- Prisma 7 + PostgreSQL
+- UploadThing
+- Vitest + Testing Library
+- Playwright
 
-## ✨ Key Features
+## Modulos
 
-- 🌍 **Full i18n:** Automated translation key synchronization and strict typing.
-- ⚡ **Performance:** Optimized for 100/100 Lighthouse scores with built-in auditing (`pnpm audit`).
-- 🛡️ **Security:** Pre-configured CSP headers and automated secret scanning.
-- 🏗️ **Industrial Scaffolding:** Automated component generation via Plop.js.
-- 🎨 **Dynamic Assets:** On-the-fly Open Graph image generation (`/api/og`).
-- 📱 **PWA Ready:** Manifest and metadata pre-configured for mobile installation.
-- 🧪 **Elite Testing:** 100% coverage strategy with unit, component, and E2E smoke tests.
+- Dashboard admin com saude operacional, agenda, lembretes e atividade recente.
+- CRM com kanban, lista, leads, notas, templates, importacao e exportacao CSV.
+- Gestao de clientes e projetos.
+- Governanca de projetos com timeline, assets, briefing, membros, auditoria e exportacoes.
+- Portal do cliente com home, projetos, timeline, validacoes, arquivos, briefing e tarefas.
+- Notificacoes e lembretes operacionais.
 
-## 🚀 Getting Started
+## Requisitos
 
-### 1. Requirements
 - Node.js 20+
 - pnpm 10+
+- PostgreSQL acessivel via `DATABASE_URL`
 
-### 2. Installation
+## Ambiente
+
+Crie `.env` a partir de `.env.example` e preencha:
+
 ```bash
 pnpm install
-```
-
-### 3. Environment Setup
-```bash
 cp .env.example .env
-# Fill in your variables
 ```
 
-### 4. Development
+Variaveis principais:
+
+- `DATABASE_URL`
+- `NEXT_PUBLIC_SITE_URL`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`
+- `UPLOADTHING_TOKEN`
+
+## Desenvolvimento
+
 ```bash
 pnpm dev
 ```
 
-## 📜 Mandatory Workflow
+## Validacao
 
-Before every commit, the system automatically runs:
-1. `pnpm format` - Organizes imports and styles.
-2. `pnpm check-i18n` - Validates translation sync.
-3. `pnpm test` - Runs unit and component tests.
-4. `pnpm typecheck` - Validates TypeScript integrity.
+```bash
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
 
-*A Husky pre-push hook also runs `pnpm build` to ensure production readiness.*
+E2E:
 
-## 📂 Project Structure
+```bash
+pnpm test:e2e
+```
 
-- `src/app/`: Core routing and layouts.
-- `src/components/`: UI, common, and landing page sections.
-- `src/config/`: Centralized site, font, and env configurations.
-- `src/lib/`: Custom hooks, animations, and utilities.
-- `src/__tests__/`: Unit and E2E test suites.
-- `messages/`: Multi-language JSON files.
+## Banco
 
-## 📋 New Project Checklist
-See [CHECKLIST.md](./CHECKLIST.md) for a step-by-step guide on starting a new project with this template.
+Schema Prisma: `prisma/schema.prisma`
 
-## 🛠 Scripts
+Migrations: `prisma/migrations`
 
-- `pnpm build`: Optimized production build.
-- `pnpm test:e2e`: Run Playwright E2E tests.
-- `pnpm generate`: Scaffolding new components.
-- `pnpm analyze`: Analyze bundle sizes.
-- `pnpm audit`: Site-wide Lighthouse audit.
-- `pnpm clean`: Wipe build artifacts and caches.
+Com Prisma 7, os comandos de migrate/db usam a configuracao em `prisma.config.ts`.
+
+## Deploy
+
+O projeto usa `output: "standalone"` no Next.js para empacotamento. Em Windows, a build pode emitir avisos ao copiar traced files com nomes derivados de `node:buffer`; em Linux/CI isso tende a ser o ambiente alvo mais confiavel para validar o artefato standalone/Docker.

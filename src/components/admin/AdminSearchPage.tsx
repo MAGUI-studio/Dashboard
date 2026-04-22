@@ -3,18 +3,24 @@
 import * as React from "react"
 
 import { useRouter } from "@/src/i18n/navigation"
-import type { GlobalSearchResult } from "@/src/lib/actions/search.actions"
-import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 
-import { Command, CommandEmpty, CommandInput, CommandList } from "@/src/components/ui/command"
+import {
+  Command,
+  CommandEmpty,
+  CommandInput,
+  CommandList,
+} from "@/src/components/ui/command"
 
 import {
-  getGroupedResults,
+  SEARCH_GROUPS,
   SearchCountPills,
   SearchResultSection,
-  SEARCH_GROUPS,
+  getGroupedResults,
 } from "@/src/components/common/global-search-shared"
+
+import type { GlobalSearchResult } from "@/src/lib/actions/search.actions"
+import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 
 interface AdminSearchPageProps {
   initialQuery: string
@@ -133,7 +139,8 @@ export function AdminSearchPage({
               Nenhum resultado encontrado
             </p>
             <p className="mt-2 text-sm text-muted-foreground/70">
-              Tente por nome da empresa, título de update, arquivo ou trecho do comentário.
+              Tente por nome da empresa, título de update, arquivo ou trecho do
+              comentário.
             </p>
           </CommandEmpty>
         ) : null}

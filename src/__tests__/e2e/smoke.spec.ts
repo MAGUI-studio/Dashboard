@@ -10,9 +10,9 @@ test.describe("Elite Smoke Tests", () => {
   test("should switch language correctly", async ({ page }) => {
     await page.goto("/")
 
-    await page.click('button[aria-haspopup="menu"]')
+    await page.getByRole("button", { name: /^en$/i }).click()
 
-    const menuItems = page.locator('[role="menuitem"]')
+    const menuItems = page.getByRole("menuitem")
     await expect(menuItems).toHaveCount(2)
   })
 })

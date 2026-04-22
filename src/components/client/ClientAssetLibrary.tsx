@@ -1,14 +1,17 @@
 "use client"
 
 import * as React from "react"
+
 import { useTranslations } from "next-intl"
-import { DashboardAsset } from "@/src/types/dashboard"
-import { ClientAssetCard } from "./ClientAssetCard"
+
 import { AssetType } from "@/src/generated/client/enums"
+import { DashboardAsset } from "@/src/types/dashboard"
+import { MagnifyingGlass } from "@phosphor-icons/react"
+
 import { Input } from "@/src/components/ui/input"
-import { MagnifyingGlass, Funnel, X } from "@phosphor-icons/react"
-import { Button } from "@/src/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+
+import { ClientAssetCard } from "./ClientAssetCard"
 
 interface ClientAssetLibraryProps {
   assets: DashboardAsset[]
@@ -18,10 +21,12 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
   const t = useTranslations("Admin.projects.details.asset_types")
   const [search, setSearch] = React.useState("")
   const [activeTab, setActiveTab] = React.useState<string>("all")
-  
+
   const filteredAssets = React.useMemo(() => {
     return assets.filter((asset) => {
-      const matchesSearch = asset.name.toLowerCase().includes(search.toLowerCase())
+      const matchesSearch = asset.name
+        .toLowerCase()
+        .includes(search.toLowerCase())
       const matchesTab = activeTab === "all" || asset.type === activeTab
       return matchesSearch && matchesTab
     })
@@ -54,11 +59,18 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
           <TabsList className="h-12 rounded-full border border-border/20 bg-muted/5 p-1.5">
-            <TabsTrigger value="all" className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+            <TabsTrigger
+              value="all"
+              className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white"
+            >
               Todos
             </TabsTrigger>
             {assetTypes.map((type) => (
-              <TabsTrigger key={type} value={type} className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white">
+              <TabsTrigger
+                key={type}
+                value={type}
+                className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white"
+              >
                 {t(type as AssetType)}
               </TabsTrigger>
             ))}

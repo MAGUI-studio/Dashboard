@@ -1,8 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useTranslations } from "next-intl"
-import { DashboardUpdate } from "@/src/types/dashboard"
+
+import { ClientPortalUpdate } from "@/src/types/client-portal"
 import {
   ChatCircleText,
   CheckCircle,
@@ -11,18 +11,19 @@ import {
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr"
 import { parseAsString, useQueryState } from "nuqs"
+
 import { UpdateAttachmentsList } from "@/src/components/common/UpdateAttachmentsList"
+
 import { formatLocalTime } from "@/src/lib/utils/utils"
 
 interface ClientTimelineProps {
-  projectId: string
-  updates: DashboardUpdate[]
+  updates: ClientPortalUpdate[]
 }
 
 function UpdateStatusPill({
   update,
 }: {
-  update: DashboardUpdate
+  update: ClientPortalUpdate
 }): React.JSX.Element {
   if (update.feedback) {
     return (
@@ -59,11 +60,7 @@ function UpdateStatusPill({
   )
 }
 
-export function ClientTimeline({
-  projectId,
-  updates,
-}: ClientTimelineProps) {
-  const t = useTranslations("Dashboard.project_details")
+export function ClientTimeline({ updates }: ClientTimelineProps) {
   const [highlightedId] = useQueryState("highlight", parseAsString)
   const [visibleUpdatesCount, setVisibleUpdatesCount] = React.useState(5)
 
@@ -155,7 +152,7 @@ export function ClientTimeline({
                   </div>
                 )}
 
-                <UpdateAttachmentsList attachments={update.attachments as any} />
+                <UpdateAttachmentsList attachments={update.attachments} />
               </div>
             </div>
           </div>

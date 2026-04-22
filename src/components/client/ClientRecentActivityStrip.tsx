@@ -1,9 +1,24 @@
 import * as React from "react"
+
 import { getTranslations } from "next-intl/server"
+
 import { Link } from "@/src/i18n/navigation"
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
-import { NewspaperClipping, CheckCircle, FolderOpen, NotePencil, ArrowRight } from "@phosphor-icons/react/dist/ssr"
+import {
+  ArrowRight,
+  CheckCircle,
+  FolderOpen,
+  NewspaperClipping,
+  NotePencil,
+} from "@phosphor-icons/react/dist/ssr"
+
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
+
+import { toHref } from "@/src/lib/utils/navigation"
 
 interface ActivityItem {
   id: string
@@ -18,7 +33,9 @@ interface ClientRecentActivityStripProps {
   activities: ActivityItem[]
 }
 
-export async function ClientRecentActivityStrip({ activities }: ClientRecentActivityStripProps): Promise<React.JSX.Element> {
+export async function ClientRecentActivityStrip({
+  activities,
+}: ClientRecentActivityStripProps): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard.client_home.activity")
 
   const iconMap = {
@@ -51,9 +68,11 @@ export async function ClientRecentActivityStrip({ activities }: ClientRecentActi
             return (
               <Link
                 key={item.id}
-                href={item.href as any}
+                href={toHref(item.href)}
                 className={`flex items-center justify-between gap-6 px-8 py-5 transition-colors hover:bg-muted/10 ${
-                  index !== activities.length - 1 ? "border-b border-border/10" : ""
+                  index !== activities.length - 1
+                    ? "border-b border-border/10"
+                    : ""
                 }`}
               >
                 <div className="flex items-center gap-5 overflow-hidden">
@@ -65,7 +84,8 @@ export async function ClientRecentActivityStrip({ activities }: ClientRecentActi
                       {item.title}
                     </p>
                     <p className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">
-                      {item.projectName} • {new Date(item.createdAt).toLocaleDateString("pt-BR")}
+                      {item.projectName} •{" "}
+                      {new Date(item.createdAt).toLocaleDateString("pt-BR")}
                     </p>
                   </div>
                 </div>

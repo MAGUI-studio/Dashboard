@@ -1,36 +1,73 @@
 import * as React from "react"
+
 import { getTranslations } from "next-intl/server"
-import { Card, CardContent, CardHeader, CardTitle } from "@/src/components/ui/card"
-import { NotePencil, Target, Users, Megaphone, Lightbulb, ChartLineUp } from "@phosphor-icons/react/dist/ssr"
+
+import {
+  ChartLineUp,
+  Lightbulb,
+  Megaphone,
+  NotePencil,
+  Target,
+  Users,
+} from "@phosphor-icons/react/dist/ssr"
+
+import { Card } from "@/src/components/ui/card"
 
 interface ClientBriefingViewProps {
-  briefing: {
-    brandTone: string
-    visualReferences: string[]
-    businessGoals: string
-    primaryCta: string
-    targetAudience: string
-    differentiators: string
-  } | null
+  briefing: Record<string, unknown> | null
 }
 
-export async function ClientBriefingView({ briefing }: ClientBriefingViewProps) {
+export async function ClientBriefingView({
+  briefing,
+}: ClientBriefingViewProps) {
   const t = await getTranslations("Briefing.steps")
-  
+
   if (!briefing) return null
 
+  const visualReferences = Array.isArray(briefing.visualReferences)
+    ? briefing.visualReferences.filter(
+        (ref): ref is string => typeof ref === "string"
+      )
+    : []
+
+  const fieldValue = (key: string): string =>
+    typeof briefing[key] === "string" ? briefing[key] : ""
+
   const items = [
-    { label: t("brandTone.label"), value: briefing.brandTone, icon: Megaphone },
-    { label: t("businessGoals.label"), value: briefing.businessGoals, icon: ChartLineUp },
-    { label: t("targetAudience.label"), value: briefing.targetAudience, icon: Users },
-    { label: t("primaryCta.label"), value: briefing.primaryCta, icon: Target },
-    { label: t("differentiators.label"), value: briefing.differentiators, icon: Lightbulb },
+    {
+      label: t("brandTone.label"),
+      value: fieldValue("brandTone"),
+      icon: Megaphone,
+    },
+    {
+      label: t("businessGoals.label"),
+      value: fieldValue("businessGoals"),
+      icon: ChartLineUp,
+    },
+    {
+      label: t("targetAudience.label"),
+      value: fieldValue("targetAudience"),
+      icon: Users,
+    },
+    {
+      label: t("primaryCta.label"),
+      value: fieldValue("primaryCta"),
+      icon: Target,
+    },
+    {
+      label: t("differentiators.label"),
+      value: fieldValue("differentiators"),
+      icon: Lightbulb,
+    },
   ]
 
   return (
     <div className="grid gap-6 md:grid-cols-2">
       {items.map((item) => (
-        <Card key={item.label} className="rounded-3xl border-border/40 bg-muted/5 p-8 transition-all hover:bg-muted/10">
+        <Card
+          key={item.label}
+          className="rounded-3xl border-border/40 bg-muted/5 p-8 transition-all hover:bg-muted/10"
+        >
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
@@ -47,10 +84,10 @@ export async function ClientBriefingView({ briefing }: ClientBriefingViewProps) 
         </Card>
       ))}
 
-      {briefing.visualReferences && briefing.visualReferences.length > 0 && (
+      {visualReferences.length > 0 && (
         <Card className="col-span-full rounded-3xl border-border/40 bg-muted/5 p-8">
           <div className="flex flex-col gap-4">
-             <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
                 <NotePencil weight="duotone" className="size-5" />
               </div>
@@ -59,7 +96,7 @@ export async function ClientBriefingView({ briefing }: ClientBriefingViewProps) 
               </h3>
             </div>
             <div className="flex flex-wrap gap-2">
-              {briefing.visualReferences.map((ref, i) => (
+              {visualReferences.map((ref, i) => (
                 <a
                   key={i}
                   href={ref}

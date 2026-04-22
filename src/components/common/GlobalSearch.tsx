@@ -3,8 +3,6 @@
 import * as React from "react"
 
 import { useRouter } from "@/src/i18n/navigation"
-import type { GlobalSearchResult } from "@/src/lib/actions/search.actions"
-import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
@@ -18,10 +16,13 @@ import {
 
 import {
   AdvancedSearchButton,
-  getGroupedResults,
-  SearchResultSection,
   SEARCH_GROUPS,
+  SearchResultSection,
+  getGroupedResults,
 } from "@/src/components/common/global-search-shared"
+
+import type { GlobalSearchResult } from "@/src/lib/actions/search.actions"
+import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 
 const QUICK_GROUPS = SEARCH_GROUPS.filter((group) =>
   ["client", "project", "lead", "update"].includes(group.key)
@@ -156,7 +157,9 @@ export function GlobalSearch(): React.JSX.Element {
           </div>
 
           <CommandList className="max-h-[28rem] bg-background/30 p-4">
-            {query.trim().length >= 2 && !isSearching && results.length === 0 ? (
+            {query.trim().length >= 2 &&
+            !isSearching &&
+            results.length === 0 ? (
               <CommandEmpty className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/55 py-12 text-center">
                 <div className="space-y-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">

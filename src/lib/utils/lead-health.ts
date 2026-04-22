@@ -89,14 +89,15 @@ export function getLeadHealth(input: LeadHealthInput): LeadHealthSnapshot {
 
   score = Math.max(0, Math.min(100, score))
 
-  const tone =
-    score >= 75 ? "healthy" : score >= 50 ? "attention" : "risk"
+  const tone = score >= 75 ? "healthy" : score >= 50 ? "attention" : "risk"
 
   return {
     score,
     tone,
     reasons,
     summary:
-      reasons.length > 0 ? reasons.slice(0, 3).join(" • ") : "lead bem preenchido e em movimento",
+      reasons.length > 0
+        ? reasons.slice(0, 3).join(" • ")
+        : "lead bem preenchido e em movimento",
   }
 }

@@ -1,14 +1,18 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
+
 import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
+
 import { ClientTimeline } from "@/src/components/client/ClientTimeline"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
 
 export default async function TimelinePage({
   params,
 }: {
-  params: any
+  params: Promise<{ id: string }>
 }): Promise<React.JSX.Element> {
   const { id } = await params
   const { userId } = await auth()
@@ -39,7 +43,7 @@ export default async function TimelinePage({
         </h1>
       </header>
 
-      <ClientTimeline projectId={id} updates={project.updates as any} />
+      <ClientTimeline updates={project.updates} />
     </div>
   )
 }

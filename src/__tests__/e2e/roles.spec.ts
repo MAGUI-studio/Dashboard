@@ -45,11 +45,15 @@ test.describe("Role-Based Access Control (RBAC)", () => {
       },
     })
 
-    await expect(page.getByText(/Authentication Active/i)).toBeVisible()
+    await page.goto("/")
+    await expect(page).not.toHaveURL(/\/sign-in/)
 
     await clerk.signOut({ page })
-    await page.reload()
+    await page.goto("/")
 
-    await expect(page.getByRole("link", { name: /sign in/i })).toBeVisible()
+    await expect(page).toHaveURL(/\/sign-in/)
+    await expect(
+      page.getByRole("heading", { name: /sign in to magui\.studio/i })
+    ).toBeVisible()
   })
 })

@@ -9,7 +9,6 @@ import {
   UserRole,
 } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
-import { DashboardProject } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import {
   ArrowRight,
@@ -42,15 +41,11 @@ import { AdminOperationsPerformance } from "@/src/components/admin/AdminOperatio
 import { AdminProjectHealthList } from "@/src/components/admin/AdminProjectHealthList"
 import { AdminRemindersCard } from "@/src/components/admin/AdminRemindersCard"
 import { AdminTemplateLibrary } from "@/src/components/admin/AdminTemplateLibrary"
-import { BriefingForm } from "@/src/components/common/BriefingForm"
-import { DashboardSummary } from "@/src/components/common/DashboardSummary"
-import { Greetings } from "@/src/components/common/Greetings"
-import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 import { ClientHome } from "@/src/components/client/ClientHome"
 
+import { getClientHomeData } from "@/src/lib/client-projects"
 import { getActiveScheduledReminders } from "@/src/lib/operational-reminders"
 import prisma from "@/src/lib/prisma"
-import { getClientHomeData } from "@/src/lib/client-projects"
 import { getLeadHealth } from "@/src/lib/utils/lead-health"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
 
@@ -61,7 +56,7 @@ export default async function DashboardPage({
 }): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard")
   const { userId } = await auth()
-  const { project: selectedProjectId } = await searchParams
+  await searchParams
 
   if (!userId) return <div />
 
@@ -908,7 +903,8 @@ export default async function DashboardPage({
 
   const clientData = await getClientHomeData(user.id)
   const clerkUser = await currentUser()
-  const userName = clerkUser?.firstName || clerkUser?.username || user.name || "Cliente"
+  const userName =
+    clerkUser?.firstName || clerkUser?.username || user.name || "Cliente"
 
   if (clientData.projects.length === 0) {
     return (
@@ -926,10 +922,10 @@ export default async function DashboardPage({
 
   return (
     <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
-      <ClientHome 
-        userName={userName} 
-        data={clientData as any} 
-        isBriefingEmpty={isBriefingEmpty} 
+      <ClientHome
+        userName={userName}
+        data={clientData}
+        isBriefingEmpty={isBriefingEmpty}
       />
     </main>
   )

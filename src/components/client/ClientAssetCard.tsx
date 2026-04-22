@@ -1,22 +1,27 @@
 import * as React from "react"
+
 import { getTranslations } from "next-intl/server"
+
 import { DashboardAsset } from "@/src/types/dashboard"
-import { Card, CardContent } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
-import { 
-  FilePdf, 
-  Image as ImageIcon, 
-  FileCode, 
-  DownloadSimple, 
+import {
   ArrowSquareOut,
-  Files
+  DownloadSimple,
+  FileCode,
+  FilePdf,
+  Files,
+  Image as ImageIcon,
 } from "@phosphor-icons/react/dist/ssr"
+
+import { Button } from "@/src/components/ui/button"
+import { Card, CardContent } from "@/src/components/ui/card"
 
 interface ClientAssetCardProps {
   asset: DashboardAsset
 }
 
-export async function ClientAssetCard({ asset }: ClientAssetCardProps): Promise<React.JSX.Element> {
+export async function ClientAssetCard({
+  asset,
+}: ClientAssetCardProps): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.projects.details.asset_types")
 
   const iconMap = {
@@ -36,9 +41,9 @@ export async function ClientAssetCard({ asset }: ClientAssetCardProps): Promise<
           <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-background/50 text-brand-primary shadow-sm ring-1 ring-border/20">
             <Icon weight="duotone" className="size-6" />
           </div>
-          
+
           <div className="flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
-             <Button
+            <Button
               asChild
               variant="ghost"
               size="icon-sm"
@@ -59,7 +64,8 @@ export async function ClientAssetCard({ asset }: ClientAssetCardProps): Promise<
             {asset.name}
           </h4>
           <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-            Adicionado em {new Date(asset.createdAt).toLocaleDateString("pt-BR")}
+            Adicionado em{" "}
+            {new Date(asset.createdAt).toLocaleDateString("pt-BR")}
           </p>
         </div>
 

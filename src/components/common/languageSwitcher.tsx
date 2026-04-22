@@ -5,7 +5,7 @@ import * as React from "react"
 import { useLocale, useTranslations } from "next-intl"
 import { useParams } from "next/navigation"
 
-import { locales } from "@/src/i18n/config"
+import { AppPathnames, locales } from "@/src/i18n/config"
 import { usePathname, useRouter } from "@/src/i18n/navigation"
 import { CaretDownIcon, CheckIcon } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
@@ -67,7 +67,7 @@ export function LanguageSwitcher(): React.JSX.Element {
 
       router.replace(
         {
-          pathname: pathname as any,
+          pathname: pathname as AppPathnames,
           params: { id: params.id },
         },
         { locale: newLocale }
@@ -75,7 +75,8 @@ export function LanguageSwitcher(): React.JSX.Element {
       return
     }
 
-    router.replace(pathname as any, { locale: newLocale })
+    type RouterHref = Parameters<typeof router.replace>[0]
+    router.replace(pathname as RouterHref, { locale: newLocale })
   }
 
   if (!mounted) {

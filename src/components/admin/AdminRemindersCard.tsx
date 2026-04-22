@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { ScheduledReminderType } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
 import {
   ArrowRight,
@@ -9,8 +10,6 @@ import {
   FolderOpen,
   NotePencil,
 } from "@phosphor-icons/react/dist/ssr"
-
-import { ScheduledReminderType } from "@/src/generated/client/enums"
 
 import { Button } from "@/src/components/ui/button"
 import {
@@ -56,7 +55,8 @@ export function AdminRemindersCard({
           Lembretes automaticos
         </CardTitle>
         <CardDescription>
-          Alertas internos criados pelo sistema para evitar que algo passe batido.
+          Alertas internos criados pelo sistema para evitar que algo passe
+          batido.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 pt-6">
@@ -87,7 +87,9 @@ export function AdminRemindersCard({
                       </span>
                       <span className="inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
                         <ClockCountdown className="size-3.5" />
-                        {new Date(item.scheduledFor).toLocaleDateString("pt-BR")}
+                        {new Date(item.scheduledFor).toLocaleDateString(
+                          "pt-BR"
+                        )}
                       </span>
                     </div>
                     <p className="text-base font-black tracking-tight text-foreground">

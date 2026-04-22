@@ -1,38 +1,48 @@
 "use client"
 
 import * as React from "react"
+
 import { useTranslations } from "next-intl"
-import { DashboardUpdate } from "@/src/types/dashboard"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/src/components/ui/card"
-import { Button } from "@/src/components/ui/button"
-import { 
-  CheckCircle, 
-  WarningCircle, 
-  ArrowRight, 
-  FilePdf, 
-  Image as ImageIcon,
-  ChatTeardropDots
-} from "@phosphor-icons/react"
-import { approveUpdateAction, rejectUpdateAction } from "@/src/lib/actions/project.actions"
+
+import { ClientPortalUpdate } from "@/src/types/client-portal"
+import { CheckCircle, WarningCircle } from "@phosphor-icons/react"
 import { toast } from "sonner"
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogDescription, 
-  DialogFooter, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger 
+
+import { Button } from "@/src/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
 } from "@/src/components/ui/dialog"
 import { Textarea } from "@/src/components/ui/textarea"
+
 import { UpdateAttachmentsList } from "@/src/components/common/UpdateAttachmentsList"
 
+import {
+  approveUpdateAction,
+  rejectUpdateAction,
+} from "@/src/lib/actions/project.actions"
+
 interface ClientApprovalCardProps {
-  update: DashboardUpdate
+  update: ClientPortalUpdate
   projectId: string
 }
 
-export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProps) {
+export function ClientApprovalCard({
+  update,
+  projectId,
+}: ClientApprovalCardProps) {
   const t = useTranslations("Approvals")
   const [isPending, setIsPending] = React.useState(false)
   const [feedback, setFeedback] = React.useState("")
@@ -47,7 +57,7 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
       } else {
         toast.error(result.error || t("toast.error_approve"))
       }
-    } catch (error) {
+    } catch {
       toast.error(t("toast.error_approve"))
     } finally {
       setIsPending(false)
@@ -69,7 +79,7 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
       } else {
         toast.error(result.error || t("toast.error_reject"))
       }
-    } catch (error) {
+    } catch {
       toast.error(t("toast.error_reject"))
     } finally {
       setIsPending(false)
@@ -81,17 +91,17 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
       <CardHeader className="border-b border-border/10 bg-muted/5 p-8">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex flex-col gap-1">
-             <div className="flex items-center gap-2">
-                <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-brand-primary">
-                  {t("status.PENDING")}
-                </span>
-                <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  • {new Date(update.createdAt).toLocaleDateString("pt-BR")}
-                </span>
-             </div>
-             <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
-               {update.title}
-             </CardTitle>
+            <div className="flex items-center gap-2">
+              <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-brand-primary">
+                {t("status.PENDING")}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                • {new Date(update.createdAt).toLocaleDateString("pt-BR")}
+              </span>
+            </div>
+            <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+              {update.title}
+            </CardTitle>
           </div>
         </div>
       </CardHeader>
@@ -101,7 +111,7 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
           {update.description || "Sem descrição detalhada."}
         </div>
 
-        <UpdateAttachmentsList attachments={update.attachments as any} />
+        <UpdateAttachmentsList attachments={update.attachments} />
       </CardContent>
 
       <CardFooter className="flex flex-col gap-4 border-t border-border/10 bg-muted/5 p-8 sm:flex-row sm:items-center sm:justify-end">
@@ -115,7 +125,10 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
               {t("actions.reject")}
             </Button>
           </DialogTrigger>
-          <DialogContent className="bg-background shadow-2xl border-border/40 max-w-2xl p-8 gap-8" showCloseButton={false}>
+          <DialogContent
+            className="bg-background shadow-2xl border-border/40 max-w-2xl p-8 gap-8"
+            showCloseButton={false}
+          >
             <DialogHeader className="gap-2">
               <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight">
                 {t("dialog.title")}
@@ -124,7 +137,7 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
                 {t("dialog.description")}
               </DialogDescription>
             </DialogHeader>
-            
+
             <div className="py-2">
               <Textarea
                 placeholder={t("dialog.placeholder")}
@@ -133,7 +146,7 @@ export function ClientApprovalCard({ update, projectId }: ClientApprovalCardProp
                 className="min-h-[200px] rounded-[2rem] border-border/40 bg-muted/5 p-6 text-sm focus:border-brand-primary/40 leading-relaxed resize-none"
               />
             </div>
-            
+
             <DialogFooter className="gap-3 sm:gap-4">
               <Button
                 variant="ghost"

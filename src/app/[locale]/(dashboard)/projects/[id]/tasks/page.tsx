@@ -1,14 +1,18 @@
 import * as React from "react"
+
 import { notFound } from "next/navigation"
+
 import { auth } from "@clerk/nextjs/server"
-import prisma from "@/src/lib/prisma"
-import { getClientProjectById } from "@/src/lib/client-projects"
+
 import { ClientTaskList } from "@/src/components/client/ClientTaskList"
+
+import { getClientProjectById } from "@/src/lib/client-projects"
+import prisma from "@/src/lib/prisma"
 
 export default async function TasksPage({
   params,
 }: {
-  params: any
+  params: Promise<{ id: string }>
 }): Promise<React.JSX.Element> {
   const { id } = await params
   const { userId } = await auth()
@@ -26,9 +30,8 @@ export default async function TasksPage({
   if (!project) return notFound()
 
   // Filter only tasks for the client
-  const clientTasks = project.actionItems?.filter(
-    (item) => item.targetRole === "CLIENT"
-  ) || []
+  const clientTasks =
+    project.actionItems?.filter((item) => item.targetRole === "CLIENT") || []
 
   return (
     <div className="flex w-full flex-col gap-10">
@@ -44,7 +47,7 @@ export default async function TasksPage({
         </h1>
       </header>
 
-      <ClientTaskList tasks={clientTasks as any} />
+      <ClientTaskList tasks={clientTasks} />
     </div>
   )
 }
