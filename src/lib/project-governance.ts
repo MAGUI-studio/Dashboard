@@ -8,6 +8,7 @@ import {
 } from "@/src/generated/client/enums"
 import { auth, clerkClient } from "@clerk/nextjs/server"
 
+import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
 
 const clerkRoleMap = {
@@ -82,6 +83,8 @@ async function upsertUserFromClerk(clerkUserId: string) {
       throw error
     }
   }
+
+  throw new Error("Unable to sync Clerk user after retries")
 }
 
 export async function getCurrentAppUser() {
