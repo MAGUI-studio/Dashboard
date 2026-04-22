@@ -1725,3 +1725,46 @@ export async function removeProjectMemberAction(input: {
     return { success: false, error: "Erro ao remover colaborador" }
   }
 }
+
+export async function addBriefingNoteAction(input: {
+  projectId: string
+  title: string
+  content: string
+}): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const { user } = await ensureProjectAccess(input.projectId, [
+      UserRole.CLIENT,
+      UserRole.ADMIN,
+      UserRole.MEMBER,
+    ])
+
+    await prisma.briefingEntry.create({
+      data: {
+        projectId: input.projectId,
+        title: input.title,
+        content: input.content,
+        createdById: user.id,
+      },
+    })
+
+    await createAuditLog({
+      action: "project.briefing_note.created",
+      entityType: "BriefingNote",
+      entityId: input.projectId,
+      summary: `Nova nota de briefing adicionada: "${input.title}".`,
+      actorId: user.id,
+      actorType: AuditActorType.USER,
+      projectId: input.projectId,
+      metadata: {
+        title: input.title,
+      },
+    })
+
+    revalidatePath(`/admin/projects/${input.projectId}`)
+    revalidatePath(`/projects/${input.projectId}/briefing`)
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Add Briefing Note Error:")
+    return { error: "Erro ao adicionar nota de briefing" }
+  }
+}

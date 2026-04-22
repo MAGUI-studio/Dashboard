@@ -1,4 +1,4 @@
-import { DashboardNotification } from "@/src/types/dashboard"
+import { DashboardNotification, DashboardUpdateAttachment } from "@/src/types/dashboard"
 import { auth, currentUser } from "@clerk/nextjs/server"
 
 import { ClientDashboardExperience } from "@/src/components/common/ClientDashboardExperience"
@@ -17,6 +17,7 @@ type PendingApprovalBannerItem = {
   lastUpdateId: string
   lastUpdateTitle: string
   lastUpdateDescription: string | null
+  attachments: DashboardUpdateAttachment[]
 }
 
 type HeaderViewer = {
@@ -101,6 +102,17 @@ export default async function DashboardLayout({
             title: true,
             description: true,
             projectId: true,
+            attachments: {
+              select: {
+                id: true,
+                name: true,
+                url: true,
+                key: true,
+                type: true,
+                mimeType: true,
+                size: true,
+              },
+            },
             project: {
               select: {
                 name: true,
@@ -120,6 +132,11 @@ export default async function DashboardLayout({
           lastUpdateId: update.id,
           lastUpdateTitle: update.title,
           lastUpdateDescription: update.description,
+          attachments: update.attachments.map((a) => ({
+            ...a,
+            customId: null,
+            createdAt: new Date().toISOString(), // Fallback or accurate date if needed
+          })),
         }))
       }
     }
@@ -127,7 +144,7 @@ export default async function DashboardLayout({
 
   return (
     <ClientDashboardExperience>
-      <div className="flex flex-col selection:bg-brand-primary/20 selection:text-brand-primary w-full max-w-440 mx-auto">
+      <div className="flex min-h-svh flex-col selection:bg-brand-primary/20 selection:text-brand-primary w-full max-w-440 mx-auto">
         <BackgroundImages />
         <Header
           notifications={notifications}

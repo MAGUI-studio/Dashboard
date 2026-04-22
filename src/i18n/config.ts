@@ -3,10 +3,6 @@ export const defaultLocale = "pt" as const
 
 export const pathnames = {
   "/": "/",
-  "/notifications": {
-    pt: "/notificacoes",
-    en: "/notifications",
-  },
   "/admin": {
     pt: "/admin",
     en: "/admin",
@@ -58,6 +54,34 @@ export const pathnames = {
   "/admin/projects/[id]/assets": {
     pt: "/admin/projetos/[id]/ativos",
     en: "/admin/projects/[id]/assets",
+  },
+  "/projects": {
+    pt: "/projetos",
+    en: "/projects",
+  },
+  "/projects/[id]": {
+    pt: "/projetos/[id]",
+    en: "/projects/[id]",
+  },
+  "/projects/[id]/timeline": {
+    pt: "/projetos/[id]/timeline",
+    en: "/projects/[id]/timeline",
+  },
+  "/projects/[id]/approvals": {
+    pt: "/projetos/[id]/validacoes",
+    en: "/projects/[id]/approvals",
+  },
+  "/projects/[id]/files": {
+    pt: "/projetos/[id]/arquivos",
+    en: "/projects/[id]/files",
+  },
+  "/projects/[id]/briefing": {
+    pt: "/projetos/[id]/briefing",
+    en: "/projects/[id]/briefing",
+  },
+  "/projects/[id]/tasks": {
+    pt: "/projetos/[id]/tarefas",
+    en: "/projects/[id]/tasks",
   },
 }
 

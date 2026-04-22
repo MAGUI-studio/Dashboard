@@ -433,9 +433,74 @@
       "profile": "Meu Perfil",
       "settings": "Configurações",
       "signOut": "Sair"
+    },
+    "client": {
+      "home": "Início",
+      "projects": "Meus Projetos",
+      "files": "Arquivos",
+      "notifications": "Notificações"
     }
   },
   "Dashboard": {
+    "client_home": {
+      "welcome_back": "Bem-vindo de volta",
+      "status": {
+        "on_track": "Tudo em dia",
+        "awaiting_approval": "Aguardando sua aprovação",
+        "need_shipment": "Precisamos de um envio",
+        "briefing_incomplete": "Briefing incompleto"
+      },
+      "nav": {
+        "projects": "Projetos",
+        "notifications": "Notificações"
+      },
+      "cta": {
+        "type": {
+          "briefing": "Briefing Pendente",
+          "approval": "Entrega para Revisão",
+          "task_overdue": "Solicitação Atrasada",
+          "task": "Sua Ação é Necessária",
+          "new_update": "Nova Atualização",
+          "default": "Seu Projeto"
+        },
+        "label": {
+          "briefing": "Continuar briefing",
+          "approval": "Revisar entrega",
+          "task_overdue": "Resolver agora",
+          "task": "Resolver pendência",
+          "new_update": "Ver novidade",
+          "default": "Ver projeto"
+        },
+        "description": {
+          "briefing": "Complete os dados para iniciarmos a engenharia do seu sistema.",
+          "approval": "Uma nova entrega estratégica aguarda sua validação formal.",
+          "task": "Temos uma solicitação operacional em aberto para você.",
+          "default": "Acompanhe o progresso e as próximas etapas do seu projeto."
+        }
+      },
+      "project": {
+        "active_project": "Projeto Ativo",
+        "phase": "Fase atual",
+        "progress": "Progresso",
+        "deadline": "Prazo de entrega",
+        "no_deadline": "Sem prazo definido",
+        "last_update": "Último update"
+      },
+      "activity": {
+        "title": "Atividade Recente",
+        "subtitle": "O que mudou nos últimos dias",
+        "view_all": "Ver tudo",
+        "empty": "Nenhuma atividade registrada recentemente."
+      },
+      "active_project_title": "Seu Projeto Principal",
+      "quick_links_title": "Acesso Rápido",
+      "links": {
+        "files": "Arquivos",
+        "briefing": "Briefing",
+        "timeline": "Timeline",
+        "tasks": "Tarefas"
+      }
+    },
     "eyebrow": "Painel do Cliente",
     "admin_eyebrow": "Gestão de Projetos",
     "admin_title": "Visão Geral do Estúdio",

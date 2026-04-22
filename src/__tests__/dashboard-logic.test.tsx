@@ -32,6 +32,7 @@ vi.mock("@/src/i18n/navigation", () => ({
     <a href={href}>{children}</a>
   ),
   usePathname: () => "/",
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }),
 }))
 
 vi.mock("@/src/lib/actions/project.actions", () => ({
@@ -50,6 +51,7 @@ const mockPendingApprovals = [
     lastUpdateId: "u1",
     lastUpdateTitle: "Delivery One",
     lastUpdateDescription: "Desc 1",
+    attachments: [],
   },
   {
     count: 1,
@@ -58,6 +60,7 @@ const mockPendingApprovals = [
     lastUpdateId: "u2",
     lastUpdateTitle: "Delivery Two",
     lastUpdateDescription: "Desc 2",
+    attachments: [],
   },
 ]
 

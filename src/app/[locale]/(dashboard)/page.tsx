@@ -46,9 +46,11 @@ import { BriefingForm } from "@/src/components/common/BriefingForm"
 import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
+import { ClientHome } from "@/src/components/client/ClientHome"
 
 import { getActiveScheduledReminders } from "@/src/lib/operational-reminders"
 import prisma from "@/src/lib/prisma"
+import { getClientHomeData } from "@/src/lib/client-projects"
 import { getLeadHealth } from "@/src/lib/utils/lead-health"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
 
@@ -904,115 +906,11 @@ export default async function DashboardPage({
     )
   }
 
-  const projectsWithAccess = await prisma.project.findMany({
-    where: {
-      OR: [
-        { clientId: user.id },
-        {
-          members: {
-            some: {
-              userId: user.id,
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      client: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          companyName: true,
-          phone: true,
-          position: true,
-          taxId: true,
-        },
-      },
-      updates: {
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          isMilestone: true,
-          imageUrl: true,
-          projectId: true,
-          createdAt: true,
-          requiresApproval: true,
-          approvalStatus: true,
-          approvedAt: true,
-          feedback: true,
-          timezone: true,
-          attachments: {
-            orderBy: { createdAt: "asc" },
-          },
-          project: {
-            select: {
-              name: true,
-            },
-          },
-        },
-      },
-      assets: {
-        orderBy: { order: "asc" },
-        select: {
-          id: true,
-          name: true,
-          url: true,
-          key: true,
-          type: true,
-          order: true,
-          origin: true,
-          visibility: true,
-          projectId: true,
-          createdAt: true,
-        },
-      },
-      actionItems: {
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          status: true,
-          dueDate: true,
-          projectId: true,
-          targetRole: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-      },
-      versions: {
-        orderBy: { createdAt: "desc" },
-        select: {
-          id: true,
-          name: true,
-          deployUrl: true,
-          description: true,
-          scorePerformance: true,
-          scoreAccessibility: true,
-          scoreBestPractices: true,
-          scoreSEO: true,
-          projectId: true,
-          createdAt: true,
-        },
-      },
-      briefingNotes: {
-        orderBy: { createdAt: "desc" },
-      },
-    },
-    orderBy: { updatedAt: "desc" },
-  })
-
+  const clientData = await getClientHomeData(user.id)
   const clerkUser = await currentUser()
-  const userName = clerkUser?.firstName || clerkUser?.username || user.name
+  const userName = clerkUser?.firstName || clerkUser?.username || user.name || "Cliente"
 
-  const project = selectedProjectId
-    ? projectsWithAccess.find((item) => item.id === selectedProjectId)
-    : projectsWithAccess[0]
-
-  if (projectsWithAccess.length === 0) {
+  if (clientData.projects.length === 0) {
     return (
       <main className="flex flex-col items-center justify-center p-6 text-center">
         <h2 className="font-heading text-2xl font-black uppercase tracking-tight opacity-20">
@@ -1022,69 +920,17 @@ export default async function DashboardPage({
     )
   }
 
-  const activeProject = project || projectsWithAccess[0]
+  const activeProject = clientData.projects[0]
   const briefingData = activeProject.briefing as Record<string, unknown> | null
   const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6
 
   return (
     <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
-      <div className="flex w-full flex-col gap-10">
-        <header className="flex flex-col justify-between gap-6 border-b border-border/20 pb-8 md:flex-row md:items-center">
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2.5">
-              <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
-              <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                {t("eyebrow")}
-                <span className="opacity-30">•</span>
-                <Greetings name={userName} compact />
-              </p>
-            </div>
-            <h1 className="font-heading text-3xl font-black uppercase tracking-tight text-foreground sm:text-4xl">
-              {activeProject.name}
-            </h1>
-          </div>
-
-          {projectsWithAccess.length > 1 ? (
-            <div className="flex flex-col gap-1.5 md:items-end">
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/30">
-                {t("select_project")}
-              </span>
-              <ProjectSwitcher
-                projects={projectsWithAccess as unknown as DashboardProject[]}
-                selectedProject={activeProject as unknown as DashboardProject}
-                onProjectSelect={(id) => {
-                  window.location.search = `?project=${id}`
-                }}
-              />
-            </div>
-          ) : null}
-        </header>
-
-        {isBriefingEmpty ? (
-          <BriefingForm
-            projectId={activeProject.id}
-            initialData={
-              activeProject.briefing as Record<string, unknown> | null
-            }
-          />
-        ) : (
-          <DashboardSummary
-            project={
-              {
-                ...activeProject,
-                assets: activeProject.assets.map((asset) => ({
-                  ...asset,
-                  timezone: "America/Sao_Paulo",
-                })),
-                updates: activeProject.updates.map((update) => ({
-                  ...update,
-                  createdAt: update.createdAt.toISOString(),
-                })),
-              } as unknown as DashboardProject
-            }
-          />
-        )}
-      </div>
+      <ClientHome 
+        userName={userName} 
+        data={clientData as any} 
+        isBriefingEmpty={isBriefingEmpty} 
+      />
     </main>
   )
 }

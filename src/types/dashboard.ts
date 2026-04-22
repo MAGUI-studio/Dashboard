@@ -52,6 +52,8 @@ export interface DashboardProject {
   notifications?: DashboardNotification[]
   auditLogs?: DashboardAuditLog[]
   members?: DashboardProjectMember[]
+  createdAt: Date
+  updatedAt: Date
 }
 
 export interface DashboardBriefingEntry {
@@ -189,6 +191,9 @@ export interface DashboardActionItem {
   targetRole: ActionTargetRole
   dueDate: Date | string | null
   projectId: string
+  project: {
+    name: string
+  }
   createdAt: Date | string
   updatedAt: Date | string
 }

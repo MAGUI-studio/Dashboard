@@ -47,7 +47,13 @@ export function HeaderLanguageSwitcher({
     if (
       pathname === "/admin/clients/[id]" ||
       pathname === "/admin/projects/[id]" ||
-      pathname === "/admin/projects/[id]/assets"
+      pathname === "/admin/projects/[id]/assets" ||
+      pathname === "/projects/[id]" ||
+      pathname === "/projects/[id]/timeline" ||
+      pathname === "/projects/[id]/approvals" ||
+      pathname === "/projects/[id]/files" ||
+      pathname === "/projects/[id]/briefing" ||
+      pathname === "/projects/[id]/tasks"
     ) {
       if (typeof params.id !== "string") {
         return
@@ -55,7 +61,7 @@ export function HeaderLanguageSwitcher({
 
       router.replace(
         {
-          pathname,
+          pathname: pathname as any,
           params: { id: params.id },
         },
         { locale: newLocale }
@@ -63,7 +69,7 @@ export function HeaderLanguageSwitcher({
       return
     }
 
-    router.replace(pathname, { locale: newLocale })
+    router.replace(pathname as any, { locale: newLocale })
   }
 
   return (

@@ -433,9 +433,74 @@
       "profile": "My Profile",
       "settings": "Settings",
       "signOut": "Sign Out"
+    },
+    "client": {
+      "home": "Home",
+      "projects": "My Projects",
+      "files": "Files",
+      "notifications": "Notifications"
     }
   },
   "Dashboard": {
+    "client_home": {
+      "welcome_back": "Welcome back",
+      "status": {
+        "on_track": "Everything on track",
+        "awaiting_approval": "Awaiting your approval",
+        "need_shipment": "Need a shipment",
+        "briefing_incomplete": "Briefing incomplete"
+      },
+      "nav": {
+        "projects": "Projects",
+        "notifications": "Notifications"
+      },
+      "cta": {
+        "type": {
+          "briefing": "Pending Briefing",
+          "approval": "Delivery for Review",
+          "task_overdue": "Overdue Request",
+          "task": "Your Action is Needed",
+          "new_update": "New Update",
+          "default": "Your Project"
+        },
+        "label": {
+          "briefing": "Continue briefing",
+          "approval": "Review delivery",
+          "task_overdue": "Solve now",
+          "task": "Solve pending",
+          "new_update": "See news",
+          "default": "See project"
+        },
+        "description": {
+          "briefing": "Complete the data so we can start the engineering of your system.",
+          "approval": "A new strategic delivery awaits your formal validation.",
+          "task": "We have an open operational request for you.",
+          "default": "Follow the progress and the next steps of your project."
+        }
+      },
+      "project": {
+        "active_project": "Active Project",
+        "phase": "Current phase",
+        "progress": "Progress",
+        "deadline": "Delivery deadline",
+        "no_deadline": "No deadline defined",
+        "last_update": "Last update"
+      },
+      "activity": {
+        "title": "Recent Activity",
+        "subtitle": "What changed in the last few days",
+        "view_all": "View all",
+        "empty": "No recent activity recorded."
+      },
+      "active_project_title": "Your Main Project",
+      "quick_links_title": "Quick Access",
+      "links": {
+        "files": "Files",
+        "briefing": "Briefing",
+        "timeline": "Timeline",
+        "tasks": "Tasks"
+      }
+    },
     "eyebrow": "Client Dashboard",
     "admin_eyebrow": "Project Management",
     "admin_title": "Studio Overview",
