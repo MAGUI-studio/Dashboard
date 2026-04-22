@@ -6,6 +6,14 @@ import { AdminSearchPage } from "@/src/components/admin/AdminSearchPage"
 
 import { searchAdminGlobal } from "@/src/lib/actions/search.actions"
 import { isAdmin } from "@/src/lib/permissions"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Busca admin",
+  description:
+    "Busca administrativa autenticada por clientes, projetos e informacoes operacionais.",
+  path: "/admin/search",
+})
 
 export default async function AdminSearchRoute({
   searchParams,

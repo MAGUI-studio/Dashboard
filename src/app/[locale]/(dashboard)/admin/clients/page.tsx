@@ -13,6 +13,14 @@ import { ClientsTable } from "@/src/components/admin/ClientsTable"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Clientes",
+  description:
+    "Gestao administrativa de clientes, acessos e projetos da MAGUI.studio.",
+  path: "/admin/clients",
+})
 
 interface SerializableUser {
   id: string

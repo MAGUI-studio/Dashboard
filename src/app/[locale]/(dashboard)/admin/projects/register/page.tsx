@@ -7,6 +7,14 @@ import { UserRole } from "@/src/generated/client/enums"
 import { CreateProjectForm } from "@/src/components/admin/CreateProjectForm"
 
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Novo projeto",
+  description:
+    "Cadastro administrativo de novos projetos e clientes responsaveis.",
+  path: "/admin/projects/register",
+})
 
 export default async function CreateProjectPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.projects")

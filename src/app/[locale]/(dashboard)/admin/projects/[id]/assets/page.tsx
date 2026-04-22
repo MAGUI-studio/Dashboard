@@ -12,9 +12,26 @@ import { AssetManagement } from "@/src/components/admin/AssetManagement"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
 
 interface AssetsPageProps {
   params: Promise<{ id: string; locale: string }>
+}
+
+export async function generateMetadata({ params }: AssetsPageProps) {
+  const { id } = await params
+  const project = await prisma.project.findUnique({
+    where: { id },
+    select: { name: true },
+  })
+
+  return dashboardMetadata({
+    title: project
+      ? `Arquivos admin: ${project.name}`
+      : "Arquivos admin do projeto",
+    description: "Gestao administrativa de arquivos e assets do projeto.",
+    path: `/admin/projects/${id}/assets`,
+  })
 }
 
 export default async function ProjectAssetsPage({

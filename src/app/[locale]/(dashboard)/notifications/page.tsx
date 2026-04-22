@@ -7,6 +7,14 @@ import { NotificationsInbox } from "@/src/components/common/NotificationsInbox"
 
 import { getClientNotifications } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Notificacoes",
+  description:
+    "Caixa autenticada de notificacoes e avisos operacionais da MAGUI.studio.",
+  path: "/notifications",
+})
 
 export default async function NotificationsPage(): Promise<React.JSX.Element> {
   const { userId } = await auth()

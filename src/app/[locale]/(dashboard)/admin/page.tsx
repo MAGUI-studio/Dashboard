@@ -11,6 +11,14 @@ import { Button } from "@/src/components/ui/button"
 import { Logo } from "@/src/components/common/logo"
 
 import { isAdmin } from "@/src/lib/permissions"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Admin",
+  description:
+    "Area administrativa da MAGUI.studio para gestao de clientes, projetos e CRM.",
+  path: "/admin",
+})
 
 export default async function AdminPage(): Promise<React.JSX.Element> {
   if (!(await isAdmin())) {

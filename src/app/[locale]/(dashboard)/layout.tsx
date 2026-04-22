@@ -14,6 +14,14 @@ import BackgroundImages from "@/src/components/common/backgroundImages"
 import { syncOperationalReminders } from "@/src/lib/operational-reminders"
 import prisma from "@/src/lib/prisma"
 import { getCurrentAppUser } from "@/src/lib/project-governance"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Dashboard",
+  description:
+    "Area autenticada da MAGUI.studio para gestao de clientes, projetos e operacao.",
+  path: "/",
+})
 
 type PendingApprovalBannerItem = {
   count: number

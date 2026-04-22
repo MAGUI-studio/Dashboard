@@ -8,6 +8,13 @@ import { ClientTimeline } from "@/src/components/client/ClientTimeline"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Timeline do projeto",
+  description: "Historico autenticado de atualizacoes e marcos do projeto.",
+  path: "/projects",
+})
 
 export default async function TimelinePage({
   params,

@@ -1,5 +1,3 @@
-"use client"
-
 import * as React from "react"
 
 import { ClientPortalActionItem } from "@/src/types/client-portal"

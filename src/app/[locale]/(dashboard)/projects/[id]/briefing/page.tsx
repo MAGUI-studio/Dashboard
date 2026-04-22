@@ -14,7 +14,14 @@ import { BriefingForm } from "@/src/components/common/BriefingForm"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
 import { toHref } from "@/src/lib/utils/navigation"
+
+export const metadata = dashboardMetadata({
+  title: "Briefing do projeto",
+  description: "Briefing autenticado, respostas e complementos do projeto.",
+  path: "/projects",
+})
 
 export default async function BriefingPage({
   params,

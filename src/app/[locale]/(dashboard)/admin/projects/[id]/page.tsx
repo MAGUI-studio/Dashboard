@@ -7,9 +7,25 @@ import { ProjectTabs } from "@/src/components/admin/ProjectTabs"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
 
 interface ProjectPageProps {
   params: Promise<{ id: string; locale: string }>
+}
+
+export async function generateMetadata({ params }: ProjectPageProps) {
+  const { id } = await params
+  const project = await prisma.project.findUnique({
+    where: { id },
+    select: { name: true },
+  })
+
+  return dashboardMetadata({
+    title: project ? `Projeto admin: ${project.name}` : "Projeto admin",
+    description:
+      "Detalhes administrativos, membros, atividades e atualizacoes do projeto.",
+    path: `/admin/projects/${id}`,
+  })
 }
 
 export default async function AdminProjectDetailPage({

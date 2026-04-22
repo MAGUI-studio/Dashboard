@@ -11,7 +11,27 @@ import { ClientProjectSidebar } from "@/src/components/client/ClientProjectSideb
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
 import { toHref } from "@/src/lib/utils/navigation"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const project = await prisma.project.findUnique({
+    where: { id },
+    select: { name: true },
+  })
+
+  return dashboardMetadata({
+    title: project?.name ?? "Projeto",
+    description:
+      "Area autenticada do projeto com timeline, aprovacoes, arquivos, briefing e tarefas.",
+    path: `/projects/${id}`,
+  })
+}
 
 export default async function ProjectLayout({
   children,

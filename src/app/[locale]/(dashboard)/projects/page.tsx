@@ -13,6 +13,14 @@ import {
 
 import { getClientProjects } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Meus projetos",
+  description:
+    "Lista autenticada de projetos, status e proximas acoes do cliente MAGUI.studio.",
+  path: "/projects",
+})
 
 export default async function ProjectsPage(): Promise<React.JSX.Element> {
   const { userId } = await auth()

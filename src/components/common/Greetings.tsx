@@ -1,17 +1,24 @@
-"use client"
-
 import * as React from "react"
 
-import { useTranslations } from "next-intl"
+import { getTranslations } from "next-intl/server"
 
 interface GreetingsProps {
   name: string | null | undefined
   compact?: boolean
 }
 
-export function Greetings({ name, compact = false }: GreetingsProps) {
-  const t = useTranslations("Dashboard.greetings")
-  const hour = new Date().getHours()
+export async function Greetings({
+  name,
+  compact = false,
+}: GreetingsProps): Promise<React.JSX.Element> {
+  const t = await getTranslations("Dashboard.greetings")
+  const hour = Number(
+    new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      hour12: false,
+      timeZone: "America/Sao_Paulo",
+    }).format(new Date())
+  )
 
   let key = "morning"
   if (hour >= 12 && hour < 18) key = "afternoon"

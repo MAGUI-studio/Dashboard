@@ -4,6 +4,14 @@ import { getTranslations } from "next-intl/server"
 
 import { CreateLeadForm } from "@/src/components/admin/CreateLeadForm"
 
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Novo lead",
+  description: "Cadastro administrativo de leads no CRM da MAGUI.studio.",
+  path: "/admin/crm/register",
+})
+
 export default async function CreateLeadPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.crm")
 

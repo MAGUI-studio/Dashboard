@@ -46,8 +46,16 @@ import { ClientHome } from "@/src/components/client/ClientHome"
 import { getClientHomeData } from "@/src/lib/client-projects"
 import { getActiveScheduledReminders } from "@/src/lib/operational-reminders"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
 import { getLeadHealth } from "@/src/lib/utils/lead-health"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
+
+export const metadata = dashboardMetadata({
+  title: "Resumo operacional",
+  description:
+    "Resumo autenticado de projetos, clientes, aprovacoes e atividades da operacao MAGUI.studio.",
+  path: "/",
+})
 
 export default async function DashboardPage({
   searchParams,

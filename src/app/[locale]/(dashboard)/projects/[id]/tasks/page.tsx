@@ -8,6 +8,13 @@ import { ClientTaskList } from "@/src/components/client/ClientTaskList"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Tarefas do projeto",
+  description: "Solicitacoes e proximas acoes autenticadas do projeto.",
+  path: "/projects",
+})
 
 export default async function TasksPage({
   params,

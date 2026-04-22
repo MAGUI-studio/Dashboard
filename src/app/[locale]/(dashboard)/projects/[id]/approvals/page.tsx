@@ -9,6 +9,13 @@ import { ClientApprovalList } from "@/src/components/client/ClientApprovalList"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Aprovacoes do projeto",
+  description: "Aprovacoes autenticadas, historico e pendencias do projeto.",
+  path: "/projects",
+})
 
 export default async function ApprovalsPage({
   params,

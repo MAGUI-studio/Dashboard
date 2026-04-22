@@ -8,6 +8,13 @@ import { ClientAssetLibrary } from "@/src/components/client/ClientAssetLibrary"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Arquivos do projeto",
+  description: "Biblioteca autenticada de arquivos e materiais do projeto.",
+  path: "/projects",
+})
 
 export default async function FilesPage({
   params,

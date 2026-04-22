@@ -25,6 +25,27 @@ import {
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>
+}) {
+  const { id } = await params
+  const localUser = await prisma.user.findUnique({
+    where: { clerkId: id },
+    select: { name: true, email: true },
+  })
+  const title = localUser?.name ?? localUser?.email ?? "Cliente"
+
+  return dashboardMetadata({
+    title: `Cliente: ${title}`,
+    description:
+      "Detalhes administrativos de cliente, projetos vinculados e dados de acesso.",
+    path: `/admin/clients/${id}`,
+  })
+}
 
 export default async function ClientDetailsPage({
   params,

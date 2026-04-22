@@ -12,6 +12,14 @@ import { ProjectsTable } from "@/src/components/admin/ProjectsTable"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Projetos admin",
+  description:
+    "Gestao administrativa de projetos, clientes e status operacionais da MAGUI.studio.",
+  path: "/admin/projects",
+})
 
 export default async function ProjectsPage(): Promise<React.JSX.Element> {
   if (!(await isAdmin())) {

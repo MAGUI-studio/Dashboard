@@ -19,6 +19,14 @@ import {
   getSavedCrmViewsAction,
 } from "@/src/lib/actions/crm.actions"
 import prisma from "@/src/lib/prisma"
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "CRM",
+  description:
+    "Pipeline comercial autenticado da MAGUI.studio com leads, templates e visoes salvas.",
+  path: "/admin/crm",
+})
 
 export default async function CRMPage({
   searchParams,

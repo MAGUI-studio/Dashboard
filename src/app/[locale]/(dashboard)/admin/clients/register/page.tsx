@@ -4,6 +4,14 @@ import { getTranslations } from "next-intl/server"
 
 import { CreateClientForm } from "@/src/components/admin/CreateClientForm"
 
+import { dashboardMetadata } from "@/src/lib/seo"
+
+export const metadata = dashboardMetadata({
+  title: "Novo cliente",
+  description: "Cadastro administrativo de novos clientes da MAGUI.studio.",
+  path: "/admin/clients/register",
+})
+
 export default async function CreateClientPage(): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.clients")
 
