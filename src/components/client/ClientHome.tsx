@@ -100,11 +100,11 @@ export async function ClientHome({
   }[heroStatus]
 
   return (
-    <div className="-m-6 flex flex-col bg-background lg:-m-12">
+    <div className="flex flex-col">
       <ClientLandingHero
-        eyebrow="Portal do cliente"
-        title={`Oi, ${userName.split(" ")[0] || userName}`}
-        description="Seu projeto em uma visao simples: o que mudou, o que falta e qual acao precisa da sua atencao agora."
+        eyebrow={t("eyebrow")}
+        title={t("welcome_user", { name: userName.split(" ")[0] || userName })}
+        description={t("description")}
         statusLabel={heroStatusLabel}
         primaryAction={{
           label: nextAction.label,
@@ -116,32 +116,32 @@ export async function ClientHome({
         }}
         metrics={[
           {
-            label: "Projetos",
+            label: t("nav.projects"),
             value: String(data.projects.length),
-            detail: "ativos no portal",
+            detail: t("project.active_project"),
           },
           {
-            label: "Validar",
+            label: t("cta.label.approval").split(" ")[0],
             value: String(data.pendingApprovals.length),
-            detail: "entregas pendentes",
+            detail: t("inbox.pending_approvals"),
           },
           {
-            label: "Responder",
+            label: t("cta.label.task").split(" ")[0],
             value: String(data.pendingTasks.length),
-            detail: "solicitacoes abertas",
+            detail: t("inbox.pending_feedback"),
           },
         ]}
       />
 
-      <section className="mx-auto grid w-full max-w-440 gap-12 px-6 py-10 lg:px-12 lg:py-14">
+      <section className="mx-auto flex w-full max-w-440 flex-col gap-10 p-5">
         <ClientActionBanner {...nextAction} />
 
         {activeProject && (
           <div className="flex flex-col gap-6">
             <ClientSectionHeader
-              eyebrow="Projeto em destaque"
+              eyebrow={t("active_project_eyebrow")}
               title={t("active_project_title")}
-              description="Acompanhe o momento atual, o progresso e o ultimo movimento importante."
+              description={t("active_project_description")}
               action={
                 <Button
                   asChild
@@ -154,7 +154,7 @@ export async function ClientHome({
                       params: { id: activeProject.id },
                     }}
                   >
-                    Ver projeto
+                    {t("view_project")}
                   </Link>
                 </Button>
               }
@@ -173,9 +173,9 @@ export async function ClientHome({
 
           <div className="flex flex-col gap-6">
             <ClientSectionHeader
-              eyebrow="Caminhos rapidos"
+              eyebrow={t("quick_links_eyebrow")}
               title={t("quick_links_title")}
-              description="Acesse os pontos que mais movem o projeto sem procurar em menus."
+              description={t("quick_links_description")}
             />
             <div className="grid gap-4 sm:grid-cols-2">
               {[

@@ -76,6 +76,16 @@
         "admin": "Administrator",
         "client": "Client"
       },
+      "stats": {
+        "active_clients": "Active clients",
+        "active_projects": "Active projects",
+        "pending_approvals": "Pending approvals",
+        "open_leads": "Open leads",
+        "base_registered": "base registered",
+        "finalized": "finalized",
+        "review_today": "request review today",
+        "unread_notifications": "{count} unread notifications"
+      },
       "form": {
         "identity_title": "Identity Profile",
         "identity_desc": "Legal identification and display name",
@@ -174,6 +184,88 @@
         "success": "Lead cataloged successfully!",
         "error": "Error saving lead."
       }
+    },
+    "activity_feed": {
+      "title": "Global Activity",
+      "description": "What changed recently in projects and operational flow.",
+      "filter_all": "All",
+      "open": "Open",
+      "empty": "No activity found for this filter.",
+      "kinds": {
+        "approval": "Approvals",
+        "project": "Projects",
+        "asset": "Files",
+        "briefing": "Briefings",
+        "timeline": "Timeline",
+        "system": "System"
+      },
+      "time": {
+        "ago": "ago",
+        "minute": "min",
+        "hour": "h",
+        "day": "d"
+      }
+    },
+    "attention_panel": {
+      "title": "Needs attention",
+      "description": "Items that request action in next hours.",
+      "sort_newest": "Newest",
+      "sort_oldest": "Oldest",
+      "filter_all_urgencies": "All urgencies",
+      "filter_high_urgency": "High urgency",
+      "filter_follow_up": "Follow-up",
+      "empty": "No items found for current filters.",
+      "kinds": {
+        "approval": "Approvals",
+        "deadline": "Deadlines",
+        "lead": "Commercial",
+        "project": "Projects",
+        "task": "Tasks"
+      },
+      "priorities": {
+        "high": "High urgency",
+        "medium": "Follow-up"
+      }
+    },
+    "commercial_health": {
+      "title": "Commercial health",
+      "description": "Leads that need care due to lack of context, delay, or rhythm loss.",
+      "empty": "No critical leads at the moment.",
+      "open_lead": "Open lead",
+      "view_full": "View full commercial",
+      "tones": {
+        "healthy": "Healthy",
+        "attention": "Attention",
+        "risk": "Risk"
+      }
+    },
+    "project_health": {
+      "title": "Projects health",
+      "description": "Quick reading of projects that deserve tracking.",
+      "empty": "No active projects at the moment.",
+      "declared_progress": "Declared progress"
+    },
+    "recent_updates": {
+      "title": "Recent updates",
+      "description": "What changed most recently in projects.",
+      "empty": "No recent updates."
+    },
+    "action_items": {
+      "title": "Next action items",
+      "description": "Operational tasks with more immediate deadline.",
+      "empty": "No tasks with defined deadline.",
+      "no_date": "No date"
+    },
+    "recent_crm": {
+      "title": "Recent commercial",
+      "description": "Most recent leads to start the day with context.",
+      "empty": "No leads registered.",
+      "updated_at": "Updated at",
+      "no_contact": "No contact"
+    },
+    "template_library": {
+      "title": "Template library",
+      "description": "Base messages for commercial, updates, approvals, material, and onboarding."
     },
     "projects": {
       "eyebrow": "Execution Process",
@@ -443,7 +535,15 @@
   },
   "Dashboard": {
     "client_home": {
+      "eyebrow": "Client Portal",
+      "welcome_user": "Hi, {name}",
+      "description": "Your project in a simple view: what changed, what's missing, and which action needs your attention now.",
       "welcome_back": "Welcome back",
+      "active_project_eyebrow": "Featured project",
+      "view_project": "View project",
+      "active_project_description": "Follow the current moment, progress, and the latest important movement.",
+      "quick_links_eyebrow": "Quick paths",
+      "quick_links_description": "Access the points that move the project most without searching menus.",
       "status": {
         "on_track": "Everything on track",
         "awaiting_approval": "Awaiting your approval",
@@ -453,6 +553,10 @@
       "nav": {
         "projects": "Projects",
         "notifications": "Notifications"
+      },
+      "inbox": {
+        "pending_approvals": "pending deliveries",
+        "pending_feedback": "open requests"
       },
       "cta": {
         "type": {
@@ -479,7 +583,17 @@
         }
       },
       "project": {
+        "nav": {
+          "overview": "General",
+          "timeline": "Timeline",
+          "approvals": "Validations",
+          "files": "Files",
+          "briefing": "Briefing",
+          "tasks": "Tasks",
+          "hint": "Advance through sections"
+        },
         "active_project": "Active Project",
+        "active_project_focus_description": "This is the project in focus now. Enter to see deliveries, files, briefing, and full history.",
         "phase": "Current phase",
         "progress": "Progress",
         "deadline": "Delivery deadline",
@@ -505,10 +619,17 @@
     "admin_eyebrow": "Project Management",
     "admin_title": "Studio Overview",
     "admin_overview": "Overview",
-    "admin_description": "Administrative control panel",
+    "admin_description": "Daily dashboard to track operations, approvals, commercial, and execution in real time.",
     "select_project": "Select Project",
     "filter_projects": "Filter projects...",
     "no_project_found": "No project found.",
+    "common": {
+      "attention": "Needs attention",
+      "no_description": "No detailed description.",
+      "quick_view": "Quick view",
+      "open_project": "Open project",
+      "back": "Back"
+    },
     "inbox": {
       "title": "Your Inbox",
       "description": "Items and actions awaiting your attention.",

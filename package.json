@@ -19,7 +19,7 @@
     "typecheck": "tsc --noEmit",
     "analyze": "ANALYZE=true pnpm build",
     "audit": "unlighthouse --site http://localhost:3000",
-    "clean": "rm -rf .next node_modules pnpm-lock.yaml",
+    "clean": "node -e \"['.next', 'node_modules', 'pnpm-lock.yaml'].forEach(p => require('fs').rmSync(p, { recursive: true, force: true }))\"",
     "prepare": "husky"
   },
   "dependencies": {

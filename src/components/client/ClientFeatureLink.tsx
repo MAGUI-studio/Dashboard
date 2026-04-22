@@ -26,10 +26,10 @@ export function ClientFeatureLink({
   return (
     <Link
       href={href}
-      className="group flex min-h-44 flex-col justify-between rounded-[1.75rem] border border-border/25 bg-muted/5 p-6 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background hover:shadow-xl hover:shadow-foreground/5"
+      className="group flex min-h-36 flex-col justify-between rounded-2xl border border-border/25 bg-muted/5 p-5 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background hover:shadow-xl hover:shadow-foreground/5 sm:min-h-44 sm:p-6"
     >
       <div className="flex items-start justify-between gap-5">
-        <div className="flex size-12 items-center justify-center rounded-[1.15rem] bg-brand-primary/10 text-brand-primary">
+        <div className="flex size-12 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
           <IconComponent weight="duotone" className="size-6" />
         </div>
         <ArrowRight
@@ -37,7 +37,7 @@ export function ClientFeatureLink({
           className="size-4 text-muted-foreground/35 transition group-hover:translate-x-1 group-hover:text-brand-primary"
         />
       </div>
-      <div className="space-y-2">
+      <div className="space-y-2 mt-5">
         {meta && (
           <p className="text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
             {meta}

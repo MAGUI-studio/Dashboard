@@ -558,7 +558,7 @@ export default async function DashboardPage({
       .slice(0, 4)
 
     return (
-      <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
+      <main className="relative flex flex-col overflow-hidden bg-background/50 px-5 py-10 sm:px-6 lg:px-12">
         <div className="flex w-full flex-col gap-10">
           <header className="flex flex-col justify-between gap-6 border-b border-border/20 pb-8 md:flex-row md:items-center">
             <div className="flex flex-col gap-2">
@@ -572,8 +572,7 @@ export default async function DashboardPage({
                 {t("admin_title")}
               </h1>
               <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/75">
-                Painel diario para acompanhar operacao, aprovacoes, comercial e
-                execucao sem precisar abrir cada modulo.
+                {t("admin_description")}
               </p>
             </div>
 
@@ -583,13 +582,13 @@ export default async function DashboardPage({
                 variant="outline"
                 className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
               >
-                <Link href="/admin/projects">Projetos</Link>
+                <Link href="/admin/projects">{t("projects.title")}</Link>
               </Button>
               <Button
                 asChild
                 className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
               >
-                <Link href="/admin/crm">Comercial</Link>
+                <Link href="/admin/crm">{t("crm.title")}</Link>
               </Button>
             </div>
           </header>
@@ -597,27 +596,29 @@ export default async function DashboardPage({
           <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
             {[
               {
-                label: "Clientes ativos",
+                label: t("clients.stats.active_clients"),
                 value: totalClients,
-                hint: "base cadastrada",
+                hint: t("clients.stats.base_registered"),
                 icon: Users,
               },
               {
-                label: "Projetos em andamento",
+                label: t("clients.stats.active_projects"),
                 value: activeProjects.length,
-                hint: `${convertedProjects.length} finalizados`,
+                hint: `${convertedProjects.length} ${t("clients.stats.finalized")}`,
                 icon: FolderOpen,
               },
               {
-                label: "Aprovacoes pendentes",
+                label: t("clients.stats.pending_approvals"),
                 value: pendingApprovals.length,
-                hint: "pedem revisao hoje",
+                hint: t("clients.stats.review_today"),
                 icon: ClockCountdown,
               },
               {
-                label: "Leads em aberto",
+                label: t("clients.stats.open_leads"),
                 value: activeLeads.length,
-                hint: `${unreadNotifications} notificacoes nao lidas`,
+                hint: t("clients.stats.unread_notifications", {
+                  count: unreadNotifications,
+                }),
                 icon: ChartLineUp,
               },
             ].map((item) => (
@@ -674,16 +675,16 @@ export default async function DashboardPage({
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Aprovacoes pendentes
+                  {t("clients.stats.pending_approvals")}
                 </CardTitle>
-                <CardDescription>
-                  Entregas que ainda dependem de validacao ou resposta.
-                </CardDescription>
+                <CardDescription>{t("approvals.description")}</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
                 {pendingApprovals.length === 0 ? (
                   <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-                    Nenhuma aprovacao pendente no momento.
+                    {t("approvals.status.PENDING").split(" ")[0] === "Aprovação"
+                      ? "Nenhuma aprovação pendente no momento."
+                      : "No pending approvals at the moment."}
                   </div>
                 ) : (
                   pendingApprovals.map((approval) => (
@@ -711,7 +712,7 @@ export default async function DashboardPage({
                             params: { id: approval.project.id },
                           }}
                         >
-                          Abrir projeto
+                          {t("common.open_project")}
                         </Link>
                       </Button>
                     </div>
@@ -725,62 +726,67 @@ export default async function DashboardPage({
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Atualizacoes recentes
+                  {t("recent_updates.title")}
                 </CardTitle>
                 <CardDescription>
-                  O que mudou mais recentemente nos projetos.
+                  {t("recent_updates.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
-                {recentUpdates.map((update) => (
-                  <div
-                    key={update.id}
-                    className="rounded-[1.5rem] border border-border/30 bg-background/60 p-5"
-                  >
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="grid gap-1">
-                        <p className="text-base font-black tracking-tight text-foreground">
-                          {update.title}
-                        </p>
-                        <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                          {update.project.name}
-                        </p>
-                      </div>
-                      {update.approvalStatus === ApprovalStatus.APPROVED ? (
-                        <CheckCircle
-                          className="size-5 text-emerald-500"
-                          weight="fill"
-                        />
-                      ) : (
-                        <NotePencil
-                          className="size-5 text-brand-primary"
-                          weight="duotone"
-                        />
-                      )}
-                    </div>
-
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground/75">
-                      {update.description ||
-                        "Sem descricao detalhada para esta atualizacao."}
-                    </p>
+                {recentUpdates.length === 0 ? (
+                  <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
+                    {t("recent_updates.empty")}
                   </div>
-                ))}
+                ) : (
+                  recentUpdates.map((update) => (
+                    <div
+                      key={update.id}
+                      className="rounded-[1.5rem] border border-border/30 bg-background/60 p-5"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="grid gap-1">
+                          <p className="text-base font-black tracking-tight text-foreground">
+                            {update.title}
+                          </p>
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
+                            {update.project.name}
+                          </p>
+                        </div>
+                        {update.approvalStatus === ApprovalStatus.APPROVED ? (
+                          <CheckCircle
+                            className="size-5 text-emerald-500"
+                            weight="fill"
+                          />
+                        ) : (
+                          <NotePencil
+                            className="size-5 text-brand-primary"
+                            weight="duotone"
+                          />
+                        )}
+                      </div>
+
+                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground/75">
+                        {update.description || t("common.no_description")}
+                      </p>
+                    </div>
+                  ))
+                )}
               </CardContent>
             </Card>
 
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Action items proximos
+                  {t("action_items.title")}
                 </CardTitle>
                 <CardDescription>
-                  Tarefas operacionais com prazo mais imediato.
+                  {t("action_items.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
                 {dueActionItems.length === 0 ? (
                   <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-                    Nenhuma tarefa com prazo definido.
+                    {t("action_items.empty")}
                   </div>
                 ) : (
                   dueActionItems.slice(0, 6).map((item) => (
@@ -798,8 +804,8 @@ export default async function DashboardPage({
                       </div>
                       <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55">
                         {item.dueDate
-                          ? new Date(item.dueDate).toLocaleDateString("pt-BR")
-                          : "Sem data"}
+                          ? new Date(item.dueDate).toLocaleDateString()
+                          : t("action_items.no_date")}
                       </span>
                     </div>
                   ))
@@ -812,16 +818,14 @@ export default async function DashboardPage({
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Comercial recente
+                  {t("recent_crm.title")}
                 </CardTitle>
-                <CardDescription>
-                  Leads mais recentes para abrir o dia com contexto.
-                </CardDescription>
+                <CardDescription>{t("recent_crm.description")}</CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
                 {recentLeads.length === 0 ? (
                   <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-                    Nenhum lead cadastrado.
+                    {t("recent_crm.empty")}
                   </div>
                 ) : (
                   recentLeads.map((lead) => (
@@ -833,11 +837,12 @@ export default async function DashboardPage({
                         {lead.companyName}
                       </p>
                       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-                        {lead.contactName || "Sem contato"} • {lead.status}
+                        {lead.contactName || t("recent_crm.no_contact")} •{" "}
+                        {lead.status}
                       </p>
                       <p className="text-sm text-muted-foreground/75">
-                        Atualizado em{" "}
-                        {new Date(lead.updatedAt).toLocaleDateString("pt-BR")}
+                        {t("recent_crm.updated_at")}{" "}
+                        {new Date(lead.updatedAt).toLocaleDateString()}
                       </p>
                     </div>
                   ))
@@ -849,7 +854,7 @@ export default async function DashboardPage({
                   className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
                 >
                   <Link href="/admin/crm">
-                    Abrir Comercial
+                    {t("recent_crm.title")}
                     <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
@@ -859,10 +864,10 @@ export default async function DashboardPage({
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Projetos em andamento
+                  {t("clients.stats.active_projects")}
                 </CardTitle>
                 <CardDescription>
-                  Visao rapida dos projetos que precisam de acompanhamento.
+                  {t("project_health.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="grid gap-4 pt-6">
@@ -893,11 +898,10 @@ export default async function DashboardPage({
             <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
               <CardHeader className="border-b border-border/20">
                 <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                  Biblioteca de templates
+                  {t("template_library.title")}
                 </CardTitle>
                 <CardDescription>
-                  Mensagens base para comercial, updates, aprovações, material e
-                  onboarding.
+                  {t("template_library.description")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
@@ -930,7 +934,7 @@ export default async function DashboardPage({
   const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6
 
   return (
-    <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
+    <main className="relative flex flex-col overflow-hidden bg-background/50 px-5 py-10 sm:px-6 lg:px-12">
       <ClientHome
         userName={userName}
         data={clientData}

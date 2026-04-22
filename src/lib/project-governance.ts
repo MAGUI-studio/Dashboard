@@ -39,30 +39,49 @@ async function upsertUserFromClerk(clerkUserId: string) {
     throw new Error("Clerk user is missing a primary email")
   }
 
-  return prisma.user.upsert({
-    where: { clerkId: clerkUser.id },
-    update: {
-      email: primaryEmail,
-      name:
-        [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
-        clerkUser.fullName ||
-        clerkUser.username ||
-        primaryEmail,
-      role: normalizeClerkRole(clerkUser.publicMetadata?.role),
-      avatarUrl: clerkUser.imageUrl ?? null,
-    },
-    create: {
-      clerkId: clerkUser.id,
-      email: primaryEmail,
-      name:
-        [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
-        clerkUser.fullName ||
-        clerkUser.username ||
-        primaryEmail,
-      role: normalizeClerkRole(clerkUser.publicMetadata?.role),
-      avatarUrl: clerkUser.imageUrl ?? null,
-    },
-  })
+  const userData = {
+    email: primaryEmail,
+    name:
+      [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(" ") ||
+      clerkUser.fullName ||
+      clerkUser.username ||
+      primaryEmail,
+    role: normalizeClerkRole(clerkUser.publicMetadata?.role),
+    avatarUrl: clerkUser.imageUrl ?? null,
+  }
+
+  // Simple retry logic for transient connection errors
+  let attempts = 0
+  const maxAttempts = 3
+
+  while (attempts < maxAttempts) {
+    try {
+      return await prisma.user.upsert({
+        where: { clerkId: clerkUser.id },
+        update: userData,
+        create: {
+          clerkId: clerkUser.id,
+          ...userData,
+        },
+      })
+    } catch (error) {
+      attempts++
+      const isConnectionError =
+        error instanceof Error &&
+        (error.message.includes("closed the connection") ||
+          error.message.includes("socket hang up"))
+
+      if (isConnectionError && attempts < maxAttempts) {
+        logger.warn(
+          { attempts, clerkUserId },
+          "Database connection closed during upsert, retrying..."
+        )
+        await new Promise((resolve) => setTimeout(resolve, 500 * attempts))
+        continue
+      }
+      throw error
+    }
+  }
 }
 
 export async function getCurrentAppUser() {

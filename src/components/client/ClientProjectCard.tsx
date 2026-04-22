@@ -1,6 +1,6 @@
 import * as React from "react"
 
-import { getTranslations } from "next-intl/server"
+import { getLocale, getTranslations } from "next-intl/server"
 
 import { Link } from "@/src/i18n/navigation"
 import { ClientProjectSummary } from "@/src/types/client-portal"
@@ -22,16 +22,17 @@ export async function ClientProjectCard({
 }: ClientProjectCardProps): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard.client_home.project")
   const tStatus = await getTranslations("Dashboard.status")
+  const locale = await getLocale()
   const statusLabel = tStatus(project.status)
 
   return (
     <Link href={{ pathname: "/projects/[id]", params: { id: project.id } }}>
-      <article className="group relative overflow-hidden rounded-[2.25rem] border border-border/25 bg-background p-6 shadow-2xl shadow-foreground/5 transition-all hover:-translate-y-1 hover:border-brand-primary/25 lg:p-8">
+      <article className="group relative overflow-hidden rounded-[2rem] border border-border/25 bg-background p-5 shadow-2xl shadow-foreground/5 transition-all hover:-translate-y-1 lg:p-8">
         <div className="absolute right-6 top-6 flex size-11 items-center justify-center rounded-full bg-muted/20 text-foreground/45 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-brand-primary group-hover:text-white">
           <ArrowUpRight weight="bold" className="size-5" />
         </div>
 
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">
           <div className="flex min-w-0 flex-col gap-7">
             <div className="flex items-center gap-2.5">
               <FolderOpen
@@ -48,13 +49,12 @@ export async function ClientProjectCard({
                 {project.name}
               </h3>
               <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/70 sm:text-base">
-                Este e o projeto em foco agora. Entre para ver entregas,
-                arquivos, briefing e o historico completo.
+                {t("active_project_focus_description")}
               </p>
             </div>
 
             {project.lastUpdate && (
-              <div className="flex items-start gap-3 rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+              <div className="flex items-start gap-3 rounded-2xl bg-muted/5 p-5 w-fit">
                 <CheckCircle
                   weight="duotone"
                   className="mt-0.5 size-5 shrink-0 text-brand-primary"
@@ -70,7 +70,7 @@ export async function ClientProjectCard({
           </div>
 
           <div className="grid gap-3">
-            <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+            <div className="rounded-2xl bg-muted/5 p-5">
               <p className="text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
                 {t("progress")}
               </p>
@@ -85,8 +85,8 @@ export async function ClientProjectCard({
               <Progress value={project.progress} className="mt-5 h-2 w-full" />
             </div>
 
-            <div className="grid grid-cols-2 gap-3">
-              <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-2">
+              <div className="rounded-2xl bg-muted/5 p-5">
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
                   {t("phase")}
                 </p>
@@ -95,7 +95,7 @@ export async function ClientProjectCard({
                 </p>
               </div>
 
-              <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+              <div className="rounded-2xl bg-muted/5 p-5">
                 <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
                   {t("deadline")}
                 </p>
@@ -106,7 +106,7 @@ export async function ClientProjectCard({
                   />
                   <p className="font-heading text-lg font-black uppercase tracking-tight">
                     {project.deadline
-                      ? new Date(project.deadline).toLocaleDateString("pt-BR")
+                      ? new Date(project.deadline).toLocaleDateString(locale)
                       : t("no_deadline")}
                   </p>
                 </div>

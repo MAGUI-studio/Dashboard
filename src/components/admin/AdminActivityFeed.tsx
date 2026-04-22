@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { UserRole } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
 import {
@@ -49,15 +51,6 @@ export interface AdminActivityFeedItem {
         params: { id: string }
         query?: Record<string, string>
       }
-}
-
-const kindLabels: Record<ActivityKind, string> = {
-  approval: "Aprovações",
-  project: "Projetos",
-  asset: "Arquivos",
-  briefing: "Briefings",
-  timeline: "Timeline",
-  system: "Sistema",
 }
 
 function getActivityPresentation(kind: ActivityKind) {
@@ -111,26 +104,29 @@ function getActivityPresentation(kind: ActivityKind) {
   }
 }
 
-function formatRelativeMoment(value: string | Date): string {
+function formatRelativeMoment(
+  value: string | Date,
+  t: (key: string) => string
+): string {
   const date = new Date(value)
   const diff = Date.now() - date.getTime()
   const minutes = Math.max(1, Math.round(diff / 60000))
 
   if (minutes < 60) {
-    return `${minutes} min atrás`
+    return `${minutes} ${t("time.minute")} ${t("time.ago")}`
   }
 
   const hours = Math.round(minutes / 60)
   if (hours < 24) {
-    return `${hours} h atrás`
+    return `${hours} ${t("time.hour")} ${t("time.ago")}`
   }
 
   const days = Math.round(hours / 24)
   if (days < 7) {
-    return `${days} d atrás`
+    return `${days} ${t("time.day")} ${t("time.ago")}`
   }
 
-  return date.toLocaleDateString("pt-BR")
+  return date.toLocaleDateString()
 }
 
 export function AdminActivityFeed({
@@ -138,9 +134,19 @@ export function AdminActivityFeed({
 }: {
   items: AdminActivityFeedItem[]
 }): React.JSX.Element {
+  const t = useTranslations("Admin.activity_feed")
   const [activeKind, setActiveKind] = React.useState<"all" | ActivityKind>(
     "all"
   )
+
+  const kindLabels: Record<ActivityKind, string> = {
+    approval: t("kinds.approval"),
+    project: t("kinds.project"),
+    asset: t("kinds.asset"),
+    briefing: t("kinds.briefing"),
+    timeline: t("kinds.timeline"),
+    system: t("kinds.system"),
+  }
 
   const visibleItems = React.useMemo(
     () =>
@@ -173,11 +179,9 @@ export function AdminActivityFeed({
         <div className="flex flex-col gap-5">
           <div>
             <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-              Atividade global
+              {t("title")}
             </CardTitle>
-            <CardDescription>
-              O que mudou recentemente nos projetos e no fluxo operacional.
-            </CardDescription>
+            <CardDescription>{t("description")}</CardDescription>
           </div>
 
           <div className="flex flex-wrap gap-2">
@@ -187,7 +191,7 @@ export function AdminActivityFeed({
               className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
               onClick={() => setActiveKind("all")}
             >
-              Tudo
+              {t("filter_all")}
               <span className="ml-2 text-[9px] opacity-70">{items.length}</span>
             </Button>
 
@@ -221,7 +225,7 @@ export function AdminActivityFeed({
       <CardContent className="grid gap-4 pt-6">
         {visibleItems.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-            Nenhuma atividade encontrada para esse filtro.
+            {t("empty")}
           </div>
         ) : (
           visibleItems.map((item) => {
@@ -249,7 +253,7 @@ export function AdminActivityFeed({
                       </span>
 
                       <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {item.projectName || "Operação interna"}
+                        {item.projectName || t("kinds.system")}
                       </span>
                     </div>
 
@@ -259,12 +263,12 @@ export function AdminActivityFeed({
 
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground/75">
                       <span>
-                        {item.actorName || "Sistema"}
+                        {item.actorName || t("kinds.system")}
                         {item.actorRole ? ` • ${item.actorRole}` : ""}
                       </span>
                       <span className="inline-flex items-center gap-1">
                         <ClockCounterClockwise className="size-3.5" />
-                        {formatRelativeMoment(item.createdAt)}
+                        {formatRelativeMoment(item.createdAt, t)}
                       </span>
                     </div>
                   </div>
@@ -276,7 +280,7 @@ export function AdminActivityFeed({
                   className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
                 >
                   <Link href={item.href as never}>
-                    Abrir
+                    {t("open")}
                     <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>

@@ -73,13 +73,13 @@ describe("Dashboard Logic", () => {
     it("renders first pending item and navigates", () => {
       render(<Header pendingApprovals={mockPendingApprovals} />)
 
-      expect(screen.getByText("Alpha Project")).toBeInTheDocument()
-      expect(screen.getByText("Delivery One")).toBeInTheDocument()
+      expect(screen.getByText(/Alpha Project/)).toBeInTheDocument()
+      expect(screen.getByText(/Delivery One/)).toBeInTheDocument()
 
       const buttons = screen.getAllByRole("button")
       fireEvent.click(buttons[1]) // Botão Next (seta direita)
 
-      expect(screen.getByText("Beta Project")).toBeInTheDocument()
+      expect(screen.getByText(/Beta Project/)).toBeInTheDocument()
     })
 
     it("handles approval flow", async () => {

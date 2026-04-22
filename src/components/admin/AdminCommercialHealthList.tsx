@@ -2,8 +2,10 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { Link } from "@/src/i18n/navigation"
-import { ArrowRight, ChartLineUp } from "@phosphor-icons/react/dist/ssr"
+import { ArrowRight, ChartLineUp } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 import {
@@ -30,33 +32,32 @@ const toneStyles = {
   risk: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
 }
 
-const toneLabels = {
-  healthy: "Saudável",
-  attention: "Atenção",
-  risk: "Risco",
-}
-
 export function AdminCommercialHealthList({
   items,
 }: {
   items: CommercialHealthItem[]
 }): React.JSX.Element {
+  const t = useTranslations("Admin.commercial_health")
+
+  const toneLabels = {
+    healthy: t("tones.healthy"),
+    attention: t("tones.attention"),
+    risk: t("tones.risk"),
+  }
+
   return (
     <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
       <CardHeader className="border-b border-border/20">
         <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-          Saúde do comercial
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Leads que pedem cuidado por falta de contexto, atraso ou perda de
-          ritmo.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
 
       <CardContent className="grid gap-4 pt-6">
         {items.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-            Nenhum lead crítico no momento.
+            {t("empty")}
           </div>
         ) : (
           items.map((item) => (
@@ -114,7 +115,7 @@ export function AdminCommercialHealthList({
                       query: { lead: item.id },
                     }}
                   >
-                    Abrir lead
+                    {t("open_lead")}
                     <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>
@@ -130,7 +131,7 @@ export function AdminCommercialHealthList({
             className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
           >
             <Link href="/admin/crm">
-              Ver comercial completo
+              {t("view_full")}
               <ArrowRight className="ml-2 size-4" />
             </Link>
           </Button>

@@ -47,6 +47,7 @@ export function HeaderThemeToggle({
         type="button"
         onClick={toggleTheme}
         className="flex size-9 items-center justify-center rounded-full bg-background/70 text-foreground/75 transition hover:bg-background hover:text-foreground"
+        aria-label={isLight ? t("dark") : t("light")}
         title={isLight ? t("dark") : t("light")}
       >
         {isLight ? (
@@ -62,6 +63,7 @@ export function HeaderThemeToggle({
     <button
       type="button"
       onClick={toggleTheme}
+      aria-label={t("label")}
       className="flex w-full items-center justify-between rounded-2xl bg-muted/5 px-4 py-3 text-left transition hover:bg-muted/10"
     >
       <div>

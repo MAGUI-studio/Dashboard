@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { Link } from "@/src/i18n/navigation"
 import {
   ArrowRight,
@@ -48,19 +50,12 @@ const priorityStyles = {
   medium: "border-border/30 bg-background/60",
 }
 
-const kindLabels: Record<AdminAttentionItem["kind"], string> = {
-  approval: "Aprovacoes",
-  deadline: "Prazos",
-  lead: "Comercial",
-  project: "Projetos",
-  task: "Tarefas",
-}
-
 export function AdminAttentionPanel({
   items,
 }: {
   items: AdminAttentionItem[]
 }): React.JSX.Element {
+  const t = useTranslations("Admin.attention_panel")
   const [activeKind, setActiveKind] = React.useState<
     "all" | AdminAttentionItem["kind"]
   >("all")
@@ -68,6 +63,14 @@ export function AdminAttentionPanel({
     "all" | "high" | "medium"
   >("all")
   const [sortBy, setSortBy] = React.useState<"newest" | "oldest">("newest")
+
+  const kindLabels: Record<AdminAttentionItem["kind"], string> = {
+    approval: t("kinds.approval"),
+    deadline: t("kinds.deadline"),
+    lead: t("kinds.lead"),
+    project: t("kinds.project"),
+    task: t("kinds.task"),
+  }
 
   const visibleItems = React.useMemo(() => {
     const filtered = items.filter((item) => {
@@ -109,11 +112,9 @@ export function AdminAttentionPanel({
           <div className="flex items-start justify-between">
             <div>
               <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-                Precisa de atencao
+                {t("title")}
               </CardTitle>
-              <CardDescription>
-                Itens que pedem acao nas proximas horas.
-              </CardDescription>
+              <CardDescription>{t("description")}</CardDescription>
             </div>
 
             <div className="flex items-center gap-1 rounded-full border border-border/30 bg-background/40 p-1">
@@ -123,7 +124,7 @@ export function AdminAttentionPanel({
                 className="h-7 rounded-full px-3 text-[9px] font-black uppercase tracking-widest"
                 onClick={() => setSortBy("newest")}
               >
-                Novos
+                {t("sort_newest")}
               </Button>
               <Button
                 variant={sortBy === "oldest" ? "secondary" : "ghost"}
@@ -131,7 +132,7 @@ export function AdminAttentionPanel({
                 className="h-7 rounded-full px-3 text-[9px] font-black uppercase tracking-widest"
                 onClick={() => setSortBy("oldest")}
               >
-                Antigos
+                {t("sort_oldest")}
               </Button>
             </div>
           </div>
@@ -143,7 +144,7 @@ export function AdminAttentionPanel({
               className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
               onClick={() => setActiveKind("all")}
             >
-              Tudo
+              {t("kinds.approval") === "Aprovações" ? "Tudo" : "All"}
               <span className="ml-2 text-[9px] opacity-70">{items.length}</span>
             </Button>
 
@@ -172,7 +173,7 @@ export function AdminAttentionPanel({
               className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
               onClick={() => setPriorityFilter("all")}
             >
-              Todas as urgencias
+              {t("filter_all_urgencies")}
             </Button>
             <Button
               type="button"
@@ -180,7 +181,7 @@ export function AdminAttentionPanel({
               className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
               onClick={() => setPriorityFilter("high")}
             >
-              Alta urgencia
+              {t("filter_high_urgency")}
             </Button>
             <Button
               type="button"
@@ -188,7 +189,7 @@ export function AdminAttentionPanel({
               className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
               onClick={() => setPriorityFilter("medium")}
             >
-              Acompanhamento
+              {t("filter_follow_up")}
             </Button>
           </div>
         </div>
@@ -196,7 +197,7 @@ export function AdminAttentionPanel({
       <CardContent className="grid gap-4 pt-6">
         {visibleItems.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-            Nenhum item encontrado para os filtros atuais.
+            {t("empty")}
           </div>
         ) : (
           visibleItems.map((item) => {
@@ -220,9 +221,7 @@ export function AdminAttentionPanel({
                         •
                       </span>
                       <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/45">
-                        {item.priority === "high"
-                          ? "Alta urgencia"
-                          : "Acompanhar"}
+                        {t(`priorities.${item.priority}`)}
                       </span>
                     </div>
                     <p className="text-base font-black tracking-tight text-foreground">
@@ -240,7 +239,7 @@ export function AdminAttentionPanel({
                   className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
                 >
                   <Link href={item.href as never}>
-                    Abrir
+                    {t("kinds.approval") === "Aprovações" ? "Abrir" : "Open"}
                     <ArrowRight className="ml-2 size-4" />
                   </Link>
                 </Button>

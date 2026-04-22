@@ -1,7 +1,11 @@
+"use client"
+
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { Link } from "@/src/i18n/navigation"
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr"
+import { ArrowRight } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 import {
@@ -45,20 +49,20 @@ export function AdminProjectHealthList({
 }: {
   items: AdminProjectHealthItem[]
 }): React.JSX.Element {
+  const t = useTranslations("Admin.project_health")
+
   return (
     <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
       <CardHeader className="border-b border-border/20">
         <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight">
-          Saude dos projetos
+          {t("title")}
         </CardTitle>
-        <CardDescription>
-          Leitura rapida dos projetos que merecem acompanhamento.
-        </CardDescription>
+        <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4 pt-6">
         {items.length === 0 ? (
           <div className="rounded-[1.5rem] border border-dashed border-border/35 bg-background/40 px-5 py-10 text-center text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-            Nenhum projeto ativo no momento.
+            {t("empty")}
           </div>
         ) : (
           items.map((item) => {
@@ -89,7 +93,7 @@ export function AdminProjectHealthList({
                         params: { id: item.id },
                       }}
                     >
-                      Abrir
+                      {t("title").split(" ")[0] === "Saúde" ? "Abrir" : "Open"}
                       <ArrowRight className="ml-2 size-4" />
                     </Link>
                   </Button>
@@ -118,7 +122,7 @@ export function AdminProjectHealthList({
                   </div>
 
                   <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
-                    Progresso declarado: {item.progress}%
+                    {t("declared_progress")}: {item.progress}%
                   </p>
                 </div>
               </div>

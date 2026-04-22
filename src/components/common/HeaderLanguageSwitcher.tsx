@@ -75,7 +75,10 @@ export function HeaderLanguageSwitcher({
 
   return (
     <DropdownMenu modal={false}>
-      <DropdownMenuTrigger className="cursor-pointer outline-none focus-visible:ring-0 focus:ring-0">
+      <DropdownMenuTrigger
+        aria-label={tLanguage("label")}
+        className="cursor-pointer outline-none focus-visible:ring-0 focus:ring-0"
+      >
         {compact ? (
           <div className="flex size-9 items-center justify-center rounded-full bg-background/70 transition hover:bg-background">
             <ReactCountryFlag

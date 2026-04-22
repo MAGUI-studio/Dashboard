@@ -11,6 +11,7 @@ import {
 } from "@/src/types/dashboard"
 import { SignOutButton } from "@clerk/nextjs"
 import {
+  ArrowRightIcon,
   CaretLeft,
   CaretRight,
   ChartLineUp,
@@ -55,6 +56,7 @@ import { Textarea } from "@/src/components/ui/textarea"
 import { GlobalSearch } from "@/src/components/common/GlobalSearch"
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
+import { MobileHeaderMenu } from "@/src/components/common/MobileHeaderMenu"
 import { NotificationsDrawer } from "@/src/components/common/NotificationsDrawer"
 import { UpdateAttachmentsList } from "@/src/components/common/UpdateAttachmentsList"
 import { Logo } from "@/src/components/common/logo"
@@ -198,7 +200,7 @@ export function Header({
       initial={{ opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="sticky top-0 z-50 w-full border-b border-border/30 bg-background/60 backdrop-blur-xl"
+      className="sticky top-0 z-50 w-full border-b border-border/30 bg-background drop-shadow-xl"
     >
       <AnimatePresence>
         {activePendingApproval && (
@@ -208,9 +210,9 @@ export function Header({
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.4, ease: "circOut" }}
-            className="overflow-hidden border-b border-sky-400/20 bg-linear-to-r from-sky-700 via-sky-600 to-cyan-600 text-white shadow-2xl shadow-sky-950/20"
+            className="overflow-hidden border-b border-yellow-400/20 bg-linear-to-b from-yellow-700 to-yellow-600 text-white shadow-2xl shadow-yellow-950/20"
           >
-            <div className="mx-auto flex w-full max-w-440 flex-col gap-3 px-6 py-3.5 lg:flex-row lg:items-center lg:justify-between lg:px-12">
+            <div className="mx-auto flex w-full max-w-440 flex-col gap-3 px-6 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-12">
               <div className="flex min-w-0 flex-1 items-center gap-6">
                 {pendingApprovals.length > 1 && (
                   <div className="flex items-center gap-1 shrink-0">
@@ -238,26 +240,14 @@ export function Header({
                   </div>
                 )}
 
-                <div className="flex min-w-0 items-center gap-3">
-                  <div className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-white/10 ring-1 ring-white/10">
-                    <ClockCountdown
-                      weight="fill"
-                      className="size-4 text-white/80"
-                    />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2">
-                      <span className="shrink-0 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wider text-white/90">
-                        {tApp("status.PENDING")}
-                      </span>
-                      <p className="truncate font-heading text-[10px] font-black uppercase leading-none tracking-widest text-white/60">
-                        {activePendingApproval.projectName}
-                      </p>
-                    </div>
-                    <p className="mt-1 truncate font-sans text-xs font-medium leading-none text-white sm:text-sm">
-                      {activePendingApproval.lastUpdateTitle}
-                    </p>
-                  </div>
+                <div className="flex items-center gap-2">
+                  <span className="shrink-0 rounded border border-white/20 bg-white/10 px-1.5 py-0.5 text-[7px] font-black uppercase tracking-wider text-white/90">
+                    {tApp("status.PENDING")}
+                  </span>
+                  <p className="truncate font-heading text-[10px] font-black uppercase leading-none tracking-widest text-white/60">
+                    {activePendingApproval.projectName} -{" "}
+                    {activePendingApproval.lastUpdateTitle}
+                  </p>
                 </div>
               </div>
 
@@ -265,9 +255,14 @@ export function Header({
                 <SheetTrigger asChild>
                   <Button
                     type="button"
-                    className="h-8 shrink-0 rounded-full border border-white/20 bg-white/10 px-6 font-mono text-[9px] font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-white/20 active:scale-95"
+                    className="h-8 shrink-0 rounded-full border border-white/20 bg-white/10 px-6 text-[9px] font-black uppercase tracking-[0.2em] text-white hover:bg-white/20 active:scale-95 group"
                   >
                     {tDashboard("banner.cta")}
+
+                    <ArrowRightIcon
+                      weight="bold"
+                      className="ml-2 size-4 group-hover:translate-x-0.5  transition-all duration-300"
+                    />
                   </Button>
                 </SheetTrigger>
                 <SheetContent
@@ -666,11 +661,13 @@ export function Header({
           {!viewer ? (
             <div className="size-8 rounded-full bg-muted/20 animate-pulse" />
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 lg:gap-3">
               {viewer.isAdmin ? <GlobalSearch /> : null}
               <NotificationsDrawer notifications={notifications} />
+              <MobileHeaderMenu viewer={viewer} />
 
               <div
+                className="hidden lg:block"
                 onMouseEnter={() => setIsUserMenuOpen(true)}
                 onMouseLeave={() => setIsUserMenuOpen(false)}
               >

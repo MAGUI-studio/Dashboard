@@ -76,6 +76,16 @@
         "admin": "Administrador",
         "client": "Cliente"
       },
+      "stats": {
+        "active_clients": "Clientes ativos",
+        "active_projects": "Projetos em andamento",
+        "pending_approvals": "Aprovações pendentes",
+        "open_leads": "Leads em aberto",
+        "base_registered": "base cadastrada",
+        "finalized": "finalizados",
+        "review_today": "pedem revisão hoje",
+        "unread_notifications": "{count} notificações não lidas"
+      },
       "form": {
         "identity_title": "Perfil de Identidade",
         "identity_desc": "Identificação legal e nome de exibição",
@@ -174,6 +184,88 @@
         "success": "Lead catalogado com sucesso!",
         "error": "Erro ao salvar lead."
       }
+    },
+    "activity_feed": {
+      "title": "Atividade global",
+      "description": "O que mudou recentemente nos projetos e no fluxo operacional.",
+      "filter_all": "Tudo",
+      "open": "Abrir",
+      "empty": "Nenhuma atividade encontrada para esse filtro.",
+      "kinds": {
+        "approval": "Aprovações",
+        "project": "Projetos",
+        "asset": "Arquivos",
+        "briefing": "Briefings",
+        "timeline": "Timeline",
+        "system": "Sistema"
+      },
+      "time": {
+        "ago": "atrás",
+        "minute": "min",
+        "hour": "h",
+        "day": "d"
+      }
+    },
+    "attention_panel": {
+      "title": "Precisa de atenção",
+      "description": "Itens que pedem ação nas próximas horas.",
+      "sort_newest": "Novos",
+      "sort_oldest": "Antigos",
+      "filter_all_urgencies": "Todas as urgências",
+      "filter_high_urgency": "Alta urgência",
+      "filter_follow_up": "Acompanhamento",
+      "empty": "Nenhum item encontrado para os filtros atuais.",
+      "kinds": {
+        "approval": "Aprovações",
+        "deadline": "Prazos",
+        "lead": "Comercial",
+        "project": "Projetos",
+        "task": "Tarefas"
+      },
+      "priorities": {
+        "high": "Alta urgência",
+        "medium": "Acompanhar"
+      }
+    },
+    "commercial_health": {
+      "title": "Saúde do comercial",
+      "description": "Leads que pedem cuidado por falta de contexto, atraso ou perda de ritmo.",
+      "empty": "Nenhum lead crítico no momento.",
+      "open_lead": "Abrir lead",
+      "view_full": "Ver comercial completo",
+      "tones": {
+        "healthy": "Saudável",
+        "attention": "Atenção",
+        "risk": "Risco"
+      }
+    },
+    "project_health": {
+      "title": "Saúde dos projetos",
+      "description": "Leitura rápida dos projetos que merecem acompanhamento.",
+      "empty": "Nenhum projeto ativo no momento.",
+      "declared_progress": "Progresso declarado"
+    },
+    "recent_updates": {
+      "title": "Atualizações recentes",
+      "description": "O que mudou mais recentemente nos projetos.",
+      "empty": "Nenhuma atualização recente."
+    },
+    "action_items": {
+      "title": "Action items próximos",
+      "description": "Tarefas operacionais com prazo mais imediato.",
+      "empty": "Nenhuma tarefa com prazo definido.",
+      "no_date": "Sem data"
+    },
+    "recent_crm": {
+      "title": "Comercial recente",
+      "description": "Leads mais recentes para abrir o dia com contexto.",
+      "empty": "Nenhum lead cadastrado.",
+      "updated_at": "Atualizado em",
+      "no_contact": "Sem contato"
+    },
+    "template_library": {
+      "title": "Biblioteca de templates",
+      "description": "Mensagens base para comercial, updates, aprovações, material e onboarding."
     },
     "projects": {
       "eyebrow": "Processo de Execução",
@@ -443,7 +535,15 @@
   },
   "Dashboard": {
     "client_home": {
+      "eyebrow": "Portal do Cliente",
+      "welcome_user": "Oi, {name}",
+      "description": "Seu projeto em uma visão simples: o que mudou, o que falta e qual ação precisa da sua atenção agora.",
       "welcome_back": "Bem-vindo de volta",
+      "active_project_eyebrow": "Projeto em destaque",
+      "view_project": "Ver projeto",
+      "active_project_description": "Acompanhe o momento atual, o progresso e o último movimento importante.",
+      "quick_links_eyebrow": "Caminhos rápidos",
+      "quick_links_description": "Acesse os pontos que mais movem o projeto sem procurar em menus.",
       "status": {
         "on_track": "Tudo em dia",
         "awaiting_approval": "Aguardando sua aprovação",
@@ -453,6 +553,10 @@
       "nav": {
         "projects": "Projetos",
         "notifications": "Notificações"
+      },
+      "inbox": {
+        "pending_approvals": "entregas pendentes",
+        "pending_feedback": "solicitações abertas"
       },
       "cta": {
         "type": {
@@ -479,7 +583,17 @@
         }
       },
       "project": {
+        "nav": {
+          "overview": "Geral",
+          "timeline": "Timeline",
+          "approvals": "Validações",
+          "files": "Arquivos",
+          "briefing": "Briefing",
+          "tasks": "Tarefas",
+          "hint": "Avance pelas seções"
+        },
         "active_project": "Projeto Ativo",
+        "active_project_focus_description": "Este é o projeto em foco agora. Entre para ver entregas, arquivos, briefing e o histórico completo.",
         "phase": "Fase atual",
         "progress": "Progresso",
         "deadline": "Prazo de entrega",
@@ -505,10 +619,17 @@
     "admin_eyebrow": "Gestão de Projetos",
     "admin_title": "Visão Geral do Estúdio",
     "admin_overview": "Visão Geral",
-    "admin_description": "Painel de controle administrativo",
+    "admin_description": "Painel diário para acompanhar operação, aprovações, comercial e execução em tempo real.",
     "select_project": "Selecione o Projeto",
     "filter_projects": "Filtrar projetos...",
     "no_project_found": "Nenhum projeto encontrado.",
+    "common": {
+      "attention": "Precisa de atenção",
+      "no_description": "Sem descrição detalhada.",
+      "quick_view": "Visão rápida",
+      "open_project": "Abrir projeto",
+      "back": "Voltar"
+    },
     "inbox": {
       "title": "Sua Inbox",
       "description": "Pendências e ações que dependem de você.",

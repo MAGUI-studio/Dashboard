@@ -47,8 +47,8 @@ export function ClientLandingHero({
   const isProject = variant === "project"
 
   return (
-    <section className="relative overflow-hidden border-b border-border/20 bg-background">
-      <div className="mx-auto grid w-full max-w-440 gap-10 px-6 py-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end lg:px-12 lg:py-16">
+    <section className="relative overflow-hidden border-b border-border/20">
+      <div className="mx-auto grid w-full max-w-440 gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end lg:px-12 lg:py-16">
         <div className="flex min-w-0 flex-col gap-8">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-brand-primary">
@@ -64,7 +64,7 @@ export function ClientLandingHero({
           </div>
 
           <div className="flex flex-col gap-5">
-            <h1 className="max-w-5xl font-heading text-5xl font-black uppercase leading-[0.9] tracking-tight text-foreground sm:text-7xl lg:text-8xl">
+            <h1 className="max-w-5xl font-heading text-4xl font-black uppercase leading-[0.95] tracking-tight text-foreground sm:text-7xl lg:text-8xl">
               {title}
             </h1>
             <p className="max-w-2xl text-base font-medium leading-relaxed text-muted-foreground sm:text-lg">
@@ -91,7 +91,7 @@ export function ClientLandingHero({
                   asChild
                   size="lg"
                   variant="outline"
-                  className="h-14 rounded-full border-border/35 bg-background/70 px-8 text-[11px] font-black uppercase tracking-[0.22em]"
+                  className="h-14 rounded-full border-border/35  px-8 text-[11px] font-black uppercase tracking-[0.22em]"
                 >
                   <Link href={secondaryAction.href}>
                     {secondaryAction.label}
@@ -104,7 +104,7 @@ export function ClientLandingHero({
         </div>
 
         <div className="grid gap-3 rounded-[2rem] border border-border/25 bg-muted/5 p-4 lg:p-5">
-          <div className="flex items-center justify-between gap-4 rounded-[1.35rem] bg-background/70 p-5 ring-1 ring-border/15">
+          <div className="flex items-center justify-between gap-4 rounded-2xl  p-5">
             <div className="flex flex-col gap-1">
               <span className="text-[9px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
                 {isProject ? "Status do projeto" : "Hoje no portal"}
@@ -121,10 +121,7 @@ export function ClientLandingHero({
           {metrics.length > 0 && (
             <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
               {metrics.map((metric) => (
-                <div
-                  key={metric.label}
-                  className="rounded-[1.35rem] bg-background/70 p-5 ring-1 ring-border/15"
-                >
+                <div key={metric.label} className="rounded-2xl  p-5">
                   <p className="text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
                     {metric.label}
                   </p>

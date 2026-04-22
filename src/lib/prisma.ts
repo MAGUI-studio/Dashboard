@@ -26,6 +26,11 @@ declare global {
 }
 
 function createPool(): pg.Pool {
+  logger.info(
+    { connectionString: connectionString.split("@")[1] || "local" },
+    "Creating new database pool"
+  )
+
   const pool = new pg.Pool({
     connectionString,
     ssl: shouldUseSsl
@@ -33,14 +38,18 @@ function createPool(): pg.Pool {
           rejectUnauthorized: false,
         }
       : undefined,
-    max: 20,
-    idleTimeoutMillis: 30000,
-    connectionTimeoutMillis: 30000,
-    keepAlive: true,
+    max: 10,
+    idleTimeoutMillis: 10000, // Reduced to catch stale connections faster
+    connectionTimeoutMillis: 5000, // Faster timeout for better responsiveness
+    // keepAlive: true, // Removed as it can cause "Server has closed the connection" on some infrastructures
   })
 
   pool.on("error", (err: Error) => {
-    logger.error({ err }, "Unexpected error on idle client")
+    logger.error({ err }, "Unexpected error on idle database client")
+  })
+
+  pool.on("connect", () => {
+    logger.debug("New database client connected to pool")
   })
 
   return pool
