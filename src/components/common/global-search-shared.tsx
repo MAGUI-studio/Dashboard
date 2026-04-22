@@ -5,7 +5,6 @@ import * as React from "react"
 import {
   Buildings,
   ChartLineUp,
-  ChatCenteredText,
   ClockCounterClockwise,
   File,
   FolderOpen,
@@ -23,7 +22,6 @@ export type SearchGroupKey =
   | "lead"
   | "update"
   | "asset"
-  | "comment"
   | "activity"
 
 export type SearchGroupConfig = {
@@ -65,12 +63,6 @@ export const SEARCH_GROUPS: SearchGroupConfig[] = [
     icon: File,
   },
   {
-    key: "comment",
-    heading: "Comentários",
-    emptyLabel: "Feedbacks e observações",
-    icon: ChatCenteredText,
-  },
-  {
     key: "activity",
     heading: "Atividades",
     emptyLabel: "Auditoria e histórico",
@@ -85,7 +77,6 @@ export function getGroupedResults(results: GlobalSearchResult[]) {
     lead: results.filter((item) => item.type === "lead"),
     update: results.filter((item) => item.type === "update"),
     asset: results.filter((item) => item.type === "asset"),
-    comment: results.filter((item) => item.type === "comment"),
     activity: results.filter((item) => item.type === "activity"),
   }
 }
@@ -158,7 +149,9 @@ export function SearchCountPills({
           className="rounded-full border border-border/35 bg-background/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55"
         >
           {group.heading}{" "}
-          <span className="text-foreground/70">{grouped[group.key].length}</span>
+          <span className="text-foreground/70">
+            {grouped[group.key].length}
+          </span>
         </div>
       ))}
     </div>

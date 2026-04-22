@@ -423,8 +423,6 @@ export const ModelName = {
   ProjectMember: "ProjectMember",
   Update: "Update",
   UpdateAttachment: "UpdateAttachment",
-  UpdateComment: "UpdateComment",
-  UpdateCommentAttachment: "UpdateCommentAttachment",
   ApprovalEvent: "ApprovalEvent",
   ActionItem: "ActionItem",
   Asset: "Asset",
@@ -465,8 +463,6 @@ export type TypeMap<
       | "projectMember"
       | "update"
       | "updateAttachment"
-      | "updateComment"
-      | "updateCommentAttachment"
       | "approvalEvent"
       | "actionItem"
       | "asset"
@@ -1313,158 +1309,6 @@ export type TypeMap<
         }
       }
     }
-    UpdateComment: {
-      payload: Prisma.$UpdateCommentPayload<ExtArgs>
-      fields: Prisma.UpdateCommentFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UpdateCommentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UpdateCommentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        findFirst: {
-          args: Prisma.UpdateCommentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UpdateCommentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        findMany: {
-          args: Prisma.UpdateCommentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>[]
-        }
-        create: {
-          args: Prisma.UpdateCommentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        createMany: {
-          args: Prisma.UpdateCommentCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.UpdateCommentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>[]
-        }
-        delete: {
-          args: Prisma.UpdateCommentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        update: {
-          args: Prisma.UpdateCommentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        deleteMany: {
-          args: Prisma.UpdateCommentDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UpdateCommentUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.UpdateCommentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>[]
-        }
-        upsert: {
-          args: Prisma.UpdateCommentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentPayload>
-        }
-        aggregate: {
-          args: Prisma.UpdateCommentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUpdateComment>
-        }
-        groupBy: {
-          args: Prisma.UpdateCommentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UpdateCommentGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UpdateCommentCountArgs<ExtArgs>
-          result:
-            | runtime.Types.Utils.Optional<Prisma.UpdateCommentCountAggregateOutputType>
-            | number
-        }
-      }
-    }
-    UpdateCommentAttachment: {
-      payload: Prisma.$UpdateCommentAttachmentPayload<ExtArgs>
-      fields: Prisma.UpdateCommentAttachmentFieldRefs
-      operations: {
-        findUnique: {
-          args: Prisma.UpdateCommentAttachmentFindUniqueArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload> | null
-        }
-        findUniqueOrThrow: {
-          args: Prisma.UpdateCommentAttachmentFindUniqueOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        findFirst: {
-          args: Prisma.UpdateCommentAttachmentFindFirstArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload> | null
-        }
-        findFirstOrThrow: {
-          args: Prisma.UpdateCommentAttachmentFindFirstOrThrowArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        findMany: {
-          args: Prisma.UpdateCommentAttachmentFindManyArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>[]
-        }
-        create: {
-          args: Prisma.UpdateCommentAttachmentCreateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        createMany: {
-          args: Prisma.UpdateCommentAttachmentCreateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        createManyAndReturn: {
-          args: Prisma.UpdateCommentAttachmentCreateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>[]
-        }
-        delete: {
-          args: Prisma.UpdateCommentAttachmentDeleteArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        update: {
-          args: Prisma.UpdateCommentAttachmentUpdateArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        deleteMany: {
-          args: Prisma.UpdateCommentAttachmentDeleteManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateMany: {
-          args: Prisma.UpdateCommentAttachmentUpdateManyArgs<ExtArgs>
-          result: BatchPayload
-        }
-        updateManyAndReturn: {
-          args: Prisma.UpdateCommentAttachmentUpdateManyAndReturnArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>[]
-        }
-        upsert: {
-          args: Prisma.UpdateCommentAttachmentUpsertArgs<ExtArgs>
-          result: runtime.Types.Utils.PayloadToResult<Prisma.$UpdateCommentAttachmentPayload>
-        }
-        aggregate: {
-          args: Prisma.UpdateCommentAttachmentAggregateArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.AggregateUpdateCommentAttachment>
-        }
-        groupBy: {
-          args: Prisma.UpdateCommentAttachmentGroupByArgs<ExtArgs>
-          result: runtime.Types.Utils.Optional<Prisma.UpdateCommentAttachmentGroupByOutputType>[]
-        }
-        count: {
-          args: Prisma.UpdateCommentAttachmentCountArgs<ExtArgs>
-          result:
-            | runtime.Types.Utils.Optional<Prisma.UpdateCommentAttachmentCountAggregateOutputType>
-            | number
-        }
-      }
-    }
     ApprovalEvent: {
       payload: Prisma.$ApprovalEventPayload<ExtArgs>
       fields: Prisma.ApprovalEventFieldRefs
@@ -2210,34 +2054,6 @@ export const UpdateAttachmentScalarFieldEnum = {
 export type UpdateAttachmentScalarFieldEnum =
   (typeof UpdateAttachmentScalarFieldEnum)[keyof typeof UpdateAttachmentScalarFieldEnum]
 
-export const UpdateCommentScalarFieldEnum = {
-  id: "id",
-  content: "content",
-  updateId: "updateId",
-  authorId: "authorId",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
-} as const
-
-export type UpdateCommentScalarFieldEnum =
-  (typeof UpdateCommentScalarFieldEnum)[keyof typeof UpdateCommentScalarFieldEnum]
-
-export const UpdateCommentAttachmentScalarFieldEnum = {
-  id: "id",
-  name: "name",
-  url: "url",
-  key: "key",
-  customId: "customId",
-  type: "type",
-  mimeType: "mimeType",
-  size: "size",
-  commentId: "commentId",
-  createdAt: "createdAt",
-} as const
-
-export type UpdateCommentAttachmentScalarFieldEnum =
-  (typeof UpdateCommentAttachmentScalarFieldEnum)[keyof typeof UpdateCommentAttachmentScalarFieldEnum]
-
 export const ApprovalEventScalarFieldEnum = {
   id: "id",
   decision: "decision",
@@ -2862,8 +2678,6 @@ export type GlobalOmitConfig = {
   projectMember?: Prisma.ProjectMemberOmit
   update?: Prisma.UpdateOmit
   updateAttachment?: Prisma.UpdateAttachmentOmit
-  updateComment?: Prisma.UpdateCommentOmit
-  updateCommentAttachment?: Prisma.UpdateCommentAttachmentOmit
   approvalEvent?: Prisma.ApprovalEventOmit
   actionItem?: Prisma.ActionItemOmit
   asset?: Prisma.AssetOmit

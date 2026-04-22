@@ -64,8 +64,6 @@ export const ModelName = {
   ProjectMember: "ProjectMember",
   Update: "Update",
   UpdateAttachment: "UpdateAttachment",
-  UpdateComment: "UpdateComment",
-  UpdateCommentAttachment: "UpdateCommentAttachment",
   ApprovalEvent: "ApprovalEvent",
   ActionItem: "ActionItem",
   Asset: "Asset",
@@ -264,34 +262,6 @@ export const UpdateAttachmentScalarFieldEnum = {
 
 export type UpdateAttachmentScalarFieldEnum =
   (typeof UpdateAttachmentScalarFieldEnum)[keyof typeof UpdateAttachmentScalarFieldEnum]
-
-export const UpdateCommentScalarFieldEnum = {
-  id: "id",
-  content: "content",
-  updateId: "updateId",
-  authorId: "authorId",
-  createdAt: "createdAt",
-  updatedAt: "updatedAt",
-} as const
-
-export type UpdateCommentScalarFieldEnum =
-  (typeof UpdateCommentScalarFieldEnum)[keyof typeof UpdateCommentScalarFieldEnum]
-
-export const UpdateCommentAttachmentScalarFieldEnum = {
-  id: "id",
-  name: "name",
-  url: "url",
-  key: "key",
-  customId: "customId",
-  type: "type",
-  mimeType: "mimeType",
-  size: "size",
-  commentId: "commentId",
-  createdAt: "createdAt",
-} as const
-
-export type UpdateCommentAttachmentScalarFieldEnum =
-  (typeof UpdateCommentAttachmentScalarFieldEnum)[keyof typeof UpdateCommentAttachmentScalarFieldEnum]
 
 export const ApprovalEventScalarFieldEnum = {
   id: "id",

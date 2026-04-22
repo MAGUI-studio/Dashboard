@@ -46,7 +46,6 @@ import { ActionItemsWidget } from "./ActionItemsWidget"
 import { BriefingNotes } from "./BriefingNotes"
 import { ClientPendingInbox } from "./ClientPendingInbox"
 import { UpdateAttachmentsList } from "./UpdateAttachmentsList"
-import { UpdateComments } from "./UpdateComments"
 import { VersionsLog } from "./VersionsLog"
 
 interface DashboardSummaryProps {
@@ -312,12 +311,6 @@ export function DashboardSummary({
                       <UpdateAttachmentsList
                         attachments={update.attachments}
                         compact
-                      />
-
-                      <UpdateComments
-                        updateId={update.id}
-                        projectId={project.id}
-                        comments={update.comments || []}
                       />
 
                       {hasFeedback && (

@@ -947,21 +947,6 @@ export default async function DashboardPage({
           attachments: {
             orderBy: { createdAt: "asc" },
           },
-          comments: {
-            orderBy: { createdAt: "asc" },
-            include: {
-              attachments: {
-                orderBy: { createdAt: "asc" },
-              },
-              author: {
-                select: {
-                  id: true,
-                  name: true,
-                  role: true,
-                },
-              },
-            },
-          },
           project: {
             select: {
               name: true,

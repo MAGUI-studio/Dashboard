@@ -37,7 +37,6 @@ vi.mock("@/src/i18n/navigation", () => ({
 vi.mock("@/src/lib/actions/project.actions", () => ({
   approveUpdateAction: vi.fn(() => Promise.resolve({ success: true })),
   rejectUpdateAction: vi.fn(() => Promise.resolve({ success: true })),
-  createUpdateCommentAction: vi.fn(() => Promise.resolve({ success: true })),
   createBriefingNoteAction: vi.fn(() => Promise.resolve({ success: true })),
 }))
 
@@ -128,7 +127,6 @@ describe("Dashboard Logic", () => {
         approvalStatus: "APPROVED",
         requiresApproval: false,
         attachments: [],
-        comments: [],
       })),
       assets: [],
       actionItems: [],

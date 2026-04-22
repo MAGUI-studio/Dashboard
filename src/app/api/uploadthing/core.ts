@@ -20,15 +20,15 @@ function toSlug(value: string): string {
 
 export const ourFileRouter = {
   projectAsset: f({
-    pdf: { maxFileSize: "32MB" },
-    image: { maxFileSize: "32MB" },
-    blob: { maxFileSize: "32MB" },
+    pdf: { maxFileSize: "32MB", maxFileCount: 10 },
+    image: { maxFileSize: "32MB", maxFileCount: 10 },
+    blob: { maxFileSize: "32MB", maxFileCount: 10 },
   })
     .input(
       z
         .object({
           projectId: z.string().min(1).optional(),
-          scope: z.enum(["assets", "timeline", "comments"]).optional(),
+          scope: z.enum(["assets", "timeline"]).optional(),
         })
         .optional()
     )

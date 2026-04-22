@@ -72,16 +72,6 @@ export type Update = Prisma.UpdateModel
  */
 export type UpdateAttachment = Prisma.UpdateAttachmentModel
 /**
- * Model UpdateComment
- *
- */
-export type UpdateComment = Prisma.UpdateCommentModel
-/**
- * Model UpdateCommentAttachment
- *
- */
-export type UpdateCommentAttachment = Prisma.UpdateCommentAttachmentModel
-/**
  * Model ApprovalEvent
  *
  */

@@ -161,7 +161,6 @@ model User {
   auditLogs     AuditLog[]     @relation("AuditActor")
   scheduledReminders ScheduledReminder[]
 
-  comments      UpdateComment[]
   approvalEvents ApprovalEvent[]
   leadActivities LeadActivity[]
 
@@ -349,7 +348,6 @@ model Update {
   projectId      String
   project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
   attachments    UpdateAttachment[]
-  comments       UpdateComment[]
   approvalEvents ApprovalEvent[]
 
   createdAt      DateTime       @default(now())
@@ -375,43 +373,6 @@ model UpdateAttachment {
   createdAt  DateTime  @default(now())
 
   @@index([updateId])
-  @@index([createdAt])
-}
-
-model UpdateComment {
-  id         String   @id @default(cuid())
-  content    String   @db.Text
-  
-  updateId   String
-  update     Update   @relation(fields: [updateId], references: [id], onDelete: Cascade)
-  
-  authorId   String?
-  author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
-  attachments UpdateCommentAttachment[]
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@index([updateId])
-  @@index([authorId])
-}
-
-model UpdateCommentAttachment {
-  id       String    @id @default(cuid())
-  name     String
-  url      String
-  key      String
-  customId String?
-  type     AssetType @default(DOCUMENT)
-  mimeType String?
-  size     Int?
-
-  commentId String
-  comment   UpdateComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-
-  @@index([commentId])
   @@index([createdAt])
 }
 

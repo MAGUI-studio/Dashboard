@@ -123,3 +123,16 @@
     @apply bg-background text-foreground antialiased selection:bg-brand-primary/20 selection:text-brand-primary;
     }
 }
+
+@layer utilities {
+  .scrollbar-hide,
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar,
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}

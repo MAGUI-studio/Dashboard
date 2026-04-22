@@ -62,8 +62,14 @@ export function UpdateAttachmentsList({
     () => attachments.filter((attachment) => attachment.type === "IMAGE"),
     [attachments]
   )
+  const fileAttachments = React.useMemo(
+    () => attachments.filter((attachment) => attachment.type !== "IMAGE"),
+    [attachments]
+  )
   const [isGalleryOpen, setIsGalleryOpen] = React.useState(false)
   const [activeImageIndex, setActiveImageIndex] = React.useState(0)
+  const visibleImages = imageAttachments.slice(0, 3)
+  const hiddenImageCount = Math.max(imageAttachments.length - 3, 0)
 
   if (attachments.length === 0) {
     return null
@@ -94,31 +100,81 @@ export function UpdateAttachmentsList({
 
   return (
     <>
-      <div className="grid gap-3 sm:grid-cols-2">
-        {attachments.map((attachment, index) => {
-          const itemClassName = `group flex cursor-pointer items-center gap-3 rounded-2xl bg-muted/20 transition-all hover:bg-muted/32 ${
-            compact ? "p-3" : "p-4"
-          }`
+      {imageAttachments.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.08, duration: 0.35 }}
+          className={`grid overflow-hidden rounded-[1.75rem] bg-muted/20 ring-1 ring-border/30 ${
+            imageAttachments.length > 1 ? "grid-cols-2 gap-1" : "grid-cols-1"
+          }`}
+        >
+          {visibleImages.map((attachment, index) => {
+            const isHero = index === 0
+            const showMoreOverlay = index === 2 && hiddenImageCount > 0
 
-          if (attachment.type === "IMAGE") {
             return (
               <motion.button
                 key={attachment.id}
                 type="button"
                 onClick={() => openGallery(attachment.id)}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.08 + index * 0.04, duration: 0.35 }}
                 whileHover={{ y: -2, transition: { duration: 0.18 } }}
-                className={`${itemClassName} text-left`}
+                className={`group relative block overflow-hidden bg-muted/30 text-left ${
+                  isHero && imageAttachments.length > 1 ? "col-span-2" : ""
+                }`}
               >
-                <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-brand-primary/10 text-brand-primary">
+                <div
+                  className={`relative w-full ${
+                    isHero ? "aspect-[16/10] sm:aspect-[16/9]" : "aspect-square"
+                  }`}
+                >
                   <Image
                     src={attachment.url}
                     alt={attachment.name}
                     fill
-                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 760px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                   />
+                  {showMoreOverlay && (
+                    <div className="absolute inset-0 grid place-items-center bg-black/55 text-white backdrop-blur-[1px]">
+                      <span className="font-heading text-3xl font-black">
+                        +{hiddenImageCount}
+                      </span>
+                    </div>
+                  )}
+                  <div className="absolute inset-x-0 bottom-0 flex items-end justify-end bg-gradient-to-t from-black/48 via-black/12 to-transparent p-3 text-white sm:p-4">
+                    <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-white/16 text-white backdrop-blur-md transition-all group-hover:bg-white/24">
+                      <ArrowSquareOut weight="bold" className="size-4" />
+                    </span>
+                  </div>
+                </div>
+              </motion.button>
+            )
+          })}
+        </motion.div>
+      )}
+
+      {fileAttachments.length > 0 && (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {fileAttachments.map((attachment, index) => {
+            const itemClassName = `group flex cursor-pointer items-center gap-3 rounded-2xl bg-muted/20 transition-all hover:bg-muted/32 ${
+              compact ? "p-3" : "p-4"
+            }`
+
+            return (
+              <motion.a
+                key={attachment.id}
+                href={attachment.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08 + index * 0.04, duration: 0.35 }}
+                whileHover={{ y: -2, transition: { duration: 0.18 } }}
+                className={itemClassName}
+              >
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                  <AttachmentIcon attachment={attachment} />
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -126,9 +182,9 @@ export function UpdateAttachmentsList({
                     {attachment.name}
                   </span>
                   <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                    {t("open_image")}
+                    {t("open_file")}
                     {formatBytes(attachment.size)
-                      ? ` • ${formatBytes(attachment.size)}`
+                      ? ` - ${formatBytes(attachment.size)}`
                       : ""}
                   </span>
                 </div>
@@ -136,57 +192,23 @@ export function UpdateAttachmentsList({
                 <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background/80 text-muted-foreground/45 transition-all group-hover:text-brand-primary">
                   <ArrowSquareOut weight="bold" className="size-4" />
                 </div>
-              </motion.button>
+              </motion.a>
             )
-          }
-
-          return (
-            <motion.a
-              key={attachment.id}
-              href={attachment.url}
-              target="_blank"
-              rel="noopener noreferrer"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.08 + index * 0.04, duration: 0.35 }}
-              whileHover={{ y: -2, transition: { duration: 0.18 } }}
-              className={itemClassName}
-            >
-              <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-                <AttachmentIcon attachment={attachment} />
-              </div>
-
-              <div className="min-w-0 flex-1">
-                <span className="block truncate text-[11px] font-black uppercase tracking-tight text-foreground/85">
-                  {attachment.name}
-                </span>
-                <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  {t("open_file")}
-                  {formatBytes(attachment.size)
-                    ? ` • ${formatBytes(attachment.size)}`
-                    : ""}
-                </span>
-              </div>
-
-              <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background/80 text-muted-foreground/45 transition-all group-hover:text-brand-primary">
-                <ArrowSquareOut weight="bold" className="size-4" />
-              </div>
-            </motion.a>
-          )
-        })}
-      </div>
+          })}
+        </div>
+      )}
 
       {activeImage && (
         <Dialog open={isGalleryOpen} onOpenChange={setIsGalleryOpen}>
           <DialogContent
             showCloseButton={false}
-            className="left-0 top-0 h-full w-full max-w-none translate-x-0 translate-y-0 border-none bg-transparent p-0 shadow-none ring-0"
+            className="fixed inset-0 left-0 top-0 h-svh w-svw max-w-none translate-x-0 translate-y-0 rounded-none border-none bg-transparent p-0 shadow-none ring-0"
           >
             <DialogTitle className="sr-only">
               {t("image_gallery_title")}
             </DialogTitle>
 
-            <div className="relative flex h-full w-full items-center justify-center bg-black/92 p-4 sm:p-8">
+            <div className="relative flex h-svh w-svw items-center justify-center bg-black/92 p-4 sm:p-8">
               <Button
                 type="button"
                 variant="secondary"
@@ -209,7 +231,7 @@ export function UpdateAttachmentsList({
                 </Button>
               )}
 
-              <div className="relative flex h-[70svh] w-full max-w-4xl items-center justify-center">
+              <div className="relative flex h-full w-full items-center justify-center">
                 <Image
                   src={activeImage.url}
                   alt={activeImage.name}

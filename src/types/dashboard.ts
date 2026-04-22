@@ -96,35 +96,7 @@ export interface DashboardUpdate {
   approvedAt: Date | string | null
   feedback: string | null
   attachments?: DashboardUpdateAttachment[]
-  comments?: DashboardUpdateComment[]
   approvalEvents?: DashboardApprovalEvent[]
-}
-
-export interface DashboardUpdateComment {
-  id: string
-  content: string
-  updateId: string
-  authorId: string | null
-  author?: {
-    id: string
-    name: string | null
-    role: UserRole
-  } | null
-  attachments?: DashboardUpdateCommentAttachment[]
-  createdAt: Date | string
-  updatedAt: Date | string
-}
-
-export interface DashboardUpdateCommentAttachment {
-  id: string
-  name: string
-  url: string
-  key: string
-  customId: string | null
-  type: AssetType
-  mimeType: string | null
-  size: number | null
-  createdAt: Date | string
 }
 
 export interface DashboardApprovalEvent {

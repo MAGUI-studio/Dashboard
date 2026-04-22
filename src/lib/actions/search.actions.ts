@@ -5,14 +5,7 @@ import prisma from "@/src/lib/prisma"
 
 export type GlobalSearchResult = {
   id: string
-  type:
-    | "client"
-    | "project"
-    | "lead"
-    | "update"
-    | "asset"
-    | "comment"
-    | "activity"
+  type: "client" | "project" | "lead" | "update" | "asset" | "activity"
   title: string
   subtitle: string
   meta: string
@@ -22,7 +15,7 @@ export type GlobalSearchResult = {
 }
 
 const truncate = (value: string, max = 72) =>
-  value.length > max ? `${value.slice(0, max - 1)}…` : value
+  value.length > max ? `${value.slice(0, max - 1)}...` : value
 
 export async function searchAdminGlobal(
   query: string,
@@ -177,7 +170,7 @@ export async function searchAdminGlobal(
     return quickResults
   }
 
-  const [assets, comments, activities] = await Promise.all([
+  const [assets, activities] = await Promise.all([
     prisma.asset.findMany({
       where: {
         OR: [
@@ -198,43 +191,6 @@ export async function searchAdminGlobal(
           select: {
             id: true,
             name: true,
-          },
-        },
-      },
-      take: 5,
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.updateComment.findMany({
-      where: {
-        OR: [
-          { content: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            update: {
-              title: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-          {
-            update: {
-              project: {
-                name: { contains: normalizedQuery, mode: "insensitive" },
-              },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        content: true,
-        update: {
-          select: {
-            id: true,
-            title: true,
-            project: {
-              select: {
-                id: true,
-                name: true,
-              },
-            },
           },
         },
       },
@@ -277,19 +233,9 @@ export async function searchAdminGlobal(
       type: "asset" as const,
       title: asset.name,
       subtitle: asset.project.name,
-      meta: `Arquivo • ${asset.type}`,
+      meta: `Arquivo - ${asset.type}`,
       targetId: asset.project.id,
       targetTab: "assets" as const,
-    })),
-    ...comments.map((comment) => ({
-      id: `comment-${comment.id}`,
-      type: "comment" as const,
-      title: truncate(comment.content, 64),
-      subtitle: `${comment.update.project.name} • ${comment.update.title}`,
-      meta: "Comentário",
-      targetId: comment.update.project.id,
-      targetTab: "timeline" as const,
-      highlightId: comment.update.id,
     })),
     ...activities
       .filter((activity) => activity.project)
@@ -298,7 +244,7 @@ export async function searchAdminGlobal(
         type: "activity" as const,
         title: truncate(activity.summary, 72),
         subtitle: activity.project!.name,
-        meta: `Atividade • ${activity.entityType}`,
+        meta: `Atividade - ${activity.entityType}`,
         targetId: activity.project!.id,
         targetTab: "audit" as const,
       })),

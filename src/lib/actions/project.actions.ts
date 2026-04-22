@@ -94,8 +94,6 @@ type TimelineAttachmentInput = {
   size?: number | null
 }
 
-type CommentAttachmentInput = TimelineAttachmentInput
-
 function parseTimelineAttachments(
   rawValue: FormDataEntryValue | null
 ): TimelineAttachmentInput[] {
@@ -1041,114 +1039,6 @@ export async function updateProjectAssetsOrderAction(
   } catch (error) {
     logger.error({ error }, "Update Assets Order Error:")
     return { error: "Erro ao atualizar ordem dos arquivos" }
-  }
-}
-
-export async function createUpdateCommentAction(input: {
-  updateId: string
-  projectId: string
-  content: string
-  attachments?: CommentAttachmentInput[]
-}): Promise<{ error?: string; success?: boolean }> {
-  try {
-    const { user } = await ensureProjectAccess(input.projectId, [
-      UserRole.CLIENT,
-      UserRole.ADMIN,
-      UserRole.MEMBER,
-    ])
-
-    const comment = await prisma.updateComment.create({
-      data: {
-        updateId: input.updateId,
-        authorId: user.id,
-        content: input.content,
-        attachments: input.attachments?.length
-          ? {
-              create: input.attachments.map((attachment) => ({
-                name: attachment.name,
-                url: attachment.url,
-                key: attachment.key,
-                customId: attachment.customId ?? null,
-                type: attachment.type,
-                mimeType: attachment.mimeType ?? null,
-                size: attachment.size ?? null,
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        attachments: true,
-        update: {
-          select: {
-            id: true,
-            title: true,
-          },
-        },
-      },
-    })
-
-    await createAuditLog({
-      action: "update.comment_created",
-      entityType: "UpdateComment",
-      entityId: comment.id,
-      summary: `Novo comentário na atualização "${comment.update.title}".`,
-      actorId: user.id,
-      actorType: AuditActorType.USER,
-      projectId: input.projectId,
-      metadata: {
-        origin: getAuditOriginLabel({
-          actorType: AuditActorType.USER,
-          role: user.role,
-        }),
-        comment: input.content,
-        after: {
-          content: input.content,
-          attachmentsCount: comment.attachments.length,
-        },
-        relatedEntities: [
-          {
-            type: "Update",
-            id: comment.update.id,
-            label: comment.update.title,
-          },
-          {
-            type: "UpdateComment",
-            id: comment.id,
-            label: "Comentário",
-          },
-          ...comment.attachments.map((attachment) => ({
-            type: "UpdateCommentAttachment",
-            id: attachment.id,
-            label: attachment.name,
-          })),
-        ],
-      },
-    })
-
-    const admins = await getInternalNotificationRecipients()
-
-    // Notify admins if a client comments
-    if (user.role === UserRole.CLIENT) {
-      await Promise.all(
-        admins.map((admin) =>
-          createNotification({
-            userId: admin.id,
-            projectId: input.projectId,
-            type: NotificationType.UPDATE_PUBLISHED, // Reusing existing type or could add new one
-            title: "Novo comentário do cliente",
-            message: `O cliente comentou em "${comment.update.title}": ${input.content.slice(0, 50)}...`,
-            ctaPath: getAdminProjectPath(input.projectId),
-          })
-        )
-      )
-    }
-
-    revalidatePath("/")
-    revalidatePath(`/admin/projects/${input.projectId}`)
-    return { success: true }
-  } catch (error) {
-    logger.error({ error }, "Create Comment Error:")
-    return { error: "Erro ao enviar comentário" }
   }
 }
 

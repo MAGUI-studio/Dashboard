@@ -32,7 +32,7 @@ const VARIANTS_FADE_IN_UP: Variants = {
 
 export default function SignUpPage(): React.JSX.Element {
   return (
-    <main className="relative flex w-full items-center justify-center overflow-hidden bg-background">
+    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-background">
       <motion.div
         initial="hidden"
         animate="visible"
@@ -66,14 +66,14 @@ export default function SignUpPage(): React.JSX.Element {
         <div className="absolute inset-0 z-10 bg-black/70 lg:hidden" />
       </section>
 
-      <div className="relative z-30 flex w-full flex-col items-center justify-center lg:flex-row">
+      <div className="relative z-30 flex min-h-screen w-full flex-col items-center justify-center lg:flex-row">
         <div className="hidden lg:flex lg:w-3/5" />
 
         <motion.section
           initial="hidden"
           animate="visible"
           variants={VARIANTS_FADE_IN_UP}
-          className="flex w-full flex-col items-center justify-center bg-background px-6 py-12 lg:w-2/5"
+          className="flex min-h-screen w-full flex-col items-center justify-center bg-background px-6 py-12 lg:w-2/5"
         >
           <div className="flex w-full max-w-[420px] flex-col items-center lg:items-start">
             <Link
