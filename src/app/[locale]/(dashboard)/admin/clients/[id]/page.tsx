@@ -57,6 +57,7 @@ export default async function ClientDetailsPage({
   }
 
   const t = await getTranslations("Admin.clients")
+  const tStatus = await getTranslations("Dashboard.status")
   const { id } = await params
   const client = await clerkClient()
 
@@ -229,7 +230,7 @@ export default async function ClientDetailsPage({
                   </p>
                   <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
                     {project.client.name || project.client.email} •{" "}
-                    {project.status}
+                    {tStatus(project.status)}
                   </p>
                 </div>
                 <Button

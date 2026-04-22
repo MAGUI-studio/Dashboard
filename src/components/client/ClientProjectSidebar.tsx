@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl"
 
 import { Link, usePathname } from "@/src/i18n/navigation"
 import {
+  ArrowRight,
   ChatTeardropDots,
   CheckCircle,
   ClockCountdown,
@@ -64,16 +65,16 @@ export function ClientProjectSidebar({ projectId }: ClientProjectSidebarProps) {
   ]
 
   return (
-    <aside className="hidden w-64 shrink-0 flex-col gap-8 py-4 lg:flex">
-      <nav className="flex flex-col gap-1.5">
+    <div className="sticky top-20 z-20 -mx-6 border-y border-border/15 bg-background/90 px-6 py-3 backdrop-blur-xl lg:-mx-12 lg:px-12">
+      <nav className="mx-auto flex w-full max-w-440 items-center gap-2 overflow-x-auto">
         {items.map((item) => (
           <Link
             key={item.href}
             href={toHref(item.href)}
-            className={`flex items-center gap-4 rounded-2xl px-5 py-3.5 text-[10px] font-black uppercase tracking-[0.2em] transition-all ${
+            className={`inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em] transition-all ${
               item.active
                 ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
-                : "text-muted-foreground/50 hover:bg-muted/10 hover:text-foreground"
+                : "border border-border/20 bg-background/60 text-muted-foreground/60 hover:border-brand-primary/25 hover:text-foreground"
             }`}
           >
             <item.icon
@@ -83,7 +84,11 @@ export function ClientProjectSidebar({ projectId }: ClientProjectSidebarProps) {
             {item.label}
           </Link>
         ))}
+        <span className="ml-auto hidden items-center gap-2 rounded-full bg-muted/5 px-4 py-2 text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45 xl:inline-flex">
+          Avance pelas secoes
+          <ArrowRight weight="bold" className="size-3" />
+        </span>
       </nav>
-    </aside>
+    </div>
   )
 }

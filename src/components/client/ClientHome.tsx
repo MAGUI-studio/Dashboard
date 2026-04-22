@@ -7,18 +7,20 @@ import { ClientHomeData } from "@/src/types/client-portal"
 import {
   ClockCountdown,
   Files,
-  FolderOpen,
   NotePencil,
+  ShieldCheck,
 } from "@phosphor-icons/react/dist/ssr"
 
 import { Button } from "@/src/components/ui/button"
 
 import { toHref } from "@/src/lib/utils/navigation"
 
-import { ClientHeroStatus } from "./ClientHeroStatus"
-import { ClientNextActionCard } from "./ClientNextActionCard"
+import { ClientActionBanner } from "./ClientActionBanner"
+import { ClientFeatureLink } from "./ClientFeatureLink"
+import { ClientLandingHero } from "./ClientLandingHero"
 import { ClientProjectCard } from "./ClientProjectCard"
 import { ClientRecentActivityStrip } from "./ClientRecentActivityStrip"
+import { ClientSectionHeader } from "./ClientSectionHeader"
 
 interface ClientHomeProps {
   userName: string
@@ -35,82 +37,128 @@ export async function ClientHome({
 
   const activeProject = data.projects[0]
 
-  let nextAction: React.ComponentProps<typeof ClientNextActionCard>["action"] =
-    {
-      type: "default",
-      title: t("cta.type.default"),
-      description: t("cta.description.default"),
-      href: toHref(
-        activeProject ? `/projects/${activeProject.id}` : "/projects"
-      ),
-    }
+  let nextAction: React.ComponentProps<typeof ClientActionBanner> = {
+    type: "default",
+    eyebrow: t("cta.type.default"),
+    title: t("cta.type.default"),
+    description: t("cta.description.default"),
+    href: toHref(activeProject ? `/projects/${activeProject.id}` : "/projects"),
+    label: t("cta.label.default"),
+  }
 
   if (isBriefingEmpty && activeProject) {
     nextAction = {
       type: "briefing",
+      eyebrow: t("cta.type.briefing"),
       title: t("cta.type.briefing"),
       description: t("cta.description.briefing"),
       href: toHref(`/projects/${activeProject.id}/briefing`),
+      label: t("cta.label.briefing"),
       projectName: activeProject.name,
     }
   } else if (data.pendingApprovals.length > 0) {
     const approval = data.pendingApprovals[0]
     nextAction = {
       type: "approval",
+      eyebrow: t("cta.type.approval"),
       title: approval.title,
       description: t("cta.description.approval"),
       href: toHref(`/projects/${approval.projectId}/approvals`),
+      label: t("cta.label.approval"),
       projectName: approval.project.name,
     }
   } else if (data.pendingTasks.length > 0) {
     const task = data.pendingTasks[0]
     nextAction = {
       type: "task",
+      eyebrow: t("cta.type.task"),
       title: task.title,
       description: t("cta.description.task"),
       href: toHref(`/projects/${task.projectId}/tasks`),
+      label: t("cta.label.task"),
       projectName: task.project.name,
     }
   }
 
-  const heroStatus: React.ComponentProps<typeof ClientHeroStatus>["status"] =
-    isBriefingEmpty
-      ? "briefing_incomplete"
-      : data.pendingApprovals.length > 0
-        ? "awaiting_approval"
-        : data.pendingTasks.length > 0
-          ? "need_shipment"
-          : "on_track"
+  const heroStatus:
+    | "on_track"
+    | "awaiting_approval"
+    | "need_shipment"
+    | "briefing_incomplete" = isBriefingEmpty
+    ? "briefing_incomplete"
+    : data.pendingApprovals.length > 0
+      ? "awaiting_approval"
+      : data.pendingTasks.length > 0
+        ? "need_shipment"
+        : "on_track"
+
+  const heroStatusLabel = {
+    on_track: t("status.on_track"),
+    awaiting_approval: t("status.awaiting_approval"),
+    need_shipment: t("status.need_shipment"),
+    briefing_incomplete: t("status.briefing_incomplete"),
+  }[heroStatus]
 
   return (
-    <div className="flex w-full flex-col gap-10 lg:gap-14">
-      <header className="flex flex-col justify-between gap-8 border-b border-border/20 pb-10 md:flex-row md:items-end">
-        <ClientHeroStatus userName={userName} status={heroStatus} />
+    <div className="-m-6 flex flex-col bg-background lg:-m-12">
+      <ClientLandingHero
+        eyebrow="Portal do cliente"
+        title={`Oi, ${userName.split(" ")[0] || userName}`}
+        description="Seu projeto em uma visao simples: o que mudou, o que falta e qual acao precisa da sua atencao agora."
+        statusLabel={heroStatusLabel}
+        primaryAction={{
+          label: nextAction.label,
+          href: nextAction.href,
+        }}
+        secondaryAction={{
+          label: t("nav.projects"),
+          href: toHref("/projects"),
+        }}
+        metrics={[
+          {
+            label: "Projetos",
+            value: String(data.projects.length),
+            detail: "ativos no portal",
+          },
+          {
+            label: "Validar",
+            value: String(data.pendingApprovals.length),
+            detail: "entregas pendentes",
+          },
+          {
+            label: "Responder",
+            value: String(data.pendingTasks.length),
+            detail: "solicitacoes abertas",
+          },
+        ]}
+      />
 
-        <div className="flex flex-wrap gap-3">
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-full px-6 text-[10px] font-black uppercase tracking-[0.2em]"
-          >
-            <Link href="/projects">
-              <FolderOpen className="mr-2 size-4" weight="duotone" />
-              {t("nav.projects")}
-            </Link>
-          </Button>
-        </div>
-      </header>
-
-      <section className="grid gap-10 lg:gap-14">
-        <ClientNextActionCard action={nextAction} />
+      <section className="mx-auto grid w-full max-w-440 gap-12 px-6 py-10 lg:px-12 lg:py-14">
+        <ClientActionBanner {...nextAction} />
 
         {activeProject && (
-          <div className="flex flex-col gap-8">
-            <div className="flex items-center justify-between px-2">
-              <h2 className="font-heading text-2xl font-black uppercase tracking-tight">
-                {t("active_project_title")}
-              </h2>
-            </div>
+          <div className="flex flex-col gap-6">
+            <ClientSectionHeader
+              eyebrow="Projeto em destaque"
+              title={t("active_project_title")}
+              description="Acompanhe o momento atual, o progresso e o ultimo movimento importante."
+              action={
+                <Button
+                  asChild
+                  variant="outline"
+                  className="h-12 rounded-full px-6 text-[10px] font-black uppercase tracking-[0.2em]"
+                >
+                  <Link
+                    href={{
+                      pathname: "/projects/[id]",
+                      params: { id: activeProject.id },
+                    }}
+                  >
+                    Ver projeto
+                  </Link>
+                </Button>
+              }
+            />
             <ClientProjectCard
               project={{
                 ...activeProject,
@@ -120,17 +168,21 @@ export async function ClientHome({
           </div>
         )}
 
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-14">
+        <div className="grid gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-14">
           <ClientRecentActivityStrip activities={data.recentActivity} />
 
-          <div className="flex flex-col gap-8">
-            <h2 className="font-heading text-2xl font-black uppercase tracking-tight px-2">
-              {t("quick_links_title")}
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="flex flex-col gap-6">
+            <ClientSectionHeader
+              eyebrow="Caminhos rapidos"
+              title={t("quick_links_title")}
+              description="Acesse os pontos que mais movem o projeto sem procurar em menus."
+            />
+            <div className="grid gap-4 sm:grid-cols-2">
               {[
                 {
                   label: t("links.files"),
+                  description:
+                    "Materiais finais, referencias e arquivos enviados.",
                   href: toHref(
                     activeProject
                       ? `/projects/${activeProject.id}/files`
@@ -140,6 +192,7 @@ export async function ClientHome({
                 },
                 {
                   label: t("links.briefing"),
+                  description: "Respostas e alinhamentos que guiam a entrega.",
                   href: toHref(
                     activeProject
                       ? `/projects/${activeProject.id}/briefing`
@@ -149,15 +202,18 @@ export async function ClientHome({
                 },
                 {
                   label: t("links.timeline"),
+                  description: "Historico do que evoluiu no projeto.",
                   href: toHref(
                     activeProject
                       ? `/projects/${activeProject.id}/timeline`
                       : "/projects"
                   ),
-                  icon: FolderOpen,
+                  icon: ShieldCheck,
                 },
                 {
                   label: t("links.tasks"),
+                  description:
+                    "Pendencias e informacoes que precisamos de voce.",
                   href: toHref(
                     activeProject
                       ? `/projects/${activeProject.id}/tasks`
@@ -166,22 +222,13 @@ export async function ClientHome({
                   icon: ClockCountdown,
                 },
               ].map((link) => (
-                <Button
+                <ClientFeatureLink
                   key={link.label}
-                  asChild
-                  variant="ghost"
-                  className="flex h-24 flex-col items-center justify-center gap-3 rounded-[2rem] border border-border/30 bg-muted/5 transition-all hover:bg-muted/10 active:scale-95"
-                >
-                  <Link href={link.href}>
-                    <link.icon
-                      className="size-6 text-brand-primary/60"
-                      weight="duotone"
-                    />
-                    <span className="text-[9px] font-black uppercase tracking-widest">
-                      {link.label}
-                    </span>
-                  </Link>
-                </Button>
+                  title={link.label}
+                  description={link.description}
+                  href={link.href}
+                  icon={link.icon}
+                />
               ))}
             </div>
           </div>

@@ -6,6 +6,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import { ClientApprovalHistory } from "@/src/components/client/ClientApprovalHistory"
 import { ClientApprovalList } from "@/src/components/client/ClientApprovalList"
+import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
@@ -39,17 +40,11 @@ export default async function ApprovalsPage({
 
   return (
     <div className="flex w-full flex-col gap-10">
-      <header className="flex flex-col gap-2 border-b border-border/20 pb-8">
-        <div className="flex items-center gap-2.5">
-          <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
-          <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            PROJETOS <span className="opacity-30">/</span> {project.name}
-          </p>
-        </div>
-        <h1 className="font-heading text-3xl font-black uppercase tracking-tight text-foreground sm:text-4xl">
-          Validações Pendentes
-        </h1>
-      </header>
+      <ClientSectionHeader
+        eyebrow={`${project.name} / Entregas`}
+        title="Entregas para validar"
+        description="Aprove o que estiver certo ou peca ajustes com clareza. Sua resposta move a proxima etapa."
+      />
 
       <div className="grid gap-14">
         <ClientApprovalList updates={project.updates} projectId={id} />

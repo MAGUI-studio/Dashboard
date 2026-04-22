@@ -2,8 +2,10 @@ import * as React from "react"
 
 import { ApprovalStatus } from "@/src/generated/client/enums"
 import { ClientPortalUpdate } from "@/src/types/client-portal"
+import { CheckCircle } from "@phosphor-icons/react/dist/ssr"
 
 import { ClientApprovalCard } from "./ClientApprovalCard"
+import { ClientEmptyState } from "./ClientEmptyState"
 
 interface ClientApprovalListProps {
   updates: ClientPortalUpdate[]
@@ -20,11 +22,11 @@ export async function ClientApprovalList({
 
   if (pendingUpdates.length === 0) {
     return (
-      <div className="rounded-[2.5rem] border border-dashed border-border/30 bg-muted/5 py-20 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-          Nenhuma validação pendente
-        </p>
-      </div>
+      <ClientEmptyState
+        title="Tudo validado por enquanto"
+        description="Quando uma entrega precisar da sua decisao, ela aparece aqui com botoes para aprovar ou pedir ajuste."
+        icon={CheckCircle}
+      />
     )
   }
 

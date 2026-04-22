@@ -11,14 +11,10 @@ import {
   NotePencil,
 } from "@phosphor-icons/react/dist/ssr"
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card"
-
 import { toHref } from "@/src/lib/utils/navigation"
+
+import { ClientEmptyState } from "./ClientEmptyState"
+import { ClientSectionHeader } from "./ClientSectionHeader"
 
 interface ActivityItem {
   id: string
@@ -46,22 +42,19 @@ export async function ClientRecentActivityStrip({
   }
 
   return (
-    <Card className="rounded-[2rem] border-border/40 bg-muted/5 backdrop-blur-md">
-      <CardHeader className="flex flex-row items-center justify-between border-b border-border/15 px-8 py-6">
-        <div className="flex flex-col gap-1">
-          <CardTitle className="font-heading text-xl font-black uppercase tracking-tight">
-            {t("title")}
-          </CardTitle>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/45">
-            {t("subtitle")}
-          </p>
-        </div>
-      </CardHeader>
-      <CardContent className="grid gap-0 p-0">
+    <section className="flex flex-col gap-6">
+      <ClientSectionHeader
+        eyebrow="Movimento recente"
+        title={t("title")}
+        description={t("subtitle")}
+      />
+      <div className="overflow-hidden rounded-[2rem] border border-border/25 bg-muted/5">
         {activities.length === 0 ? (
-          <div className="p-10 text-center text-[10px] font-black uppercase tracking-widest text-muted-foreground/40">
-            {t("empty")}
-          </div>
+          <ClientEmptyState
+            title="Nada novo por enquanto"
+            description={t("empty")}
+            icon={NewspaperClipping}
+          />
         ) : (
           activities.map((item, index) => {
             const Icon = iconMap[item.type]
@@ -69,7 +62,7 @@ export async function ClientRecentActivityStrip({
               <Link
                 key={item.id}
                 href={toHref(item.href)}
-                className={`flex items-center justify-between gap-6 px-8 py-5 transition-colors hover:bg-muted/10 ${
+                className={`flex items-center justify-between gap-6 px-6 py-5 transition-colors hover:bg-background/70 sm:px-8 ${
                   index !== activities.length - 1
                     ? "border-b border-border/10"
                     : ""
@@ -80,7 +73,7 @@ export async function ClientRecentActivityStrip({
                     <Icon weight="duotone" className="size-5" />
                   </div>
                   <div className="flex flex-col gap-0.5 overflow-hidden">
-                    <p className="truncate text-sm font-black tracking-tight text-foreground">
+                    <p className="truncate font-heading text-lg font-black uppercase tracking-tight text-foreground">
                       {item.title}
                     </p>
                     <p className="truncate text-[10px] font-bold uppercase tracking-wider text-muted-foreground/50">
@@ -94,7 +87,7 @@ export async function ClientRecentActivityStrip({
             )
           })
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   )
 }

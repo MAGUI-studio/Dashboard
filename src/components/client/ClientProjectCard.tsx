@@ -7,10 +7,10 @@ import { ClientProjectSummary } from "@/src/types/client-portal"
 import {
   ArrowUpRight,
   Calendar,
+  CheckCircle,
   FolderOpen,
 } from "@phosphor-icons/react/dist/ssr"
 
-import { Card } from "@/src/components/ui/card"
 import { Progress } from "@/src/components/ui/progress"
 
 interface ClientProjectCardProps {
@@ -21,16 +21,18 @@ export async function ClientProjectCard({
   project,
 }: ClientProjectCardProps): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard.client_home.project")
+  const tStatus = await getTranslations("Dashboard.status")
+  const statusLabel = tStatus(project.status)
 
   return (
     <Link href={{ pathname: "/projects/[id]", params: { id: project.id } }}>
-      <Card className="group relative overflow-hidden rounded-[2.5rem] border-border/40 bg-muted/10 p-8 transition-all hover:bg-muted/15 lg:p-10">
-        <div className="absolute top-8 right-8 flex size-10 items-center justify-center rounded-full bg-foreground/5 text-foreground/40 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-brand-primary group-hover:text-white lg:top-10 lg:right-10">
+      <article className="group relative overflow-hidden rounded-[2.25rem] border border-border/25 bg-background p-6 shadow-2xl shadow-foreground/5 transition-all hover:-translate-y-1 hover:border-brand-primary/25 lg:p-8">
+        <div className="absolute right-6 top-6 flex size-11 items-center justify-center rounded-full bg-muted/20 text-foreground/45 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-brand-primary group-hover:text-white">
           <ArrowUpRight weight="bold" className="size-5" />
         </div>
 
-        <div className="flex flex-col gap-10">
-          <div className="flex flex-col gap-3">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px] lg:items-end">
+          <div className="flex min-w-0 flex-col gap-7">
             <div className="flex items-center gap-2.5">
               <FolderOpen
                 weight="duotone"
@@ -40,69 +42,79 @@ export async function ClientProjectCard({
                 {t("active_project")}
               </span>
             </div>
-            <h3 className="font-heading text-4xl font-black uppercase tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              {project.name}
-            </h3>
-          </div>
 
-          <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-3">
-            <div className="flex flex-col gap-3">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
-                {t("phase")}
+            <div className="space-y-4">
+              <h3 className="max-w-4xl font-heading text-4xl font-black uppercase leading-[0.9] tracking-tight text-foreground sm:text-5xl lg:text-7xl">
+                {project.name}
+              </h3>
+              <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/70 sm:text-base">
+                Este e o projeto em foco agora. Entre para ver entregas,
+                arquivos, briefing e o historico completo.
               </p>
-              <div className="flex items-center gap-2">
-                <span className="rounded-full bg-brand-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-brand-primary">
-                  {project.status}
-                </span>
-              </div>
             </div>
 
-            <div className="flex flex-col gap-3">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
+            {project.lastUpdate && (
+              <div className="flex items-start gap-3 rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+                <CheckCircle
+                  weight="duotone"
+                  className="mt-0.5 size-5 shrink-0 text-brand-primary"
+                />
+                <p className="text-sm font-medium leading-relaxed text-muted-foreground/75">
+                  {t("last_update")}:{" "}
+                  <span className="text-foreground">
+                    {project.lastUpdate.title}
+                  </span>
+                </p>
+              </div>
+            )}
+          </div>
+
+          <div className="grid gap-3">
+            <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+              <p className="text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
                 {t("progress")}
               </p>
-              <div className="flex flex-col gap-2">
-                <span className="font-heading text-xl font-black text-foreground">
+              <div className="mt-3 flex items-end justify-between gap-4">
+                <span className="font-heading text-5xl font-black leading-none text-foreground">
                   {project.progress}%
                 </span>
-                <Progress
-                  value={project.progress}
-                  className="h-1.5 w-full max-w-[120px]"
-                />
+                <span className="rounded-full bg-brand-primary/10 px-4 py-1.5 text-[10px] font-black uppercase tracking-wider text-brand-primary">
+                  {statusLabel}
+                </span>
               </div>
+              <Progress value={project.progress} className="mt-5 h-2 w-full" />
             </div>
 
-            <div className="flex flex-col gap-3">
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
-                {t("deadline")}
-              </p>
-              <div className="flex items-center gap-2.5">
-                <Calendar
-                  weight="duotone"
-                  className="size-5 text-muted-foreground/40"
-                />
-                <span className="font-heading text-xl font-black text-foreground">
-                  {project.deadline
-                    ? new Date(project.deadline).toLocaleDateString("pt-BR")
-                    : t("no_deadline")}
-                </span>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
+                  {t("phase")}
+                </p>
+                <p className="mt-2 font-heading text-lg font-black uppercase tracking-tight">
+                  {statusLabel}
+                </p>
+              </div>
+
+              <div className="rounded-[1.5rem] border border-border/20 bg-muted/5 p-5">
+                <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
+                  {t("deadline")}
+                </p>
+                <div className="mt-2 flex items-center gap-2">
+                  <Calendar
+                    weight="duotone"
+                    className="size-4 text-muted-foreground/45"
+                  />
+                  <p className="font-heading text-lg font-black uppercase tracking-tight">
+                    {project.deadline
+                      ? new Date(project.deadline).toLocaleDateString("pt-BR")
+                      : t("no_deadline")}
+                  </p>
+                </div>
               </div>
             </div>
           </div>
-
-          {project.lastUpdate && (
-            <div className="mt-4 flex items-center gap-3 border-t border-border/15 pt-8">
-              <div className="size-2 shrink-0 rounded-full bg-brand-primary/40" />
-              <p className="text-sm font-medium text-muted-foreground/75">
-                {t("last_update")}:{" "}
-                <span className="text-foreground">
-                  {project.lastUpdate.title}
-                </span>
-              </p>
-            </div>
-          )}
         </div>
-      </Card>
+      </article>
     </Link>
   )
 }

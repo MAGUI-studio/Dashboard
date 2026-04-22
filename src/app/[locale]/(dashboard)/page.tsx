@@ -63,6 +63,7 @@ export default async function DashboardPage({
   searchParams: Promise<{ project?: string }>
 }): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard")
+  const tStatus = await getTranslations("Dashboard.status")
   const { userId } = await auth()
   await searchParams
 
@@ -876,7 +877,7 @@ export default async function DashboardPage({
                       </p>
                       <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
                         {project.client.name || project.client.email} •{" "}
-                        {project.status}
+                        {tStatus(project.status)}
                       </p>
                     </div>
                     <span className="text-sm font-black text-foreground/75">

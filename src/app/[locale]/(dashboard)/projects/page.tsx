@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { getTranslations } from "next-intl/server"
+
 import { Link } from "@/src/i18n/navigation"
 import { auth } from "@clerk/nextjs/server"
 import { FolderOpen } from "@phosphor-icons/react/dist/ssr"
@@ -24,6 +26,7 @@ export const metadata = dashboardMetadata({
 
 export default async function ProjectsPage(): Promise<React.JSX.Element> {
   const { userId } = await auth()
+  const tStatus = await getTranslations("Dashboard.status")
 
   if (!userId) return <div />
 
@@ -78,7 +81,7 @@ export default async function ProjectsPage(): Promise<React.JSX.Element> {
                   </CardHeader>
                   <CardContent>
                     <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/50">
-                      Fase: {project.status}
+                      Fase: {tStatus(project.status)}
                     </p>
                     <p className="mt-1 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/50">
                       Progresso: {project.progress}%

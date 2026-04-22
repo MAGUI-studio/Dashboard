@@ -4,6 +4,7 @@ import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 
+import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 import { ClientTimeline } from "@/src/components/client/ClientTimeline"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
@@ -38,17 +39,11 @@ export default async function TimelinePage({
 
   return (
     <div className="flex w-full flex-col gap-10">
-      <header className="flex flex-col gap-2 border-b border-border/20 pb-8">
-        <div className="flex items-center gap-2.5">
-          <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
-          <p className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            PROJETOS <span className="opacity-30">/</span> {project.name}
-          </p>
-        </div>
-        <h1 className="font-heading text-3xl font-black uppercase tracking-tight text-foreground sm:text-4xl">
-          Timeline de Evolução
-        </h1>
-      </header>
+      <ClientSectionHeader
+        eyebrow={`${project.name} / Historico`}
+        title="Historico do projeto"
+        description="Acompanhe a evolucao como uma linha narrativa: marcos, entregas, feedbacks e proximos passos."
+      />
 
       <ClientTimeline updates={project.updates} />
     </div>
