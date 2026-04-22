@@ -35,19 +35,19 @@ export async function ClientAssetCard({
   const Icon = iconMap[asset.type] || Files
 
   return (
-    <Card className="group relative overflow-hidden rounded-[1.75rem] border-border/40 bg-muted/5 transition-all hover:bg-muted/10">
-      <CardContent className="flex flex-col gap-6 p-6">
+    <Card className="group relative overflow-hidden rounded-[1.5rem] border-border/20 bg-muted/5 transition-all hover:-translate-y-0.5 hover:border-brand-primary/20 hover:bg-background">
+      <CardContent className="flex h-full flex-col gap-5 p-5 sm:p-6">
         <div className="flex items-start justify-between gap-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-background/50 text-brand-primary shadow-sm ring-1 ring-border/20">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary shadow-sm ring-1 ring-border/20">
             <Icon weight="duotone" className="size-6" />
           </div>
 
-          <div className="flex gap-1.5 opacity-0 transition-opacity group-hover:opacity-100">
+          <div className="flex gap-1.5 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
             <Button
               asChild
               variant="ghost"
               size="icon-sm"
-              className="size-8 rounded-full bg-background/80 text-muted-foreground hover:bg-brand-primary hover:text-white"
+              className="size-8 rounded-full bg-muted/30 text-muted-foreground hover:bg-brand-primary hover:text-white"
             >
               <a href={asset.url} target="_blank" rel="noopener noreferrer">
                 <ArrowSquareOut weight="bold" className="size-4" />
@@ -56,7 +56,7 @@ export async function ClientAssetCard({
           </div>
         </div>
 
-        <div className="flex flex-col gap-1 overflow-hidden">
+        <div className="flex min-h-24 flex-col gap-1 overflow-hidden">
           <p className="text-[10px] font-black uppercase tracking-[0.24em] text-brand-primary/60">
             {t(asset.type)}
           </p>
@@ -72,7 +72,7 @@ export async function ClientAssetCard({
         <Button
           asChild
           variant="outline"
-          className="h-10 w-full rounded-full border-border/40 text-[9px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
+          className="mt-auto h-10 w-full rounded-full border-border/40 text-[9px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
         >
           <a href={asset.url} download={asset.name}>
             <DownloadSimple className="mr-2 size-3.5" />

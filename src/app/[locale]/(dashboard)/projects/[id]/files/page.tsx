@@ -38,7 +38,7 @@ export default async function FilesPage({
   if (!project) return notFound()
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
         eyebrow={`${project.name} / Materiais`}
         title="Materiais e entregas"

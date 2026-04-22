@@ -28,18 +28,18 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
   }
 
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-4">
       {tasks.map((task) => {
         const isOverdue = task.dueDate && new Date(task.dueDate) < new Date()
 
         return (
           <article
             key={task.id}
-            className="group rounded-[2rem] border border-border/25 bg-muted/5 p-6 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background hover:shadow-xl hover:shadow-foreground/5 lg:p-8"
+            className="group rounded-[1.75rem] border border-border/20 bg-muted/5 p-5 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background sm:p-6 lg:p-7"
           >
-            <div className="grid gap-6 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center">
+            <div className="grid gap-5 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center">
               <div
-                className={`flex size-16 shrink-0 items-center justify-center rounded-[1.35rem] ${
+                className={`flex size-14 shrink-0 items-center justify-center rounded-[1.25rem] sm:size-16 ${
                   isOverdue
                     ? "bg-amber-500/10 text-amber-600"
                     : "bg-brand-primary/10 text-brand-primary"
@@ -52,7 +52,7 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
                 )}
               </div>
 
-              <div className="min-w-0 space-y-2">
+              <div className="flex min-w-0 flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
                     Solicitacao
@@ -66,7 +66,7 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
                     </Badge>
                   )}
                 </div>
-                <h2 className="font-heading text-3xl font-black uppercase leading-none tracking-tight text-foreground">
+                <h2 className="font-heading text-2xl font-black uppercase leading-none tracking-tight text-foreground sm:text-3xl">
                   {task.title}
                 </h2>
                 <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/75">
@@ -89,7 +89,7 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
                 )}
               </div>
 
-              <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-border/40 text-muted-foreground/35 transition group-hover:border-brand-primary/30 group-hover:bg-brand-primary group-hover:text-white">
+              <div className="flex size-12 shrink-0 items-center justify-center rounded-full border border-border/40 text-muted-foreground/40 transition group-hover:border-brand-primary/30 group-hover:bg-brand-primary group-hover:text-white">
                 <ArrowRight weight="bold" className="size-5" />
               </div>
             </div>

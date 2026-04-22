@@ -48,7 +48,7 @@ export function ClientLandingHero({
 
   return (
     <section className="relative overflow-hidden border-b border-border/20">
-      <div className="mx-auto grid w-full max-w-440 gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end lg:px-12 lg:py-16">
+      <div className="mx-auto grid w-full max-w-440 gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)] lg:items-end lg:p-12">
         <div className="flex min-w-0 flex-col gap-8">
           <div className="flex flex-wrap items-center gap-3">
             <span className="inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-brand-primary/10 px-4 py-2 text-[10px] font-black uppercase tracking-[0.24em] text-brand-primary">

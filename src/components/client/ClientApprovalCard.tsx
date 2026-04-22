@@ -87,10 +87,10 @@ export function ClientApprovalCard({
   }
 
   return (
-    <Card className="overflow-hidden rounded-[2rem] border-border/40 bg-muted/5 transition-all hover:bg-muted/10">
-      <CardHeader className="border-b border-border/10 bg-muted/5 p-8">
+    <Card className="overflow-hidden rounded-[1.75rem] border-border/20 bg-muted/5 transition-all hover:border-brand-primary/20">
+      <CardHeader className="border-b border-border/10 p-5 sm:p-6 lg:p-7">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-3">
             <div className="flex items-center gap-2">
               <span className="rounded-full bg-brand-primary/10 px-3 py-1 text-[9px] font-black uppercase tracking-widest text-brand-primary">
                 {t("status.PENDING")}
@@ -99,22 +99,22 @@ export function ClientApprovalCard({
                 • {new Date(update.createdAt).toLocaleDateString("pt-BR")}
               </span>
             </div>
-            <CardTitle className="font-heading text-2xl font-black uppercase tracking-tight text-foreground sm:text-3xl">
+            <CardTitle className="font-heading text-2xl font-black uppercase leading-none tracking-tight text-foreground sm:text-3xl">
               {update.title}
             </CardTitle>
           </div>
         </div>
       </CardHeader>
 
-      <CardContent className="grid gap-8 p-8">
-        <div className="prose prose-sm prose-invert max-w-none font-medium leading-relaxed text-muted-foreground/80">
+      <CardContent className="grid gap-6 p-5 sm:p-6 lg:p-7">
+        <div className="max-w-3xl text-sm font-medium leading-relaxed text-muted-foreground/80 sm:text-base">
           {update.description || "Sem descrição detalhada."}
         </div>
 
         <UpdateAttachmentsList attachments={update.attachments} />
       </CardContent>
 
-      <CardFooter className="flex flex-col gap-4 border-t border-border/10 bg-muted/5 p-8 sm:flex-row sm:items-center sm:justify-end">
+      <CardFooter className="flex flex-col gap-3 border-t border-border/10 p-5 sm:flex-row sm:items-center sm:justify-end sm:p-6 lg:p-7">
         <Dialog open={isRejectDialogOpen} onOpenChange={setIsRejectDialogOpen}>
           <DialogTrigger asChild>
             <Button

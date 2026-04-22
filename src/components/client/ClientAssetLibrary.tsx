@@ -9,7 +9,14 @@ import { DashboardAsset } from "@/src/types/dashboard"
 import { MagnifyingGlass } from "@phosphor-icons/react"
 
 import { Input } from "@/src/components/ui/input"
-import { Tabs, TabsList, TabsTrigger } from "@/src/components/ui/tabs"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select"
 
 import { ClientAssetCard } from "./ClientAssetCard"
 
@@ -34,7 +41,7 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
 
   if (assets.length === 0) {
     return (
-      <div className="rounded-[2.5rem] border border-dashed border-border/30 bg-muted/5 py-20 text-center">
+      <div className="rounded-[1.75rem] border border-dashed border-border/25 px-6 py-16 text-center">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
           Nenhum arquivo disponível no momento.
         </p>
@@ -45,47 +52,55 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
   const assetTypes = Array.from(new Set(assets.map((a) => a.type)))
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+    <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="relative w-full max-w-md">
           <MagnifyingGlass className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40" />
           <Input
             placeholder="Buscar arquivos pelo nome..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="h-12 rounded-full border-border/40 bg-muted/5 pl-11 pr-4 text-sm transition-all focus:border-brand-primary/40 focus:ring-0"
+            className="h-12 rounded-full border-border/40 bg-muted/20 pl-11 pr-4 text-sm transition-all focus:border-brand-primary/40 focus:ring-0"
           />
         </div>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-auto">
-          <TabsList className="h-12 rounded-full border border-border/20 bg-muted/5 p-1.5">
-            <TabsTrigger
-              value="all"
-              className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white"
-            >
-              Todos
-            </TabsTrigger>
-            {assetTypes.map((type) => (
-              <TabsTrigger
-                key={type}
-                value={type}
-                className="rounded-full px-5 text-[9px] font-black uppercase tracking-widest data-[state=active]:bg-brand-primary data-[state=active]:text-white"
+        <Select value={activeTab} onValueChange={setActiveTab}>
+          <SelectTrigger
+            size="lg"
+            className="h-12 w-full rounded-full border-border/40 bg-muted/10 px-5 text-[10px] font-black uppercase tracking-widest md:w-56"
+          >
+            <SelectValue placeholder="Tipo de arquivo" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectGroup>
+              <SelectItem
+                value="all"
+                className="text-[10px] font-bold uppercase tracking-widest"
               >
-                {t(type as AssetType)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-        </Tabs>
+                Todos
+              </SelectItem>
+              {assetTypes.map((type) => (
+                <SelectItem
+                  key={type}
+                  value={type}
+                  className="text-[10px] font-bold uppercase tracking-widest"
+                >
+                  {t(type as AssetType)}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
       </div>
 
       {filteredAssets.length === 0 ? (
-        <div className="rounded-[2.5rem] border border-dashed border-border/30 bg-muted/5 py-20 text-center">
+        <div className="rounded-[1.75rem] border border-dashed border-border/25 px-6 py-16 text-center">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
             Nenhum arquivo encontrado para esta busca.
           </p>
         </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {filteredAssets.map((asset) => (
             <ClientAssetCard key={asset.id} asset={asset} />
           ))}

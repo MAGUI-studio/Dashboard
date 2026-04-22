@@ -1,18 +1,14 @@
 "use client"
-
-import * as React from "react"
-
 import { useTranslations } from "next-intl"
 
 import { Link, usePathname } from "@/src/i18n/navigation"
 import {
-  ArrowRight,
-  ChatTeardropDots,
-  CheckCircle,
-  ClockCountdown,
-  Files,
-  NotePencil,
-  ProjectorScreen,
+  ChatTeardropDotsIcon,
+  CheckCircleIcon,
+  ClockCountdownIcon,
+  FilesIcon,
+  NotePencilIcon,
+  ProjectorScreenIcon,
 } from "@phosphor-icons/react"
 
 import { toHref } from "@/src/lib/utils/navigation"
@@ -29,41 +25,41 @@ export function ClientProjectNav({ projectId }: ClientProjectNavProps) {
     {
       label: t("overview"),
       href: `/projects/${projectId}`,
-      icon: ProjectorScreen,
+      icon: ProjectorScreenIcon,
       exact: true,
     },
     {
       label: t("timeline"),
       href: `/projects/${projectId}/timeline`,
-      icon: ClockCountdown,
+      icon: ClockCountdownIcon,
     },
     {
       label: t("approvals"),
       href: `/projects/${projectId}/approvals`,
-      icon: CheckCircle,
+      icon: CheckCircleIcon,
     },
     {
       label: t("files"),
       href: `/projects/${projectId}/files`,
-      icon: Files,
+      icon: FilesIcon,
     },
     {
       label: t("briefing"),
       href: `/projects/${projectId}/briefing`,
-      icon: NotePencil,
+      icon: NotePencilIcon,
     },
     {
       label: t("tasks"),
       href: `/projects/${projectId}/tasks`,
-      icon: ChatTeardropDots,
+      icon: ChatTeardropDotsIcon,
     },
   ]
 
   return (
-    <div className="sticky top-20 z-20 border-y border-border/15 bg-background/90 px-5 py-3 backdrop-blur-xl sm:px-6 lg:px-12">
+    <div className="px-5 py-3 sm:px-6 lg:px-12 pt-12">
       <nav
         aria-label={t("overview")}
-        className="mx-auto flex w-full max-w-440 items-center gap-2 overflow-x-auto no-scrollbar"
+        className="mx-auto flex w-full max-w-440 items-center gap-6 overflow-x-auto no-scrollbar"
       >
         {items.map((item) => {
           const isActive = item.exact
@@ -75,10 +71,10 @@ export function ClientProjectNav({ projectId }: ClientProjectNavProps) {
               key={item.href}
               href={toHref(item.href)}
               aria-current={isActive ? "page" : undefined}
-              className={`inline-flex h-11 shrink-0 items-center gap-2 rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em] transition-all active:scale-95 ${
+              className={`relative inline-flex h-9 shrink-0 items-center gap-2 text-[10px] font-black uppercase tracking-[0.18em] transition-colors ${
                 isActive
-                  ? "bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
-                  : "border border-border/20 bg-background/60 text-muted-foreground/60 hover:border-brand-primary/25 hover:text-foreground"
+                  ? "text-foreground"
+                  : "text-muted-foreground/55 hover:text-foreground"
               }`}
             >
               <item.icon
@@ -86,13 +82,12 @@ export function ClientProjectNav({ projectId }: ClientProjectNavProps) {
                 className="size-5"
               />
               {item.label}
+              {isActive && (
+                <span className="absolute inset-x-0 -bottom-3 h-0.5 rounded-full bg-brand-primary" />
+              )}
             </Link>
           )
         })}
-        <span className="ml-auto hidden items-center gap-2 rounded-full bg-muted/5 px-4 py-2 text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45 xl:inline-flex">
-          {t("hint")}
-          <ArrowRight weight="bold" className="size-3" />
-        </span>
       </nav>
     </div>
   )

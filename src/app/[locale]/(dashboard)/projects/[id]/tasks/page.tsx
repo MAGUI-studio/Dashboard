@@ -41,7 +41,7 @@ export default async function TasksPage({
     project.actionItems?.filter((item) => item.targetRole === "CLIENT") ?? []
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
         eyebrow={`${project.name} / Solicitacoes`}
         title="O que precisamos de voce"

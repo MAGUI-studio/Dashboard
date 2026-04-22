@@ -38,7 +38,7 @@ export default async function TimelinePage({
   if (!project) return notFound()
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
         eyebrow={`${project.name} / Historico`}
         title="Historico do projeto"

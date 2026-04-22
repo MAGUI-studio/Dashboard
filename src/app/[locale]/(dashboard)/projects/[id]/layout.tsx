@@ -52,11 +52,8 @@ export default async function ProjectLayout({
   if (!project) return notFound()
 
   return (
-    <div className="flex min-h-full flex-col bg-background">
-      <ClientProjectNav projectId={id} />
-      <div className="mx-auto flex w-full max-w-440 flex-col px-5 py-10 sm:px-6 lg:px-12 lg:py-14">
-        {children}
-      </div>
+    <div className="flex min-h-full flex-col px-5 py-10 sm:px-6 lg:px-12">
+      <main className="mx-auto flex w-full max-w-440 flex-col">{children}</main>
     </div>
   )
 }

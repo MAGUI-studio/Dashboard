@@ -52,7 +52,7 @@ export default async function BriefingPage({
   const isEditing = mode === "edit" || isBriefingEmpty
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
         eyebrow={`${project.name} / Alinhamento`}
         title="Briefing estrategico"
@@ -78,9 +78,9 @@ export default async function BriefingPage({
           <BriefingForm projectId={id} initialData={briefingData} />
         </div>
       ) : (
-        <div className="grid gap-14 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="flex flex-col gap-12">
-            <h2 className="px-2 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+        <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
+          <div className="flex flex-col gap-5">
+            <h2 className="px-1 text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/60">
               Estrutura de negocio
             </h2>
             <ClientBriefingView briefing={briefingData} />

@@ -15,7 +15,7 @@ export function ClientSectionHeader({
 }: ClientSectionHeaderProps): React.JSX.Element {
   return (
     <div className="flex flex-col justify-between gap-5 md:flex-row md:items-end">
-      <div className="max-w-2xl space-y-2">
+      <div className="space-y-2">
         {eyebrow && (
           <p className="text-[10px] font-black uppercase tracking-[0.24em] text-brand-primary">
             {eyebrow}

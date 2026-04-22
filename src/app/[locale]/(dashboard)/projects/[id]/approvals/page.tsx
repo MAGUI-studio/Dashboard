@@ -39,14 +39,14 @@ export default async function ApprovalsPage({
   if (!project) return notFound()
 
   return (
-    <div className="flex w-full flex-col gap-10">
+    <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
         eyebrow={`${project.name} / Entregas`}
         title="Entregas para validar"
         description="Aprove o que estiver certo ou peca ajustes com clareza. Sua resposta move a proxima etapa."
       />
 
-      <div className="grid gap-14">
+      <div className="grid gap-10">
         <ClientApprovalList updates={project.updates} projectId={id} />
         <ClientApprovalHistory updates={project.updates} />
       </div>

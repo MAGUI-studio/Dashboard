@@ -11,7 +11,13 @@ import {
   Users,
 } from "@phosphor-icons/react/dist/ssr"
 
-import { Card } from "@/src/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/src/components/ui/card"
 
 interface ClientBriefingViewProps {
   briefing: Record<string, unknown> | null
@@ -62,39 +68,43 @@ export async function ClientBriefingView({
   ]
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
+    <div className="grid gap-4 md:grid-cols-2">
       {items.map((item) => (
         <Card
           key={item.label}
-          className="rounded-3xl border-border/40 bg-muted/5 p-8 transition-all hover:bg-muted/10"
+          className="rounded-[1.75rem] border-border/20 bg-muted/5 transition-all hover:border-brand-primary/20"
         >
-          <div className="flex flex-col gap-4">
+          <CardHeader className="p-5 pb-3 sm:p-6 sm:pb-4">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
                 <item.icon weight="duotone" className="size-5" />
               </div>
-              <h3 className="font-heading text-base font-black uppercase tracking-tight text-foreground/70">
+              <CardTitle className="font-heading text-base font-black uppercase tracking-tight text-foreground/75">
                 {item.label}
-              </h3>
+              </CardTitle>
             </div>
-            <p className="text-sm font-medium leading-relaxed text-muted-foreground/80">
+          </CardHeader>
+          <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
+            <CardDescription className="text-sm font-medium leading-relaxed text-muted-foreground/75">
               {item.value || "Não preenchido."}
-            </p>
-          </div>
+            </CardDescription>
+          </CardContent>
         </Card>
       ))}
 
       {visualReferences.length > 0 && (
-        <Card className="col-span-full rounded-3xl border-border/40 bg-muted/5 p-8">
-          <div className="flex flex-col gap-4">
+        <Card className="col-span-full rounded-[1.75rem] border-border/20 bg-muted/5">
+          <CardHeader className="p-5 pb-3 sm:p-6 sm:pb-4">
             <div className="flex items-center gap-3">
               <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
                 <NotePencil weight="duotone" className="size-5" />
               </div>
-              <h3 className="font-heading text-base font-black uppercase tracking-tight text-foreground/70">
+              <CardTitle className="font-heading text-base font-black uppercase tracking-tight text-foreground/75">
                 {t("visualReferences.label")}
-              </h3>
+              </CardTitle>
             </div>
+          </CardHeader>
+          <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
             <div className="flex flex-wrap gap-2">
               {visualReferences.map((ref, i) => (
                 <a
@@ -102,13 +112,13 @@ export async function ClientBriefingView({
                   href={ref}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="rounded-full bg-background/50 px-4 py-2 text-[11px] font-bold text-brand-primary ring-1 ring-border/20 transition-all hover:bg-brand-primary hover:text-white"
+                  className="rounded-full bg-muted/40 px-4 py-2 text-[11px] font-bold text-brand-primary ring-1 ring-border/20 transition-all hover:bg-brand-primary hover:text-white"
                 >
                   Referência {i + 1}
                 </a>
               ))}
             </div>
-          </div>
+          </CardContent>
         </Card>
       )}
     </div>
