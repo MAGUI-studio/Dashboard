@@ -38,5 +38,3 @@ jobs:
 
       - name: Build
         run: pnpm build
-        env:
-          NEXT_PUBLIC_SITE_URL: "https://example.com"
