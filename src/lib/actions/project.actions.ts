@@ -11,11 +11,11 @@ import {
   ProjectStatus,
 } from "@/src/generated/client/enums"
 import {
+  ApprovalStatus,
   AssetOrigin,
   AssetVisibility,
   AuditActorType,
   NotificationType,
-  ApprovalStatus,
   ProjectMemberRole,
   UserRole,
 } from "@/src/generated/client/enums"
@@ -93,6 +93,8 @@ type TimelineAttachmentInput = {
   mimeType?: string | null
   size?: number | null
 }
+
+type CommentAttachmentInput = TimelineAttachmentInput
 
 function parseTimelineAttachments(
   rawValue: FormDataEntryValue | null
@@ -1046,6 +1048,7 @@ export async function createUpdateCommentAction(input: {
   updateId: string
   projectId: string
   content: string
+  attachments?: CommentAttachmentInput[]
 }): Promise<{ error?: string; success?: boolean }> {
   try {
     const { user } = await ensureProjectAccess(input.projectId, [
@@ -1059,8 +1062,22 @@ export async function createUpdateCommentAction(input: {
         updateId: input.updateId,
         authorId: user.id,
         content: input.content,
+        attachments: input.attachments?.length
+          ? {
+              create: input.attachments.map((attachment) => ({
+                name: attachment.name,
+                url: attachment.url,
+                key: attachment.key,
+                customId: attachment.customId ?? null,
+                type: attachment.type,
+                mimeType: attachment.mimeType ?? null,
+                size: attachment.size ?? null,
+              })),
+            }
+          : undefined,
       },
       include: {
+        attachments: true,
         update: {
           select: {
             id: true,
@@ -1086,6 +1103,7 @@ export async function createUpdateCommentAction(input: {
         comment: input.content,
         after: {
           content: input.content,
+          attachmentsCount: comment.attachments.length,
         },
         relatedEntities: [
           {
@@ -1098,6 +1116,11 @@ export async function createUpdateCommentAction(input: {
             id: comment.id,
             label: "Comentário",
           },
+          ...comment.attachments.map((attachment) => ({
+            type: "UpdateCommentAttachment",
+            id: attachment.id,
+            label: attachment.name,
+          })),
         ],
       },
     })
@@ -1300,6 +1323,142 @@ export async function exportProjectApprovalsCsvAction(
   }
 }
 
+export async function exportProjectApprovalsHtmlAction(
+  projectId: string
+): Promise<{
+  success: boolean
+  filename?: string
+  html?: string
+  error?: string
+}> {
+  try {
+    await protect("admin")
+
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+      select: {
+        id: true,
+        name: true,
+        client: {
+          select: {
+            name: true,
+            email: true,
+            companyName: true,
+          },
+        },
+      },
+    })
+
+    if (!project) {
+      return { success: false, error: "Projeto não encontrado" }
+    }
+
+    const events = await prisma.approvalEvent.findMany({
+      where: {
+        update: {
+          projectId,
+        },
+      },
+      include: {
+        actor: {
+          select: {
+            name: true,
+            email: true,
+            role: true,
+          },
+        },
+        update: {
+          select: {
+            title: true,
+            approvalStatus: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+    })
+
+    const safeProjectName = project.name
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, "-")
+      .replace(/^-|-$/g, "")
+      .toLowerCase()
+
+    const rows = events
+      .map(
+        (event) => `<tr>
+          <td>${escapeHtml(event.update.title)}</td>
+          <td>${escapeHtml(approvalStatusLabels[event.decision])}</td>
+          <td>${escapeHtml(event.comment || "")}</td>
+          <td>${escapeHtml(event.actor?.name ?? event.actor?.email ?? "Sistema")}</td>
+          <td>${escapeHtml(toBrazilianDate(event.createdAt))}</td>
+        </tr>`
+      )
+      .join("")
+
+    const html = `<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aprovações - ${escapeHtml(project.name)}</title>
+  <style>
+    :root {
+      --ink: oklch(0.18 0.02 250);
+      --muted: oklch(0.5 0.02 250);
+      --line: oklch(0.9 0.01 250);
+      --paper: oklch(0.99 0.003 250);
+      --brand: oklch(0.57 0.15 245);
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: ui-sans-serif, system-ui, sans-serif; }
+    main { max-width: 960px; margin: 0 auto; padding: 56px 40px; }
+    .eyebrow { color: var(--brand); font-size: 11px; font-weight: 900; letter-spacing: .24em; text-transform: uppercase; }
+    h1 { margin: 10px 0 12px; font-size: 42px; line-height: .95; letter-spacing: -.05em; text-transform: uppercase; }
+    p { margin: 0; color: var(--muted); }
+    table { width: 100%; margin-top: 36px; border-collapse: collapse; background: white; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+    th { text-align: left; font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); background: oklch(0.96 0.006 250); }
+    th, td { padding: 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    td { font-size: 13px; }
+    tr:last-child td { border-bottom: 0; }
+    @media print { main { padding: 24px; } table { break-inside: auto; } tr { break-inside: avoid; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">Histórico de aprovações</div>
+    <h1>${escapeHtml(project.name)}</h1>
+    <p>${escapeHtml(project.client.companyName || project.client.name || project.client.email)}</p>
+    <table>
+      <thead>
+        <tr>
+          <th>Entrega</th>
+          <th>Decisão</th>
+          <th>Comentário</th>
+          <th>Responsável</th>
+          <th>Data</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows || '<tr><td colspan="5">Nenhuma aprovação registrada.</td></tr>'}
+      </tbody>
+    </table>
+  </main>
+  <script>window.addEventListener("load", () => setTimeout(() => window.print(), 250));</script>
+</body>
+</html>`
+
+    return {
+      success: true,
+      filename: `aprovacoes-${safeProjectName || project.id}.html`,
+      html,
+    }
+  } catch (error) {
+    logger.error({ error }, "Export Project Approvals HTML Error")
+    return { success: false, error: "Erro ao exportar aprovações" }
+  }
+}
+
 export async function exportProjectSummaryHtmlAction(
   projectId: string
 ): Promise<{
@@ -1434,29 +1593,38 @@ export async function exportProjectSummaryHtmlAction(
 
     <section>
       <h2>Últimas atualizações</h2>
-      ${project.updates
-        .map(
-          (update) => `<div class="item"><div class="title">${escapeHtml(update.title)}</div><p>${escapeHtml(update.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(update.createdAt))} · ${escapeHtml(update.approvalStatus)}</div></div>`
-        )
-        .join("") || '<p>Nenhuma atualização registrada.</p>'}
+      ${
+        project.updates
+          .map(
+            (update) =>
+              `<div class="item"><div class="title">${escapeHtml(update.title)}</div><p>${escapeHtml(update.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(update.createdAt))} · ${escapeHtml(update.approvalStatus)}</div></div>`
+          )
+          .join("") || "<p>Nenhuma atualização registrada.</p>"
+      }
     </section>
 
     <section>
       <h2>Pendências</h2>
-      ${project.actionItems
-        .map(
-          (item) => `<div class="item"><div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.status)} · ${escapeHtml(item.targetRole)} · ${escapeHtml(toBrazilianDate(item.dueDate)) || "Sem prazo"}</div></div>`
-        )
-        .join("") || '<p>Nenhuma pendência registrada.</p>'}
+      ${
+        project.actionItems
+          .map(
+            (item) =>
+              `<div class="item"><div class="title">${escapeHtml(item.title)}</div><div class="meta">${escapeHtml(item.status)} · ${escapeHtml(item.targetRole)} · ${escapeHtml(toBrazilianDate(item.dueDate)) || "Sem prazo"}</div></div>`
+          )
+          .join("") || "<p>Nenhuma pendência registrada.</p>"
+      }
     </section>
 
     <section>
       <h2>Versões</h2>
-      ${project.versions
-        .map(
-          (version) => `<div class="item"><div class="title">${escapeHtml(version.name)}</div><p>${escapeHtml(version.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(version.createdAt))}${version.deployUrl ? ` · ${escapeHtml(version.deployUrl)}` : ""}</div></div>`
-        )
-        .join("") || '<p>Nenhuma versão registrada.</p>'}
+      ${
+        project.versions
+          .map(
+            (version) =>
+              `<div class="item"><div class="title">${escapeHtml(version.name)}</div><p>${escapeHtml(version.description || "")}</p><div class="meta">${escapeHtml(toBrazilianDate(version.createdAt))}${version.deployUrl ? ` · ${escapeHtml(version.deployUrl)}` : ""}</div></div>`
+          )
+          .join("") || "<p>Nenhuma versão registrada.</p>"
+      }
     </section>
   </main>
   <script>window.addEventListener("load", () => setTimeout(() => window.print(), 250));</script>

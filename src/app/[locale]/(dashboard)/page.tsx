@@ -31,11 +31,11 @@ import {
   CardTitle,
 } from "@/src/components/ui/card"
 
-import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
 import {
-  AdminActivityFeed,
   type ActivityKind,
+  AdminActivityFeed,
 } from "@/src/components/admin/AdminActivityFeed"
+import { AdminAttentionPanel } from "@/src/components/admin/AdminAttentionPanel"
 import { AdminCommercialHealthList } from "@/src/components/admin/AdminCommercialHealthList"
 import { AdminOperationsAgenda } from "@/src/components/admin/AdminOperationsAgenda"
 import { AdminOperationsPerformance } from "@/src/components/admin/AdminOperationsPerformance"
@@ -47,8 +47,8 @@ import { DashboardSummary } from "@/src/components/common/DashboardSummary"
 import { Greetings } from "@/src/components/common/Greetings"
 import { ProjectSwitcher } from "@/src/components/common/ProjectSwitcher"
 
-import prisma from "@/src/lib/prisma"
 import { getActiveScheduledReminders } from "@/src/lib/operational-reminders"
+import prisma from "@/src/lib/prisma"
 import { getLeadHealth } from "@/src/lib/utils/lead-health"
 import { getProjectHealth } from "@/src/lib/utils/project-health"
 
@@ -537,7 +537,7 @@ export default async function DashboardPage({
       .map((project) => {
         const lastUpdateAt = project.updates[0]?.createdAt ?? project.updatedAt
         const daysWithoutUpdate = Math.floor(
-          (Date.now() - new Date(lastUpdateAt).getTime()) / 86_400_000
+          (today.getTime() - new Date(lastUpdateAt).getTime()) / 86_400_000
         )
 
         return {
@@ -890,7 +890,8 @@ export default async function DashboardPage({
                   Biblioteca de templates
                 </CardTitle>
                 <CardDescription>
-                  Mensagens base para comercial, updates, aprovações, material e onboarding.
+                  Mensagens base para comercial, updates, aprovações, material e
+                  onboarding.
                 </CardDescription>
               </CardHeader>
               <CardContent className="pt-6">
@@ -949,6 +950,9 @@ export default async function DashboardPage({
           comments: {
             orderBy: { createdAt: "asc" },
             include: {
+              attachments: {
+                orderBy: { createdAt: "asc" },
+              },
               author: {
                 select: {
                   id: true,

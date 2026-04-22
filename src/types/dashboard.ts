@@ -7,8 +7,8 @@ import {
   AssetVisibility,
   NotificationType,
   Priority,
-  ProjectMemberRole,
   ProjectCategory,
+  ProjectMemberRole,
   ProjectStatus,
   UserRole,
 } from "@/src/generated/client/enums"
@@ -110,8 +110,21 @@ export interface DashboardUpdateComment {
     name: string | null
     role: UserRole
   } | null
+  attachments?: DashboardUpdateCommentAttachment[]
   createdAt: Date | string
   updatedAt: Date | string
+}
+
+export interface DashboardUpdateCommentAttachment {
+  id: string
+  name: string
+  url: string
+  key: string
+  customId: string | null
+  type: AssetType
+  mimeType: string | null
+  size: number | null
+  createdAt: Date | string
 }
 
 export interface DashboardApprovalEvent {

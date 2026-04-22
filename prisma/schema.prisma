@@ -387,12 +387,32 @@ model UpdateComment {
   
   authorId   String?
   author     User?    @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  attachments UpdateCommentAttachment[]
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
   @@index([updateId])
   @@index([authorId])
+}
+
+model UpdateCommentAttachment {
+  id       String    @id @default(cuid())
+  name     String
+  url      String
+  key      String
+  customId String?
+  type     AssetType @default(DOCUMENT)
+  mimeType String?
+  size     Int?
+
+  commentId String
+  comment   UpdateComment @relation(fields: [commentId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+
+  @@index([commentId])
+  @@index([createdAt])
 }
 
 model ApprovalEvent {

@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl"
 import { usePathname, useRouter } from "next/navigation"
 
 import { LeadStatus } from "@/src/generated/client/enums"
-import { Lead, MessageTemplate } from "@/src/types/crm"
+import { Lead, MessageTemplate, SavedView } from "@/src/types/crm"
 import {
   DndContext,
   type DragEndEvent,
@@ -32,6 +32,8 @@ import {
   MagnifyingGlass,
   NotePencil,
   Phone,
+  Star,
+  Trash,
 } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 import { toast } from "sonner"
@@ -41,7 +43,12 @@ import { Input } from "@/src/components/ui/input"
 
 import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
 
-import { updateLeadStatus } from "@/src/lib/actions/crm.actions"
+import {
+  deleteCrmViewAction,
+  saveCrmPreferencesAction,
+  saveCrmViewAction,
+  updateLeadStatus,
+} from "@/src/lib/actions/crm.actions"
 import {
   CRM_STATUS_ORDER,
   LEAD_STATUS_STYLES,
@@ -125,6 +132,7 @@ function moveLeadBetweenColumns(params: {
 
 function LeadCard({
   lead,
+  density = "comfortable",
   dragging = false,
   dragAttributes,
   dragListeners,
@@ -136,6 +144,7 @@ function LeadCard({
   templates,
 }: {
   lead: Lead
+  density?: "comfortable" | "compact"
   dragging?: boolean
   dragAttributes?: DraggableAttributes
   dragListeners?: Record<string, unknown>
@@ -177,7 +186,11 @@ function LeadCard({
         ) : null}
       </div>
 
-      <div className="mt-4 grid gap-3 rounded-[1.25rem] border border-border/35 bg-muted/10 p-3.5">
+      <div
+        className={`mt-4 grid rounded-[1.25rem] border border-border/35 bg-muted/10 ${
+          density === "compact" ? "gap-2 p-3" : "gap-3 p-3.5"
+        }`}
+      >
         <div className="flex items-center justify-between gap-3">
           <span className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/50">
             {t(`source.${lead.source}`)}
@@ -213,7 +226,11 @@ function LeadCard({
         ) : null}
       </div>
 
-      <div className="mt-4 flex items-center justify-between gap-3">
+      <div
+        className={`flex items-center justify-between gap-3 ${
+          density === "compact" ? "mt-3" : "mt-4"
+        }`}
+      >
         <span className="inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/55">
           <NotePencil size={12} />
           {lead.followUpNotes?.length || 0} nota(s)
@@ -243,6 +260,7 @@ function LeadCard({
 function SortableLeadCardWithDrawerState({
   lead,
   dragDisabled,
+  density,
   onDrawerOpenChange = () => undefined,
   isOpen = false,
   clients,
@@ -250,6 +268,7 @@ function SortableLeadCardWithDrawerState({
 }: {
   lead: Lead
   dragDisabled: boolean
+  density: "comfortable" | "compact"
   onDrawerOpenChange?: (leadId: string, open: boolean) => void
   isOpen?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
@@ -270,6 +289,7 @@ function SortableLeadCardWithDrawerState({
   return (
     <LeadCard
       lead={lead}
+      density={density}
       dragging={isDragging}
       dragAttributes={dragDisabled ? undefined : attributes}
       dragListeners={dragDisabled ? undefined : listeners}
@@ -291,6 +311,7 @@ function KanbanColumn({
   leadIds,
   leadMap,
   dragDisabled,
+  density,
   onDrawerOpenChange,
   selectedLeadId,
   clients,
@@ -300,6 +321,7 @@ function KanbanColumn({
   leadIds: string[]
   leadMap: LeadMap
   dragDisabled: boolean
+  density: "comfortable" | "compact"
   onDrawerOpenChange: (leadId: string, open: boolean) => void
   selectedLeadId: string | null
   clients: Array<{ id: string; name: string | null; email: string }>
@@ -340,6 +362,7 @@ function KanbanColumn({
               key={lead.id}
               lead={lead}
               dragDisabled={dragDisabled}
+              density={density}
               onDrawerOpenChange={onDrawerOpenChange}
               isOpen={selectedLeadId === lead.id}
               clients={clients}
@@ -363,11 +386,15 @@ export function KanbanBoard({
   initialLeadId = null,
   clients,
   templates,
+  savedViews,
+  preferences,
 }: {
   leads: Lead[]
   initialLeadId?: string | null
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
+  savedViews: SavedView[]
+  preferences: { density: "comfortable" | "compact" }
 }): React.JSX.Element {
   const [search, setSearch] = React.useState("")
   const [filters, setFilters] = React.useState<CRMFilters>({
@@ -383,6 +410,12 @@ export function KanbanBoard({
   const [selectedLeadId, setSelectedLeadId] = React.useState<string | null>(
     initialLeadId
   )
+  const [viewName, setViewName] = React.useState("")
+  const [isSavingView, setIsSavingView] = React.useState(false)
+  const [isDeletingViewId, setIsDeletingViewId] = React.useState<string | null>(
+    null
+  )
+  const [density, setDensity] = React.useState(preferences.density)
   const lastCommittedStatusRef = React.useRef<LeadStatus | null>(null)
   const router = useRouter()
   const pathname = usePathname()
@@ -490,6 +523,79 @@ export function KanbanBoard({
   )
 
   const activeLead = activeLeadId ? leadMap[activeLeadId] : null
+
+  const handleSaveView = async (): Promise<void> => {
+    const name = viewName.trim()
+
+    if (!name) {
+      toast.error("Nome da visão obrigatório.")
+      return
+    }
+
+    setIsSavingView(true)
+    const result = await saveCrmViewAction({
+      name,
+      filters: {
+        search,
+        ...filters,
+      },
+    })
+
+    if (result.success) {
+      toast.success("Visão salva.")
+      setViewName("")
+      router.refresh()
+    } else {
+      toast.error(result.error ?? "Não foi possível salvar visão.")
+    }
+
+    setIsSavingView(false)
+  }
+
+  const handleApplyView = (view: SavedView): void => {
+    const data = view.filtersJson
+
+    setSearch(typeof data.search === "string" ? data.search : "")
+    setFilters({
+      source:
+        typeof data.source === "string"
+          ? (data.source as CRMFilters["source"])
+          : "all",
+      stagnation:
+        typeof data.stagnation === "string"
+          ? (data.stagnation as CRMFilters["stagnation"])
+          : "all",
+      hasContact:
+        typeof data.hasContact === "string"
+          ? (data.hasContact as CRMFilters["hasContact"])
+          : "all",
+    })
+  }
+
+  const handleDeleteView = async (id: string): Promise<void> => {
+    setIsDeletingViewId(id)
+    const result = await deleteCrmViewAction(id)
+
+    if (result.success) {
+      toast.success("Visão removida.")
+      router.refresh()
+    } else {
+      toast.error(result.error ?? "Não foi possível remover visão.")
+    }
+
+    setIsDeletingViewId(null)
+  }
+
+  const handleDensityChange = async (
+    nextDensity: "comfortable" | "compact"
+  ): Promise<void> => {
+    setDensity(nextDensity)
+    const result = await saveCrmPreferencesAction({ density: nextDensity })
+
+    if (!result.success) {
+      toast.error("Não foi possível salvar preferência.")
+    }
+  }
 
   const handleDrawerOpenChange = React.useCallback(
     (leadId: string, open: boolean) => {
@@ -619,6 +725,77 @@ export function KanbanBoard({
         </div>
       </div>
 
+      <div className="flex flex-col gap-3 rounded-[1.5rem] border border-border/30 bg-background/55 p-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.22em] text-muted-foreground/45">
+            <Star weight="duotone" className="size-4 text-brand-primary" />
+            Visões salvas
+          </span>
+          {savedViews.length ? (
+            savedViews.map((view) => (
+              <div
+                key={view.id}
+                className="inline-flex items-center overflow-hidden rounded-full border border-border/35 bg-muted/10"
+              >
+                <button
+                  type="button"
+                  onClick={() => handleApplyView(view)}
+                  className="px-3 py-2 text-[9px] font-black uppercase tracking-[0.16em] text-foreground/75 transition-colors hover:text-brand-primary"
+                >
+                  {view.name}
+                </button>
+                <button
+                  type="button"
+                  disabled={isDeletingViewId === view.id}
+                  onClick={() => handleDeleteView(view.id)}
+                  className="border-l border-border/30 px-2 py-2 text-muted-foreground/45 transition-colors hover:text-destructive"
+                  aria-label={`Remover visão ${view.name}`}
+                >
+                  <Trash weight="duotone" className="size-3.5" />
+                </button>
+              </div>
+            ))
+          ) : (
+            <span className="text-xs font-medium text-muted-foreground/50">
+              Nenhuma visão salva.
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <div className="inline-flex rounded-full border border-border/35 bg-muted/10 p-1">
+            {(["comfortable", "compact"] as const).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => handleDensityChange(item)}
+                className={`rounded-full px-3 py-2 text-[9px] font-black uppercase tracking-[0.16em] transition-colors ${
+                  density === item
+                    ? "bg-foreground text-background"
+                    : "text-muted-foreground/65 hover:text-foreground"
+                }`}
+              >
+                {item === "comfortable" ? "Conforto" : "Compacto"}
+              </button>
+            ))}
+          </div>
+          <Input
+            value={viewName}
+            onChange={(event) => setViewName(event.target.value)}
+            placeholder="Nome da visão"
+            className="h-10 min-w-56 rounded-full border-border/50 bg-background/80"
+          />
+          <Button
+            type="button"
+            onClick={handleSaveView}
+            disabled={isSavingView}
+            className="h-10 rounded-full px-5 text-[9px] font-black uppercase tracking-[0.18em]"
+          >
+            {isSavingView ? "Salvando" : "Salvar filtros"}
+          </Button>
+        </div>
+      </div>
+
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
@@ -634,6 +811,7 @@ export function KanbanBoard({
               leadIds={filteredColumnMap[status]}
               leadMap={leadMap}
               dragDisabled={hasOpenDrawer}
+              density={density}
               onDrawerOpenChange={handleDrawerOpenChange}
               selectedLeadId={selectedLeadId}
               clients={clients}
@@ -646,6 +824,7 @@ export function KanbanBoard({
           {activeLead ? (
             <LeadCard
               lead={activeLead}
+              density={density}
               dragging
               clients={clients}
               templates={templates}

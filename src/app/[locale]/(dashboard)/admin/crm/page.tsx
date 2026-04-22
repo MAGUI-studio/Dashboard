@@ -13,8 +13,10 @@ import { ExportLeadsButton } from "@/src/components/admin/ExportLeadsButton"
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
 import {
+  getCrmPreferencesAction,
   getLeads,
   getMessageTemplatesAction,
+  getSavedCrmViewsAction,
 } from "@/src/lib/actions/crm.actions"
 import prisma from "@/src/lib/prisma"
 
@@ -26,6 +28,8 @@ export default async function CRMPage({
   const t = await getTranslations("Admin.crm")
   const leads = await getLeads()
   const templates = await getMessageTemplatesAction()
+  const savedViews = await getSavedCrmViewsAction()
+  const preferences = await getCrmPreferencesAction()
 
   const clients = await prisma.user.findMany({
     where: { role: UserRole.CLIENT },
@@ -83,6 +87,8 @@ export default async function CRMPage({
         initialLeadId={selectedLeadId}
         clients={clients}
         templates={templates}
+        savedViews={savedViews}
+        preferences={preferences}
       />
     </main>
   )

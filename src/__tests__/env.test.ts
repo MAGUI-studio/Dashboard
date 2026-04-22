@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { describe, expect, it } from "vitest"
 import { z } from "zod"
 
@@ -27,5 +29,15 @@ describe("env schema", () => {
   it("should fail when missing required URL", () => {
     const result = envSchema.safeParse({})
     expect(result.success).toBe(false)
+  })
+
+  it("does not hardcode a PostgreSQL connection string fallback", () => {
+    const envFile = fs.readFileSync(
+      path.join(process.cwd(), "src", "config", "env.ts"),
+      "utf8"
+    )
+
+    expect(envFile).not.toContain("postgresql://")
+    expect(envFile).not.toContain("postgres://")
   })
 })

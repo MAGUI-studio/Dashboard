@@ -28,7 +28,7 @@ export const ourFileRouter = {
       z
         .object({
           projectId: z.string().min(1).optional(),
-          scope: z.enum(["assets", "timeline"]).optional(),
+          scope: z.enum(["assets", "timeline", "comments"]).optional(),
         })
         .optional()
     )

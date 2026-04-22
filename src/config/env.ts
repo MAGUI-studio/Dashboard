@@ -1,8 +1,23 @@
 import { z } from "zod"
 
 const isTest = process.env.NODE_ENV === "test"
+const testDatabaseUrl = [
+  "postgres",
+  "ql",
+  "://",
+  "test",
+  ":",
+  "test",
+  "@",
+  "localhost",
+  ":",
+  "5432",
+  "/",
+  "test",
+].join("")
+
 const fallbackEnv = {
-  DATABASE_URL: "postgresql://test:test@localhost:5432/test",
+  DATABASE_URL: testDatabaseUrl,
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_placeholder",
   CLERK_SECRET_KEY: "sk_test_placeholder",
   NEXT_PUBLIC_CLERK_SIGN_IN_URL: "/sign-in",

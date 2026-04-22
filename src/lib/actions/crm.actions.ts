@@ -10,7 +10,7 @@ import {
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client/enums"
-import { Lead, MessageTemplate } from "@/src/types/crm"
+import { Lead, MessageTemplate, SavedView } from "@/src/types/crm"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
@@ -39,6 +39,15 @@ const LeadNoteSchema = z.object({
 
 const UpdateLeadSchema = LeadSchema.extend({
   id: z.string().min(1),
+})
+
+const SavedCrmViewSchema = z.object({
+  name: z.string().trim().min(2).max(60),
+  filters: z.record(z.string(), z.unknown()),
+})
+
+const CrmPreferencesSchema = z.object({
+  density: z.enum(["comfortable", "compact"]),
 })
 
 function revalidateCrmPaths(): void {
@@ -423,6 +432,151 @@ export async function deleteMessageTemplateAction(
   } catch (error) {
     logger.error({ error }, "Delete Template Error")
     return { success: false, error: "Failed to delete template" }
+  }
+}
+
+export async function getSavedCrmViewsAction(): Promise<SavedView[]> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (!actor) return []
+
+    const views = await prisma.savedView.findMany({
+      where: {
+        userId: actor.id,
+        module: "CRM",
+      },
+      orderBy: { updatedAt: "desc" },
+    })
+
+    return views as unknown as SavedView[]
+  } catch (error) {
+    logger.error({ error }, "Get Saved CRM Views Error")
+    return []
+  }
+}
+
+export async function saveCrmViewAction(
+  data: z.infer<typeof SavedCrmViewSchema>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (!actor) return { success: false, error: "Unauthorized" }
+
+    const validated = SavedCrmViewSchema.parse(data)
+
+    await prisma.$transaction([
+      prisma.savedView.deleteMany({
+        where: {
+          userId: actor.id,
+          module: "CRM",
+          name: validated.name,
+        },
+      }),
+      prisma.savedView.create({
+        data: {
+          userId: actor.id,
+          module: "CRM",
+          name: validated.name,
+          filtersJson: validated.filters as Prisma.InputJsonValue,
+        },
+      }),
+    ])
+
+    revalidateCrmPaths()
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Save CRM View Error")
+    return { success: false, error: "Failed to save CRM view" }
+  }
+}
+
+export async function deleteCrmViewAction(
+  id: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (!actor) return { success: false, error: "Unauthorized" }
+
+    await prisma.savedView.deleteMany({
+      where: {
+        id,
+        userId: actor.id,
+        module: "CRM",
+      },
+    })
+
+    revalidateCrmPaths()
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Delete CRM View Error")
+    return { success: false, error: "Failed to delete CRM view" }
+  }
+}
+
+export async function getCrmPreferencesAction(): Promise<{
+  density: "comfortable" | "compact"
+}> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (!actor) return { density: "comfortable" }
+
+    const preferences = await prisma.savedView.findFirst({
+      where: {
+        userId: actor.id,
+        module: "CRM_PREFERENCES",
+        name: "default",
+      },
+    })
+
+    const parsed = CrmPreferencesSchema.safeParse(preferences?.filtersJson)
+    return parsed.success ? parsed.data : { density: "comfortable" }
+  } catch (error) {
+    logger.error({ error }, "Get CRM Preferences Error")
+    return { density: "comfortable" }
+  }
+}
+
+export async function saveCrmPreferencesAction(
+  data: z.infer<typeof CrmPreferencesSchema>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    if (!actor) return { success: false, error: "Unauthorized" }
+
+    const validated = CrmPreferencesSchema.parse(data)
+
+    await prisma.$transaction([
+      prisma.savedView.deleteMany({
+        where: {
+          userId: actor.id,
+          module: "CRM_PREFERENCES",
+          name: "default",
+        },
+      }),
+      prisma.savedView.create({
+        data: {
+          userId: actor.id,
+          module: "CRM_PREFERENCES",
+          name: "default",
+          filtersJson: validated as Prisma.InputJsonValue,
+        },
+      }),
+    ])
+
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Save CRM Preferences Error")
+    return { success: false, error: "Failed to save CRM preferences" }
   }
 }
 
