@@ -6,12 +6,10 @@ import { Prisma } from "@/src/generated/client/client"
 import { LeadStatus } from "@/src/generated/client/enums"
 import { Lead, MessageTemplate, SavedView } from "@/src/types/crm"
 
-import { env } from "@/src/config/env"
+import { CACHE_TTL } from "@/src/config/cache"
 
 import { cacheTags } from "./cache-tags"
 import prisma from "./prisma"
-
-const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
 // Types for DTO mapping
 type LeadWithRelations = Prisma.LeadGetPayload<{
@@ -86,7 +84,10 @@ const getLeadsCached = (page: number = 1, limit: number = 50) =>
       return { leads, totalCount, totalPages: Math.ceil(totalCount / limit) }
     },
     ["crm-leads", page.toString(), limit.toString()],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+    {
+      revalidate: CACHE_TTL.LEADS,
+      tags: [cacheTags.adminCrmLeads, cacheTags.adminCrm],
+    }
   )()
 
 export const getLeads = async (page: number = 1, limit: number = 100) => {
@@ -136,7 +137,7 @@ export const getLeadDetails = (id: string) =>
     },
     ["crm-lead-details", id],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.LEADS,
       tags: [cacheTags.adminLead(id), cacheTags.adminCrm],
     }
   )()
@@ -149,7 +150,7 @@ const getMessageTemplatesCached = unstable_cache(
     })
   },
   ["crm-message-templates"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+  { revalidate: CACHE_TTL.USER_PREFERENCES, tags: [cacheTags.adminCrm] }
 )
 
 export const getMessageTemplates = (scope: string = "LEAD") =>
@@ -159,7 +160,10 @@ export const getMessageTemplates = (scope: string = "LEAD") =>
       return (templates as MessageTemplateType[]).map(toMessageTemplateDto)
     },
     ["crm-message-templates", scope],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+    {
+      revalidate: CACHE_TTL.TEMPLATES,
+      tags: [cacheTags.adminCrmTemplates, cacheTags.adminCrm],
+    }
   )()
 
 const getSavedCrmViewsCached = unstable_cache(
@@ -183,7 +187,10 @@ export const getSavedCrmViews = (userId: string) =>
       return (views as SavedViewType[]).map(toSavedViewDto)
     },
     ["crm-saved-views", userId],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+    {
+      revalidate: dataCacheTtl,
+      tags: [cacheTags.adminCrmViews(userId), cacheTags.adminCrm],
+    }
   )()
 
 const getCrmPreferencesCached = unstable_cache(
@@ -207,5 +214,8 @@ export const getCrmPreferences = (userId: string) =>
       return prefs ? toSavedViewDto(prefs as SavedViewType) : null
     },
     ["crm-preferences", userId],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+    {
+      revalidate: dataCacheTtl,
+      tags: [cacheTags.adminCrmPrefs(userId), cacheTags.adminCrm],
+    }
   )()

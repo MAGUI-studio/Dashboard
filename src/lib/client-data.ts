@@ -4,12 +4,10 @@ import { unstable_cache } from "next/cache"
 
 import { UserRole } from "@/src/generated/client/enums"
 
-import { env } from "@/src/config/env"
+import { CACHE_TTL } from "@/src/config/cache"
 
 import { cacheTags } from "./cache-tags"
 import prisma from "./prisma"
-
-const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
 const getAdminClientOptionsCached = unstable_cache(
   async () => {
@@ -65,7 +63,7 @@ const getAdminClientRowsCached = (page: number = 1, limit: number = 50) =>
       return { clients, totalCount, totalPages: Math.ceil(totalCount / limit) }
     },
     ["admin-client-rows", page.toString(), limit.toString()],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminClientOptions] }
+    { revalidate: CACHE_TTL.CLIENT_ROWS, tags: [cacheTags.adminClientOptions] }
   )()
 
 export const getAdminClientRows = getAdminClientRowsCached
@@ -96,9 +94,9 @@ const getAdminClientDetailsCached = unstable_cache(
 export const getAdminClientDetails = (id: string) =>
   unstable_cache(
     async () => getAdminClientDetailsCached(id),
-    ["admin-client-details", id],
+    ["admin-client-details", clerkId],
     {
-      revalidate: dataCacheTtl,
-      tags: [cacheTags.adminClient(id), cacheTags.adminClientOptions],
+      revalidate: CACHE_TTL.CLIENT_DETAILS,
+      tags: [cacheTags.adminClient(clerkId), cacheTags.adminClientOptions],
     }
   )()

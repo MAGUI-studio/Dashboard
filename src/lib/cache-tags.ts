@@ -8,6 +8,10 @@ export const cacheTags = {
   adminDashboard: "admin:dashboard",
   adminSearch: "admin:search",
   adminCrm: "admin:crm",
+  adminCrmLeads: "admin:crm:leads",
+  adminCrmTemplates: "admin:crm:templates",
+  adminCrmViews: (userId: string) => `admin:crm:views:${userId}`,
+  adminCrmPrefs: (userId: string) => `admin:crm:prefs:${userId}`,
   adminLead: (id: string) => `admin:lead:${id}`,
   projectTimeline: (id: string) => `project:timeline:${id}`,
   projectAssets: (id: string) => `project:assets:${id}`,
@@ -34,12 +38,30 @@ export function revalidateProjectData(projectId?: string) {
   revalidateTag(cacheTags.adminSearch, "max")
 }
 
-export function revalidateCrmData(leadId?: string) {
+export function revalidateCrmData() {
   revalidateTag(cacheTags.adminCrm, "max")
-  if (leadId) {
-    revalidateTag(cacheTags.adminLead(leadId), "max")
-  }
   revalidateTag(cacheTags.adminDashboard, "max")
+}
+
+export function revalidateCrmLeads() {
+  revalidateTag(cacheTags.adminCrmLeads, "max")
+  revalidateTag(cacheTags.adminDashboard, "max")
+}
+
+export function revalidateCrmLead(id: string) {
+  revalidateTag(cacheTags.adminLead(id), "max")
+}
+
+export function revalidateCrmTemplates() {
+  revalidateTag(cacheTags.adminCrmTemplates, "max")
+}
+
+export function revalidateCrmViews(userId: string) {
+  revalidateTag(cacheTags.adminCrmViews(userId), "max")
+}
+
+export function revalidateCrmPrefs(userId: string) {
+  revalidateTag(cacheTags.adminCrmPrefs(userId), "max")
 }
 
 export function revalidateProjectTimeline(projectId: string) {

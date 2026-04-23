@@ -12,6 +12,10 @@ import {
   ProjectStatus,
 } from "@/src/generated/client/enums"
 
+import {
+  revalidateProjectData,
+  revalidateProjectStatus,
+} from "@/src/lib/cache-tags"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -164,7 +168,7 @@ export async function createProjectAction(
       return project
     })
 
-    revalidatePath("/admin/projects")
+    revalidateProjectData()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Create Project Error:")
@@ -269,9 +273,7 @@ export async function updateProjectStatusAction(
       })
     })
 
-    revalidatePath(`/admin/projects/${id}`)
-    revalidatePath("/admin/projects")
-    revalidatePath("/")
+    revalidateProjectStatus(id)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Update Project Error:")
@@ -323,7 +325,7 @@ export async function deleteProjectAction(
       })
     })
 
-    revalidatePath("/admin/projects")
+    revalidateProjectData()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Delete Project Error:")

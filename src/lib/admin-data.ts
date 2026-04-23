@@ -12,9 +12,7 @@ import {
 import { cacheTags } from "@/src/lib/cache-tags"
 import prisma from "@/src/lib/prisma"
 
-import { env } from "@/src/config/env"
-
-const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
+import { CACHE_TTL } from "@/src/config/cache"
 
 const getAdminProjectRowsCached = (page: number = 1, limit: number = 20) =>
   unstable_cache(
@@ -46,47 +44,50 @@ const getAdminProjectRowsCached = (page: number = 1, limit: number = 20) =>
       return { projects, totalCount, totalPages: Math.ceil(totalCount / limit) }
     },
     ["admin-project-rows", page.toString(), limit.toString()],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminProjects] }
+    { revalidate: CACHE_TTL.PROJECT_ROWS, tags: [cacheTags.adminProjects] }
   )()
 
 export const getAdminProjectRows = getAdminProjectRowsCached
 
-const getAdminDashboardSummaryCached = unstable_cache(
-  async () => {
-    const [
-      totalClients,
-      activeProjects,
-      pendingApprovals,
-      activeLeads,
-      unreadNotifications,
-    ] = await Promise.all([
-      prisma.user.count({ where: { role: UserRole.CLIENT } }),
-      prisma.project.count({
-        where: { status: { not: ProjectStatus.LAUNCHED } },
-      }),
-      prisma.update.count({
-        where: {
-          requiresApproval: true,
-          approvalStatus: ApprovalStatus.PENDING,
-        },
-      }),
-      prisma.lead.count({ where: { status: { not: LeadStatus.CONVERTIDO } } }),
-      prisma.notification.count({ where: { readAt: null } }),
-    ])
+const getAdminDashboardSummaryCached = (userId: string) =>
+  unstable_cache(
+    async () => {
+      const [
+        totalClients,
+        activeProjects,
+        pendingApprovals,
+        activeLeads,
+        unreadNotifications,
+      ] = await Promise.all([
+        prisma.user.count({ where: { role: UserRole.CLIENT } }),
+        prisma.project.count({
+          where: { status: { not: ProjectStatus.LAUNCHED } },
+        }),
+        prisma.update.count({
+          where: {
+            requiresApproval: true,
+            approvalStatus: ApprovalStatus.PENDING,
+          },
+        }),
+        prisma.lead.count({
+          where: { status: { not: LeadStatus.CONVERTIDO } },
+        }),
+        prisma.notification.count({ where: { userId, readAt: null } }),
+      ])
 
-    return {
-      totalClients,
-      activeProjects,
-      pendingApprovals,
-      activeLeads,
-      unreadNotifications,
-    }
-  },
-  ["admin-dashboard-summary"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
-)
+      return {
+        totalClients,
+        activeProjects,
+        pendingApprovals,
+        activeLeads,
+        unreadNotifications,
+      }
+    },
+    ["admin-dashboard-summary", userId],
+    { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
+  )()
 
-export const getAdminDashboardSummary = cache(getAdminDashboardSummaryCached)
+export const getAdminDashboardSummary = getAdminDashboardSummaryCached
 
 const getAdminDashboardAttentionCached = unstable_cache(
   async (todayIso: string) => {
@@ -164,7 +165,7 @@ const getAdminDashboardAttentionCached = unstable_cache(
     }
   },
   ["admin-dashboard-attention"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardAttention = cache(
@@ -215,7 +216,7 @@ const getAdminDashboardAgendaCached = unstable_cache(
     return { deadlines, actionItems, followUps }
   },
   ["admin-dashboard-agenda"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardAgenda = cache(getAdminDashboardAgendaCached)
@@ -232,7 +233,7 @@ const getAdminDashboardActivityCached = unstable_cache(
     })
   },
   ["admin-dashboard-activity"],
-  { revalidate: 30, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.ACTIVITY_FEED, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardActivity = cache(getAdminDashboardActivityCached)
@@ -240,28 +241,12 @@ export const getAdminDashboardActivity = cache(getAdminDashboardActivityCached)
 const getAdminDashboardPerformanceCached = unstable_cache(
   async () => {
     const [
-      approvedUpdates,
-      convertedLeads,
       activeProjectsCount,
       silentProjectsCount,
       projectDistributionCounts,
       leadDistributionCounts,
       stagnantLeadsCount,
     ] = await Promise.all([
-      prisma.update.findMany({
-        where: {
-          requiresApproval: true,
-          approvalStatus: ApprovalStatus.APPROVED,
-          approvedAt: { not: null },
-        },
-        select: { createdAt: true, approvedAt: true },
-        take: 50,
-      }),
-      prisma.lead.findMany({
-        where: { convertedAt: { not: null } },
-        select: { createdAt: true, convertedAt: true },
-        take: 50,
-      }),
       prisma.project.count({
         where: { status: { not: ProjectStatus.LAUNCHED } },
       }),
@@ -288,6 +273,18 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       }),
     ])
 
+    // Calculate Average Approval Time via raw SQL for performance
+    const avgApprovalResult = await prisma.$queryRaw<
+      Array<{ avg_hours: number | null }>
+    >`
+      SELECT 
+        EXTRACT(EPOCH FROM AVG("approvedAt" - "createdAt")) / 3600 as avg_hours
+      FROM "Update"
+      WHERE "approvalStatus" = 'APPROVED' AND "approvedAt" IS NOT NULL
+    `
+
+    const averageApprovalHours = Number(avgApprovalResult[0]?.avg_hours ?? 0)
+
     const projectDistribution = Object.values(ProjectStatus).map((status) => ({
       label: status,
       value:
@@ -303,8 +300,7 @@ const getAdminDashboardPerformanceCached = unstable_cache(
     }))
 
     return {
-      approvedUpdates,
-      convertedLeads,
+      averageApprovalHours,
       activeProjectsCount,
       silentProjectsCount,
       stagnantLeadsCount,
@@ -313,7 +309,7 @@ const getAdminDashboardPerformanceCached = unstable_cache(
     }
   },
   ["admin-dashboard-performance"],
-  { revalidate: 300, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardPerformance = cache(
@@ -382,7 +378,7 @@ const getAdminDashboardHealthCached = unstable_cache(
     return { activeProjects, activeLeads }
   },
   ["admin-dashboard-health"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardHealth = cache(getAdminDashboardHealthCached)
@@ -403,7 +399,7 @@ const getAdminDashboardRecentUpdatesCached = unstable_cache(
     })
   },
   ["admin-dashboard-recent-updates"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardRecentUpdates = cache(
@@ -430,7 +426,7 @@ const getAdminDashboardDueActionItemsCached = unstable_cache(
     })
   },
   ["admin-dashboard-due-action-items"],
-  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardDueActionItems = cache(

@@ -14,6 +14,14 @@ import {
 import { LeadActivity, LeadNote } from "@/src/types/crm"
 import { z } from "zod"
 
+import {
+  revalidateCrmLead,
+  revalidateCrmLeads,
+  revalidateCrmPrefs,
+  revalidateCrmTemplates,
+  revalidateCrmViews,
+  revalidateProjectData,
+} from "@/src/lib/cache-tags"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -55,14 +63,6 @@ const CrmPreferencesSchema = z.object({
   density: z.enum(["comfortable", "compact"]),
 })
 
-function revalidateCrmPaths(): void {
-  revalidatePath("/admin/crm")
-  revalidatePath("/admin/crm/kanban")
-  revalidatePath("/admin/crm/list")
-  revalidatePath("/admin/projects")
-  revalidatePath("/")
-}
-
 export async function createLead(
   data: z.infer<typeof LeadSchema>
 ): Promise<{ success: boolean; error?: string }> {
@@ -95,7 +95,7 @@ export async function createLead(
       })
     })
 
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Create Lead Error")
@@ -143,7 +143,7 @@ export async function updateLeadStatus(
       })
     })
 
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Update Lead Status Error")
@@ -189,7 +189,7 @@ export async function updateLead(
       })
     })
 
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Update Lead Error")
@@ -230,7 +230,7 @@ export async function deleteLead(
       )
     })
 
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Delete Lead Error")
@@ -274,7 +274,7 @@ export async function addLeadNote(
       })
     })
 
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Add Lead Note Error")
@@ -393,8 +393,8 @@ export async function convertLeadToProjectAction(input: {
       return project
     })
 
-    revalidateCrmPaths()
-    revalidatePath("/admin/projects")
+    revalidateCrmLeads()
+    revalidateProjectData()
 
     return { success: true, projectId: result.id }
   } catch (error) {
@@ -436,7 +436,7 @@ export async function saveMessageTemplateAction(data: {
           content: data.content,
         },
       })
-      revalidateCrmPaths()
+      revalidateCrmTemplates()
       return { success: true, template }
     } else {
       const template = await prisma.messageTemplate.create({
@@ -447,7 +447,7 @@ export async function saveMessageTemplateAction(data: {
           createdById: actor?.id,
         },
       })
-      revalidateCrmPaths()
+      revalidateCrmTemplates()
       return { success: true, template }
     }
   } catch (error) {
@@ -462,7 +462,7 @@ export async function deleteMessageTemplateAction(
   try {
     await protect("admin")
     await prisma.messageTemplate.delete({ where: { id } })
-    revalidateCrmPaths()
+    revalidateCrmLeads()
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Delete Template Error")
@@ -548,7 +548,7 @@ export async function saveCrmViewAction(
       }),
     ])
 
-    revalidateCrmPaths()
+    revalidateCrmViews(actor.id)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Save CRM View Error")
@@ -573,7 +573,7 @@ export async function deleteCrmViewAction(
       },
     })
 
-    revalidateCrmPaths()
+    revalidateCrmViews(actor.id)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Delete CRM View Error")
@@ -610,6 +610,7 @@ export async function saveCrmPreferencesAction(
       }),
     ])
 
+    revalidateCrmPrefs(actor.id)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Save CRM Preferences Error")
