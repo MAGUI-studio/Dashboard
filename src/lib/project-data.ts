@@ -14,104 +14,16 @@ export const getProjectForLifecycleCached = (id: string) =>
           id: true,
           name: true,
           status: true,
-          progress: true,
+          category: true,
           clientId: true,
         },
       })
     },
     ["project-lifecycle", id],
-    { revalidate: 60, tags: [cacheTags.adminProject(id)] }
-  )()
-
-export const getProjectForTimelineCached = (id: string) =>
-  unstable_cache(
-    async () => {
-      return prisma.project.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          name: true,
-          clientId: true,
-        },
-      })
-    },
-    ["project-timeline-meta", id],
-    { revalidate: 60, tags: [cacheTags.adminProject(id)] }
-  )()
-
-export const getProjectForExportCached = (id: string) =>
-  unstable_cache(
-    async () => {
-      return prisma.project.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          name: true,
-          client: {
-            select: {
-              name: true,
-              email: true,
-              companyName: true,
-            },
-          },
-        },
-      })
-    },
-    ["project-export-meta", id],
-    { revalidate: 60, tags: [cacheTags.adminProject(id)] }
-  )()
-
-export const getProjectApprovalEventsCached = (projectId: string) =>
-  unstable_cache(
-    async () => {
-      return prisma.approvalEvent.findMany({
-        where: {
-          update: {
-            projectId,
-          },
-        },
-        include: {
-          actor: {
-            select: {
-              name: true,
-              email: true,
-              role: true,
-            },
-          },
-          update: {
-            select: {
-              title: true,
-              approvalStatus: true,
-            },
-          },
-        },
-        orderBy: { createdAt: "desc" },
-      })
-    },
-    ["project-approval-events", projectId],
-    { revalidate: 60, tags: [cacheTags.projectTimeline(projectId)] }
-  )()
-
-export const getProjectBriefingMetaCached = (id: string) =>
-  unstable_cache(
-    async () => {
-      return prisma.project.findUnique({
-        where: { id },
-        select: {
-          id: true,
-          name: true,
-          briefing: true,
-          client: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-      })
-    },
-    ["project-briefing-meta", id],
-    { revalidate: 60, tags: [cacheTags.projectBriefing(id)] }
+    {
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
+      tags: [cacheTags.adminProject(id)],
+    }
   )()
 
 export const getAdminProjectOverview = (id: string) =>
@@ -136,17 +48,9 @@ export const getAdminProjectOverview = (id: string) =>
                   id: true,
                   name: true,
                   email: true,
-                  companyName: true,
                   avatarUrl: true,
                 },
               },
-            },
-          },
-          _count: {
-            select: {
-              updates: true,
-              assets: true,
-              actionItems: true,
             },
           },
         },
@@ -162,18 +66,31 @@ export const getAdminProjectOverview = (id: string) =>
 export const getAdminProjectTimeline = (id: string) =>
   unstable_cache(
     async () => {
-      return prisma.update.findMany({
-        where: { projectId: id },
-        include: {
-          attachments: true,
-          approvalEvents: {
-            include: {
-              actor: { select: { id: true, name: true, role: true } },
-            },
+      return prisma.project.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          updates: {
             orderBy: { createdAt: "desc" },
+            include: {
+              attachments: true,
+              approvalEvents: {
+                orderBy: { createdAt: "desc" },
+                take: 1,
+                include: {
+                  actor: {
+                    select: {
+                      id: true,
+                      name: true,
+                      role: true,
+                    },
+                  },
+                },
+              },
+            },
           },
         },
-        orderBy: { createdAt: "desc" },
       })
     },
     ["admin-project-timeline", id],
@@ -188,7 +105,15 @@ export const getAdminProjectAudit = (id: string) =>
     async () => {
       return prisma.auditLog.findMany({
         where: { projectId: id },
-        include: { actor: { select: { id: true, name: true, role: true } } },
+        include: {
+          actor: {
+            select: {
+              id: true,
+              name: true,
+              role: true,
+            },
+          },
+        },
         orderBy: { createdAt: "desc" },
         take: 50,
       })
@@ -205,7 +130,9 @@ export const getAdminProjectAssets = (id: string) =>
     async () => {
       return prisma.project.findUnique({
         where: { id },
-        include: {
+        select: {
+          id: true,
+          name: true,
           assets: {
             orderBy: { order: "asc" },
           },

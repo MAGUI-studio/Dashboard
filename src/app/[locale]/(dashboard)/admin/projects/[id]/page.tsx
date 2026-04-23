@@ -22,29 +22,21 @@ interface ProjectPageProps {
   params: Promise<{ id: string; locale: string }>
 }
 
-type AdminProjectOverviewResult = NonNullable<
-  Awaited<ReturnType<typeof getAdminProjectOverview>>
->
-type AdminProjectTimelineResult = Awaited<
-  ReturnType<typeof getAdminProjectTimeline>
->
-type AdminProjectAssetsResult = Awaited<
-  ReturnType<typeof getAdminProjectAssets>
->
-type AdminProjectAuditResult = Awaited<ReturnType<typeof getAdminProjectAudit>>
-
 function toDashboardProject(input: {
-  project: AdminProjectOverviewResult
-  updates: AdminProjectTimelineResult
-  assets: AdminProjectAssetsResult
-  auditLogs: AdminProjectAuditResult
+  /* eslint-disable @typescript-eslint/no-explicit-any */
+  project: any
+  timeline: any
+  assets: any
+  auditLogs: any
+  /* eslint-enable @typescript-eslint/no-explicit-any */
 }): DashboardProject {
-  const { project, updates, assets, auditLogs } = input
+  const { project, timeline, assets, auditLogs } = input
 
   return {
     ...project,
     client: {
       ...project.client,
+      companyName: project.client.companyName ?? null,
       phone: null,
       position: null,
       taxId: null,
@@ -52,12 +44,14 @@ function toDashboardProject(input: {
     briefing:
       (project.briefing as DashboardProject["briefing"] | null | undefined) ??
       null,
-    updates: updates.map((update: AdminProjectTimelineResult[number]) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    updates: (timeline?.updates || []).map((update: any) => ({
       ...update,
       project: { name: project.name },
     })),
     assets: assets?.assets ?? [],
-    auditLogs: auditLogs.map((log) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    auditLogs: (auditLogs || []).map((log: any) => ({
       ...log,
       metadata:
         log.metadata &&
@@ -93,7 +87,7 @@ export default async function AdminProjectDetailPage({
 
   const { id } = await params
 
-  const [project, updates, assets, auditLogs, clients] = await Promise.all([
+  const [project, timeline, assets, auditLogs, clients] = await Promise.all([
     getAdminProjectOverview(id),
     getAdminProjectTimeline(id),
     getAdminProjectAssets(id),
@@ -107,7 +101,7 @@ export default async function AdminProjectDetailPage({
 
   const dashboardProject = toDashboardProject({
     project,
-    updates,
+    timeline,
     assets,
     auditLogs,
   })

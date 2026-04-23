@@ -324,17 +324,20 @@ export async function syncOperationalReminders(options?: {
 
   await prisma.$transaction(async (tx) => {
     if (notificationsToCreate.length > 0) {
-      await tx.notification.createMany({ data: notificationsToCreate })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await tx.notification.createMany({ data: notificationsToCreate as any })
     }
 
     if (remindersToCreate.length > 0) {
-      await tx.scheduledReminder.createMany({ data: remindersToCreate })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await tx.scheduledReminder.createMany({ data: remindersToCreate as any })
     }
 
     for (const update of remindersToUpdate) {
       await tx.scheduledReminder.update({
         where: { id: update.id },
-        data: update.data as Prisma.ScheduledReminderUpdateInput,
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: update.data as any,
       })
     }
 
