@@ -1,4 +1,4 @@
-import { revalidatePath } from "next/cache"
+import { revalidatePath, unstable_cache } from "next/cache"
 
 import { Prisma } from "@/src/generated/client/client"
 import {
@@ -10,6 +10,8 @@ import { auth, clerkClient } from "@clerk/nextjs/server"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
+
+import { cacheTags } from "./cache-tags"
 
 const clerkRoleMap = {
   admin: UserRole.ADMIN,
@@ -111,8 +113,10 @@ export async function findOrCreateClientFromEmail(
     throw new Error("Client email is required")
   }
 
+  // Path 1: Local user exists
   const localUser = await tx.user.findUnique({
     where: { email },
+    select: { id: true, role: true, email: true, companyName: true },
   })
 
   if (localUser) {
@@ -120,9 +124,18 @@ export async function findOrCreateClientFromEmail(
       throw new Error("Email belongs to a non-client user")
     }
 
+    // Update company name if missing and provided
+    if (input.companyName && !localUser.companyName) {
+      return tx.user.update({
+        where: { id: localUser.id },
+        data: { companyName: input.companyName },
+      })
+    }
+
     return localUser
   }
 
+  // Path 2: Clerk lookup and possible creation
   const client = await clerkClient()
   const existingClerkUsers = await client.users.getUserList({
     emailAddress: [email],
@@ -156,6 +169,7 @@ export async function findOrCreateClientFromEmail(
     })
   }
 
+  // Path 3: Create new Clerk user and local user
   const displayName = input.name?.trim() || input.companyName?.trim() || email
   const { firstName, lastName } = splitClientName(displayName)
   const clerkUser = await client.users.createUser({
@@ -186,27 +200,32 @@ export async function getCurrentAppUser() {
   return upsertUserFromClerk(userId)
 }
 
-export async function getInternalNotificationRecipients(): Promise<
-  Array<{ id: string }>
-> {
-  const client = await clerkClient()
-  const clerkUsers = await client.users.getUserList({ limit: 100 })
+export const getInternalNotificationRecipients = unstable_cache(
+  async (): Promise<Array<{ id: string }>> => {
+    const client = await clerkClient()
+    const clerkUsers = await client.users.getUserList({ limit: 100 })
 
-  const internalUsers = clerkUsers.data.filter((user) => {
-    const role = normalizeClerkRole(user.publicMetadata?.role)
-    return role === UserRole.ADMIN || role === UserRole.MEMBER
-  })
+    const internalUsers = clerkUsers.data.filter((user) => {
+      const role = normalizeClerkRole(user.publicMetadata?.role)
+      return role === UserRole.ADMIN || role === UserRole.MEMBER
+    })
 
-  if (internalUsers.length === 0) {
-    return []
+    if (internalUsers.length === 0) {
+      return []
+    }
+
+    const syncedUsers = await Promise.all(
+      internalUsers.map((user) => upsertUserFromClerk(user.id))
+    )
+
+    return syncedUsers.map((user) => ({ id: user.id }))
+  },
+  ["internal-notification-recipients"],
+  {
+    revalidate: 3600, // 1 hour
+    tags: [cacheTags.adminProjects], // Use a generic admin tag or create one for users
   }
-
-  const syncedUsers = await Promise.all(
-    internalUsers.map((user) => upsertUserFromClerk(user.id))
-  )
-
-  return syncedUsers.map((user) => ({ id: user.id }))
-}
+)
 
 export async function ensureProjectAccess(
   projectId: string,
@@ -258,6 +277,84 @@ export async function ensureProjectAccess(
   }
 
   return { user, project }
+}
+
+export async function ensureProjectAccessSimple(
+  projectId: string,
+  allowedRoles: UserRole[] = [UserRole.ADMIN, UserRole.MEMBER, UserRole.CLIENT]
+) {
+  const user = await getCurrentAppUser()
+
+  if (!user || !allowedRoles.includes(user.role)) {
+    throw new Error("Unauthorized")
+  }
+
+  if (user.role === UserRole.ADMIN || user.role === UserRole.MEMBER) {
+    return { user }
+  }
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: {
+      clientId: true,
+      members: {
+        where: { userId: user.id },
+        select: { id: true },
+      },
+    },
+  })
+
+  if (!project) {
+    throw new Error("Project not found")
+  }
+
+  const canAccess = project.clientId === user.id || project.members.length > 0
+
+  if (!canAccess) {
+    throw new Error("Unauthorized")
+  }
+
+  return { user }
+}
+
+export async function ensureProjectAccessWithName(
+  projectId: string,
+  allowedRoles: UserRole[] = [UserRole.ADMIN, UserRole.MEMBER, UserRole.CLIENT]
+) {
+  const user = await getCurrentAppUser()
+
+  if (!user || !allowedRoles.includes(user.role)) {
+    throw new Error("Unauthorized")
+  }
+
+  const project = await prisma.project.findUnique({
+    where: { id: projectId },
+    select: {
+      id: true,
+      name: true,
+      clientId: true,
+      members: {
+        where: { userId: user.id },
+        select: { id: true },
+      },
+    },
+  })
+
+  if (!project) {
+    throw new Error("Project not found")
+  }
+
+  const canAccess =
+    user.role === UserRole.ADMIN ||
+    user.role === UserRole.MEMBER ||
+    project.clientId === user.id ||
+    project.members.length > 0
+
+  if (!canAccess) {
+    throw new Error("Unauthorized")
+  }
+
+  return { user, project: { id: project.id, name: project.name } }
 }
 
 export async function writeAuditAndNotifications(

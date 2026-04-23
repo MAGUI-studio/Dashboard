@@ -60,46 +60,43 @@ export const toSavedViewDto = (view: SavedViewType): SavedView => ({
   filtersJson: (view.filtersJson as Record<string, unknown>) || {},
 })
 
-const getLeadsCached = unstable_cache(
-  async () => {
-    const leads = await prisma.lead.findMany({
-      where: {
-        status: {
-          not: LeadStatus.DESCARTADO,
-        },
-      },
-      include: {
-        activities: {
-          orderBy: { createdAt: "desc" },
-          include: {
-            author: {
-              select: { id: true, name: true },
+const getLeadsCached = (page: number = 1, limit: number = 50) =>
+  unstable_cache(
+    async () => {
+      const skip = (page - 1) * limit
+      const [leads, totalCount] = await Promise.all([
+        prisma.lead.findMany({
+          where: {
+            status: {
+              not: LeadStatus.DESCARTADO,
             },
           },
-        },
-        followUpNotes: {
-          orderBy: {
-            createdAt: "desc",
-          },
-          include: {
-            author: {
-              select: { id: true, name: true },
+          orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
+          skip,
+          take: limit,
+        }),
+        prisma.lead.count({
+          where: {
+            status: {
+              not: LeadStatus.DESCARTADO,
             },
           },
-        },
-      },
-      orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
-    })
-    return leads
-  },
-  ["crm-leads"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
-)
+        }),
+      ])
+      return { leads, totalCount, totalPages: Math.ceil(totalCount / limit) }
+    },
+    ["crm-leads", page.toString(), limit.toString()],
+    { revalidate: dataCacheTtl, tags: [cacheTags.adminCrm] }
+  )()
 
-export const getLeads = cache(async () => {
-  const leads = await getLeadsCached()
-  return (leads as LeadWithRelations[]).map(toLeadDto)
-})
+export const getLeads = async (page: number = 1, limit: number = 100) => {
+  const { leads } = await getLeadsCached(page, limit)
+  return leads.map((l) => ({
+    ...l,
+    activities: [],
+    followUpNotes: [],
+  })) as Lead[]
+}
 
 const getLeadDetailsCached = unstable_cache(
   async (id: string) => {

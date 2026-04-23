@@ -16,31 +16,40 @@ import { env } from "@/src/config/env"
 
 const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
-const getAdminProjectRowsCached = unstable_cache(
-  async () => {
-    return prisma.project.findMany({
-      select: {
-        id: true,
-        name: true,
-        status: true,
-        progress: true,
-        createdAt: true,
-        client: {
+const getAdminProjectRowsCached = (page: number = 1, limit: number = 20) =>
+  unstable_cache(
+    async () => {
+      const skip = (page - 1) * limit
+      const [projects, totalCount] = await Promise.all([
+        prisma.project.findMany({
           select: {
-            clerkId: true,
+            id: true,
             name: true,
-            email: true,
+            status: true,
+            progress: true,
+            createdAt: true,
+            client: {
+              select: {
+                clerkId: true,
+                name: true,
+                email: true,
+              },
+            },
           },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    })
-  },
-  ["admin-project-rows"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminProjects] }
-)
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        prisma.project.count(),
+      ])
 
-export const getAdminProjectRows = cache(getAdminProjectRowsCached)
+      return { projects, totalCount, totalPages: Math.ceil(totalCount / limit) }
+    },
+    ["admin-project-rows", page.toString(), limit.toString()],
+    { revalidate: dataCacheTtl, tags: [cacheTags.adminProjects] }
+  )()
+
+export const getAdminProjectRows = getAdminProjectRowsCached
 
 const getAdminDashboardSummaryCached = unstable_cache(
   async () => {

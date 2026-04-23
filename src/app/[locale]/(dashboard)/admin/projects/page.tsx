@@ -10,8 +10,8 @@ import { Button } from "@/src/components/ui/button"
 
 import { ProjectsTable } from "@/src/components/admin/ProjectsTable"
 
+import { getAdminProjectRows } from "@/src/lib/admin-data"
 import { isAdmin } from "@/src/lib/permissions"
-import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 export const metadata = dashboardMetadata({
@@ -21,25 +21,23 @@ export const metadata = dashboardMetadata({
   path: "/admin/projects",
 })
 
-export default async function ProjectsPage(): Promise<React.JSX.Element> {
+interface ProjectsPageProps {
+  searchParams: Promise<{ page?: string }>
+}
+
+export default async function ProjectsPage({
+  searchParams,
+}: ProjectsPageProps): Promise<React.JSX.Element> {
   if (!(await isAdmin())) {
     redirect("/")
   }
 
+  const { page } = await searchParams
+  const currentPage = Number(page) || 1
+
   const t = await getTranslations("Admin.projects")
 
-  const projects = await prisma.project.findMany({
-    include: {
-      client: {
-        select: {
-          clerkId: true,
-          name: true,
-          email: true,
-        },
-      },
-    },
-    orderBy: { createdAt: "desc" },
-  })
+  const { projects, totalPages } = await getAdminProjectRows(currentPage, 30)
 
   const serializableProjects = projects.map((p) => ({
     id: p.id,

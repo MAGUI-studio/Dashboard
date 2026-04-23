@@ -69,6 +69,7 @@ import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 import {
   addLeadNote,
   deleteLead,
+  getLeadActivitiesAction,
   saveMessageTemplateAction,
   updateLead,
   updateLeadStatus,
@@ -180,6 +181,7 @@ export function LeadDetailsDrawer({
   const [isSavingNote, setIsSavingNote] = React.useState(false)
   const [isSavingLead, setIsSavingLead] = React.useState(false)
   const [isDeleting, setIsDeleting] = React.useState(false)
+  const [isLoadingData, setIsLoadingData] = React.useState(false)
   const [isUpdatingStatus, setIsUpdatingStatus] =
     React.useState<LeadStatus | null>(null)
   const [quickActionsOpen, setQuickActionsOpen] = React.useState(false)
@@ -191,6 +193,25 @@ export function LeadDetailsDrawer({
   const [localLead, setLocalLead] = React.useState(lead)
   const [form, setForm] = React.useState(() => getInitialFormState(lead))
   const open = controlledOpen ?? uncontrolledOpen
+
+  const loadExtraData = React.useCallback(async (leadId: string) => {
+    setIsLoadingData(true)
+    const result = await getLeadActivitiesAction(leadId)
+    if (result.success && result.activities) {
+      setLocalLead((current) => ({
+        ...current,
+        activities: result.activities,
+        followUpNotes: result.notes,
+      }))
+    }
+    setIsLoadingData(false)
+  }, [])
+
+  React.useEffect(() => {
+    if (open && localLead.id) {
+      loadExtraData(localLead.id)
+    }
+  }, [open, localLead.id, loadExtraData])
 
   React.useEffect(() => {
     setLocalLead(lead)
@@ -962,13 +983,18 @@ export function LeadDetailsDrawer({
           </section>
 
           <section className="grid gap-6">
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-                Linha do Tempo
-              </p>
-              <p className="mt-1 text-sm text-muted-foreground/70">
-                Historico estruturado de acoes e contatos.
-              </p>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
+                  Linha do Tempo
+                </p>
+                <p className="mt-1 text-sm text-muted-foreground/70">
+                  Historico estruturado de acoes e contatos.
+                </p>
+              </div>
+              {isLoadingData && (
+                <CircleNotch className="size-4 animate-spin text-muted-foreground/40" />
+              )}
             </div>
 
             <LeadActivityFeed activities={localLead.activities || []} />

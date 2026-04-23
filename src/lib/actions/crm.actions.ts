@@ -468,6 +468,55 @@ export async function deleteMessageTemplateAction(
   }
 }
 
+export async function getLeadActivitiesAction(leadId: string): Promise<{
+  success: boolean
+  error?: string
+  activities?: LeadActivity[]
+  notes?: LeadNote[]
+}> {
+  try {
+    await protect("admin")
+
+    const lead = await prisma.lead.findUnique({
+      where: { id: leadId },
+      include: {
+        activities: {
+          orderBy: { createdAt: "desc" },
+          include: {
+            author: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+        followUpNotes: {
+          orderBy: {
+            createdAt: "desc",
+          },
+          include: {
+            author: {
+              select: { id: true, name: true },
+            },
+          },
+        },
+      },
+    })
+
+    if (!lead) return { success: false, error: "Lead not found" }
+
+    return {
+      success: true,
+      activities: lead.activities.map((a) => ({
+        ...a,
+        metadata: (a.metadata as Record<string, unknown>) || {},
+      })) as LeadActivity[],
+      notes: lead.followUpNotes as LeadNote[],
+    }
+  } catch (error) {
+    logger.error({ error }, "Get Lead Activities Error")
+    return { success: false, error: "Failed to fetch activities" }
+  }
+}
+
 export async function saveCrmViewAction(
   data: z.infer<typeof SavedCrmViewSchema>
 ): Promise<{ success: boolean; error?: string }> {

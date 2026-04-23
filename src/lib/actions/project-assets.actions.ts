@@ -205,12 +205,12 @@ export async function createProjectAssetAction(data: {
         throw new Error("Projeto não encontrado")
       }
 
-      const lastAsset = await tx.asset.findFirst({
+      const aggregation = await tx.asset.aggregate({
         where: { projectId: data.projectId },
-        orderBy: { order: "desc" },
+        _max: { order: true },
       })
 
-      const nextOrder = lastAsset ? lastAsset.order + 1 : 0
+      const nextOrder = (aggregation._max.order ?? -1) + 1
 
       const asset = await tx.asset.create({
         data: {
@@ -319,15 +319,36 @@ export async function updateProjectAssetsOrderAction(
     return { error: "Unauthorized" }
   }
 
+  if (assetIds.length === 0) return { success: true }
+
   try {
-    await prisma.$transaction(
-      assetIds.map((id, index) =>
-        prisma.asset.update({
-          where: { id },
-          data: { order: index },
-        })
+    await prisma.$transaction(async (tx) => {
+      // Use CASE WHEN to update all orders in a single query
+      const cases = assetIds
+        .map((id, index) => `WHEN id = '${id}' THEN ${index}`)
+        .join(" ")
+      const ids = assetIds.map((id) => `'${id}'`).join(", ")
+
+      await tx.$executeRawUnsafe(`
+        UPDATE "Asset"
+        SET "order" = CASE
+          ${cases}
+        END
+        WHERE id IN (${ids}) AND "projectId" = '${projectId}'
+      `)
+
+      await createAuditLog(
+        {
+          action: "assets.reordered",
+          entityType: "Project",
+          entityId: projectId,
+          projectId,
+          summary: `Ordem dos arquivos redefinida.`,
+          metadata: { assetIds },
+        },
+        tx
       )
-    )
+    })
 
     revalidatePath(`/admin/projects/${projectId}/assets`)
     return { success: true }

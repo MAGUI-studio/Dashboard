@@ -30,35 +30,45 @@ const getAdminClientOptionsCached = unstable_cache(
 
 export const getAdminClientOptions = cache(getAdminClientOptionsCached)
 
-const getAdminClientRowsCached = unstable_cache(
-  async () => {
-    return prisma.user.findMany({
-      select: {
-        id: true,
-        clerkId: true,
-        name: true,
-        email: true,
-        avatarUrl: true,
-        role: true,
-        _count: {
-          select: {
-            projects: true,
-          },
-        },
-        projects: {
+const getAdminClientRowsCached = (page: number = 1, limit: number = 50) =>
+  unstable_cache(
+    async () => {
+      const skip = (page - 1) * limit
+      const [clients, totalCount] = await Promise.all([
+        prisma.user.findMany({
+          where: { role: UserRole.CLIENT },
           select: {
             id: true,
-            status: true,
+            clerkId: true,
+            name: true,
+            email: true,
+            avatarUrl: true,
+            role: true,
+            _count: {
+              select: {
+                projects: true,
+              },
+            },
+            projects: {
+              select: {
+                id: true,
+                status: true,
+              },
+            },
           },
-        },
-      },
-    })
-  },
-  ["admin-client-rows"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminClientOptions] }
-)
+          orderBy: { name: "asc" },
+          skip,
+          take: limit,
+        }),
+        prisma.user.count({ where: { role: UserRole.CLIENT } }),
+      ])
+      return { clients, totalCount, totalPages: Math.ceil(totalCount / limit) }
+    },
+    ["admin-client-rows", page.toString(), limit.toString()],
+    { revalidate: dataCacheTtl, tags: [cacheTags.adminClientOptions] }
+  )()
 
-export const getAdminClientRows = cache(getAdminClientRowsCached)
+export const getAdminClientRows = getAdminClientRowsCached
 
 const getAdminClientDetailsCached = unstable_cache(
   async (clerkId: string) => {
