@@ -32,21 +32,21 @@ export async function DashboardStatsWidget({
     },
     {
       label: t("clients.stats.active_projects"),
-      value: stats.activeProjects,
+      value: stats.activeProjectsCount,
       hint: "vários concluídos", // simplify hint or fetch more data
       icon: FolderOpen,
     },
     {
       label: t("clients.stats.pending_approvals"),
-      value: stats.pendingApprovals,
+      value: stats.pendingApprovalsCount,
       hint: t("clients.stats.review_today"),
       icon: ClockCountdown,
     },
     {
       label: t("clients.stats.open_leads"),
-      value: stats.activeLeads,
+      value: stats.activeLeadsCount,
       hint: t("clients.stats.unread_notifications", {
-        count: stats.unreadNotifications,
+        count: stats.unreadNotificationsCount,
       }),
       icon: ChartLineUp,
     },

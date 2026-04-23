@@ -1,11 +1,9 @@
 import { unstable_cache } from "next/cache"
 
-import { env } from "@/src/config/env"
+import { CACHE_TTL } from "@/src/config/cache"
 
 import { cacheTags } from "./cache-tags"
 import prisma from "./prisma"
-
-const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
 export const getProjectForLifecycleCached = (id: string) =>
   unstable_cache(
@@ -155,7 +153,10 @@ export const getAdminProjectOverview = (id: string) =>
       })
     },
     ["admin-project-overview", id],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminProject(id)] }
+    {
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
+      tags: [cacheTags.adminProject(id)],
+    }
   )()
 
 export const getAdminProjectTimeline = (id: string) =>
@@ -176,7 +177,10 @@ export const getAdminProjectTimeline = (id: string) =>
       })
     },
     ["admin-project-timeline", id],
-    { revalidate: dataCacheTtl, tags: [cacheTags.projectTimeline(id)] }
+    {
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
+      tags: [cacheTags.projectTimeline(id)],
+    }
   )()
 
 export const getAdminProjectAudit = (id: string) =>
@@ -190,7 +194,10 @@ export const getAdminProjectAudit = (id: string) =>
       })
     },
     ["admin-project-audit", id],
-    { revalidate: dataCacheTtl, tags: [cacheTags.adminProject(id)] }
+    {
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
+      tags: [cacheTags.adminProject(id)],
+    }
   )()
 
 export const getAdminProjectAssets = (id: string) =>
@@ -207,7 +214,7 @@ export const getAdminProjectAssets = (id: string) =>
     },
     ["admin-project-assets", id],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.projectAssets(id), cacheTags.adminProjects],
     }
   )()

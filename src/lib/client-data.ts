@@ -23,7 +23,7 @@ const getAdminClientOptionsCached = unstable_cache(
     })
   },
   ["admin-client-options"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminClientOptions] }
+  { revalidate: CACHE_TTL.CLIENT_OPTIONS, tags: [cacheTags.adminClientOptions] }
 )
 
 export const getAdminClientOptions = cache(getAdminClientOptionsCached)
@@ -88,15 +88,15 @@ const getAdminClientDetailsCached = unstable_cache(
     })
   },
   ["admin-client-details"],
-  { revalidate: dataCacheTtl, tags: [cacheTags.adminClientOptions] }
+  { revalidate: CACHE_TTL.CLIENT_OPTIONS, tags: [cacheTags.adminClientOptions] }
 )
 
 export const getAdminClientDetails = (id: string) =>
   unstable_cache(
     async () => getAdminClientDetailsCached(id),
-    ["admin-client-details", clerkId],
+    ["admin-client-details", id],
     {
       revalidate: CACHE_TTL.CLIENT_DETAILS,
-      tags: [cacheTags.adminClient(clerkId), cacheTags.adminClientOptions],
+      tags: [cacheTags.adminClient(id), cacheTags.adminClientOptions],
     }
   )()

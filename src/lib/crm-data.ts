@@ -126,7 +126,7 @@ const getLeadDetailsCached = unstable_cache(
     })
   },
   ["crm-lead-details"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.LEADS }
 )
 
 export const getLeadDetails = (id: string) =>
@@ -177,7 +177,7 @@ const getSavedCrmViewsCached = unstable_cache(
     })
   },
   ["crm-saved-views"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.LEADS }
 )
 
 export const getSavedCrmViews = (userId: string) =>
@@ -188,7 +188,7 @@ export const getSavedCrmViews = (userId: string) =>
     },
     ["crm-saved-views", userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.USER_PREFERENCES,
       tags: [cacheTags.adminCrmViews(userId), cacheTags.adminCrm],
     }
   )()
@@ -204,7 +204,7 @@ const getCrmPreferencesCached = unstable_cache(
     })
   },
   ["crm-preferences"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.LEADS }
 )
 
 export const getCrmPreferences = (userId: string) =>
@@ -215,7 +215,7 @@ export const getCrmPreferences = (userId: string) =>
     },
     ["crm-preferences", userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.USER_PREFERENCES,
       tags: [cacheTags.adminCrmPrefs(userId), cacheTags.adminCrm],
     }
   )()

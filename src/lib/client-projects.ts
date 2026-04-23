@@ -2,12 +2,10 @@ import { unstable_cache } from "next/cache"
 
 import { ApprovalStatus } from "@/src/generated/client/enums"
 
-import { env } from "@/src/config/env"
+import { CACHE_TTL } from "@/src/config/cache"
 
 import { cacheTags } from "./cache-tags"
 import prisma from "./prisma"
-
-const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
 export const getClientHomeDataCached = unstable_cache(
   async (userId: string) => {
@@ -39,7 +37,7 @@ export const getClientHomeDataCached = unstable_cache(
     return { projects }
   },
   ["client-home-data"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.PROJECT_DETAILS }
 )
 
 export const getClientHomeData = (userId: string) =>
@@ -47,7 +45,7 @@ export const getClientHomeData = (userId: string) =>
     async () => getClientHomeDataCached(userId),
     ["client-home-data", userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientHome, cacheTags.clientProjects],
     }
   )()
@@ -74,14 +72,14 @@ export const getClientProjectsCached = unstable_cache(
     })
   },
   ["client-projects"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.PROJECT_DETAILS }
 )
 
 export const getClientProjects = (userId: string) =>
   unstable_cache(
     async () => getClientProjectsCached(userId),
     ["client-projects", userId],
-    { revalidate: dataCacheTtl, tags: [cacheTags.clientProjects] }
+    { revalidate: CACHE_TTL.PROJECT_DETAILS, tags: [cacheTags.clientProjects] }
   )()
 
 export const getClientProjectByIdCached = unstable_cache(
@@ -118,7 +116,7 @@ export const getClientProjectByIdCached = unstable_cache(
     })
   },
   ["client-project-detail"],
-  { revalidate: dataCacheTtl }
+  { revalidate: CACHE_TTL.PROJECT_DETAILS }
 )
 
 export const getClientProjectById = (id: string, userId: string) =>
@@ -126,7 +124,7 @@ export const getClientProjectById = (id: string, userId: string) =>
     async () => getClientProjectByIdCached(id, userId),
     ["client-project-detail", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientProject, `client:project:${id}`],
     }
   )()
@@ -144,7 +142,7 @@ export const getClientProjectBreadcrumb = (id: string, userId: string) =>
     },
     ["client-project-breadcrumb", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientProject, `client:project:${id}`],
     }
   )()
@@ -199,7 +197,7 @@ export const getClientProjectOverview = (id: string, userId: string) =>
     },
     ["client-project-overview", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientProject, `client:project:${id}`],
     }
   )()
@@ -221,7 +219,7 @@ export const getClientProjectTimeline = (id: string, userId: string) =>
     },
     ["client-project-timeline", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
         cacheTags.clientProject,
         cacheTags.projectTimeline(id),
@@ -246,7 +244,7 @@ export const getClientProjectFiles = (id: string, userId: string) =>
     },
     ["client-project-files", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
         cacheTags.clientProject,
         cacheTags.projectAssets(id),
@@ -272,7 +270,7 @@ export const getClientProjectTasks = (id: string, userId: string) =>
     },
     ["client-project-tasks", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientProject, `client:project:${id}`],
     }
   )()
@@ -295,7 +293,7 @@ export const getClientProjectApprovals = (id: string, userId: string) =>
     },
     ["client-project-approvals", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
         cacheTags.clientProject,
         cacheTags.projectTimeline(id),
@@ -321,7 +319,7 @@ export const getClientProjectBriefing = (id: string, userId: string) =>
     },
     ["client-project-briefing", id, userId],
     {
-      revalidate: dataCacheTtl,
+      revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
         cacheTags.clientProject,
         cacheTags.projectBriefing(id),
