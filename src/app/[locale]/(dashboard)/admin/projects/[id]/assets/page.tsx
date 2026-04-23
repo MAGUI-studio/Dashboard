@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server"
 import { notFound, redirect } from "next/navigation"
 
 import { Link } from "@/src/i18n/navigation"
+import { DashboardAsset } from "@/src/types/dashboard"
 import { ArrowLeft, Files } from "@phosphor-icons/react/dist/ssr"
 
 import { Button } from "@/src/components/ui/button"
@@ -12,6 +13,7 @@ import { AssetManagement } from "@/src/components/admin/AssetManagement"
 
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { getAdminProjectAssets } from "@/src/lib/project-data"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 interface AssetsPageProps {
@@ -44,14 +46,7 @@ export default async function ProjectAssetsPage({
   const { id } = await params
   const t = await getTranslations("Admin.projects.details")
 
-  const project = await prisma.project.findUnique({
-    where: { id },
-    include: {
-      assets: {
-        orderBy: { order: "asc" },
-      },
-    },
-  })
+  const project = await getAdminProjectAssets(id)
 
   if (!project) {
     notFound()
@@ -97,7 +92,10 @@ export default async function ProjectAssetsPage({
       </div>
 
       <div className="rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm">
-        <AssetManagement projectId={project.id} assets={project.assets} />
+        <AssetManagement
+          projectId={project.id}
+          assets={project.assets as DashboardAsset[]}
+        />
       </div>
     </main>
   )

@@ -33,6 +33,9 @@ const fallbackEnv = {
 
 const envSchema = z.object({
   DATABASE_URL: z.string().min(1),
+  DATABASE_POOL_MAX: z.coerce.number().optional(),
+  DATA_CACHE_TTL_SECONDS: z.coerce.number().default(300),
+  OPERATIONAL_REMINDERS_SECRET: z.string().optional(),
   NEXT_PUBLIC_SITE_URL: z.string().url(),
   NEXT_PUBLIC_GA_ID: z.string().optional(),
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1),
@@ -52,6 +55,9 @@ const parsedEnv = envSchema.safeParse({
   DATABASE_URL:
     process.env.DATABASE_URL ||
     (useFallback ? fallbackEnv.DATABASE_URL : undefined),
+  DATABASE_POOL_MAX: process.env.DATABASE_POOL_MAX,
+  DATA_CACHE_TTL_SECONDS: process.env.DATA_CACHE_TTL_SECONDS,
+  OPERATIONAL_REMINDERS_SECRET: process.env.OPERATIONAL_REMINDERS_SECRET,
   NEXT_PUBLIC_SITE_URL:
     process.env.NEXT_PUBLIC_SITE_URL ||
     (useFallback ? fallbackEnv.NEXT_PUBLIC_SITE_URL : undefined),

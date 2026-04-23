@@ -1,7 +1,10 @@
 "use server"
 
 import { protect } from "@/src/lib/permissions"
-import prisma from "@/src/lib/prisma"
+import {
+  searchAdminEntities,
+  searchAdminFullEntities,
+} from "@/src/lib/search-data"
 
 export type GlobalSearchResult = {
   id: string
@@ -29,105 +32,8 @@ export async function searchAdminGlobal(
     return []
   }
 
-  const [users, projects, leads, updates] = await Promise.all([
-    prisma.user.findMany({
-      where: {
-        OR: [
-          { name: { contains: normalizedQuery, mode: "insensitive" } },
-          { email: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            companyName: {
-              contains: normalizedQuery,
-              mode: "insensitive",
-            },
-          },
-        ],
-      },
-      select: {
-        clerkId: true,
-        name: true,
-        email: true,
-        companyName: true,
-      },
-      take: 5,
-      orderBy: { updatedAt: "desc" },
-    }),
-    prisma.project.findMany({
-      where: {
-        OR: [
-          { name: { contains: normalizedQuery, mode: "insensitive" } },
-          { description: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            client: {
-              name: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-          {
-            client: {
-              email: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        name: true,
-        status: true,
-        client: {
-          select: {
-            name: true,
-            email: true,
-          },
-        },
-      },
-      take: 5,
-      orderBy: { updatedAt: "desc" },
-    }),
-    prisma.lead.findMany({
-      where: {
-        OR: [
-          { companyName: { contains: normalizedQuery, mode: "insensitive" } },
-          { contactName: { contains: normalizedQuery, mode: "insensitive" } },
-          { phone: { contains: normalizedQuery, mode: "insensitive" } },
-          { instagram: { contains: normalizedQuery, mode: "insensitive" } },
-          { email: { contains: normalizedQuery, mode: "insensitive" } },
-        ],
-      },
-      select: {
-        id: true,
-        companyName: true,
-        contactName: true,
-        status: true,
-      },
-      take: 5,
-      orderBy: { updatedAt: "desc" },
-    }),
-    prisma.update.findMany({
-      where: {
-        OR: [
-          { title: { contains: normalizedQuery, mode: "insensitive" } },
-          { description: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            project: {
-              name: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        title: true,
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      take: 5,
-      orderBy: { createdAt: "desc" },
-    }),
-  ])
+  const { users, projects, leads, updates } =
+    await searchAdminEntities(normalizedQuery)
 
   const quickResults: GlobalSearchResult[] = [
     ...users.map((user) => ({
@@ -170,61 +76,7 @@ export async function searchAdminGlobal(
     return quickResults
   }
 
-  const [assets, activities] = await Promise.all([
-    prisma.asset.findMany({
-      where: {
-        OR: [
-          { name: { contains: normalizedQuery, mode: "insensitive" } },
-          { key: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            project: {
-              name: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        name: true,
-        type: true,
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      take: 5,
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.auditLog.findMany({
-      where: {
-        OR: [
-          { summary: { contains: normalizedQuery, mode: "insensitive" } },
-          { entityType: { contains: normalizedQuery, mode: "insensitive" } },
-          { action: { contains: normalizedQuery, mode: "insensitive" } },
-          {
-            project: {
-              name: { contains: normalizedQuery, mode: "insensitive" },
-            },
-          },
-        ],
-      },
-      select: {
-        id: true,
-        summary: true,
-        entityType: true,
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      take: 5,
-      orderBy: { createdAt: "desc" },
-    }),
-  ])
+  const { assets, activities } = await searchAdminFullEntities(normalizedQuery)
 
   return [
     ...quickResults,

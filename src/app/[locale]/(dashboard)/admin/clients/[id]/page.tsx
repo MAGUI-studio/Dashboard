@@ -23,6 +23,7 @@ import {
   CardTitle,
 } from "@/src/components/ui/card"
 
+import { getAdminClientDetails } from "@/src/lib/client-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
@@ -68,22 +69,7 @@ export default async function ClientDetailsPage({
     notFound()
   }
 
-  const localUser = await prisma.user.findUnique({
-    where: { clerkId: id },
-    include: {
-      projects: {
-        include: {
-          client: {
-            select: {
-              name: true,
-              email: true,
-            },
-          },
-        },
-        orderBy: { updatedAt: "desc" },
-      },
-    },
-  })
+  const localUser = await getAdminClientDetails(id)
 
   const projects = localUser?.projects ?? []
   const activeProjects = projects.filter(

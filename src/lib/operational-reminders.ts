@@ -1,5 +1,6 @@
 import { revalidatePath } from "next/cache"
 
+import { Prisma } from "@/src/generated/client/client"
 import {
   ApprovalStatus,
   LeadStatus,
@@ -32,11 +33,18 @@ const activeReminderStatuses: ScheduledReminderStatus[] = [
 function getScheduledReminderDelegate() {
   return (
     prisma as typeof prisma & {
-      scheduledReminder?: {
-        findMany: typeof prisma.notification.findMany
-        create: typeof prisma.notification.create
-        update: typeof prisma.notification.update
-        updateMany: typeof prisma.notification.updateMany
+      scheduledReminder: {
+        findMany: (
+          args: Prisma.ScheduledReminderFindManyArgs
+        ) => Promise<unknown[]>
+        create: (args: Prisma.ScheduledReminderCreateArgs) => Promise<unknown>
+        update: (args: Prisma.ScheduledReminderUpdateArgs) => Promise<unknown>
+        updateMany: (
+          args: Prisma.ScheduledReminderUpdateManyArgs
+        ) => Promise<unknown>
+        createMany: (
+          args: Prisma.ScheduledReminderCreateManyArgs
+        ) => Promise<unknown>
       }
     }
   ).scheduledReminder
@@ -225,11 +233,12 @@ export async function syncOperationalReminders(options?: {
 
   const candidates = await getReminderCandidates()
   const recipientIds = internalRecipients.map((recipient) => recipient.id)
-  const existingReminders = await scheduledReminder.findMany({
+
+  const existingReminders = (await scheduledReminder.findMany({
     where: {
-      recipientUserId: {
-        in: recipientIds,
-      },
+      recipientUserId: { in: recipientIds },
+      type: { in: Array.from(new Set(candidates.map((c) => c.type))) },
+      entityId: { in: Array.from(new Set(candidates.map((c) => c.entityId))) },
     },
     select: {
       id: true,
@@ -238,7 +247,13 @@ export async function syncOperationalReminders(options?: {
       recipientUserId: true,
       status: true,
     },
-  })
+  })) as Array<{
+    id: string
+    type: ScheduledReminderType
+    entityId: string
+    recipientUserId: string
+    status: ScheduledReminderStatus
+  }>
 
   const activeKeys = new Set<string>()
   const existingKeys = new Map(
@@ -248,8 +263,15 @@ export async function syncOperationalReminders(options?: {
     ])
   )
 
-  const createOperations = recipientIds.flatMap((recipientUserId) =>
-    candidates.flatMap((candidate) => {
+  const notificationsToCreate: Array<Prisma.NotificationCreateManyInput> = []
+  const remindersToCreate: Array<Prisma.ScheduledReminderCreateManyInput> = []
+  const remindersToUpdate: Array<{
+    id: string
+    data: Prisma.ScheduledReminderUpdateInput
+  }> = []
+
+  recipientIds.forEach((recipientUserId) => {
+    candidates.forEach((candidate) => {
       const key = buildReminderKey(candidate, recipientUserId)
       activeKeys.add(key)
 
@@ -259,108 +281,108 @@ export async function syncOperationalReminders(options?: {
         existingReminder &&
         activeReminderStatuses.includes(existingReminder.status)
       ) {
-        return []
+        return
       }
+
+      const commonData = {
+        title: candidate.title,
+        message: candidate.message,
+        ctaPath: candidate.ctaPath,
+        metadata: {
+          reminderType: candidate.type,
+          entityType: candidate.entityType,
+          entityId: candidate.entityId,
+          ...candidate.metadata,
+        } as Prisma.JsonObject,
+      }
+
+      notificationsToCreate.push({
+        userId: recipientUserId,
+        type: NotificationType.OPERATIONAL_REMINDER,
+        ...commonData,
+      })
 
       if (existingReminder) {
-        return [
-          prisma.notification.create({
-            data: {
-              userId: recipientUserId,
-              type: NotificationType.OPERATIONAL_REMINDER,
-              title: candidate.title,
-              message: candidate.message,
-              ctaPath: candidate.ctaPath,
-              metadata: {
-                reminderType: candidate.type,
-                entityType: candidate.entityType,
-                entityId: candidate.entityId,
-                ...candidate.metadata,
-              },
-            },
-          }),
-          scheduledReminder.update({
-            where: {
-              id: existingReminder.id,
-            },
-            data: {
-              status: ScheduledReminderStatus.SENT,
-              title: candidate.title,
-              message: candidate.message,
-              ctaPath: candidate.ctaPath,
-              scheduledFor: candidate.scheduledFor,
-              sentAt: new Date(),
-              resolvedAt: null,
-              metadata: candidate.metadata ?? {},
-            },
-          }),
-        ]
-      }
-
-      return [
-        prisma.notification.create({
+        remindersToUpdate.push({
+          id: existingReminder.id,
           data: {
-            userId: recipientUserId,
-            type: NotificationType.OPERATIONAL_REMINDER,
-            title: candidate.title,
-            message: candidate.message,
-            ctaPath: candidate.ctaPath,
-            metadata: {
-              reminderType: candidate.type,
-              entityType: candidate.entityType,
-              entityId: candidate.entityId,
-              ...candidate.metadata,
-            },
-          },
-        }),
-        scheduledReminder.create({
-          data: {
-            recipientUserId,
-            type: candidate.type,
             status: ScheduledReminderStatus.SENT,
-            entityType: candidate.entityType,
-            entityId: candidate.entityId,
             title: candidate.title,
             message: candidate.message,
             ctaPath: candidate.ctaPath,
             scheduledFor: candidate.scheduledFor,
             sentAt: new Date(),
-            metadata: candidate.metadata ?? {},
+            resolvedAt: null,
+            metadata: (candidate.metadata || {}) as Prisma.JsonObject,
           },
-        }),
-      ]
-    })
-  )
-
-  const resolvedReminderIds = existingReminders
-    .filter((reminder) => {
-      if (!activeReminderStatuses.includes(reminder.status)) {
-        return false
+        })
+      } else {
+        remindersToCreate.push({
+          recipientUserId,
+          type: candidate.type,
+          status: ScheduledReminderStatus.SENT,
+          entityType: candidate.entityType,
+          entityId: candidate.entityId,
+          title: candidate.title,
+          message: candidate.message,
+          ctaPath: candidate.ctaPath,
+          scheduledFor: candidate.scheduledFor,
+          sentAt: new Date(),
+          metadata: (candidate.metadata || {}) as Prisma.JsonObject,
+        })
       }
-
-      const key = `${reminder.recipientUserId}:${reminder.type}:${reminder.entityId}`
-      return !activeKeys.has(key)
     })
-    .map((reminder) => reminder.id)
+  })
 
-  await prisma.$transaction([
-    ...createOperations,
-    ...(resolvedReminderIds.length > 0
-      ? [
-          scheduledReminder.updateMany({
-            where: {
-              id: {
-                in: resolvedReminderIds,
-              },
-            },
-            data: {
-              status: ScheduledReminderStatus.RESOLVED,
-              resolvedAt: new Date(),
-            },
-          }),
-        ]
-      : []),
-  ])
+  await prisma.$transaction(async (tx) => {
+    const sr = (
+      tx as unknown as {
+        scheduledReminder: {
+          createMany: (
+            args: Prisma.ScheduledReminderCreateManyArgs
+          ) => Promise<unknown>
+          update: (args: Prisma.ScheduledReminderUpdateArgs) => Promise<unknown>
+          updateMany: (
+            args: Prisma.ScheduledReminderUpdateManyArgs
+          ) => Promise<unknown>
+        }
+      }
+    ).scheduledReminder
+
+    if (notificationsToCreate.length > 0) {
+      await tx.notification.createMany({ data: notificationsToCreate })
+    }
+
+    if (remindersToCreate.length > 0) {
+      await sr.createMany({ data: remindersToCreate })
+    }
+
+    for (const update of remindersToUpdate) {
+      await sr.update({
+        where: { id: update.id },
+        data: update.data,
+      })
+    }
+
+    await sr.updateMany({
+      where: {
+        recipientUserId: { in: recipientIds },
+        status: { in: activeReminderStatuses },
+        NOT: Array.from(activeKeys).map((key) => {
+          const [uid, type, eid] = key.split(":")
+          return {
+            recipientUserId: uid,
+            type: type as ScheduledReminderType,
+            entityId: eid,
+          }
+        }),
+      },
+      data: {
+        status: ScheduledReminderStatus.RESOLVED,
+        resolvedAt: new Date(),
+      },
+    })
+  })
 
   if (options?.revalidate !== false) {
     revalidatePath("/", "layout")
@@ -376,7 +398,7 @@ export async function getActiveScheduledReminders(recipientUserId: string) {
     return []
   }
 
-  return scheduledReminder.findMany({
+  return (await scheduledReminder.findMany({
     where: {
       recipientUserId,
       status: {
@@ -385,5 +407,11 @@ export async function getActiveScheduledReminders(recipientUserId: string) {
     },
     orderBy: [{ scheduledFor: "asc" }, { createdAt: "asc" }],
     take: 8,
-  })
+  })) as Array<{
+    id: string
+    type: ScheduledReminderType
+    scheduledFor: Date
+    title: string
+    message: string
+  }>
 }

@@ -1,221 +1,148 @@
-import { ApprovalStatus, AssetVisibility } from "@/src/generated/client/enums"
+import { unstable_cache } from "next/cache"
 
-import prisma from "@/src/lib/prisma"
+import { ApprovalStatus } from "@/src/generated/client/enums"
 
-export async function getClientProjects(userId: string) {
-  return prisma.project.findMany({
-    where: {
-      OR: [
-        { clientId: userId },
-        {
-          members: {
-            some: {
-              userId: userId,
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      client: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          companyName: true,
-        },
-      },
-    },
-    orderBy: { updatedAt: "desc" },
-  })
-}
+import { env } from "@/src/config/env"
 
-export async function getClientProjectById(projectId: string, userId: string) {
-  return prisma.project.findFirst({
-    where: {
-      id: projectId,
-      OR: [
-        { clientId: userId },
-        {
-          members: {
-            some: {
-              userId: userId,
-            },
-          },
-        },
-      ],
-    },
-    include: {
-      client: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          companyName: true,
-        },
-      },
-      updates: {
-        orderBy: { createdAt: "desc" },
-        include: {
-          attachments: {
-            orderBy: { createdAt: "asc" },
-          },
-        },
-      },
-      assets: {
-        where: {
-          visibility: AssetVisibility.CLIENT,
-        },
-        orderBy: { order: "asc" },
-      },
-      actionItems: {
-        orderBy: { createdAt: "desc" },
-      },
-      versions: {
-        orderBy: { createdAt: "desc" },
-      },
-      briefingNotes: {
-        orderBy: { createdAt: "desc" },
-      },
-    },
-  })
-}
+import { cacheTags } from "./cache-tags"
+import prisma from "./prisma"
 
-export async function getClientPendingItems(userId: string) {
-  const projects = await getClientProjects(userId)
-  const projectIds = projects.map((p) => p.id)
+const dataCacheTtl = env.DATA_CACHE_TTL_SECONDS
 
-  const [pendingApprovals, pendingTasks] = await Promise.all([
-    prisma.update.findMany({
-      where: {
-        projectId: { in: projectIds },
-        requiresApproval: true,
-        approvalStatus: ApprovalStatus.PENDING,
-      },
+export const getClientHomeDataCached = unstable_cache(
+  async (userId: string) => {
+    const projects = await prisma.project.findMany({
+      where: { clientId: userId },
       include: {
-        project: {
-          select: {
-            id: true,
-            name: true,
-          },
+        updates: {
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          include: { attachments: true },
         },
-      },
-      orderBy: { createdAt: "desc" },
-    }),
-    prisma.actionItem.findMany({
-      where: {
-        projectId: { in: projectIds },
-        targetRole: "CLIENT",
-        status: { not: "COMPLETED" },
-      },
-      include: {
-        project: {
+        _count: {
           select: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      orderBy: { dueDate: "asc" },
-    }),
-  ])
-
-  return {
-    pendingApprovals,
-    pendingTasks,
-  }
-}
-
-export async function getClientHomeData(userId: string) {
-  const projects = await prisma.project.findMany({
-    where: {
-      OR: [
-        { clientId: userId },
-        {
-          members: {
-            some: {
-              userId: userId,
+            updates: {
+              where: {
+                requiresApproval: true,
+                approvalStatus: ApprovalStatus.PENDING,
+              },
+            },
+            actionItems: {
+              where: { status: "PENDING" },
             },
           },
         },
-      ],
-    },
-    include: {
-      updates: {
-        orderBy: { createdAt: "desc" },
-        take: 1,
       },
-    },
-    orderBy: { updatedAt: "desc" },
-  })
+      orderBy: { updatedAt: "desc" },
+    })
 
-  const { pendingApprovals, pendingTasks } = await getClientPendingItems(userId)
+    return { projects }
+  },
+  ["client-home-data"],
+  { revalidate: dataCacheTtl }
+)
 
-  // Fetch recent activity across updates and assets
-  const projectIds = projects.map((p) => p.id)
-  const [recentUpdates, recentAssets] = await Promise.all([
-    prisma.update.findMany({
-      where: { projectId: { in: projectIds } },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { project: { select: { name: true } } },
-    }),
-    prisma.asset.findMany({
-      where: {
-        projectId: { in: projectIds },
-        visibility: AssetVisibility.CLIENT,
-      },
-      orderBy: { createdAt: "desc" },
-      take: 5,
-      include: { project: { select: { name: true } } },
-    }),
-  ])
+export const getClientHomeData = (userId: string) =>
+  unstable_cache(
+    async () => getClientHomeDataCached(userId),
+    ["client-home-data", userId],
+    {
+      revalidate: dataCacheTtl,
+      tags: [cacheTags.clientHome, cacheTags.clientProjects],
+    }
+  )()
 
-  const activity = [
-    ...recentUpdates.map((u) => ({
-      id: `update-${u.id}`,
-      title: u.title,
-      type: "update" as const,
-      projectName: u.project.name,
-      createdAt: u.createdAt,
-      href: `/projects/${u.projectId}/timeline?highlight=${u.id}`,
-    })),
-    ...recentAssets.map((a) => ({
-      id: `asset-${a.id}`,
-      title: a.name,
-      type: "file" as const,
-      projectName: a.project.name,
-      createdAt: a.createdAt,
-      href: `/projects/${a.projectId}/files`,
-    })),
-  ]
-    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-    .slice(0, 5)
-
-  return {
-    projects,
-    pendingApprovals,
-    pendingTasks,
-    recentActivity: activity,
-  }
-}
-
-export async function getClientNotifications(userId: string) {
-  return prisma.notification.findMany({
-    where: {
-      userId,
-    },
-    include: {
-      project: {
-        select: {
-          id: true,
-          name: true,
+export const getClientProjectsCached = unstable_cache(
+  async (userId: string) => {
+    return prisma.project.findMany({
+      where: { clientId: userId },
+      select: {
+        id: true,
+        name: true,
+        status: true,
+        progress: true,
+        updatedAt: true,
+        client: {
+          select: {
+            name: true,
+            email: true,
+            avatarUrl: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-    take: 50,
-  })
-}
+      orderBy: { updatedAt: "desc" },
+    })
+  },
+  ["client-projects"],
+  { revalidate: dataCacheTtl }
+)
+
+export const getClientProjects = (userId: string) =>
+  unstable_cache(
+    async () => getClientProjectsCached(userId),
+    ["client-projects", userId],
+    { revalidate: dataCacheTtl, tags: [cacheTags.clientProjects] }
+  )()
+
+export const getClientProjectByIdCached = unstable_cache(
+  async (id: string, userId: string) => {
+    return prisma.project.findUnique({
+      where: { id, clientId: userId },
+      include: {
+        client: true,
+        updates: {
+          orderBy: { createdAt: "desc" },
+          include: { attachments: true },
+        },
+        assets: {
+          orderBy: { order: "asc" },
+        },
+        actionItems: {
+          orderBy: { dueDate: "asc" },
+        },
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                name: true,
+                avatarUrl: true,
+              },
+            },
+          },
+        },
+      },
+    })
+  },
+  ["client-project-detail"],
+  { revalidate: dataCacheTtl }
+)
+
+export const getClientProjectById = (id: string, userId: string) =>
+  unstable_cache(
+    async () => getClientProjectByIdCached(id, userId),
+    ["client-project-detail", id, userId],
+    {
+      revalidate: dataCacheTtl,
+      tags: [cacheTags.clientProject, `client:project:${id}`],
+    }
+  )()
+
+export const getClientNotificationsCached = unstable_cache(
+  async (userId: string) => {
+    return prisma.notification.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+    })
+  },
+  ["client-notifications"],
+  { revalidate: 60 }
+)
+
+export const getClientNotifications = (userId: string) =>
+  unstable_cache(
+    async () => getClientNotificationsCached(userId),
+    ["client-notifications", userId],
+    { revalidate: 60, tags: [cacheTags.clientNotifications] }
+  )()

@@ -19,7 +19,7 @@ Sistema interno da MAGUI.studio para operar clientes, projetos, CRM, aprovacoes,
 ## Modulos
 
 - Dashboard admin com saude operacional, agenda, lembretes e atividade recente.
-- CRM com kanban, lista, leads, notas, templates, importacao e exportacao CSV.
+- CRM com kanban, lista, leads, notas e templates.
 - Gestao de clientes e projetos.
 - Governanca de projetos com timeline, assets, briefing, membros, auditoria e exportacoes.
 - Portal do cliente com home, projetos, timeline, validacoes, arquivos, briefing e tarefas.
@@ -51,6 +51,21 @@ Variaveis principais:
 - `NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL`
 - `NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL`
 - `UPLOADTHING_TOKEN`
+- `DATABASE_POOL_MAX`: Limite de conexões no pool (default 1-2 em dev, 1 em prod, max 5).
+- `DATA_CACHE_TTL_SECONDS`: TTL global para cache de dados (default 300s).
+- `OPERATIONAL_REMINDERS_SECRET`: Segredo para autorizar execução do cron.
+
+## Lembretes Operacionais
+
+O sistema gera lembretes automáticos para leads parados, aprovações pendentes e projetos sem atualização.
+
+Rota de sincronização (Cron):
+`GET /api/cron/operational-reminders`
+
+Header de autorização:
+`Authorization: Bearer <OPERATIONAL_REMINDERS_SECRET>`
+
+Frequência sugerida: 1x por dia ou a cada 12 horas.
 
 ## Desenvolvimento
 

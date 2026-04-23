@@ -258,17 +258,22 @@ export async function ensureProjectAccess(
   return { user, project }
 }
 
-export async function createAuditLog(data: {
-  action: string
-  entityType: string
-  entityId: string
-  summary: string
-  metadata?: Prisma.InputJsonValue
-  actorId?: string | null
-  actorType?: AuditActorType
-  projectId?: string | null
-}) {
-  await prisma.auditLog.create({
+export async function createAuditLog(
+  data: {
+    action: string
+    entityType: string
+    entityId: string
+    summary: string
+    metadata?: Prisma.InputJsonValue
+    actorId?: string | null
+    actorType?: AuditActorType
+    projectId?: string | null
+  },
+  tx: {
+    auditLog: { create: (args: Prisma.AuditLogCreateArgs) => Promise<unknown> }
+  } = prisma
+) {
+  await tx.auditLog.create({
     data: {
       action: data.action,
       entityType: data.entityType,
@@ -301,16 +306,23 @@ export function getAuditOriginLabel(input: {
   return "client_portal"
 }
 
-export async function createNotification(data: {
-  userId: string
-  type: NotificationType
-  title: string
-  message: string
-  ctaPath?: string | null
-  metadata?: Prisma.InputJsonValue
-  projectId?: string | null
-}) {
-  await prisma.notification.create({
+export async function createNotification(
+  data: {
+    userId: string
+    type: NotificationType
+    title: string
+    message: string
+    ctaPath?: string | null
+    metadata?: Prisma.InputJsonValue
+    projectId?: string | null
+  },
+  tx: {
+    notification: {
+      create: (args: Prisma.NotificationCreateArgs) => Promise<unknown>
+    }
+  } = prisma
+) {
+  await tx.notification.create({
     data: {
       userId: data.userId,
       type: data.type,
@@ -327,6 +339,48 @@ export async function createNotification(data: {
   revalidatePath("/admin/projects")
   if (data.projectId) {
     revalidatePath(`/admin/projects/${data.projectId}`)
+  }
+  revalidatePath("/notifications")
+}
+
+export async function createNotificationsMany(
+  notifications: Array<{
+    userId: string
+    type: NotificationType
+    title: string
+    message: string
+    ctaPath?: string | null
+    metadata?: Prisma.InputJsonValue
+    projectId?: string | null
+  }>,
+  tx: {
+    notification: {
+      createMany: (args: Prisma.NotificationCreateManyArgs) => Promise<unknown>
+    }
+  } = prisma
+) {
+  if (notifications.length === 0) return
+
+  await tx.notification.createMany({
+    data: notifications.map((n) => ({
+      userId: n.userId,
+      type: n.type,
+      title: n.title,
+      message: n.message,
+      ctaPath: n.ctaPath ?? null,
+      metadata: n.metadata || {},
+      projectId: n.projectId ?? null,
+    })),
+  })
+
+  revalidatePath("/", "layout")
+  revalidatePath("/admin")
+  revalidatePath("/admin/projects")
+  const projectIds = Array.from(
+    new Set(notifications.map((n) => n.projectId).filter(Boolean))
+  )
+  for (const pid of projectIds) {
+    revalidatePath(`/admin/projects/${pid}`)
   }
   revalidatePath("/notifications")
 }

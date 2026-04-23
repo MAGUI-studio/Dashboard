@@ -10,7 +10,6 @@ import {
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client/enums"
-import { Lead, MessageTemplate, SavedView } from "@/src/types/crm"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
@@ -62,26 +61,6 @@ function revalidateCrmPaths(): void {
   revalidatePath("/")
 }
 
-async function createLeadActivity(data: {
-  leadId: string
-  type: LeadActivityType
-  title: string
-  content?: string
-  metadata?: Prisma.InputJsonValue
-}) {
-  const actor = await getCurrentAppUser()
-  return prisma.leadActivity.create({
-    data: {
-      leadId: data.leadId,
-      type: data.type,
-      title: data.title,
-      content: data.content,
-      metadata: data.metadata || {},
-      authorId: actor?.id,
-    },
-  })
-}
-
 export async function createLead(
   data: z.infer<typeof LeadSchema>
 ): Promise<{ success: boolean; error?: string }> {
@@ -89,23 +68,29 @@ export async function createLead(
     await protect("admin")
 
     const validatedData = LeadSchema.parse(data)
+    const actor = await getCurrentAppUser()
 
-    const lead = await prisma.lead.create({
-      data: {
-        ...validatedData,
-        email: validatedData.email === "" ? null : validatedData.email,
-        website: validatedData.website === "" ? null : validatedData.website,
-        nextActionAt: validatedData.nextActionAt
-          ? new Date(validatedData.nextActionAt)
-          : null,
-      },
-    })
+    await prisma.$transaction(async (tx) => {
+      const lead = await tx.lead.create({
+        data: {
+          ...validatedData,
+          email: validatedData.email === "" ? null : validatedData.email,
+          website: validatedData.website === "" ? null : validatedData.website,
+          nextActionAt: validatedData.nextActionAt
+            ? new Date(validatedData.nextActionAt)
+            : null,
+        },
+      })
 
-    await createLeadActivity({
-      leadId: lead.id,
-      type: LeadActivityType.LEAD_EDITED, // Initial creation
-      title: "Lead catalogado no sistema",
-      content: `Lead da empresa ${lead.companyName} criado com origem ${lead.source}.`,
+      await tx.leadActivity.create({
+        data: {
+          leadId: lead.id,
+          type: LeadActivityType.LEAD_EDITED,
+          title: "Lead catalogado no sistema",
+          content: `Lead da empresa ${lead.companyName} criado com origem ${lead.source}.`,
+          authorId: actor?.id,
+        },
+      })
     })
 
     revalidateCrmPaths()
@@ -122,28 +107,38 @@ export async function updateLeadStatus(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await protect("admin")
+    const actor = await getCurrentAppUser()
 
-    const oldLead = await prisma.lead.findUnique({ where: { id } })
-    if (!oldLead) return { success: false, error: "Lead not found" }
+    await prisma.$transaction(async (tx) => {
+      const oldLead = await tx.lead.findUnique({
+        where: { id },
+        select: { status: true },
+      })
 
-    await prisma.lead.update({
-      where: { id },
-      data: {
-        status,
-        lastContactAt:
-          status === LeadStatus.CONTATO_REALIZADO ||
-          status === LeadStatus.NEGOCIACAO
-            ? new Date()
-            : undefined,
-      },
-    })
+      if (!oldLead) throw new Error("Lead not found")
 
-    await createLeadActivity({
-      leadId: id,
-      type: LeadActivityType.STATUS_CHANGED,
-      title: `Status alterado para ${status}`,
-      content: `O lead foi movido de ${oldLead.status} para ${status}.`,
-      metadata: { from: oldLead.status, to: status },
+      await tx.lead.update({
+        where: { id },
+        data: {
+          status,
+          lastContactAt:
+            status === LeadStatus.CONTATO_REALIZADO ||
+            status === LeadStatus.NEGOCIACAO
+              ? new Date()
+              : undefined,
+        },
+      })
+
+      await tx.leadActivity.create({
+        data: {
+          leadId: id,
+          type: LeadActivityType.STATUS_CHANGED,
+          title: `Status alterado para ${status}`,
+          content: `O lead foi movido de ${oldLead.status} para ${status}.`,
+          metadata: { from: oldLead.status, to: status },
+          authorId: actor?.id,
+        },
+      })
     })
 
     revalidateCrmPaths()
@@ -161,29 +156,35 @@ export async function updateLead(
     await protect("admin")
 
     const validatedData = UpdateLeadSchema.parse(data)
+    const actor = await getCurrentAppUser()
 
-    await prisma.lead.update({
-      where: { id: validatedData.id },
-      data: {
-        companyName: validatedData.companyName,
-        contactName: validatedData.contactName || null,
-        email: validatedData.email === "" ? null : validatedData.email,
-        phone: validatedData.phone || null,
-        website: validatedData.website === "" ? null : validatedData.website,
-        instagram: validatedData.instagram || null,
-        notes: validatedData.notes || null,
-        value: validatedData.value || null,
-        source: validatedData.source,
-        nextActionAt: validatedData.nextActionAt
-          ? new Date(validatedData.nextActionAt)
-          : null,
-      },
-    })
+    await prisma.$transaction(async (tx) => {
+      await tx.lead.update({
+        where: { id: validatedData.id },
+        data: {
+          companyName: validatedData.companyName,
+          contactName: validatedData.contactName || null,
+          email: validatedData.email === "" ? null : validatedData.email,
+          phone: validatedData.phone || null,
+          website: validatedData.website === "" ? null : validatedData.website,
+          instagram: validatedData.instagram || null,
+          notes: validatedData.notes || null,
+          value: validatedData.value || null,
+          source: validatedData.source,
+          nextActionAt: validatedData.nextActionAt
+            ? new Date(validatedData.nextActionAt)
+            : null,
+        },
+      })
 
-    await createLeadActivity({
-      leadId: validatedData.id,
-      type: LeadActivityType.LEAD_EDITED,
-      title: "Informacoes do lead atualizadas",
+      await tx.leadActivity.create({
+        data: {
+          leadId: validatedData.id,
+          type: LeadActivityType.LEAD_EDITED,
+          title: "Informacoes do lead atualizadas",
+          authorId: actor?.id,
+        },
+      })
     })
 
     revalidateCrmPaths()
@@ -221,27 +222,31 @@ export async function addLeadNote(
     const validatedData = LeadNoteSchema.parse(data)
     const actor = await getCurrentAppUser()
 
-    await prisma.$transaction([
-      prisma.leadNote.create({
+    await prisma.$transaction(async (tx) => {
+      await tx.leadNote.create({
         data: {
           leadId: validatedData.leadId,
           content: validatedData.content,
           authorId: actor?.id ?? null,
         },
-      }),
-      prisma.lead.update({
+      })
+
+      await tx.lead.update({
         where: { id: validatedData.leadId },
         data: {
           lastContactAt: new Date(),
         },
-      }),
-    ])
+      })
 
-    await createLeadActivity({
-      leadId: validatedData.leadId,
-      type: LeadActivityType.NOTE_CREATED,
-      title: "Nova nota de follow-up",
-      content: validatedData.content,
+      await tx.leadActivity.create({
+        data: {
+          leadId: validatedData.leadId,
+          type: LeadActivityType.NOTE_CREATED,
+          title: "Nova nota de follow-up",
+          content: validatedData.content,
+          authorId: actor?.id,
+        },
+      })
     })
 
     revalidateCrmPaths()
@@ -305,70 +310,65 @@ export async function convertLeadToProjectAction(input: {
     if (!finalUserId)
       return { success: false, error: "Client must be selected." }
 
-    const project = await prisma.project.create({
-      data: {
-        name: input.projectData.name,
-        category: input.projectData.category || ProjectCategory.WEB_APP,
-        budget: input.projectData.budget || lead.value,
-        deadline: input.projectData.deadline
-          ? new Date(input.projectData.deadline)
-          : null,
-        clientId: finalUserId,
-        status: ProjectStatus.STRATEGY,
-        progress: 0,
-        description: lead.notes,
-      },
-    })
+    const finalActorId = finalUserId
+    const result = await prisma.$transaction(async (tx) => {
+      const project = await tx.project.create({
+        data: {
+          name: input.projectData.name,
+          category: input.projectData.category || ProjectCategory.WEB_APP,
+          budget: input.projectData.budget || lead.value,
+          deadline: input.projectData.deadline
+            ? new Date(input.projectData.deadline)
+            : null,
+          clientId: finalActorId,
+          status: ProjectStatus.STRATEGY,
+          progress: 0,
+          description: lead.notes,
+        },
+      })
 
-    await prisma.lead.update({
-      where: { id: input.leadId },
-      data: {
-        status: LeadStatus.CONVERTIDO,
-        convertedAt: new Date(),
-        convertedProjectId: project.id,
-      },
-    })
+      await tx.lead.update({
+        where: { id: input.leadId },
+        data: {
+          status: LeadStatus.CONVERTIDO,
+          convertedAt: new Date(),
+          convertedProjectId: project.id,
+        },
+      })
 
-    await createLeadActivity({
-      leadId: input.leadId,
-      type: LeadActivityType.CONVERTED_TO_PROJECT,
-      title: "Lead convertido em projeto",
-      content: `Projeto "${project.name}" criado com sucesso.`,
-      metadata: { projectId: project.id },
-    })
+      await tx.leadActivity.create({
+        data: {
+          leadId: input.leadId,
+          type: LeadActivityType.CONVERTED_TO_PROJECT,
+          title: "Lead convertido em projeto",
+          content: `Projeto "${project.name}" criado com sucesso.`,
+          metadata: { projectId: project.id },
+          authorId: actor?.id,
+        },
+      })
 
-    await createAuditLog({
-      action: "lead.converted_to_project",
-      entityType: "Lead",
-      entityId: input.leadId,
-      projectId: project.id,
-      summary: `Lead ${lead.companyName} convertido no projeto ${project.name}.`,
-      metadata: { projectId: project.id, clientId: finalUserId },
+      await createAuditLog(
+        {
+          action: "lead.converted_to_project",
+          entityType: "Lead",
+          entityId: input.leadId,
+          projectId: project.id,
+          summary: `Lead ${lead.companyName} convertido no projeto ${project.name}.`,
+          metadata: { projectId: project.id, clientId: finalUserId },
+        },
+        tx
+      )
+
+      return project
     })
 
     revalidateCrmPaths()
     revalidatePath("/admin/projects")
 
-    return { success: true, projectId: project.id }
+    return { success: true, projectId: result.id }
   } catch (error) {
     logger.error({ error }, "Convert Lead Error")
     return { success: false, error: "Failed to convert lead" }
-  }
-}
-
-export async function getMessageTemplatesAction(
-  scope: string = "LEAD"
-): Promise<MessageTemplate[]> {
-  try {
-    await protect("admin")
-    const templates = await prisma.messageTemplate.findMany({
-      where: { scope },
-      orderBy: { createdAt: "asc" },
-    })
-    return templates as unknown as MessageTemplate[]
-  } catch (error) {
-    logger.error({ error }, "Get Templates Error")
-    return []
   }
 }
 
@@ -420,28 +420,6 @@ export async function deleteMessageTemplateAction(
   } catch (error) {
     logger.error({ error }, "Delete Template Error")
     return { success: false, error: "Failed to delete template" }
-  }
-}
-
-export async function getSavedCrmViewsAction(): Promise<SavedView[]> {
-  try {
-    await protect("admin")
-    const actor = await getCurrentAppUser()
-
-    if (!actor) return []
-
-    const views = await prisma.savedView.findMany({
-      where: {
-        userId: actor.id,
-        module: "CRM",
-      },
-      orderBy: { updatedAt: "desc" },
-    })
-
-    return views as unknown as SavedView[]
-  } catch (error) {
-    logger.error({ error }, "Get Saved CRM Views Error")
-    return []
   }
 }
 
@@ -507,31 +485,6 @@ export async function deleteCrmViewAction(
   }
 }
 
-export async function getCrmPreferencesAction(): Promise<{
-  density: "comfortable" | "compact"
-}> {
-  try {
-    await protect("admin")
-    const actor = await getCurrentAppUser()
-
-    if (!actor) return { density: "comfortable" }
-
-    const preferences = await prisma.savedView.findFirst({
-      where: {
-        userId: actor.id,
-        module: "CRM_PREFERENCES",
-        name: "default",
-      },
-    })
-
-    const parsed = CrmPreferencesSchema.safeParse(preferences?.filtersJson)
-    return parsed.success ? parsed.data : { density: "comfortable" }
-  } catch (error) {
-    logger.error({ error }, "Get CRM Preferences Error")
-    return { density: "comfortable" }
-  }
-}
-
 export async function saveCrmPreferencesAction(
   data: z.infer<typeof CrmPreferencesSchema>
 ): Promise<{ success: boolean; error?: string }> {
@@ -566,38 +519,4 @@ export async function saveCrmPreferencesAction(
     logger.error({ error }, "Save CRM Preferences Error")
     return { success: false, error: "Failed to save CRM preferences" }
   }
-}
-
-export async function getLeads(): Promise<Lead[]> {
-  const leads = await prisma.lead.findMany({
-    where: {
-      status: {
-        not: LeadStatus.DESCARTADO,
-      },
-    },
-    include: {
-      activities: {
-        orderBy: { createdAt: "desc" },
-        include: {
-          author: {
-            select: { id: true, name: true },
-          },
-        },
-      },
-      followUpNotes: {
-        orderBy: {
-          createdAt: "desc",
-        },
-        select: {
-          id: true,
-          content: true,
-          authorId: true,
-          createdAt: true,
-        },
-      },
-    },
-    orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
-  })
-
-  return leads as unknown as Lead[]
 }

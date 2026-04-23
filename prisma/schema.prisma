@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../src/generated/client"
 }
 
@@ -194,9 +194,10 @@ model Lead {
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @updatedAt
 
-  @@index([status])
-  @@index([assignedToId])
-  @@index([nextActionAt])
+  @@index([status, updatedAt])
+  @@index([status, nextActionAt])
+  @@index([assignedToId, status, updatedAt])
+  @@index([convertedProjectId])
 }
 
 model LeadNote {
@@ -246,6 +247,8 @@ model MessageTemplate {
   
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
+
+  @@index([scope, createdAt])
 }
 
 model SavedView {
@@ -258,7 +261,7 @@ model SavedView {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 
-  @@index([userId, module])
+  @@unique([userId, module, name])
 }
 
 model Project {
@@ -293,9 +296,8 @@ model Project {
   createdAt     DateTime        @default(now())
   updatedAt     DateTime        @updatedAt
 
-  @@index([clientId])
-  @@index([status])
-  @@index([updatedAt])
+  @@index([status, updatedAt])
+  @@index([clientId, updatedAt])
 }
 
 model BriefingEntry {
@@ -352,9 +354,8 @@ model Update {
 
   createdAt      DateTime       @default(now())
 
-  @@index([projectId])
-  @@index([approvalStatus])
-  @@index([createdAt])
+  @@index([projectId, createdAt])
+  @@index([requiresApproval, approvalStatus, createdAt])
 }
 
 model UpdateAttachment {
@@ -372,8 +373,7 @@ model UpdateAttachment {
 
   createdAt  DateTime  @default(now())
 
-  @@index([updateId])
-  @@index([createdAt])
+  @@index([updateId, createdAt])
 }
 
 model ApprovalEvent {
@@ -407,9 +407,8 @@ model ActionItem {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
 
-  @@index([projectId])
-  @@index([status])
-  @@index([dueDate])
+  @@index([status, dueDate])
+  @@index([projectId, status, dueDate])
   @@index([targetRole])
 }
 
@@ -430,9 +429,8 @@ model Asset {
 
   createdAt   DateTime        @default(now())
 
-  @@index([projectId])
-  @@index([order])
-  @@index([visibility])
+  @@index([projectId, visibility, order])
+  @@index([projectId, createdAt])
 }
 
 model Version {
@@ -451,8 +449,7 @@ model Version {
 
   createdAt   DateTime @default(now())
 
-  @@index([projectId])
-  @@index([createdAt])
+  @@index([projectId, createdAt])
 }
 
 model Notification {
@@ -471,9 +468,7 @@ model Notification {
 
   createdAt DateTime         @default(now())
 
-  @@index([userId])
-  @@index([readAt])
-  @@index([createdAt])
+  @@index([userId, readAt, createdAt])
   @@index([projectId])
 }
 
@@ -497,9 +492,8 @@ model ScheduledReminder {
   createdAt       DateTime                @default(now())
   updatedAt       DateTime                @updatedAt
 
-  @@index([recipientUserId, status])
+  @@index([recipientUserId, status, scheduledFor])
   @@index([type, status])
-  @@index([scheduledFor])
   @@index([entityType, entityId])
   @@unique([recipientUserId, type, entityId])
 }
@@ -520,8 +514,7 @@ model AuditLog {
 
   createdAt DateTime       @default(now())
 
-  @@index([projectId])
+  @@index([projectId, createdAt])
   @@index([actorId])
-  @@index([createdAt])
   @@index([entityType, entityId])
 }

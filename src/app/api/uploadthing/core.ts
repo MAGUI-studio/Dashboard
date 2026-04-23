@@ -4,8 +4,8 @@ import { UTFiles, UploadThingError } from "uploadthing/server"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
-import prisma from "@/src/lib/prisma"
 import { getCurrentAppUser } from "@/src/lib/project-governance"
+import { getUploadProjectAccess } from "@/src/lib/uploadthing-data"
 
 const f = createUploadthing()
 
@@ -42,28 +42,10 @@ export const ourFileRouter = {
         return { userId }
       }
 
-      const project = await prisma.project.findUnique({
-        where: { id: input.projectId },
-        select: {
-          id: true,
-          name: true,
-          client: {
-            select: {
-              id: true,
-              name: true,
-              companyName: true,
-            },
-          },
-          members: {
-            where: {
-              userId: appUser?.id ?? "",
-            },
-            select: {
-              id: true,
-            },
-          },
-        },
-      })
+      const project = await getUploadProjectAccess(
+        input.projectId,
+        appUser?.id ?? ""
+      )
 
       if (!project) {
         throw new UploadThingError("Project not found")
