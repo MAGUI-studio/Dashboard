@@ -6,12 +6,19 @@ import {
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
-import { auth, clerkClient } from "@clerk/nextjs/server"
+import { auth, clerkClient, createClerkClient } from "@clerk/nextjs/server"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
 
+import { env } from "@/src/config/env"
+
 import { cacheTags } from "./cache-tags"
+
+const clerkAuth = createClerkClient({
+  secretKey: env.CLERK_SECRET_KEY,
+  publishableKey: env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
+})
 
 const clerkRoleMap = {
   admin: UserRole.ADMIN,
@@ -31,7 +38,7 @@ function normalizeClerkRole(rawRole: unknown): UserRole {
 }
 
 async function upsertUserFromClerk(clerkUserId: string) {
-  const client = await clerkClient()
+  const client = clerkAuth
   const clerkUser = await client.users.getUser(clerkUserId)
   const primaryEmail =
     clerkUser.emailAddresses.find(
@@ -136,7 +143,7 @@ export async function findOrCreateClientFromEmail(
   }
 
   // Path 2: Clerk lookup and possible creation
-  const client = await clerkClient()
+  const client = clerkAuth
   const existingClerkUsers = await client.users.getUserList({
     emailAddress: [email],
     limit: 1,
@@ -202,7 +209,7 @@ export async function getCurrentAppUser() {
 
 export const getInternalNotificationRecipients = unstable_cache(
   async (): Promise<Array<{ id: string }>> => {
-    const client = await clerkClient()
+    const client = clerkAuth
     const clerkUsers = await client.users.getUserList({ limit: 100 })
 
     const internalUsers = clerkUsers.data.filter((user) => {

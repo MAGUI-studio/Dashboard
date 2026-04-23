@@ -4,12 +4,14 @@ import { revalidatePath } from "next/cache"
 
 import { Prisma } from "@/src/generated/client/client"
 import {
+  AuditActorType,
   LeadActivityType,
   LeadSource,
   LeadStatus,
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client/enums"
+import { LeadActivity, LeadNote } from "@/src/types/crm"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
