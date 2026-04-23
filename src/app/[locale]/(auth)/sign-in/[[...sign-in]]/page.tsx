@@ -33,6 +33,11 @@ const VARIANTS_FADE_IN_UP: Variants = {
 export default function SignInPage(): React.JSX.Element {
   return (
     <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-background">
+      <style jsx global>{`
+        .cl-footerAction {
+          display: none !important;
+        }
+      `}</style>
       <motion.div
         initial="hidden"
         animate="visible"
@@ -100,6 +105,7 @@ export default function SignInPage(): React.JSX.Element {
                     "rounded-full h-14 bg-brand-primary hover:bg-brand-primary/90 transition-all font-sans font-black uppercase text-[11px] tracking-[0.25em] shadow-2xl shadow-brand-primary/40 mt-6 active:scale-95",
                   footerActionLink:
                     "text-brand-primary hover:text-brand-primary/80 transition-colors font-sans font-black uppercase text-[10px] tracking-widest",
+                  footerAction: "hidden",
                   formFieldInput:
                     "h-14 rounded-2xl border border-border/80 bg-background focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all shadow-sm",
                   dividerLine: "bg-border/40",

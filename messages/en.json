@@ -653,6 +653,55 @@
     "admin_title": "Studio Overview",
     "admin_overview": "Overview",
     "admin_description": "Daily dashboard to track operations, approvals, commercial, and execution in real time.",
+    "projects": {
+      "title": "Projects"
+    },
+    "crm": {
+      "title": "Commercial"
+    },
+    "clients": {
+      "stats": {
+        "active_clients": "Active clients",
+        "active_projects": "Active projects",
+        "pending_approvals": "Pending approvals",
+        "open_leads": "Open leads",
+        "base_registered": "base registered",
+        "finalized": "finalized",
+        "review_today": "request review today",
+        "unread_notifications": "{count} unread notifications"
+      }
+    },
+    "approvals": {
+      "description": "Items that require your formal validation to proceed.",
+      "status": {
+        "PENDING": "Pending Approval"
+      }
+    },
+    "recent_updates": {
+      "title": "Recent updates",
+      "description": "What changed most recently in projects.",
+      "empty": "No recent updates."
+    },
+    "action_items": {
+      "title": "Next action items",
+      "description": "Operational tasks with more immediate deadline.",
+      "empty": "No tasks with defined deadline.",
+      "no_date": "No date"
+    },
+    "recent_crm": {
+      "title": "Recent commercial",
+      "description": "Most recent leads to start the day with context.",
+      "empty": "No leads registered.",
+      "updated_at": "Updated at",
+      "no_contact": "No contact"
+    },
+    "project_health": {
+      "description": "Quick reading of projects that deserve tracking."
+    },
+    "template_library": {
+      "title": "Template library",
+      "description": "Base messages for commercial, updates, approvals, material, and onboarding."
+    },
     "select_project": "Select Project",
     "filter_projects": "Filter projects...",
     "no_project_found": "No project found.",

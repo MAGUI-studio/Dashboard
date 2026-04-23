@@ -38,9 +38,9 @@ function createPool(): pg.Pool {
           rejectUnauthorized: false,
         }
       : undefined,
-    max: 10,
-    idleTimeoutMillis: 10000, // Reduced to catch stale connections faster
-    connectionTimeoutMillis: 5000, // Faster timeout for better responsiveness
+    max: isExternalDb ? 4 : 10,
+    idleTimeoutMillis: isExternalDb ? 30000 : 10000,
+    connectionTimeoutMillis: isExternalDb ? 15000 : 5000,
     // keepAlive: true, // Removed as it can cause "Server has closed the connection" on some infrastructures
   })
 

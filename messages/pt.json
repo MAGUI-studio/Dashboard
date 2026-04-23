@@ -653,6 +653,55 @@
     "admin_title": "Visão Geral do Estúdio",
     "admin_overview": "Visão Geral",
     "admin_description": "Painel diário para acompanhar operação, aprovações, comercial e execução em tempo real.",
+    "projects": {
+      "title": "Projetos"
+    },
+    "crm": {
+      "title": "Comercial"
+    },
+    "clients": {
+      "stats": {
+        "active_clients": "Clientes ativos",
+        "active_projects": "Projetos em andamento",
+        "pending_approvals": "Aprovações pendentes",
+        "open_leads": "Leads em aberto",
+        "base_registered": "base cadastrada",
+        "finalized": "finalizados",
+        "review_today": "pedem revisão hoje",
+        "unread_notifications": "{count} notificações não lidas"
+      }
+    },
+    "approvals": {
+      "description": "Itens que requerem sua validação formal para prosseguir.",
+      "status": {
+        "PENDING": "Aprovação Pendente"
+      }
+    },
+    "recent_updates": {
+      "title": "Atualizações recentes",
+      "description": "O que mudou mais recentemente nos projetos.",
+      "empty": "Nenhuma atualização recente."
+    },
+    "action_items": {
+      "title": "Action items próximos",
+      "description": "Tarefas operacionais com prazo mais imediato.",
+      "empty": "Nenhuma tarefa com prazo definido.",
+      "no_date": "Sem data"
+    },
+    "recent_crm": {
+      "title": "Comercial recente",
+      "description": "Leads mais recentes para abrir o dia com contexto.",
+      "empty": "Nenhum lead cadastrado.",
+      "updated_at": "Atualizado em",
+      "no_contact": "Sem contato"
+    },
+    "project_health": {
+      "description": "Leitura rápida dos projetos que merecem acompanhamento."
+    },
+    "template_library": {
+      "title": "Biblioteca de templates",
+      "description": "Mensagens base para comercial, updates, aprovações, material e onboarding."
+    },
     "select_project": "Selecione o Projeto",
     "filter_projects": "Filtrar projetos...",
     "no_project_found": "Nenhum projeto encontrado.",
