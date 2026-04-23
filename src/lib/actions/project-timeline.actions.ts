@@ -15,6 +15,7 @@ import prisma from "@/src/lib/prisma"
 import {
   createAuditLog,
   createNotification,
+  createNotificationsMany,
   ensureProjectAccess,
   getAuditOriginLabel,
   getCurrentAppUser,
@@ -103,113 +104,119 @@ export async function addProjectTimelineAction(
       imageUrl ||
       attachments.find((attachment) => attachment.type === AssetType.IMAGE)?.url
 
-    const update = await prisma.update.create({
-      data: {
-        projectId,
-        title,
-        description: description ?? null,
-        isMilestone,
-        requiresApproval,
-        approvalStatus: "PENDING",
-        approvedAt: null,
-        imageUrl: coverImage || null,
-        timezone,
-        attachments: attachments.length
-          ? {
-              create: attachments.map((attachment) => ({
-                name: attachment.name,
-                url: attachment.url,
-                key: attachment.key,
-                customId: attachment.customId ?? null,
-                type: attachment.type,
-                mimeType: attachment.mimeType ?? null,
-                size: attachment.size ?? null,
-              })),
-            }
-          : undefined,
-      },
-      include: {
-        project: {
-          select: {
-            id: true,
-            name: true,
-            clientId: true,
-          },
-        },
-        attachments: true,
-      },
-    })
-
-    try {
-      await createAuditLog({
-        action: "update.created",
-        entityType: "Update",
-        entityId: update.id,
-        summary: `Atualização "${update.title}" registrada no projeto ${update.project.name}.`,
-        actorId: actor?.id,
-        actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-        projectId,
-        metadata: {
-          origin: getAuditOriginLabel({
-            actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-            role: actor?.role,
-          }),
-          requiresApproval,
+    const { update } = await prisma.$transaction(async (tx) => {
+      const newUpdate = await tx.update.create({
+        data: {
+          projectId,
+          title,
+          description: description ?? null,
           isMilestone,
-          attachmentsCount: update.attachments.length,
-          after: {
-            requiresApproval,
-            isMilestone,
-            attachmentsCount: update.attachments.length,
+          requiresApproval,
+          approvalStatus: "PENDING",
+          approvedAt: null,
+          imageUrl: coverImage || null,
+          timezone,
+          attachments: attachments.length
+            ? {
+                create: attachments.map((attachment) => ({
+                  name: attachment.name,
+                  url: attachment.url,
+                  key: attachment.key,
+                  customId: attachment.customId ?? null,
+                  type: attachment.type,
+                  mimeType: attachment.mimeType ?? null,
+                  size: attachment.size ?? null,
+                })),
+              }
+            : undefined,
+        },
+        include: {
+          project: {
+            select: {
+              id: true,
+              name: true,
+              clientId: true,
+            },
           },
-          relatedEntities: [
-            {
-              type: "Project",
-              id: update.project.id,
-              label: update.project.name,
-            },
-            {
-              type: "Update",
-              id: update.id,
-              label: update.title,
-            },
-          ],
+          attachments: true,
         },
       })
 
-      if (requiresApproval) {
-        await createNotification({
-          userId: update.project.clientId,
+      await createAuditLog(
+        {
+          action: "update.created",
+          entityType: "Update",
+          entityId: newUpdate.id,
+          summary: `Atualização "${newUpdate.title}" registrada no projeto ${newUpdate.project.name}.`,
+          actorId: actor?.id,
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
           projectId,
-          type: NotificationType.UPDATE_PENDING_APPROVAL,
-          title: "Nova aprovação pendente",
-          message: `A atualização "${update.title}" está pronta para sua validação.`,
-          ctaPath: getDashboardPath(projectId),
           metadata: {
-            updateId: update.id,
-            attachmentsCount: update.attachments.length,
+            origin: getAuditOriginLabel({
+              actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+              role: actor?.role,
+            }),
+            requiresApproval,
+            isMilestone,
+            attachmentsCount: newUpdate.attachments.length,
+            after: {
+              requiresApproval,
+              isMilestone,
+              attachmentsCount: newUpdate.attachments.length,
+            },
+            relatedEntities: [
+              {
+                type: "Project",
+                id: newUpdate.project.id,
+                label: newUpdate.project.name,
+              },
+              {
+                type: "Update",
+                id: newUpdate.id,
+                label: newUpdate.title,
+              },
+            ],
           },
-        })
-      } else {
-        await createNotification({
-          userId: update.project.clientId,
-          projectId,
-          type: NotificationType.UPDATE_PUBLISHED,
-          title: "Nova evolução publicada",
-          message: `A atualização "${update.title}" foi adicionada na timeline do projeto.`,
-          ctaPath: getDashboardPath(projectId),
-          metadata: {
-            updateId: update.id,
-            attachmentsCount: update.attachments.length,
-          },
-        })
-      }
-    } catch (govError) {
-      logger.error(
-        { govError },
-        "Add Timeline Governance Error (Non-blocking):"
+        },
+        tx
       )
-    }
+
+      if (requiresApproval) {
+        await createNotification(
+          {
+            userId: newUpdate.project.clientId,
+            projectId,
+            type: NotificationType.UPDATE_PENDING_APPROVAL,
+            title: "Nova aprovação pendente",
+            message: `A atualização "${newUpdate.title}" está pronta para sua validação.`,
+            ctaPath: getDashboardPath(projectId),
+            metadata: {
+              updateId: newUpdate.id,
+              attachmentsCount: newUpdate.attachments.length,
+            },
+          },
+          tx
+        )
+      } else {
+        await createNotification(
+          {
+            userId: newUpdate.project.clientId,
+            projectId,
+            type: NotificationType.UPDATE_PUBLISHED,
+            title: "Nova evolução publicada",
+            message: `A atualização "${newUpdate.title}" foi adicionada na timeline do projeto.`,
+            ctaPath: getDashboardPath(projectId),
+            metadata: {
+              updateId: newUpdate.id,
+              attachmentsCount: newUpdate.attachments.length,
+            },
+          },
+          tx
+        )
+      }
+
+      return { update: newUpdate }
+    })
 
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
@@ -233,72 +240,78 @@ export async function approveUpdateAction(
       UserRole.MEMBER,
     ])
 
-    const update = await prisma.update.update({
-      where: { id: updateId, projectId },
-      data: {
-        approvalStatus: "APPROVED",
-        approvedAt: new Date(),
-        feedback: null,
-        approvalEvents: {
-          create: {
-            decision: "APPROVED",
-            comment: comment || null,
-            actorId: user.id,
-          },
-        },
-      },
-    })
-
-    await createAuditLog({
-      action: "update.approved",
-      entityType: "Update",
-      entityId: update.id,
-      summary: `Atualização "${update.title}" aprovada pelo cliente.`,
-      actorId: user.id,
-      actorType: AuditActorType.USER,
-      projectId,
-      metadata: {
-        origin: getAuditOriginLabel({
-          actorType: AuditActorType.USER,
-          role: user.role,
-        }),
-        before: {
-          approvalStatus: "PENDING",
-        },
-        after: {
+    const { update } = await prisma.$transaction(async (tx) => {
+      const updatedUpdate = await tx.update.update({
+        where: { id: updateId, projectId },
+        data: {
           approvalStatus: "APPROVED",
+          approvedAt: new Date(),
+          feedback: null,
+          approvalEvents: {
+            create: {
+              decision: "APPROVED",
+              comment: comment || null,
+              actorId: user.id,
+            },
+          },
         },
-        comment,
-        relatedEntities: [
-          {
-            type: "Project",
-            id: project.id,
-            label: project.name,
-          },
-          {
-            type: "Update",
-            id: update.id,
-            label: update.title,
-          },
-        ],
-      },
-    })
+      })
 
-    const admins = await getInternalNotificationRecipients()
+      await createAuditLog(
+        {
+          action: "update.approved",
+          entityType: "Update",
+          entityId: updatedUpdate.id,
+          summary: `Atualização "${updatedUpdate.title}" aprovada pelo cliente.`,
+          actorId: user.id,
+          actorType: AuditActorType.USER,
+          projectId,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: AuditActorType.USER,
+              role: user.role,
+            }),
+            before: {
+              approvalStatus: "PENDING",
+            },
+            after: {
+              approvalStatus: "APPROVED",
+            },
+            comment,
+            relatedEntities: [
+              {
+                type: "Project",
+                id: project.id,
+                label: project.name,
+              },
+              {
+                type: "Update",
+                id: updatedUpdate.id,
+                label: updatedUpdate.title,
+              },
+            ],
+          },
+        },
+        tx
+      )
 
-    await Promise.all(
-      admins.map((admin) =>
-        createNotification({
+      const admins = await getInternalNotificationRecipients()
+
+      await createNotificationsMany(
+        admins.map((admin) => ({
           userId: admin.id,
           projectId,
           type: NotificationType.UPDATE_APPROVED,
           title: "Milestone aprovada",
-          message: `${project.client.name ?? "O cliente"} aprovou "${update.title}".`,
+          message: `${project.client.name ?? "O cliente"} aprovou "${updatedUpdate.title}".`,
           ctaPath: getAdminProjectPath(projectId),
-          metadata: { updateId: update.id, comment },
-        })
+          metadata: { updateId: updatedUpdate.id, comment },
+        })),
+        tx
       )
-    )
+
+      return { update: updatedUpdate }
+    })
 
     revalidatePath("/")
     revalidatePath("/admin")
@@ -329,78 +342,84 @@ export async function rejectUpdateAction(input: {
       [UserRole.CLIENT, UserRole.ADMIN, UserRole.MEMBER]
     )
 
-    const update = await prisma.update.update({
-      where: {
-        id: validated.data.updateId,
-        projectId: validated.data.projectId,
-      },
-      data: {
-        approvalStatus: "REJECTED",
-        approvedAt: null,
-        feedback: validated.data.feedback,
-        approvalEvents: {
-          create: {
-            decision: "REJECTED",
-            comment: validated.data.feedback,
-            actorId: user.id,
-          },
+    const { update } = await prisma.$transaction(async (tx) => {
+      const updatedUpdate = await tx.update.update({
+        where: {
+          id: validated.data.updateId,
+          projectId: validated.data.projectId,
         },
-      },
-    })
-
-    await createAuditLog({
-      action: "update.rejected",
-      entityType: "Update",
-      entityId: update.id,
-      summary: `Atualização "${update.title}" reprovada com feedback do cliente.`,
-      actorId: user.id,
-      actorType: AuditActorType.USER,
-      projectId: validated.data.projectId,
-      metadata: {
-        origin: getAuditOriginLabel({
-          actorType: AuditActorType.USER,
-          role: user.role,
-        }),
-        before: {
-          approvalStatus: "PENDING",
-        },
-        after: {
+        data: {
           approvalStatus: "REJECTED",
+          approvedAt: null,
+          feedback: validated.data.feedback,
+          approvalEvents: {
+            create: {
+              decision: "REJECTED",
+              comment: validated.data.feedback,
+              actorId: user.id,
+            },
+          },
         },
-        feedback: validated.data.feedback,
-        relatedEntities: [
-          {
-            type: "Project",
-            id: project.id,
-            label: project.name,
-          },
-          {
-            type: "Update",
-            id: update.id,
-            label: update.title,
-          },
-        ],
-      },
-    })
+      })
 
-    const admins = await getInternalNotificationRecipients()
+      await createAuditLog(
+        {
+          action: "update.rejected",
+          entityType: "Update",
+          entityId: updatedUpdate.id,
+          summary: `Atualização "${updatedUpdate.title}" reprovada com feedback do cliente.`,
+          actorId: user.id,
+          actorType: AuditActorType.USER,
+          projectId: validated.data.projectId,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: AuditActorType.USER,
+              role: user.role,
+            }),
+            before: {
+              approvalStatus: "PENDING",
+            },
+            after: {
+              approvalStatus: "REJECTED",
+            },
+            feedback: validated.data.feedback,
+            relatedEntities: [
+              {
+                type: "Project",
+                id: project.id,
+                label: project.name,
+              },
+              {
+                type: "Update",
+                id: updatedUpdate.id,
+                label: updatedUpdate.title,
+              },
+            ],
+          },
+        },
+        tx
+      )
 
-    await Promise.all(
-      admins.map((admin) =>
-        createNotification({
+      const admins = await getInternalNotificationRecipients()
+
+      await createNotificationsMany(
+        admins.map((admin) => ({
           userId: admin.id,
           projectId: validated.data.projectId,
           type: NotificationType.UPDATE_REJECTED,
           title: "Milestone precisa de ajustes",
-          message: `${project.client.name ?? "O cliente"} enviou feedback em "${update.title}".`,
+          message: `${project.client.name ?? "O cliente"} enviou feedback em "${updatedUpdate.title}".`,
           ctaPath: getAdminProjectPath(validated.data.projectId),
           metadata: {
-            updateId: update.id,
+            updateId: updatedUpdate.id,
             feedback: validated.data.feedback,
           },
-        })
+        })),
+        tx
       )
-    )
+
+      return { update: updatedUpdate }
+    })
 
     revalidatePath("/")
     revalidatePath("/admin")
