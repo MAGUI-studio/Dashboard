@@ -7,7 +7,18 @@ import { env } from "@/src/config/env"
 
 import { PrismaClient } from "../generated/client/client"
 
-const connectionString = env.DATABASE_URL
+function normalizeConnectionString(value: string): string {
+  if (!value.includes("sslmode=")) {
+    return value
+  }
+
+  return value.replace(
+    /sslmode=(prefer|require|verify-ca)\b/g,
+    "sslmode=verify-full"
+  )
+}
+
+const connectionString = normalizeConnectionString(env.DATABASE_URL)
 
 const isExternalDb =
   connectionString.includes("neon.tech") ||

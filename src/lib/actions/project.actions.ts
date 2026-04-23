@@ -1,37 +1,140 @@
 "use server"
 
-export {
-  createProjectAction,
-  updateProjectStatusAction,
-  deleteProjectAction,
+import {
+  createProjectAssetAction as createProjectAssetActionImpl,
+  deleteProjectAssetAction as deleteProjectAssetActionImpl,
+  updateProjectAssetAction as updateProjectAssetActionImpl,
+  updateProjectAssetsOrderAction as updateProjectAssetsOrderActionImpl,
+} from "./project-assets.actions"
+import {
+  addBriefingNoteAction as addBriefingNoteActionImpl,
+  createBriefingNoteAction as createBriefingNoteActionImpl,
+  savePartialBriefingAction as savePartialBriefingActionImpl,
+  updateProjectBriefingAction as updateProjectBriefingActionImpl,
+} from "./project-briefing.actions"
+import {
+  exportProjectApprovalsHtmlAction as exportProjectApprovalsHtmlActionImpl,
+  exportProjectSummaryHtmlAction as exportProjectSummaryHtmlActionImpl,
+} from "./project-export.actions"
+import {
+  createProjectAction as createProjectActionImpl,
+  deleteProjectAction as deleteProjectActionImpl,
+  updateProjectStatusAction as updateProjectStatusActionImpl,
 } from "./project-lifecycle.actions"
-
-export {
-  addProjectTimelineAction,
-  approveUpdateAction,
-  rejectUpdateAction,
+import {
+  addProjectMemberAction as addProjectMemberActionImpl,
+  removeProjectMemberAction as removeProjectMemberActionImpl,
+} from "./project-members.actions"
+import {
+  addProjectTimelineAction as addProjectTimelineActionImpl,
+  approveUpdateAction as approveUpdateActionImpl,
+  rejectUpdateAction as rejectUpdateActionImpl,
 } from "./project-timeline.actions"
 
-export {
-  deleteProjectAssetAction,
-  updateProjectAssetAction,
-  createProjectAssetAction,
-  updateProjectAssetsOrderAction,
-} from "./project-assets.actions"
+export async function createProjectAction(
+  ...args: Parameters<typeof createProjectActionImpl>
+): ReturnType<typeof createProjectActionImpl> {
+  return createProjectActionImpl(...args)
+}
 
-export {
-  updateProjectBriefingAction,
-  savePartialBriefingAction,
-  createBriefingNoteAction,
-  addBriefingNoteAction,
-} from "./project-briefing.actions"
+export async function updateProjectStatusAction(
+  ...args: Parameters<typeof updateProjectStatusActionImpl>
+): ReturnType<typeof updateProjectStatusActionImpl> {
+  return updateProjectStatusActionImpl(...args)
+}
 
-export {
-  exportProjectApprovalsHtmlAction,
-  exportProjectSummaryHtmlAction,
-} from "./project-export.actions"
+export async function deleteProjectAction(
+  ...args: Parameters<typeof deleteProjectActionImpl>
+): ReturnType<typeof deleteProjectActionImpl> {
+  return deleteProjectActionImpl(...args)
+}
 
-export {
-  addProjectMemberAction,
-  removeProjectMemberAction,
-} from "./project-members.actions"
+export async function addProjectTimelineAction(
+  ...args: Parameters<typeof addProjectTimelineActionImpl>
+): ReturnType<typeof addProjectTimelineActionImpl> {
+  return addProjectTimelineActionImpl(...args)
+}
+
+export async function approveUpdateAction(
+  ...args: Parameters<typeof approveUpdateActionImpl>
+): ReturnType<typeof approveUpdateActionImpl> {
+  return approveUpdateActionImpl(...args)
+}
+
+export async function rejectUpdateAction(
+  ...args: Parameters<typeof rejectUpdateActionImpl>
+): ReturnType<typeof rejectUpdateActionImpl> {
+  return rejectUpdateActionImpl(...args)
+}
+
+export async function deleteProjectAssetAction(
+  ...args: Parameters<typeof deleteProjectAssetActionImpl>
+): ReturnType<typeof deleteProjectAssetActionImpl> {
+  return deleteProjectAssetActionImpl(...args)
+}
+
+export async function updateProjectAssetAction(
+  ...args: Parameters<typeof updateProjectAssetActionImpl>
+): ReturnType<typeof updateProjectAssetActionImpl> {
+  return updateProjectAssetActionImpl(...args)
+}
+
+export async function createProjectAssetAction(
+  ...args: Parameters<typeof createProjectAssetActionImpl>
+): ReturnType<typeof createProjectAssetActionImpl> {
+  return createProjectAssetActionImpl(...args)
+}
+
+export async function updateProjectAssetsOrderAction(
+  ...args: Parameters<typeof updateProjectAssetsOrderActionImpl>
+): ReturnType<typeof updateProjectAssetsOrderActionImpl> {
+  return updateProjectAssetsOrderActionImpl(...args)
+}
+
+export async function updateProjectBriefingAction(
+  ...args: Parameters<typeof updateProjectBriefingActionImpl>
+): ReturnType<typeof updateProjectBriefingActionImpl> {
+  return updateProjectBriefingActionImpl(...args)
+}
+
+export async function savePartialBriefingAction(
+  ...args: Parameters<typeof savePartialBriefingActionImpl>
+): ReturnType<typeof savePartialBriefingActionImpl> {
+  return savePartialBriefingActionImpl(...args)
+}
+
+export async function createBriefingNoteAction(
+  ...args: Parameters<typeof createBriefingNoteActionImpl>
+): ReturnType<typeof createBriefingNoteActionImpl> {
+  return createBriefingNoteActionImpl(...args)
+}
+
+export async function addBriefingNoteAction(
+  ...args: Parameters<typeof addBriefingNoteActionImpl>
+): ReturnType<typeof addBriefingNoteActionImpl> {
+  return addBriefingNoteActionImpl(...args)
+}
+
+export async function exportProjectApprovalsHtmlAction(
+  ...args: Parameters<typeof exportProjectApprovalsHtmlActionImpl>
+): ReturnType<typeof exportProjectApprovalsHtmlActionImpl> {
+  return exportProjectApprovalsHtmlActionImpl(...args)
+}
+
+export async function exportProjectSummaryHtmlAction(
+  ...args: Parameters<typeof exportProjectSummaryHtmlActionImpl>
+): ReturnType<typeof exportProjectSummaryHtmlActionImpl> {
+  return exportProjectSummaryHtmlActionImpl(...args)
+}
+
+export async function addProjectMemberAction(
+  ...args: Parameters<typeof addProjectMemberActionImpl>
+): ReturnType<typeof addProjectMemberActionImpl> {
+  return addProjectMemberActionImpl(...args)
+}
+
+export async function removeProjectMemberAction(
+  ...args: Parameters<typeof removeProjectMemberActionImpl>
+): ReturnType<typeof removeProjectMemberActionImpl> {
+  return removeProjectMemberActionImpl(...args)
+}

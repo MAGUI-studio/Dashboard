@@ -6,7 +6,7 @@ import { auth } from "@clerk/nextjs/server"
 
 import { ClientProjectBreadcrumb } from "@/src/components/client/ClientProjectBreadcrumb"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectBreadcrumb } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
@@ -47,7 +47,7 @@ export default async function ProjectLayout({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectBreadcrumb(id, user.id)
 
   if (!project) return notFound()
 

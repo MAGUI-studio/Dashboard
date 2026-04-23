@@ -274,6 +274,7 @@ export async function convertLeadToProjectAction(input: {
 }): Promise<{ success: boolean; error?: string; projectId?: string }> {
   try {
     await protect("admin")
+    const actor = await getCurrentAppUser()
 
     const lead = await prisma.lead.findUnique({
       where: { id: input.leadId },
@@ -377,21 +378,35 @@ export async function saveMessageTemplateAction(data: {
   name: string
   content: string
   scope?: string
-}): Promise<{ success: boolean; error?: string }> {
+}): Promise<{
+  success: boolean
+  error?: string
+  template?: {
+    id: string
+    scope: string
+    name: string
+    content: string
+    createdById: string | null
+    createdAt: Date
+    updatedAt: Date
+  }
+}> {
   try {
     await protect("admin")
     const actor = await getCurrentAppUser()
 
     if (data.id) {
-      await prisma.messageTemplate.update({
+      const template = await prisma.messageTemplate.update({
         where: { id: data.id },
         data: {
           name: data.name,
           content: data.content,
         },
       })
+      revalidateCrmPaths()
+      return { success: true, template }
     } else {
-      await prisma.messageTemplate.create({
+      const template = await prisma.messageTemplate.create({
         data: {
           name: data.name,
           content: data.content,
@@ -399,10 +414,9 @@ export async function saveMessageTemplateAction(data: {
           createdById: actor?.id,
         },
       })
+      revalidateCrmPaths()
+      return { success: true, template }
     }
-
-    revalidateCrmPaths()
-    return { success: true }
   } catch (error) {
     logger.error({ error }, "Save Template Error")
     return { success: false, error: "Failed to save template" }

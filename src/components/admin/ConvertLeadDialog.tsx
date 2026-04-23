@@ -35,6 +35,7 @@ interface ConvertLeadDialogProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   clients: Array<{ id: string; name: string | null; email: string }>
+  onConverted?: (projectId: string) => void
 }
 
 export function ConvertLeadDialog({
@@ -42,6 +43,7 @@ export function ConvertLeadDialog({
   open,
   onOpenChange,
   clients,
+  onConverted,
 }: ConvertLeadDialogProps): React.JSX.Element {
   const t = useTranslations("Admin.crm.convert")
   const router = useRouter()
@@ -90,6 +92,9 @@ export function ConvertLeadDialog({
     if (result.success) {
       toast.success(t("success"))
       onOpenChange(false)
+      if (result.projectId) {
+        onConverted?.(result.projectId)
+      }
       router.push(`/admin/projects/${result.projectId}`)
     } else {
       toast.error(result.error || t("error"))

@@ -24,7 +24,7 @@ type ReminderItem = {
   id: string
   title: string
   message: string
-  ctaPath: string | null
+  ctaPath?: string | null
   scheduledFor: Date | string
   type: ScheduledReminderType
 }

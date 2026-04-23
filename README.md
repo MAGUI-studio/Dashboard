@@ -96,6 +96,8 @@ Migrations: `prisma/migrations`
 
 Com Prisma 7, os comandos de migrate/db usam a configuracao em `prisma.config.ts`.
 
+Guia operacional de banco/cache: `docs/db-operations.md`
+
 ## Deploy
 
 O projeto usa `output: "standalone"` no Next.js para empacotamento. Em Windows, a build pode emitir avisos ao copiar traced files com nomes derivados de `node:buffer`; em Linux/CI isso tende a ser o ambiente alvo mais confiavel para validar o artefato standalone/Docker.

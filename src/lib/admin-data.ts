@@ -2,7 +2,12 @@ import { cache } from "react"
 
 import { unstable_cache } from "next/cache"
 
-import { ProjectStatus } from "@/src/generated/client/enums"
+import {
+  ApprovalStatus,
+  LeadStatus,
+  ProjectStatus,
+  UserRole,
+} from "@/src/generated/client/enums"
 
 import { cacheTags } from "@/src/lib/cache-tags"
 import prisma from "@/src/lib/prisma"
@@ -38,8 +43,7 @@ const getAdminProjectRowsCached = unstable_cache(
 export const getAdminProjectRows = cache(getAdminProjectRowsCached)
 
 const getAdminDashboardSummaryCached = unstable_cache(
-  async (_todayIso: string) => {
-    // _todayIso is used in cache key
+  async () => {
     const [
       totalClients,
       activeProjects,
@@ -231,8 +235,9 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       convertedLeads,
       activeProjectsCount,
       silentProjectsCount,
-      allProjects,
-      allLeads,
+      projectDistributionCounts,
+      leadDistributionCounts,
+      stagnantLeadsCount,
     ] = await Promise.all([
       prisma.update.findMany({
         where: {
@@ -257,20 +262,45 @@ const getAdminDashboardPerformanceCached = unstable_cache(
           updatedAt: { lt: new Date(Date.now() - 8 * 86_400_000) },
         },
       }),
-      prisma.project.findMany({ select: { status: true } }),
-      prisma.lead.findMany({
+      prisma.project.groupBy({
+        by: ["status"],
+        _count: { _all: true },
+      }),
+      prisma.lead.groupBy({
+        by: ["status"],
         where: { status: { not: LeadStatus.DESCARTADO } },
-        select: { status: true },
+        _count: { _all: true },
+      }),
+      prisma.lead.count({
+        where: {
+          status: { in: [LeadStatus.GARIMPAGEM, LeadStatus.CONTATO_REALIZADO] },
+          updatedAt: { lt: new Date(Date.now() - 4 * 86_400_000) },
+        },
       }),
     ])
+
+    const projectDistribution = Object.values(ProjectStatus).map((status) => ({
+      label: status,
+      value:
+        projectDistributionCounts.find((item) => item.status === status)?._count
+          ._all ?? 0,
+    }))
+
+    const leadDistribution = Object.values(LeadStatus).map((status) => ({
+      label: status,
+      value:
+        leadDistributionCounts.find((item) => item.status === status)?._count
+          ._all ?? 0,
+    }))
 
     return {
       approvedUpdates,
       convertedLeads,
       activeProjectsCount,
       silentProjectsCount,
-      projectDistribution: allProjects,
-      leadDistribution: allLeads,
+      stagnantLeadsCount,
+      projectDistribution,
+      leadDistribution,
     }
   },
   ["admin-dashboard-performance"],
@@ -347,3 +377,53 @@ const getAdminDashboardHealthCached = unstable_cache(
 )
 
 export const getAdminDashboardHealth = cache(getAdminDashboardHealthCached)
+
+const getAdminDashboardRecentUpdatesCached = unstable_cache(
+  async () => {
+    return prisma.update.findMany({
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 6,
+    })
+  },
+  ["admin-dashboard-recent-updates"],
+  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+)
+
+export const getAdminDashboardRecentUpdates = cache(
+  getAdminDashboardRecentUpdatesCached
+)
+
+const getAdminDashboardDueActionItemsCached = unstable_cache(
+  async () => {
+    return prisma.actionItem.findMany({
+      where: {
+        dueDate: { not: null },
+        status: { not: "COMPLETED" },
+      },
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+      orderBy: { dueDate: "asc" },
+      take: 12,
+    })
+  },
+  ["admin-dashboard-due-action-items"],
+  { revalidate: 60, tags: [cacheTags.adminDashboard] }
+)
+
+export const getAdminDashboardDueActionItems = cache(
+  getAdminDashboardDueActionItemsCached
+)

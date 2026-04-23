@@ -54,8 +54,9 @@ export function mapPerformanceMetrics(data: {
   convertedLeads: Array<{ createdAt: Date; convertedAt: Date | null }>
   activeProjectsCount: number
   silentProjectsCount: number
-  projectDistribution: Array<{ status: ProjectStatus }>
-  leadDistribution: Array<{ status: LeadStatus }>
+  projectDistribution: Array<{ label: ProjectStatus; value: number }>
+  leadDistribution: Array<{ label: LeadStatus; value: number }>
+  stagnantLeadsCount?: number
 }) {
   const approvedUpdates = data.approvedUpdates.map((u) => ({
     createdAt: new Date(u.createdAt),
@@ -90,15 +91,15 @@ export function mapPerformanceMetrics(data: {
 
   const operationsMetrics = [
     {
-      label: "Aprovação média",
+      label: "Aprovacao media",
       value: averageApprovalHours > 0 ? `${averageApprovalHours}h` : "—",
-      hint: "tempo até aprovar entrega",
+      hint: "tempo ate aprovar entrega",
     },
     {
-      label: "Conversão média",
+      label: "Conversao media",
       value:
         averageLeadConversionDays > 0 ? `${averageLeadConversionDays}d` : "—",
-      hint: "tempo até virar projeto",
+      hint: "tempo ate virar projeto",
     },
     {
       label: "Projetos ativos",
@@ -107,24 +108,21 @@ export function mapPerformanceMetrics(data: {
     },
     {
       label: "Leads estagnados",
-      value: "—", // Will be calculated in the health widget or simplified here
+      value:
+        typeof data.stagnantLeadsCount === "number"
+          ? String(data.stagnantLeadsCount)
+          : "—",
       hint: "em risco comercial",
     },
   ]
 
-  const projectDistribution = Object.values(ProjectStatus).map((status) => ({
-    label: status,
-    value: data.projectDistribution.filter((p) => p.status === status).length,
-  }))
-
-  const leadDistribution = Object.values(LeadStatus)
-    .filter((status) => status !== LeadStatus.DESCARTADO)
-    .map((status) => ({
-      label: status,
-      value: data.leadDistribution.filter((l) => l.status === status).length,
-    }))
-
-  return { operationsMetrics, projectDistribution, leadDistribution }
+  return {
+    operationsMetrics,
+    projectDistribution: data.projectDistribution,
+    leadDistribution: data.leadDistribution.filter(
+      (item) => item.label !== LeadStatus.DESCARTADO
+    ),
+  }
 }
 
 export function mapActivityLogs(logs: AuditLogWithRelations[]) {

@@ -7,7 +7,7 @@ import { auth } from "@clerk/nextjs/server"
 import { ClientAssetLibrary } from "@/src/components/client/ClientAssetLibrary"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectFiles } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
@@ -33,7 +33,7 @@ export default async function FilesPage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectFiles(id, user.id)
 
   if (!project) return notFound()
 

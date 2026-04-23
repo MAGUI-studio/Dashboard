@@ -7,7 +7,7 @@ import { auth } from "@clerk/nextjs/server"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 import { ClientTaskList } from "@/src/components/client/ClientTaskList"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectTasks } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
@@ -33,12 +33,11 @@ export default async function TasksPage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectTasks(id, user.id)
 
   if (!project) return notFound()
 
-  const clientTasks =
-    project.actionItems?.filter((item) => item.targetRole === "CLIENT") ?? []
+  const clientTasks = project.actionItems ?? []
 
   return (
     <div className="flex w-full flex-col gap-8">

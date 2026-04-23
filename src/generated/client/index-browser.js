@@ -144,8 +144,53 @@ exports.Prisma.LeadScalarFieldEnum = {
   website: 'website',
   instagram: 'instagram',
   status: 'status',
+  source: 'source',
   notes: 'notes',
   value: 'value',
+  lastContactAt: 'lastContactAt',
+  nextActionAt: 'nextActionAt',
+  assignedToId: 'assignedToId',
+  convertedProjectId: 'convertedProjectId',
+  convertedAt: 'convertedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.LeadNoteScalarFieldEnum = {
+  id: 'id',
+  content: 'content',
+  leadId: 'leadId',
+  authorId: 'authorId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.LeadActivityScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  content: 'content',
+  metadata: 'metadata',
+  leadId: 'leadId',
+  authorId: 'authorId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.MessageTemplateScalarFieldEnum = {
+  id: 'id',
+  scope: 'scope',
+  name: 'name',
+  content: 'content',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.SavedViewScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  module: 'module',
+  name: 'name',
+  filtersJson: 'filtersJson',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -169,6 +214,25 @@ exports.Prisma.ProjectScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BriefingEntryScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  content: 'content',
+  projectId: 'projectId',
+  createdById: 'createdById',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProjectMemberScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  projectId: 'projectId',
+  userId: 'userId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.UpdateScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -184,12 +248,35 @@ exports.Prisma.UpdateScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.UpdateAttachmentScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  url: 'url',
+  key: 'key',
+  customId: 'customId',
+  type: 'type',
+  mimeType: 'mimeType',
+  size: 'size',
+  updateId: 'updateId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ApprovalEventScalarFieldEnum = {
+  id: 'id',
+  decision: 'decision',
+  comment: 'comment',
+  updateId: 'updateId',
+  actorId: 'actorId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ActionItemScalarFieldEnum = {
   id: 'id',
   title: 'title',
   description: 'description',
   status: 'status',
   dueDate: 'dueDate',
+  targetRole: 'targetRole',
   projectId: 'projectId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -203,6 +290,8 @@ exports.Prisma.AssetScalarFieldEnum = {
   type: 'type',
   order: 'order',
   timezone: 'timezone',
+  origin: 'origin',
+  visibility: 'visibility',
   projectId: 'projectId',
   createdAt: 'createdAt'
 };
@@ -220,6 +309,50 @@ exports.Prisma.VersionScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.NotificationScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  message: 'message',
+  ctaPath: 'ctaPath',
+  metadata: 'metadata',
+  readAt: 'readAt',
+  userId: 'userId',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ScheduledReminderScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  status: 'status',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  title: 'title',
+  message: 'message',
+  ctaPath: 'ctaPath',
+  scheduledFor: 'scheduledFor',
+  sentAt: 'sentAt',
+  resolvedAt: 'resolvedAt',
+  metadata: 'metadata',
+  recipientUserId: 'recipientUserId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AuditLogScalarFieldEnum = {
+  id: 'id',
+  action: 'action',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  summary: 'summary',
+  metadata: 'metadata',
+  actorType: 'actorType',
+  actorId: 'actorId',
+  projectId: 'projectId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -227,6 +360,10 @@ exports.Prisma.SortOrder = {
 
 exports.Prisma.NullableJsonNullValueInput = {
   DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
+};
+
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
@@ -245,12 +382,40 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
+exports.UserRole = exports.$Enums.UserRole = {
+  ADMIN: 'ADMIN',
+  MEMBER: 'MEMBER',
+  CLIENT: 'CLIENT'
+};
+
 exports.LeadStatus = exports.$Enums.LeadStatus = {
   GARIMPAGEM: 'GARIMPAGEM',
   CONTATO_REALIZADO: 'CONTATO_REALIZADO',
   NEGOCIACAO: 'NEGOCIACAO',
   CONVERTIDO: 'CONVERTIDO',
   DESCARTADO: 'DESCARTADO'
+};
+
+exports.LeadSource = exports.$Enums.LeadSource = {
+  REFERRAL: 'REFERRAL',
+  ORGANIC: 'ORGANIC',
+  INSTAGRAM: 'INSTAGRAM',
+  LINKEDIN: 'LINKEDIN',
+  WEBSITE: 'WEBSITE',
+  OUTBOUND: 'OUTBOUND',
+  EVENT: 'EVENT',
+  OTHER: 'OTHER'
+};
+
+exports.LeadActivityType = exports.$Enums.LeadActivityType = {
+  NOTE_CREATED: 'NOTE_CREATED',
+  STATUS_CHANGED: 'STATUS_CHANGED',
+  SOURCE_UPDATED: 'SOURCE_UPDATED',
+  CONTACT_UPDATED: 'CONTACT_UPDATED',
+  WHATSAPP_LINK_OPENED: 'WHATSAPP_LINK_OPENED',
+  LEAD_EDITED: 'LEAD_EDITED',
+  CONVERTED_TO_PROJECT: 'CONVERTED_TO_PROJECT',
+  REMINDER_SET: 'REMINDER_SET'
 };
 
 exports.ProjectStatus = exports.$Enums.ProjectStatus = {
@@ -280,15 +445,15 @@ exports.Priority = exports.$Enums.Priority = {
   URGENT: 'URGENT'
 };
 
+exports.ProjectMemberRole = exports.$Enums.ProjectMemberRole = {
+  OWNER: 'OWNER',
+  COLLABORATOR: 'COLLABORATOR'
+};
+
 exports.ApprovalStatus = exports.$Enums.ApprovalStatus = {
   PENDING: 'PENDING',
   APPROVED: 'APPROVED',
   REJECTED: 'REJECTED'
-};
-
-exports.ActionStatus = exports.$Enums.ActionStatus = {
-  PENDING: 'PENDING',
-  COMPLETED: 'COMPLETED'
 };
 
 exports.AssetType = exports.$Enums.AssetType = {
@@ -299,14 +464,76 @@ exports.AssetType = exports.$Enums.AssetType = {
   SOURCE_CODE: 'SOURCE_CODE'
 };
 
+exports.ActionStatus = exports.$Enums.ActionStatus = {
+  PENDING: 'PENDING',
+  COMPLETED: 'COMPLETED'
+};
+
+exports.ActionTargetRole = exports.$Enums.ActionTargetRole = {
+  ADMIN: 'ADMIN',
+  CLIENT: 'CLIENT'
+};
+
+exports.AssetOrigin = exports.$Enums.AssetOrigin = {
+  ADMIN: 'ADMIN',
+  CLIENT: 'CLIENT'
+};
+
+exports.AssetVisibility = exports.$Enums.AssetVisibility = {
+  INTERNAL: 'INTERNAL',
+  CLIENT: 'CLIENT'
+};
+
+exports.NotificationType = exports.$Enums.NotificationType = {
+  UPDATE_PENDING_APPROVAL: 'UPDATE_PENDING_APPROVAL',
+  UPDATE_PUBLISHED: 'UPDATE_PUBLISHED',
+  UPDATE_APPROVED: 'UPDATE_APPROVED',
+  UPDATE_REJECTED: 'UPDATE_REJECTED',
+  BRIEFING_SUBMITTED: 'BRIEFING_SUBMITTED',
+  ASSET_UPLOADED: 'ASSET_UPLOADED',
+  PROJECT_STATUS_CHANGED: 'PROJECT_STATUS_CHANGED',
+  LEAD_ASSIGNED: 'LEAD_ASSIGNED',
+  OPERATIONAL_REMINDER: 'OPERATIONAL_REMINDER'
+};
+
+exports.ScheduledReminderType = exports.$Enums.ScheduledReminderType = {
+  LEAD_STALLED: 'LEAD_STALLED',
+  APPROVAL_PENDING: 'APPROVAL_PENDING',
+  PROJECT_SILENT: 'PROJECT_SILENT',
+  ACTION_ITEM_OVERDUE: 'ACTION_ITEM_OVERDUE'
+};
+
+exports.ScheduledReminderStatus = exports.$Enums.ScheduledReminderStatus = {
+  PENDING: 'PENDING',
+  SENT: 'SENT',
+  RESOLVED: 'RESOLVED',
+  DISMISSED: 'DISMISSED'
+};
+
+exports.AuditActorType = exports.$Enums.AuditActorType = {
+  SYSTEM: 'SYSTEM',
+  USER: 'USER'
+};
+
 exports.Prisma.ModelName = {
   User: 'User',
   Lead: 'Lead',
+  LeadNote: 'LeadNote',
+  LeadActivity: 'LeadActivity',
+  MessageTemplate: 'MessageTemplate',
+  SavedView: 'SavedView',
   Project: 'Project',
+  BriefingEntry: 'BriefingEntry',
+  ProjectMember: 'ProjectMember',
   Update: 'Update',
+  UpdateAttachment: 'UpdateAttachment',
+  ApprovalEvent: 'ApprovalEvent',
   ActionItem: 'ActionItem',
   Asset: 'Asset',
-  Version: 'Version'
+  Version: 'Version',
+  Notification: 'Notification',
+  ScheduledReminder: 'ScheduledReminder',
+  AuditLog: 'AuditLog'
 };
 
 /**

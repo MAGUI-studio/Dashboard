@@ -9,6 +9,7 @@ import {
   UserRole,
 } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
+import { ClientHomeData } from "@/src/types/client-portal"
 import { auth, currentUser } from "@clerk/nextjs/server"
 import {
   ArrowRight,
@@ -914,7 +915,13 @@ export default async function DashboardPage({
     )
   }
 
-  const clientData = await getClientHomeData(user.id)
+  const rawClientData = await getClientHomeData(user.id)
+  const clientData: ClientHomeData = {
+    pendingApprovals: [],
+    pendingTasks: [],
+    recentActivity: [],
+    ...rawClientData,
+  }
   const clerkUser = await currentUser()
   const userName =
     clerkUser?.firstName || clerkUser?.username || user.name || "Cliente"

@@ -3,7 +3,6 @@ import * as React from "react"
 import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 
-import { ApprovalStatus } from "@/src/generated/client/enums"
 import { auth } from "@clerk/nextjs/server"
 import {
   CheckCircleIcon,
@@ -18,7 +17,7 @@ import { ClientFeatureLink } from "@/src/components/client/ClientFeatureLink"
 import { ClientLandingHero } from "@/src/components/client/ClientLandingHero"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectOverview } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { toHref } from "@/src/lib/utils/navigation"
 
@@ -38,7 +37,7 @@ export default async function ProjectDetailPage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectOverview(id, user.id)
 
   if (!project) {
     return notFound()
@@ -46,13 +45,8 @@ export default async function ProjectDetailPage({
 
   const tStatus = await getTranslations("Dashboard.status")
   const statusLabel = tStatus(project.status)
-  const pendingApprovals = project.updates.filter(
-    (update) =>
-      update.requiresApproval &&
-      update.approvalStatus === ApprovalStatus.PENDING
-  )
-  const clientTasks =
-    project.actionItems?.filter((item) => item.targetRole === "CLIENT") ?? []
+  const pendingApprovals = project.updates
+  const clientTasks = project.actionItems ?? []
   const primaryHref =
     pendingApprovals[0] !== undefined
       ? toHref(`/projects/${project.id}/approvals`)
@@ -145,14 +139,14 @@ export default async function ProjectDetailPage({
             description="Acesse documentos, imagens e arquivos finais enviados pela equipe."
             href={toHref(`/projects/${project.id}/files`)}
             icon={FilesIcon}
-            meta={`${project.assets.length} item(ns)`}
+            meta={`${project._count.assets} item(ns)`}
           />
           <ClientFeatureLink
             title="Historico do projeto"
             description="Veja as atualizacoes como uma historia de progresso."
             href={toHref(`/projects/${project.id}/timeline`)}
             icon={ClockCountdownIcon}
-            meta={`${project.updates.length} update(s)`}
+            meta={`${project._count.updates} update(s)`}
           />
           <ClientFeatureLink
             title="Alinhamento"
@@ -166,7 +160,7 @@ export default async function ProjectDetailPage({
             description="Resolva pendencias que dependem da sua resposta."
             href={toHref(`/projects/${project.id}/tasks`)}
             icon={ShieldCheckIcon}
-            meta={`${clientTasks.length} aberta(s)`}
+            meta={`${project._count.actionItems} aberta(s)`}
           />
         </div>
       </section>

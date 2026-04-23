@@ -3,7 +3,6 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 
 import {
   ArrowLeft,
@@ -47,7 +46,6 @@ export function BriefingForm({
   initialData,
 }: BriefingFormProps): React.JSX.Element {
   const t = useTranslations("Briefing")
-  const router = useRouter()
   const inputRef = React.useRef<HTMLTextAreaElement | HTMLInputElement>(null)
 
   const idToSlug = React.useMemo(() => {
@@ -206,9 +204,6 @@ export function BriefingForm({
     if (result.success) {
       toast.success(t("success"))
       setIsFinished(true)
-      setTimeout(() => {
-        router.refresh()
-      }, 1800)
     } else {
       toast.error(result.error ?? "Erro ao enviar briefing")
     }
@@ -220,7 +215,6 @@ export function BriefingForm({
     idToSlug,
     isFieldMissing,
     projectId,
-    router,
     setCurrentSlug,
     t,
   ])

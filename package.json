@@ -17,6 +17,7 @@
     "test:e2e:ui": "playwright test --ui",
     "generate": "plop",
     "typecheck": "tsc --noEmit",
+    "db:audit": "node scripts/db-audit.mjs",
     "analyze": "ANALYZE=true pnpm build",
     "audit": "unlighthouse --site http://localhost:3000",
     "clean": "node -e \"['.next', 'node_modules', 'pnpm-lock.yaml'].forEach(p => require('fs').rmSync(p, { recursive: true, force: true }))\"",

@@ -102,7 +102,6 @@ export function NotificationsDrawer({
 
       setOpen(false)
       router.push(ctaPath)
-      router.refresh()
     })
   }
 

@@ -11,12 +11,13 @@ import { Button } from "@/src/components/ui/button"
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
 import {
-  getCrmPreferencesAction,
+  getCrmPreferences,
   getLeads,
-  getMessageTemplatesAction,
-  getSavedCrmViewsAction,
-} from "@/src/lib/actions/crm.actions"
+  getMessageTemplates,
+  getSavedCrmViews,
+} from "@/src/lib/crm-data"
 import prisma from "@/src/lib/prisma"
+import { getCurrentAppUser } from "@/src/lib/project-governance"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 export const metadata = dashboardMetadata({
@@ -32,10 +33,16 @@ export default async function CRMPage({
   searchParams?: Promise<{ lead?: string }>
 }): Promise<React.JSX.Element> {
   const t = await getTranslations("Admin.crm")
+  const actor = await getCurrentAppUser()
+
+  if (!actor) {
+    return <div />
+  }
+
   const leads = await getLeads()
-  const templates = await getMessageTemplatesAction()
-  const savedViews = await getSavedCrmViewsAction()
-  const preferences = await getCrmPreferencesAction()
+  const templates = await getMessageTemplates()
+  const savedViews = await getSavedCrmViews(actor.id)
+  const preferences = await getCrmPreferences(actor.id)
 
   const clients = await prisma.user.findMany({
     where: { role: UserRole.CLIENT },
@@ -92,7 +99,12 @@ export default async function CRMPage({
         clients={clients}
         templates={templates}
         savedViews={savedViews}
-        preferences={preferences}
+        preferences={{
+          density:
+            preferences?.filtersJson?.density === "compact"
+              ? "compact"
+              : "comfortable",
+        }}
       />
     </main>
   )

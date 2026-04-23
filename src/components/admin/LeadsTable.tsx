@@ -41,9 +41,14 @@ export function LeadsTable({
 }: LeadsTableProps): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const [search, setSearch] = React.useState("")
+  const [leadItems, setLeadItems] = React.useState(leads)
+
+  React.useEffect(() => {
+    setLeadItems(leads)
+  }, [leads])
 
   const filteredLeads = React.useMemo(() => {
-    let result = [...leads]
+    let result = [...leadItems]
 
     if (search.trim()) {
       const query = search.toLowerCase()
@@ -61,7 +66,7 @@ export function LeadsTable({
     )
 
     return result
-  }, [leads, search])
+  }, [leadItems, search])
 
   return (
     <div className="flex flex-col gap-6">
@@ -203,6 +208,18 @@ export function LeadsTable({
                         lead={lead}
                         clients={clients}
                         templates={templates}
+                        onLeadUpdated={(nextLead) => {
+                          setLeadItems((current) =>
+                            current.map((item) =>
+                              item.id === nextLead.id ? nextLead : item
+                            )
+                          )
+                        }}
+                        onLeadDeleted={(leadId) => {
+                          setLeadItems((current) =>
+                            current.filter((item) => item.id !== leadId)
+                          )
+                        }}
                       >
                         <Button
                           variant="outline"

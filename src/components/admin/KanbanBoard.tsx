@@ -130,6 +130,25 @@ function moveLeadBetweenColumns(params: {
   }
 }
 
+function rebuildBoardWithLead(
+  current: { leadMap: LeadMap; columnMap: ColumnMap },
+  nextLead: Lead
+) {
+  return buildBoardState([
+    ...Object.values(current.leadMap).filter((lead) => lead.id !== nextLead.id),
+    nextLead,
+  ])
+}
+
+function rebuildBoardWithoutLead(
+  current: { leadMap: LeadMap; columnMap: ColumnMap },
+  leadId: string
+) {
+  return buildBoardState(
+    Object.values(current.leadMap).filter((lead) => lead.id !== leadId)
+  )
+}
+
 function LeadCard({
   lead,
   density = "comfortable",
@@ -142,6 +161,8 @@ function LeadCard({
   open,
   clients,
   templates,
+  onLeadUpdated,
+  onLeadDeleted,
 }: {
   lead: Lead
   density?: "comfortable" | "compact"
@@ -154,6 +175,8 @@ function LeadCard({
   open?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
+  onLeadUpdated?: (lead: Lead) => void
+  onLeadDeleted?: (leadId: string) => void
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const stagnant = isLeadStagnant(lead)
@@ -242,6 +265,8 @@ function LeadCard({
           open={open}
           clients={clients}
           templates={templates}
+          onLeadUpdated={onLeadUpdated}
+          onLeadDeleted={onLeadDeleted}
         >
           <Button
             type="button"
@@ -265,6 +290,8 @@ function SortableLeadCardWithDrawerState({
   isOpen = false,
   clients,
   templates,
+  onLeadUpdated,
+  onLeadDeleted,
 }: {
   lead: Lead
   dragDisabled: boolean
@@ -273,6 +300,8 @@ function SortableLeadCardWithDrawerState({
   isOpen?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
+  onLeadUpdated?: (lead: Lead) => void
+  onLeadDeleted?: (leadId: string) => void
 }): React.JSX.Element {
   const {
     attributes,
@@ -302,6 +331,8 @@ function SortableLeadCardWithDrawerState({
       open={isOpen}
       clients={clients}
       templates={templates}
+      onLeadUpdated={onLeadUpdated}
+      onLeadDeleted={onLeadDeleted}
     />
   )
 }
@@ -316,6 +347,8 @@ function KanbanColumn({
   selectedLeadId,
   clients,
   templates,
+  onLeadUpdated,
+  onLeadDeleted,
 }: {
   status: LeadStatus
   leadIds: string[]
@@ -326,6 +359,8 @@ function KanbanColumn({
   selectedLeadId: string | null
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
+  onLeadUpdated: (lead: Lead) => void
+  onLeadDeleted: (leadId: string) => void
 }): React.JSX.Element {
   const t = useTranslations("Admin.crm")
   const { setNodeRef, isOver } = useDroppable({ id: status })
@@ -367,6 +402,8 @@ function KanbanColumn({
               isOpen={selectedLeadId === lead.id}
               clients={clients}
               templates={templates}
+              onLeadUpdated={onLeadUpdated}
+              onLeadDeleted={onLeadDeleted}
             />
           ))}
 
@@ -415,6 +452,7 @@ export function KanbanBoard({
   const [isDeletingViewId, setIsDeletingViewId] = React.useState<string | null>(
     null
   )
+  const [viewItems, setViewItems] = React.useState(savedViews)
   const [density, setDensity] = React.useState(preferences.density)
   const lastCommittedStatusRef = React.useRef<LeadStatus | null>(null)
   const router = useRouter()
@@ -431,6 +469,10 @@ export function KanbanBoard({
   React.useEffect(() => {
     setBoardState(buildBoardState(leads))
   }, [leads])
+
+  React.useEffect(() => {
+    setViewItems(savedViews)
+  }, [savedViews])
 
   React.useEffect(() => {
     if (!initialLeadId) {
@@ -543,8 +585,22 @@ export function KanbanBoard({
 
     if (result.success) {
       toast.success("Visão salva.")
+      setViewItems((current) => [
+        {
+          id: `local-view-${crypto.randomUUID()}`,
+          userId: "local",
+          module: "CRM",
+          name,
+          filtersJson: {
+            search,
+            ...filters,
+          },
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        ...current.filter((view) => view.name !== name),
+      ])
       setViewName("")
-      router.refresh()
     } else {
       toast.error(result.error ?? "Não foi possível salvar visão.")
     }
@@ -578,7 +634,7 @@ export function KanbanBoard({
 
     if (result.success) {
       toast.success("Visão removida.")
-      router.refresh()
+      setViewItems((current) => current.filter((view) => view.id !== id))
     } else {
       toast.error(result.error ?? "Não foi possível remover visão.")
     }
@@ -610,6 +666,21 @@ export function KanbanBoard({
       }
     },
     [initialLeadId, pathname, router]
+  )
+
+  const handleLeadUpdated = React.useCallback((nextLead: Lead) => {
+    setBoardState((current) => rebuildBoardWithLead(current, nextLead))
+  }, [])
+
+  const handleLeadDeleted = React.useCallback(
+    (leadId: string) => {
+      setBoardState((current) => rebuildBoardWithoutLead(current, leadId))
+      setSelectedLeadId((current) => (current === leadId ? null : current))
+      setHasOpenDrawer((current) =>
+        selectedLeadId === leadId ? false : current
+      )
+    },
+    [selectedLeadId]
   )
 
   const handleDragStart = (event: DragStartEvent): void => {
@@ -711,7 +782,7 @@ export function KanbanBoard({
         <KanbanFilters
           filters={filters}
           onFiltersChange={setFilters}
-          totalCount={leads.length}
+          totalCount={Object.keys(leadMap).length}
           filteredCount={visibleLeadIds.size}
         />
         <div className="relative w-full max-w-md">
@@ -731,8 +802,8 @@ export function KanbanBoard({
             <Star weight="duotone" className="size-4 text-brand-primary" />
             Visões salvas
           </span>
-          {savedViews.length ? (
-            savedViews.map((view) => (
+          {viewItems.length ? (
+            viewItems.map((view) => (
               <div
                 key={view.id}
                 className="inline-flex items-center overflow-hidden rounded-full border border-border/35 bg-muted/10"
@@ -816,6 +887,8 @@ export function KanbanBoard({
               selectedLeadId={selectedLeadId}
               clients={clients}
               templates={templates}
+              onLeadUpdated={handleLeadUpdated}
+              onLeadDeleted={handleLeadDeleted}
             />
           ))}
         </div>

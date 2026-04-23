@@ -7,7 +7,7 @@ import { auth } from "@clerk/nextjs/server"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 import { ClientTimeline } from "@/src/components/client/ClientTimeline"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectTimeline } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
@@ -33,7 +33,7 @@ export default async function TimelinePage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectTimeline(id, user.id)
 
   if (!project) return notFound()
 

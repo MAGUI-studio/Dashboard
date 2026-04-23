@@ -1,9 +1,4 @@
 import { execSync } from "node:child_process"
-import path from "node:path"
-import fs from "node:fs"
-
-const PROJECT_ROOT = process.cwd()
-const SRC_DIR = path.join(PROJECT_ROOT, "src")
 
 const RULES = [
   {
@@ -52,7 +47,7 @@ function runAudit() {
     try {
       const includePattern = rule.include.join(" ")
       const excludeArgs = rule.exclude?.map(e => `--exclude "${e}"`).join(" ") || ""
-      
+
       // Using ripgrep (rg) if available, otherwise grep
       const command = `rg -n "${rule.pattern}" ${includePattern} ${excludeArgs} --color never`
       const output = execSync(command, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] })

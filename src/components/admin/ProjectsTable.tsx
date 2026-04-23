@@ -3,7 +3,6 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
-import { useRouter } from "next/navigation"
 
 import { Link } from "@/src/i18n/navigation"
 import {
@@ -59,20 +58,24 @@ interface ProjectsTableProps {
 export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
   const t = useTranslations("Dashboard.status")
   const commonT = useTranslations("Admin.clients.table")
-  const router = useRouter()
+  const [projectItems, setProjectItems] = React.useState(initialProjects)
   const [search, setSearch] = React.useState("")
   const [pendingDeletion, startDeletion] = React.useTransition()
 
+  React.useEffect(() => {
+    setProjectItems(initialProjects)
+  }, [initialProjects])
+
   const filteredProjects = React.useMemo(() => {
-    if (!search) return initialProjects
+    if (!search) return projectItems
     const query = search.toLowerCase()
-    return initialProjects.filter(
+    return projectItems.filter(
       (p) =>
         p.name.toLowerCase().includes(query) ||
         (p.client.name?.toLowerCase() || "").includes(query) ||
         p.client.email.toLowerCase().includes(query)
     )
-  }, [initialProjects, search])
+  }, [projectItems, search])
 
   const handleDelete = (projectId: string) => {
     startDeletion(async () => {
@@ -80,7 +83,9 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
 
       if (result.success) {
         toast.success("Projeto removido com sucesso.")
-        router.refresh()
+        setProjectItems((current) =>
+          current.filter((project) => project.id !== projectId)
+        )
         return
       }
 

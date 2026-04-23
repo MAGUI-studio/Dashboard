@@ -8,7 +8,7 @@ import { ClientApprovalHistory } from "@/src/components/client/ClientApprovalHis
 import { ClientApprovalList } from "@/src/components/client/ClientApprovalList"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectApprovals } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
@@ -34,7 +34,7 @@ export default async function ApprovalsPage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectApprovals(id, user.id)
 
   if (!project) return notFound()
 

@@ -2,7 +2,6 @@
 
 import * as React from "react"
 
-import { useRouter } from "@/src/i18n/navigation"
 import { MessageTemplate } from "@/src/types/crm"
 import { Copy, FloppyDisk, Plus, Trash } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -31,14 +30,18 @@ export function AdminTemplateLibrary({
 }: {
   templates: MessageTemplate[]
 }): React.JSX.Element {
-  const router = useRouter()
+  const [templateItems, setTemplateItems] = React.useState(templates)
   const [activeScope, setActiveScope] = React.useState("LEAD")
   const [name, setName] = React.useState("")
   const [content, setContent] = React.useState("")
   const [isSaving, startSaving] = React.useTransition()
   const [isDeleting, startDeleting] = React.useTransition()
 
-  const visibleTemplates = templates.filter(
+  React.useEffect(() => {
+    setTemplateItems(templates)
+  }, [templates])
+
+  const visibleTemplates = templateItems.filter(
     (template) => template.scope === activeScope
   )
 
@@ -57,9 +60,11 @@ export function AdminTemplateLibrary({
 
       if (result.success) {
         toast.success("Template salvo com sucesso.")
+        if (result.template) {
+          setTemplateItems((current) => [result.template!, ...current])
+        }
         setName("")
         setContent("")
-        router.refresh()
       } else {
         toast.error(result.error || "Erro ao salvar template.")
       }
@@ -72,7 +77,9 @@ export function AdminTemplateLibrary({
 
       if (result.success) {
         toast.success("Template removido.")
-        router.refresh()
+        setTemplateItems((current) =>
+          current.filter((template) => template.id !== id)
+        )
       } else {
         toast.error(result.error || "Erro ao remover template.")
       }
@@ -97,7 +104,7 @@ export function AdminTemplateLibrary({
           >
             {scopeLabels[scope]}
             <span className="ml-2 text-[9px] opacity-70">
-              {templates.filter((item) => item.scope === scope).length}
+              {templateItems.filter((item) => item.scope === scope).length}
             </span>
           </Button>
         ))}

@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { Link, usePathname, useRouter } from "@/src/i18n/navigation"
+import { Link, usePathname } from "@/src/i18n/navigation"
 import {
   DashboardNotification,
   DashboardUpdateAttachment,
@@ -86,17 +86,17 @@ interface HeaderProps {
   } | null
 }
 
+type PendingApproval = NonNullable<HeaderProps["pendingApprovals"]>[number]
+
 export function Header({
   notifications = [],
   pendingApprovals = [],
   viewer = null,
 }: HeaderProps): React.JSX.Element {
-  const router = useRouter()
   const t = useTranslations("Sidebar")
   const tDashboard = useTranslations("Dashboard")
   const tApp = useTranslations("Approvals")
   const pathname = usePathname()
-  const lastRefreshAtRef = React.useRef(0)
 
   const [isClientsMenuOpen, setIsClientsMenuOpen] = React.useState(false)
   const [isCommercialMenuOpen, setIsCommercialMenuOpen] = React.useState(false)
@@ -108,23 +108,66 @@ export function Header({
   const [isSheetOpen, setIsSheetOpen] = React.useState(false)
   const [feedback, setFeedback] = React.useState("")
   const [currentApprovalIndex, setCurrentApprovalIndex] = React.useState(0)
+  const [dismissedApprovalIds, setDismissedApprovalIds] = React.useState<
+    string[]
+  >([])
 
-  // Reset index if pendingApprovals changes
+  const pendingApprovalSignature = React.useMemo(
+    () => pendingApprovals.map((approval) => approval.lastUpdateId).join("|"),
+    [pendingApprovals]
+  )
+  const visiblePendingApprovals = React.useMemo(
+    () =>
+      pendingApprovals.filter(
+        (approval) => !dismissedApprovalIds.includes(approval.lastUpdateId)
+      ),
+    [dismissedApprovalIds, pendingApprovals]
+  )
+
   React.useEffect(() => {
     setCurrentApprovalIndex(0)
-  }, [pendingApprovals.length])
+    setDismissedApprovalIds([])
+  }, [pendingApprovalSignature])
 
-  const activePendingApproval = pendingApprovals[currentApprovalIndex]
+  React.useEffect(() => {
+    if (visiblePendingApprovals.length === 0) {
+      setCurrentApprovalIndex(0)
+      setIsSheetOpen(false)
+      setFeedback("")
+      return
+    }
+
+    if (currentApprovalIndex >= visiblePendingApprovals.length) {
+      setCurrentApprovalIndex(visiblePendingApprovals.length - 1)
+    }
+  }, [currentApprovalIndex, visiblePendingApprovals.length])
+
+  const activePendingApproval: PendingApproval | undefined =
+    visiblePendingApprovals[currentApprovalIndex]
 
   const handleNextApproval = (e: React.MouseEvent) => {
     e.stopPropagation()
-    setCurrentApprovalIndex((prev) => (prev + 1) % pendingApprovals.length)
+
+    if (visiblePendingApprovals.length === 0) {
+      return
+    }
+
+    setCurrentApprovalIndex(
+      (prev) => (prev + 1) % visiblePendingApprovals.length
+    )
   }
 
   const handlePrevApproval = (e: React.MouseEvent) => {
     e.stopPropagation()
+
+    if (visiblePendingApprovals.length === 0) {
+      return
+    }
+
     setCurrentApprovalIndex(
-      (prev) => (prev - 1 + pendingApprovals.length) % pendingApprovals.length
+      (prev) =>
+        (prev - 1 + visiblePendingApprovals.length) %
+        visiblePendingApprovals.length
     )
   }
 
@@ -139,6 +182,11 @@ export function Header({
 
     if (result.success) {
       toast.success(tApp("toast.approve_success"))
+      setDismissedApprovalIds((current) => [
+        ...current,
+        activePendingApproval.lastUpdateId,
+      ])
+      setFeedback("")
       setIsSheetOpen(false)
     } else {
       toast.error(result.error ?? tApp("toast.error_approve"))
@@ -159,6 +207,10 @@ export function Header({
 
     if (result.success) {
       toast.success(tApp("toast.reject_success"))
+      setDismissedApprovalIds((current) => [
+        ...current,
+        activePendingApproval.lastUpdateId,
+      ])
       setFeedback("")
       setIsSheetOpen(false)
     } else {
@@ -167,33 +219,6 @@ export function Header({
 
     setIsRejecting(false)
   }
-
-  React.useEffect(() => {
-    const refreshNotifications = () => {
-      const now = Date.now()
-
-      if (now - lastRefreshAtRef.current < 2_000) {
-        return
-      }
-
-      lastRefreshAtRef.current = now
-      router.refresh()
-    }
-
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === "visible") {
-        refreshNotifications()
-      }
-    }
-
-    window.addEventListener("focus", refreshNotifications)
-    document.addEventListener("visibilitychange", handleVisibilityChange)
-
-    return () => {
-      window.removeEventListener("focus", refreshNotifications)
-      document.removeEventListener("visibilitychange", handleVisibilityChange)
-    }
-  }, [router])
 
   return (
     <motion.header
@@ -214,7 +239,7 @@ export function Header({
           >
             <div className="mx-auto flex w-full max-w-440 flex-col gap-3 px-6 py-3 lg:flex-row lg:items-center lg:justify-between lg:px-12">
               <div className="flex min-w-0 flex-1 items-center gap-6">
-                {pendingApprovals.length > 1 && (
+                {visiblePendingApprovals.length > 1 && (
                   <div className="flex items-center gap-1 shrink-0">
                     <Button
                       variant="ghost"
@@ -227,7 +252,7 @@ export function Header({
                     <span className="min-w-[40px] text-center font-mono text-[10px] font-bold tracking-tighter text-white/40">
                       {currentApprovalIndex + 1}
                       <span className="mx-1 opacity-20">/</span>
-                      {pendingApprovals.length}
+                      {visiblePendingApprovals.length}
                     </span>
                     <Button
                       variant="ghost"

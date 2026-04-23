@@ -13,7 +13,7 @@ import { ClientBriefingView } from "@/src/components/client/ClientBriefingView"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 import { BriefingForm } from "@/src/components/common/BriefingForm"
 
-import { getClientProjectById } from "@/src/lib/client-projects"
+import { getClientProjectBriefing } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 import { toHref } from "@/src/lib/utils/navigation"
@@ -43,7 +43,7 @@ export default async function BriefingPage({
 
   if (!user) return <div />
 
-  const project = await getClientProjectById(id, user.id)
+  const project = await getClientProjectBriefing(id, user.id)
 
   if (!project) return notFound()
 

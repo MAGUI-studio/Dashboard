@@ -92,7 +92,6 @@ export function CreateLeadForm(): React.JSX.Element {
       formElement.reset()
       setSource("OTHER")
       router.push("/admin/crm")
-      router.refresh()
     } else {
       toast.error(t("form.error"))
     }
