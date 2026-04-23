@@ -735,6 +735,8 @@
     "active_projects_count": "{count} projetos em execução",
     "project_name_label": "Projeto",
     "no_project": "Nenhum projeto ativo encontrado.",
+    "no_project_eyebrow": "Portal do Cliente",
+    "no_project_description": "Ainda não temos um projeto ativo registrado para sua conta. Se você acredita que isso é um erro ou quer iniciar algo novo, entre em contato.",
     "status": {
       "title": "Status do Projeto",
       "progress": "Progresso Geral",

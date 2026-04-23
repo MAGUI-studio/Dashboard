@@ -1,0 +1,46 @@
+"use server"
+
+import { UserRole } from "@/src/generated/client/enums"
+
+import {
+  getAdminDashboardPerformance,
+  getAdminDashboardSummary,
+} from "@/src/lib/admin-data"
+import { logger } from "@/src/lib/logger"
+import prisma from "@/src/lib/prisma"
+
+export async function takeDashboardSnapshotAction() {
+  try {
+    // We need an admin user ID for the summary, fetch first admin
+    const admin = await prisma.user.findFirst({
+      where: { role: UserRole.ADMIN },
+      select: { id: true },
+    })
+
+    if (!admin) {
+      throw new Error("No admin user found to generate metrics")
+    }
+
+    const [stats, perf] = await Promise.all([
+      getAdminDashboardSummary(admin.id),
+      getAdminDashboardPerformance(),
+    ])
+
+    const snapshot = await prisma.dashboardMetricSnapshot.create({
+      data: {
+        activeProjects: stats.activeProjectsCount,
+        completedProjects: 0, // Need to implement completed count
+        pendingApprovals: stats.pendingApprovalsCount,
+        totalLeads: stats.activeLeadsCount,
+        convertedLeads: 0, // Need to implement
+        negotiationValue: 0, // Need to implement
+        avgApprovalHours: perf.averageApprovalHours,
+      },
+    })
+
+    return { success: true, snapshot }
+  } catch (error) {
+    logger.error({ error }, "Take Snapshot Error")
+    return { success: false, error: "Failed to generate metrics snapshot" }
+  }
+}

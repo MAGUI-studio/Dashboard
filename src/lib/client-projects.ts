@@ -261,22 +261,36 @@ export const getClientProjectOverview = (id: string, userId: string) =>
     }
   )()
 
-export const getClientProjectTimeline = (id: string, userId: string) =>
+export const getClientProjectTimeline = (
+  id: string,
+  userId: string,
+  page: number = 1,
+  limit: number = 20
+) =>
   unstable_cache(
     async () => {
-      return prisma.project.findUnique({
-        where: { id, clientId: userId },
-        select: {
-          id: true,
-          name: true,
-          updates: {
-            orderBy: { createdAt: "desc" },
-            include: { attachments: true },
+      const skip = (page - 1) * limit
+      const [project, totalCount] = await Promise.all([
+        prisma.project.findUnique({
+          where: { id, clientId: userId },
+          select: {
+            id: true,
+            name: true,
+            updates: {
+              orderBy: { createdAt: "desc" },
+              include: { attachments: true },
+              skip,
+              take: limit,
+            },
           },
-        },
-      })
+        }),
+        prisma.update.count({ where: { projectId: id } }),
+      ])
+      return project
+        ? { ...project, totalCount, totalPages: Math.ceil(totalCount / limit) }
+        : null
     },
-    ["client-project-timeline", id, userId],
+    ["client-project-timeline", id, userId, page.toString(), limit.toString()],
     {
       revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
@@ -287,21 +301,35 @@ export const getClientProjectTimeline = (id: string, userId: string) =>
     }
   )()
 
-export const getClientProjectFiles = (id: string, userId: string) =>
+export const getClientProjectFiles = (
+  id: string,
+  userId: string,
+  page: number = 1,
+  limit: number = 30
+) =>
   unstable_cache(
     async () => {
-      return prisma.project.findUnique({
-        where: { id, clientId: userId },
-        select: {
-          id: true,
-          name: true,
-          assets: {
-            orderBy: { order: "asc" },
+      const skip = (page - 1) * limit
+      const [project, totalCount] = await Promise.all([
+        prisma.project.findUnique({
+          where: { id, clientId: userId },
+          select: {
+            id: true,
+            name: true,
+            assets: {
+              orderBy: { order: "asc" },
+              skip,
+              take: limit,
+            },
           },
-        },
-      })
+        }),
+        prisma.asset.count({ where: { projectId: id } }),
+      ])
+      return project
+        ? { ...project, totalCount, totalPages: Math.ceil(totalCount / limit) }
+        : null
     },
-    ["client-project-files", id, userId],
+    ["client-project-files", id, userId, page.toString(), limit.toString()],
     {
       revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [
@@ -312,22 +340,38 @@ export const getClientProjectFiles = (id: string, userId: string) =>
     }
   )()
 
-export const getClientProjectTasks = (id: string, userId: string) =>
+export const getClientProjectTasks = (
+  id: string,
+  userId: string,
+  page: number = 1,
+  limit: number = 50
+) =>
   unstable_cache(
     async () => {
-      return prisma.project.findUnique({
-        where: { id, clientId: userId },
-        select: {
-          id: true,
-          name: true,
-          actionItems: {
-            where: { targetRole: "CLIENT" },
-            orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
+      const skip = (page - 1) * limit
+      const [project, totalCount] = await Promise.all([
+        prisma.project.findUnique({
+          where: { id, clientId: userId },
+          select: {
+            id: true,
+            name: true,
+            actionItems: {
+              where: { targetRole: "CLIENT" },
+              orderBy: [{ dueDate: "asc" }, { createdAt: "desc" }],
+              skip,
+              take: limit,
+            },
           },
-        },
-      })
+        }),
+        prisma.actionItem.count({
+          where: { projectId: id, targetRole: "CLIENT" },
+        }),
+      ])
+      return project
+        ? { ...project, totalCount, totalPages: Math.ceil(totalCount / limit) }
+        : null
     },
-    ["client-project-tasks", id, userId],
+    ["client-project-tasks", id, userId, page.toString(), limit.toString()],
     {
       revalidate: CACHE_TTL.PROJECT_DETAILS,
       tags: [cacheTags.clientProject, `client:project:${id}`],
@@ -346,6 +390,13 @@ export const getClientProjectApprovals = (id: string, userId: string) =>
             where: { requiresApproval: true },
             orderBy: { createdAt: "desc" },
             include: { attachments: true },
+          },
+          _count: {
+            select: {
+              updates: {
+                where: { requiresApproval: true },
+              },
+            },
           },
         },
       })
@@ -372,6 +423,11 @@ export const getClientProjectBriefing = (id: string, userId: string) =>
           briefing: true,
           briefingNotes: {
             orderBy: { createdAt: "desc" },
+          },
+          _count: {
+            select: {
+              briefingNotes: true,
+            },
           },
         },
       })
