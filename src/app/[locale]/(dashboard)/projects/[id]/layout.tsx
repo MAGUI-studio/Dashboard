@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 
-import { ClientProjectNav } from "@/src/components/client/ClientProjectNav"
+import { ClientProjectBreadcrumb } from "@/src/components/client/ClientProjectBreadcrumb"
 
 import { getClientProjectById } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
@@ -53,7 +53,13 @@ export default async function ProjectLayout({
 
   return (
     <div className="flex min-h-full flex-col px-5 py-10 sm:px-6 lg:px-12">
-      <main className="mx-auto flex w-full max-w-440 flex-col">{children}</main>
+      <main className="mx-auto flex w-full max-w-440 flex-col">
+        <ClientProjectBreadcrumb
+          projectId={project.id}
+          projectName={project.name}
+        />
+        {children}
+      </main>
     </div>
   )
 }

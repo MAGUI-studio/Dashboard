@@ -54,6 +54,7 @@ import {
 import {
   createProjectAssetAction,
   deleteProjectAssetAction,
+  updateProjectAssetAction,
   updateProjectAssetsOrderAction,
 } from "@/src/lib/actions/project.actions"
 import { useUploadThing } from "@/src/lib/uploadthing"
@@ -81,11 +82,13 @@ function SortableAssetItem({
   asset,
   index,
   onDelete,
+  onToggleVisibility,
   isDeleting,
 }: {
   asset: Asset
   index: number
   onDelete: (id: string, key: string) => void
+  onToggleVisibility: (asset: Asset) => void
   isDeleting: boolean
 }) {
   const t = useTranslations("Admin.projects.details")
@@ -156,73 +159,89 @@ function SortableAssetItem({
           </div>
         </div>
 
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="size-10 rounded-xl text-muted-foreground/40 hover:bg-red-600/10 hover:text-red-600 transition-all"
-              disabled={isDeleting}
-            >
-              <Trash weight="bold" className="size-5" />
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-xl border-none bg-background/95 p-0 overflow-hidden rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
-            <div className="bg-red-600/10 p-10 pb-6">
-              <DialogHeader className="gap-5">
-                <div className="flex size-16 items-center justify-center rounded-[1.25rem] bg-red-600 text-white shadow-xl shadow-red-600/20">
-                  <Warning weight="bold" className="size-8" />
-                </div>
-                <div className="flex flex-col gap-1.5">
-                  <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight text-red-600 leading-none">
-                    {t("delete_asset_confirm_title")}
-                  </DialogTitle>
-                  <DialogDescription className="text-xs font-black text-red-600/60 uppercase tracking-[0.2em]">
-                    Ação Irreversível e Permanente
-                  </DialogDescription>
-                </div>
-              </DialogHeader>
-            </div>
-
-            <div className="p-10 pt-6">
-              <p className="mb-10 text-base font-medium leading-relaxed text-muted-foreground/80">
-                {t("delete_asset_confirm_desc")}
-              </p>
-
-              <div className="mb-10 flex items-center gap-4 rounded-[1.5rem] border border-border/40 bg-muted/5 p-6">
-                <div className="flex size-12 items-center justify-center rounded-xl bg-muted/10 text-muted-foreground">
-                  <File weight="duotone" className="size-6" />
-                </div>
-                <div className="flex flex-col gap-0.5 overflow-hidden">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                    Arquivo Selecionado
-                  </span>
-                  <span className="truncate text-sm font-black text-foreground uppercase">
-                    {asset.name}
-                  </span>
-                </div>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="size-10 rounded-xl text-muted-foreground/40 hover:bg-brand-primary/10 hover:text-brand-primary transition-all"
+            onClick={() => onToggleVisibility(asset)}
+            disabled={isDeleting}
+            aria-label={t("toggle_asset_visibility")}
+          >
+            {asset.visibility === AssetVisibility.CLIENT ? (
+              <EyeSlash weight="bold" className="size-5" />
+            ) : (
+              <Eye weight="bold" className="size-5" />
+            )}
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-10 rounded-xl text-muted-foreground/40 hover:bg-red-600/10 hover:text-red-600 transition-all"
+                disabled={isDeleting}
+              >
+                <Trash weight="bold" className="size-5" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-xl border-none bg-background/95 p-0 overflow-hidden rounded-[2.5rem] backdrop-blur-xl shadow-2xl">
+              <div className="bg-red-600/10 p-10 pb-6">
+                <DialogHeader className="gap-5">
+                  <div className="flex size-16 items-center justify-center rounded-[1.25rem] bg-red-600 text-white shadow-xl shadow-red-600/20">
+                    <Warning weight="bold" className="size-8" />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight text-red-600 leading-none">
+                      {t("delete_asset_confirm_title")}
+                    </DialogTitle>
+                    <DialogDescription className="text-xs font-black text-red-600/60 uppercase tracking-[0.2em]">
+                      Ação Irreversível e Permanente
+                    </DialogDescription>
+                  </div>
+                </DialogHeader>
               </div>
 
-              <div className="grid grid-cols-2 gap-5">
-                <DialogTrigger asChild>
+              <div className="p-10 pt-6">
+                <p className="mb-10 text-base font-medium leading-relaxed text-muted-foreground/80">
+                  {t("delete_asset_confirm_desc")}
+                </p>
+
+                <div className="mb-10 flex items-center gap-4 rounded-[1.5rem] border border-border/40 bg-muted/5 p-6">
+                  <div className="flex size-12 items-center justify-center rounded-xl bg-muted/10 text-muted-foreground">
+                    <File weight="duotone" className="size-6" />
+                  </div>
+                  <div className="flex flex-col gap-0.5 overflow-hidden">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                      Arquivo Selecionado
+                    </span>
+                    <span className="truncate text-sm font-black text-foreground uppercase">
+                      {asset.name}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-5">
+                  <DialogTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className="h-16 rounded-[1.25rem] font-sans font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-muted/10 hover:text-foreground"
+                    >
+                      {t("cancel")}
+                    </Button>
+                  </DialogTrigger>
                   <Button
-                    variant="ghost"
-                    className="h-16 rounded-[1.25rem] font-sans font-black uppercase tracking-widest text-muted-foreground transition-all hover:bg-muted/10 hover:text-foreground"
+                    className="h-16 rounded-[1.25rem] bg-red-600 font-sans font-black uppercase tracking-widest text-white shadow-xl shadow-red-600/20 transition-all hover:bg-red-700 active:scale-[0.98]"
+                    onClick={() => onDelete(asset.id, asset.key)}
+                    disabled={isDeleting}
                   >
-                    {t("cancel")}
+                    {isDeleting ? t("deleting") : t("confirm_delete")}
                   </Button>
-                </DialogTrigger>
-                <Button
-                  className="h-16 rounded-[1.25rem] bg-red-600 font-sans font-black uppercase tracking-widest text-white shadow-xl shadow-red-600/20 transition-all hover:bg-red-700 active:scale-[0.98]"
-                  onClick={() => onDelete(asset.id, asset.key)}
-                  disabled={isDeleting}
-                >
-                  {isDeleting ? t("deleting") : t("confirm_delete")}
-                </Button>
+                </div>
               </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
 
       <div className="mt-auto flex items-end justify-between gap-4 pt-2">
@@ -323,6 +342,41 @@ export function AssetManagement({
     setIsDeleting(id)
     await deleteProjectAssetAction(id, projectId, key)
     setIsDeleting(null)
+  }
+
+  const handleToggleVisibility = async (asset: Asset) => {
+    const nextVisibility =
+      asset.visibility === AssetVisibility.CLIENT
+        ? AssetVisibility.INTERNAL
+        : AssetVisibility.CLIENT
+
+    setAssets((current) =>
+      current.map((item) =>
+        item.id === asset.id ? { ...item, visibility: nextVisibility } : item
+      )
+    )
+
+    const result = await updateProjectAssetAction({
+      id: asset.id,
+      projectId,
+      name: asset.name,
+      type: asset.type,
+      visibility: nextVisibility,
+    })
+
+    if (result.error) {
+      setAssets((current) =>
+        current.map((item) =>
+          item.id === asset.id
+            ? { ...item, visibility: asset.visibility }
+            : item
+        )
+      )
+      toast.error(result.error)
+      return
+    }
+
+    toast.success(t("asset_visibility_updated"))
   }
 
   const handleDragEnd = async (event: DragEndEvent) => {
@@ -431,6 +485,7 @@ export function AssetManagement({
                     asset={asset}
                     index={index}
                     onDelete={handleDelete}
+                    onToggleVisibility={handleToggleVisibility}
                     isDeleting={isDeleting === asset.id}
                   />
                 ))}

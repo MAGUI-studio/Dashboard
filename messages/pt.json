@@ -183,6 +183,28 @@
         "submit": "Salvar Lead",
         "success": "Lead catalogado com sucesso!",
         "error": "Erro ao salvar lead."
+      },
+      "convert": {
+        "title": "Converter em Projeto",
+        "description": "Transicao para execucao",
+        "client_section": "1. Cliente do projeto",
+        "existing_client": "Cliente existente",
+        "create_client": "Criar do lead",
+        "select_placeholder": "Escolha o acesso do cliente...",
+        "existing_hint": "Use esta opcao quando o cliente ja existe no sistema.",
+        "create_hint": "Cria ou sincroniza o acesso usando {email}.",
+        "missing_email": "e-mail ausente",
+        "project_section": "2. Dados do projeto",
+        "project_name": "Nome do Projeto",
+        "category": "Categoria",
+        "budget": "Orcamento (Opcional)",
+        "budget_placeholder": "Ex: R$ 15.000",
+        "cancel": "Cancelar",
+        "submit": "Iniciar Projeto",
+        "success": "Lead convertido com sucesso!",
+        "error": "Erro ao converter lead.",
+        "select_client_error": "Selecione um cliente.",
+        "email_required_error": "Este lead precisa de e-mail para criar o cliente."
       }
     },
     "activity_feed": {
@@ -363,6 +385,8 @@
         "upload_button": "Upload de Arquivo",
         "uploading": "Carregando...",
         "upload_hint": "PDF, Imagens, Documentos (Max 32MB)",
+        "toggle_asset_visibility": "Alternar visibilidade do arquivo",
+        "asset_visibility_updated": "Visibilidade do arquivo atualizada.",
         "timeline_form": {
           "attachments": "Anexos da evolução",
           "attachments_hint": "PDF e imagens para apoiar a entrega",
@@ -591,6 +615,15 @@
           "briefing": "Briefing",
           "tasks": "Tarefas",
           "hint": "Avance pelas seções"
+        },
+        "breadcrumb": {
+          "label": "Navegacao do projeto",
+          "projects": "Projetos",
+          "timeline": "Historico",
+          "approvals": "Entregas",
+          "files": "Arquivos",
+          "briefing": "Briefing",
+          "tasks": "Solicitacoes"
         },
         "active_project": "Projeto Ativo",
         "active_project_focus_description": "Este é o projeto em foco agora. Entre para ver entregas, arquivos, briefing e o histórico completo.",

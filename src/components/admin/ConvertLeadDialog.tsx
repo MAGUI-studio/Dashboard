@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
 import { ProjectCategory } from "@/src/generated/client/enums"
@@ -42,8 +43,12 @@ export function ConvertLeadDialog({
   onOpenChange,
   clients,
 }: ConvertLeadDialogProps): React.JSX.Element {
+  const t = useTranslations("Admin.crm.convert")
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = React.useState(false)
+  const [clientMode, setClientMode] = React.useState<"existing" | "create">(
+    "existing"
+  )
   const [selectedClientId, setSelectedClientId] = React.useState<string>("")
   const [projectName, setProjectName] = React.useState(lead.companyName)
   const [category, setCategory] = React.useState<ProjectCategory>(
@@ -53,15 +58,27 @@ export function ConvertLeadDialog({
   const [deadline] = React.useState("")
 
   const handleConvert = async () => {
-    if (!selectedClientId) {
-      toast.error("Selecione um cliente.")
+    if (clientMode === "existing" && !selectedClientId) {
+      toast.error(t("select_client_error"))
+      return
+    }
+
+    if (clientMode === "create" && !lead.email) {
+      toast.error(t("email_required_error"))
       return
     }
 
     setIsSubmitting(true)
     const result = await convertLeadToProjectAction({
       leadId: lead.id,
-      userId: selectedClientId,
+      userId: clientMode === "existing" ? selectedClientId : undefined,
+      newUserData:
+        clientMode === "create"
+          ? {
+              email: lead.email ?? "",
+              name: lead.contactName || lead.companyName,
+            }
+          : undefined,
       projectData: {
         name: projectName,
         category,
@@ -71,11 +88,11 @@ export function ConvertLeadDialog({
     })
 
     if (result.success) {
-      toast.success("Lead convertido com sucesso!")
+      toast.success(t("success"))
       onOpenChange(false)
       router.push(`/admin/projects/${result.projectId}`)
     } else {
-      toast.error(result.error || "Erro ao converter lead.")
+      toast.error(result.error || t("error"))
     }
     setIsSubmitting(false)
   }
@@ -92,10 +109,10 @@ export function ConvertLeadDialog({
             </div>
             <div className="flex flex-col gap-1.5">
               <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tight text-brand-primary leading-none">
-                Converter em Projeto
+                {t("title")}
               </DialogTitle>
               <DialogDescription className="text-xs font-black text-brand-primary/60 uppercase tracking-[0.2em]">
-                Transicao para execucao
+                {t("description")}
               </DialogDescription>
             </div>
           </DialogHeader>
@@ -105,14 +122,33 @@ export function ConvertLeadDialog({
           <div className="grid gap-6">
             <div className="space-y-2">
               <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                1. Selecionar Cliente Existente
+                {t("client_section")}
               </Label>
+              <div className="grid grid-cols-2 gap-3">
+                <Button
+                  type="button"
+                  variant={clientMode === "existing" ? "default" : "outline"}
+                  className="h-11 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                  onClick={() => setClientMode("existing")}
+                >
+                  {t("existing_client")}
+                </Button>
+                <Button
+                  type="button"
+                  variant={clientMode === "create" ? "default" : "outline"}
+                  className="h-11 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                  onClick={() => setClientMode("create")}
+                >
+                  {t("create_client")}
+                </Button>
+              </div>
               <Select
                 value={selectedClientId}
                 onValueChange={setSelectedClientId}
+                disabled={clientMode !== "existing"}
               >
                 <SelectTrigger className="h-14 rounded-2xl border-border/40 bg-muted/10">
-                  <SelectValue placeholder="Escolha o acesso do cliente..." />
+                  <SelectValue placeholder={t("select_placeholder")} />
                 </SelectTrigger>
                 <SelectContent>
                   {clients.map((client) => (
@@ -123,8 +159,11 @@ export function ConvertLeadDialog({
                 </SelectContent>
               </Select>
               <p className="text-[9px] font-medium text-muted-foreground/40 italic">
-                Nota: A criacao de novos acessos deve ser feita via menu
-                Clientes por seguranca.
+                {clientMode === "create"
+                  ? t("create_hint", {
+                      email: lead.email ?? t("missing_email"),
+                    })
+                  : t("existing_hint")}
               </p>
             </div>
 
@@ -132,13 +171,13 @@ export function ConvertLeadDialog({
 
             <div className="space-y-4">
               <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                2. Dados do Projeto
+                {t("project_section")}
               </Label>
 
               <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2 md:col-span-2">
                   <Label className="text-[10px] font-bold uppercase tracking-tight ml-1">
-                    Nome do Projeto
+                    {t("project_name")}
                   </Label>
                   <Input
                     value={projectName}
@@ -149,7 +188,7 @@ export function ConvertLeadDialog({
 
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold uppercase tracking-tight ml-1">
-                    Categoria
+                    {t("category")}
                   </Label>
                   <Select
                     value={category}
@@ -170,12 +209,12 @@ export function ConvertLeadDialog({
 
                 <div className="space-y-2">
                   <Label className="text-[10px] font-bold uppercase tracking-tight ml-1">
-                    Orcamento (Opcional)
+                    {t("budget")}
                   </Label>
                   <Input
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
-                    placeholder="Ex: R$ 15.000"
+                    placeholder={t("budget_placeholder")}
                     className="h-12 rounded-xl"
                   />
                 </div>
@@ -189,19 +228,24 @@ export function ConvertLeadDialog({
               className="h-16 rounded-[1.25rem] font-black uppercase tracking-widest text-muted-foreground"
               onClick={() => onOpenChange(false)}
             >
-              Cancelar
+              {t("cancel")}
             </Button>
             <Button
               className="h-16 rounded-[1.25rem] bg-brand-primary font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 hover:brightness-110"
               onClick={handleConvert}
-              disabled={isSubmitting || !selectedClientId || !projectName}
+              disabled={
+                isSubmitting ||
+                !projectName ||
+                (clientMode === "existing" && !selectedClientId) ||
+                (clientMode === "create" && !lead.email)
+              }
             >
               {isSubmitting ? (
                 <CircleNotch className="mr-2 size-5 animate-spin" />
               ) : (
                 <CheckCircle className="mr-2 size-5" weight="bold" />
               )}
-              Iniciar Projeto
+              {t("submit")}
             </Button>
           </div>
         </div>

@@ -183,6 +183,28 @@
         "submit": "Save Lead",
         "success": "Lead cataloged successfully!",
         "error": "Error saving lead."
+      },
+      "convert": {
+        "title": "Convert to Project",
+        "description": "Transition to execution",
+        "client_section": "1. Project client",
+        "existing_client": "Existing client",
+        "create_client": "Create from lead",
+        "select_placeholder": "Choose client access...",
+        "existing_hint": "Use this option when the client already exists in the system.",
+        "create_hint": "Creates or syncs access using {email}.",
+        "missing_email": "missing email",
+        "project_section": "2. Project data",
+        "project_name": "Project Name",
+        "category": "Category",
+        "budget": "Budget (Optional)",
+        "budget_placeholder": "Ex: $15,000",
+        "cancel": "Cancel",
+        "submit": "Start Project",
+        "success": "Lead converted successfully!",
+        "error": "Error converting lead.",
+        "select_client_error": "Select a client.",
+        "email_required_error": "This lead needs an email to create the client."
       }
     },
     "activity_feed": {
@@ -363,6 +385,8 @@
         "upload_button": "File Upload",
         "uploading": "Loading...",
         "upload_hint": "PDF, Images, Documents (Max 32MB)",
+        "toggle_asset_visibility": "Toggle file visibility",
+        "asset_visibility_updated": "File visibility updated.",
         "timeline_form": {
           "attachments": "Timeline attachments",
           "attachments_hint": "PDFs and images to support this delivery",
@@ -591,6 +615,15 @@
           "briefing": "Briefing",
           "tasks": "Tasks",
           "hint": "Advance through sections"
+        },
+        "breadcrumb": {
+          "label": "Project navigation",
+          "projects": "Projects",
+          "timeline": "History",
+          "approvals": "Deliveries",
+          "files": "Files",
+          "briefing": "Briefing",
+          "tasks": "Requests"
         },
         "active_project": "Active Project",
         "active_project_focus_description": "This is the project in focus now. Enter to see deliveries, files, briefing, and full history.",

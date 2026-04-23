@@ -63,7 +63,7 @@ export default async function DashboardLayout({
         firstName: clerkUser?.firstName ?? null,
         fullName: clerkUser?.fullName ?? user.name ?? null,
         imageUrl: clerkUser?.imageUrl ?? null,
-        isAdmin: user.role === "ADMIN" || user.role === "MEMBER",
+        isAdmin: user.role === "ADMIN",
       }
 
       if (viewer.isAdmin) {

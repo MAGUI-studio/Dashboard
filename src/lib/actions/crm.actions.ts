@@ -16,7 +16,11 @@ import { z } from "zod"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
-import { getCurrentAppUser } from "@/src/lib/project-governance"
+import {
+  createAuditLog,
+  findOrCreateClientFromEmail,
+  getCurrentAppUser,
+} from "@/src/lib/project-governance"
 
 const LeadSchema = z.object({
   companyName: z.string().min(2),
@@ -272,15 +276,30 @@ export async function convertLeadToProjectAction(input: {
 
     if (!lead) return { success: false, error: "Lead not found" }
 
-    const finalUserId = input.userId
+    let finalUserId = input.userId
 
-    // 1. Handle User creation if needed (simplified for MVP, ideally uses Clerk)
     if (!finalUserId && input.newUserData) {
-      return {
-        success: false,
-        error:
-          "User creation flow requires Clerk integration. Please select an existing client.",
+      const email = input.newUserData.email || lead.email
+
+      if (!email) {
+        return { success: false, error: "Client email must be provided." }
       }
+
+      const clientUser = await findOrCreateClientFromEmail({
+        email,
+        name: input.newUserData.name || lead.contactName || lead.companyName,
+        companyName: lead.companyName,
+      })
+
+      finalUserId = clientUser.id
+
+      await createAuditLog({
+        action: "client.created_from_lead",
+        entityType: "User",
+        entityId: clientUser.id,
+        summary: `Cliente ${clientUser.email} sincronizado a partir do lead ${lead.companyName}.`,
+        metadata: { leadId: lead.id, email: clientUser.email },
+      })
     }
 
     if (!finalUserId)
@@ -316,6 +335,15 @@ export async function convertLeadToProjectAction(input: {
       title: "Lead convertido em projeto",
       content: `Projeto "${project.name}" criado com sucesso.`,
       metadata: { projectId: project.id },
+    })
+
+    await createAuditLog({
+      action: "lead.converted_to_project",
+      entityType: "Lead",
+      entityId: input.leadId,
+      projectId: project.id,
+      summary: `Lead ${lead.companyName} convertido no projeto ${project.name}.`,
+      metadata: { projectId: project.id, clientId: finalUserId },
     })
 
     revalidateCrmPaths()

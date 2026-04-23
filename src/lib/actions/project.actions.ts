@@ -868,18 +868,125 @@ export async function deleteProjectAssetAction(
   const utapi = new UTApi()
 
   try {
+    const asset = await prisma.asset.findUnique({
+      where: { id },
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    if (!asset) {
+      return { error: "Arquivo nao encontrado" }
+    }
+
     await utapi.deleteFiles(key)
 
     await prisma.asset.delete({
       where: { id },
     })
 
+    await createAuditLog({
+      action: "asset.deleted",
+      entityType: "Asset",
+      entityId: asset.id,
+      projectId,
+      summary: `Arquivo ${asset.name} removido de ${asset.project.name}.`,
+      metadata: {
+        before: {
+          name: asset.name,
+          type: asset.type,
+          visibility: asset.visibility,
+          origin: asset.origin,
+          key: asset.key,
+        },
+      },
+    })
+
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath(`/admin/projects/${projectId}/assets`)
+    revalidatePath("/")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Delete Asset Error:")
     return { error: "Erro ao deletar arquivo" }
+  }
+}
+
+export async function updateProjectAssetAction(input: {
+  id: string
+  projectId: string
+  name: string
+  type: AssetType
+  visibility: AssetVisibility
+}): Promise<{ error?: string; success?: boolean }> {
+  try {
+    await protect("admin")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  try {
+    const current = await prisma.asset.findUnique({
+      where: { id: input.id },
+      include: {
+        project: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    })
+
+    if (!current || current.projectId !== input.projectId) {
+      return { error: "Arquivo nao encontrado" }
+    }
+
+    const updated = await prisma.asset.update({
+      where: { id: input.id },
+      data: {
+        name: input.name.trim(),
+        type: input.type,
+        visibility: input.visibility,
+      },
+    })
+
+    const visibilityChanged = current.visibility !== updated.visibility
+
+    await createAuditLog({
+      action: visibilityChanged ? "asset.visibility_changed" : "asset.updated",
+      entityType: "Asset",
+      entityId: updated.id,
+      projectId: input.projectId,
+      summary: visibilityChanged
+        ? `Visibilidade do arquivo ${updated.name} alterada em ${current.project.name}.`
+        : `Arquivo ${updated.name} atualizado em ${current.project.name}.`,
+      metadata: {
+        before: {
+          name: current.name,
+          type: current.type,
+          visibility: current.visibility,
+        },
+        after: {
+          name: updated.name,
+          type: updated.type,
+          visibility: updated.visibility,
+        },
+      },
+    })
+
+    revalidatePath(`/admin/projects/${input.projectId}`)
+    revalidatePath(`/admin/projects/${input.projectId}/assets`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Update Asset Error:")
+    return { error: "Erro ao atualizar arquivo" }
   }
 }
 

@@ -87,6 +87,93 @@ async function upsertUserFromClerk(clerkUserId: string) {
   throw new Error("Unable to sync Clerk user after retries")
 }
 
+function splitClientName(name: string): {
+  firstName: string
+  lastName: string
+} {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  const firstName = parts.shift() ?? "Cliente"
+  const lastName = parts.join(" ") || "MAGUI"
+  return { firstName, lastName }
+}
+
+export async function findOrCreateClientFromEmail(input: {
+  email: string
+  name?: string | null
+  companyName?: string | null
+}) {
+  const email = input.email.trim().toLowerCase()
+
+  if (!email) {
+    throw new Error("Client email is required")
+  }
+
+  const localUser = await prisma.user.findUnique({
+    where: { email },
+  })
+
+  if (localUser) {
+    if (localUser.role !== UserRole.CLIENT) {
+      throw new Error("Email belongs to a non-client user")
+    }
+
+    return localUser
+  }
+
+  const client = await clerkClient()
+  const existingClerkUsers = await client.users.getUserList({
+    emailAddress: [email],
+    limit: 1,
+  })
+  const existingClerkUser = existingClerkUsers.data[0]
+
+  if (existingClerkUser) {
+    await client.users.updateUser(existingClerkUser.id, {
+      publicMetadata: {
+        ...existingClerkUser.publicMetadata,
+        role: "client",
+      },
+    })
+
+    const syncedUser = await upsertUserFromClerk(existingClerkUser.id)
+
+    if (syncedUser.role !== UserRole.CLIENT) {
+      return prisma.user.update({
+        where: { id: syncedUser.id },
+        data: { role: UserRole.CLIENT, companyName: input.companyName ?? null },
+      })
+    }
+
+    if (input.companyName && !syncedUser.companyName) {
+      return prisma.user.update({
+        where: { id: syncedUser.id },
+        data: { companyName: input.companyName },
+      })
+    }
+
+    return syncedUser
+  }
+
+  const displayName = input.name?.trim() || input.companyName?.trim() || email
+  const { firstName, lastName } = splitClientName(displayName)
+  const clerkUser = await client.users.createUser({
+    emailAddress: [email],
+    firstName,
+    lastName,
+    publicMetadata: { role: "client" },
+  })
+
+  return prisma.user.create({
+    data: {
+      clerkId: clerkUser.id,
+      email,
+      name: displayName,
+      role: UserRole.CLIENT,
+      companyName: input.companyName ?? null,
+    },
+  })
+}
+
 export async function getCurrentAppUser() {
   const { userId } = await auth()
 
