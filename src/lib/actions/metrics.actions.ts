@@ -34,7 +34,7 @@ export async function takeDashboardSnapshotAction() {
         totalLeads: stats.activeLeadsCount,
         convertedLeads: 0, // Need to implement
         negotiationValue: 0, // Need to implement
-        avgApprovalHours: perf.averageApprovalHours,
+        avgApprovalHours: Math.round(perf.averageApprovalHours),
       },
     })
 

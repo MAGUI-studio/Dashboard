@@ -162,6 +162,38 @@ model DashboardMetricSnapshot {
   @@index([date])
 }
 
+model SearchDocument {
+  id          String   @id @default(cuid())
+  entityType  String   // User, Project, Lead, Asset, Update
+  entityId    String
+  projectId   String?
+  
+  title       String
+  subtitle    String?
+  body        String?  @db.Text
+  
+  metadata    Json?
+  
+  updatedAt   DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([projectId])
+}
+
+model EventOutbox {
+  id          String   @id @default(cuid())
+  type        String   // NOTIFICATION, AUDIT, SEARCH_SYNC
+  payload     Json
+  status      String   @default("PENDING") // PENDING, PROCESSED, FAILED
+  error       String?  @db.Text
+  attempts    Int      @default(0)
+  
+  processedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([status, createdAt])
+}
+
 model User {
   id            String         @id @default(cuid())
   clerkId       String         @unique

@@ -109,6 +109,36 @@ export const getClientHomeActivity = (userId: string) =>
     }
   )()
 
+export const getClientPendingItems = (projectIds: string[]) =>
+  unstable_cache(
+    async () => {
+      return prisma.project.findMany({
+        where: { id: { in: projectIds } },
+        select: {
+          id: true,
+          _count: {
+            select: {
+              updates: {
+                where: {
+                  requiresApproval: true,
+                  approvalStatus: ApprovalStatus.PENDING,
+                },
+              },
+              actionItems: {
+                where: { status: "PENDING", targetRole: "CLIENT" },
+              },
+            },
+          },
+        },
+      })
+    },
+    ["client-pending-items", ...[...projectIds].sort()],
+    {
+      revalidate: CACHE_TTL.NOTIFICATIONS,
+      tags: [cacheTags.clientPendingApprovals],
+    }
+  )()
+
 export const getClientProjectsCached = unstable_cache(
   async (userId: string) => {
     return prisma.project.findMany({

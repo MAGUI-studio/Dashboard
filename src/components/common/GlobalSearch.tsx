@@ -34,6 +34,7 @@ export function GlobalSearch(): React.JSX.Element {
   const [query, setQuery] = React.useState("")
   const [results, setResults] = React.useState<GlobalSearchResult[]>([])
   const [isSearching, startSearching] = React.useTransition()
+  const searchIdRef = React.useRef(0)
 
   React.useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -54,9 +55,12 @@ export function GlobalSearch(): React.JSX.Element {
     }
 
     const timer = window.setTimeout(() => {
+      const currentId = ++searchIdRef.current
       startSearching(async () => {
         const response = await searchAdminGlobal(query, "quick")
-        setResults(response)
+        if (currentId === searchIdRef.current) {
+          setResults(response)
+        }
       })
     }, 220)
 

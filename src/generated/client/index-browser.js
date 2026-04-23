@@ -120,6 +120,42 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
   Serializable: 'Serializable'
 });
 
+exports.Prisma.DashboardMetricSnapshotScalarFieldEnum = {
+  id: 'id',
+  date: 'date',
+  activeProjects: 'activeProjects',
+  completedProjects: 'completedProjects',
+  pendingApprovals: 'pendingApprovals',
+  totalLeads: 'totalLeads',
+  convertedLeads: 'convertedLeads',
+  negotiationValue: 'negotiationValue',
+  avgApprovalHours: 'avgApprovalHours',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SearchDocumentScalarFieldEnum = {
+  id: 'id',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  projectId: 'projectId',
+  title: 'title',
+  subtitle: 'subtitle',
+  body: 'body',
+  metadata: 'metadata',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.EventOutboxScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  payload: 'payload',
+  status: 'status',
+  error: 'error',
+  attempts: 'attempts',
+  processedAt: 'processedAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.UserScalarFieldEnum = {
   id: 'id',
   clerkId: 'clerkId',
@@ -372,15 +408,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
@@ -516,6 +552,9 @@ exports.AuditActorType = exports.$Enums.AuditActorType = {
 };
 
 exports.Prisma.ModelName = {
+  DashboardMetricSnapshot: 'DashboardMetricSnapshot',
+  SearchDocument: 'SearchDocument',
+  EventOutbox: 'EventOutbox',
   User: 'User',
   Lead: 'Lead',
   LeadNote: 'LeadNote',

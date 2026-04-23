@@ -6,7 +6,7 @@ import {
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
-import { auth, clerkClient, createClerkClient } from "@clerk/nextjs/server"
+import { auth, createClerkClient } from "@clerk/nextjs/server"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
@@ -112,7 +112,8 @@ export async function findOrCreateClientFromEmail(
     name?: string | null
     companyName?: string | null
   },
-  tx: Prisma.TransactionClient = prisma
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any = prisma
 ) {
   const email = input.email.trim().toLowerCase()
 
@@ -364,8 +365,25 @@ export async function ensureProjectAccessWithName(
   return { user, project: { id: project.id, name: project.name } }
 }
 
+export async function enqueueEvent(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any,
+  data: {
+    type: "NOTIFICATION" | "AUDIT" | "SEARCH_SYNC"
+    payload: Prisma.InputJsonValue
+  }
+) {
+  await tx.eventOutbox.create({
+    data: {
+      type: data.type,
+      payload: data.payload,
+    },
+  })
+}
+
 export async function writeAuditAndNotifications(
-  tx: Prisma.TransactionClient,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any,
   data: {
     audit: {
       action: string
@@ -406,7 +424,8 @@ export async function createAuditLog(
     actorType?: AuditActorType
     projectId?: string | null
   },
-  tx: Prisma.TransactionClient = prisma
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any = prisma
 ) {
   await tx.auditLog.create({
     data: {
@@ -451,11 +470,8 @@ export async function createNotification(
     metadata?: Prisma.InputJsonValue
     projectId?: string | null
   },
-  tx: {
-    notification: {
-      create: (args: Prisma.NotificationCreateArgs) => Promise<unknown>
-    }
-  } = prisma
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any = prisma
 ) {
   await tx.notification.create({
     data: {
@@ -488,11 +504,8 @@ export async function createNotificationsMany(
     metadata?: Prisma.InputJsonValue
     projectId?: string | null
   }>,
-  tx: {
-    notification: {
-      createMany: (args: Prisma.NotificationCreateManyArgs) => Promise<unknown>
-    }
-  } = prisma
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  tx: any = prisma
 ) {
   if (notifications.length === 0) return
 

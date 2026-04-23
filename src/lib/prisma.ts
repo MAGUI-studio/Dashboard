@@ -5,7 +5,7 @@ import { logger } from "@/src/lib/logger"
 
 import { env } from "@/src/config/env"
 
-import { PrismaClient } from "../generated/client/client"
+import { PrismaClient } from "../generated/client"
 
 function normalizeConnectionString(value: string): string {
   if (!value.includes("sslmode=")) {
