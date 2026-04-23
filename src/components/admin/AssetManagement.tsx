@@ -9,6 +9,7 @@ import {
   AssetType,
   AssetVisibility,
 } from "@/src/generated/client/enums"
+import { DashboardAsset } from "@/src/types/dashboard"
 import {
   DndContext,
   DragEndEvent,
@@ -60,18 +61,7 @@ import {
 import { useUploadThing } from "@/src/lib/uploadthing"
 import { formatLocalTime } from "@/src/lib/utils/utils"
 
-interface Asset {
-  id: string
-  name: string
-  url: string
-  key: string
-  type: AssetType
-  order: number
-  timezone: string
-  origin: AssetOrigin
-  visibility: AssetVisibility
-  createdAt: Date | string
-}
+type Asset = DashboardAsset
 
 interface AssetManagementProps {
   projectId: string

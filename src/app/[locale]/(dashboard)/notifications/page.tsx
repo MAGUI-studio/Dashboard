@@ -1,6 +1,5 @@
 import * as React from "react"
 
-import { DashboardNotification } from "@/src/types/dashboard"
 import { auth } from "@clerk/nextjs/server"
 
 import { NotificationsInbox } from "@/src/components/common/NotificationsInbox"
@@ -32,9 +31,7 @@ export default async function NotificationsPage(): Promise<React.JSX.Element> {
   return (
     <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="mx-auto w-full max-w-5xl">
-        <NotificationsInbox
-          notifications={notifications as unknown as DashboardNotification[]}
-        />
+        <NotificationsInbox notifications={notifications} />
       </div>
     </main>
   )

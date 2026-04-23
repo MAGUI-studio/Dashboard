@@ -8,3 +8,21 @@ services:
     env_file:
       - .env
     restart: always
+    depends_on:
+      - db
+
+  db:
+    image: postgres:17-alpine
+    container_name: dashboard_magui_db
+    restart: always
+    environment:
+      POSTGRES_USER: magui
+      POSTGRES_PASSWORD: magui_pass
+      POSTGRES_DB: dashboard_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

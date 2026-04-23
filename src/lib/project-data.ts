@@ -166,7 +166,9 @@ export const getAdminProjectTimeline = (id: string) =>
         include: {
           attachments: true,
           approvalEvents: {
-            include: { actor: { select: { id: true, name: true } } },
+            include: {
+              actor: { select: { id: true, name: true, role: true } },
+            },
             orderBy: { createdAt: "desc" },
           },
         },

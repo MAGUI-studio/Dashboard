@@ -4,7 +4,6 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { DashboardNotification } from "@/src/types/dashboard"
 import { ArrowUpRight, BellRinging, Check } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -13,8 +12,21 @@ import { cn, formatLocalTime } from "@/src/lib/utils/utils"
 
 import { Button } from "../ui/button"
 
+type NotificationsInboxItem = {
+  id: string
+  title: string
+  message: string
+  ctaPath: string | null
+  readAt: Date | string | null
+  createdAt: Date | string
+  project?: {
+    id: string
+    name: string
+  } | null
+}
+
 interface NotificationsInboxProps {
-  notifications: DashboardNotification[]
+  notifications: NotificationsInboxItem[]
 }
 
 export function NotificationsInbox({

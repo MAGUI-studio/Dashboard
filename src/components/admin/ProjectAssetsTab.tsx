@@ -19,8 +19,7 @@ export function ProjectAssetsTab({ projectId, assets }: ProjectAssetsTabProps) {
       <h3 className="mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
         {t("assets_manage_button")}
       </h3>
-      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-      <AssetManagement projectId={projectId} assets={assets as any} />
+      <AssetManagement projectId={projectId} assets={assets} />
     </section>
   )
 }
