@@ -199,12 +199,6 @@ async function getReminderCandidates(): Promise<ReminderCandidate[]> {
 export async function syncOperationalReminders(options?: {
   revalidate?: boolean
 }): Promise<void> {
-  const scheduledReminder = getScheduledReminderDelegate()
-
-  if (!scheduledReminder) {
-    return
-  }
-
   const internalRecipients = await getInternalNotificationRecipients()
 
   if (internalRecipients.length === 0) {
@@ -373,13 +367,7 @@ export async function syncOperationalReminders(options?: {
 }
 
 export async function getActiveScheduledReminders(recipientUserId: string) {
-  const scheduledReminder = getScheduledReminderDelegate()
-
-  if (!scheduledReminder) {
-    return []
-  }
-
-  return (await scheduledReminder.findMany({
+  return (await prisma.scheduledReminder.findMany({
     where: {
       recipientUserId,
       status: {
