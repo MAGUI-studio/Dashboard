@@ -18,6 +18,7 @@ import prisma from "@/src/lib/prisma"
 import {
   createAuditLog,
   createNotification,
+  createNotificationsMany,
   getAuditOriginLabel,
   getCurrentAppUser,
   getInternalNotificationRecipients,
@@ -57,25 +58,30 @@ export async function deleteProjectAssetAction(
 
     await utapi.deleteFiles(key)
 
-    await prisma.asset.delete({
-      where: { id },
-    })
+    await prisma.$transaction(async (tx) => {
+      await tx.asset.delete({
+        where: { id },
+      })
 
-    await createAuditLog({
-      action: "asset.deleted",
-      entityType: "Asset",
-      entityId: asset.id,
-      projectId,
-      summary: `Arquivo ${asset.name} removido de ${asset.project.name}.`,
-      metadata: {
-        before: {
-          name: asset.name,
-          type: asset.type,
-          visibility: asset.visibility,
-          origin: asset.origin,
-          key: asset.key,
+      await createAuditLog(
+        {
+          action: "asset.deleted",
+          entityType: "Asset",
+          entityId: asset.id,
+          projectId,
+          summary: `Arquivo ${asset.name} removido de ${asset.project.name}.`,
+          metadata: {
+            before: {
+              name: asset.name,
+              type: asset.type,
+              visibility: asset.visibility,
+              origin: asset.origin,
+              key: asset.key,
+            },
+          },
         },
-      },
+        tx
+      )
     })
 
     revalidatePath(`/admin/projects/${projectId}`)
@@ -102,53 +108,60 @@ export async function updateProjectAssetAction(input: {
   }
 
   try {
-    const current = await prisma.asset.findUnique({
-      where: { id: input.id },
-      include: {
-        project: {
-          select: {
-            id: true,
-            name: true,
+    await prisma.$transaction(async (tx) => {
+      const current = await tx.asset.findUnique({
+        where: { id: input.id },
+        include: {
+          project: {
+            select: {
+              id: true,
+              name: true,
+            },
           },
         },
-      },
-    })
+      })
 
-    if (!current || current.projectId !== input.projectId) {
-      return { error: "Arquivo nao encontrado" }
-    }
+      if (!current || current.projectId !== input.projectId) {
+        throw new Error("Arquivo nao encontrado")
+      }
 
-    const updated = await prisma.asset.update({
-      where: { id: input.id },
-      data: {
-        name: input.name.trim(),
-        type: input.type,
-        visibility: input.visibility,
-      },
-    })
-
-    const visibilityChanged = current.visibility !== updated.visibility
-
-    await createAuditLog({
-      action: visibilityChanged ? "asset.visibility_changed" : "asset.updated",
-      entityType: "Asset",
-      entityId: updated.id,
-      projectId: input.projectId,
-      summary: visibilityChanged
-        ? `Visibilidade do arquivo ${updated.name} alterada em ${current.project.name}.`
-        : `Arquivo ${updated.name} atualizado em ${current.project.name}.`,
-      metadata: {
-        before: {
-          name: current.name,
-          type: current.type,
-          visibility: current.visibility,
+      const updatedAsset = await tx.asset.update({
+        where: { id: input.id },
+        data: {
+          name: input.name.trim(),
+          type: input.type,
+          visibility: input.visibility,
         },
-        after: {
-          name: updated.name,
-          type: updated.type,
-          visibility: updated.visibility,
+      })
+
+      const visibilityChanged = current.visibility !== updatedAsset.visibility
+
+      await createAuditLog(
+        {
+          action: visibilityChanged
+            ? "asset.visibility_changed"
+            : "asset.updated",
+          entityType: "Asset",
+          entityId: updatedAsset.id,
+          projectId: input.projectId,
+          summary: visibilityChanged
+            ? `Visibilidade do arquivo ${updatedAsset.name} alterada em ${current.project.name}.`
+            : `Arquivo ${updatedAsset.name} atualizado em ${current.project.name}.`,
+          metadata: {
+            before: {
+              name: current.name,
+              type: current.type,
+              visibility: current.visibility,
+            },
+            after: {
+              name: updatedAsset.name,
+              type: updatedAsset.type,
+              visibility: updatedAsset.visibility,
+            },
+          },
         },
-      },
+        tx
+      )
     })
 
     revalidatePath(`/admin/projects/${input.projectId}`)
@@ -157,7 +170,10 @@ export async function updateProjectAssetAction(input: {
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Update Asset Error:")
-    return { error: "Erro ao atualizar arquivo" }
+    return {
+      error:
+        error instanceof Error ? error.message : "Erro ao atualizar arquivo",
+    }
   }
 }
 
@@ -175,100 +191,109 @@ export async function createProjectAssetAction(data: {
     const actor = await getCurrentAppUser()
     const isClient = actor?.role === UserRole.CLIENT
 
-    const project = await prisma.project.findUnique({
-      where: { id: data.projectId },
-      select: {
-        id: true,
-        name: true,
-        clientId: true,
-      },
-    })
+    await prisma.$transaction(async (tx) => {
+      const project = await tx.project.findUnique({
+        where: { id: data.projectId },
+        select: {
+          id: true,
+          name: true,
+          clientId: true,
+        },
+      })
 
-    if (!project) {
-      return { error: "Projeto não encontrado" }
-    }
+      if (!project) {
+        throw new Error("Projeto não encontrado")
+      }
 
-    const lastAsset = await prisma.asset.findFirst({
-      where: { projectId: data.projectId },
-      orderBy: { order: "desc" },
-    })
+      const lastAsset = await tx.asset.findFirst({
+        where: { projectId: data.projectId },
+        orderBy: { order: "desc" },
+      })
 
-    const nextOrder = lastAsset ? lastAsset.order + 1 : 0
+      const nextOrder = lastAsset ? lastAsset.order + 1 : 0
 
-    const asset = await prisma.asset.create({
-      data: {
-        projectId: data.projectId,
-        name: data.name,
-        url: data.url,
-        key: data.key,
-        type: data.type,
-        timezone: data.timezone || "America/Sao_Paulo",
-        order: nextOrder,
-        origin:
-          data.origin || (isClient ? AssetOrigin.CLIENT : AssetOrigin.ADMIN),
-        visibility: data.visibility || AssetVisibility.CLIENT,
-      },
-    })
+      const asset = await tx.asset.create({
+        data: {
+          projectId: data.projectId,
+          name: data.name,
+          url: data.url,
+          key: data.key,
+          type: data.type,
+          timezone: data.timezone || "America/Sao_Paulo",
+          order: nextOrder,
+          origin:
+            data.origin || (isClient ? AssetOrigin.CLIENT : AssetOrigin.ADMIN),
+          visibility: data.visibility || AssetVisibility.CLIENT,
+        },
+      })
 
-    await Promise.all([
-      createAuditLog({
-        action: "asset.created",
-        entityType: "Asset",
-        entityId: asset.id,
-        summary: `Arquivo ${asset.name} enviado para ${project.name} por ${isClient ? "cliente" : "admin"}.`,
-        actorId: actor?.id,
-        actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-        projectId: data.projectId,
-        metadata: {
-          origin: getAuditOriginLabel({
-            actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-            role: actor?.role,
-          }),
-          type: asset.type,
-          assetOrigin: asset.origin,
-          visibility: asset.visibility,
-          after: {
+      await createAuditLog(
+        {
+          action: "asset.created",
+          entityType: "Asset",
+          entityId: asset.id,
+          summary: `Arquivo ${asset.name} enviado para ${project.name} por ${isClient ? "cliente" : "admin"}.`,
+          actorId: actor?.id,
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          projectId: data.projectId,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+              role: actor?.role,
+            }),
             type: asset.type,
             assetOrigin: asset.origin,
             visibility: asset.visibility,
-            order: asset.order,
+            after: {
+              type: asset.type,
+              assetOrigin: asset.origin,
+              visibility: asset.visibility,
+              order: asset.order,
+            },
+            relatedEntities: [
+              {
+                type: "Project",
+                id: project.id,
+                label: project.name,
+              },
+              {
+                type: "Asset",
+                id: asset.id,
+                label: asset.name,
+              },
+            ],
           },
-          relatedEntities: [
-            {
-              type: "Project",
-              id: project.id,
-              label: project.name,
-            },
-            {
-              type: "Asset",
-              id: asset.id,
-              label: asset.name,
-            },
-          ],
         },
-      }),
-      ...(isClient
-        ? (await getInternalNotificationRecipients()).map((admin) =>
-            createNotification({
-              userId: admin.id,
-              projectId: data.projectId,
-              type: NotificationType.ASSET_UPLOADED,
-              title: "Cliente enviou novo arquivo",
-              message: `${actor?.name || "O cliente"} enviou "${asset.name}" para o projeto ${project.name}.`,
-              ctaPath: `/admin/projects/${data.projectId}/assets`,
-            })
-          )
-        : [
-            createNotification({
-              userId: project.clientId,
-              projectId: data.projectId,
-              type: NotificationType.ASSET_UPLOADED,
-              title: "Novo arquivo disponível",
-              message: `${asset.name} foi adicionado ao repositório do projeto ${project.name}.`,
-              ctaPath: getDashboardPath(data.projectId),
-            }),
-          ]),
-    ])
+        tx
+      )
+
+      if (isClient) {
+        const admins = await getInternalNotificationRecipients()
+        await createNotificationsMany(
+          admins.map((admin) => ({
+            userId: admin.id,
+            projectId: data.projectId,
+            type: NotificationType.ASSET_UPLOADED,
+            title: "Cliente enviou novo arquivo",
+            message: `${actor?.name || "O cliente"} enviou "${asset.name}" para o projeto ${project.name}.`,
+            ctaPath: `/admin/projects/${data.projectId}/assets`,
+          })),
+          tx
+        )
+      } else {
+        await createNotification(
+          {
+            userId: project.clientId,
+            projectId: data.projectId,
+            type: NotificationType.ASSET_UPLOADED,
+            title: "Novo arquivo disponível",
+            message: `${asset.name} foi adicionado ao repositório do projeto ${project.name}.`,
+            ctaPath: getDashboardPath(data.projectId),
+          },
+          tx
+        )
+      }
+    })
 
     revalidatePath(`/admin/projects/${data.projectId}`)
     revalidatePath(`/admin/projects/${data.projectId}/assets`)
@@ -277,7 +302,10 @@ export async function createProjectAssetAction(data: {
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Create Asset Error:")
-    return { error: "Erro ao registrar arquivo" }
+    return {
+      error:
+        error instanceof Error ? error.message : "Erro ao registrar arquivo",
+    }
   }
 }
 

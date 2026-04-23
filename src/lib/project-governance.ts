@@ -97,18 +97,21 @@ function splitClientName(name: string): {
   return { firstName, lastName }
 }
 
-export async function findOrCreateClientFromEmail(input: {
-  email: string
-  name?: string | null
-  companyName?: string | null
-}) {
+export async function findOrCreateClientFromEmail(
+  input: {
+    email: string
+    name?: string | null
+    companyName?: string | null
+  },
+  tx: Prisma.TransactionClient = prisma
+) {
   const email = input.email.trim().toLowerCase()
 
   if (!email) {
     throw new Error("Client email is required")
   }
 
-  const localUser = await prisma.user.findUnique({
+  const localUser = await tx.user.findUnique({
     where: { email },
   })
 
@@ -135,23 +138,22 @@ export async function findOrCreateClientFromEmail(input: {
       },
     })
 
-    const syncedUser = await upsertUserFromClerk(existingClerkUser.id)
-
-    if (syncedUser.role !== UserRole.CLIENT) {
-      return prisma.user.update({
-        where: { id: syncedUser.id },
-        data: { role: UserRole.CLIENT, companyName: input.companyName ?? null },
-      })
+    const userData = {
+      email,
+      name: input.name?.trim() || existingClerkUser.fullName || email,
+      role: UserRole.CLIENT,
+      avatarUrl: existingClerkUser.imageUrl ?? null,
+      companyName: input.companyName ?? null,
     }
 
-    if (input.companyName && !syncedUser.companyName) {
-      return prisma.user.update({
-        where: { id: syncedUser.id },
-        data: { companyName: input.companyName },
-      })
-    }
-
-    return syncedUser
+    return tx.user.upsert({
+      where: { clerkId: existingClerkUser.id },
+      update: userData,
+      create: {
+        clerkId: existingClerkUser.id,
+        ...userData,
+      },
+    })
   }
 
   const displayName = input.name?.trim() || input.companyName?.trim() || email
@@ -163,7 +165,7 @@ export async function findOrCreateClientFromEmail(input: {
     publicMetadata: { role: "client" },
   })
 
-  return prisma.user.create({
+  return tx.user.create({
     data: {
       clerkId: clerkUser.id,
       email,
@@ -258,6 +260,37 @@ export async function ensureProjectAccess(
   return { user, project }
 }
 
+export async function writeAuditAndNotifications(
+  tx: Prisma.TransactionClient,
+  data: {
+    audit: {
+      action: string
+      entityType: string
+      entityId: string
+      summary: string
+      metadata?: Prisma.InputJsonValue
+      actorId?: string | null
+      actorType?: AuditActorType
+      projectId?: string | null
+    }
+    notifications?: Array<{
+      userId: string
+      type: NotificationType
+      title: string
+      message: string
+      ctaPath?: string | null
+      metadata?: Prisma.InputJsonValue
+      projectId?: string | null
+    }>
+  }
+) {
+  await createAuditLog(data.audit, tx)
+
+  if (data.notifications && data.notifications.length > 0) {
+    await createNotificationsMany(data.notifications, tx)
+  }
+}
+
 export async function createAuditLog(
   data: {
     action: string
@@ -269,9 +302,7 @@ export async function createAuditLog(
     actorType?: AuditActorType
     projectId?: string | null
   },
-  tx: {
-    auditLog: { create: (args: Prisma.AuditLogCreateArgs) => Promise<unknown> }
-  } = prisma
+  tx: Prisma.TransactionClient = prisma
 ) {
   await tx.auditLog.create({
     data: {

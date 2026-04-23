@@ -112,7 +112,7 @@ export async function updateLeadStatus(
     await prisma.$transaction(async (tx) => {
       const oldLead = await tx.lead.findUnique({
         where: { id },
-        select: { status: true },
+        select: { status: true, companyName: true },
       })
 
       if (!oldLead) throw new Error("Lead not found")
@@ -134,7 +134,7 @@ export async function updateLeadStatus(
           leadId: id,
           type: LeadActivityType.STATUS_CHANGED,
           title: `Status alterado para ${status}`,
-          content: `O lead foi movido de ${oldLead.status} para ${status}.`,
+          content: `Lead "${oldLead.companyName}" movido de ${oldLead.status} para ${status}.`,
           metadata: { from: oldLead.status, to: status },
           authorId: actor?.id,
         },
@@ -200,9 +200,32 @@ export async function deleteLead(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await protect("admin")
+    const actor = await getCurrentAppUser()
 
-    await prisma.lead.delete({
+    const lead = await prisma.lead.findUnique({
       where: { id },
+      select: { companyName: true },
+    })
+
+    if (!lead) return { success: false, error: "Lead not found" }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.lead.delete({
+        where: { id },
+      })
+
+      await createAuditLog(
+        {
+          action: "lead.deleted",
+          entityType: "Lead",
+          entityId: id,
+          summary: `Lead da empresa ${lead.companyName} deletado.`,
+          actorId: actor?.id,
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          metadata: { companyName: lead.companyName },
+        },
+        tx
+      )
     })
 
     revalidateCrmPaths()
@@ -282,37 +305,42 @@ export async function convertLeadToProjectAction(input: {
 
     if (!lead) return { success: false, error: "Lead not found" }
 
-    let finalUserId = input.userId
+    const result = await prisma.$transaction(async (tx) => {
+      let finalUserId = input.userId
 
-    if (!finalUserId && input.newUserData) {
-      const email = input.newUserData.email || lead.email
+      if (!finalUserId && input.newUserData) {
+        const email = input.newUserData.email || lead.email
 
-      if (!email) {
-        return { success: false, error: "Client email must be provided." }
+        if (!email) {
+          throw new Error("Client email must be provided.")
+        }
+
+        const clientUser = await findOrCreateClientFromEmail(
+          {
+            email,
+            name:
+              input.newUserData.name || lead.contactName || lead.companyName,
+            companyName: lead.companyName,
+          },
+          tx
+        )
+
+        finalUserId = clientUser.id
+
+        await createAuditLog(
+          {
+            action: "client.created_from_lead",
+            entityType: "User",
+            entityId: clientUser.id,
+            summary: `Cliente ${clientUser.email} sincronizado a partir do lead ${lead.companyName}.`,
+            metadata: { leadId: lead.id, email: clientUser.email },
+          },
+          tx
+        )
       }
 
-      const clientUser = await findOrCreateClientFromEmail({
-        email,
-        name: input.newUserData.name || lead.contactName || lead.companyName,
-        companyName: lead.companyName,
-      })
+      if (!finalUserId) throw new Error("Client must be selected.")
 
-      finalUserId = clientUser.id
-
-      await createAuditLog({
-        action: "client.created_from_lead",
-        entityType: "User",
-        entityId: clientUser.id,
-        summary: `Cliente ${clientUser.email} sincronizado a partir do lead ${lead.companyName}.`,
-        metadata: { leadId: lead.id, email: clientUser.email },
-      })
-    }
-
-    if (!finalUserId)
-      return { success: false, error: "Client must be selected." }
-
-    const finalActorId = finalUserId
-    const result = await prisma.$transaction(async (tx) => {
       const project = await tx.project.create({
         data: {
           name: input.projectData.name,
@@ -321,7 +349,7 @@ export async function convertLeadToProjectAction(input: {
           deadline: input.projectData.deadline
             ? new Date(input.projectData.deadline)
             : null,
-          clientId: finalActorId,
+          clientId: finalUserId,
           status: ProjectStatus.STRATEGY,
           progress: 0,
           description: lead.notes,
@@ -369,7 +397,10 @@ export async function convertLeadToProjectAction(input: {
     return { success: true, projectId: result.id }
   } catch (error) {
     logger.error({ error }, "Convert Lead Error")
-    return { success: false, error: "Failed to convert lead" }
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to convert lead",
+    }
   }
 }
 

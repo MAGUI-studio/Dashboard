@@ -289,8 +289,38 @@ export async function deleteProjectAction(
   }
 
   try {
-    await prisma.project.delete({
+    const actor = await getCurrentAppUser()
+    const project = await prisma.project.findUnique({
       where: { id },
+      select: { name: true },
+    })
+
+    if (!project) {
+      return { error: "Projeto não encontrado" }
+    }
+
+    await prisma.$transaction(async (tx) => {
+      await tx.project.delete({
+        where: { id },
+      })
+
+      await tx.auditLog.create({
+        data: {
+          action: "project.deleted",
+          entityType: "Project",
+          entityId: id,
+          summary: `Projeto ${project.name} deletado.`,
+          actorId: actor?.id,
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+              role: actor?.role,
+            }),
+            projectName: project.name,
+          },
+        },
+      })
     })
 
     revalidatePath("/admin/projects")
