@@ -54,17 +54,6 @@ const approvalStatusLabels: Record<ApprovalStatus, string> = {
   REJECTED: "Reprovado",
 }
 
-function toCsvCell(value: unknown): string {
-  if (value === null || value === undefined) {
-    return ""
-  }
-
-  const normalized =
-    value instanceof Date ? value.toISOString() : String(value).trim()
-
-  return `"${normalized.replace(/"/g, '""')}"`
-}
-
 function toBrazilianDate(value: Date | string | null | undefined): string {
   if (!value) return ""
 
@@ -1117,99 +1106,6 @@ export async function createBriefingNoteAction(input: {
   } catch (error) {
     logger.error({ error }, "Create Briefing Note Error:")
     return { error: "Erro ao adicionar nota de briefing" }
-  }
-}
-
-export async function exportProjectApprovalsCsvAction(
-  projectId: string
-): Promise<{
-  success: boolean
-  filename?: string
-  csv?: string
-  error?: string
-}> {
-  try {
-    await protect("admin")
-
-    const project = await prisma.project.findUnique({
-      where: { id: projectId },
-      select: { id: true, name: true },
-    })
-
-    if (!project) {
-      return { success: false, error: "Projeto não encontrado" }
-    }
-
-    const events = await prisma.approvalEvent.findMany({
-      where: {
-        update: {
-          projectId,
-        },
-      },
-      include: {
-        actor: {
-          select: {
-            name: true,
-            email: true,
-            role: true,
-          },
-        },
-        update: {
-          select: {
-            title: true,
-            approvalStatus: true,
-            requiresApproval: true,
-          },
-        },
-      },
-      orderBy: { createdAt: "desc" },
-    })
-
-    const headers = [
-      "Projeto",
-      "Entrega",
-      "Decisão",
-      "Comentário",
-      "Responsável",
-      "Email",
-      "Perfil",
-      "Status atual",
-      "Data",
-    ]
-
-    const rows = events.map((event) => [
-      project.name,
-      event.update.title,
-      approvalStatusLabels[event.decision],
-      event.comment,
-      event.actor?.name ?? "Sistema",
-      event.actor?.email ?? "",
-      event.actor?.role ?? "",
-      approvalStatusLabels[event.update.approvalStatus],
-      toBrazilianDate(event.createdAt),
-    ])
-
-    const csv = [
-      headers.map(toCsvCell).join(","),
-      ...rows.map((row) => row.map(toCsvCell).join(",")),
-    ].join("\r\n")
-
-    const safeProjectName = project.name
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/[^a-zA-Z0-9]+/g, "-")
-      .replace(/^-|-$/g, "")
-      .toLowerCase()
-    const date = new Date().toISOString().slice(0, 10)
-
-    return {
-      success: true,
-      filename: `aprovacoes-${safeProjectName || project.id}-${date}.csv`,
-      csv: `\uFEFF${csv}`,
-    }
-  } catch (error) {
-    logger.error({ error }, "Export Project Approvals CSV Error")
-    return { success: false, error: "Erro ao exportar aprovações" }
   }
 }
 
