@@ -27,10 +27,14 @@ type NotificationsInboxItem = {
 
 interface NotificationsInboxProps {
   notifications: NotificationsInboxItem[]
+  totalPages?: number
+  currentPage?: number
 }
 
 export function NotificationsInbox({
   notifications,
+  totalPages = 1,
+  currentPage = 1,
 }: NotificationsInboxProps): React.JSX.Element {
   const t = useTranslations("Notifications")
   const [isSubmitting, startTransition] = React.useTransition()
@@ -163,6 +167,40 @@ export function NotificationsInbox({
           </div>
         ))}
       </div>
+
+      {totalPages > 1 && (
+        <div className="mt-10 flex items-center justify-center gap-4 border-t border-border/10 pt-8">
+          <Button
+            asChild
+            variant="outline"
+            disabled={currentPage <= 1}
+            className="rounded-full border-border/40 px-6 text-[10px] font-black uppercase tracking-[0.2em]"
+          >
+            {currentPage <= 1 ? (
+              <span>Anterior</span>
+            ) : (
+              <a href={`?page=${currentPage - 1}`}>Anterior</a>
+            )}
+          </Button>
+
+          <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+            Pagina {currentPage} de {totalPages}
+          </span>
+
+          <Button
+            asChild
+            variant="outline"
+            disabled={currentPage >= totalPages}
+            className="rounded-full border-border/40 px-6 text-[10px] font-black uppercase tracking-[0.2em]"
+          >
+            {currentPage >= totalPages ? (
+              <span>Proxima</span>
+            ) : (
+              <a href={`?page=${currentPage + 1}`}>Proxima</a>
+            )}
+          </Button>
+        </div>
+      )}
     </section>
   )
 }

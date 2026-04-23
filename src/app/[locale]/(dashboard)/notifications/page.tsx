@@ -15,23 +15,41 @@ export const metadata = dashboardMetadata({
   path: "/notifications",
 })
 
-export default async function NotificationsPage(): Promise<React.JSX.Element> {
-  const { userId } = await auth()
+interface NotificationsPageProps {
+  searchParams: Promise<{ page?: string }>
+}
 
-  if (!userId) return <div />
+export default async function NotificationsPage({
+  searchParams,
+}: NotificationsPageProps): Promise<React.JSX.Element> {
+  const { userId: clerkId } = await auth()
+
+  if (!clerkId) return <div />
+
+  const { page } = await searchParams
+  const currentPage = Number(page) || 1
 
   const user = await prisma.user.findUnique({
-    where: { clerkId: userId },
+    where: { clerkId },
+    select: { id: true },
   })
 
   if (!user) return <div />
 
-  const notifications = await getClientNotifications(user.id)
+  const { notifications, totalPages } = await getClientNotifications(
+    user.id,
+    currentPage,
+    50
+  )
 
   return (
     <main className="relative flex flex-col overflow-hidden bg-background/50 p-6 lg:p-12">
       <div className="mx-auto w-full max-w-5xl">
-        <NotificationsInbox notifications={notifications} />
+        <NotificationsInbox
+          notifications={notifications}
+          totalPages={totalPages}
+          currentPage={currentPage}
+        />
       </div>
     </main>
   )

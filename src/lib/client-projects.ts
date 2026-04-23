@@ -330,21 +330,31 @@ export const getClientProjectBriefing = (id: string, userId: string) =>
     }
   )()
 
-export const getClientNotificationsCached = unstable_cache(
-  async (userId: string) => {
-    return prisma.notification.findMany({
-      where: { userId },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-    })
-  },
-  ["client-notifications"],
-  { revalidate: 60 }
-)
-
-export const getClientNotifications = (userId: string) =>
+const getClientNotificationsCached = (
+  userId: string,
+  page: number = 1,
+  limit: number = 50
+) =>
   unstable_cache(
-    async () => getClientNotificationsCached(userId),
-    ["client-notifications", userId],
+    async () => {
+      const skip = (page - 1) * limit
+      const [notifications, totalCount] = await Promise.all([
+        prisma.notification.findMany({
+          where: { userId },
+          orderBy: { createdAt: "desc" },
+          skip,
+          take: limit,
+        }),
+        prisma.notification.count({ where: { userId } }),
+      ])
+      return {
+        notifications,
+        totalCount,
+        totalPages: Math.ceil(totalCount / limit),
+      }
+    },
+    ["client-notifications", userId, page.toString(), limit.toString()],
     { revalidate: 60, tags: [cacheTags.clientNotifications] }
   )()
+
+export const getClientNotifications = getClientNotificationsCached

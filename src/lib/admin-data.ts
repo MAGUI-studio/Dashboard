@@ -6,11 +6,14 @@ import {
   ApprovalStatus,
   LeadStatus,
   ProjectStatus,
+  ScheduledReminderStatus,
   UserRole,
 } from "@/src/generated/client/enums"
 
 import { cacheTags } from "@/src/lib/cache-tags"
 import prisma from "@/src/lib/prisma"
+import { getLeadHealth } from "@/src/lib/utils/lead-health"
+import { getProjectHealth } from "@/src/lib/utils/project-health"
 
 import { CACHE_TTL } from "@/src/config/cache"
 
@@ -54,10 +57,10 @@ const getAdminDashboardSummaryCached = (userId: string) =>
     async () => {
       const [
         totalClients,
-        activeProjects,
-        pendingApprovals,
-        activeLeads,
-        unreadNotifications,
+        activeProjectsCount,
+        pendingApprovalsCount,
+        activeLeadsCount,
+        unreadNotificationsCount,
       ] = await Promise.all([
         prisma.user.count({ where: { role: UserRole.CLIENT } }),
         prisma.project.count({
@@ -77,10 +80,10 @@ const getAdminDashboardSummaryCached = (userId: string) =>
 
       return {
         totalClients,
-        activeProjects,
-        pendingApprovals,
-        activeLeads,
-        unreadNotifications,
+        activeProjectsCount,
+        pendingApprovalsCount,
+        activeLeadsCount,
+        unreadNotificationsCount,
       }
     },
     ["admin-dashboard-summary", userId],
@@ -148,7 +151,6 @@ const getAdminDashboardAttentionCached = unstable_cache(
       }),
     ])
 
-    // Filter projects without updates for > 8 days
     const projectsNeedingUpdates = silentProjects
       .filter((p) => {
         const lastUpdateAt = p.updates[0]?.createdAt ?? p.updatedAt
@@ -273,7 +275,6 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       }),
     ])
 
-    // Calculate Average Approval Time via raw SQL for performance
     const avgApprovalResult = await prisma.$queryRaw<
       Array<{ avg_hours: number | null }>
     >`
@@ -283,7 +284,9 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       WHERE "approvalStatus" = 'APPROVED' AND "approvedAt" IS NOT NULL
     `
 
-    const averageApprovalHours = Number(avgApprovalResult[0]?.avg_hours ?? 0)
+    const averageApprovalHours = Math.round(
+      Number(avgApprovalResult[0]?.avg_hours ?? 0)
+    )
 
     const projectDistribution = Object.values(ProjectStatus).map((status) => ({
       label: status,
@@ -299,6 +302,30 @@ const getAdminDashboardPerformanceCached = unstable_cache(
           ._all ?? 0,
     }))
 
+    const silentProjects = await prisma.project.findMany({
+      where: {
+        status: { not: ProjectStatus.LAUNCHED },
+        updatedAt: { lt: new Date(Date.now() - 5 * 86_400_000) },
+      },
+      select: {
+        id: true,
+        name: true,
+        updatedAt: true,
+        client: { select: { name: true, email: true } },
+      },
+      orderBy: { updatedAt: "asc" },
+      take: 4,
+    })
+
+    const mappedSilentProjects = silentProjects.map((p) => ({
+      id: p.id,
+      name: p.name,
+      clientName: p.client.name || p.client.email,
+      daysWithoutUpdate: Math.floor(
+        (Date.now() - p.updatedAt.getTime()) / 86_400_000
+      ),
+    }))
+
     return {
       averageApprovalHours,
       activeProjectsCount,
@@ -306,6 +333,7 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       stagnantLeadsCount,
       projectDistribution,
       leadDistribution,
+      silentProjects: mappedSilentProjects,
     }
   },
   ["admin-dashboard-performance"],
@@ -318,64 +346,88 @@ export const getAdminDashboardPerformance = cache(
 
 const getAdminDashboardHealthCached = unstable_cache(
   async () => {
-    const [activeProjects, activeLeads] = await Promise.all([
+    const [projects, leads] = await Promise.all([
       prisma.project.findMany({
         where: { status: { not: ProjectStatus.LAUNCHED } },
-        select: {
-          id: true,
-          name: true,
-          status: true,
-          progress: true,
-          deadline: true,
-          updatedAt: true,
+        include: {
           client: { select: { name: true, email: true } },
           updates: {
             select: { createdAt: true },
             orderBy: { createdAt: "desc" },
             take: 1,
           },
-          _count: {
-            select: {
-              updates: {
-                where: {
-                  requiresApproval: true,
-                  approvalStatus: ApprovalStatus.PENDING,
-                },
-              },
-              actionItems: {
-                where: {
-                  status: { not: "COMPLETED" },
-                  dueDate: { lt: new Date() },
-                },
-              },
-            },
+          actionItems: {
+            where: { status: { not: "COMPLETED" } },
+            select: { dueDate: true, status: true },
           },
         },
-        orderBy: { updatedAt: "desc" },
         take: 10,
+        orderBy: { updatedAt: "desc" },
       }),
       prisma.lead.findMany({
         where: { status: { not: LeadStatus.CONVERTIDO } },
-        select: {
-          id: true,
-          companyName: true,
-          contactName: true,
-          email: true,
-          phone: true,
-          instagram: true,
-          website: true,
-          status: true,
-          source: true,
-          createdAt: true,
-          updatedAt: true,
-          lastContactAt: true,
-        },
         orderBy: { updatedAt: "desc" },
         take: 10,
       }),
     ])
 
-    return { activeProjects, activeLeads }
+    const today = new Date()
+
+    const projectHealth = projects
+      .map((project) => {
+        const pendingApprovalCount = 0 // Optimized out of this view for now
+        const overdueActionItemCount = project.actionItems.filter(
+          (item) => item.dueDate && item.dueDate < today
+        ).length
+
+        const health = getProjectHealth({
+          status: project.status,
+          progress: project.progress,
+          deadline: project.deadline,
+          updatedAt: project.updatedAt,
+          lastUpdateAt: project.updates[0]?.createdAt ?? null,
+          pendingApprovalCount,
+          overdueActionItemCount,
+        })
+
+        return {
+          id: project.id,
+          name: project.name,
+          clientName: project.client.name || project.client.email,
+          progress: project.progress,
+          ...health,
+        }
+      })
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 5)
+
+    const commercialHealth = leads
+      .map((lead) => {
+        const health = getLeadHealth({
+          status: lead.status,
+          source: lead.source,
+          createdAt: lead.createdAt,
+          updatedAt: lead.updatedAt,
+          lastContactAt: lead.lastContactAt,
+          contactName: lead.contactName,
+          email: lead.email,
+          phone: lead.phone,
+          instagram: lead.instagram,
+          website: lead.website,
+        })
+
+        return {
+          id: lead.id,
+          companyName: lead.companyName,
+          contactName: lead.contactName,
+          statusLabel: lead.status,
+          ...health,
+        }
+      })
+      .sort((a, b) => a.score - b.score)
+      .slice(0, 5)
+
+    return { projectHealth, commercialHealth }
   },
   ["admin-dashboard-health"],
   { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
@@ -399,7 +451,7 @@ const getAdminDashboardRecentUpdatesCached = unstable_cache(
     })
   },
   ["admin-dashboard-recent-updates"],
-  { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }
+  { revalidate: CACHE_TTL.ACTIVITY_FEED, tags: [cacheTags.adminDashboard] }
 )
 
 export const getAdminDashboardRecentUpdates = cache(
@@ -431,4 +483,21 @@ const getAdminDashboardDueActionItemsCached = unstable_cache(
 
 export const getAdminDashboardDueActionItems = cache(
   getAdminDashboardDueActionItemsCached
+)
+
+export const getAdminDashboardReminders = unstable_cache(
+  async (userId: string) => {
+    return prisma.scheduledReminder.findMany({
+      where: {
+        recipientUserId: userId,
+        status: {
+          in: [ScheduledReminderStatus.PENDING, ScheduledReminderStatus.SENT],
+        },
+      },
+      orderBy: [{ scheduledFor: "asc" }, { createdAt: "asc" }],
+      take: 8,
+    })
+  },
+  ["admin-dashboard-reminders"],
+  { revalidate: 60, tags: [cacheTags.adminDashboard] }
 )
