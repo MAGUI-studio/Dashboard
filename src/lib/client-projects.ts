@@ -50,6 +50,65 @@ export const getClientHomeData = (userId: string) =>
     }
   )()
 
+export const getClientHomePending = (userId: string) =>
+  unstable_cache(
+    async () => {
+      const projects = await prisma.project.findMany({
+        where: { clientId: userId },
+        select: {
+          id: true,
+          name: true,
+          _count: {
+            select: {
+              updates: {
+                where: {
+                  requiresApproval: true,
+                  approvalStatus: ApprovalStatus.PENDING,
+                },
+              },
+              actionItems: {
+                where: {
+                  status: "PENDING",
+                  targetRole: "CLIENT",
+                },
+              },
+            },
+          },
+        },
+      })
+
+      return projects.filter(
+        (p) => p._count.updates > 0 || p._count.actionItems > 0
+      )
+    },
+    ["client-home-pending", userId],
+    {
+      revalidate: CACHE_TTL.NOTIFICATIONS,
+      tags: [cacheTags.clientPendingApprovals, cacheTags.clientHome],
+    }
+  )()
+
+export const getClientHomeActivity = (userId: string) =>
+  unstable_cache(
+    async () => {
+      return prisma.auditLog.findMany({
+        where: {
+          project: { clientId: userId },
+        },
+        include: {
+          project: { select: { id: true, name: true } },
+        },
+        orderBy: { createdAt: "desc" },
+        take: 10,
+      })
+    },
+    ["client-home-activity", userId],
+    {
+      revalidate: CACHE_TTL.ACTIVITY_FEED,
+      tags: [cacheTags.clientHome],
+    }
+  )()
+
 export const getClientProjectsCached = unstable_cache(
   async (userId: string) => {
     return prisma.project.findMany({

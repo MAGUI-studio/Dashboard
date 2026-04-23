@@ -7,6 +7,7 @@ import { UserRole } from "@/src/generated/client/enums"
 import { Link } from "@/src/i18n/navigation"
 import { ClientHomeData } from "@/src/types/client-portal"
 import { auth, currentUser } from "@clerk/nextjs/server"
+import { FolderOpen } from "@phosphor-icons/react/dist/ssr"
 
 import { Button } from "@/src/components/ui/button"
 
@@ -135,10 +136,45 @@ export default async function DashboardPage({
 
   if (clientData.projects.length === 0) {
     return (
-      <main className="flex flex-col items-center justify-center p-6 text-center">
-        <h2 className="font-heading text-2xl font-black uppercase tracking-tight opacity-20">
-          {t("no_project")}
-        </h2>
+      <main className="relative flex min-h-[80vh] flex-col items-center justify-center bg-background/50 px-5 py-10 sm:px-6 lg:px-12">
+        <div className="flex w-full max-w-xl flex-col items-center text-center">
+          <div className="relative mb-8 flex size-24 items-center justify-center rounded-[2rem] bg-muted/10 backdrop-blur-xl">
+            <div className="absolute inset-0 size-full animate-pulse rounded-[2rem] bg-brand-primary/5" />
+            <FolderOpen
+              weight="duotone"
+              className="relative size-10 text-brand-primary/40"
+            />
+          </div>
+
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary/60">
+            {t("no_project_eyebrow") || "Portal do Cliente"}
+          </p>
+
+          <h2 className="mt-4 font-heading text-3xl font-black uppercase tracking-tight text-foreground sm:text-4xl">
+            {t("no_project")}
+          </h2>
+
+          <p className="mt-4 text-sm font-medium leading-relaxed text-muted-foreground/60">
+            {t("no_project_description") ||
+              "Ainda não temos um projeto ativo registrado para sua conta. Se você acredita que isso é um erro ou quer iniciar algo novo, entre em contato."}
+          </p>
+
+          <div className="mt-10 flex flex-wrap justify-center gap-4">
+            <Button
+              asChild
+              className="rounded-full px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]"
+            >
+              <a href="mailto:contato@magui.studio">Falar com o time</a>
+            </Button>
+            <Button
+              asChild
+              variant="outline"
+              className="rounded-full border-border/40 bg-background/50 px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]"
+            >
+              <Link href="/notifications">Minhas Notificações</Link>
+            </Button>
+          </div>
+        </div>
       </main>
     )
   }
