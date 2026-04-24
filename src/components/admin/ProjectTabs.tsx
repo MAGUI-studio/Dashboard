@@ -9,6 +9,7 @@ import { DashboardProject } from "@/src/types/dashboard"
 import {
   ChatCircleDots,
   Clock,
+  CurrencyCircleDollar,
   Files,
   Fingerprint,
   Handshake,
@@ -33,6 +34,7 @@ import { ProjectEngineeringTab } from "@/src/components/admin/ProjectEngineering
 import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
 import { ProjectSettingsTab } from "@/src/components/admin/ProjectSettingsTab"
 import { ProjectTimelineTab } from "@/src/components/admin/ProjectTimelineTab"
+import { ProjectFinancialTab } from "@/src/components/admin/financial/ProjectFinancialTab"
 import { ProjectHandoffTab } from "@/src/components/admin/handoff/ProjectHandoffTab"
 import { ProjectCommunication } from "@/src/components/common/communication/ProjectCommunication"
 
@@ -71,6 +73,8 @@ interface ProjectTabsProps {
     }
   }> | null
   kickoff?: Prisma.ProjectKickoffChecklist | null
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  invoices: any[]
 }
 
 export function ProjectTabs({
@@ -82,6 +86,7 @@ export function ProjectTabs({
   currentUserId,
   handoff,
   kickoff,
+  invoices,
 }: ProjectTabsProps) {
   const t = useTranslations("Admin.projects.details")
   const [activeTab, setActiveTab] = useQueryState(
@@ -127,6 +132,13 @@ export function ProjectTabs({
           >
             <Handshake weight="duotone" className="mr-2 size-4" />
             {t("tabs.handoff", { fallback: "Handoff" })}
+          </TabsTrigger>
+          <TabsTrigger
+            value="financial"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <CurrencyCircleDollar weight="duotone" className="mr-2 size-4" />
+            {t("tabs.financial", { fallback: "Financeiro" })}
           </TabsTrigger>
           <TabsTrigger
             value="briefing"
@@ -189,6 +201,13 @@ export function ProjectTabs({
 
       <TabsContent value="handoff" className="mt-0 focus-visible:outline-none">
         <ProjectHandoffTab handoff={handoff} kickoff={kickoff} />
+      </TabsContent>
+
+      <TabsContent
+        value="financial"
+        className="mt-0 focus-visible:outline-none"
+      >
+        <ProjectFinancialTab projectId={projectId} invoices={invoices} />
       </TabsContent>
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">

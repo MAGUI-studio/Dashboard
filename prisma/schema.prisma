@@ -15,6 +15,23 @@ enum ProposalStatus {
   EXPIRED
 }
 
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum InstallmentStatus {
+  PENDING
+  DUE_SOON
+  OVERDUE
+  PAID
+  WAIVED
+}
+
 enum UserRole {
   ADMIN
   MEMBER
@@ -169,117 +186,123 @@ enum AuditActorType {
 }
 
 model DashboardMetricSnapshot {
-  id        String   @id @default(cuid())
-  date      DateTime @default(now())
-  
+  id   String   @id @default(cuid())
+  date DateTime @default(now())
+
   // Projects
-  activeProjects     Int
-  completedProjects  Int
-  pendingApprovals   Int
-  
+  activeProjects    Int
+  completedProjects Int
+  pendingApprovals  Int
+
   // CRM
-  totalLeads         Int
-  convertedLeads     Int
-  negotiationValue   Float
-  
+  totalLeads       Int
+  convertedLeads   Int
+  negotiationValue Float
+
   // Performance
-  avgApprovalHours   Float
-  
+  avgApprovalHours Float
+
   createdAt DateTime @default(now())
 
   @@index([date])
 }
 
 model SearchDocument {
-  id          String   @id @default(cuid())
-  entityType  String   // User, Project, Lead, Asset, Update
-  entityId    String
-  projectId   String?
-  
-  title       String
-  subtitle    String?
-  body        String?  @db.Text
-  
-  metadata    Json?
-  
-  updatedAt   DateTime @default(now())
+  id         String  @id @default(cuid())
+  entityType String // User, Project, Lead, Asset, Update
+  entityId   String
+  projectId  String?
+
+  title    String
+  subtitle String?
+  body     String? @db.Text
+
+  metadata Json?
+
+  updatedAt DateTime @default(now())
 
   @@index([entityType, entityId])
   @@index([projectId])
 }
 
 model EventOutbox {
-  id          String   @id @default(cuid())
-  type        String   // NOTIFICATION, AUDIT, SEARCH_SYNC
-  payload     Json
-  status      String   @default("PENDING") // PENDING, PROCESSED, FAILED
-  error       String?  @db.Text
-  attempts    Int      @default(0)
-  
+  id       String  @id @default(cuid())
+  type     String // NOTIFICATION, AUDIT, SEARCH_SYNC
+  payload  Json
+  status   String  @default("PENDING") // PENDING, PROCESSED, FAILED
+  error    String? @db.Text
+  attempts Int     @default(0)
+
   processedAt DateTime?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime  @default(now())
 
   @@index([status, createdAt])
 }
 
 model User {
-  id            String         @id @default(cuid())
-  clerkId       String         @unique
-  email         String         @unique
-  name          String?
-  role          UserRole       @default(CLIENT)
+  id      String   @id @default(cuid())
+  clerkId String   @unique
+  email   String   @unique
+  name    String?
+  role    UserRole @default(CLIENT)
 
-  companyName   String?
-  phone         String?
-  position      String?
-  avatarUrl     String?
-  taxId         String?
+  companyName String?
+  phone       String?
+  position    String?
+  avatarUrl   String?
+  taxId       String?
 
-  projects      Project[]
+  projects           Project[]
   projectMemberships ProjectMember[]
-  ownedLeads    Lead[]         @relation("LeadOwner")
-  leadNotes     LeadNote[]     @relation("LeadNoteAuthor")
-  notifications Notification[]
-  auditLogs     AuditLog[]     @relation("AuditActor")
+  ownedLeads         Lead[]              @relation("LeadOwner")
+  leadNotes          LeadNote[]          @relation("LeadNoteAuthor")
+  notifications      Notification[]
+  auditLogs          AuditLog[]          @relation("AuditActor")
   scheduledReminders ScheduledReminder[]
 
   approvalEvents ApprovalEvent[]
   leadActivities LeadActivity[]
-  
-  messages       Message[]      @relation("MessageAuthor")
-  resolvedMessages Message[]    @relation("MessageResolver")
-  decisions      Decision[]
 
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  messages         Message[]  @relation("MessageAuthor")
+  resolvedMessages Message[]  @relation("MessageResolver")
+  decisions        Decision[]
+
+  documents               Document[]
+  createdDocumentVersions DocumentVersion[]
+
+  billingProfile BillingProfile?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Lead {
-  id            String      @id @default(cuid())
+  id            String     @id @default(cuid())
   companyName   String
   contactName   String?
   email         String?
   phone         String?
   website       String?
   instagram     String?
-  status        LeadStatus  @default(GARIMPAGEM)
-  source        LeadSource  @default(OTHER)
-  notes         String?     @db.Text
+  status        LeadStatus @default(GARIMPAGEM)
+  source        LeadSource @default(OTHER)
+  notes         String?    @db.Text
   value         String?
   lastContactAt DateTime?
   nextActionAt  DateTime?
 
   assignedToId  String?
-  assignedTo    User?       @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedTo    User?          @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
   followUpNotes LeadNote[]
   activities    LeadActivity[]
   proposals     Proposal[]
+  documents     Document[]
 
   convertedProjectId String?
   convertedAt        DateTime?
 
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status, updatedAt])
   @@index([status, nextActionAt])
@@ -288,16 +311,16 @@ model Lead {
 }
 
 model LeadNote {
-  id         String   @id @default(cuid())
-  content    String   @db.Text
+  id      String @id @default(cuid())
+  content String @db.Text
 
-  leadId     String
-  lead       Lead     @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  authorId   String?
-  author     User?    @relation("LeadNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String?
+  author   User?   @relation("LeadNoteAuthor", fields: [authorId], references: [id], onDelete: SetNull)
 
-  createdAt  DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([leadId])
   @@index([authorId])
@@ -305,19 +328,19 @@ model LeadNote {
 }
 
 model LeadActivity {
-  id         String           @id @default(cuid())
-  type       LeadActivityType
-  title      String
-  content    String?          @db.Text
-  metadata   Json?            @default("{}")
+  id       String           @id @default(cuid())
+  type     LeadActivityType
+  title    String
+  content  String?          @db.Text
+  metadata Json?            @default("{}")
 
-  leadId     String
-  lead       Lead             @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
 
-  authorId   String?
-  author     User?            @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId String?
+  author   User?   @relation(fields: [authorId], references: [id], onDelete: SetNull)
 
-  createdAt  DateTime         @default(now())
+  createdAt DateTime @default(now())
 
   @@index([leadId])
   @@index([authorId])
@@ -325,54 +348,81 @@ model LeadActivity {
 }
 
 model MessageTemplate {
-  id         String   @id @default(cuid())
-  scope      String   @default("LEAD") // LEAD, PROJECT
-  name       String
-  content    String   @db.Text
-  
+  id      String @id @default(cuid())
+  scope   String @default("LEAD") // LEAD, PROJECT
+  name    String
+  content String @db.Text
+
   createdById String?
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([scope, createdAt])
 }
 
 model SavedView {
-  id          String   @id @default(cuid())
+  id          String @id @default(cuid())
   userId      String
-  module      String   // CRM, PROJECTS
+  module      String // CRM, PROJECTS
   name        String
   filtersJson Json
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([userId, module, name])
 }
 
+enum DocumentType {
+  CONTRACT
+  AMENDMENT
+  NDA
+  PROPOSAL_ACCEPTANCE
+  ADDENDUM
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  VIEWED
+  SIGNED
+  COMPLETED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum SignatureProvider {
+  AUTENTIQUE
+  DOCUSIGN
+  ADOBE_SIGN
+  OTHER
+}
+
 model Project {
-  id            String          @id @default(cuid())
-  name          String
-  description   String?         @db.Text
-  status        ProjectStatus   @default(STRATEGY)
-  category      ProjectCategory @default(WEB_APP)
-  priority      Priority        @default(MEDIUM)
-  progress      Int             @default(0)
-  budget        String?
-  
+  id          String          @id @default(cuid())
+  name        String
+  description String?         @db.Text
+  status      ProjectStatus   @default(STRATEGY)
+  category    ProjectCategory @default(WEB_APP)
+  priority    Priority        @default(MEDIUM)
+  progress    Int             @default(0)
+  budget      String?
+
   briefing      Json?           @default("{}")
   briefingNotes BriefingEntry[]
 
-  startDate     DateTime        @default(now())
+  startDate     DateTime  @default(now())
   deadline      DateTime?
   liveUrl       String?
   repositoryUrl String?
 
-  clientId      String
-  client        User            @relation(fields: [clientId], references: [id], onDelete: Cascade)
-  members       ProjectMember[]
-  
+  clientId String
+  client   User            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  members  ProjectMember[]
+
   updates       Update[]
   assets        Asset[]
   actionItems   ActionItem[]
@@ -384,97 +434,193 @@ model Project {
   decisions     Decision[]
   handoff       ProjectHandoff?
   kickoff       ProjectKickoffChecklist?
+  documents     Document[]
+  invoices      Invoice[]
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status, updatedAt])
   @@index([clientId, updatedAt])
 }
 
-model ProjectHandoff {
-  id                String   @id @default(cuid())
-  projectId         String   @unique
-  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  proposalId        String?  @unique
-  proposal          Proposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
-  
-  // Commercial Snapshot
-  proposalTitle     String?
-  finalValue        Float?
-  currency          String   @default("BRL")
-  soldItems         Json?    @default("[]") // [{description, unitValue, quantity}]
-  commercialNotes   String?  @db.Text
-  
-  // Operational Snapshot
-  status            String   @default("PENDING") // PENDING, COMPLETED
-  ownerId           String?
-  handoffNotes      String?  @db.Text
+model Document {
+  id     String         @id @default(cuid())
+  type   DocumentType   @default(CONTRACT)
+  title  String
+  status DocumentStatus @default(DRAFT)
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  sourceLeadId String?
+  lead         Lead?   @relation(fields: [sourceLeadId], references: [id], onDelete: SetNull)
+
+  clientId String?
+  client   User?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  signatureProvider SignatureProvider @default(AUTENTIQUE)
+  providerDocId     String?           @unique
+  providerLink      String?
+
+  // Parties Data (Snapshot)
+  contractedData  Json? @default("{}") // { legalName, tradeName, document, email, address... }
+  contractingData Json? @default("{}") // { legalName, tradeName, document, email, address... }
+
+  // Commercial Data (Snapshot)
+  commercialData Json? @default("{}") // { totalValue, installments, revisions, deadline... }
+
+  currentVersionId String?
+  versions         DocumentVersion[]
+  clauses          DocumentClause[]
+  signers          DocumentSigner[]
+  invoices         Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([clientId])
+  @@index([status])
+}
+
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  versionNumber   Int     @default(1)
+  pdfUrl          String?
+  contentSnapshot Json?   @default("{}")
+
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([documentId])
+}
+
+model DocumentClause {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  order      Int     @default(0)
+  title      String
+  content    String  @db.Text
+  isRequired Boolean @default(true)
+
+  subclauses Json? @default("[]") // [{label, content, order}]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId, order])
+}
+
+model DocumentSigner {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  name  String
+  email String
+  role  String? // CONTRACTOR, CLIENT, WITNESS
+
+  providerSignerId String?
+  status           String    @default("PENDING") // PENDING, SIGNED, REJECTED
+  signedAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId])
+}
+
+model ProjectHandoff {
+  id        String  @id @default(cuid())
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  proposalId String?   @unique
+  proposal   Proposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+
+  // Commercial Snapshot
+  proposalTitle   String?
+  finalValue      Float?
+  currency        String  @default("BRL")
+  soldItems       Json?   @default("[]") // [{description, unitValue, quantity}]
+  commercialNotes String? @db.Text
+
+  // Operational Snapshot
+  status       String  @default("PENDING") // PENDING, COMPLETED
+  ownerId      String?
+  handoffNotes String? @db.Text
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([projectId])
 }
 
 model ProjectKickoffChecklist {
-  id                String   @id @default(cuid())
-  projectId         String   @unique
-  project           Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  contractSigned    Boolean  @default(false)
-  briefingCompleted Boolean  @default(false)
-  brandAssetsSent   Boolean  @default(false)
-  accessReceived    Boolean  @default(false)
-  firstMeetingDone  Boolean  @default(false)
-  
-  items             Json?    @default("[]") // [{id, label, completed, type: "SYSTEM" | "CUSTOM"}]
+  id        String  @id @default(cuid())
+  projectId String  @unique
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
+  contractSigned    Boolean @default(false)
+  briefingCompleted Boolean @default(false)
+  brandAssetsSent   Boolean @default(false)
+  accessReceived    Boolean @default(false)
+  firstMeetingDone  Boolean @default(false)
+
+  items Json? @default("[]") // [{id, label, completed, type: "SYSTEM" | "CUSTOM"}]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Thread {
-  id          String       @id @default(cuid())
-  entityType  String       // Project, Update, Asset, Proposal, Lead, ActionItem, etc.
-  entityId    String
-  title       String?
-  status      ThreadStatus @default(OPEN)
-  
-  projectId   String?
-  project     Project?     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  id         String       @id @default(cuid())
+  entityType String // Project, Update, Asset, Proposal, Lead, ActionItem, etc.
+  entityId   String
+  title      String?
+  status     ThreadStatus @default(OPEN)
 
-  messages    Message[]
-  decisions   Decision[]
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  messages  Message[]
+  decisions Decision[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([entityType, entityId])
   @@index([projectId, status])
 }
 
 model Message {
-  id               String      @id @default(cuid())
-  content          String      @db.Text
-  type             MessageType @default(INFORMATIVE)
-  
-  authorId         String?
-  author           User?       @relation("MessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-  
-  threadId         String
-  thread           Thread      @relation(fields: [threadId], references: [id], onDelete: Cascade)
-  
-  attachments      Json?       @default("[]") // [{name: string, url: string, key: string}]
-  
-  requiresResponse Boolean     @default(false)
+  id      String      @id @default(cuid())
+  content String      @db.Text
+  type    MessageType @default(INFORMATIVE)
+
+  authorId String?
+  author   User?   @relation("MessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
+
+  threadId String
+  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
+
+  attachments Json? @default("[]") // [{name: string, url: string, key: string}]
+
+  requiresResponse Boolean   @default(false)
   resolvedAt       DateTime?
   resolvedById     String?
-  resolvedBy       User?       @relation("MessageResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
+  resolvedBy       User?     @relation("MessageResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
 
-  createdAt        DateTime    @default(now())
-  updatedAt        DateTime    @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([threadId, createdAt])
   @@index([authorId])
@@ -482,60 +628,60 @@ model Message {
 }
 
 model Decision {
-  id              String   @id @default(cuid())
-  title           String
-  description     String?  @db.Text
-  decision        String   @db.Text
-  
+  id          String  @id @default(cuid())
+  title       String
+  description String? @db.Text
+  decision    String  @db.Text
+
   impactScope     String?
   impactDeadline  String?
   impactFinancial String?
-  
-  threadId        String?
-  thread          Thread?  @relation(fields: [threadId], references: [id], onDelete: SetNull)
-  
-  projectId       String
-  project         Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
-  decidedById     String?
-  decidedBy       User?    @relation(fields: [decidedById], references: [id], onDelete: SetNull)
 
-  decidedAt       DateTime @default(now())
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  threadId String?
+  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: SetNull)
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  decidedById String?
+  decidedBy   User?   @relation(fields: [decidedById], references: [id], onDelete: SetNull)
+
+  decidedAt DateTime @default(now())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([projectId, decidedAt])
   @@index([threadId])
 }
 
 model BriefingEntry {
-  id         String   @id @default(cuid())
-  title      String
-  content    String   @db.Text
-  
-  projectId  String
-  project    Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  
+  id      String @id @default(cuid())
+  title   String
+  content String @db.Text
+
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
   createdById String?
-  
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([projectId])
 }
 
 model ProjectMember {
-  id        String            @id @default(cuid())
-  role      ProjectMemberRole @default(COLLABORATOR)
+  id   String            @id @default(cuid())
+  role ProjectMemberRole @default(COLLABORATOR)
 
   projectId String
-  project   Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  userId    String
-  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@unique([projectId, userId])
   @@index([userId])
@@ -543,77 +689,77 @@ model ProjectMember {
 }
 
 model Update {
-  id             String         @id @default(cuid())
-  title          String
-  description    String?        @db.Text
-  isMilestone    Boolean        @default(false)
-  imageUrl       String?
-  timezone       String         @default("UTC")
-  
-  requiresApproval Boolean      @default(false)
+  id          String  @id @default(cuid())
+  title       String
+  description String? @db.Text
+  isMilestone Boolean @default(false)
+  imageUrl    String?
+  timezone    String  @default("UTC")
+
+  requiresApproval Boolean        @default(false)
   approvalStatus   ApprovalStatus @default(PENDING)
   approvedAt       DateTime?
-  feedback         String?      @db.Text
+  feedback         String?        @db.Text
 
   projectId      String
-  project        Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project        Project            @relation(fields: [projectId], references: [id], onDelete: Cascade)
   attachments    UpdateAttachment[]
   approvalEvents ApprovalEvent[]
 
-  createdAt      DateTime       @default(now())
+  createdAt DateTime @default(now())
 
   @@index([projectId, createdAt])
   @@index([requiresApproval, approvalStatus, createdAt])
 }
 
 model UpdateAttachment {
-  id         String    @id @default(cuid())
-  name       String
-  url        String
-  key        String
-  customId   String?
-  type       AssetType @default(DOCUMENT)
-  mimeType   String?
-  size       Int?
+  id       String    @id @default(cuid())
+  name     String
+  url      String
+  key      String
+  customId String?
+  type     AssetType @default(DOCUMENT)
+  mimeType String?
+  size     Int?
 
-  updateId   String
-  update     Update    @relation(fields: [updateId], references: [id], onDelete: Cascade)
+  updateId String
+  update   Update @relation(fields: [updateId], references: [id], onDelete: Cascade)
 
-  createdAt  DateTime  @default(now())
+  createdAt DateTime @default(now())
 
   @@index([updateId, createdAt])
 }
 
 model ApprovalEvent {
-  id         String         @id @default(cuid())
-  decision   ApprovalStatus
-  comment    String?        @db.Text
-  
-  updateId   String
-  update     Update         @relation(fields: [updateId], references: [id], onDelete: Cascade)
-  
-  actorId    String?
-  actor      User?          @relation(fields: [actorId], references: [id], onDelete: SetNull)
-  
-  createdAt  DateTime       @default(now())
+  id       String         @id @default(cuid())
+  decision ApprovalStatus
+  comment  String?        @db.Text
+
+  updateId String
+  update   Update @relation(fields: [updateId], references: [id], onDelete: Cascade)
+
+  actorId String?
+  actor   User?   @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
 
   @@index([updateId])
   @@index([actorId])
 }
 
 model ActionItem {
-  id          String       @id @default(cuid())
+  id          String           @id @default(cuid())
   title       String
-  description String?      @db.Text
-  status      ActionStatus @default(PENDING)
+  description String?          @db.Text
+  status      ActionStatus     @default(PENDING)
   dueDate     DateTime?
   targetRole  ActionTargetRole @default(ADMIN)
 
-  projectId   String
-  project     Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([status, dueDate])
   @@index([projectId, status, dueDate])
@@ -621,106 +767,106 @@ model ActionItem {
 }
 
 model Asset {
-  id          String          @id @default(cuid())
-  name        String
-  url         String
-  key         String
-  type        AssetType       @default(DOCUMENT)
-  order       Int             @default(0)
-  timezone    String          @default("UTC")
-  
-  origin      AssetOrigin     @default(ADMIN)
-  visibility  AssetVisibility @default(CLIENT)
+  id       String    @id @default(cuid())
+  name     String
+  url      String
+  key      String
+  type     AssetType @default(DOCUMENT)
+  order    Int       @default(0)
+  timezone String    @default("UTC")
 
-  projectId   String
-  project     Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  origin     AssetOrigin     @default(ADMIN)
+  visibility AssetVisibility @default(CLIENT)
 
-  createdAt   DateTime        @default(now())
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 
   @@index([projectId, visibility, order])
   @@index([projectId, createdAt])
 }
 
 model Version {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   name        String
   deployUrl   String?
-  description String?  @db.Text
-  
-  scorePerformance Int?
+  description String? @db.Text
+
+  scorePerformance   Int?
   scoreAccessibility Int?
   scoreBestPractices Int?
-  scoreSEO Int?
+  scoreSEO           Int?
 
-  projectId   String
-  project     Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  projectId String
+  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt   DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([projectId, createdAt])
 }
 
 model Notification {
-  id        String           @id @default(cuid())
-  type      NotificationType
-  title     String
-  message   String           @db.Text
-  ctaPath   String?
-  metadata  Json?
-  readAt    DateTime?
+  id       String           @id @default(cuid())
+  type     NotificationType
+  title    String
+  message  String           @db.Text
+  ctaPath  String?
+  metadata Json?
+  readAt   DateTime?
 
   userId    String
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   projectId String?
-  project   Project?         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime         @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId, readAt, createdAt])
   @@index([projectId])
 }
 
 model ScheduledReminder {
-  id              String                  @id @default(cuid())
-  type            ScheduledReminderType
-  status          ScheduledReminderStatus @default(PENDING)
-  entityType      String
-  entityId        String
-  title           String
-  message         String                  @db.Text
-  ctaPath         String?
-  scheduledFor    DateTime
-  sentAt          DateTime?
-  resolvedAt      DateTime?
-  metadata        Json?
+  id           String                  @id @default(cuid())
+  type         ScheduledReminderType
+  status       ScheduledReminderStatus @default(PENDING)
+  entityType   String
+  entityId     String
+  title        String
+  message      String                  @db.Text
+  ctaPath      String?
+  scheduledFor DateTime
+  sentAt       DateTime?
+  resolvedAt   DateTime?
+  metadata     Json?
 
   recipientUserId String
-  recipientUser   User                    @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
+  recipientUser   User   @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
 
-  createdAt       DateTime                @default(now())
-  updatedAt       DateTime                @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
+  @@unique([recipientUserId, type, entityId])
   @@index([recipientUserId, status, scheduledFor])
   @@index([type, status])
   @@index([entityType, entityId])
-  @@unique([recipientUserId, type, entityId])
 }
 
 model AuditLog {
-  id        String         @id @default(cuid())
-  action    String
+  id         String         @id @default(cuid())
+  action     String
   entityType String
-  entityId  String
-  summary   String
-  metadata  Json?
-  actorType AuditActorType @default(SYSTEM)
+  entityId   String
+  summary    String
+  metadata   Json?
+  actorType  AuditActorType @default(SYSTEM)
 
   actorId   String?
-  actor     User?          @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
+  actor     User?    @relation("AuditActor", fields: [actorId], references: [id], onDelete: SetNull)
   projectId String?
-  project   Project?       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  createdAt DateTime       @default(now())
+  createdAt DateTime @default(now())
 
   @@index([projectId, createdAt])
   @@index([actorId])
@@ -728,60 +874,155 @@ model AuditLog {
 }
 
 model Proposal {
-  id          String         @id @default(cuid())
-  number      Int            @default(autoincrement())
-  title       String
-  status      ProposalStatus @default(DRAFT)
-  validUntil  DateTime?
-  totalValue  Float          @default(0)
-  currency    String         @default("BRL")
-  notes       String?        @db.Text
-  
-  acceptedAt  DateTime?
-  acceptedIp  String?
-  
-  leadId      String
-  lead        Lead           @relation(fields: [leadId], references: [id], onDelete: Cascade)
-  
-  projectId   String?
-  project     Project?       @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  
-  handoff     ProjectHandoff?
-  
-  items       ProposalItem[]
-  
-  createdAt   DateTime       @default(now())
-  updatedAt   DateTime       @updatedAt
+  id         String         @id @default(cuid())
+  number     Int            @default(autoincrement())
+  title      String
+  status     ProposalStatus @default(DRAFT)
+  validUntil DateTime?
+  totalValue Float          @default(0)
+  currency   String         @default("BRL")
+  notes      String?        @db.Text
+
+  acceptedAt DateTime?
+  acceptedIp String?
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  handoff ProjectHandoff?
+
+  items    ProposalItem[]
+  invoices Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([leadId])
   @@index([status])
 }
 
 model ProposalItem {
-  id              String   @id @default(cuid())
+  id              String  @id @default(cuid())
   description     String
-  longDescription String?  @db.Text
-  unitValue       Float    @default(0)
-  quantity        Int      @default(1)
-  order           Int      @default(0)
-  
-  proposalId      String
-  proposal        Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+  longDescription String? @db.Text
+  unitValue       Float   @default(0)
+  quantity        Int     @default(1)
+  order           Int     @default(0)
 
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  proposalId String
+  proposal   Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([proposalId, order])
 }
 
 model ProposalBlock {
-  id        String   @id @default(cuid())
-  category  String   // EXECUTIVE_SUMMARY, OBJECTIVES, etc.
-  title     String
-  content   String   @db.Text
-  
+  id       String @id @default(cuid())
+  category String // EXECUTIVE_SUMMARY, OBJECTIVES, etc.
+  title    String
+  content  String @db.Text
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([category])
+}
+
+model BillingProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  legalName    String?
+  tradeName    String?
+  taxId        String?
+  billingEmail String?
+  billingPhone String?
+
+  addressStreet     String?
+  addressNumber     String?
+  addressComplement String?
+  addressDistrict   String?
+  addressCity       String?
+  addressState      String?
+  addressZipCode    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  title       String
+  description String?       @db.Text
+  status      InvoiceStatus @default(DRAFT)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  proposalId String?
+  proposal   Proposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+
+  documentId String?
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  totalAmount Float
+  currency    String @default("BRL")
+
+  issuedAt DateTime  @default(now())
+  dueDate  DateTime?
+
+  installments Installment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model Installment {
+  id        String  @id @default(cuid())
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  number  Int
+  amount  Float
+  dueDate DateTime
+  status  InstallmentStatus @default(PENDING)
+
+  paidAt   DateTime?
+  proofUrl String? // Payment proof file
+  proofKey String?
+
+  paymentEvents PaymentEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([invoiceId])
+  @@index([status, dueDate])
+}
+
+model PaymentEvent {
+  id            String      @id @default(cuid())
+  installmentId String
+  installment   Installment @relation(fields: [installmentId], references: [id], onDelete: Cascade)
+
+  type          String // PIX, TRANSFER, CREDIT_CARD, etc.
+  amount        Float
+  date          DateTime @default(now())
+  note          String?  @db.Text
+  attachmentUrl String?
+  attachmentKey String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([installmentId])
 }

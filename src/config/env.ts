@@ -46,6 +46,11 @@ const envSchema = z.object({
   NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL: z.string().min(1),
   CLERK_PROXY_URL: z.string().optional(),
   UPLOADTHING_TOKEN: z.string().min(1),
+  AUTENTIQUE_TOKEN: z.string().optional(),
+  AUTENTIQUE_URL: z
+    .string()
+    .url()
+    .default("https://api.autentique.com.br/v2/graphql"),
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
@@ -88,6 +93,8 @@ const parsedEnv = envSchema.safeParse({
   UPLOADTHING_TOKEN:
     process.env.UPLOADTHING_TOKEN ||
     (useFallback ? fallbackEnv.UPLOADTHING_TOKEN : undefined),
+  AUTENTIQUE_TOKEN: process.env.AUTENTIQUE_TOKEN,
+  AUTENTIQUE_URL: process.env.AUTENTIQUE_URL,
   NODE_ENV: process.env.NODE_ENV,
 })
 

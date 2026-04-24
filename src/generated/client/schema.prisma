@@ -15,6 +15,23 @@ enum ProposalStatus {
   EXPIRED
 }
 
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PARTIALLY_PAID
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum InstallmentStatus {
+  PENDING
+  DUE_SOON
+  OVERDUE
+  PAID
+  WAIVED
+}
+
 enum UserRole {
   ADMIN
   MEMBER
@@ -250,6 +267,11 @@ model User {
   resolvedMessages Message[]  @relation("MessageResolver")
   decisions        Decision[]
 
+  documents               Document[]
+  createdDocumentVersions DocumentVersion[]
+
+  billingProfile BillingProfile?
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -274,6 +296,7 @@ model Lead {
   followUpNotes LeadNote[]
   activities    LeadActivity[]
   proposals     Proposal[]
+  documents     Document[]
 
   convertedProjectId String?
   convertedAt        DateTime?
@@ -351,6 +374,33 @@ model SavedView {
   @@unique([userId, module, name])
 }
 
+enum DocumentType {
+  CONTRACT
+  AMENDMENT
+  NDA
+  PROPOSAL_ACCEPTANCE
+  ADDENDUM
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  VIEWED
+  SIGNED
+  COMPLETED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum SignatureProvider {
+  AUTENTIQUE
+  DOCUSIGN
+  ADOBE_SIGN
+  OTHER
+}
+
 model Project {
   id          String          @id @default(cuid())
   name        String
@@ -384,12 +434,108 @@ model Project {
   decisions     Decision[]
   handoff       ProjectHandoff?
   kickoff       ProjectKickoffChecklist?
+  documents     Document[]
+  invoices      Invoice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([status, updatedAt])
   @@index([clientId, updatedAt])
+}
+
+model Document {
+  id     String         @id @default(cuid())
+  type   DocumentType   @default(CONTRACT)
+  title  String
+  status DocumentStatus @default(DRAFT)
+
+  sourceLeadId String?
+  lead         Lead?   @relation(fields: [sourceLeadId], references: [id], onDelete: SetNull)
+
+  clientId String?
+  client   User?   @relation(fields: [clientId], references: [id], onDelete: SetNull)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  signatureProvider SignatureProvider @default(AUTENTIQUE)
+  providerDocId     String?           @unique
+  providerLink      String?
+
+  // Parties Data (Snapshot)
+  contractedData  Json? @default("{}") // { legalName, tradeName, document, email, address... }
+  contractingData Json? @default("{}") // { legalName, tradeName, document, email, address... }
+
+  // Commercial Data (Snapshot)
+  commercialData Json? @default("{}") // { totalValue, installments, revisions, deadline... }
+
+  currentVersionId String?
+  versions         DocumentVersion[]
+  clauses          DocumentClause[]
+  signers          DocumentSigner[]
+  invoices         Invoice[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([clientId])
+  @@index([status])
+}
+
+model DocumentVersion {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  versionNumber   Int     @default(1)
+  pdfUrl          String?
+  contentSnapshot Json?   @default("{}")
+
+  createdById String?
+  createdBy   User?   @relation(fields: [createdById], references: [id], onDelete: SetNull)
+
+  createdAt DateTime @default(now())
+
+  @@index([documentId])
+}
+
+model DocumentClause {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  order      Int     @default(0)
+  title      String
+  content    String  @db.Text
+  isRequired Boolean @default(true)
+
+  subclauses Json? @default("[]") // [{label, content, order}]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId, order])
+}
+
+model DocumentSigner {
+  id         String   @id @default(cuid())
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  name  String
+  email String
+  role  String? // CONTRACTOR, CLIENT, WITNESS
+
+  providerSignerId String?
+  status           String    @default("PENDING") // PENDING, SIGNED, REJECTED
+  signedAt         DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([documentId])
 }
 
 model ProjectHandoff {
@@ -748,7 +894,8 @@ model Proposal {
 
   handoff ProjectHandoff?
 
-  items ProposalItem[]
+  items    ProposalItem[]
+  invoices Invoice[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -784,4 +931,98 @@ model ProposalBlock {
   updatedAt DateTime @updatedAt
 
   @@index([category])
+}
+
+model BillingProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  legalName    String?
+  tradeName    String?
+  taxId        String?
+  billingEmail String?
+  billingPhone String?
+
+  addressStreet     String?
+  addressNumber     String?
+  addressComplement String?
+  addressDistrict   String?
+  addressCity       String?
+  addressState      String?
+  addressZipCode    String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Invoice {
+  id          String        @id @default(cuid())
+  title       String
+  description String?       @db.Text
+  status      InvoiceStatus @default(DRAFT)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  proposalId String?
+  proposal   Proposal? @relation(fields: [proposalId], references: [id], onDelete: SetNull)
+
+  documentId String?
+  document   Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
+
+  totalAmount Float
+  currency    String @default("BRL")
+
+  issuedAt DateTime  @default(now())
+  dueDate  DateTime?
+
+  installments Installment[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([projectId])
+  @@index([status])
+}
+
+model Installment {
+  id        String  @id @default(cuid())
+  invoiceId String
+  invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  number  Int
+  amount  Float
+  dueDate DateTime
+  status  InstallmentStatus @default(PENDING)
+
+  paidAt   DateTime?
+  proofUrl String? // Payment proof file
+  proofKey String?
+
+  paymentEvents PaymentEvent[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([invoiceId])
+  @@index([status, dueDate])
+}
+
+model PaymentEvent {
+  id            String      @id @default(cuid())
+  installmentId String
+  installment   Installment @relation(fields: [installmentId], references: [id], onDelete: Cascade)
+
+  type          String // PIX, TRANSFER, CREDIT_CARD, etc.
+  amount        Float
+  date          DateTime @default(now())
+  note          String?  @db.Text
+  attachmentUrl String?
+  attachmentKey String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([installmentId])
 }

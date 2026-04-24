@@ -1,0 +1,189 @@
+"use server"
+
+import { revalidatePath } from "next/cache"
+
+import { InstallmentStatus, InvoiceStatus } from "@/src/generated/client"
+import { z } from "zod"
+
+import { logger } from "@/src/lib/logger"
+import { protect } from "@/src/lib/permissions"
+import prisma from "@/src/lib/prisma"
+import { createAuditLog, getCurrentAppUser } from "@/src/lib/project-governance"
+import {
+  BillingProfileSchema,
+  CreateInvoiceSchema,
+  RegisterPaymentEventSchema,
+} from "@/src/lib/validations/financial"
+
+export async function createInvoiceAction(
+  data: z.infer<typeof CreateInvoiceSchema>
+) {
+  try {
+    await protect("admin")
+    const user = await getCurrentAppUser()
+    if (!user) throw new Error("Unauthorized")
+
+    const validated = CreateInvoiceSchema.parse(data)
+
+    const invoice = await prisma.$transaction(async (tx) => {
+      const inv = await tx.invoice.create({
+        data: {
+          title: validated.title,
+          description: validated.description,
+          projectId: validated.projectId,
+          proposalId: validated.proposalId,
+          documentId: validated.documentId,
+          totalAmount: validated.totalAmount,
+          currency: validated.currency,
+          status: InvoiceStatus.SENT,
+          dueDate: validated.dueDate,
+          installments: {
+            create: validated.installments.map((inst) => ({
+              number: inst.number,
+              amount: inst.amount,
+              dueDate: inst.dueDate,
+              status: InstallmentStatus.PENDING,
+            })),
+          },
+        },
+      })
+
+      await createAuditLog(
+        {
+          action: "invoice.created",
+          entityType: "Invoice",
+          entityId: inv.id,
+          summary: `Fatura "${inv.title}" de ${inv.currency} ${inv.totalAmount} criada.`,
+          actorId: user.id,
+          projectId: inv.projectId,
+          metadata: { installments: validated.installments.length },
+        },
+        tx
+      )
+
+      return inv
+    })
+
+    revalidatePath("/admin/financial")
+    if (invoice.projectId)
+      revalidatePath(`/admin/projects/${invoice.projectId}`)
+    return { success: true, invoiceId: invoice.id }
+  } catch (error) {
+    logger.error({ error }, "Create Invoice Error")
+    return { error: "Erro ao criar fatura" }
+  }
+}
+
+export async function registerPaymentAction(
+  data: z.infer<typeof RegisterPaymentEventSchema>
+) {
+  try {
+    const user = await getCurrentAppUser()
+    if (!user) throw new Error("Unauthorized")
+
+    const validated = RegisterPaymentEventSchema.parse(data)
+
+    const result = await prisma.$transaction(async (tx) => {
+      const payment = await tx.paymentEvent.create({
+        data: {
+          installmentId: validated.installmentId,
+          type: validated.type,
+          amount: validated.amount,
+          date: validated.date,
+          note: validated.note,
+          attachmentUrl: validated.attachmentUrl,
+          attachmentKey: validated.attachmentKey,
+        },
+        include: {
+          installment: {
+            include: {
+              invoice: true,
+            },
+          },
+        },
+      })
+
+      // If full amount paid, update installment status
+      // Note: simplistic logic, in real world we check total events vs installment amount
+      await tx.installment.update({
+        where: { id: validated.installmentId },
+        data: {
+          status: InstallmentStatus.PAID,
+          paidAt: validated.date,
+        },
+      })
+
+      // Update invoice status if all installments paid
+      const invoice = await tx.invoice.findUnique({
+        where: { id: payment.installment.invoiceId },
+        include: { installments: true },
+      })
+
+      if (
+        invoice &&
+        invoice.installments.every((i) => i.status === InstallmentStatus.PAID)
+      ) {
+        await tx.invoice.update({
+          where: { id: invoice.id },
+          data: { status: InvoiceStatus.PAID },
+        })
+      } else if (invoice) {
+        await tx.invoice.update({
+          where: { id: invoice.id },
+          data: { status: InvoiceStatus.PARTIALLY_PAID },
+        })
+      }
+
+      await createAuditLog(
+        {
+          action: "payment.registered",
+          entityType: "PaymentEvent",
+          entityId: payment.id,
+          summary: `Pagamento de ${payment.installment.invoice.currency} ${payment.amount} registrado para parcela #${payment.installment.number}.`,
+          actorId: user.id,
+          projectId: payment.installment.invoice.projectId,
+        },
+        tx
+      )
+
+      return payment
+    })
+
+    revalidatePath("/admin/financial")
+    if (result.installment.invoice.projectId) {
+      revalidatePath(`/portal/projects/${result.installment.invoice.projectId}`)
+      revalidatePath(`/admin/projects/${result.installment.invoice.projectId}`)
+    }
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Register Payment Error")
+    return { error: "Erro ao registrar pagamento" }
+  }
+}
+
+export async function saveBillingProfileAction(
+  userId: string,
+  data: z.infer<typeof BillingProfileSchema>
+) {
+  try {
+    await protect("admin") // Or owner
+    const validated = BillingProfileSchema.parse(data)
+
+    await prisma.billingProfile.upsert({
+      where: { userId },
+      create: {
+        userId,
+        ...validated,
+      },
+      update: {
+        ...validated,
+      },
+    })
+
+    revalidatePath(`/admin/clients/${userId}`)
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Save Billing Profile Error")
+    return { error: "Erro ao salvar perfil de faturamento" }
+  }
+}

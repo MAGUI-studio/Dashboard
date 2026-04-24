@@ -8,6 +8,7 @@ import {
   NotificationType,
   UserRole,
 } from "@/src/generated/client/enums"
+import { addDays } from "date-fns"
 
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
@@ -19,6 +20,67 @@ import {
   getInternalNotificationRecipients,
 } from "@/src/lib/project-governance"
 import { briefingSchema } from "@/src/lib/validations/project"
+
+async function verifyAndCreateMissingBriefingTasks(
+  projectId: string,
+  briefing: Prisma.InputJsonValue,
+  tx: Prisma.TransactionClient
+) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = briefing as any
+  const missingTasks = []
+
+  if (!data.logos?.primary) {
+    missingTasks.push({
+      label: "Enviar logo principal da marca (Vetor/PNG)",
+      type: "SYSTEM",
+    })
+  }
+
+  if (!briefing.palette?.primary) {
+    missingTasks.push({
+      label: "Definir cores principais da marca (HEX)",
+      type: "SYSTEM",
+    })
+  }
+
+  if (!briefing.visualReferences || briefing.visualReferences.length === 0) {
+    missingTasks.push({
+      label: "Adicionar referências visuais e inspirações",
+      type: "SYSTEM",
+    })
+  }
+
+  if (!briefing.governance?.primaryApprover) {
+    missingTasks.push({
+      label: "Definir aprovador oficial do projeto",
+      type: "SYSTEM",
+    })
+  }
+
+  if (missingTasks.length > 0) {
+    for (const task of missingTasks) {
+      // Check if task already exists to avoid duplicates
+      const exists = await tx.actionItem.findFirst({
+        where: { projectId, title: task.label, status: "PENDING" },
+      })
+
+      if (!exists) {
+        await tx.actionItem.create({
+          data: {
+            projectId,
+            title: task.label,
+            description:
+              "Item obrigatório para avanço operacional identificado via briefing.",
+            status: "PENDING",
+            dueDate: addDays(new Date(), 2),
+            targetRole: "CLIENT",
+          },
+        })
+      }
+    }
+  }
+}
 
 export async function updateProjectBriefingAction(
   projectId: string,
@@ -49,6 +111,13 @@ export async function updateProjectBriefingAction(
         where: { id: projectId },
         data: { briefing: validatedBriefing.data },
       })
+
+      // Verify missing critical data and create tasks
+      await verifyAndCreateMissingBriefingTasks(
+        projectId,
+        validatedBriefing.data,
+        tx
+      )
 
       await createAuditLog(
         {

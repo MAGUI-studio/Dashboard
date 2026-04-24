@@ -69,7 +69,7 @@ export function ProjectHandoffTab({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
       <div className="space-y-8">
-        <ProjectKickoffChecklist kickoff={kickoff} />
+        {kickoff && <ProjectKickoffChecklist kickoff={kickoff} />}
 
         <Card className="rounded-[2rem] border-border/40 bg-background/40">
           <CardHeader>

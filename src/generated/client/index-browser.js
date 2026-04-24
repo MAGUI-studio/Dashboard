@@ -250,6 +250,60 @@ exports.Prisma.ProjectScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.DocumentScalarFieldEnum = {
+  id: 'id',
+  type: 'type',
+  title: 'title',
+  status: 'status',
+  sourceLeadId: 'sourceLeadId',
+  clientId: 'clientId',
+  projectId: 'projectId',
+  signatureProvider: 'signatureProvider',
+  providerDocId: 'providerDocId',
+  providerLink: 'providerLink',
+  contractedData: 'contractedData',
+  contractingData: 'contractingData',
+  commercialData: 'commercialData',
+  currentVersionId: 'currentVersionId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DocumentVersionScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  versionNumber: 'versionNumber',
+  pdfUrl: 'pdfUrl',
+  contentSnapshot: 'contentSnapshot',
+  createdById: 'createdById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.DocumentClauseScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  order: 'order',
+  title: 'title',
+  content: 'content',
+  isRequired: 'isRequired',
+  subclauses: 'subclauses',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.DocumentSignerScalarFieldEnum = {
+  id: 'id',
+  documentId: 'documentId',
+  name: 'name',
+  email: 'email',
+  role: 'role',
+  providerSignerId: 'providerSignerId',
+  status: 'status',
+  signedAt: 'signedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProjectHandoffScalarFieldEnum = {
   id: 'id',
   projectId: 'projectId',
@@ -497,6 +551,68 @@ exports.Prisma.ProposalBlockScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.BillingProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  legalName: 'legalName',
+  tradeName: 'tradeName',
+  taxId: 'taxId',
+  billingEmail: 'billingEmail',
+  billingPhone: 'billingPhone',
+  addressStreet: 'addressStreet',
+  addressNumber: 'addressNumber',
+  addressComplement: 'addressComplement',
+  addressDistrict: 'addressDistrict',
+  addressCity: 'addressCity',
+  addressState: 'addressState',
+  addressZipCode: 'addressZipCode',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InvoiceScalarFieldEnum = {
+  id: 'id',
+  title: 'title',
+  description: 'description',
+  status: 'status',
+  projectId: 'projectId',
+  proposalId: 'proposalId',
+  documentId: 'documentId',
+  totalAmount: 'totalAmount',
+  currency: 'currency',
+  issuedAt: 'issuedAt',
+  dueDate: 'dueDate',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.InstallmentScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  number: 'number',
+  amount: 'amount',
+  dueDate: 'dueDate',
+  status: 'status',
+  paidAt: 'paidAt',
+  proofUrl: 'proofUrl',
+  proofKey: 'proofKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.PaymentEventScalarFieldEnum = {
+  id: 'id',
+  installmentId: 'installmentId',
+  type: 'type',
+  amount: 'amount',
+  date: 'date',
+  note: 'note',
+  attachmentUrl: 'attachmentUrl',
+  attachmentKey: 'attachmentKey',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -587,6 +703,33 @@ exports.Priority = exports.$Enums.Priority = {
   MEDIUM: 'MEDIUM',
   HIGH: 'HIGH',
   URGENT: 'URGENT'
+};
+
+exports.DocumentType = exports.$Enums.DocumentType = {
+  CONTRACT: 'CONTRACT',
+  AMENDMENT: 'AMENDMENT',
+  NDA: 'NDA',
+  PROPOSAL_ACCEPTANCE: 'PROPOSAL_ACCEPTANCE',
+  ADDENDUM: 'ADDENDUM',
+  OTHER: 'OTHER'
+};
+
+exports.DocumentStatus = exports.$Enums.DocumentStatus = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  VIEWED: 'VIEWED',
+  SIGNED: 'SIGNED',
+  COMPLETED: 'COMPLETED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.SignatureProvider = exports.$Enums.SignatureProvider = {
+  AUTENTIQUE: 'AUTENTIQUE',
+  DOCUSIGN: 'DOCUSIGN',
+  ADOBE_SIGN: 'ADOBE_SIGN',
+  OTHER: 'OTHER'
 };
 
 exports.ThreadStatus = exports.$Enums.ThreadStatus = {
@@ -687,6 +830,23 @@ exports.ProposalStatus = exports.$Enums.ProposalStatus = {
   EXPIRED: 'EXPIRED'
 };
 
+exports.InvoiceStatus = exports.$Enums.InvoiceStatus = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  PARTIALLY_PAID: 'PARTIALLY_PAID',
+  PAID: 'PAID',
+  OVERDUE: 'OVERDUE',
+  CANCELLED: 'CANCELLED'
+};
+
+exports.InstallmentStatus = exports.$Enums.InstallmentStatus = {
+  PENDING: 'PENDING',
+  DUE_SOON: 'DUE_SOON',
+  OVERDUE: 'OVERDUE',
+  PAID: 'PAID',
+  WAIVED: 'WAIVED'
+};
+
 exports.Prisma.ModelName = {
   DashboardMetricSnapshot: 'DashboardMetricSnapshot',
   SearchDocument: 'SearchDocument',
@@ -698,6 +858,10 @@ exports.Prisma.ModelName = {
   MessageTemplate: 'MessageTemplate',
   SavedView: 'SavedView',
   Project: 'Project',
+  Document: 'Document',
+  DocumentVersion: 'DocumentVersion',
+  DocumentClause: 'DocumentClause',
+  DocumentSigner: 'DocumentSigner',
   ProjectHandoff: 'ProjectHandoff',
   ProjectKickoffChecklist: 'ProjectKickoffChecklist',
   Thread: 'Thread',
@@ -716,7 +880,11 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   Proposal: 'Proposal',
   ProposalItem: 'ProposalItem',
-  ProposalBlock: 'ProposalBlock'
+  ProposalBlock: 'ProposalBlock',
+  BillingProfile: 'BillingProfile',
+  Invoice: 'Invoice',
+  Installment: 'Installment',
+  PaymentEvent: 'PaymentEvent'
 };
 
 /**

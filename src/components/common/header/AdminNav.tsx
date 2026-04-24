@@ -8,6 +8,7 @@ import { Link, usePathname } from "@/src/i18n/navigation"
 import {
   ChartLineUp,
   ChartPie,
+  Files,
   House,
   List,
   Plus,
@@ -34,6 +35,7 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
 
   const [isClientsOpen, setIsClientsOpen] = React.useState(false)
   const [isCommercialOpen, setIsCommercialOpen] = React.useState(false)
+  const [isDocumentsOpen, setIsDocumentsOpen] = React.useState(false)
   const [isProjectsOpen, setIsProjectsOpen] = React.useState(false)
 
   return (
@@ -228,6 +230,69 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
                       />
                       <span className="font-bold uppercase tracking-tight text-[10px]">
                         {t("clients.create")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div
+            onMouseEnter={() => setIsDocumentsOpen(true)}
+            onMouseLeave={() => setIsDocumentsOpen(false)}
+          >
+            <DropdownMenu
+              modal={false}
+              open={isDocumentsOpen}
+              onOpenChange={setIsDocumentsOpen}
+            >
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                    pathname.startsWith("/admin/documents")
+                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
+                  }`}
+                >
+                  <Files weight="duotone" className="mr-1.5 size-3.5" />
+                  {t("documents.title")}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="start"
+                className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+              >
+                <DropdownMenuGroup className="grid gap-0.5">
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                  >
+                    <Link href="/admin/documents" className="flex items-center">
+                      <List
+                        weight="bold"
+                        className="mr-2.5 size-3.5 text-brand-primary/60"
+                      />
+                      <span className="font-bold uppercase tracking-tight text-[10px]">
+                        {t("documents.list")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                  >
+                    <Link
+                      href="/admin/documents/new"
+                      className="flex items-center"
+                    >
+                      <Plus
+                        weight="bold"
+                        className="mr-2.5 size-3.5 text-brand-primary/60"
+                      />
+                      <span className="font-bold uppercase tracking-tight text-[10px]">
+                        {t("documents.create")}
                       </span>
                     </Link>
                   </DropdownMenuItem>

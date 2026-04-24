@@ -12,6 +12,7 @@ import {
   getProjectDecisionsCached,
   getProjectThreadsCached,
 } from "@/src/lib/communication-data"
+import { getProjectInvoicesCached } from "@/src/lib/financial-data"
 import {
   getProjectHandoffCached,
   getProjectKickoffCached,
@@ -107,6 +108,7 @@ export default async function AdminProjectDetailPage({
     currentUser,
     handoff,
     kickoff,
+    invoices,
   ] = await Promise.all([
     getAdminProjectOverview(id),
     getAdminProjectTimeline(id),
@@ -118,6 +120,7 @@ export default async function AdminProjectDetailPage({
     getCurrentAppUser(),
     getProjectHandoffCached(id),
     getProjectKickoffCached(id),
+    getProjectInvoicesCached(id),
   ])
 
   if (!project) {
@@ -158,6 +161,7 @@ export default async function AdminProjectDetailPage({
         currentUserId={currentUser?.id || ""}
         handoff={handoff}
         kickoff={kickoff}
+        invoices={invoices}
       />
     </main>
   )

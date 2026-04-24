@@ -16,6 +16,7 @@ const sectionByPath = {
   briefing: "briefing",
   tasks: "tasks",
   communication: "communication",
+  financial: "financial",
 } as const
 
 type SectionKey = keyof typeof sectionByPath

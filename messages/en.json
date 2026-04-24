@@ -336,7 +336,8 @@
           "assets": "Assets",
           "settings": "Settings",
           "communication": "Communication",
-          "handoff": "Handoff"
+          "handoff": "Handoff",
+          "financial": "Financial"
         },
         "project_info_title": "Project Information",
         "project_description_label": "Scope Description",
@@ -440,15 +441,15 @@
     "step_number": "Step {number}",
     "add_reference": "Add Reference",
     "steps": {
+      "businessDescription": {
+        "label": "About the Business",
+        "slug": "about-the-business",
+        "placeholder": "Briefly describe the business model, what you sell, and how you operate."
+      },
       "brandTone": {
         "label": "Brand Essence",
         "slug": "brand-essence",
         "placeholder": "How should the brand sound and behave? Ex: sophisticated, precise, warm, strategic."
-      },
-      "visualReferences": {
-        "label": "Visual References",
-        "slug": "visual-references",
-        "placeholder": "Add links to examples of sites, campaigns or interfaces that reflect the vision of the project."
       },
       "businessGoals": {
         "label": "Business Goals",
@@ -469,6 +470,56 @@
         "label": "Differentiators",
         "slug": "differentiators",
         "placeholder": "What makes the operation, the offer or the brand unique compared to the competition?"
+      },
+      "logos": {
+        "label": "Visual Identity (Logos)",
+        "slug": "logos",
+        "placeholder": "Upload your logos in vector or transparent background."
+      },
+      "palette": {
+        "label": "Official Colors",
+        "slug": "colors",
+        "placeholder": "Define your brand's primary HEX colors."
+      },
+      "typography": {
+        "label": "Typography",
+        "slug": "typography",
+        "placeholder": "What fonts does your brand use?"
+      },
+      "brandbook": {
+        "label": "Brandbook",
+        "slug": "brandbook",
+        "placeholder": "Brand manual or style guide."
+      },
+      "visualReferences": {
+        "label": "Visual References",
+        "slug": "visual-references",
+        "placeholder": "Add links to examples of sites, campaigns or interfaces that reflect the vision of the project."
+      },
+      "dislikedReferences": {
+        "label": "What to Avoid",
+        "slug": "avoid",
+        "placeholder": "What do you definitely NOT like or want to avoid?"
+      },
+      "competitors": {
+        "label": "Competitors",
+        "slug": "competitors",
+        "placeholder": "Which brands operate in the same market as yours?"
+      },
+      "desiredPerceptions": {
+        "label": "Desired Perception",
+        "slug": "perception",
+        "placeholder": "Words that define how you want to be seen."
+      },
+      "infrastructure": {
+        "label": "Access and Infra",
+        "slug": "infra",
+        "placeholder": "Technical data, domain, and hosting."
+      },
+      "governance": {
+        "label": "Rules and Approvers",
+        "slug": "governance",
+        "placeholder": "Who makes the final decisions on the project?"
       }
     },
     "questions": {
@@ -549,6 +600,11 @@
       "proposals": "All Proposals",
       "proposal_create": "New Proposal"
     },
+    "documents": {
+      "title": "Documents",
+      "list": "All Documents",
+      "create": "New Document"
+    },
     "user": {
       "profile": "My Profile",
       "settings": "Settings",
@@ -628,7 +684,8 @@
           "files": "Files",
           "briefing": "Briefing",
           "tasks": "Requests",
-          "communication": "Communication"
+          "communication": "Communication",
+          "financial": "Investment"
         },
         "active_project": "Active Project",
         "active_project_focus_description": "This is the project in focus now. Enter to see deliveries, files, briefing, and full history.",

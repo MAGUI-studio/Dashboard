@@ -8,6 +8,7 @@ import {
   ChatCircleDots as ChatCircleDotsIcon,
   CheckCircle as CheckCircleIcon,
   ClockCountdown as ClockCountdownIcon,
+  CurrencyCircleDollar as CurrencyCircleDollarIcon,
   Files as FilesIcon,
   NotePencil as NotePencilIcon,
   ShieldCheck as ShieldCheckIcon,
@@ -162,6 +163,13 @@ export default async function ProjectDetailPage({
             href={toHref(`/projects/${project.id}/communication`)}
             icon={ChatCircleDotsIcon}
             meta="inbox"
+          />
+          <ClientFeatureLink
+            title="Financeiro"
+            description="Gerencie seu investimento, parcelas e comprovantes."
+            href={toHref(`/projects/${project.id}/financial`)}
+            icon={CurrencyCircleDollarIcon}
+            meta="financial"
           />
           <ClientFeatureLink
             title="Solicitacoes"

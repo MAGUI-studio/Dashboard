@@ -336,7 +336,8 @@
           "assets": "Ativos",
           "settings": "Configurações",
           "communication": "Comunicação",
-          "handoff": "Handoff"
+          "handoff": "Handoff",
+          "financial": "Financeiro"
         },
         "project_info_title": "Informações do Projeto",
         "project_description_label": "Descrição do Escopo",
@@ -440,15 +441,15 @@
     "step_number": "Etapa {number}",
     "add_reference": "Adicionar Referência",
     "steps": {
+      "businessDescription": {
+        "label": "Sobre o Negócio",
+        "slug": "sobre-o-negocio",
+        "placeholder": "Descreva brevemente o modelo de negócio, o que vendem e como operam."
+      },
       "brandTone": {
         "label": "Essência da Marca",
         "slug": "essencia-da-marca",
         "placeholder": "Como a marca deve soar e se comportar? Ex: sofisticada, precisa, calorosa, estratégica."
-      },
-      "visualReferences": {
-        "label": "Referências Visuais",
-        "slug": "referencias-visuais",
-        "placeholder": "Adicione links de exemplos de sites, campanhas ou interfaces que refletem a visão do projeto."
       },
       "businessGoals": {
         "label": "Metas de Negócio",
@@ -469,6 +470,56 @@
         "label": "Diferenciais",
         "slug": "diferenciais",
         "placeholder": "O que torna a operação, a oferta ou a marca única frente à concorrência?"
+      },
+      "logos": {
+        "label": "Identidade Visual (Logos)",
+        "slug": "logos",
+        "placeholder": "Envie suas logos em vetor ou fundo transparente."
+      },
+      "palette": {
+        "label": "Cores Oficiais",
+        "slug": "cores",
+        "placeholder": "Defina as cores HEX principais da sua marca."
+      },
+      "typography": {
+        "label": "Tipografia",
+        "slug": "tipografia",
+        "placeholder": "Quais fontes sua marca utiliza?"
+      },
+      "brandbook": {
+        "label": "Brandbook",
+        "slug": "brandbook",
+        "placeholder": "Manual da marca ou guia de estilo."
+      },
+      "visualReferences": {
+        "label": "Referências Visuais",
+        "slug": "referencias-visuais",
+        "placeholder": "Adicione links de exemplos de sites, campanhas ou interfaces que refletem a visão do projeto."
+      },
+      "dislikedReferences": {
+        "label": "O que Evitar",
+        "slug": "evitar",
+        "placeholder": "O que você definitivamente NÃO gosta ou quer evitar?"
+      },
+      "competitors": {
+        "label": "Concorrentes",
+        "slug": "concorrentes",
+        "placeholder": "Quais marcas operam no mesmo mercado que o seu?"
+      },
+      "desiredPerceptions": {
+        "label": "Percepção Desejada",
+        "slug": "percepcao",
+        "placeholder": "Palavras que definem como você quer ser visto."
+      },
+      "infrastructure": {
+        "label": "Acessos e Infra",
+        "slug": "infra",
+        "placeholder": "Dados técnicos, domínio e hospedagem."
+      },
+      "governance": {
+        "label": "Regras e Aprovadores",
+        "slug": "governanca",
+        "placeholder": "Quem toma as decisões finais no projeto?"
       }
     },
     "questions": {
@@ -549,6 +600,11 @@
       "proposals": "Todas as Propostas",
       "proposal_create": "Nova Proposta"
     },
+    "documents": {
+      "title": "Documentos",
+      "list": "Todos os Documentos",
+      "create": "Novo Documento"
+    },
     "user": {
       "profile": "Meu Perfil",
       "settings": "Configurações",
@@ -628,7 +684,8 @@
           "files": "Arquivos",
           "briefing": "Briefing",
           "tasks": "Solicitacoes",
-          "communication": "Comunicação"
+          "communication": "Comunicação",
+          "financial": "Investimento"
         },
         "active_project": "Projeto Ativo",
         "active_project_focus_description": "Este é o projeto em foco agora. Entre para ver entregas, arquivos, briefing e o histórico completo.",
