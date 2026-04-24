@@ -9,11 +9,11 @@ import {
   CaretDown,
   CaretUp,
   CaretUpDown,
-  DotsThreeVertical,
-  MagnifyingGlass,
-  Funnel,
-  DownloadSimple,
   Copy,
+  DotsThreeVertical,
+  DownloadSimple,
+  Funnel,
+  MagnifyingGlass,
   Trash,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
