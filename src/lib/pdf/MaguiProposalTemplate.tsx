@@ -914,19 +914,6 @@ export function MaguiProposalTemplate({
   ]
 
   const commercialBlocks: ContentBlock[] = [
-    ...proposal.items.map(
-      (item, index) =>
-        ({
-          kind: "pricing",
-          title:
-            index === 0
-              ? "Investimento por entrega"
-              : "Investimento por entrega (continuacao)",
-          items: [item],
-          currency,
-        }) satisfies PricingSectionBlock
-    ),
-    { kind: "investment", totalValue: proposal.totalValue, currency },
     ...createTextBlocks(
       "bullets",
       "Operacao pela plataforma",
@@ -949,6 +936,19 @@ export function MaguiProposalTemplate({
           120
         )
       : []),
+    ...proposal.items.map(
+      (item, index) =>
+        ({
+          kind: "pricing",
+          title:
+            index === 0
+              ? "Investimento por entrega"
+              : "Investimento por entrega (continuacao)",
+          items: [item],
+          currency,
+        }) satisfies PricingSectionBlock
+    ),
+    { kind: "investment", totalValue: proposal.totalValue, currency },
     ...createTextBlocks("bullets", "Proximos passos", nextSteps, 120),
   ]
 

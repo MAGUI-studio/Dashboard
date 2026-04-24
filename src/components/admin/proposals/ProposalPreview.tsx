@@ -249,7 +249,7 @@ export function ProposalPreview({
                   </div>
                 </div>
                 {item.longDescription && (
-                  <p className="text-sm leading-relaxed text-slate-500 font-medium whitespace-pre-wrap border-t border-slate-100 pt-4 mt-4">
+                  <p className="whitespace-pre-wrap border-t border-slate-100 mt-4 pt-4 text-sm font-medium leading-relaxed text-slate-500">
                     {item.longDescription}
                   </p>
                 )}
@@ -258,19 +258,31 @@ export function ProposalPreview({
           </div>
         </div>
 
+        {/* Section: Governance */}
+        <div className="border-t border-slate-100 p-16 sm:p-24 space-y-8">
+          <div className="space-y-4">
+            <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0093C8]">
+              <Info weight="bold" /> Operação e Governança
+            </h4>
+            <p className="max-w-3xl text-sm font-medium leading-relaxed text-slate-600">
+              {data.platformFlow}
+            </p>
+          </div>
+        </div>
+
         {/* Section: Investment */}
-        <div className="p-16 sm:p-24 bg-[#0F172A] text-white">
-          <div className="grid gap-16 md:grid-cols-2 items-center">
+        <div className="bg-[#0F172A] p-16 text-white sm:p-24">
+          <div className="grid items-center gap-16 md:grid-cols-2">
             <div className="space-y-8">
               <div className="space-y-2">
                 <p className="text-[11px] font-black uppercase tracking-[0.4em] text-[#0093C8]">
                   Investimento Consolidado
                 </p>
-                <h2 className="text-6xl sm:text-8xl font-black tracking-tighter tabular-nums">
+                <h2 className="text-6xl font-black tracking-tighter tabular-nums sm:text-8xl">
                   {formatCurrency(data.total)}
                 </h2>
               </div>
-              <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+              <p className="max-w-sm text-sm leading-relaxed text-slate-400">
                 Valor total para execução integral do escopo apresentado,
                 incluindo coordenação, design, desenvolvimento e governança
                 MAGUI.
@@ -279,7 +291,7 @@ export function ProposalPreview({
 
             <div className="rounded-[2.5rem] border border-white/10 bg-white/5 p-10 space-y-8">
               <div className="space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0093C8] flex items-center gap-2">
+                <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0093C8]">
                   <CurrencyDollar weight="bold" /> Condições de Pagamento
                 </h4>
                 <p className="text-sm font-bold leading-relaxed">
@@ -287,7 +299,7 @@ export function ProposalPreview({
                 </p>
               </div>
               <div className="space-y-4">
-                <h4 className="text-[10px] font-black uppercase tracking-widest text-[#0093C8] flex items-center gap-2">
+                <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0093C8]">
                   <ListChecks weight="bold" /> Prazo Estimado
                 </h4>
                 <p className="text-sm font-bold leading-relaxed">
@@ -298,34 +310,23 @@ export function ProposalPreview({
           </div>
         </div>
 
-        {/* Section: Extra info & Footer */}
-        <div className="p-16 sm:p-24 space-y-16 border-t border-slate-100">
-          <div className="grid gap-12 md:grid-cols-2">
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <Info weight="bold" /> Operação e Governança
-              </h4>
-              <p className="text-xs leading-relaxed text-slate-500 font-medium">
-                {data.platformFlow}
-              </p>
-            </div>
-            <div className="space-y-4">
-              <h4 className="text-[10px] font-black uppercase tracking-widest text-slate-400 flex items-center gap-2">
-                <ArrowLeft className="rotate-180" weight="bold" /> Próximos
-                Passos
-              </h4>
-              <p className="text-xs leading-relaxed text-slate-500 font-medium">
-                {data.nextSteps || "Aprovação e kickoff inicial."}
-              </p>
-            </div>
+        {/* Section: Next Steps & Footer */}
+        <div className="border-t border-slate-100 p-16 sm:p-24 space-y-16">
+          <div className="space-y-4">
+            <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
+              <ArrowLeft className="rotate-180" weight="bold" /> Próximos Passos
+            </h4>
+            <p className="text-sm font-medium leading-relaxed text-slate-500">
+              {data.nextSteps || "Aprovação e kickoff inicial."}
+            </p>
           </div>
 
-          <div className="pt-16 border-t border-slate-100 flex flex-col sm:flex-row justify-between items-center gap-6">
+          <div className="flex flex-col items-center justify-between gap-6 border-t border-slate-100 pt-16 sm:flex-row">
             <div className="space-y-1">
               <p className="text-[10px] font-black uppercase tracking-widest text-[#0F172A]">
                 MAGUI.studio
               </p>
-              <p className="text-[8px] font-bold text-slate-400 uppercase tracking-tight">
+              <p className="text-[8px] font-bold uppercase tracking-tight text-slate-400">
                 magui.studio | contato@magui.studio
               </p>
             </div>
