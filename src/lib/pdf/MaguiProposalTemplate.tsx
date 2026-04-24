@@ -152,8 +152,6 @@ const styles = StyleSheet.create({
   section: {
     marginBottom: 18,
     paddingTop: 12,
-    borderTopWidth: 1,
-    borderTopColor: BRAND_COLORS.rule,
   },
   sectionTitle: {
     fontSize: 11,
@@ -207,8 +205,6 @@ const styles = StyleSheet.create({
     gap: 18,
     marginBottom: 10,
     paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: BRAND_COLORS.rule,
   },
   pricingLeft: {
     flex: 1,
@@ -265,8 +261,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     fontSize: 7,
     color: BRAND_COLORS.textMuted,
-    borderTopWidth: 1,
-    borderTopColor: BRAND_COLORS.border,
     paddingTop: 10,
   },
 })
@@ -341,7 +335,7 @@ type ContentBlock =
   | InvestmentBlock
 
 function toDateLabel(value?: Date | string | null) {
-  if (!value) return "Nao definido"
+  if (!value) return "Não definido"
   return new Date(value).toLocaleDateString("pt-BR")
 }
 
@@ -427,10 +421,10 @@ function parseProposalNotes(notes?: string | null): ParsedNotes {
     else if (title === "impacto esperado") parsed.expectedImpact = lines
     else if (title === "diferenciais da entrega") parsed.differentials = lines
     else if (title === "prazo estimado") parsed.timeline = lines
-    else if (title === "condicoes de pagamento") parsed.paymentTerms = lines
-    else if (title === "operacao pela plataforma") parsed.platformFlow = lines
-    else if (title === "proximos passos") parsed.nextSteps = lines
-    else if (title === "observacoes adicionais") parsed.additionalNotes = lines
+    else if (title === "condições de pagamento") parsed.paymentTerms = lines
+    else if (title === "operação pela plataforma") parsed.platformFlow = lines
+    else if (title === "próximos passos") parsed.nextSteps = lines
+    else if (title === "observações adicionais") parsed.additionalNotes = lines
   })
 
   if (
@@ -456,47 +450,47 @@ function buildFallbackSummary(proposal: ProposalData) {
   return [
     `Esta proposta organiza ${count} ${
       count === 1 ? "entrega principal" : "entregas principais"
-    } em uma leitura comercial clara, conectando escopo, criterio de execucao e investimento de forma objetiva.`,
+    } em uma leitura comercial clara, conectando escopo, critério de execução e investimento de forma objetiva.`,
   ]
 }
 
 function buildFallbackObjectives() {
   return [
-    "Dar clareza ao que sera entregue, como o trabalho sera conduzido e qual leitura de valor sustenta a decisao.",
-    "Reduzir ambiguidades comerciais e aumentar confianca na aprovacao.",
+    "Dar clareza ao que será entregue, como o trabalho será conduzido e qual leitura de valor sustenta a decisão.",
+    "Reduzir ambiguidades comerciais e aumentar confiança na aprovação.",
   ]
 }
 
 function buildFallbackImpact() {
   return [
-    "Mais clareza sobre escopo, investimento e conducao do projeto.",
-    "Percepcao mais profissional da entrega e menor atrito operacional ao longo da execucao.",
+    "Mais clareza sobre escopo, investimento e condução do projeto.",
+    "Percepção mais profissional da entrega e menor atrito operacional ao longo da execução.",
   ]
 }
 
 function buildFallbackDifferentials() {
   return [
-    "Leitura comercial estruturada por entregas, e nao apenas por preco final.",
-    "Centralizacao de aprovacoes, materiais e historico para diminuir retrabalho.",
+    "Leitura comercial estruturada por entregas, e não apenas por preço final.",
+    "Centralização de aprovações, materiais e histórico para diminuir retrabalho.",
   ]
 }
 
 function buildFallbackPlatformFlow() {
   return [
-    "Toda a comunicacao, aprovacoes, centralizacao de arquivos e acompanhamento das etapas acontecem pela plataforma da MAGUI.",
-    "Esse fluxo reduz ruido operacional, preserva historico e facilita a tomada de decisao durante o projeto.",
+    "Toda a comunicação, aprovações, centralização de arquivos e acompanhamento das etapas acontecem pela plataforma da MAGUI.",
+    "Esse fluxo reduz ruído operacional, preserva histórico e facilita a tomada de decisão durante o projeto.",
   ]
 }
 
 function buildScopeParagraph(item: ProposalItem) {
   if (item.longDescription?.trim()) return item.longDescription.trim()
 
-  return `${item.description} sera conduzido(a) como uma frente dedicada do projeto, com alinhamento claro de entrega, criterio de aprovacao e foco em resultado final consistente.`
+  return `${item.description} será conduzido(a) como uma frente dedicada do projeto, com alinhamento claro de entrega, critério de aprovação e foco em resultado final consistente.`
 }
 
 function buildDeliverableLine(item: ProposalItem) {
   if (item.longDescription?.trim()) return item.longDescription.trim()
-  return `${item.description} com direcionamento claro de execucao e entrega.`
+  return `${item.description} com direcionamento claro de execução e entrega.`
 }
 
 function buildScopeParagraphs(item: ProposalItem) {
@@ -511,8 +505,8 @@ function buildProcessLines(items: ProposalItem[], timeline: string[]) {
   const lines = [
     `O projeto foi dividido em ${items.length} ${
       items.length === 1 ? "frente principal" : "frentes principais"
-    } para facilitar entendimento, aprovacao e execucao.`,
-    "Cada entrega foi separada para tornar o investimento mais tangivel e a operacao mais previsivel.",
+    } para facilitar entendimento, aprovação e execução.`,
+    "Cada entrega foi separada para tornar o investimento mais tangível e a operação mais previsível.",
   ]
 
   if (timeline.length > 0) lines.push(...timeline)
@@ -527,7 +521,7 @@ function buildNextSteps(
   if (customSteps && customSteps.length > 0) return customSteps
 
   return [
-    "Aprovacao desta proposta para consolidacao do escopo e do investimento.",
+    "Aprovação desta proposta para consolidação do escopo e do investimento.",
     "Kickoff com alinhamento final de prioridades, cronograma e materiais de entrada.",
     `Validade comercial deste documento: ${toDateLabel(validUntil)}.`,
   ]
@@ -553,7 +547,7 @@ function createTextBlocks(
     ) {
       blocks.push({
         kind,
-        title: blocks.length === 0 ? title : `${title} (continuacao)`,
+        title: blocks.length === 0 ? title : `${title} (continuação)`,
         lines: currentLines,
       })
       currentLines = []
@@ -567,7 +561,7 @@ function createTextBlocks(
   if (currentLines.length > 0) {
     blocks.push({
       kind,
-      title: blocks.length === 0 ? title : `${title} (continuacao)`,
+      title: blocks.length === 0 ? title : `${title} (continuação)`,
       lines: currentLines,
     })
   }
@@ -669,8 +663,8 @@ function renderBlock(block: ContentBlock, currency: string) {
         </Text>
         <Text style={styles.investmentText}>
           Valor consolidado para todas as entregas previstas nesta proposta, com
-          leitura pensada para decisao comercial clara e conducao mais
-          previsivel do projeto.
+          leitura pensada para decisão comercial clara e condução mais
+          previsível do projeto.
         </Text>
       </View>
     )
@@ -797,9 +791,7 @@ function InternalPage({
         {/* Brand Header */}
         <View style={styles.header} fixed>
           <View style={styles.studioInfo}>
-            <Text style={styles.studioDetails}>
-              Padrao de Autoridade Digital
-            </Text>
+            <Text style={styles.studioDetails}>Padrão de Autoridade Digital</Text>
             <Text style={styles.studioDetails}>
               magui.studio | contato@magui.studio
             </Text>
@@ -809,7 +801,7 @@ function InternalPage({
         <View style={styles.headerLine} />
         <Text style={styles.kicker}>{kicker}</Text>
         <Text style={isContinuation ? styles.continuationTitle : styles.title}>
-          {isContinuation ? `${title} (continuacao)` : title}
+          {isContinuation ? `${title} (continuação)` : title}
         </Text>
 
         {!isContinuation && leadName ? (
@@ -894,7 +886,7 @@ export function MaguiProposalTemplate({
           title:
             index === 0
               ? "Escopo da entrega"
-              : "Escopo da entrega (continuacao)",
+              : "Escopo da entrega (continuação)",
           items: [item],
         }) satisfies ItemSectionBlock
     ),
@@ -907,7 +899,7 @@ export function MaguiProposalTemplate({
     ),
     ...createTextBlocks(
       "bullets",
-      "Como o trabalho sera conduzido",
+      "Como o trabalho será conduzido",
       processLines,
       120
     ),
@@ -916,14 +908,14 @@ export function MaguiProposalTemplate({
   const commercialBlocks: ContentBlock[] = [
     ...createTextBlocks(
       "bullets",
-      "Operacao pela plataforma",
+      "Operação pela plataforma",
       platformFlow,
       120
     ),
     ...(parsedNotes.paymentTerms.length > 0
       ? createTextBlocks(
           "bullets",
-          "Condicoes de pagamento",
+          "Condições de pagamento",
           parsedNotes.paymentTerms,
           120
         )
@@ -931,7 +923,7 @@ export function MaguiProposalTemplate({
     ...(parsedNotes.additionalNotes.length > 0
       ? createTextBlocks(
           "bullets",
-          "Observacoes importantes",
+          "Observações importantes",
           parsedNotes.additionalNotes,
           120
         )
@@ -943,13 +935,13 @@ export function MaguiProposalTemplate({
           title:
             index === 0
               ? "Investimento por entrega"
-              : "Investimento por entrega (continuacao)",
+              : "Investimento por entrega (continuação)",
           items: [item],
           currency,
         }) satisfies PricingSectionBlock
     ),
     { kind: "investment", totalValue: proposal.totalValue, currency },
-    ...createTextBlocks("bullets", "Proximos passos", nextSteps, 120),
+    ...createTextBlocks("bullets", "Próximos passos", nextSteps, 120),
   ]
 
   const overviewPages = paginateBlocks(overviewBlocks, 320, 440)
@@ -959,7 +951,10 @@ export function MaguiProposalTemplate({
     <Document title={proposal.title || "Proposta Comercial"}>
       <Page size="A4" style={styles.page}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={FRONT_IMAGE} style={styles.fullBleed} />
+        <Image
+          src={FRONT_IMAGE}
+          style={styles.fullBleed}
+        />
       </Page>
 
       {overviewPages.map((blocks, index) => (
@@ -981,7 +976,7 @@ export function MaguiProposalTemplate({
         <InternalPage
           key={`commercial-${index}`}
           kicker="Investimento"
-          title="Estrutura comercial e condicoes da proposta"
+          title="Estrutura comercial e condições da proposta"
           isContinuation={index > 0}
           blocks={blocks}
           currency={currency}
@@ -990,7 +985,10 @@ export function MaguiProposalTemplate({
 
       <Page size="A4" style={styles.page}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image src={BACK_IMAGE} style={styles.fullBleed} />
+        <Image
+          src={BACK_IMAGE}
+          style={styles.fullBleed}
+        />
       </Page>
     </Document>
   )

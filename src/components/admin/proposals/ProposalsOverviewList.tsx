@@ -9,11 +9,11 @@ import {
   CaretDown,
   CaretUp,
   CaretUpDown,
-  Copy,
   DotsThreeVertical,
-  DownloadSimple,
-  Funnel,
   MagnifyingGlass,
+  Funnel,
+  DownloadSimple,
+  Copy,
   Trash,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -89,7 +89,7 @@ export function ProposalsOverviewList({
   const handleDelete = async (id: string) => {
     const result = await deleteProposalAction(id)
     if (result.success) {
-      toast.success("Proposta excluida")
+      toast.success("Proposta excluída")
       setItems((current) => current.filter((proposal) => proposal.id !== id))
     } else {
       toast.error("Erro ao excluir proposta")
@@ -244,7 +244,7 @@ export function ProposalsOverviewList({
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por titulo, empresa ou numero..."
+            placeholder="Buscar por título, empresa ou número..."
             className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-11 pr-4 text-xs font-bold transition-all focus-visible:bg-muted/20 focus-visible:ring-brand-primary/20"
           />
         </div>
@@ -343,11 +343,11 @@ export function ProposalsOverviewList({
                 onClick={() => handleSort("date")}
               >
                 <div className="flex items-center gap-2">
-                  Criacao {getSortIcon("date")}
+                  Criação {getSortIcon("date")}
                 </div>
               </TableHead>
               <TableHead className="h-16 px-8 text-right text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-                Acoes
+                Ações
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -453,7 +453,7 @@ export function ProposalsOverviewList({
                         >
                           <div className="px-3 py-2">
                             <p className="text-[8px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
-                              Exportacao
+                              Exportação
                             </p>
                           </div>
                           <DropdownMenuItem

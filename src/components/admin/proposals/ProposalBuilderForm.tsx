@@ -8,10 +8,10 @@ import {
   ClockCountdown,
   FilePdf,
   ListChecks,
-  MagicWand,
   Plus,
   Sparkle,
   Trash,
+  MagicWand,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -28,12 +28,10 @@ import {
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProposalAction } from "@/src/lib/actions/proposal.actions"
-
 import {
   PROPOSAL_PRESETS,
   type ProposalPreset,
 } from "@/src/config/proposal-presets"
-
 import { ProposalPreview } from "./ProposalPreview"
 
 interface ProposalBuilderFormProps {
@@ -56,7 +54,7 @@ const EMPTY_ITEM: ProposalItemForm = {
 }
 
 const DEFAULT_PLATFORM_FLOW =
-  "Toda a comunicacao, aprovacoes, centralizacao de arquivos e acompanhamento das etapas acontecem pela plataforma da MAGUI. Isso reduz ruido operacional, evita retrabalho e concentra historico, decisoes e materiais em um unico ambiente."
+  "Toda a comunicação, aprovações, centralização de arquivos e acompanhamento das etapas acontecem pela plataforma da MAGUI. Isso reduz ruído operacional, evita retrabalho e concentra histórico, decisões e materiais em um único ambiente."
 
 function parseCurrencyInput(value: string): number {
   const digits = value.replace(/\D/g, "")
@@ -164,10 +162,10 @@ export function ProposalBuilderForm({
       ["Impacto esperado", expectedImpact],
       ["Diferenciais da entrega", differentials],
       ["Prazo estimado", timeline],
-      ["Condicoes de pagamento", paymentTerms],
-      ["Operacao pela plataforma", platformFlow],
-      ["Proximos passos", nextSteps],
-      ["Observacoes adicionais", notes],
+      ["Condições de pagamento", paymentTerms],
+      ["Operação pela plataforma", platformFlow],
+      ["Próximos passos", nextSteps],
+      ["Observações adicionais", notes],
     ]
       .map(([sectionTitle, content]) => [sectionTitle, content.trim()] as const)
       .filter(([, content]) => content.length > 0)
@@ -260,8 +258,8 @@ export function ProposalBuilderForm({
             </h2>
             <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground/75">
               Preencha o contexto, as entregas e os acordos do projeto em uma
-              leitura mais limpa. O PDF final vai puxar essas informacoes para
-              gerar uma proposta mais legivel, explicativa e orientada a valor.
+              leitura mais limpa. O PDF final vai puxar essas informações para
+              gerar uma proposta mais legível, explicativa e orientada a valor.
             </p>
           </div>
         </div>
@@ -293,7 +291,7 @@ export function ProposalBuilderForm({
 
           <div className="space-y-2">
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-              Titulo do documento
+              Título do documento
             </Label>
             <div className="flex gap-3">
               <Input
@@ -337,7 +335,7 @@ export function ProposalBuilderForm({
       <SectionHeading
         icon={Sparkle}
         title="Narrativa da proposta"
-        description="Preencha o contexto, os objetivos e os argumentos que reforcam por que esse investimento faz sentido."
+        description="Preencha o contexto, os objetivos e os argumentos que reforçam por que esse investimento faz sentido."
       />
 
       <section className="space-y-8">
@@ -345,7 +343,7 @@ export function ProposalBuilderForm({
           label="Resumo executivo"
           value={executiveSummary}
           onChange={setExecutiveSummary}
-          placeholder="Apresente a leitura do momento, a oportunidade e a transformacao que esta proposta pretende viabilizar."
+          placeholder="Apresente a leitura do momento, a oportunidade e a transformação que esta proposta pretende viabilizar."
           minHeightClassName="min-h-40"
           presets={PROPOSAL_PRESETS.executiveSummary}
           onApplyPreset={(content) =>
@@ -356,7 +354,7 @@ export function ProposalBuilderForm({
           label="Objetivos do projeto"
           value={objectives}
           onChange={setObjectives}
-          placeholder="Ex: estruturar a presenca digital, elevar percepcao de valor e melhorar a conversa comercial."
+          placeholder="Ex: estruturar a presença digital, elevar percepção de valor e melhorar a conversa comercial."
           presets={PROPOSAL_PRESETS.objectives}
           onApplyPreset={(content) => handleApplyPreset(setObjectives, content)}
         />
@@ -364,7 +362,7 @@ export function ProposalBuilderForm({
           label="Impacto esperado"
           value={expectedImpact}
           onChange={setExpectedImpact}
-          placeholder="Ex: mais clareza na oferta, melhor apresentacao da marca e mais confianca no processo comercial."
+          placeholder="Ex: mais clareza na oferta, melhor apresentação da marca e mais confiança no processo comercial."
           presets={PROPOSAL_PRESETS.expectedImpact}
           onApplyPreset={(content) =>
             handleApplyPreset(setExpectedImpact, content)
@@ -377,7 +375,7 @@ export function ProposalBuilderForm({
           label="Diferenciais da entrega"
           value={differentials}
           onChange={setDifferentials}
-          placeholder="Ex: conducao centralizada, linguagem premium, aprovacoes organizadas e leitura mais profissional do projeto."
+          placeholder="Ex: condução centralizada, linguagem premium, aprovações organizadas e leitura mais profissional do projeto."
           presets={PROPOSAL_PRESETS.differentials}
           onApplyPreset={(content) =>
             handleApplyPreset(setDifferentials, content)
@@ -387,15 +385,15 @@ export function ProposalBuilderForm({
           label="Prazo estimado"
           value={timeline}
           onChange={setTimeline}
-          placeholder="Ex: 20 dias uteis a partir da aprovacao, kickoff e recebimento dos materiais."
+          placeholder="Ex: 20 dias úteis a partir da aprovação, kickoff e recebimento dos materiais."
           presets={PROPOSAL_PRESETS.timeline}
           onApplyPreset={(content) => handleApplyPreset(setTimeline, content)}
         />
         <FieldBlock
-          label="Condicoes de pagamento"
+          label="Condições de pagamento"
           value={paymentTerms}
           onChange={setPaymentTerms}
-          placeholder="Ex: 50% na aprovacao e 50% na etapa final, via PIX ou transferencia."
+          placeholder="Ex: 50% na aprovação e 50% na etapa final, via PIX ou transferência."
           presets={PROPOSAL_PRESETS.paymentTerms}
           onApplyPreset={(content) =>
             handleApplyPreset(setPaymentTerms, content)
@@ -406,7 +404,7 @@ export function ProposalBuilderForm({
       <SectionHeading
         icon={ListChecks}
         title="Escopo e investimento"
-        description="Organize as entregas com explicacao comercial e mantenha o investimento total sempre visivel."
+        description="Organize as entregas com explicação comercial e mantenha o investimento total sempre visível."
       />
 
       <section className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_18rem]">
@@ -414,10 +412,10 @@ export function ProposalBuilderForm({
           <div className="flex items-center justify-between gap-4">
             <div className="space-y-1">
               <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                Itens e servicos
+                Itens e serviços
               </Label>
               <p className="text-xs text-muted-foreground/50">
-                Cada entrega deve deixar claro o que esta incluso e qual papel
+                Cada entrega deve deixar claro o que está incluso e qual papel
                 ela cumpre dentro do projeto.
               </p>
             </div>
@@ -490,7 +488,7 @@ export function ProposalBuilderForm({
 
                   <div className="space-y-2 md:col-span-4">
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Valor unitario
+                      Valor unitário
                     </Label>
                     <div className="relative">
                       <Input
@@ -529,7 +527,7 @@ export function ProposalBuilderForm({
 
                   <div className="space-y-2 md:col-span-12">
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Explicacao comercial da entrega
+                      Explicação comercial da entrega
                     </Label>
                     <div className="space-y-3">
                       <Textarea
@@ -541,7 +539,7 @@ export function ProposalBuilderForm({
                             e.target.value
                           )
                         }
-                        placeholder="Descreva o que entra nesta entrega, como ela sera conduzida e qual valor ela gera para o projeto."
+                        placeholder="Descreva o que entra nesta entrega, como ela será conduzida e qual valor ela gera para o projeto."
                         className="min-h-28 rounded-2xl border-border/40 bg-muted/10 px-4 py-3 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                       />
                       <div className="flex flex-wrap gap-2">
@@ -582,8 +580,8 @@ export function ProposalBuilderForm({
               }).format(total)}
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground/70">
-              Valor consolidado desta proposta. Use os itens para reforcar o
-              escopo e a leitura de investimento, nao apenas o preco.
+              Valor consolidado desta proposta. Use os itens para reforçar o
+              escopo e a leitura de investimento, não apenas o preço.
             </p>
           </div>
 
@@ -595,9 +593,9 @@ export function ProposalBuilderForm({
               </p>
             </div>
             <p className="text-sm leading-relaxed text-muted-foreground/70">
-              Propostas mais fortes conectam entrega, impacto e conducao. Quando
-              o valor aparece sem contexto, a percepcao do investimento perde
-              forca.
+              Propostas mais fortes conectam entrega, impacto e condução. Quando
+              o valor aparece sem contexto, a percepção do investimento perde
+              força.
             </p>
           </div>
         </aside>
@@ -605,27 +603,27 @@ export function ProposalBuilderForm({
 
       <SectionHeading
         icon={ClockCountdown}
-        title="Condicoes e operacao"
-        description="Registre como o projeto sera conduzido, quais sao os proximos passos e qualquer observacao relevante para a decisao."
+        title="Condições e operação"
+        description="Registre como o projeto será conduzido, quais são os próximos passos e qualquer observação relevante para a decisão."
       />
 
       <section className="grid gap-8 md:grid-cols-2">
         <FieldBlock
-          label="Operacao pela plataforma"
+          label="Operação pela plataforma"
           value={platformFlow}
           onChange={setPlatformFlow}
-          description="Texto padrao de governanca para reforcar a centralizacao da comunicacao, aprovacoes e materiais."
-          placeholder="Explique como a plataforma organiza comunicacao, aprovacoes, materiais e acompanhamento."
+          description="Texto padrão de governança para reforçar a centralização da comunicação, aprovações e materiais."
+          placeholder="Explique como a plataforma organiza comunicação, aprovações, materiais e acompanhamento."
           presets={PROPOSAL_PRESETS.platformFlow}
           onApplyPreset={(content) =>
             handleApplyPreset(setPlatformFlow, content)
           }
         />
         <FieldBlock
-          label="Proximos passos"
+          label="Próximos passos"
           value={nextSteps}
           onChange={setNextSteps}
-          placeholder="Ex: aprovacao da proposta, assinatura, kickoff e envio dos materiais necessarios."
+          placeholder="Ex: aprovação da proposta, assinatura, kickoff e envio dos materiais necessários."
           presets={PROPOSAL_PRESETS.nextSteps}
           onApplyPreset={(content) => handleApplyPreset(setNextSteps, content)}
         />
@@ -633,10 +631,10 @@ export function ProposalBuilderForm({
 
       <section className="grid gap-8 md:grid-cols-2">
         <FieldBlock
-          label="Observacoes adicionais"
+          label="Observações adicionais"
           value={notes}
           onChange={setNotes}
-          placeholder="Ex: materiais que devem ser fornecidos, revisoes previstas, itens fora do escopo ou alinhamentos especificos."
+          placeholder="Ex: materiais que devem ser fornecidos, revisões previstas, itens fora do escopo ou alinhamentos específicos."
         />
       </section>
 

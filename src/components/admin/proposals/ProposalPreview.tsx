@@ -59,7 +59,7 @@ export function ProposalPreview({
   return (
     <div className="mx-auto max-w-5xl space-y-10 pb-20">
       {/* Header Actions */}
-      <div className="flex items-center justify-between gap-4 sticky top-4 z-10 bg-background/80 backdrop-blur-md p-4 rounded-3xl border border-border/10 shadow-2xl">
+      <div className="sticky top-4 z-10 flex items-center justify-between gap-4 rounded-3xl border border-border/10 bg-background/80 p-4 shadow-2xl backdrop-blur-md">
         <Button
           variant="ghost"
           onClick={onBack}
@@ -68,7 +68,7 @@ export function ProposalPreview({
           <ArrowLeft className="mr-2" weight="bold" /> Voltar para Edição
         </Button>
         <div className="flex items-center gap-3">
-          <p className="hidden sm:block text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 mr-4">
+          <p className="mr-4 hidden text-[9px] font-bold uppercase tracking-widest text-muted-foreground/60 sm:block">
             Revise os dados antes de gerar o PDF oficial
           </p>
           <Button
@@ -85,10 +85,10 @@ export function ProposalPreview({
       </div>
 
       {/* PDF Mockup Container */}
-      <div className="overflow-hidden rounded-[2.5rem] border border-border/20 bg-white shadow-2xl text-[#0F172A] font-sans">
+      <div className="overflow-hidden rounded-[2.5rem] border border-border/20 bg-white font-sans text-[#0F172A] shadow-2xl">
         {/* Page 1: Brand & Lead */}
-        <div className="p-16 sm:p-24 border-b border-border/10 min-h-[600px] flex flex-col justify-between">
-          <div className="flex justify-end items-start">
+        <div className="flex min-h-[600px] flex-col justify-between border-b border-border/10 p-16 sm:p-24">
+          <div className="flex items-start justify-end">
             <div className="text-right">
               <p className="text-[12px] font-black uppercase tracking-[0.3em] text-[#0093C8]">
                 Padrão de Autoridade Digital
@@ -103,12 +103,12 @@ export function ProposalPreview({
           </div>
 
           <div className="space-y-8">
-            <div className="h-1 w-20 bg-[#0093C8] rounded-full" />
+            <div className="h-1 w-20 rounded-full bg-[#0093C8]" />
             <div className="space-y-4">
               <p className="text-[10px] font-black uppercase tracking-[0.4em] text-[#0093C8]">
                 Proposta Comercial
               </p>
-              <h1 className="text-5xl sm:text-7xl font-black tracking-tighter leading-[0.9] uppercase">
+              <h1 className="text-5xl font-black leading-[0.9] tracking-tighter uppercase sm:text-7xl">
                 {data.title}
               </h1>
             </div>
@@ -151,13 +151,13 @@ export function ProposalPreview({
         </div>
 
         {/* Section: Narrative */}
-        <div className="p-16 sm:p-24 bg-slate-50/50 space-y-16">
+        <div className="space-y-16 bg-slate-50/50 p-16 sm:p-24">
           {data.executiveSummary && (
             <div className="space-y-6">
-              <h3 className="text-[11px] font-black uppercase tracking-[0.25em] text-[#0093C8] flex items-center gap-3">
+              <h3 className="flex items-center gap-3 text-[11px] font-black uppercase tracking-[0.25em] text-[#0093C8]">
                 <div className="h-px w-8 bg-[#0093C8]/30" /> Resumo Executivo
               </h3>
-              <p className="text-lg font-medium leading-relaxed max-w-3xl text-slate-700 italic">
+              <p className="max-w-3xl text-lg font-medium italic leading-relaxed text-slate-700">
                 &quot;{data.executiveSummary}&quot;
               </p>
             </div>
@@ -216,7 +216,7 @@ export function ProposalPreview({
         </div>
 
         {/* Section: Deliverables */}
-        <div className="p-16 sm:p-24 space-y-12">
+        <div className="space-y-12 p-16 sm:p-24">
           <div className="flex items-center gap-4">
             <h2 className="text-3xl font-black uppercase tracking-tighter">
               Escopo da Entrega
@@ -230,7 +230,7 @@ export function ProposalPreview({
                 key={i}
                 className="group rounded-3xl border border-slate-100 p-8 transition-colors hover:bg-slate-50"
               >
-                <div className="flex justify-between items-start mb-4">
+                <div className="mb-4 flex items-start justify-between">
                   <div className="space-y-1">
                     <p className="text-[9px] font-black uppercase tracking-[0.2em] text-[#0093C8]">
                       Entrega {String(i + 1).padStart(2, "0")}
@@ -240,7 +240,7 @@ export function ProposalPreview({
                     </h4>
                   </div>
                   <div className="text-right">
-                    <p className="text-[9px] font-bold text-muted-foreground/40 uppercase mb-1">
+                    <p className="mb-1 text-[9px] font-bold uppercase text-muted-foreground/40">
                       Subtotal
                     </p>
                     <p className="text-lg font-black">
@@ -249,7 +249,7 @@ export function ProposalPreview({
                   </div>
                 </div>
                 {item.longDescription && (
-                  <p className="whitespace-pre-wrap border-t border-slate-100 mt-4 pt-4 text-sm font-medium leading-relaxed text-slate-500">
+                  <p className="mt-4 whitespace-pre-wrap border-t border-slate-100 pt-4 text-sm font-medium leading-relaxed text-slate-500">
                     {item.longDescription}
                   </p>
                 )}
@@ -259,7 +259,7 @@ export function ProposalPreview({
         </div>
 
         {/* Section: Governance */}
-        <div className="border-t border-slate-100 p-16 sm:p-24 space-y-8">
+        <div className="space-y-8 border-t border-slate-100 p-16 sm:p-24">
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-[#0093C8]">
               <Info weight="bold" /> Operação e Governança
@@ -311,7 +311,7 @@ export function ProposalPreview({
         </div>
 
         {/* Section: Next Steps & Footer */}
-        <div className="border-t border-slate-100 p-16 sm:p-24 space-y-16">
+        <div className="space-y-16 border-t border-slate-100 p-16 sm:p-24">
           <div className="space-y-4">
             <h4 className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-slate-400">
               <ArrowLeft className="rotate-180" weight="bold" /> Próximos Passos
