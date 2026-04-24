@@ -13,6 +13,7 @@ import { extractRouterConfig } from "uploadthing/server"
 
 import { Toaster } from "@/src/components/ui/sonner"
 
+import { PwaInstallPrompt } from "@/src/components/common/PwaInstallPrompt"
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
 import { cn } from "@/src/lib/utils/utils"
@@ -26,9 +27,13 @@ import "@/src/app/globals.css"
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
+    { media: "(prefers-color-scheme: light)", color: "#0093C8" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F172A" },
   ],
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
 }
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -74,10 +79,10 @@ export async function generateMetadata(): Promise<Metadata> {
       shortcut: "/favicon-16x16.png",
       apple: "/apple-touch-icon.png",
     },
-    manifest: `${siteConfig.url}/site.webmanifest`,
+    manifest: "/manifest.webmanifest",
     appleWebApp: {
       capable: true,
-      statusBarStyle: "default",
+      statusBarStyle: "black-translucent",
       title: t("name"),
     },
     formatDetection: {
@@ -139,6 +144,7 @@ export default async function RootLayout({
             <ThemeProvider>
               <NuqsAdapter>{children}</NuqsAdapter>
               <Toaster />
+              <PwaInstallPrompt />
             </ThemeProvider>
           </NextIntlClientProvider>
         </ClerkProvider>

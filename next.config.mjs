@@ -1,5 +1,6 @@
 import createNextIntlPlugin from "next-intl/plugin"
 import withBundleAnalyzer from "@next/bundle-analyzer"
+import withSerwistInit from "@serwist/next"
 
 const withNextIntl = createNextIntlPlugin()
 
@@ -7,6 +8,13 @@ const analyzer = withBundleAnalyzer({
   enabled: process.env.ANALYZE === "true",
 })
 
+const withSerwist = withSerwistInit({
+  swSrc: "src/sw.ts",
+  swDest: "public/sw.js",
+  disable: process.env.NODE_ENV === "development",
+})
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   output: "standalone",
   images: {
@@ -35,4 +43,4 @@ const nextConfig = {
   },
 }
 
-export default analyzer(withNextIntl(nextConfig))
+export default analyzer(withNextIntl(withSerwist(nextConfig)))
