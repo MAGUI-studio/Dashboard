@@ -398,6 +398,8 @@ exports.Prisma.ProposalScalarFieldEnum = {
   totalValue: 'totalValue',
   currency: 'currency',
   notes: 'notes',
+  acceptedAt: 'acceptedAt',
+  acceptedIp: 'acceptedIp',
   leadId: 'leadId',
   projectId: 'projectId',
   createdAt: 'createdAt',
@@ -412,6 +414,15 @@ exports.Prisma.ProposalItemScalarFieldEnum = {
   quantity: 'quantity',
   order: 'order',
   proposalId: 'proposalId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProposalBlockScalarFieldEnum = {
+  id: 'id',
+  category: 'category',
+  title: 'title',
+  content: 'content',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -609,7 +620,8 @@ exports.Prisma.ModelName = {
   ScheduledReminder: 'ScheduledReminder',
   AuditLog: 'AuditLog',
   Proposal: 'Proposal',
-  ProposalItem: 'ProposalItem'
+  ProposalItem: 'ProposalItem',
+  ProposalBlock: 'ProposalBlock'
 };
 
 /**

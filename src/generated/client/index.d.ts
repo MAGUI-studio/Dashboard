@@ -134,6 +134,12 @@ export type Proposal = $Result.DefaultSelection<Prisma.$ProposalPayload>
  *
  */
 export type ProposalItem = $Result.DefaultSelection<Prisma.$ProposalItemPayload>
+/**
+ * Model ProposalBlock
+ *
+ */
+export type ProposalBlock =
+  $Result.DefaultSelection<Prisma.$ProposalBlockPayload>
 
 /**
  * Enums
@@ -807,6 +813,16 @@ export class PrismaClient<
    * ```
    */
   get proposalItem(): Prisma.ProposalItemDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.proposalBlock`: Exposes CRUD operations for the **ProposalBlock** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ProposalBlocks
+   * const proposalBlocks = await prisma.proposalBlock.findMany()
+   * ```
+   */
+  get proposalBlock(): Prisma.ProposalBlockDelegate<ExtArgs, ClientOptions>
 }
 
 export namespace Prisma {
@@ -1280,6 +1296,7 @@ export namespace Prisma {
     AuditLog: "AuditLog"
     Proposal: "Proposal"
     ProposalItem: "ProposalItem"
+    ProposalBlock: "ProposalBlock"
   }
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1326,6 +1343,7 @@ export namespace Prisma {
         | "auditLog"
         | "proposal"
         | "proposalItem"
+        | "proposalBlock"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -3055,6 +3073,82 @@ export namespace Prisma {
           }
         }
       }
+      ProposalBlock: {
+        payload: Prisma.$ProposalBlockPayload<ExtArgs>
+        fields: Prisma.ProposalBlockFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ProposalBlockFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ProposalBlockFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          findFirst: {
+            args: Prisma.ProposalBlockFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ProposalBlockFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          findMany: {
+            args: Prisma.ProposalBlockFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>[]
+          }
+          create: {
+            args: Prisma.ProposalBlockCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          createMany: {
+            args: Prisma.ProposalBlockCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ProposalBlockCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>[]
+          }
+          delete: {
+            args: Prisma.ProposalBlockDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          update: {
+            args: Prisma.ProposalBlockUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          deleteMany: {
+            args: Prisma.ProposalBlockDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ProposalBlockUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ProposalBlockUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>[]
+          }
+          upsert: {
+            args: Prisma.ProposalBlockUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ProposalBlockPayload>
+          }
+          aggregate: {
+            args: Prisma.ProposalBlockAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateProposalBlock>
+          }
+          groupBy: {
+            args: Prisma.ProposalBlockGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ProposalBlockGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ProposalBlockCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<ProposalBlockCountAggregateOutputType>
+              | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -3190,6 +3284,7 @@ export namespace Prisma {
     auditLog?: AuditLogOmit
     proposal?: ProposalOmit
     proposalItem?: ProposalItemOmit
+    proposalBlock?: ProposalBlockOmit
   }
 
   /* Types for Logging */
@@ -33806,6 +33901,8 @@ export namespace Prisma {
     totalValue: number | null
     currency: string | null
     notes: string | null
+    acceptedAt: Date | null
+    acceptedIp: string | null
     leadId: string | null
     projectId: string | null
     createdAt: Date | null
@@ -33821,6 +33918,8 @@ export namespace Prisma {
     totalValue: number | null
     currency: string | null
     notes: string | null
+    acceptedAt: Date | null
+    acceptedIp: string | null
     leadId: string | null
     projectId: string | null
     createdAt: Date | null
@@ -33836,6 +33935,8 @@ export namespace Prisma {
     totalValue: number
     currency: number
     notes: number
+    acceptedAt: number
+    acceptedIp: number
     leadId: number
     projectId: number
     createdAt: number
@@ -33862,6 +33963,8 @@ export namespace Prisma {
     totalValue?: true
     currency?: true
     notes?: true
+    acceptedAt?: true
+    acceptedIp?: true
     leadId?: true
     projectId?: true
     createdAt?: true
@@ -33877,6 +33980,8 @@ export namespace Prisma {
     totalValue?: true
     currency?: true
     notes?: true
+    acceptedAt?: true
+    acceptedIp?: true
     leadId?: true
     projectId?: true
     createdAt?: true
@@ -33892,6 +33997,8 @@ export namespace Prisma {
     totalValue?: true
     currency?: true
     notes?: true
+    acceptedAt?: true
+    acceptedIp?: true
     leadId?: true
     projectId?: true
     createdAt?: true
@@ -33999,6 +34106,8 @@ export namespace Prisma {
     totalValue: number
     currency: string
     notes: string | null
+    acceptedAt: Date | null
+    acceptedIp: string | null
     leadId: string
     projectId: string | null
     createdAt: Date
@@ -34035,6 +34144,8 @@ export namespace Prisma {
       totalValue?: boolean
       currency?: boolean
       notes?: boolean
+      acceptedAt?: boolean
+      acceptedIp?: boolean
       leadId?: boolean
       projectId?: boolean
       createdAt?: boolean
@@ -34059,6 +34170,8 @@ export namespace Prisma {
       totalValue?: boolean
       currency?: boolean
       notes?: boolean
+      acceptedAt?: boolean
+      acceptedIp?: boolean
       leadId?: boolean
       projectId?: boolean
       createdAt?: boolean
@@ -34081,6 +34194,8 @@ export namespace Prisma {
       totalValue?: boolean
       currency?: boolean
       notes?: boolean
+      acceptedAt?: boolean
+      acceptedIp?: boolean
       leadId?: boolean
       projectId?: boolean
       createdAt?: boolean
@@ -34100,6 +34215,8 @@ export namespace Prisma {
     totalValue?: boolean
     currency?: boolean
     notes?: boolean
+    acceptedAt?: boolean
+    acceptedIp?: boolean
     leadId?: boolean
     projectId?: boolean
     createdAt?: boolean
@@ -34117,6 +34234,8 @@ export namespace Prisma {
     | "totalValue"
     | "currency"
     | "notes"
+    | "acceptedAt"
+    | "acceptedIp"
     | "leadId"
     | "projectId"
     | "createdAt"
@@ -34163,6 +34282,8 @@ export namespace Prisma {
         totalValue: number
         currency: string
         notes: string | null
+        acceptedAt: Date | null
+        acceptedIp: string | null
         leadId: string
         projectId: string | null
         createdAt: Date
@@ -34799,6 +34920,8 @@ export namespace Prisma {
     readonly totalValue: FieldRef<"Proposal", "Float">
     readonly currency: FieldRef<"Proposal", "String">
     readonly notes: FieldRef<"Proposal", "String">
+    readonly acceptedAt: FieldRef<"Proposal", "DateTime">
+    readonly acceptedIp: FieldRef<"Proposal", "String">
     readonly leadId: FieldRef<"Proposal", "String">
     readonly projectId: FieldRef<"Proposal", "String">
     readonly createdAt: FieldRef<"Proposal", "DateTime">
@@ -36726,6 +36849,1255 @@ export namespace Prisma {
   }
 
   /**
+   * Model ProposalBlock
+   */
+
+  export type AggregateProposalBlock = {
+    _count: ProposalBlockCountAggregateOutputType | null
+    _min: ProposalBlockMinAggregateOutputType | null
+    _max: ProposalBlockMaxAggregateOutputType | null
+  }
+
+  export type ProposalBlockMinAggregateOutputType = {
+    id: string | null
+    category: string | null
+    title: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProposalBlockMaxAggregateOutputType = {
+    id: string | null
+    category: string | null
+    title: string | null
+    content: string | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ProposalBlockCountAggregateOutputType = {
+    id: number
+    category: number
+    title: number
+    content: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type ProposalBlockMinAggregateInputType = {
+    id?: true
+    category?: true
+    title?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProposalBlockMaxAggregateInputType = {
+    id?: true
+    category?: true
+    title?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ProposalBlockCountAggregateInputType = {
+    id?: true
+    category?: true
+    title?: true
+    content?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ProposalBlockAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProposalBlock to aggregate.
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProposalBlocks to fetch.
+     */
+    orderBy?:
+      | ProposalBlockOrderByWithRelationInput
+      | ProposalBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ProposalBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProposalBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProposalBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ProposalBlocks
+     **/
+    _count?: true | ProposalBlockCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ProposalBlockMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ProposalBlockMaxAggregateInputType
+  }
+
+  export type GetProposalBlockAggregateType<
+    T extends ProposalBlockAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateProposalBlock]: P extends "_count" | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateProposalBlock[P]>
+      : GetScalarType<T[P], AggregateProposalBlock[P]>
+  }
+
+  export type ProposalBlockGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProposalBlockWhereInput
+    orderBy?:
+      | ProposalBlockOrderByWithAggregationInput
+      | ProposalBlockOrderByWithAggregationInput[]
+    by: ProposalBlockScalarFieldEnum[] | ProposalBlockScalarFieldEnum
+    having?: ProposalBlockScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ProposalBlockCountAggregateInputType | true
+    _min?: ProposalBlockMinAggregateInputType
+    _max?: ProposalBlockMaxAggregateInputType
+  }
+
+  export type ProposalBlockGroupByOutputType = {
+    id: string
+    category: string
+    title: string
+    content: string
+    createdAt: Date
+    updatedAt: Date
+    _count: ProposalBlockCountAggregateOutputType | null
+    _min: ProposalBlockMinAggregateOutputType | null
+    _max: ProposalBlockMaxAggregateOutputType | null
+  }
+
+  type GetProposalBlockGroupByPayload<T extends ProposalBlockGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<ProposalBlockGroupByOutputType, T["by"]> & {
+          [P in keyof T &
+            keyof ProposalBlockGroupByOutputType]: P extends "_count"
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ProposalBlockGroupByOutputType[P]>
+            : GetScalarType<T[P], ProposalBlockGroupByOutputType[P]>
+        }
+      >
+    >
+
+  export type ProposalBlockSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      category?: boolean
+      title?: boolean
+      content?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs["result"]["proposalBlock"]
+  >
+
+  export type ProposalBlockSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      category?: boolean
+      title?: boolean
+      content?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs["result"]["proposalBlock"]
+  >
+
+  export type ProposalBlockSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      category?: boolean
+      title?: boolean
+      content?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs["result"]["proposalBlock"]
+  >
+
+  export type ProposalBlockSelectScalar = {
+    id?: boolean
+    category?: boolean
+    title?: boolean
+    content?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ProposalBlockOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "category" | "title" | "content" | "createdAt" | "updatedAt",
+    ExtArgs["result"]["proposalBlock"]
+  >
+
+  export type $ProposalBlockPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "ProposalBlock"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        category: string
+        title: string
+        content: string
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs["result"]["proposalBlock"]
+    >
+    composites: {}
+  }
+
+  type ProposalBlockGetPayload<
+    S extends boolean | null | undefined | ProposalBlockDefaultArgs,
+  > = $Result.GetResult<Prisma.$ProposalBlockPayload, S>
+
+  type ProposalBlockCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    ProposalBlockFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: ProposalBlockCountAggregateInputType | true
+  }
+
+  export interface ProposalBlockDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["ProposalBlock"]
+      meta: { name: "ProposalBlock" }
+    }
+    /**
+     * Find zero or one ProposalBlock that matches the filter.
+     * @param {ProposalBlockFindUniqueArgs} args - Arguments to find a ProposalBlock
+     * @example
+     * // Get one ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ProposalBlockFindUniqueArgs>(
+      args: SelectSubset<T, ProposalBlockFindUniqueArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one ProposalBlock that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ProposalBlockFindUniqueOrThrowArgs} args - Arguments to find a ProposalBlock
+     * @example
+     * // Get one ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ProposalBlockFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ProposalBlockFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProposalBlock that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockFindFirstArgs} args - Arguments to find a ProposalBlock
+     * @example
+     * // Get one ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ProposalBlockFindFirstArgs>(
+      args?: SelectSubset<T, ProposalBlockFindFirstArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ProposalBlock that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockFindFirstOrThrowArgs} args - Arguments to find a ProposalBlock
+     * @example
+     * // Get one ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ProposalBlockFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ProposalBlockFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more ProposalBlocks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ProposalBlocks
+     * const proposalBlocks = await prisma.proposalBlock.findMany()
+     *
+     * // Get first 10 ProposalBlocks
+     * const proposalBlocks = await prisma.proposalBlock.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const proposalBlockWithIdOnly = await prisma.proposalBlock.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ProposalBlockFindManyArgs>(
+      args?: SelectSubset<T, ProposalBlockFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a ProposalBlock.
+     * @param {ProposalBlockCreateArgs} args - Arguments to create a ProposalBlock.
+     * @example
+     * // Create one ProposalBlock
+     * const ProposalBlock = await prisma.proposalBlock.create({
+     *   data: {
+     *     // ... data to create a ProposalBlock
+     *   }
+     * })
+     *
+     */
+    create<T extends ProposalBlockCreateArgs>(
+      args: SelectSubset<T, ProposalBlockCreateArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many ProposalBlocks.
+     * @param {ProposalBlockCreateManyArgs} args - Arguments to create many ProposalBlocks.
+     * @example
+     * // Create many ProposalBlocks
+     * const proposalBlock = await prisma.proposalBlock.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ProposalBlockCreateManyArgs>(
+      args?: SelectSubset<T, ProposalBlockCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ProposalBlocks and returns the data saved in the database.
+     * @param {ProposalBlockCreateManyAndReturnArgs} args - Arguments to create many ProposalBlocks.
+     * @example
+     * // Create many ProposalBlocks
+     * const proposalBlock = await prisma.proposalBlock.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ProposalBlocks and only return the `id`
+     * const proposalBlockWithIdOnly = await prisma.proposalBlock.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ProposalBlockCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ProposalBlockCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a ProposalBlock.
+     * @param {ProposalBlockDeleteArgs} args - Arguments to delete one ProposalBlock.
+     * @example
+     * // Delete one ProposalBlock
+     * const ProposalBlock = await prisma.proposalBlock.delete({
+     *   where: {
+     *     // ... filter to delete one ProposalBlock
+     *   }
+     * })
+     *
+     */
+    delete<T extends ProposalBlockDeleteArgs>(
+      args: SelectSubset<T, ProposalBlockDeleteArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one ProposalBlock.
+     * @param {ProposalBlockUpdateArgs} args - Arguments to update one ProposalBlock.
+     * @example
+     * // Update one ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ProposalBlockUpdateArgs>(
+      args: SelectSubset<T, ProposalBlockUpdateArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more ProposalBlocks.
+     * @param {ProposalBlockDeleteManyArgs} args - Arguments to filter ProposalBlocks to delete.
+     * @example
+     * // Delete a few ProposalBlocks
+     * const { count } = await prisma.proposalBlock.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ProposalBlockDeleteManyArgs>(
+      args?: SelectSubset<T, ProposalBlockDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProposalBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ProposalBlocks
+     * const proposalBlock = await prisma.proposalBlock.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ProposalBlockUpdateManyArgs>(
+      args: SelectSubset<T, ProposalBlockUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ProposalBlocks and returns the data updated in the database.
+     * @param {ProposalBlockUpdateManyAndReturnArgs} args - Arguments to update many ProposalBlocks.
+     * @example
+     * // Update many ProposalBlocks
+     * const proposalBlock = await prisma.proposalBlock.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ProposalBlocks and only return the `id`
+     * const proposalBlockWithIdOnly = await prisma.proposalBlock.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ProposalBlockUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ProposalBlockUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one ProposalBlock.
+     * @param {ProposalBlockUpsertArgs} args - Arguments to update or create a ProposalBlock.
+     * @example
+     * // Update or create a ProposalBlock
+     * const proposalBlock = await prisma.proposalBlock.upsert({
+     *   create: {
+     *     // ... data to create a ProposalBlock
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ProposalBlock we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ProposalBlockUpsertArgs>(
+      args: SelectSubset<T, ProposalBlockUpsertArgs<ExtArgs>>
+    ): Prisma__ProposalBlockClient<
+      $Result.GetResult<
+        Prisma.$ProposalBlockPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of ProposalBlocks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockCountArgs} args - Arguments to filter ProposalBlocks to count.
+     * @example
+     * // Count the number of ProposalBlocks
+     * const count = await prisma.proposalBlock.count({
+     *   where: {
+     *     // ... the filter for the ProposalBlocks we want to count
+     *   }
+     * })
+     **/
+    count<T extends ProposalBlockCountArgs>(
+      args?: Subset<T, ProposalBlockCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], ProposalBlockCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ProposalBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ProposalBlockAggregateArgs>(
+      args: Subset<T, ProposalBlockAggregateArgs>
+    ): Prisma.PrismaPromise<GetProposalBlockAggregateType<T>>
+
+    /**
+     * Group by ProposalBlock.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ProposalBlockGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ProposalBlockGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ProposalBlockGroupByArgs["orderBy"] }
+        : { orderBy?: ProposalBlockGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ProposalBlockGroupByArgs, OrderByArg> &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetProposalBlockGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the ProposalBlock model
+     */
+    readonly fields: ProposalBlockFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ProposalBlock.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ProposalBlockClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the ProposalBlock model
+   */
+  interface ProposalBlockFieldRefs {
+    readonly id: FieldRef<"ProposalBlock", "String">
+    readonly category: FieldRef<"ProposalBlock", "String">
+    readonly title: FieldRef<"ProposalBlock", "String">
+    readonly content: FieldRef<"ProposalBlock", "String">
+    readonly createdAt: FieldRef<"ProposalBlock", "DateTime">
+    readonly updatedAt: FieldRef<"ProposalBlock", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * ProposalBlock findUnique
+   */
+  export type ProposalBlockFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter, which ProposalBlock to fetch.
+     */
+    where: ProposalBlockWhereUniqueInput
+  }
+
+  /**
+   * ProposalBlock findUniqueOrThrow
+   */
+  export type ProposalBlockFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter, which ProposalBlock to fetch.
+     */
+    where: ProposalBlockWhereUniqueInput
+  }
+
+  /**
+   * ProposalBlock findFirst
+   */
+  export type ProposalBlockFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter, which ProposalBlock to fetch.
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProposalBlocks to fetch.
+     */
+    orderBy?:
+      | ProposalBlockOrderByWithRelationInput
+      | ProposalBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProposalBlocks.
+     */
+    cursor?: ProposalBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProposalBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProposalBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProposalBlocks.
+     */
+    distinct?: ProposalBlockScalarFieldEnum | ProposalBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProposalBlock findFirstOrThrow
+   */
+  export type ProposalBlockFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter, which ProposalBlock to fetch.
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProposalBlocks to fetch.
+     */
+    orderBy?:
+      | ProposalBlockOrderByWithRelationInput
+      | ProposalBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ProposalBlocks.
+     */
+    cursor?: ProposalBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProposalBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProposalBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProposalBlocks.
+     */
+    distinct?: ProposalBlockScalarFieldEnum | ProposalBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProposalBlock findMany
+   */
+  export type ProposalBlockFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter, which ProposalBlocks to fetch.
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ProposalBlocks to fetch.
+     */
+    orderBy?:
+      | ProposalBlockOrderByWithRelationInput
+      | ProposalBlockOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ProposalBlocks.
+     */
+    cursor?: ProposalBlockWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ProposalBlocks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ProposalBlocks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ProposalBlocks.
+     */
+    distinct?: ProposalBlockScalarFieldEnum | ProposalBlockScalarFieldEnum[]
+  }
+
+  /**
+   * ProposalBlock create
+   */
+  export type ProposalBlockCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * The data needed to create a ProposalBlock.
+     */
+    data: XOR<ProposalBlockCreateInput, ProposalBlockUncheckedCreateInput>
+  }
+
+  /**
+   * ProposalBlock createMany
+   */
+  export type ProposalBlockCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ProposalBlocks.
+     */
+    data: ProposalBlockCreateManyInput | ProposalBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProposalBlock createManyAndReturn
+   */
+  export type ProposalBlockCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * The data used to create many ProposalBlocks.
+     */
+    data: ProposalBlockCreateManyInput | ProposalBlockCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ProposalBlock update
+   */
+  export type ProposalBlockUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * The data needed to update a ProposalBlock.
+     */
+    data: XOR<ProposalBlockUpdateInput, ProposalBlockUncheckedUpdateInput>
+    /**
+     * Choose, which ProposalBlock to update.
+     */
+    where: ProposalBlockWhereUniqueInput
+  }
+
+  /**
+   * ProposalBlock updateMany
+   */
+  export type ProposalBlockUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ProposalBlocks.
+     */
+    data: XOR<
+      ProposalBlockUpdateManyMutationInput,
+      ProposalBlockUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which ProposalBlocks to update
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * Limit how many ProposalBlocks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProposalBlock updateManyAndReturn
+   */
+  export type ProposalBlockUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * The data used to update ProposalBlocks.
+     */
+    data: XOR<
+      ProposalBlockUpdateManyMutationInput,
+      ProposalBlockUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which ProposalBlocks to update
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * Limit how many ProposalBlocks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProposalBlock upsert
+   */
+  export type ProposalBlockUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * The filter to search for the ProposalBlock to update in case it exists.
+     */
+    where: ProposalBlockWhereUniqueInput
+    /**
+     * In case the ProposalBlock found by the `where` argument doesn't exist, create a new ProposalBlock with this data.
+     */
+    create: XOR<ProposalBlockCreateInput, ProposalBlockUncheckedCreateInput>
+    /**
+     * In case the ProposalBlock was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ProposalBlockUpdateInput, ProposalBlockUncheckedUpdateInput>
+  }
+
+  /**
+   * ProposalBlock delete
+   */
+  export type ProposalBlockDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+    /**
+     * Filter which ProposalBlock to delete.
+     */
+    where: ProposalBlockWhereUniqueInput
+  }
+
+  /**
+   * ProposalBlock deleteMany
+   */
+  export type ProposalBlockDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ProposalBlocks to delete
+     */
+    where?: ProposalBlockWhereInput
+    /**
+     * Limit how many ProposalBlocks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ProposalBlock without action
+   */
+  export type ProposalBlockDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ProposalBlock
+     */
+    select?: ProposalBlockSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ProposalBlock
+     */
+    omit?: ProposalBlockOmit<ExtArgs> | null
+  }
+
+  /**
    * Enums
    */
 
@@ -37080,6 +38452,8 @@ export namespace Prisma {
     totalValue: "totalValue"
     currency: "currency"
     notes: "notes"
+    acceptedAt: "acceptedAt"
+    acceptedIp: "acceptedIp"
     leadId: "leadId"
     projectId: "projectId"
     createdAt: "createdAt"
@@ -37103,6 +38477,18 @@ export namespace Prisma {
 
   export type ProposalItemScalarFieldEnum =
     (typeof ProposalItemScalarFieldEnum)[keyof typeof ProposalItemScalarFieldEnum]
+
+  export const ProposalBlockScalarFieldEnum: {
+    id: "id"
+    category: "category"
+    title: "title"
+    content: "content"
+    createdAt: "createdAt"
+    updatedAt: "updatedAt"
+  }
+
+  export type ProposalBlockScalarFieldEnum =
+    (typeof ProposalBlockScalarFieldEnum)[keyof typeof ProposalBlockScalarFieldEnum]
 
   export const SortOrder: {
     asc: "asc"
@@ -39600,6 +40986,8 @@ export namespace Prisma {
     totalValue?: FloatFilter<"Proposal"> | number
     currency?: StringFilter<"Proposal"> | string
     notes?: StringNullableFilter<"Proposal"> | string | null
+    acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    acceptedIp?: StringNullableFilter<"Proposal"> | string | null
     leadId?: StringFilter<"Proposal"> | string
     projectId?: StringNullableFilter<"Proposal"> | string | null
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
@@ -39618,6 +41006,8 @@ export namespace Prisma {
     totalValue?: SortOrder
     currency?: SortOrder
     notes?: SortOrderInput | SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    acceptedIp?: SortOrderInput | SortOrder
     leadId?: SortOrder
     projectId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -39640,6 +41030,8 @@ export namespace Prisma {
       totalValue?: FloatFilter<"Proposal"> | number
       currency?: StringFilter<"Proposal"> | string
       notes?: StringNullableFilter<"Proposal"> | string | null
+      acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+      acceptedIp?: StringNullableFilter<"Proposal"> | string | null
       leadId?: StringFilter<"Proposal"> | string
       projectId?: StringNullableFilter<"Proposal"> | string | null
       createdAt?: DateTimeFilter<"Proposal"> | Date | string
@@ -39663,6 +41055,8 @@ export namespace Prisma {
     totalValue?: SortOrder
     currency?: SortOrder
     notes?: SortOrderInput | SortOrder
+    acceptedAt?: SortOrderInput | SortOrder
+    acceptedIp?: SortOrderInput | SortOrder
     leadId?: SortOrder
     projectId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
@@ -39696,6 +41090,12 @@ export namespace Prisma {
     totalValue?: FloatWithAggregatesFilter<"Proposal"> | number
     currency?: StringWithAggregatesFilter<"Proposal"> | string
     notes?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
+    acceptedAt?:
+      | DateTimeNullableWithAggregatesFilter<"Proposal">
+      | Date
+      | string
+      | null
+    acceptedIp?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     leadId?: StringWithAggregatesFilter<"Proposal"> | string
     projectId?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Proposal"> | Date | string
@@ -39787,6 +41187,70 @@ export namespace Prisma {
     proposalId?: StringWithAggregatesFilter<"ProposalItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProposalItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProposalItem"> | Date | string
+  }
+
+  export type ProposalBlockWhereInput = {
+    AND?: ProposalBlockWhereInput | ProposalBlockWhereInput[]
+    OR?: ProposalBlockWhereInput[]
+    NOT?: ProposalBlockWhereInput | ProposalBlockWhereInput[]
+    id?: StringFilter<"ProposalBlock"> | string
+    category?: StringFilter<"ProposalBlock"> | string
+    title?: StringFilter<"ProposalBlock"> | string
+    content?: StringFilter<"ProposalBlock"> | string
+    createdAt?: DateTimeFilter<"ProposalBlock"> | Date | string
+    updatedAt?: DateTimeFilter<"ProposalBlock"> | Date | string
+  }
+
+  export type ProposalBlockOrderByWithRelationInput = {
+    id?: SortOrder
+    category?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProposalBlockWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      AND?: ProposalBlockWhereInput | ProposalBlockWhereInput[]
+      OR?: ProposalBlockWhereInput[]
+      NOT?: ProposalBlockWhereInput | ProposalBlockWhereInput[]
+      category?: StringFilter<"ProposalBlock"> | string
+      title?: StringFilter<"ProposalBlock"> | string
+      content?: StringFilter<"ProposalBlock"> | string
+      createdAt?: DateTimeFilter<"ProposalBlock"> | Date | string
+      updatedAt?: DateTimeFilter<"ProposalBlock"> | Date | string
+    },
+    "id"
+  >
+
+  export type ProposalBlockOrderByWithAggregationInput = {
+    id?: SortOrder
+    category?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ProposalBlockCountOrderByAggregateInput
+    _max?: ProposalBlockMaxOrderByAggregateInput
+    _min?: ProposalBlockMinOrderByAggregateInput
+  }
+
+  export type ProposalBlockScalarWhereWithAggregatesInput = {
+    AND?:
+      | ProposalBlockScalarWhereWithAggregatesInput
+      | ProposalBlockScalarWhereWithAggregatesInput[]
+    OR?: ProposalBlockScalarWhereWithAggregatesInput[]
+    NOT?:
+      | ProposalBlockScalarWhereWithAggregatesInput
+      | ProposalBlockScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ProposalBlock"> | string
+    category?: StringWithAggregatesFilter<"ProposalBlock"> | string
+    title?: StringWithAggregatesFilter<"ProposalBlock"> | string
+    content?: StringWithAggregatesFilter<"ProposalBlock"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"ProposalBlock"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ProposalBlock"> | Date | string
   }
 
   export type DashboardMetricSnapshotCreateInput = {
@@ -41948,6 +43412,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lead: LeadCreateNestedOneWithoutProposalsInput
@@ -41964,6 +43430,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     leadId: string
     projectId?: string | null
     createdAt?: Date | string
@@ -41986,6 +43454,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lead?: LeadUpdateOneRequiredWithoutProposalsNestedInput
@@ -42008,6 +43482,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     leadId?: StringFieldUpdateOperationsInput | string
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42024,6 +43504,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     leadId: string
     projectId?: string | null
     createdAt?: Date | string
@@ -42045,6 +43527,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -42064,6 +43552,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     leadId?: StringFieldUpdateOperationsInput | string
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -42149,6 +43643,69 @@ export namespace Prisma {
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     proposalId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalBlockCreateInput = {
+    id?: string
+    category: string
+    title: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProposalBlockUncheckedCreateInput = {
+    id?: string
+    category: string
+    title: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProposalBlockUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalBlockUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalBlockCreateManyInput = {
+    id?: string
+    category: string
+    title: string
+    content: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProposalBlockUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProposalBlockUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    category?: StringFieldUpdateOperationsInput | string
+    title?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -44095,6 +45652,8 @@ export namespace Prisma {
     totalValue?: SortOrder
     currency?: SortOrder
     notes?: SortOrder
+    acceptedAt?: SortOrder
+    acceptedIp?: SortOrder
     leadId?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
@@ -44115,6 +45674,8 @@ export namespace Prisma {
     totalValue?: SortOrder
     currency?: SortOrder
     notes?: SortOrder
+    acceptedAt?: SortOrder
+    acceptedIp?: SortOrder
     leadId?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
@@ -44130,6 +45691,8 @@ export namespace Prisma {
     totalValue?: SortOrder
     currency?: SortOrder
     notes?: SortOrder
+    acceptedAt?: SortOrder
+    acceptedIp?: SortOrder
     leadId?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
@@ -44210,6 +45773,33 @@ export namespace Prisma {
     unitValue?: SortOrder
     quantity?: SortOrder
     order?: SortOrder
+  }
+
+  export type ProposalBlockCountOrderByAggregateInput = {
+    id?: SortOrder
+    category?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProposalBlockMaxOrderByAggregateInput = {
+    id?: SortOrder
+    category?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ProposalBlockMinOrderByAggregateInput = {
+    id?: SortOrder
+    category?: SortOrder
+    title?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
   }
 
   export type StringFieldUpdateOperationsInput = {
@@ -48822,6 +50412,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project?: ProjectCreateNestedOneWithoutProposalsInput
@@ -48837,6 +50429,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     projectId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -49018,6 +50612,8 @@ export namespace Prisma {
     totalValue?: FloatFilter<"Proposal"> | number
     currency?: StringFilter<"Proposal"> | string
     notes?: StringNullableFilter<"Proposal"> | string | null
+    acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
+    acceptedIp?: StringNullableFilter<"Proposal"> | string | null
     leadId?: StringFilter<"Proposal"> | string
     projectId?: StringNullableFilter<"Proposal"> | string | null
     createdAt?: DateTimeFilter<"Proposal"> | Date | string
@@ -49923,6 +51519,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lead: LeadCreateNestedOneWithoutProposalsInput
@@ -49938,6 +51536,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     leadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -52805,6 +54405,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     lead: LeadCreateNestedOneWithoutProposalsInput
@@ -52820,6 +54422,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     leadId: string
     projectId?: string | null
     createdAt?: Date | string
@@ -52869,6 +54473,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lead?: LeadUpdateOneRequiredWithoutProposalsNestedInput
@@ -52890,6 +54500,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     leadId?: StringFieldUpdateOperationsInput | string
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53499,6 +55115,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     projectId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -53576,6 +55194,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneWithoutProposalsNestedInput
@@ -53597,6 +55221,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53618,6 +55248,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -53723,6 +55359,8 @@ export namespace Prisma {
     totalValue?: number
     currency?: string
     notes?: string | null
+    acceptedAt?: Date | string | null
+    acceptedIp?: string | null
     leadId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -54068,6 +55706,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     lead?: LeadUpdateOneRequiredWithoutProposalsNestedInput
@@ -54089,6 +55733,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     leadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -54110,6 +55760,12 @@ export namespace Prisma {
     totalValue?: FloatFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
+    acceptedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    acceptedIp?: NullableStringFieldUpdateOperationsInput | string | null
     leadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

@@ -1,17 +1,13 @@
 "use server"
 
-import { ProposalStatus } from "@/src/generated/client"
+import { AuditActorType, ProposalStatus } from "@/src/generated/client"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
+import { createAuditLog, getCurrentAppUser } from "@/src/lib/project-governance"
 import { revalidateCrmLead } from "@/src/lib/revalidate"
-import {
-  AuditActorType,
-  createAuditLog,
-  getCurrentAppUser,
-} from "@/src/lib/utils/crm"
 
 const CreateProposalSchema = z.object({
   leadId: z.string(),
@@ -239,6 +235,25 @@ export async function deleteProposalAction(id: string) {
   } catch (error) {
     logger.error({ error }, "Delete Proposal Error")
     return { success: false, error: "Falha ao excluir proposta" }
+  }
+}
+
+export async function getLeadProposalsAction(leadId: string) {
+  try {
+    await protect("admin")
+    const proposals = await prisma.proposal.findMany({
+      where: { leadId },
+      orderBy: { createdAt: "desc" },
+    })
+
+    return { success: true, proposals }
+  } catch (error) {
+    logger.error({ error }, "Get Lead Proposals Action Error")
+    return {
+      success: false,
+      error: "Falha ao carregar propostas do lead",
+      proposals: [],
+    }
   }
 }
 

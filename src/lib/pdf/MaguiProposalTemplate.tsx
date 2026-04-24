@@ -792,7 +792,8 @@ function InternalPage({
 }) {
   return (
     <Page size="A4" style={styles.page}>
-      <Image src={PAGE_IMAGE} style={styles.sheet} fixed alt="Papel timbrado" />
+      {/* eslint-disable-next-line jsx-a11y/alt-text */}
+      <Image src={PAGE_IMAGE} style={styles.sheet} fixed />
 
       <View style={styles.content}>
         {/* Brand Header */}
@@ -959,11 +960,8 @@ export function MaguiProposalTemplate({
   return (
     <Document title={proposal.title || "Proposta Comercial"}>
       <Page size="A4" style={styles.page}>
-        <Image
-          src={FRONT_IMAGE}
-          style={styles.fullBleed}
-          alt="Capa da proposta"
-        />
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <Image src={FRONT_IMAGE} style={styles.fullBleed} />
       </Page>
 
       {overviewPages.map((blocks, index) => (
@@ -993,11 +991,8 @@ export function MaguiProposalTemplate({
       ))}
 
       <Page size="A4" style={styles.page}>
-        <Image
-          src={BACK_IMAGE}
-          style={styles.fullBleed}
-          alt="Contracapa da proposta"
-        />
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
+        <Image src={BACK_IMAGE} style={styles.fullBleed} />
       </Page>
     </Document>
   )

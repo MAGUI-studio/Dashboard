@@ -32,10 +32,10 @@ export async function triggerAutomatedFollowUpsAction() {
         where: {
           userId: admin.id,
           type: NotificationType.OPERATIONAL_REMINDER,
-          metadata: {
-            path: { equals: "lead_stale" },
-            leadId: { equals: lead.id },
-          },
+          AND: [
+            { metadata: { path: ["path"], equals: "lead_stale" } },
+            { metadata: { path: ["leadId"], equals: lead.id } },
+          ],
           createdAt: {
             gt: new Date(Date.now() - 24 * 60 * 60 * 1000),
           },
