@@ -593,6 +593,9 @@ model Proposal {
   currency    String         @default("BRL")
   notes       String?        @db.Text
   
+  acceptedAt  DateTime?
+  acceptedIp  String?
+  
   leadId      String
   lead        Lead           @relation(fields: [leadId], references: [id], onDelete: Cascade)
   
@@ -623,4 +626,16 @@ model ProposalItem {
   updatedAt       DateTime @updatedAt
 
   @@index([proposalId, order])
+}
+
+model ProposalBlock {
+  id        String   @id @default(cuid())
+  category  String   // EXECUTIVE_SUMMARY, OBJECTIVES, etc.
+  title     String
+  content   String   @db.Text
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
 }

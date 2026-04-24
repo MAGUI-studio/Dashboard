@@ -58,13 +58,19 @@ const getAdminDashboardSummaryCached = (userId: string) =>
       const [
         totalClients,
         activeProjectsCount,
+        completedProjectsCount,
         pendingApprovalsCount,
         activeLeadsCount,
+        convertedLeadsCount,
         unreadNotificationsCount,
+        negotiationValueResult,
       ] = await Promise.all([
         prisma.user.count({ where: { role: UserRole.CLIENT } }),
         prisma.project.count({
           where: { status: { not: ProjectStatus.LAUNCHED } },
+        }),
+        prisma.project.count({
+          where: { status: ProjectStatus.LAUNCHED },
         }),
         prisma.update.count({
           where: {
@@ -75,15 +81,29 @@ const getAdminDashboardSummaryCached = (userId: string) =>
         prisma.lead.count({
           where: { status: { not: LeadStatus.CONVERTIDO } },
         }),
+        prisma.lead.count({
+          where: { status: LeadStatus.CONVERTIDO },
+        }),
         prisma.notification.count({ where: { userId, readAt: null } }),
+        prisma.proposal.aggregate({
+          where: {
+            status: { in: ["DRAFT", "SENT"] },
+          },
+          _sum: {
+            totalValue: true,
+          },
+        }),
       ])
 
       return {
         totalClients,
         activeProjectsCount,
+        completedProjectsCount,
         pendingApprovalsCount,
         activeLeadsCount,
+        convertedLeadsCount,
         unreadNotificationsCount,
+        negotiationValue: negotiationValueResult._sum.totalValue || 0,
       }
     },
     ["admin-dashboard-summary", userId],
@@ -326,6 +346,11 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       ),
     }))
 
+    const negotiationValueSum = await prisma.proposal.aggregate({
+      where: { status: { in: ["DRAFT", "SENT"] } },
+      _sum: { totalValue: true },
+    })
+
     return {
       averageApprovalHours,
       activeProjectsCount,
@@ -334,6 +359,7 @@ const getAdminDashboardPerformanceCached = unstable_cache(
       projectDistribution,
       leadDistribution,
       silentProjects: mappedSilentProjects,
+      negotiationValue: negotiationValueSum._sum.totalValue || 0,
     }
   },
   ["admin-dashboard-performance"],

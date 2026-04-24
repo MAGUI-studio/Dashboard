@@ -29,11 +29,11 @@ export async function takeDashboardSnapshotAction() {
     const snapshot = await prisma.dashboardMetricSnapshot.create({
       data: {
         activeProjects: stats.activeProjectsCount,
-        completedProjects: 0, // Need to implement completed count
+        completedProjects: stats.completedProjectsCount,
         pendingApprovals: stats.pendingApprovalsCount,
-        totalLeads: stats.activeLeadsCount,
-        convertedLeads: 0, // Need to implement
-        negotiationValue: 0, // Need to implement
+        totalLeads: stats.activeLeadsCount + stats.convertedLeadsCount,
+        convertedLeads: stats.convertedLeadsCount,
+        negotiationValue: stats.negotiationValue,
         avgApprovalHours: Math.round(perf.averageApprovalHours),
       },
     })

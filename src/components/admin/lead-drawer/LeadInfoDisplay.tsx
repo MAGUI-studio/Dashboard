@@ -10,11 +10,7 @@ import {
   ChatCircleText,
   Clock,
   Copy,
-  EnvelopeSimple,
   Globe,
-  InstagramLogo,
-  LinkSimple,
-  Phone,
   WhatsappLogo,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -39,54 +35,58 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
   const whatsappUrl = phone ? `https://wa.me/${phone}` : null
 
   return (
-    <div className="grid gap-12">
+    <div className="grid gap-8">
       {/* Reminders & Urgency */}
       {lead.nextActionAt && (
-        <div className="flex items-center justify-between rounded-full border border-brand-primary/10 bg-brand-primary/[0.03] py-4 pl-6 pr-4">
+        <div className="flex items-center justify-between rounded-3xl border border-brand-primary/10 bg-brand-primary/[0.03] p-5">
           <div className="flex items-center gap-4">
-            <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-              <Clock size={16} weight="bold" />
+            <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+              <Clock size={20} weight="bold" />
             </div>
             <div>
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-brand-primary/60">
+              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary/60">
                 Ação Agendada
               </p>
-              <p className="text-xs font-bold text-foreground">
+              <p className="text-sm font-bold text-foreground">
                 {new Date(lead.nextActionAt).toLocaleDateString("pt-BR")}
               </p>
             </div>
           </div>
-          <div className="flex size-6 items-center justify-center rounded-full bg-brand-primary/10">
-            <span className="relative flex h-1.5 w-1.5">
+          <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10">
+            <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-primary opacity-75"></span>
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-primary"></span>
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-primary"></span>
             </span>
           </div>
         </div>
       )}
 
-      <div className="grid gap-10 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {/* Contact Intelligence */}
-        <section className="space-y-8">
+        <section className="space-y-4 rounded-[2rem] border border-border/40 bg-muted/5 p-6">
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-border/10" />
-            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
+            <ChatCircleText
+              size={18}
+              weight="duotone"
+              className="text-brand-primary"
+            />
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/60">
               Inteligência de Contato
             </h4>
           </div>
 
-          <div className="space-y-6 px-2">
-            <div className="group space-y-1.5">
-              <Label label="Responsável" icon={ChatCircleText} />
-              <p className="pl-6 text-sm font-bold text-foreground/90">
+          <div className="space-y-5">
+            <div className="group space-y-1">
+              <Label label="Responsável" />
+              <p className="text-sm font-bold text-foreground/90">
                 {lead.contactName || "Time Comercial"}
               </p>
             </div>
 
             {lead.email && (
-              <div className="group space-y-1.5">
-                <Label label="E-mail Corporativo" icon={EnvelopeSimple} />
-                <div className="flex items-center justify-between pl-6">
+              <div className="group space-y-1">
+                <Label label="E-mail Corporativo" />
+                <div className="flex items-center justify-between">
                   <p className="truncate text-sm font-bold text-foreground/90">
                     {lead.email}
                   </p>
@@ -103,9 +103,9 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
             )}
 
             {lead.phone && (
-              <div className="group space-y-1.5">
-                <Label label="Telefone / WhatsApp" icon={Phone} />
-                <div className="flex items-center justify-between pl-6">
+              <div className="group space-y-1">
+                <Label label="Telefone / WhatsApp" />
+                <div className="flex items-center justify-between">
                   <p className="text-sm font-bold text-foreground/90">
                     {lead.phone}
                   </p>
@@ -138,26 +138,26 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
         </section>
 
         {/* Source & Presence */}
-        <section className="space-y-8">
+        <section className="space-y-4 rounded-[2rem] border border-border/40 bg-muted/5 p-6">
           <div className="flex items-center gap-3">
-            <div className="h-px flex-1 bg-border/10" />
-            <h4 className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
+            <Globe size={18} weight="duotone" className="text-brand-primary" />
+            <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-foreground/60">
               Origem e Presença
             </h4>
           </div>
 
-          <div className="space-y-6 px-2">
-            <div className="space-y-1.5">
-              <Label label="Canal de Aquisição" icon={LinkSimple} />
-              <p className="pl-6 text-sm font-bold text-foreground/90">
+          <div className="space-y-5">
+            <div className="space-y-1">
+              <Label label="Canal de Aquisição" />
+              <p className="text-sm font-bold text-foreground/90">
                 {t(`source.${lead.source}`)}
               </p>
             </div>
 
             {lead.instagram && (
-              <div className="space-y-1.5">
-                <Label label="Instagram" icon={InstagramLogo} />
-                <div className="flex items-center gap-2 pl-6">
+              <div className="space-y-1">
+                <Label label="Instagram" />
+                <div className="flex items-center gap-2">
                   <p className="text-sm font-bold text-foreground/90">
                     @{lead.instagram.replace("@", "")}
                   </p>
@@ -180,16 +180,15 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
             )}
 
             {lead.website && (
-              <div className="space-y-1.5">
+              <div className="space-y-1">
                 <Label
                   label={
                     lead.source === LeadSource.LINKEDIN
                       ? "LinkedIn"
                       : "Website Oficial"
                   }
-                  icon={Globe}
                 />
-                <div className="flex items-center gap-2 pl-6">
+                <div className="flex items-center gap-2">
                   <p className="truncate text-sm font-bold text-foreground/90">
                     {lead.website.replace(/^https?:\/\//, "")}
                   </p>
@@ -213,20 +212,11 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
   )
 }
 
-function Label({
-  label,
-  icon: Icon,
-}: {
-  label: string
-  icon: React.ElementType
-}) {
+function Label({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2">
-      <Icon size={12} weight="bold" className="text-muted-foreground/30" />
-      <span className="text-[8px] font-black uppercase tracking-[0.25em] text-muted-foreground/30">
-        {label}
-      </span>
-    </div>
+    <span className="text-[8px] font-black uppercase tracking-[0.25em] text-muted-foreground/40">
+      {label}
+    </span>
   )
 }
 

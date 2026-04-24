@@ -1,35 +1,33 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
-
 import { ProposalStatus } from "@/src/generated/client"
 import { z } from "zod"
 
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
-import {
-  createAuditLog,
-  enqueueEvent,
-  getCurrentAppUser,
-} from "@/src/lib/project-governance"
 import { revalidateCrmLead } from "@/src/lib/revalidate"
-
-const ProposalItemSchema = z.object({
-  description: z.string().min(3),
-  longDescription: z.string().optional(),
-  unitValue: z.number().min(0),
-  quantity: z.number().min(1),
-  order: z.number().default(0),
-})
+import {
+  AuditActorType,
+  createAuditLog,
+  getCurrentAppUser,
+} from "@/src/lib/utils/crm"
 
 const CreateProposalSchema = z.object({
   leadId: z.string(),
-  title: z.string().min(5),
+  title: z.string(),
+  currency: z.string().default("BRL"),
   validUntil: z.string().optional(),
   notes: z.string().optional(),
-  currency: z.string().default("BRL"),
-  items: z.array(ProposalItemSchema).min(1),
+  items: z.array(
+    z.object({
+      description: z.string(),
+      longDescription: z.string().optional(),
+      unitValue: z.number(),
+      quantity: z.number(),
+      order: z.number(),
+    })
+  ),
 })
 
 export async function createProposalAction(
@@ -40,24 +38,30 @@ export async function createProposalAction(
     const actor = await getCurrentAppUser()
     const validated = CreateProposalSchema.parse(data)
 
-    const result = await prisma.$transaction(async (tx) => {
-      const totalValue = validated.items.reduce(
-        (acc, item) => acc + item.unitValue * item.quantity,
-        0
-      )
+    const totalValue = validated.items.reduce(
+      (acc, item) => acc + item.unitValue * item.quantity,
+      0
+    )
 
+    const result = await prisma.$transaction(async (tx) => {
       const proposal = await tx.proposal.create({
         data: {
           leadId: validated.leadId,
           title: validated.title,
+          currency: validated.currency,
           validUntil: validated.validUntil
             ? new Date(validated.validUntil)
             : null,
           totalValue,
-          currency: validated.currency,
           notes: validated.notes,
           items: {
-            create: validated.items,
+            create: validated.items.map((item) => ({
+              description: item.description,
+              longDescription: item.longDescription,
+              unitValue: item.unitValue,
+              quantity: item.quantity,
+              order: item.order,
+            })),
           },
         },
         include: {
@@ -70,7 +74,7 @@ export async function createProposalAction(
           action: "proposal.created",
           entityType: "Proposal",
           entityId: proposal.id,
-          summary: `Proposta "${proposal.title}" criada para ${proposal.lead.companyName}.`,
+          summary: `Nova proposta "${proposal.title}" criada para ${proposal.lead.companyName}.`,
           actorId: actor?.id,
           projectId: null,
           metadata: { totalValue },
@@ -84,8 +88,8 @@ export async function createProposalAction(
     revalidateCrmLead(validated.leadId)
     return { success: true, proposal: result }
   } catch (error) {
-    logger.error({ error }, "Create Proposal Error")
-    return { success: false, error: "Falha ao criar proposta" }
+    logger.error({ error }, "Create Proposal Action Error")
+    return { success: false, error: "Falha ao criar proposta comercial" }
   }
 }
 
@@ -97,40 +101,18 @@ export async function updateProposalStatusAction(
     await protect("admin")
     const actor = await getCurrentAppUser()
 
-    const proposal = await prisma.$transaction(async (tx) => {
-      const p = await tx.proposal.update({
-        where: { id },
-        data: { status },
-        include: {
-          lead: { select: { id: true, companyName: true, value: true } },
-        },
-      })
+    const proposal = await prisma.proposal.update({
+      where: { id },
+      data: { status },
+    })
 
-      await createAuditLog(
-        {
-          action: "proposal.status_changed",
-          entityType: "Proposal",
-          entityId: id,
-          summary: `Status da proposta "${p.title}" alterado para ${status}.`,
-          actorId: actor?.id,
-          metadata: { status },
-        },
-        tx
-      )
-
-      if (status === ProposalStatus.ACCEPTED) {
-        await enqueueEvent(tx, {
-          type: "NOTIFICATION",
-          payload: {
-            type: "PROPOSAL_ACCEPTED",
-            proposalId: id,
-            leadId: p.leadId,
-            value: p.totalValue,
-          },
-        })
-      }
-
-      return p
+    await createAuditLog({
+      action: "proposal.status_updated",
+      entityType: "Proposal",
+      entityId: id,
+      summary: `Status da proposta "${proposal.title}" alterado para ${status}.`,
+      actorId: actor?.id,
+      metadata: { status },
     })
 
     revalidateCrmLead(proposal.leadId)
@@ -138,6 +120,102 @@ export async function updateProposalStatusAction(
   } catch (error) {
     logger.error({ error }, "Update Proposal Status Error")
     return { success: false, error: "Falha ao atualizar status da proposta" }
+  }
+}
+
+export async function acceptProposalAction(id: string, ip: string) {
+  try {
+    const proposal = await prisma.proposal.findUnique({
+      where: { id },
+      select: { id: true, leadId: true, title: true },
+    })
+
+    if (!proposal) throw new Error("Proposal not found")
+
+    await prisma.proposal.update({
+      where: { id },
+      data: {
+        status: ProposalStatus.ACCEPTED,
+        acceptedAt: new Date(),
+        acceptedIp: ip,
+      },
+    })
+
+    await createAuditLog({
+      action: "proposal.accepted",
+      entityType: "Proposal",
+      entityId: id,
+      summary: `Proposta "${proposal.title}" aceita digitalmente via IP ${ip}.`,
+      actorType: AuditActorType.SYSTEM,
+      metadata: { ip },
+    })
+
+    revalidateCrmLead(proposal.leadId)
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Accept Proposal Error")
+    return { success: false, error: "Falha ao aceitar proposta" }
+  }
+}
+
+export async function duplicateProposalAction(id: string) {
+  try {
+    await protect("admin")
+    const actor = await getCurrentAppUser()
+
+    const original = await prisma.proposal.findUnique({
+      where: { id },
+      include: { items: true },
+    })
+
+    if (!original) throw new Error("Proposal not found")
+
+    const result = await prisma.$transaction(async (tx) => {
+      const duplicated = await tx.proposal.create({
+        data: {
+          leadId: original.leadId,
+          title: `${original.title} (Cópia)`,
+          status: ProposalStatus.DRAFT,
+          validUntil: original.validUntil,
+          totalValue: original.totalValue,
+          currency: original.currency,
+          notes: original.notes,
+          items: {
+            create: original.items.map((item) => ({
+              description: item.description,
+              longDescription: item.longDescription,
+              unitValue: item.unitValue,
+              quantity: item.quantity,
+              order: item.order,
+            })),
+          },
+        },
+        include: {
+          lead: { select: { companyName: true } },
+        },
+      })
+
+      await createAuditLog(
+        {
+          action: "proposal.duplicated",
+          entityType: "Proposal",
+          entityId: duplicated.id,
+          summary: `Proposta "${original.title}" duplicada para ${duplicated.lead.companyName}.`,
+          actorId: actor?.id,
+          projectId: null,
+          metadata: { originalId: id, totalValue: duplicated.totalValue },
+        },
+        tx
+      )
+
+      return duplicated
+    })
+
+    revalidateCrmLead(original.leadId)
+    return { success: true, proposal: result }
+  } catch (error) {
+    logger.error({ error }, "Duplicate Proposal Error")
+    return { success: false, error: "Falha ao duplicar proposta" }
   }
 }
 
@@ -152,7 +230,9 @@ export async function deleteProposalAction(id: string) {
 
     if (!proposal) throw new Error("Proposal not found")
 
-    await prisma.proposal.delete({ where: { id } })
+    await prisma.proposal.delete({
+      where: { id },
+    })
 
     revalidateCrmLead(proposal.leadId)
     return { success: true }
@@ -162,12 +242,18 @@ export async function deleteProposalAction(id: string) {
   }
 }
 
-export async function getLeadProposalsAction(leadId: string) {
+export async function getProposalsAction() {
   try {
     await protect("admin")
     const proposals = await prisma.proposal.findMany({
-      where: { leadId },
-      include: { items: { orderBy: { order: "asc" } } },
+      include: {
+        lead: {
+          select: {
+            id: true,
+            companyName: true,
+          },
+        },
+      },
       orderBy: { createdAt: "desc" },
     })
     return { success: true, proposals }

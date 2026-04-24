@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 import {
@@ -10,6 +12,266 @@ import {
 } from "@react-pdf/renderer"
 import fs from "node:fs"
 import path from "node:path"
+
+// PDF Engine only supports Hex/RGB. Converting MAGUI brand colors.
+const BRAND_COLORS = {
+  primary: "#0093C8", // Official brand blue
+  background: "#0F172A",
+  text: "#0F172A",
+  textMuted: "#64748B",
+  border: "#E2E8F0",
+  ink: "#0F172A",
+  body: "#334155",
+  rule: "#D7E2EA",
+}
+
+const PAGE_WIDTH = 595.28
+const PAGE_HEIGHT = 841.89
+
+function imageToDataUri(dir: string, fileName: string) {
+  const filePath = path.join(process.cwd(), "public", dir, fileName)
+  const file = fs.readFileSync(filePath)
+  const extension = path.extname(fileName).slice(1)
+  const mimeType = extension === "svg" ? "image/svg+xml" : `image/${extension}`
+  return `data:${mimeType};base64,${file.toString("base64")}`
+}
+
+const FRONT_IMAGE = imageToDataUri("images", "proposal_front.png")
+const BACK_IMAGE = imageToDataUri("images", "proposal_back.png")
+const PAGE_IMAGE = imageToDataUri("images", "proposal_page.png")
+
+const styles = StyleSheet.create({
+  page: {
+    position: "relative",
+    width: PAGE_WIDTH,
+    height: PAGE_HEIGHT,
+    fontFamily: "Helvetica",
+    color: BRAND_COLORS.ink,
+  },
+  fullBleed: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: PAGE_WIDTH,
+    height: PAGE_HEIGHT,
+  },
+  sheet: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: PAGE_WIDTH,
+    height: PAGE_HEIGHT,
+  },
+  content: {
+    position: "relative",
+    flex: 1,
+    paddingTop: 94, // Increased margin as requested (74 + 20)
+    paddingRight: 60,
+    paddingBottom: 64,
+    paddingLeft: 60,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    alignItems: "flex-start",
+    marginBottom: 20,
+  },
+  logo: {
+    width: 120,
+    height: "auto",
+  },
+  studioInfo: {
+    textAlign: "right",
+  },
+  studioName: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: BRAND_COLORS.primary,
+    textTransform: "uppercase",
+    marginBottom: 2,
+  },
+  studioDetails: {
+    fontSize: 7,
+    color: BRAND_COLORS.textMuted,
+  },
+  headerLine: {
+    width: 40,
+    height: 2,
+    borderRadius: 999,
+    backgroundColor: BRAND_COLORS.primary,
+    marginBottom: 10,
+  },
+  kicker: {
+    fontSize: 8,
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    color: BRAND_COLORS.primary,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: "bold",
+    color: BRAND_COLORS.ink,
+    lineHeight: 1.1,
+    marginBottom: 8,
+    maxWidth: 440,
+  },
+  continuationTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: BRAND_COLORS.ink,
+    lineHeight: 1.1,
+    marginBottom: 8,
+  },
+  leadLine: {
+    fontSize: 10,
+    fontWeight: "bold",
+    color: BRAND_COLORS.ink,
+    textTransform: "uppercase",
+    letterSpacing: 1,
+    marginBottom: 12,
+  },
+  intro: {
+    fontSize: 9.5,
+    lineHeight: 1.6,
+    color: BRAND_COLORS.body,
+    marginBottom: 8,
+    maxWidth: 450,
+  },
+  metaRow: {
+    flexDirection: "row",
+    gap: 20,
+    marginTop: 8,
+    marginBottom: 20,
+  },
+  metaText: {
+    fontSize: 8,
+    color: BRAND_COLORS.textMuted,
+    textTransform: "uppercase",
+    letterSpacing: 0.5,
+  },
+  section: {
+    marginBottom: 18,
+    paddingTop: 12,
+    borderTopWidth: 1,
+    borderTopColor: BRAND_COLORS.rule,
+  },
+  sectionTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    color: BRAND_COLORS.primary,
+    textTransform: "uppercase",
+    letterSpacing: 1.5,
+    marginBottom: 10,
+  },
+  bulletRow: {
+    flexDirection: "row",
+    gap: 8,
+    marginBottom: 6,
+    paddingRight: 10,
+  },
+  bulletMark: {
+    width: 8,
+    fontSize: 9,
+    color: BRAND_COLORS.primary,
+    fontWeight: "bold",
+  },
+  bulletText: {
+    flex: 1,
+    fontSize: 9,
+    lineHeight: 1.5,
+    color: BRAND_COLORS.body,
+  },
+  paragraph: {
+    fontSize: 9,
+    lineHeight: 1.5,
+    color: BRAND_COLORS.body,
+    marginBottom: 7,
+  },
+  itemBlock: {
+    marginBottom: 12,
+  },
+  itemTitle: {
+    fontSize: 11,
+    fontWeight: "bold",
+    color: BRAND_COLORS.ink,
+    marginBottom: 5,
+  },
+  itemText: {
+    fontSize: 9,
+    lineHeight: 1.5,
+    color: BRAND_COLORS.body,
+  },
+  pricingRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 18,
+    marginBottom: 10,
+    paddingBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: BRAND_COLORS.rule,
+  },
+  pricingLeft: {
+    flex: 1,
+    paddingRight: 10,
+  },
+  pricingRight: {
+    width: 140,
+    alignItems: "flex-end",
+  },
+  priceValue: {
+    fontSize: 12,
+    fontWeight: "bold",
+    color: BRAND_COLORS.ink,
+    marginBottom: 3,
+  },
+  priceMeta: {
+    fontSize: 8,
+    color: BRAND_COLORS.textMuted,
+  },
+  investmentBox: {
+    marginTop: 10,
+    marginBottom: 20,
+    padding: 20,
+    backgroundColor: BRAND_COLORS.background,
+    borderRadius: 12,
+  },
+  investmentLabel: {
+    fontSize: 8,
+    textTransform: "uppercase",
+    letterSpacing: 2,
+    color: BRAND_COLORS.primary,
+    fontWeight: "bold",
+    marginBottom: 8,
+  },
+  investmentValue: {
+    fontSize: 32,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    lineHeight: 1,
+    marginBottom: 10,
+  },
+  investmentText: {
+    fontSize: 8.5,
+    lineHeight: 1.5,
+    color: "#94A3B8",
+    maxWidth: 420,
+  },
+  footer: {
+    position: "absolute",
+    bottom: 40,
+    left: 60,
+    right: 60,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    fontSize: 7,
+    color: BRAND_COLORS.textMuted,
+    borderTopWidth: 1,
+    borderTopColor: BRAND_COLORS.border,
+    paddingTop: 10,
+  },
+})
 
 interface ProposalItem {
   description: string
@@ -80,217 +342,6 @@ type ContentBlock =
   | PricingSectionBlock
   | InvestmentBlock
 
-const PAGE_WIDTH = 595.28
-const PAGE_HEIGHT = 841.89
-const BRAND_PRIMARY = "#0093C8"
-const INK = "#0F172A"
-const BODY = "#334155"
-const MUTED = "#64748B"
-const RULE = "#D7E2EA"
-
-function imageToDataUri(fileName: string) {
-  const filePath = path.join(process.cwd(), "public", "images", fileName)
-  const file = fs.readFileSync(filePath)
-  return `data:image/png;base64,${file.toString("base64")}`
-}
-
-const FRONT_IMAGE = imageToDataUri("proposal_front.png")
-const BACK_IMAGE = imageToDataUri("proposal_back.png")
-const PAGE_IMAGE = imageToDataUri("proposal_page.png")
-
-const styles = StyleSheet.create({
-  page: {
-    position: "relative",
-    width: PAGE_WIDTH,
-    height: PAGE_HEIGHT,
-    fontFamily: "Helvetica",
-    color: INK,
-  },
-  fullBleed: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: PAGE_WIDTH,
-    height: PAGE_HEIGHT,
-  },
-  sheet: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: PAGE_WIDTH,
-    height: PAGE_HEIGHT,
-  },
-  content: {
-    position: "relative",
-    flex: 1,
-    paddingTop: 74,
-    paddingRight: 60,
-    paddingBottom: 54,
-    paddingLeft: 60,
-  },
-  headerLine: {
-    width: 68,
-    height: 3,
-    borderRadius: 999,
-    backgroundColor: BRAND_PRIMARY,
-    marginBottom: 10,
-  },
-  kicker: {
-    fontSize: 8.5,
-    textTransform: "uppercase",
-    letterSpacing: 2.6,
-    color: BRAND_PRIMARY,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: INK,
-    lineHeight: 1.04,
-    marginBottom: 10,
-    maxWidth: 440,
-  },
-  continuationTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: INK,
-    lineHeight: 1.08,
-    marginBottom: 8,
-  },
-  leadLine: {
-    fontSize: 10.5,
-    color: MUTED,
-    marginBottom: 12,
-  },
-  intro: {
-    fontSize: 9.8,
-    lineHeight: 1.5,
-    color: BODY,
-    marginBottom: 8,
-    maxWidth: 450,
-  },
-  metaRow: {
-    flexDirection: "row",
-    gap: 24,
-    marginTop: 6,
-    marginBottom: 14,
-  },
-  metaText: {
-    fontSize: 9,
-    color: MUTED,
-  },
-  section: {
-    marginBottom: 14,
-    paddingTop: 10,
-    borderTopWidth: 1,
-    borderTopColor: RULE,
-  },
-  sectionTitle: {
-    fontSize: 14.5,
-    fontWeight: "bold",
-    color: INK,
-    marginBottom: 7,
-    lineHeight: 1.12,
-  },
-  bulletRow: {
-    flexDirection: "row",
-    gap: 8,
-    marginBottom: 5,
-    paddingRight: 6,
-  },
-  bulletMark: {
-    width: 8,
-    fontSize: 9.4,
-    color: BRAND_PRIMARY,
-    fontWeight: "bold",
-  },
-  bulletText: {
-    flex: 1,
-    fontSize: 9.1,
-    lineHeight: 1.42,
-    color: BODY,
-  },
-  paragraph: {
-    fontSize: 9.1,
-    lineHeight: 1.42,
-    color: BODY,
-    marginBottom: 6,
-  },
-  itemBlock: {
-    marginBottom: 10,
-  },
-  itemTitle: {
-    fontSize: 10.8,
-    fontWeight: "bold",
-    color: INK,
-    marginBottom: 4,
-  },
-  itemText: {
-    fontSize: 9.1,
-    lineHeight: 1.42,
-    color: BODY,
-  },
-  pricingRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 18,
-    marginBottom: 9,
-    paddingBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: RULE,
-  },
-  pricingLeft: {
-    flex: 1,
-    paddingRight: 10,
-  },
-  pricingRight: {
-    width: 140,
-    alignItems: "flex-end",
-  },
-  priceValue: {
-    fontSize: 11.8,
-    fontWeight: "bold",
-    color: INK,
-    marginBottom: 2,
-  },
-  priceMeta: {
-    fontSize: 8.2,
-    color: MUTED,
-  },
-  investmentBox: {
-    marginTop: 4,
-    marginBottom: 14,
-    paddingTop: 10,
-    paddingBottom: 10,
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-    borderTopColor: BRAND_PRIMARY,
-    borderBottomColor: BRAND_PRIMARY,
-  },
-  investmentLabel: {
-    fontSize: 8.4,
-    textTransform: "uppercase",
-    letterSpacing: 2.1,
-    color: BRAND_PRIMARY,
-    fontWeight: "bold",
-    marginBottom: 6,
-  },
-  investmentValue: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: INK,
-    lineHeight: 1,
-    marginBottom: 6,
-  },
-  investmentText: {
-    fontSize: 9,
-    lineHeight: 1.42,
-    color: BODY,
-    maxWidth: 420,
-  },
-})
-
 function toDateLabel(value?: Date | string | null) {
   if (!value) return "Nao definido"
   return new Date(value).toLocaleDateString("pt-BR")
@@ -344,7 +395,7 @@ function estimateLines(text: string, charsPerLine: number) {
   return Math.max(1, Math.ceil(text.length / charsPerLine))
 }
 
-function parseNotes(notes?: string | null): ParsedNotes {
+function parseProposalNotes(notes?: string | null): ParsedNotes {
   const parsed: ParsedNotes = {
     executiveSummary: [],
     objectives: [],
@@ -741,9 +792,21 @@ function InternalPage({
 }) {
   return (
     <Page size="A4" style={styles.page}>
-      <Image src={PAGE_IMAGE} style={styles.sheet} fixed />
+      <Image src={PAGE_IMAGE} style={styles.sheet} fixed alt="Papel timbrado" />
 
       <View style={styles.content}>
+        {/* Brand Header */}
+        <View style={styles.header} fixed>
+          <View style={styles.studioInfo}>
+            <Text style={styles.studioDetails}>
+              Padrao de Autoridade Digital
+            </Text>
+            <Text style={styles.studioDetails}>
+              magui.studio | contato@magui.studio
+            </Text>
+          </View>
+        </View>
+
         <View style={styles.headerLine} />
         <Text style={styles.kicker}>{kicker}</Text>
         <Text style={isContinuation ? styles.continuationTitle : styles.title}>
@@ -778,6 +841,16 @@ function InternalPage({
             {renderBlock(block, currency)}
           </React.Fragment>
         ))}
+
+        {/* Brand Footer */}
+        <View style={styles.footer} fixed>
+          <Text></Text>
+          <Text
+            render={({ pageNumber, totalPages }) =>
+              `${pageNumber} / ${totalPages}`
+            }
+          />
+        </View>
       </View>
     </Page>
   )
@@ -788,7 +861,7 @@ export function MaguiProposalTemplate({
   lead,
 }: MaguiProposalTemplateProps) {
   const currency = proposal.currency || "BRL"
-  const parsedNotes = parseNotes(proposal.notes)
+  const parsedNotes = parseProposalNotes(proposal.notes)
 
   const summaryLines =
     parsedNotes.executiveSummary.length > 0
@@ -884,9 +957,13 @@ export function MaguiProposalTemplate({
   const commercialPages = paginateBlocks(commercialBlocks, 300, 430)
 
   return (
-    <Document>
+    <Document title={proposal.title || "Proposta Comercial"}>
       <Page size="A4" style={styles.page}>
-        <Image src={FRONT_IMAGE} style={styles.fullBleed} />
+        <Image
+          src={FRONT_IMAGE}
+          style={styles.fullBleed}
+          alt="Capa da proposta"
+        />
       </Page>
 
       {overviewPages.map((blocks, index) => (
@@ -916,7 +993,11 @@ export function MaguiProposalTemplate({
       ))}
 
       <Page size="A4" style={styles.page}>
-        <Image src={BACK_IMAGE} style={styles.fullBleed} />
+        <Image
+          src={BACK_IMAGE}
+          style={styles.fullBleed}
+          alt="Contracapa da proposta"
+        />
       </Page>
     </Document>
   )

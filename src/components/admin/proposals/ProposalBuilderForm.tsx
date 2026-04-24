@@ -8,6 +8,7 @@ import {
   ClockCountdown,
   FilePdf,
   ListChecks,
+  MagicWand,
   Plus,
   Sparkle,
   Trash,
@@ -27,6 +28,13 @@ import {
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProposalAction } from "@/src/lib/actions/proposal.actions"
+
+import {
+  PROPOSAL_PRESETS,
+  type ProposalPreset,
+} from "@/src/config/proposal-presets"
+
+import { ProposalPreview } from "./ProposalPreview"
 
 interface ProposalBuilderFormProps {
   leads: Array<{ id: string; companyName: string }>
@@ -55,10 +63,10 @@ function parseCurrencyInput(value: string): number {
   return digits ? Number(digits) / 100 : 0
 }
 
-function formatCurrencyInput(value: number): string {
+function formatCurrencyInput(value: number, currency: string): string {
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
-    currency: "BRL",
+    currency: currency,
   }).format(value)
 }
 
@@ -86,11 +94,13 @@ export function ProposalBuilderForm({
   const [timeline, setTimeline] = React.useState("")
   const [paymentTerms, setPaymentTerms] = React.useState("")
   const [platformFlow, setPlatformFlow] = React.useState(DEFAULT_PLATFORM_FLOW)
+  const [currency, setCurrency] = React.useState("BRL")
   const [nextSteps, setNextSteps] = React.useState("")
   const [notes, setNotes] = React.useState("")
   const [items, setItems] = React.useState<ProposalItemForm[]>([
     { ...EMPTY_ITEM },
   ])
+  const [showPreview, setShowPreview] = React.useState(false)
 
   React.useEffect(() => {
     const selectedLead = leads.find((lead) => lead.id === selectedLeadId)
@@ -131,6 +141,22 @@ export function ProposalBuilderForm({
     })
   }
 
+  const handleApplyPreset = (
+    setter: (value: string | ((prev: string) => string)) => void,
+    content: string
+  ) => {
+    const selectedLead = leads.find((l) => l.id === selectedLeadId)
+    const processedContent = content.replace(
+      "[Empresa]",
+      selectedLead?.companyName ?? "empresa"
+    )
+
+    setter((prev) => {
+      if (!prev.trim()) return processedContent
+      return `${prev}\n\n${processedContent}`
+    })
+  }
+
   const buildProposalNotes = () => {
     const sections = [
       ["Resumo executivo", executiveSummary],
@@ -166,7 +192,7 @@ export function ProposalBuilderForm({
     const result = await createProposalAction({
       leadId: selectedLeadId,
       title,
-      currency: "BRL",
+      currency: currency,
       validUntil: validUntil || undefined,
       notes: buildProposalNotes() || undefined,
       items: items.map((item, order) => ({
@@ -185,6 +211,37 @@ export function ProposalBuilderForm({
 
     toast.error("Erro ao criar proposta")
     setIsSubmitting(false)
+  }
+
+  if (showPreview) {
+    const selectedLead = leads.find((lead) => lead.id === selectedLeadId)
+    return (
+      <ProposalPreview
+        isSubmitting={isSubmitting}
+        onBack={() => setShowPreview(false)}
+        onConfirm={handleSubmit}
+        data={{
+          title,
+          leadName: selectedLead?.companyName ?? "Cliente",
+          executiveSummary,
+          objectives,
+          expectedImpact,
+          differentials,
+          timeline,
+          paymentTerms,
+          platformFlow,
+          nextSteps,
+          notes,
+          items: items.map((item) => ({
+            ...item,
+            longDescription: item.longDescription.trim(),
+          })),
+          total,
+          validUntil,
+          currency,
+        }}
+      />
+    )
   }
 
   return (
@@ -238,11 +295,29 @@ export function ProposalBuilderForm({
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
               Titulo do documento
             </Label>
-            <Input
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="h-14 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
-            />
+            <div className="flex gap-3">
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="h-14 flex-1 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
+              />
+              <Select value={currency} onValueChange={setCurrency}>
+                <SelectTrigger className="h-14 w-28 rounded-2xl border-border/40 bg-muted/10 px-4 font-mono font-bold">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-border/40">
+                  <SelectItem value="BRL" className="font-mono">
+                    BRL
+                  </SelectItem>
+                  <SelectItem value="USD" className="font-mono">
+                    USD
+                  </SelectItem>
+                  <SelectItem value="EUR" className="font-mono">
+                    EUR
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-2 md:max-w-sm">
@@ -272,18 +347,28 @@ export function ProposalBuilderForm({
           onChange={setExecutiveSummary}
           placeholder="Apresente a leitura do momento, a oportunidade e a transformacao que esta proposta pretende viabilizar."
           minHeightClassName="min-h-40"
+          presets={PROPOSAL_PRESETS.executiveSummary}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setExecutiveSummary, content)
+          }
         />
         <FieldBlock
           label="Objetivos do projeto"
           value={objectives}
           onChange={setObjectives}
           placeholder="Ex: estruturar a presenca digital, elevar percepcao de valor e melhorar a conversa comercial."
+          presets={PROPOSAL_PRESETS.objectives}
+          onApplyPreset={(content) => handleApplyPreset(setObjectives, content)}
         />
         <FieldBlock
           label="Impacto esperado"
           value={expectedImpact}
           onChange={setExpectedImpact}
           placeholder="Ex: mais clareza na oferta, melhor apresentacao da marca e mais confianca no processo comercial."
+          presets={PROPOSAL_PRESETS.expectedImpact}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setExpectedImpact, content)
+          }
         />
       </section>
 
@@ -293,18 +378,28 @@ export function ProposalBuilderForm({
           value={differentials}
           onChange={setDifferentials}
           placeholder="Ex: conducao centralizada, linguagem premium, aprovacoes organizadas e leitura mais profissional do projeto."
+          presets={PROPOSAL_PRESETS.differentials}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setDifferentials, content)
+          }
         />
         <FieldBlock
           label="Prazo estimado"
           value={timeline}
           onChange={setTimeline}
           placeholder="Ex: 20 dias uteis a partir da aprovacao, kickoff e recebimento dos materiais."
+          presets={PROPOSAL_PRESETS.timeline}
+          onApplyPreset={(content) => handleApplyPreset(setTimeline, content)}
         />
         <FieldBlock
           label="Condicoes de pagamento"
           value={paymentTerms}
           onChange={setPaymentTerms}
           placeholder="Ex: 50% na aprovacao e 50% na etapa final, via PIX ou transferencia."
+          presets={PROPOSAL_PRESETS.paymentTerms}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setPaymentTerms, content)
+          }
         />
       </section>
 
@@ -364,14 +459,33 @@ export function ProposalBuilderForm({
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
                       Nome da entrega
                     </Label>
-                    <Input
-                      value={item.description}
-                      onChange={(e) =>
-                        handleItemChange(index, "description", e.target.value)
-                      }
-                      placeholder="Ex: Landing page comercial"
-                      className="h-12 rounded-xl border-border/40 bg-muted/10 px-4 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
-                    />
+                    <div className="space-y-2">
+                      <Input
+                        value={item.description}
+                        onChange={(e) =>
+                          handleItemChange(index, "description", e.target.value)
+                        }
+                        placeholder="Ex: Landing page comercial"
+                        className="h-12 rounded-xl border-border/40 bg-muted/10 px-4 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                      />
+                      <div className="flex flex-wrap gap-1.5">
+                        {PROPOSAL_PRESETS.itemDescriptions.map((preset) => (
+                          <button
+                            key={preset.id}
+                            onClick={() =>
+                              handleItemChange(
+                                index,
+                                "description",
+                                preset.content
+                              )
+                            }
+                            className="rounded-full bg-muted/20 px-2.5 py-1 text-[8px] font-black uppercase tracking-wider text-muted-foreground/60 transition-colors hover:bg-brand-primary/10 hover:text-brand-primary"
+                          >
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
 
                   <div className="space-y-2 md:col-span-4">
@@ -382,7 +496,7 @@ export function ProposalBuilderForm({
                       <Input
                         type="text"
                         inputMode="numeric"
-                        value={formatCurrencyInput(item.unitValue)}
+                        value={formatCurrencyInput(item.unitValue, currency)}
                         onChange={(e) =>
                           handleItemChange(
                             index,
@@ -417,18 +531,38 @@ export function ProposalBuilderForm({
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
                       Explicacao comercial da entrega
                     </Label>
-                    <Textarea
-                      value={item.longDescription}
-                      onChange={(e) =>
-                        handleItemChange(
-                          index,
-                          "longDescription",
-                          e.target.value
-                        )
-                      }
-                      placeholder="Descreva o que entra nesta entrega, como ela sera conduzida e qual valor ela gera para o projeto."
-                      className="min-h-28 rounded-2xl border-border/40 bg-muted/10 px-4 py-3 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
-                    />
+                    <div className="space-y-3">
+                      <Textarea
+                        value={item.longDescription}
+                        onChange={(e) =>
+                          handleItemChange(
+                            index,
+                            "longDescription",
+                            e.target.value
+                          )
+                        }
+                        placeholder="Descreva o que entra nesta entrega, como ela sera conduzida e qual valor ela gera para o projeto."
+                        className="min-h-28 rounded-2xl border-border/40 bg-muted/10 px-4 py-3 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                      />
+                      <div className="flex flex-wrap gap-2">
+                        {PROPOSAL_PRESETS.itemLongDescriptions.map((preset) => (
+                          <button
+                            key={preset.id}
+                            onClick={() => {
+                              const currentVal = item.longDescription
+                              const newVal = !currentVal.trim()
+                                ? preset.content
+                                : `${currentVal}\n\n${preset.content}`
+                              handleItemChange(index, "longDescription", newVal)
+                            }}
+                            className="flex items-center gap-1.5 rounded-full bg-muted/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wide text-muted-foreground/70 transition-all hover:bg-brand-primary/5 hover:text-brand-primary"
+                          >
+                            <MagicWand size={10} weight="bold" />
+                            {preset.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -444,7 +578,7 @@ export function ProposalBuilderForm({
             <p className="font-heading text-5xl font-black tracking-tighter text-foreground">
               {new Intl.NumberFormat("pt-BR", {
                 style: "currency",
-                currency: "BRL",
+                currency: currency,
               }).format(total)}
             </p>
             <p className="text-sm leading-relaxed text-muted-foreground/70">
@@ -482,12 +616,18 @@ export function ProposalBuilderForm({
           onChange={setPlatformFlow}
           description="Texto padrao de governanca para reforcar a centralizacao da comunicacao, aprovacoes e materiais."
           placeholder="Explique como a plataforma organiza comunicacao, aprovacoes, materiais e acompanhamento."
+          presets={PROPOSAL_PRESETS.platformFlow}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setPlatformFlow, content)
+          }
         />
         <FieldBlock
           label="Proximos passos"
           value={nextSteps}
           onChange={setNextSteps}
           placeholder="Ex: aprovacao da proposta, assinatura, kickoff e envio dos materiais necessarios."
+          presets={PROPOSAL_PRESETS.nextSteps}
+          onApplyPreset={(content) => handleApplyPreset(setNextSteps, content)}
         />
       </section>
 
@@ -509,11 +649,10 @@ export function ProposalBuilderForm({
           Cancelar
         </Button>
         <Button
-          onClick={handleSubmit}
-          disabled={isSubmitting}
+          onClick={() => setShowPreview(true)}
           className="h-14 rounded-2xl bg-brand-primary px-8 text-[10px] font-black uppercase tracking-widest text-white shadow-2xl shadow-brand-primary/30 transition-all hover:scale-[1.02] hover:bg-brand-primary/90 active:scale-[0.98]"
         >
-          {isSubmitting ? "Gerando Proposta..." : "Gerar Documento PDF"}
+          Revisar Proposta
         </Button>
       </div>
     </div>
@@ -551,6 +690,8 @@ function FieldBlock({
   placeholder,
   description,
   minHeightClassName,
+  presets,
+  onApplyPreset,
 }: {
   label: string
   value: string
@@ -558,12 +699,30 @@ function FieldBlock({
   placeholder: string
   description?: string
   minHeightClassName?: string
+  presets?: ProposalPreset[]
+  onApplyPreset?: (content: string) => void
 }): React.JSX.Element {
   return (
     <div className="space-y-3">
-      <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-        {label}
-      </Label>
+      <div className="flex items-center justify-between gap-4">
+        <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          {label}
+        </Label>
+        {presets && onApplyPreset ? (
+          <div className="flex flex-wrap gap-2">
+            {presets.map((preset) => (
+              <button
+                key={preset.id}
+                onClick={() => onApplyPreset(preset.content)}
+                className="flex items-center gap-1.5 rounded-full bg-muted/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wide text-muted-foreground/70 transition-all hover:bg-brand-primary/5 hover:text-brand-primary"
+              >
+                <MagicWand size={10} weight="bold" />
+                {preset.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </div>
       {description ? (
         <p className="text-xs leading-relaxed text-muted-foreground/50">
           {description}

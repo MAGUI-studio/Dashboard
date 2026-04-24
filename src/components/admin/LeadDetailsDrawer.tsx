@@ -54,6 +54,7 @@ import { useLeadMutations } from "@/src/hooks/use-lead-mutations"
 import { LeadDeleteDialog } from "./lead-drawer/LeadDeleteDialog"
 import { LeadEditForm } from "./lead-drawer/LeadEditForm"
 import { LeadInfoDisplay } from "./lead-drawer/LeadInfoDisplay"
+import { LeadNotesList } from "./lead-drawer/LeadNotesList"
 import { LeadQuickActions } from "./lead-drawer/LeadQuickActions"
 
 function formatDateTime(value: string | Date): string {
@@ -385,7 +386,7 @@ export function LeadDetailsDrawer({
                   </div>
 
                   {/* Notes Strategy */}
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     <SectionHeader
                       title="Insight Estratégico"
                       icon={NotePencil}
@@ -410,6 +411,10 @@ export function LeadDetailsDrawer({
                           "Salvar Nota"
                         )}
                       </Button>
+                    </div>
+
+                    <div className="mt-4">
+                      <LeadNotesList notes={localLead.followUpNotes || []} />
                     </div>
                   </div>
 
