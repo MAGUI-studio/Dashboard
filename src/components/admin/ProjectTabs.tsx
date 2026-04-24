@@ -4,11 +4,14 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { Prisma } from "@/src/generated/client"
 import { DashboardProject } from "@/src/types/dashboard"
 import {
+  ChatCircleDots,
   Clock,
   Files,
   Fingerprint,
+  Handshake,
   Info,
   NoteBlank,
   Sliders,
@@ -30,6 +33,8 @@ import { ProjectEngineeringTab } from "@/src/components/admin/ProjectEngineering
 import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
 import { ProjectSettingsTab } from "@/src/components/admin/ProjectSettingsTab"
 import { ProjectTimelineTab } from "@/src/components/admin/ProjectTimelineTab"
+import { ProjectHandoffTab } from "@/src/components/admin/handoff/ProjectHandoffTab"
+import { ProjectCommunication } from "@/src/components/common/communication/ProjectCommunication"
 
 interface ProjectTabsProps {
   project: DashboardProject
@@ -40,9 +45,44 @@ interface ProjectTabsProps {
     email: string
     companyName: string | null
   }>
+  threads: Prisma.ThreadGetPayload<{
+    include: {
+      messages: {
+        include: {
+          author: true
+          resolvedBy: true
+        }
+      }
+    }
+  }>[]
+  decisions: Prisma.DecisionGetPayload<{
+    include: {
+      decidedBy: true
+    }
+  }>[]
+  currentUserId: string
+  handoff?: Prisma.ProjectHandoffGetPayload<{
+    include: {
+      proposal: {
+        include: {
+          items: true
+        }
+      }
+    }
+  }> | null
+  kickoff?: Prisma.ProjectKickoffChecklist | null
 }
 
-export function ProjectTabs({ project, projectId, clients }: ProjectTabsProps) {
+export function ProjectTabs({
+  project,
+  projectId,
+  clients,
+  threads,
+  decisions,
+  currentUserId,
+  handoff,
+  kickoff,
+}: ProjectTabsProps) {
   const t = useTranslations("Admin.projects.details")
   const [activeTab, setActiveTab] = useQueryState(
     "tab",
@@ -73,6 +113,20 @@ export function ProjectTabs({ project, projectId, clients }: ProjectTabsProps) {
           >
             <Clock weight="duotone" className="mr-2 size-4" />
             {t("tabs.timeline")}
+          </TabsTrigger>
+          <TabsTrigger
+            value="communication"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <ChatCircleDots weight="duotone" className="mr-2 size-4" />
+            {t("tabs.communication", { fallback: "Comunicação" })}
+          </TabsTrigger>
+          <TabsTrigger
+            value="handoff"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <Handshake weight="duotone" className="mr-2 size-4" />
+            {t("tabs.handoff", { fallback: "Handoff" })}
           </TabsTrigger>
           <TabsTrigger
             value="briefing"
@@ -118,6 +172,23 @@ export function ProjectTabs({ project, projectId, clients }: ProjectTabsProps) {
 
       <TabsContent value="timeline" className="mt-0 focus-visible:outline-none">
         <ProjectTimelineTab projectId={projectId} updates={project.updates} />
+      </TabsContent>
+
+      <TabsContent
+        value="communication"
+        className="mt-0 focus-visible:outline-none"
+      >
+        <ProjectCommunication
+          projectId={projectId}
+          initialThreads={threads}
+          initialDecisions={decisions}
+          currentUserId={currentUserId}
+          userRole="ADMIN"
+        />
+      </TabsContent>
+
+      <TabsContent value="handoff" className="mt-0 focus-visible:outline-none">
+        <ProjectHandoffTab handoff={handoff} kickoff={kickoff} />
       </TabsContent>
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">

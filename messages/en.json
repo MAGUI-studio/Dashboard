@@ -334,7 +334,9 @@
           "audit": "Audit",
           "briefing": "Briefing",
           "assets": "Assets",
-          "settings": "Settings"
+          "settings": "Settings",
+          "communication": "Communication",
+          "handoff": "Handoff"
         },
         "project_info_title": "Project Information",
         "project_description_label": "Scope Description",
@@ -625,7 +627,8 @@
           "approvals": "Deliveries",
           "files": "Files",
           "briefing": "Briefing",
-          "tasks": "Requests"
+          "tasks": "Requests",
+          "communication": "Communication"
         },
         "active_project": "Active Project",
         "active_project_focus_description": "This is the project in focus now. Enter to see deliveries, files, briefing, and full history.",
@@ -830,6 +833,69 @@
       "new_material": "New material",
       "lead_assigned": "Lead assigned",
       "informational": "Informational"
+    }
+  },
+  "Communication": {
+    "title": "Central Communication",
+    "description": "Structured threads by context to eliminate external channels usage.",
+    "inbox": {
+      "title": "Your Message Inbox",
+      "description": "Track project conversations, questions, and requests.",
+      "empty": "No active conversations at the moment.",
+      "search": "Search conversation...",
+      "all": "All",
+      "unread": "Unread",
+      "requests": "Requests",
+      "decisions": "Decisions"
+    },
+    "threads": {
+      "new": "New Thread",
+      "open": "Open",
+      "resolved": "Resolved",
+      "archived": "Archived",
+      "mark_resolved": "Mark as Resolved",
+      "project_context": "Project Context",
+      "update_context": "Delivery Context",
+      "asset_context": "File Context",
+      "action_context": "Request Context"
+    },
+    "messages": {
+      "placeholder": "Write your message...",
+      "send": "Send Message",
+      "reply": "Reply",
+      "informative": "Informational",
+      "requires_response": "Requires Response",
+      "requires_approval": "Requires Approval",
+      "requires_asset": "Requires Material Shipment",
+      "financial": "Financial",
+      "legal": "Legal",
+      "call_summary": "Call Summary",
+      "resolved_by": "Resolved by {name} on {date}",
+      "attachments": "Attachments",
+      "no_messages": "No messages in this conversation yet."
+    },
+    "decisions": {
+      "title": "Registered Decisions",
+      "description": "Formal history of everything decided for the project.",
+      "new": "Register Decision",
+      "form": {
+        "title": "Decision Title",
+        "title_placeholder": "Ex: Change of primary color palette",
+        "description": "Context and Motivation",
+        "description_placeholder": "Why was this decision made?",
+        "decision": "What was decided?",
+        "decision_placeholder": "Describe the final verdict...",
+        "impact_scope": "Scope Impact",
+        "impact_deadline": "Deadline Impact",
+        "impact_financial": "Financial Impact",
+        "submit": "Register Formal Decision"
+      },
+      "impact": {
+        "scope": "Scope",
+        "deadline": "Deadline",
+        "financial": "Financial",
+        "none": "None"
+      }
     }
   }
 }

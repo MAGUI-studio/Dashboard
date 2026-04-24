@@ -334,7 +334,9 @@
           "audit": "Auditoria",
           "briefing": "Briefing",
           "assets": "Ativos",
-          "settings": "Configurações"
+          "settings": "Configurações",
+          "communication": "Comunicação",
+          "handoff": "Handoff"
         },
         "project_info_title": "Informações do Projeto",
         "project_description_label": "Descrição do Escopo",
@@ -625,7 +627,8 @@
           "approvals": "Entregas",
           "files": "Arquivos",
           "briefing": "Briefing",
-          "tasks": "Solicitacoes"
+          "tasks": "Solicitacoes",
+          "communication": "Comunicação"
         },
         "active_project": "Projeto Ativo",
         "active_project_focus_description": "Este é o projeto em foco agora. Entre para ver entregas, arquivos, briefing e o histórico completo.",
@@ -830,6 +833,69 @@
       "new_material": "Novo material",
       "lead_assigned": "Lead atribuído",
       "informational": "Informativo"
+    }
+  },
+  "Communication": {
+    "title": "Comunicação Central",
+    "description": "Threads estruturadas por contexto para eliminar o uso de canais externos.",
+    "inbox": {
+      "title": "Sua Inbox de Mensagens",
+      "description": "Acompanhe conversas, dúvidas e solicitações do projeto.",
+      "empty": "Nenhuma conversa ativa no momento.",
+      "search": "Buscar conversa...",
+      "all": "Todas",
+      "unread": "Não lidas",
+      "requests": "Solicitações",
+      "decisions": "Decisões"
+    },
+    "threads": {
+      "new": "Nova Thread",
+      "open": "Aberta",
+      "resolved": "Resolvida",
+      "archived": "Arquivada",
+      "mark_resolved": "Marcar como Resolvida",
+      "project_context": "Contexto do Projeto",
+      "update_context": "Contexto da Entrega",
+      "asset_context": "Contexto do Arquivo",
+      "action_context": "Contexto da Solicitação"
+    },
+    "messages": {
+      "placeholder": "Escreva sua mensagem...",
+      "send": "Enviar Mensagem",
+      "reply": "Responder",
+      "informative": "Informativo",
+      "requires_response": "Exige Resposta",
+      "requires_approval": "Exige Aprovação",
+      "requires_asset": "Exige Envio de Material",
+      "financial": "Financeiro",
+      "legal": "Jurídico",
+      "call_summary": "Resumo de Call",
+      "resolved_by": "Resolvido por {name} em {date}",
+      "attachments": "Anexos",
+      "no_messages": "Ainda não há mensagens nesta conversa."
+    },
+    "decisions": {
+      "title": "Decisões Registradas",
+      "description": "Histórico formal de tudo que foi decidido para o projeto.",
+      "new": "Registrar Decisão",
+      "form": {
+        "title": "Título da Decisão",
+        "title_placeholder": "Ex: Mudança de paleta cromática principal",
+        "description": "Contexto e Motivação",
+        "description_placeholder": "Por que esta decisão foi tomada?",
+        "decision": "O que foi decidido?",
+        "decision_placeholder": "Descreva o veredito final...",
+        "impact_scope": "Impacto no Escopo",
+        "impact_deadline": "Impacto no Prazo",
+        "impact_financial": "Impacto Financeiro",
+        "submit": "Registrar Decisão Formal"
+      },
+      "impact": {
+        "scope": "Escopo",
+        "deadline": "Prazo",
+        "financial": "Financeiro",
+        "none": "Nenhum"
+      }
     }
   }
 }

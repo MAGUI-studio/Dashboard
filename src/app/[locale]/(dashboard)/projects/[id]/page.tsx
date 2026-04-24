@@ -5,11 +5,12 @@ import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 import {
-  CheckCircleIcon,
-  ClockCountdownIcon,
-  FilesIcon,
-  NotePencilIcon,
-  ShieldCheckIcon,
+  ChatCircleDots as ChatCircleDotsIcon,
+  CheckCircle as CheckCircleIcon,
+  ClockCountdown as ClockCountdownIcon,
+  Files as FilesIcon,
+  NotePencil as NotePencilIcon,
+  ShieldCheck as ShieldCheckIcon,
 } from "@phosphor-icons/react/dist/ssr"
 
 import { ClientActionBanner } from "@/src/components/client/ClientActionBanner"
@@ -154,6 +155,13 @@ export default async function ProjectDetailPage({
             href={toHref(`/projects/${project.id}/briefing`)}
             icon={NotePencilIcon}
             meta="briefing"
+          />
+          <ClientFeatureLink
+            title="Comunicação"
+            description="Threads estruturadas e histórico de decisões do projeto."
+            href={toHref(`/projects/${project.id}/communication`)}
+            icon={ChatCircleDotsIcon}
+            meta="inbox"
           />
           <ClientFeatureLink
             title="Solicitacoes"

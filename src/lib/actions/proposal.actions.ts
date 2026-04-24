@@ -9,6 +9,8 @@ import prisma from "@/src/lib/prisma"
 import { createAuditLog, getCurrentAppUser } from "@/src/lib/project-governance"
 import { revalidateCrmLead } from "@/src/lib/revalidate"
 
+import { processProjectHandoffAction } from "./handoff.actions"
+
 const CreateProposalSchema = z.object({
   leadId: z.string(),
   title: z.string(),
@@ -145,6 +147,9 @@ export async function acceptProposalAction(id: string, ip: string) {
       actorType: AuditActorType.SYSTEM,
       metadata: { ip },
     })
+
+    // Trigger automatic handoff to operation
+    await processProjectHandoffAction(id)
 
     revalidateCrmLead(proposal.leadId)
     return { success: true }

@@ -8,6 +8,14 @@ import { ProjectDetailsHeader } from "@/src/components/admin/ProjectDetailsHeade
 import { ProjectTabs } from "@/src/components/admin/ProjectTabs"
 
 import { getAdminClientOptions } from "@/src/lib/client-data"
+import {
+  getProjectDecisionsCached,
+  getProjectThreadsCached,
+} from "@/src/lib/communication-data"
+import {
+  getProjectHandoffCached,
+  getProjectKickoffCached,
+} from "@/src/lib/handoff-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import {
@@ -16,6 +24,7 @@ import {
   getAdminProjectOverview,
   getAdminProjectTimeline,
 } from "@/src/lib/project-data"
+import { getCurrentAppUser } from "@/src/lib/project-governance"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 interface ProjectPageProps {
@@ -87,12 +96,28 @@ export default async function AdminProjectDetailPage({
 
   const { id } = await params
 
-  const [project, timeline, assets, auditLogs, clients] = await Promise.all([
+  const [
+    project,
+    timeline,
+    assets,
+    auditLogs,
+    clients,
+    threads,
+    decisions,
+    currentUser,
+    handoff,
+    kickoff,
+  ] = await Promise.all([
     getAdminProjectOverview(id),
     getAdminProjectTimeline(id),
     getAdminProjectAssets(id),
     getAdminProjectAudit(id),
     getAdminClientOptions(),
+    getProjectThreadsCached(id),
+    getProjectDecisionsCached(id),
+    getCurrentAppUser(),
+    getProjectHandoffCached(id),
+    getProjectKickoffCached(id),
   ])
 
   if (!project) {
@@ -128,6 +153,11 @@ export default async function AdminProjectDetailPage({
         project={dashboardProject}
         projectId={id}
         clients={clients}
+        threads={threads}
+        decisions={decisions}
+        currentUserId={currentUser?.id || ""}
+        handoff={handoff}
+        kickoff={kickoff}
       />
     </main>
   )

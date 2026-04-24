@@ -15,6 +15,7 @@ const sectionByPath = {
   files: "files",
   briefing: "briefing",
   tasks: "tasks",
+  communication: "communication",
 } as const
 
 type SectionKey = keyof typeof sectionByPath
