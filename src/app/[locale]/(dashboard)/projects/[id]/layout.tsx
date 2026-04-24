@@ -5,6 +5,7 @@ import { notFound } from "next/navigation"
 import { auth } from "@clerk/nextjs/server"
 
 import { ClientProjectBreadcrumb } from "@/src/components/client/ClientProjectBreadcrumb"
+import { ClientAiWidget } from "@/src/components/client/ai/ClientAiWidget"
 
 import { getClientProjectBreadcrumb } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
@@ -52,7 +53,7 @@ export default async function ProjectLayout({
   if (!project) return notFound()
 
   return (
-    <div className="flex min-h-full flex-col px-5 py-10 sm:px-6 lg:px-12">
+    <div className="flex min-h-full flex-col px-5 py-10 sm:px-6 lg:px-12 relative">
       <main className="mx-auto flex w-full max-w-440 flex-col">
         <ClientProjectBreadcrumb
           projectId={project.id}
@@ -60,6 +61,11 @@ export default async function ProjectLayout({
         />
         {children}
       </main>
+
+      <ClientAiWidget
+        projectId={project.id}
+        contactName={user.name || "Cliente"}
+      />
     </div>
   )
 }
