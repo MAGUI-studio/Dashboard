@@ -613,6 +613,22 @@ exports.Prisma.PaymentEventScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EmailLogScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  to: 'to',
+  subject: 'subject',
+  templateKey: 'templateKey',
+  entityType: 'entityType',
+  entityId: 'entityId',
+  status: 'status',
+  provider: 'provider',
+  providerMessageId: 'providerMessageId',
+  errorMessage: 'errorMessage',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -884,7 +900,8 @@ exports.Prisma.ModelName = {
   BillingProfile: 'BillingProfile',
   Invoice: 'Invoice',
   Installment: 'Installment',
-  PaymentEvent: 'PaymentEvent'
+  PaymentEvent: 'PaymentEvent',
+  EmailLog: 'EmailLog'
 };
 
 /**

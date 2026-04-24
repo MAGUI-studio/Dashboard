@@ -2,9 +2,14 @@
 
 import { revalidatePath } from "next/cache"
 
-import { InstallmentStatus, InvoiceStatus } from "@/src/generated/client"
+import {
+  InstallmentStatus,
+  InvoiceStatus,
+  Prisma,
+} from "@/src/generated/client"
 import { z } from "zod"
 
+import { triggerProductEvent } from "@/src/lib/email/events"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -64,6 +69,9 @@ export async function createInvoiceAction(
       return inv
     })
 
+    // Trigger email notification
+    await triggerProductEvent({ type: "INVOICE_SENT", invoiceId: invoice.id })
+
     revalidatePath("/admin/financial")
     if (invoice.projectId)
       revalidatePath(`/admin/projects/${invoice.projectId}`)
@@ -79,7 +87,7 @@ export async function registerPaymentAction(
 ) {
   try {
     const user = await getCurrentAppUser()
-    if (!user) throw new Error("Unauthorized")
+    if (!user) return { error: "Unauthorized" }
 
     const validated = RegisterPaymentEventSchema.parse(data)
 
@@ -104,7 +112,6 @@ export async function registerPaymentAction(
       })
 
       // If full amount paid, update installment status
-      // Note: simplistic logic, in real world we check total events vs installment amount
       await tx.installment.update({
         where: { id: validated.installmentId },
         data: {
@@ -166,7 +173,7 @@ export async function saveBillingProfileAction(
   data: z.infer<typeof BillingProfileSchema>
 ) {
   try {
-    await protect("admin") // Or owner
+    await protect("admin")
     const validated = BillingProfileSchema.parse(data)
 
     await prisma.billingProfile.upsert({

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache"
 import { DocumentStatus, Prisma } from "@/src/generated/client"
 import { z } from "zod"
 
+import { triggerProductEvent } from "@/src/lib/email/events"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -138,7 +139,6 @@ export async function sendDocumentToSignatureAction(id: string) {
       where: { id },
       include: {
         signers: true,
-        clauses: { orderBy: { order: "asc" } },
       },
     })
 
@@ -146,8 +146,6 @@ export async function sendDocumentToSignatureAction(id: string) {
     if (document.status !== DocumentStatus.DRAFT)
       throw new Error("Only drafts can be sent")
 
-    // In a real scenario, we would generate the PDF here and upload it
-    // For now, we simulate the Autentique call
     const providerDoc = await autentique.createDocument(
       document.title,
       "https://fake-url.com/doc.pdf",
@@ -166,6 +164,9 @@ export async function sendDocumentToSignatureAction(id: string) {
         providerLink: providerDoc.link,
       },
     })
+
+    // Trigger email notification
+    await triggerProductEvent({ type: "CONTRACT_SENT", documentId: id })
 
     await createAuditLog({
       action: "document.sent",

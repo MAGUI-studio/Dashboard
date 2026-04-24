@@ -271,6 +271,7 @@ model User {
   createdDocumentVersions DocumentVersion[]
 
   billingProfile BillingProfile?
+  emailLogs      EmailLog[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -1025,4 +1026,30 @@ model PaymentEvent {
   updatedAt DateTime @updatedAt
 
   @@index([installmentId])
+}
+
+model EmailLog {
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  to          String
+  subject     String
+  templateKey String // e.g., "PROPOSAL_SENT", "INVOICE_OVERDUE"
+
+  entityType String? // Project, Proposal, Invoice, etc.
+  entityId   String?
+
+  status            String  @default("SENT") // SENT, DELIVERED, FAILED
+  provider          String  @default("RESEND")
+  providerMessageId String? @unique
+
+  errorMessage String? @db.Text
+
+  sentAt    DateTime @default(now())
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([templateKey])
+  @@index([entityType, entityId])
 }

@@ -51,6 +51,7 @@ const envSchema = z.object({
     .string()
     .url()
     .default("https://api.autentique.com.br/v2/graphql"),
+  RESEND_API_KEY: z.string().optional(),
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
@@ -95,6 +96,7 @@ const parsedEnv = envSchema.safeParse({
     (useFallback ? fallbackEnv.UPLOADTHING_TOKEN : undefined),
   AUTENTIQUE_TOKEN: process.env.AUTENTIQUE_TOKEN,
   AUTENTIQUE_URL: process.env.AUTENTIQUE_URL,
+  RESEND_API_KEY: process.env.RESEND_API_KEY,
   NODE_ENV: process.env.NODE_ENV,
 })
 
