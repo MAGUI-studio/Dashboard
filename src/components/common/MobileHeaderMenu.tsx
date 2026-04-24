@@ -162,6 +162,54 @@ export function MobileHeaderMenu({
 
                   <SheetClose asChild>
                     <Link
+                      href="/admin/crm/register"
+                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
+                        pathname === "/admin/crm/register"
+                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                      }`}
+                    >
+                      <ChartLineUp weight="duotone" className="size-6" />
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                        {t("commercial.create")}
+                      </span>
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link
+                      href="/admin/crm/proposals"
+                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
+                        pathname.startsWith("/admin/crm/proposals")
+                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                      }`}
+                    >
+                      <ChartLineUp weight="duotone" className="size-6" />
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                        {t("commercial.proposals")}
+                      </span>
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link
+                      href="/admin/crm/proposals/new"
+                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
+                        pathname === "/admin/crm/proposals/new"
+                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                      }`}
+                    >
+                      <ChartLineUp weight="duotone" className="size-6" />
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                        {t("commercial.proposal_create")}
+                      </span>
+                    </Link>
+                  </SheetClose>
+
+                  <SheetClose asChild>
+                    <Link
                       href="/admin/clients"
                       className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
                         pathname.startsWith("/admin/clients")

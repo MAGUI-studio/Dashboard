@@ -12,10 +12,6 @@ import {
   ProjectStatus,
 } from "@/src/generated/client/enums"
 
-import {
-  revalidateProjectData,
-  revalidateProjectStatus,
-} from "@/src/lib/cache-tags"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -23,6 +19,10 @@ import {
   getAuditOriginLabel,
   getCurrentAppUser,
 } from "@/src/lib/project-governance"
+import {
+  revalidateProjectData,
+  revalidateProjectStatus,
+} from "@/src/lib/revalidate"
 import {
   createProjectSchema,
   updateProjectStatusSchema,

@@ -14,14 +14,6 @@ import {
 import { LeadActivity, LeadNote } from "@/src/types/crm"
 import { z } from "zod"
 
-import {
-  revalidateCrmLead,
-  revalidateCrmLeads,
-  revalidateCrmPrefs,
-  revalidateCrmTemplates,
-  revalidateCrmViews,
-  revalidateProjectData,
-} from "@/src/lib/cache-tags"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -30,6 +22,14 @@ import {
   findOrCreateClientFromEmail,
   getCurrentAppUser,
 } from "@/src/lib/project-governance"
+import {
+  revalidateCrmLead,
+  revalidateCrmLeads,
+  revalidateCrmPrefs,
+  revalidateCrmTemplates,
+  revalidateCrmViews,
+  revalidateProjectData,
+} from "@/src/lib/revalidate"
 
 const LeadSchema = z.object({
   companyName: z.string().min(2),

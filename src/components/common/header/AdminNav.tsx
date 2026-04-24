@@ -134,6 +134,40 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
                       </span>
                     </Link>
                   </DropdownMenuItem>
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                  >
+                    <Link
+                      href="/admin/crm/proposals"
+                      className="flex items-center"
+                    >
+                      <List
+                        weight="bold"
+                        className="mr-2.5 size-3.5 text-brand-primary/60"
+                      />
+                      <span className="font-bold uppercase tracking-tight text-[10px]">
+                        {t("commercial.proposals")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    asChild
+                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
+                  >
+                    <Link
+                      href="/admin/crm/proposals/new"
+                      className="flex items-center"
+                    >
+                      <Plus
+                        weight="bold"
+                        className="mr-2.5 size-3.5 text-brand-primary/60"
+                      />
+                      <span className="font-bold uppercase tracking-tight text-[10px]">
+                        {t("commercial.proposal_create")}
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
               </DropdownMenuContent>
             </DropdownMenu>

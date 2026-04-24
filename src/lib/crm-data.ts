@@ -153,6 +153,22 @@ const getMessageTemplatesCached = unstable_cache(
   { revalidate: CACHE_TTL.USER_PREFERENCES, tags: [cacheTags.adminCrm] }
 )
 
+export const getLeadProposals = (leadId: string) =>
+  unstable_cache(
+    async () => {
+      return prisma.proposal.findMany({
+        where: { leadId },
+        include: { items: { orderBy: { order: "asc" } } },
+        orderBy: { createdAt: "desc" },
+      })
+    },
+    ["crm-lead-proposals", leadId],
+    {
+      revalidate: CACHE_TTL.LEADS,
+      tags: [cacheTags.adminLead(leadId), cacheTags.adminCrm],
+    }
+  )()
+
 export const getMessageTemplates = (scope: string = "LEAD") =>
   unstable_cache(
     async () => {

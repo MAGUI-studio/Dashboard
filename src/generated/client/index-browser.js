@@ -389,6 +389,33 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ProposalScalarFieldEnum = {
+  id: 'id',
+  number: 'number',
+  title: 'title',
+  status: 'status',
+  validUntil: 'validUntil',
+  totalValue: 'totalValue',
+  currency: 'currency',
+  notes: 'notes',
+  leadId: 'leadId',
+  projectId: 'projectId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.ProposalItemScalarFieldEnum = {
+  id: 'id',
+  description: 'description',
+  longDescription: 'longDescription',
+  unitValue: 'unitValue',
+  quantity: 'quantity',
+  order: 'order',
+  proposalId: 'proposalId',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -551,6 +578,14 @@ exports.AuditActorType = exports.$Enums.AuditActorType = {
   USER: 'USER'
 };
 
+exports.ProposalStatus = exports.$Enums.ProposalStatus = {
+  DRAFT: 'DRAFT',
+  SENT: 'SENT',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED',
+  EXPIRED: 'EXPIRED'
+};
+
 exports.Prisma.ModelName = {
   DashboardMetricSnapshot: 'DashboardMetricSnapshot',
   SearchDocument: 'SearchDocument',
@@ -572,7 +607,9 @@ exports.Prisma.ModelName = {
   Version: 'Version',
   Notification: 'Notification',
   ScheduledReminder: 'ScheduledReminder',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  Proposal: 'Proposal',
+  ProposalItem: 'ProposalItem'
 };
 
 /**

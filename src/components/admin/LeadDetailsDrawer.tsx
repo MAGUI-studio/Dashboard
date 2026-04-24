@@ -9,21 +9,38 @@ import { Link } from "@/src/i18n/navigation"
 import { Lead, MessageTemplate } from "@/src/types/crm"
 import {
   ArrowSquareOut,
-  ChatCircleText,
+  Briefcase,
+  Calendar,
   CircleNotch,
+  DotsThreeVertical,
+  Layout,
+  Lightning,
+  NotePencil,
   PencilSimple,
   RocketLaunch,
+  WhatsappLogo,
 } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/src/components/ui/dropdown-menu"
+import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/src/components/ui/sheet"
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/src/components/ui/tabs"
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { ConvertLeadDialog } from "@/src/components/admin/ConvertLeadDialog"
@@ -132,172 +149,305 @@ export function LeadDetailsDrawer({
       <SheetTrigger asChild>{children}</SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[96vw] overflow-y-auto border-l border-border/30 bg-background/98 p-0 sm:min-w-[40rem] sm:max-w-[42rem]"
+        className="w-[96vw] overflow-y-auto border-l border-border/15 bg-background p-0 sm:min-w-[40rem] sm:max-w-[42rem] sm:rounded-l-[3.5rem]"
       >
-        <SheetHeader className="border-b border-border/15 px-8 py-8 text-left">
-          <div className="space-y-3">
-            <div className="flex items-start justify-between gap-4">
-              <div className="space-y-2">
-                <div className="flex items-center gap-3">
-                  <SheetTitle className="font-heading text-3xl font-black tracking-tight text-foreground">
+        <div className="flex min-h-screen flex-col">
+          {/* Executive Header */}
+          <SheetHeader className="border-b border-border/10 px-10 py-12 text-left">
+            <div className="flex flex-col gap-8">
+              <div className="flex items-start justify-between">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Briefcase
+                      size={16}
+                      className="text-brand-primary"
+                      weight="bold"
+                    />
+                    <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/50">
+                      Gestão de Oportunidade
+                    </span>
+                  </div>
+                  <SheetTitle className="font-heading text-4xl font-black tracking-tighter text-foreground">
                     {localLead.companyName}
                   </SheetTitle>
-                  <LeadStatusBadge status={localLead.status} />
+                  <div className="flex items-center gap-3">
+                    <LeadStatusBadge status={localLead.status} />
+                    <span className="text-xs font-medium text-muted-foreground/40">
+                      •
+                    </span>
+                    <span className="text-xs font-bold text-muted-foreground/60">
+                      {t(`source.${localLead.source}`)}
+                    </span>
+                  </div>
                 </div>
-                <SheetDescription className="text-sm leading-relaxed text-muted-foreground/65">
-                  {t(`source.${localLead.source}`)} •{" "}
-                  {localLead.activities?.length || 0} atividades
-                </SheetDescription>
-              </div>
-              <div className="flex flex-col items-end gap-3">
-                <p className="pt-1 text-right text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
-                  Atualizado em {formatDateTime(localLead.updatedAt)}
-                </p>
-                <div className="flex gap-2">
-                  <Button
-                    variant="outline"
-                    onClick={() => setIsEditing(!isEditing)}
-                    className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.18em]"
-                  >
-                    <PencilSimple className="mr-2 size-4" />{" "}
-                    {isEditing ? "Cancelar" : "Editar"}
-                  </Button>
-                  {localLead.status !== LeadStatus.CONVERTIDO && (
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button
-                      onClick={() => setIsConvertDialogOpen(true)}
-                      className="rounded-full bg-brand-primary px-5 text-[10px] font-black uppercase tracking-[0.18em] text-white"
+                      variant="outline"
+                      size="icon"
+                      className="size-10 rounded-full border-border/20 shadow-sm transition-transform active:scale-90"
                     >
-                      <RocketLaunch className="mr-2 size-4" /> Converter
+                      <DotsThreeVertical size={20} weight="bold" />
                     </Button>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {localLead.convertedProjectId && (
-              <div className="flex items-center gap-2 rounded-2xl border border-green-500/20 bg-green-500/10 p-4">
-                <RocketLaunch weight="fill" className="size-5 text-green-600" />
-                <div className="flex-1">
-                  <p className="text-[10px] font-black uppercase tracking-widest text-green-600">
-                    Lead convertido com sucesso
-                  </p>
-                  <p className="text-xs font-medium text-green-700/80">
-                    Este lead agora e um projeto oficial.
-                  </p>
-                </div>
-                <Button
-                  asChild
-                  size="sm"
-                  variant="ghost"
-                  className="rounded-full text-[10px] font-black uppercase tracking-widest text-green-600 hover:bg-green-500/20"
-                >
-                  <Link
-                    href={{
-                      pathname: "/admin/projects/[id]",
-                      params: { id: localLead.convertedProjectId },
-                    }}
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    className="z-50 w-52 rounded-[2rem] border border-border/10 bg-background p-2 shadow-2xl"
                   >
-                    Abrir Projeto <ArrowSquareOut className="ml-2 size-4" />
-                  </Link>
-                </Button>
+                    <DropdownMenuItem
+                      onClick={() => setIsEditing(true)}
+                      className="cursor-pointer rounded-full px-4 py-3 text-[11px] font-black uppercase tracking-widest transition-colors hover:bg-muted"
+                    >
+                      <PencilSimple size={16} className="mr-3" /> Editar Lead
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      asChild
+                      className="cursor-pointer rounded-full px-4 py-3 text-[11px] font-black uppercase tracking-widest"
+                    >
+                      <Link
+                        href={{
+                          pathname: "/admin/crm/leads/[id]",
+                          params: { id: localLead.id },
+                        }}
+                        target="_blank"
+                      >
+                        <ArrowSquareOut size={16} className="mr-3" /> Ver
+                        Detalhes
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      asChild
+                      className="cursor-pointer rounded-full px-4 py-3 text-[11px] font-black uppercase tracking-widest"
+                    >
+                      <Link
+                        href={{
+                          pathname: "/admin/crm/leads/[id]/proposals",
+                          params: { id: localLead.id },
+                        }}
+                        target="_blank"
+                      >
+                        <ArrowSquareOut size={16} className="mr-3" /> Ver
+                        Propostas
+                      </Link>
+                    </DropdownMenuItem>
+                    <div className="my-2 h-px bg-border/10 px-2" />
+                    <LeadDeleteDialog
+                      leadId={localLead.id}
+                      companyName={localLead.companyName}
+                      onDeleted={(id) => {
+                        setUncontrolledOpen(false)
+                        onOpenChange?.(false)
+                        onLeadDeleted?.(id)
+                      }}
+                    />
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
-            )}
-          </div>
-        </SheetHeader>
 
-        <div className="grid gap-8 px-8 py-8">
-          {isEditing ? (
-            <LeadEditForm
-              lead={localLead}
-              isSaving={isSavingLead}
-              onSave={async (data) => {
-                const ok = await handleSaveLead(data)
-                if (ok) setIsEditing(false)
-                return ok
-              }}
-            />
-          ) : null}
-
-          <LeadInfoDisplay lead={localLead} />
-
-          <section className="grid gap-4 border-b border-border/15 pb-8">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-              Status do lead
-            </p>
-            <div className="grid gap-2 sm:grid-cols-2">
-              {statuses.map((s) => (
-                <Button
-                  key={s}
-                  variant={localLead.status === s ? "default" : "outline"}
-                  onClick={() => handleStatusChange(s)}
-                  disabled={Boolean(isUpdatingStatus)}
-                  className="justify-start rounded-[1rem] border-border/50 px-4 py-5 text-[10px] font-black uppercase tracking-[0.18em]"
-                >
-                  {isUpdatingStatus === s && (
-                    <CircleNotch className="mr-2 size-3.5 animate-spin" />
-                  )}
-                  {t(`status.${s}`)}
-                </Button>
-              ))}
-            </div>
-          </section>
-
-          <LeadQuickActions lead={localLead} templates={templates} />
-
-          <section className="grid gap-4 border-b border-border/15 pb-8">
-            <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-              Registrar nota
-            </p>
-            <div className="grid gap-3">
-              <Textarea
-                value={note}
-                onChange={(e) => setNote(e.target.value)}
-                placeholder="Contexto da conversa..."
-                className="min-h-28 rounded-[1.35rem] border-border/50 bg-background/80 p-4 text-sm"
-              />
-              <Button
-                onClick={async () => {
-                  if (await handleAddNote(note)) setNote("")
-                }}
-                disabled={isSavingNote || note.trim().length < 2}
-                className="h-12 w-full rounded-full text-[10px] font-black uppercase tracking-[0.2em]"
-              >
-                {isSavingNote ? (
-                  <CircleNotch className="mr-2 size-4 animate-spin" />
+              {/* Primary Actions Grid */}
+              <div className="grid gap-4 md:grid-cols-2">
+                {localLead.status !== LeadStatus.CONVERTIDO ? (
+                  <Button
+                    onClick={() => setIsConvertDialogOpen(true)}
+                    className="h-14 rounded-full bg-brand-primary text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.02] hover:bg-brand-primary/90 active:scale-95"
+                  >
+                    <RocketLaunch size={20} weight="bold" className="mr-3" />
+                    Converter Lead
+                  </Button>
                 ) : (
-                  <ChatCircleText className="mr-2 size-4" />
+                  <Button
+                    asChild
+                    variant="outline"
+                    className="h-14 rounded-full border-green-500/30 bg-green-500/5 text-[11px] font-black uppercase tracking-widest text-green-600 shadow-sm"
+                  >
+                    <Link
+                      href={{
+                        pathname: "/admin/projects/[id]",
+                        params: { id: localLead.convertedProjectId || "" },
+                      }}
+                    >
+                      <RocketLaunch size={20} weight="fill" className="mr-3" />
+                      Acessar Projeto
+                    </Link>
+                  </Button>
                 )}
-                Salvar nota
-              </Button>
-            </div>
-          </section>
 
-          <section className="grid gap-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.22em] text-muted-foreground/50">
-                  Linha do Tempo
-                </p>
-                <p className="mt-1 text-sm text-muted-foreground/70">
-                  Historico estruturado.
-                </p>
+                <div className="flex h-14 items-center justify-between rounded-full border border-border/15 bg-muted/5 px-8">
+                  <div className="flex flex-col">
+                    <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/40">
+                      Última Interação
+                    </span>
+                    <span className="text-[10px] font-bold text-foreground/70">
+                      {formatDateTime(localLead.updatedAt)}
+                    </span>
+                  </div>
+                  <Calendar
+                    size={18}
+                    className="text-muted-foreground/30"
+                    weight="bold"
+                  />
+                </div>
               </div>
-              {isLoadingData && (
-                <CircleNotch className="size-4 animate-spin text-muted-foreground/40" />
-              )}
             </div>
-            <LeadActivityFeed activities={localLead.activities || []} />
-          </section>
+          </SheetHeader>
 
-          <LeadDeleteDialog
-            leadId={localLead.id}
-            companyName={localLead.companyName}
-            onDeleted={(id) => {
-              setUncontrolledOpen(false)
-              onOpenChange?.(false)
-              onLeadDeleted?.(id)
-            }}
-          />
+          {/* Content Tabs */}
+          <Tabs defaultValue="overview" className="flex-1">
+            <div className="bg-background px-10 pt-6">
+              <TabsList className="flex h-12 w-full items-center justify-start gap-2 rounded-full border border-border/10 bg-muted/10 p-1">
+                <TabsTrigger
+                  value="overview"
+                  className="h-full rounded-full px-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                >
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger
+                  value="timeline"
+                  className="h-full rounded-full px-8 text-[10px] font-black uppercase tracking-widest text-muted-foreground/50 transition-all data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+                >
+                  Atividades
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <div className="p-10">
+              <TabsContent
+                value="overview"
+                className="m-0 space-y-10 outline-none"
+              >
+                {isEditing && (
+                  <div className="rounded-[2.5rem] border border-brand-primary/20 bg-brand-primary/[0.02] p-8 shadow-sm">
+                    <LeadEditForm
+                      lead={localLead}
+                      isSaving={isSavingLead}
+                      onSave={async (data) => {
+                        const ok = await handleSaveLead(data)
+                        if (ok) setIsEditing(false)
+                        return ok
+                      }}
+                    />
+                  </div>
+                )}
+
+                <LeadInfoDisplay lead={localLead} />
+
+                <div className="grid gap-10">
+                  <div className="space-y-3">
+                    <SectionHeader
+                      title="Proposta Comercial"
+                      icon={NotePencil}
+                    />
+                    <Button
+                      asChild
+                      variant="outline"
+                      className="h-14 w-full justify-start rounded-full border-brand-primary/25 bg-brand-primary/5 px-6 text-[11px] font-black uppercase tracking-widest text-brand-primary shadow-sm"
+                    >
+                      <Link
+                        href={{
+                          pathname: "/admin/crm/proposals/new",
+                          query: { leadId: localLead.id },
+                        }}
+                      >
+                        <NotePencil size={20} weight="bold" className="mr-3" />
+                        Criar Proposta
+                      </Link>
+                    </Button>
+                  </div>
+
+                  {/* Pipeline Control */}
+                  <div className="space-y-4">
+                    <SectionHeader title="Estágio do Funil" icon={Layout} />
+                    <div className="flex flex-wrap gap-2">
+                      {statuses.map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => handleStatusChange(s)}
+                          disabled={Boolean(isUpdatingStatus)}
+                          className={`flex items-center rounded-full border px-6 py-3 transition-all active:scale-95 ${
+                            localLead.status === s
+                              ? "border-brand-primary bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
+                              : "border-border/40 bg-background text-muted-foreground/60 hover:border-border/80"
+                          }`}
+                        >
+                          {isUpdatingStatus === s && (
+                            <CircleNotch
+                              size={12}
+                              className="mr-2 animate-spin"
+                            />
+                          )}
+                          <span className="text-[10px] font-black uppercase tracking-widest">
+                            {t(`status.${s}`)}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Notes Strategy */}
+                  <div className="space-y-4">
+                    <SectionHeader
+                      title="Insight Estratégico"
+                      icon={NotePencil}
+                    />
+                    <div className="relative">
+                      <Textarea
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        placeholder="Descreva pontos críticos da negociação..."
+                        className="min-h-[140px] resize-none rounded-[2rem] border-border/15 bg-muted/5 p-8 text-sm font-medium transition-all focus:bg-background focus:ring-1 focus:ring-brand-primary/20 shadow-inner"
+                      />
+                      <Button
+                        onClick={async () => {
+                          if (await handleAddNote(note)) setNote("")
+                        }}
+                        disabled={isSavingNote || note.trim().length < 2}
+                        className="absolute bottom-4 right-4 h-11 rounded-full bg-foreground px-8 text-[10px] font-black uppercase tracking-widest text-background shadow-xl active:scale-95"
+                      >
+                        {isSavingNote ? (
+                          <CircleNotch size={14} className="animate-spin" />
+                        ) : (
+                          "Salvar Nota"
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+
+                  {/* Communication */}
+                  <div className="space-y-4">
+                    <SectionHeader
+                      title="Templates de Contato"
+                      icon={WhatsappLogo}
+                    />
+                    <div className="rounded-[2.5rem] border border-border/15 bg-muted/5 p-8 shadow-sm">
+                      <LeadQuickActions
+                        lead={localLead}
+                        templates={templates}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent
+                value="timeline"
+                className="m-0 space-y-8 outline-none"
+              >
+                <div className="flex items-center justify-between">
+                  <SectionHeader title="Histórico Completo" icon={Lightning} />
+                  {isLoadingData && (
+                    <CircleNotch
+                      size={18}
+                      className="animate-spin text-brand-primary"
+                    />
+                  )}
+                </div>
+                <div className="rounded-[2.5rem] border border-border/15 bg-background p-10 shadow-sm">
+                  <LeadActivityFeed activities={localLead.activities || []} />
+                </div>
+              </TabsContent>
+            </div>
+          </Tabs>
         </div>
 
         <ConvertLeadDialog
@@ -305,12 +455,26 @@ export function LeadDetailsDrawer({
           open={isConvertDialogOpen}
           onOpenChange={setIsConvertDialogOpen}
           clients={clients}
-          onConverted={() => {
-            handleStatusChange(LeadStatus.CONVERTIDO)
-            // setLocalLead updated via mutation hook or manual if needed
-          }}
+          onConverted={() => handleStatusChange(LeadStatus.CONVERTIDO)}
         />
       </SheetContent>
     </Sheet>
+  )
+}
+
+function SectionHeader({
+  title,
+  icon: Icon,
+}: {
+  title: string
+  icon: React.ElementType
+}) {
+  return (
+    <div className="flex items-center gap-2 px-1">
+      <Icon size={14} weight="bold" className="text-brand-primary/60" />
+      <h4 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+        {title}
+      </h4>
+    </div>
   )
 }

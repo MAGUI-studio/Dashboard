@@ -166,6 +166,40 @@ export function UserMenu({ viewer }: UserMenuProps) {
                     </span>
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem
+                  asChild
+                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                >
+                  <Link
+                    href="/admin/crm/proposals"
+                    className="flex items-center"
+                  >
+                    <ChartLineUp
+                      weight="duotone"
+                      className="mr-3 size-4 text-brand-primary/60"
+                    />
+                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                      {t("commercial.proposals")}
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  asChild
+                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
+                >
+                  <Link
+                    href="/admin/crm/proposals/new"
+                    className="flex items-center"
+                  >
+                    <Plus
+                      weight="duotone"
+                      className="mr-3 size-4 text-brand-primary/60"
+                    />
+                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+                      {t("commercial.proposal_create")}
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
               </>
             )}
           </div>

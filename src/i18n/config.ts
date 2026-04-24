@@ -35,6 +35,26 @@ export const pathnames = {
     pt: "/admin/prospeccao/lista",
     en: "/admin/crm/list",
   },
+  "/admin/crm/proposals": {
+    pt: "/admin/prospeccao/propostas",
+    en: "/admin/crm/proposals",
+  },
+  "/admin/crm/proposals/new": {
+    pt: "/admin/prospeccao/propostas/nova",
+    en: "/admin/crm/proposals/new",
+  },
+  "/admin/crm/leads/[id]": {
+    pt: "/admin/prospeccao/leads/[id]",
+    en: "/admin/crm/leads/[id]",
+  },
+  "/admin/crm/leads/[id]/proposal": {
+    pt: "/admin/prospeccao/leads/[id]/proposta",
+    en: "/admin/crm/leads/[id]/proposal",
+  },
+  "/admin/crm/leads/[id]/proposals": {
+    pt: "/admin/prospeccao/leads/[id]/propostas",
+    en: "/admin/crm/leads/[id]/proposals",
+  },
   "/admin/search": {
     pt: "/admin/busca",
     en: "/admin/search",

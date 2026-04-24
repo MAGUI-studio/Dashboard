@@ -59,11 +59,12 @@ export function HeaderLanguageSwitcher({
         return
       }
 
+      type RouterHref = Parameters<typeof router.replace>[0]
       router.replace(
         {
           pathname: pathname as AppPathnames,
           params: { id: params.id },
-        },
+        } as RouterHref,
         { locale: newLocale }
       )
       return

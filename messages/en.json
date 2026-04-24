@@ -543,7 +543,9 @@
       "title": "Commercial",
       "list": "All Leads",
       "kanban": "Kanban",
-      "create": "New Lead"
+      "create": "New Lead",
+      "proposals": "All Proposals",
+      "proposal_create": "New Proposal"
     },
     "user": {
       "profile": "My Profile",

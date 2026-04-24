@@ -7,6 +7,14 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ProposalStatus {
+  DRAFT
+  SENT
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
 enum UserRole {
   ADMIN
   MEMBER
@@ -241,6 +249,7 @@ model Lead {
   assignedTo    User?          @relation("LeadOwner", fields: [assignedToId], references: [id], onDelete: SetNull)
   followUpNotes LeadNote[]
   activities    LeadActivity[]
+  proposals     Proposal[]
 
   convertedProjectId String?
   convertedAt        DateTime?
@@ -346,6 +355,7 @@ model Project {
   versions      Version[]
   notifications Notification[]
   auditLogs     AuditLog[]
+  proposals     Proposal[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -571,4 +581,46 @@ model AuditLog {
   @@index([projectId, createdAt])
   @@index([actorId])
   @@index([entityType, entityId])
+}
+
+model Proposal {
+  id         String         @id @default(cuid())
+  number     Int            @default(autoincrement())
+  title      String
+  status     ProposalStatus @default(DRAFT)
+  validUntil DateTime?
+  totalValue Float          @default(0)
+  currency   String         @default("BRL")
+  notes      String?        @db.Text
+
+  leadId String
+  lead   Lead   @relation(fields: [leadId], references: [id], onDelete: Cascade)
+
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  items ProposalItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([leadId])
+  @@index([status])
+}
+
+model ProposalItem {
+  id              String  @id @default(cuid())
+  description     String
+  longDescription String? @db.Text
+  unitValue       Float   @default(0)
+  quantity        Int     @default(1)
+  order           Int     @default(0)
+
+  proposalId String
+  proposal   Proposal @relation(fields: [proposalId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([proposalId, order])
 }
