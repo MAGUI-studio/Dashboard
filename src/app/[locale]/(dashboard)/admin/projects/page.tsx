@@ -49,7 +49,7 @@ export default async function ProjectsPage({
       name: p.client.name,
       email: p.client.email,
     },
-    createdAt: p.createdAt.toISOString(),
+    createdAt: new Date(p.createdAt).toISOString(),
   }))
 
   return (

@@ -162,7 +162,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
   )
 
   return (
-    <div className="max-w-5xl">
+    <div className="w-full">
       {renderStepIndicator()}
 
       <div className="min-h-[400px]">
@@ -181,7 +181,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, type: v })
                       }
                     >
-                      <SelectTrigger className="h-12 rounded-full border-border/40 bg-muted/10">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -222,7 +222,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, clientId: v })
                       }
                     >
-                      <SelectTrigger className="h-12 rounded-full border-border/40 bg-muted/10">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
                         <SelectValue placeholder="Selecione um cliente..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -245,7 +245,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, projectId: v })
                       }
                     >
-                      <SelectTrigger className="h-12 rounded-full border-border/40 bg-muted/10">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
                         <SelectValue placeholder="Opcional..." />
                       </SelectTrigger>
                       <SelectContent>

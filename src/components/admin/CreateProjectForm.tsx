@@ -23,6 +23,7 @@ import {
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
+import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
 import { Calendar } from "@/src/components/ui/calendar"
 import {
@@ -83,6 +84,12 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
   const [deadline, setDeadline] = React.useState<Date | undefined>(undefined)
   const [startDate, setStartDate] = React.useState<Date | undefined>(new Date())
   const [budgetValue, setBudgetValue] = React.useState("")
+
+  const setDeadlineByDays = (days: number) => {
+    const date = new Date()
+    date.setDate(date.getDate() + days)
+    setDeadline(date)
+  }
 
   const [state, formAction, isPending] = React.useActionState(
     async (_prevState: unknown, formData: FormData) => {
@@ -448,6 +455,19 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                   />
                 </PopoverContent>
               </Popover>
+
+              <div className="mt-3 flex flex-wrap gap-2">
+                {[7, 14, 21, 30].map((days) => (
+                  <Badge
+                    key={days}
+                    variant="outline"
+                    className="cursor-pointer border-border/40 bg-muted/5 px-3 py-1 text-[9px] font-black uppercase tracking-widest transition-all hover:border-brand-primary/40 hover:bg-brand-primary/5 hover:text-brand-primary"
+                    onClick={() => setDeadlineByDays(days)}
+                  >
+                    {days} dias
+                  </Badge>
+                ))}
+              </div>
             </Field>
           </div>
 

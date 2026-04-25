@@ -75,6 +75,22 @@ export const pathnames = {
     pt: "/admin/projetos/[id]/ativos",
     en: "/admin/projects/[id]/assets",
   },
+  "/admin/documents": {
+    pt: "/admin/documentos",
+    en: "/admin/documents",
+  },
+  "/admin/documents/new": {
+    pt: "/admin/documentos/novo",
+    en: "/admin/documents/new",
+  },
+  "/admin/documents/[id]": {
+    pt: "/admin/documentos/[id]",
+    en: "/admin/documents/[id]",
+  },
+  "/admin/documents/[id]/edit": {
+    pt: "/admin/documentos/[id]/editar",
+    en: "/admin/documents/[id]/edit",
+  },
   "/projects": {
     pt: "/projetos",
     en: "/projects",
@@ -103,9 +119,29 @@ export const pathnames = {
     pt: "/projetos/[id]/tarefas",
     en: "/projects/[id]/tasks",
   },
+  "/projects/[id]/communication": {
+    pt: "/projetos/[id]/comunicacao",
+    en: "/projects/[id]/communication",
+  },
+  "/projects/[id]/financial": {
+    pt: "/projetos/[id]/investimento",
+    en: "/projects/[id]/financial",
+  },
   "/notifications": {
     pt: "/notificacoes",
     en: "/notifications",
+  },
+  "/docs": {
+    pt: "/docs",
+    en: "/docs",
+  },
+  "/docs/[...slug]": {
+    pt: "/docs/[...slug]",
+    en: "/docs/[...slug]",
+  },
+  "/docs/changelog": {
+    pt: "/docs/changelog",
+    en: "/docs/changelog",
   },
 }
 
