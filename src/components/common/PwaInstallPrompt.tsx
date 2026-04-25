@@ -7,6 +7,8 @@ import { AnimatePresence, motion } from "framer-motion"
 
 import { Button } from "@/src/components/ui/button"
 
+import { useIsMobile } from "@/src/hooks/use-mobile"
+
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[]
   readonly userChoice: Promise<{
@@ -17,11 +19,15 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PwaInstallPrompt() {
+  const isMobile = useIsMobile()
   const [showPrompt, setShowPrompt] = React.useState(false)
   const [deferredPrompt, setDeferredPrompt] =
     React.useState<BeforeInstallPromptEvent | null>(null)
 
   React.useEffect(() => {
+    // Only proceed on mobile
+    if (!isMobile) return
+
     const handleBeforeInstallPrompt = (e: Event) => {
       e.preventDefault()
       setDeferredPrompt(e as BeforeInstallPromptEvent)
@@ -44,7 +50,7 @@ export function PwaInstallPrompt() {
         handleBeforeInstallPrompt
       )
     }
-  }, [])
+  }, [isMobile])
 
   const handleInstall = async () => {
     if (!deferredPrompt) return
