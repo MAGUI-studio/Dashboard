@@ -165,7 +165,8 @@ export function DocumentsTable({ documents }: DocumentsTableProps) {
                     className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary"
                   >
                     <Link
-                      href={`/admin/documents/${doc.id}`}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      href={`/admin/documents/${doc.id}` as any}
                       className="flex items-center"
                     >
                       <Eye
@@ -182,7 +183,8 @@ export function DocumentsTable({ documents }: DocumentsTableProps) {
                     className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary"
                   >
                     <Link
-                      href={`/admin/documents/${doc.id}/edit`}
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      href={`/admin/documents/${doc.id}/edit` as any}
                       className="flex items-center"
                     >
                       <Pencil

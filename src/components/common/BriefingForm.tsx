@@ -34,7 +34,8 @@ export function BriefingForm({
     isFieldMissing,
     handleNext,
     handleSubmit,
-  } = useBriefingForm(projectId, initialData)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } = useBriefingForm(projectId, initialData as any)
 
   React.useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {

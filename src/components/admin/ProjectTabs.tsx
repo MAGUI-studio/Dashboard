@@ -47,21 +47,29 @@ interface ProjectTabsProps {
     email: string
     companyName: string | null
   }>
-  threads: Prisma.ThreadGetPayload<{
-    include: {
-      messages: {
-        include: {
-          author: true
-          resolvedBy: true
+  threads: Array<
+    Prisma.ThreadGetPayload<{
+      include: {
+        messages: {
+          include: {
+            author: true
+            resolvedBy: true
+          }
         }
       }
-    }
-  }>[]
-  decisions: Prisma.DecisionGetPayload<{
-    include: {
-      decidedBy: true
-    }
-  }>[]
+    }> &
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any
+  >
+  decisions: Array<
+    Prisma.DecisionGetPayload<{
+      include: {
+        decidedBy: true
+      }
+    }> &
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      any
+  >
   currentUserId: string
   handoff?: Prisma.ProjectHandoffGetPayload<{
     include: {
@@ -72,7 +80,9 @@ interface ProjectTabsProps {
       }
     }
   }> | null
-  kickoff?: Prisma.ProjectKickoffChecklist | null
+  kickoff?: Prisma.ProjectKickoffChecklistGetPayload<
+    Record<string, never>
+  > | null
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   invoices: any[]
 }
@@ -200,14 +210,17 @@ export function ProjectTabs({
       </TabsContent>
 
       <TabsContent value="handoff" className="mt-0 focus-visible:outline-none">
-        <ProjectHandoffTab handoff={handoff} kickoff={kickoff} />
+        <ProjectHandoffTab
+          handoff={handoff ?? null}
+          kickoff={kickoff ?? null}
+        />
       </TabsContent>
 
       <TabsContent
         value="financial"
         className="mt-0 focus-visible:outline-none"
       >
-        <ProjectFinancialTab projectId={projectId} invoices={invoices} />
+        <ProjectFinancialTab invoices={invoices} />
       </TabsContent>
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">

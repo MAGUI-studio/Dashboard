@@ -69,7 +69,12 @@ export function BriefingStepEditor({
 
   // 1. Branding Palette Editor
   if (currentStepId === "palette") {
-    const p = value || { primary: "#000000", secondary: "#FFFFFF", accent: "" }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const p = (value as any) || {
+      primary: "#000000",
+      secondary: "#FFFFFF",
+      accent: "",
+    }
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8">
         <div className="space-y-4">
@@ -120,7 +125,8 @@ export function BriefingStepEditor({
 
   // 2. Typography Editor
   if (currentStepId === "typography") {
-    const ty = value || { primary: "", secondary: "" }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ty = (value as any) || { primary: "", secondary: "" }
     return (
       <div className="space-y-12 pt-8">
         <div className="space-y-4">
@@ -155,7 +161,8 @@ export function BriefingStepEditor({
 
   // 3. Infrastructure Editor
   if (currentStepId === "infrastructure") {
-    const infra = value || { domain: "", hosting: "", analytics: "" }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const infra = (value as any) || { domain: "", hosting: "", analytics: "" }
     return (
       <div className="space-y-12 pt-8">
         <div className="space-y-4">
@@ -192,7 +199,8 @@ export function BriefingStepEditor({
 
   // 4. Governance Editor
   if (currentStepId === "governance") {
-    const gov = value || { primaryApprover: "", financialApprover: "" }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const gov = (value as any) || { primaryApprover: "", financialApprover: "" }
     return (
       <div className="space-y-12 pt-8">
         <div className="space-y-4">
@@ -235,7 +243,7 @@ export function BriefingStepEditor({
     ].includes(currentStepId)
   ) {
     return renderListInput(
-      value || [""],
+      (value as string[]) || [""],
       currentStepId.substring(0, 3).toUpperCase()
     )
   }

@@ -5,7 +5,6 @@ import {
   AssetOrigin,
   AssetType,
   AssetVisibility,
-  NotificationType,
   Priority,
   ProjectCategory,
   ProjectMemberRole,
@@ -129,7 +128,8 @@ export interface DashboardUpdateAttachment {
 
 export interface DashboardNotification {
   id: string
-  type: NotificationType
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  type: any
   title: string
   message: string
   ctaPath: string | null

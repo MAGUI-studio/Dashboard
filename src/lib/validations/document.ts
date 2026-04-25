@@ -32,9 +32,9 @@ export const CreateDocumentSchema = z.object({
   clientId: z.string().optional(),
   sourceLeadId: z.string().optional(),
 
-  contractedData: z.record(z.any()).optional(),
-  contractingData: z.record(z.any()).optional(),
-  commercialData: z.record(z.any()).optional(),
+  contractedData: z.record(z.string(), z.any()).optional(),
+  contractingData: z.record(z.string(), z.any()).optional(),
+  commercialData: z.record(z.string(), z.any()).optional(),
 
   clauses: z.array(DocumentClauseSchema).optional(),
   signers: z.array(DocumentSignerSchema).optional(),

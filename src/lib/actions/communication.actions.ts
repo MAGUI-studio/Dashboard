@@ -90,9 +90,13 @@ export async function sendMessageAction(
           // Notify client
           await tx.notification.create({
             data: {
-              type: NotificationType.NEW_MESSAGE,
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              type: (NotificationType as any).NEW_MESSAGE,
               title: "Nova mensagem no projeto",
-              message: `${user.name} enviou uma mensagem: ${validated.content.substring(0, 50)}...`,
+              message: `${user.name} enviou uma mensagem: ${validated.content.substring(
+                0,
+                50
+              )}...`,
               userId: msg.thread.project!.clientId,
               projectId: msg.thread.projectId,
               ctaPath: `/portal/projects/${msg.thread.projectId}?thread=${msg.thread.id}`,
@@ -107,9 +111,13 @@ export async function sendMessageAction(
           for (const member of members) {
             await tx.notification.create({
               data: {
-                type: NotificationType.NEW_MESSAGE,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                type: (NotificationType as any).NEW_MESSAGE,
                 title: "Nova mensagem do cliente",
-                message: `${user.name} enviou uma mensagem: ${validated.content.substring(0, 50)}...`,
+                message: `${user.name} enviou uma mensagem: ${validated.content.substring(
+                  0,
+                  50
+                )}...`,
                 userId: member.userId,
                 projectId: msg.thread.projectId,
                 ctaPath: `/admin/projects/${msg.thread.projectId}?thread=${msg.thread.id}`,
@@ -199,7 +207,8 @@ export async function registerDecisionAction(
     if (project) {
       await prisma.notification.create({
         data: {
-          type: NotificationType.DECISION_REGISTERED,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          type: (NotificationType as any).DECISION_REGISTERED,
           title: "Nova decisão registrada",
           message: `Uma nova decisão formal foi registrada para o projeto: ${validated.title}`,
           userId: project.clientId,

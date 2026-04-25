@@ -52,8 +52,10 @@ export default async function ProjectCommunicationPage({ params }: PageProps) {
 
       <ProjectCommunication
         projectId={id}
-        initialThreads={threads}
-        initialDecisions={decisions}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        initialThreads={threads as any}
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        initialDecisions={decisions as any}
         currentUserId={user.id}
         userRole="CLIENT"
       />

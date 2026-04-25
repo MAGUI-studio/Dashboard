@@ -175,20 +175,11 @@ export function MaguiContractTemplate({
   return (
     <Document title={document.title}>
       <Page size="A4" style={styles.page}>
-        <Image
-          src={FRONT_IMAGE}
-          style={styles.fullBleed}
-          alt="Capa do Contrato"
-        />
+        <Image src={FRONT_IMAGE} style={styles.fullBleed} alt="" />
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <Image
-          src={PAGE_IMAGE}
-          style={styles.sheet}
-          fixed
-          alt="Papel Timbrado"
-        />
+        <Image src={PAGE_IMAGE} style={styles.sheet} fixed alt="" />
         <View style={styles.content}>
           <View style={styles.header} fixed>
             <View style={styles.studioInfo}>
@@ -257,11 +248,7 @@ export function MaguiContractTemplate({
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <Image
-          src={BACK_IMAGE}
-          style={styles.fullBleed}
-          alt="Encerramento do Contrato"
-        />
+        <Image src={BACK_IMAGE} style={styles.fullBleed} alt="" />
       </Page>
     </Document>
   )

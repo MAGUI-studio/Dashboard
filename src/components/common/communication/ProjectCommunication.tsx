@@ -34,7 +34,7 @@ import { cn } from "@/src/lib/utils/utils"
 
 import { DecisionCard, DecisionItem } from "./DecisionCard"
 import { DecisionForm } from "./DecisionForm"
-import { MessageBubble } from "./MessageBubble"
+import { MessageAttachment, MessageBubble } from "./MessageBubble"
 import { MessageComposer } from "./MessageComposer"
 import { ThreadList } from "./ThreadList"
 

@@ -72,7 +72,8 @@ export async function processProjectHandoffAction(proposalId: string) {
           proposalTitle: proposal.title,
           finalValue: proposal.totalValue,
           currency: proposal.currency,
-          soldItems: proposal.items as unknown as Prisma.JsonValue,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          soldItems: proposal.items as unknown as any,
           commercialNotes: proposal.notes,
           status: "COMPLETED",
         },

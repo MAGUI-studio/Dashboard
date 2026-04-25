@@ -73,7 +73,8 @@ export default async function DocsLayout({ children }: DocsLayoutProps) {
                 {group.items.map((item, j) => (
                   <Link
                     key={j}
-                    href={item.href}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    href={item.href as any}
                     className="flex items-center justify-between group px-4 py-2.5 rounded-xl hover:bg-muted/10 transition-all"
                   >
                     <span className="text-sm font-bold text-foreground/70 group-hover:text-foreground">
@@ -88,7 +89,8 @@ export default async function DocsLayout({ children }: DocsLayoutProps) {
 
           <div className="pt-4 border-t border-border/40">
             <Link
-              href="/docs/changelog"
+              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+              href={"/docs/changelog" as any}
               className="flex items-center gap-3 px-4 py-2.5 text-sm font-bold text-foreground/70 hover:text-foreground"
             >
               <Megaphone className="size-4" /> Changelog

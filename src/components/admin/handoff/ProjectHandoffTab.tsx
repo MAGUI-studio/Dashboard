@@ -34,7 +34,9 @@ interface ProjectHandoffTabProps {
       }
     }
   }> | null
-  kickoff: Prisma.ProjectKickoffChecklist | null
+  kickoff: Prisma.ProjectKickoffChecklistGetPayload<
+    Record<string, never>
+  > | null
 }
 
 interface SoldItem {

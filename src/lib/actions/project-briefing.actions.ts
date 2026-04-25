@@ -23,11 +23,11 @@ import { briefingSchema } from "@/src/lib/validations/project"
 
 async function verifyAndCreateMissingBriefingTasks(
   projectId: string,
-  briefing: Prisma.InputJsonValue,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  briefing: any,
   tx: Prisma.TransactionClient
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = briefing as any
+  const data = briefing
   const missingTasks = []
 
   if (!data.logos?.primary) {
@@ -37,21 +37,21 @@ async function verifyAndCreateMissingBriefingTasks(
     })
   }
 
-  if (!briefing.palette?.primary) {
+  if (!data.palette?.primary) {
     missingTasks.push({
       label: "Definir cores principais da marca (HEX)",
       type: "SYSTEM",
     })
   }
 
-  if (!briefing.visualReferences || briefing.visualReferences.length === 0) {
+  if (!data.visualReferences || data.visualReferences.length === 0) {
     missingTasks.push({
       label: "Adicionar referências visuais e inspirações",
       type: "SYSTEM",
     })
   }
 
-  if (!briefing.governance?.primaryApprover) {
+  if (!data.governance?.primaryApprover) {
     missingTasks.push({
       label: "Definir aprovador oficial do projeto",
       type: "SYSTEM",
@@ -109,11 +109,12 @@ export async function updateProjectBriefingAction(
 
       await tx.project.update({
         where: { id: projectId },
-        data: { briefing: validatedBriefing.data },
+        data: { briefing: validatedBriefing.data as Prisma.InputJsonValue },
       })
 
       // Verify missing critical data and create tasks
-      await verifyAndCreateMissingBriefingTasks(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (verifyAndCreateMissingBriefingTasks as any)(
         projectId,
         validatedBriefing.data,
         tx
@@ -146,7 +147,7 @@ export async function updateProjectBriefingAction(
                 label: project.name,
               },
             ],
-          },
+          } as Prisma.InputJsonValue,
         },
         tx
       )
@@ -209,7 +210,8 @@ export async function savePartialBriefingAction(
 
       await tx.project.update({
         where: { id: projectId },
-        data: { briefing: updatedBriefing },
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        data: { briefing: updatedBriefing as any },
       })
     })
 

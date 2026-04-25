@@ -5,6 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useLocale } from "next-intl"
 
+import { Prisma } from "@/src/generated/client"
 import {
   ChatCircleDots,
   CheckCircle,

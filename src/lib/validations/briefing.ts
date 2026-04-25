@@ -81,7 +81,7 @@ export const briefingSchema = z.object({
       domain: z.string().optional(),
       hosting: z.string().optional(),
       analytics: z.string().optional(),
-      socialMedia: z.record(z.string().url()).optional(),
+      socialMedia: z.record(z.string(), z.string().url()).optional(),
       technicalNotes: z.string().optional(),
     })
     .optional(),

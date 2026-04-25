@@ -181,7 +181,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, type: v })
                       }
                     >
-                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/10 px-6 font-bold text-foreground transition-all focus:bg-muted/20">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -222,7 +222,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, clientId: v })
                       }
                     >
-                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/10 px-6 font-bold text-foreground transition-all focus:bg-muted/20">
                         <SelectValue placeholder="Selecione um cliente..." />
                       </SelectTrigger>
                       <SelectContent>
@@ -245,7 +245,7 @@ export function DocumentForm({ clients, projects }: DocumentFormProps) {
                         setFormData({ ...formData, projectId: v })
                       }
                     >
-                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/15 px-6 font-bold text-foreground">
+                      <SelectTrigger className="h-12 w-full rounded-full border-border/40 bg-muted/10 px-6 font-bold text-foreground transition-all focus:bg-muted/20">
                         <SelectValue placeholder="Opcional..." />
                       </SelectTrigger>
                       <SelectContent>

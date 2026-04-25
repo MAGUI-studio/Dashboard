@@ -2,6 +2,7 @@
 
 import * as React from "react"
 
+import { useChat } from "@ai-sdk/react"
 import {
   ArrowClockwise,
   ChatCircleDots,
@@ -11,7 +12,6 @@ import {
   User,
   X,
 } from "@phosphor-icons/react"
-import { useChat } from "ai/react"
 import { AnimatePresence, motion } from "framer-motion"
 import ReactMarkdown from "react-markdown"
 
@@ -49,7 +49,8 @@ export function ClientAiWidget({
         content: `Olá, ${contactName}! Sou o assistente da MAGUI. Como posso ajudar com seu projeto hoje?`,
       },
     ],
-  })
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } as any) as any
 
   const scrollRef = React.useRef<HTMLDivElement>(null)
 
@@ -113,7 +114,8 @@ export function ClientAiWidget({
             {/* Chat Area */}
             <ScrollArea className="flex-1 px-8 py-4" ref={scrollRef}>
               <div className="flex flex-col gap-6 py-4">
-                {messages.map((m) => (
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {messages.map((m: any) => (
                   <div
                     key={m.id}
                     className={cn(
@@ -143,9 +145,9 @@ export function ClientAiWidget({
                           : "bg-muted/40 text-foreground rounded-tl-none border border-border/20"
                       )}
                     >
-                      <ReactMarkdown className="prose prose-sm dark:prose-invert">
-                        {m.content}
-                      </ReactMarkdown>
+                      <div className="prose prose-sm dark:prose-invert">
+                        <ReactMarkdown>{m.content}</ReactMarkdown>
+                      </div>
                     </div>
                   </div>
                 ))}

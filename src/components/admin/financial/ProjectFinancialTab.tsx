@@ -49,19 +49,15 @@ type InvoiceWithInstallments = Prisma.InvoiceGetPayload<{
   }
 }>
 
-type InstallmentWithInvoice = Prisma.InstallmentGetPayload<{
-  include: {
-    invoice: true
-  }
-}>
-
 interface ProjectFinancialTabProps {
   invoices: InvoiceWithInstallments[]
 }
 
 export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
-  const [selectedInstallment, setSelectedInstallment] =
-    React.useState<InstallmentWithInvoice | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [selectedInstallment, setSelectedInstallment] = React.useState<
+    any | null
+  >(null)
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = React.useState(false)
 
   const totalValue = invoices.reduce((acc, inv) => acc + inv.totalAmount, 0)

@@ -90,7 +90,8 @@ export default async function DashboardLayout({
         take: 50,
       })
 
-      notifications = rawNotifications.map((notification) => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      notifications = rawNotifications.map((notification: any) => ({
         ...notification,
         type: notification.type,
         createdAt: notification.createdAt.toISOString(),

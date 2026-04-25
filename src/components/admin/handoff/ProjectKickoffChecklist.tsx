@@ -16,7 +16,7 @@ import {
 import { cn } from "@/src/lib/utils/utils"
 
 interface ProjectKickoffChecklistProps {
-  kickoff: Prisma.ProjectKickoffChecklist
+  kickoff: Prisma.ProjectKickoffChecklistGetPayload<Record<string, never>>
 }
 
 export function ProjectKickoffChecklist({

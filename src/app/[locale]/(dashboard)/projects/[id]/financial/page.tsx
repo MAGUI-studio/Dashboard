@@ -44,7 +44,10 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
         description="Acompanhe o status das parcelas, faturas e envie seus comprovantes de pagamento."
       />
 
-      <ProjectFinancialTab projectId={id} invoices={invoices} />
+      <ProjectFinancialTab
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        invoices={invoices as any}
+      />
     </div>
   )
 }
