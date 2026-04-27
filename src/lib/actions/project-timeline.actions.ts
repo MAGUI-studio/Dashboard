@@ -9,6 +9,7 @@ import {
   UserRole,
 } from "@/src/generated/client/enums"
 
+import { triggerProductEvent } from "@/src/lib/email/events"
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -215,8 +216,24 @@ export async function addProjectTimelineAction(
         )
       }
 
+      // Trigger email notification after transaction
       return { update: newUpdate }
     })
+
+    // Trigger transactional email
+    if (requiresApproval) {
+      await triggerProductEvent({
+        type: "UPDATE_PENDING_APPROVAL",
+        updateId: update.id,
+        projectId: update.projectId,
+      })
+    } else {
+      await triggerProductEvent({
+        type: "UPDATE_PUBLISHED",
+        updateId: update.id,
+        projectId: update.projectId,
+      })
+    }
 
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
@@ -240,7 +257,7 @@ export async function approveUpdateAction(
       UserRole.MEMBER,
     ])
 
-    const { update } = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       const updatedUpdate = await tx.update.update({
         where: { id: updateId, projectId },
         data: {
@@ -342,7 +359,7 @@ export async function rejectUpdateAction(input: {
       [UserRole.CLIENT, UserRole.ADMIN, UserRole.MEMBER]
     )
 
-    const { update } = await prisma.$transaction(async (tx) => {
+    await prisma.$transaction(async (tx) => {
       const updatedUpdate = await tx.update.update({
         where: {
           id: validated.data.updateId,
@@ -430,5 +447,53 @@ export async function rejectUpdateAction(input: {
   } catch (error) {
     logger.error({ error }, "Reject Update Error:")
     return { error: "Erro ao registrar feedback da atualização" }
+  }
+}
+
+export async function deleteProjectTimelineAction(
+  updateId: string,
+  projectId: string
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    await protect("admin")
+  } catch {
+    return { error: "Unauthorized" }
+  }
+
+  try {
+    await prisma.$transaction(async (tx) => {
+      const deletedUpdate = await tx.update.delete({
+        where: { id: updateId, projectId },
+      })
+
+      const actor = await getCurrentAppUser()
+
+      await createAuditLog(
+        {
+          action: "update.deleted",
+          entityType: "Update",
+          entityId: updateId,
+          summary: `Atualização "${deletedUpdate.title}" removida da timeline.`,
+          actorId: actor?.id,
+          actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+          projectId,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
+              role: actor?.role,
+            }),
+            title: deletedUpdate.title,
+          },
+        },
+        tx
+      )
+    })
+
+    revalidatePath(`/admin/projects/${projectId}`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Delete Timeline Error:")
+    return { error: "Erro ao remover atualização da timeline" }
   }
 }

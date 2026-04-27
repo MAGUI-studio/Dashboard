@@ -10,13 +10,26 @@ import {
   CheckCircle,
   Clock,
   HourglassSimple,
+  Trash,
   WarningCircle,
 } from "@phosphor-icons/react/dist/ssr"
-import { parseAsString, useQueryState } from "nuqs"
+import { toast } from "sonner"
+
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/src/components/ui/alert-dialog"
 
 import { AddTimelineForm } from "@/src/components/admin/AddTimelineForm"
 import { UpdateAttachmentsList } from "@/src/components/common/UpdateAttachmentsList"
 
+import { deleteProjectTimelineAction } from "@/src/lib/actions/project-timeline.actions"
 import { formatLocalTime } from "@/src/lib/utils/utils"
 
 interface ProjectTimelineTabProps {
@@ -69,29 +82,32 @@ export function ProjectTimelineTab({
   updates,
 }: ProjectTimelineTabProps) {
   const t = useTranslations("Admin.projects.details")
-  const [highlightedId] = useQueryState("highlight", parseAsString)
   const [visibleUpdatesCount, setVisibleUpdatesCount] = React.useState(5)
+  const [isDeleting, setIsDeleting] = React.useState<string | null>(null)
+  const [updateToDelete, setUpdateToDelete] = React.useState<string | null>(
+    null
+  )
 
   const visibleUpdates = React.useMemo(() => {
-    if (highlightedId) {
-      const highlightedIndex = updates.findIndex((u) => u.id === highlightedId)
-      if (highlightedIndex >= visibleUpdatesCount) {
-        return updates.slice(0, highlightedIndex + 1)
-      }
-    }
     return updates.slice(0, visibleUpdatesCount)
-  }, [updates, highlightedId, visibleUpdatesCount])
+  }, [updates, visibleUpdatesCount])
 
   const hasMoreUpdates = visibleUpdates.length < updates.length
 
-  React.useEffect(() => {
-    if (highlightedId) {
-      const element = document.getElementById(`update-${highlightedId}`)
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth", block: "center" })
-      }
+  const handleDelete = async () => {
+    if (!updateToDelete) return
+
+    setIsDeleting(updateToDelete)
+    const result = await deleteProjectTimelineAction(updateToDelete, projectId)
+
+    if (result.success) {
+      toast.success("Atualização removida com sucesso")
+    } else {
+      toast.error(result.error || "Erro ao remover atualização")
     }
-  }, [highlightedId])
+    setIsDeleting(null)
+    setUpdateToDelete(null)
+  }
 
   return (
     <div className="flex flex-col gap-12">
@@ -107,11 +123,7 @@ export function ProjectTimelineTab({
             <div
               key={update.id}
               id={`update-${update.id}`}
-              className={`relative pb-12 pl-12 transition-colors duration-1000 last:pb-0 ${
-                highlightedId === update.id
-                  ? "bg-brand-primary/5 ring-1 ring-brand-primary/20"
-                  : ""
-              }`}
+              className="relative pb-12 pl-12 transition-colors duration-1000 last:pb-0"
             >
               <div className="absolute -left-[9px] top-0 size-4 rounded-full border-4 border-background bg-brand-primary shadow-sm shadow-brand-primary/20" />
               <div className="flex flex-col gap-4">
@@ -136,6 +148,18 @@ export function ProjectTimelineTab({
                   )}
 
                   <UpdateStatusPill update={update} />
+
+                  <button
+                    onClick={() => setUpdateToDelete(update.id)}
+                    disabled={isDeleting === update.id}
+                    className="ml-auto flex size-8 items-center justify-center rounded-xl bg-muted/5 text-muted-foreground/30 transition-all hover:bg-destructive/10 hover:text-destructive disabled:opacity-50"
+                    title="Excluir atualização"
+                  >
+                    <Trash
+                      weight="bold"
+                      className={`size-4 ${isDeleting === update.id ? "animate-pulse" : ""}`}
+                    />
+                  </button>
                 </div>
 
                 <div className="flex flex-col gap-3">
@@ -186,6 +210,34 @@ export function ProjectTimelineTab({
           </div>
         )}
       </section>
+
+      <AlertDialog
+        open={!!updateToDelete}
+        onOpenChange={(open) => !open && setUpdateToDelete(null)}
+      >
+        <AlertDialogContent className="rounded-3xl border-border/60 bg-background/95 backdrop-blur-xl">
+          <AlertDialogHeader>
+            <AlertDialogTitle className="font-heading text-xl font-black uppercase tracking-tight">
+              Remover Atualização
+            </AlertDialogTitle>
+            <AlertDialogDescription className="text-sm font-medium text-muted-foreground/60">
+              Esta ação removerá permanentemente esta evolução da timeline do
+              cliente. Deseja continuar?
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter className="gap-3">
+            <AlertDialogCancel className="rounded-full border-border/40 text-xs font-bold uppercase tracking-widest hover:bg-muted/10">
+              Cancelar
+            </AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDelete}
+              className="rounded-full bg-destructive text-xs font-bold uppercase tracking-widest text-white hover:bg-destructive/90"
+            >
+              Confirmar Exclusão
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

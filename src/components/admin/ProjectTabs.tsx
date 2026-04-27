@@ -224,7 +224,7 @@ export function ProjectTabs({
       </TabsContent>
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">
-        <ProjectBriefingTab briefing={project.briefing} />
+        <ProjectBriefingTab projectId={projectId} briefing={project.briefing} />
       </TabsContent>
 
       <TabsContent value="assets" className="mt-0 focus-visible:outline-none">

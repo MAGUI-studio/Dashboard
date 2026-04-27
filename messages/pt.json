@@ -433,6 +433,8 @@
     "onboarding_protocol": "Onboarding Protocol",
     "step_strategy": "Etapa estratégica",
     "answer_label": "Resposta",
+    "optional": "(opcional)",
+    "min_required": "mínimo exigido",
     "back_button": "Voltar",
     "next_step": "Próxima Etapa",
     "creative_direction": "Direção Criativa",
@@ -526,7 +528,8 @@
       "tone": "Qual o tom de voz da marca?",
       "references": "Referências (links de sites que você gosta)",
       "goals": "Quais os principais objetivos deste projeto?"
-    }
+    },
+    "add_item": "Adicionar Item"
   },
   "ActionItems": {
     "title": "Ações Necessárias",
@@ -889,7 +892,9 @@
       "status_updated": "Status atualizado",
       "new_material": "Novo material",
       "lead_assigned": "Lead atribuído",
-      "informational": "Informativo"
+      "informational": "Informativo",
+      "operations": "Operações",
+      "automatic_reminder": "Lembrete automático"
     }
   },
   "Communication": {
@@ -940,6 +945,7 @@
         "title_placeholder": "Ex: Mudança de paleta cromática principal",
         "description": "Contexto e Motivação",
         "description_placeholder": "Por que esta decisão foi tomada?",
+        "decision_placeholder": "Por que esta decisão foi tomada?",
         "decision": "O que foi decidido?",
         "decision_placeholder": "Descreva o veredito final...",
         "impact_scope": "Impacto no Escopo",

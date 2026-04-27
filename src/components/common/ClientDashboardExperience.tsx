@@ -40,8 +40,8 @@ export function ClientDashboardExperience({
 
       {isReady ? (
         <motion.div
-          initial={{ opacity: 0, y: 18, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 0.08 }}
         >
           {children}

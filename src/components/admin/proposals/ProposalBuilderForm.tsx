@@ -8,10 +8,10 @@ import {
   ClockCountdown,
   FilePdf,
   ListChecks,
+  MagicWand,
   Plus,
   Sparkle,
   Trash,
-  MagicWand,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -28,10 +28,12 @@ import {
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProposalAction } from "@/src/lib/actions/proposal.actions"
+
 import {
   PROPOSAL_PRESETS,
   type ProposalPreset,
 } from "@/src/config/proposal-presets"
+
 import { ProposalPreview } from "./ProposalPreview"
 
 interface ProposalBuilderFormProps {

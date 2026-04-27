@@ -54,9 +54,8 @@ interface ProjectFinancialTabProps {
 }
 
 export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [selectedInstallment, setSelectedInstallment] = React.useState<
-    any | null
+    InvoiceWithInstallments["installments"][number] | null
   >(null)
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = React.useState(false)
 

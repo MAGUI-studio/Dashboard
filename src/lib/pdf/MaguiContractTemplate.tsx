@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 import * as React from "react"
 
 import {
@@ -175,11 +176,11 @@ export function MaguiContractTemplate({
   return (
     <Document title={document.title}>
       <Page size="A4" style={styles.page}>
-        <Image src={FRONT_IMAGE} style={styles.fullBleed} alt="" />
+        <Image src={FRONT_IMAGE} style={styles.fullBleed} />
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <Image src={PAGE_IMAGE} style={styles.sheet} fixed alt="" />
+        <Image src={PAGE_IMAGE} style={styles.sheet} fixed />
         <View style={styles.content}>
           <View style={styles.header} fixed>
             <View style={styles.studioInfo}>
@@ -248,7 +249,7 @@ export function MaguiContractTemplate({
       </Page>
 
       <Page size="A4" style={styles.page}>
-        <Image src={BACK_IMAGE} style={styles.fullBleed} alt="" />
+        <Image src={BACK_IMAGE} style={styles.fullBleed} />
       </Page>
     </Document>
   )

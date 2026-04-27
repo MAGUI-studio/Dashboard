@@ -191,7 +191,12 @@ export function ClientAiWidget({
                   type="submit"
                   size="icon"
                   className="absolute right-2 size-10 rounded-full bg-brand-primary text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.05]"
-                  disabled={!input.trim() || isLoading}
+                  disabled={
+                    !input ||
+                    typeof input !== "string" ||
+                    !input.trim() ||
+                    isLoading
+                  }
                 >
                   <PaperPlaneTilt weight="fill" className="size-5" />
                 </Button>

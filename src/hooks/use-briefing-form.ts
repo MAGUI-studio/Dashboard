@@ -10,44 +10,37 @@ import {
 
 export const stepsConfig = [
   // 1. Contexto de Negócio
-  { id: "businessDescription", min: 100 },
-  { id: "brandTone", min: 100 },
-  { id: "businessGoals", min: 100 },
+  { id: "businessDescription", min: 50 },
+  { id: "businessGoals", min: 50 },
+  { id: "brandTone", min: 50 },
   { id: "primaryCta", min: 10 },
-  { id: "targetAudience", min: 100 },
-  { id: "differentiators", min: 100 },
+  { id: "targetAudience", min: 50 },
+  { id: "differentiators", min: 50 },
 
   // 2. Identidade da Marca
   { id: "logos", min: 0 },
   { id: "palette", min: 0 },
-  { id: "typography", min: 0 },
-  { id: "brandbook", min: 0 },
 
   // 3. Direção Visual
   { id: "visualReferences", min: 0 },
   { id: "dislikedReferences", min: 0 },
   { id: "competitors", min: 0 },
-  { id: "desiredPerceptions", min: 0 },
-
-  // 4. Acessos e Infra
-  { id: "infrastructure", min: 0 },
-
-  // 5. Regras Operacionais
-  { id: "governance", min: 2 },
 ] as const
 
 export type StepId = (typeof stepsConfig)[number]["id"]
 
 export function useBriefingForm(
   projectId: string,
-  initialData: Prisma.JsonValue | null | undefined
+  initialData: Prisma.JsonValue | null | undefined,
+  currentStepId: StepId,
+  setCurrentStepId: (step: StepId) => void
 ) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const data = (initialData as any) || {}
   const [formData, setFormData] = React.useState({
     businessDescription: String(data?.businessDescription || ""),
-    brandTone: String(data?.brandTone || ""),
     businessGoals: String(data?.businessGoals || ""),
+    brandTone: String(data?.brandTone || ""),
     primaryCta: String(data?.primaryCta || ""),
     targetAudience: String(data?.targetAudience || ""),
     differentiators: String(data?.differentiators || ""),
@@ -64,8 +57,6 @@ export function useBriefingForm(
       accent: "",
       extra: [],
     },
-    typography: data?.typography || { primary: "", secondary: "" },
-    brandbook: data?.brandbook || null,
 
     visualReferences: Array.isArray(data?.visualReferences)
       ? data.visualReferences
@@ -74,34 +65,12 @@ export function useBriefingForm(
       ? data.dislikedReferences
       : [""],
     competitors: Array.isArray(data?.competitors) ? data.competitors : [""],
-    desiredPerceptions: Array.isArray(data?.desiredPerceptions)
-      ? data.desiredPerceptions
-      : [""],
-
-    infrastructure: data?.infrastructure || {
-      domain: "",
-      hosting: "",
-      analytics: "",
-      technicalNotes: "",
-    },
-    governance: data?.governance || {
-      primaryApprover: "",
-      financialApprover: "",
-      preferredCommunication: "PLATFORM",
-    },
   })
 
   const [isLoading, setIsLoading] = React.useState(false)
   const [isFinished, setIsFinished] = React.useState(false)
   const [showErrors, setShowErrors] = React.useState(false)
 
-  const firstMissingId =
-    stepsConfig.find(
-      (s) => s.min > 0 && (!data?.[s.id] || String(data[s.id]).length < s.min)
-    )?.id || stepsConfig[0].id
-
-  const [currentStepId, setCurrentStepId] =
-    React.useState<StepId>(firstMissingId)
   const currentStepIndex = stepsConfig.findIndex((s) => s.id === currentStepId)
 
   const isFieldMissing = (id: string) => {
@@ -110,8 +79,6 @@ export function useBriefingForm(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const val = (formData as any)[id]
     if (typeof val === "string") return val.trim().length < config.min
-    if (id === "governance")
-      return !val.primaryApprover || val.primaryApprover.length < config.min
     return false
   }
 
@@ -157,5 +124,6 @@ export function useBriefingForm(
     isFieldMissing,
     handleNext,
     handleSubmit,
+    saveCurrent,
   }
 }

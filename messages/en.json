@@ -433,6 +433,8 @@
     "onboarding_protocol": "Onboarding Protocol",
     "step_strategy": "Strategic step",
     "answer_label": "Answer",
+    "optional": "(optional)",
+    "min_required": "minimum required",
     "back_button": "Back",
     "next_step": "Next Step",
     "creative_direction": "Creative Direction",
@@ -526,7 +528,8 @@
       "tone": "What is the brand's tone of voice?",
       "references": "References (links to websites you like)",
       "goals": "What are the main objectives of this project?"
-    }
+    },
+    "add_item": "Add Item"
   },
   "ActionItems": {
     "title": "Required Actions",
@@ -889,7 +892,9 @@
       "status_updated": "Status updated",
       "new_material": "New material",
       "lead_assigned": "Lead assigned",
-      "informational": "Informational"
+      "informational": "Informational",
+      "operations": "Operations",
+      "automatic_reminder": "Automatic reminder"
     }
   },
   "Communication": {

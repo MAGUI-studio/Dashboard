@@ -791,7 +791,9 @@ function InternalPage({
         {/* Brand Header */}
         <View style={styles.header} fixed>
           <View style={styles.studioInfo}>
-            <Text style={styles.studioDetails}>Padrão de Autoridade Digital</Text>
+            <Text style={styles.studioDetails}>
+              Padrão de Autoridade Digital
+            </Text>
             <Text style={styles.studioDetails}>
               magui.studio | contato@magui.studio
             </Text>
@@ -951,10 +953,7 @@ export function MaguiProposalTemplate({
     <Document title={proposal.title || "Proposta Comercial"}>
       <Page size="A4" style={styles.page}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image
-          src={FRONT_IMAGE}
-          style={styles.fullBleed}
-        />
+        <Image src={FRONT_IMAGE} style={styles.fullBleed} />
       </Page>
 
       {overviewPages.map((blocks, index) => (
@@ -985,10 +984,7 @@ export function MaguiProposalTemplate({
 
       <Page size="A4" style={styles.page}>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image
-          src={BACK_IMAGE}
-          style={styles.fullBleed}
-        />
+        <Image src={BACK_IMAGE} style={styles.fullBleed} />
       </Page>
     </Document>
   )

@@ -5,30 +5,44 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { Plus, Trash } from "@phosphor-icons/react"
+import { HexColorPicker } from "react-colorful"
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/src/components/ui/popover"
 
 import { StepId } from "@/src/hooks/use-briefing-form"
+
+import { LogoUploadEditor } from "./LogoUploadEditor"
 
 interface BriefingStepEditorProps {
   currentStepId: StepId
   formData: Record<string, unknown>
-  onValueChange: (v: unknown) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFormData: React.Dispatch<React.SetStateAction<any>>
 }
 
 export function BriefingStepEditor({
   currentStepId,
   formData,
-  onValueChange,
+  setFormData,
 }: BriefingStepEditorProps) {
   const t = useTranslations("Briefing")
   const value = formData[currentStepId]
+  const onValueChange = (v: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    setFormData((f: any) => ({ ...f, [currentStepId]: v }))
+  }
 
   // Render Generic List Input (References, Competitors, Perceptions)
-  const renderListInput = (list: string[], label: string) => (
+  const renderListInput = (list: string[]) => (
     <div className="space-y-6">
       {list.map((item, i) => (
         <div key={i} className="group relative flex items-center">
           <span className="absolute left-0 font-mono text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest">
-            {label}
+            {t(`steps.${currentStepId}.label`)}
           </span>
           <input
             type="text"
@@ -38,8 +52,8 @@ export function BriefingStepEditor({
               n[i] = e.target.value
               onValueChange(n)
             }}
-            placeholder="..."
-            className="w-full bg-transparent border-b border-border/30 pl-12 pr-12 py-6 text-xl text-foreground font-medium focus:border-brand-primary outline-none"
+            placeholder={t(`steps.${currentStepId}.placeholder`)}
+            className="w-full bg-transparent border-b border-border/30 pl-48 pr-12 py-6 text-xl text-foreground font-medium focus:border-brand-primary outline-none"
           />
           {list.length > 1 && (
             <button
@@ -69,183 +83,112 @@ export function BriefingStepEditor({
 
   // 1. Branding Palette Editor
   if (currentStepId === "palette") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const p = (value as any) || {
+    const p = formData.palette || {
       primary: "#000000",
       secondary: "#FFFFFF",
       accent: "",
     }
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 pt-8">
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Cor Principal (HEX)
-          </label>
-          <div className="flex items-center gap-4">
-            <input
-              type="color"
-              value={p.primary}
-              onChange={(e) => onValueChange({ ...p, primary: e.target.value })}
-              className="size-16 rounded-2xl cursor-pointer bg-transparent"
-            />
-            <input
-              type="text"
-              value={p.primary}
-              onChange={(e) => onValueChange({ ...p, primary: e.target.value })}
-              className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
-            />
+      <div className="space-y-12 pt-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+              Cor Principal (HEX)
+            </label>
+            <div className="flex items-center gap-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20"
+                    style={{ backgroundColor: p.primary }}
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 border-none">
+                  <HexColorPicker
+                    color={p.primary}
+                    onChange={(color) =>
+                      setFormData({
+                        ...formData,
+                        palette: { ...p, primary: color },
+                      })
+                    }
+                  />
+                </PopoverContent>
+              </Popover>
+              <input
+                type="text"
+                value={p.primary}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    palette: { ...p, primary: e.target.value },
+                  })
+                }
+                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
+              />
+            </div>
+          </div>
+          <div className="space-y-4">
+            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+              Cor Secundária (HEX)
+            </label>
+            <div className="flex items-center gap-4">
+              <Popover>
+                <PopoverTrigger asChild>
+                  <button
+                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20"
+                    style={{ backgroundColor: p.secondary }}
+                  />
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 border-none">
+                  <HexColorPicker
+                    color={p.secondary}
+                    onChange={(color) =>
+                      setFormData({
+                        ...formData,
+                        palette: { ...p, secondary: color },
+                      })
+                    }
+                  />
+                </PopoverContent>
+              </Popover>
+              <input
+                type="text"
+                value={p.secondary}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    palette: { ...p, secondary: e.target.value },
+                  })
+                }
+                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
+              />
+            </div>
           </div>
         </div>
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Cor Secundária (HEX)
-          </label>
-          <div className="flex items-center gap-4">
-            <input
-              type="color"
-              value={p.secondary}
-              onChange={(e) =>
-                onValueChange({ ...p, secondary: e.target.value })
-              }
-              className="size-16 rounded-2xl cursor-pointer bg-transparent"
-            />
-            <input
-              type="text"
-              value={p.secondary}
-              onChange={(e) =>
-                onValueChange({ ...p, secondary: e.target.value })
-              }
-              className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
-            />
-          </div>
-        </div>
       </div>
     )
   }
 
-  // 2. Typography Editor
-  if (currentStepId === "typography") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const ty = (value as any) || { primary: "", secondary: "" }
+  // Logo Uploader
+  if (currentStepId === "logos") {
     return (
-      <div className="space-y-12 pt-8">
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Tipografia Principal (Nome da Fonte)
-          </label>
-          <input
-            type="text"
-            value={ty.primary}
-            onChange={(e) => onValueChange({ ...ty, primary: e.target.value })}
-            placeholder="Ex: Inter, Montserrat..."
-            className="w-full bg-transparent border-b border-border/40 text-3xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Tipografia Secundária
-          </label>
-          <input
-            type="text"
-            value={ty.secondary}
-            onChange={(e) =>
-              onValueChange({ ...ty, secondary: e.target.value })
-            }
-            placeholder="Ex: Roboto Mono..."
-            className="w-full bg-transparent border-b border-border/40 text-3xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-      </div>
-    )
-  }
-
-  // 3. Infrastructure Editor
-  if (currentStepId === "infrastructure") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const infra = (value as any) || { domain: "", hosting: "", analytics: "" }
-    return (
-      <div className="space-y-12 pt-8">
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Domínio / URL Atual
-          </label>
-          <input
-            type="text"
-            value={infra.domain}
-            onChange={(e) =>
-              onValueChange({ ...infra, domain: e.target.value })
-            }
-            placeholder="www.suaempresa.com.br"
-            className="w-full bg-transparent border-b border-border/40 text-2xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Hospedagem / Painel Atual
-          </label>
-          <input
-            type="text"
-            value={infra.hosting}
-            onChange={(e) =>
-              onValueChange({ ...infra, hosting: e.target.value })
-            }
-            placeholder="Ex: AWS, Vercel, Hostgator..."
-            className="w-full bg-transparent border-b border-border/40 text-2xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-      </div>
-    )
-  }
-
-  // 4. Governance Editor
-  if (currentStepId === "governance") {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const gov = (value as any) || { primaryApprover: "", financialApprover: "" }
-    return (
-      <div className="space-y-12 pt-8">
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Aprovador Principal (Nome Completo)
-          </label>
-          <input
-            type="text"
-            value={gov.primaryApprover}
-            onChange={(e) =>
-              onValueChange({ ...gov, primaryApprover: e.target.value })
-            }
-            className="w-full bg-transparent border-b border-border/40 text-3xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-        <div className="space-y-4">
-          <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-            Aprovador Financeiro
-          </label>
-          <input
-            type="text"
-            value={gov.financialApprover}
-            onChange={(e) =>
-              onValueChange({ ...gov, financialApprover: e.target.value })
-            }
-            className="w-full bg-transparent border-b border-border/40 text-3xl font-bold outline-none focus:border-brand-primary pb-4"
-          />
-        </div>
-      </div>
+      <LogoUploadEditor
+        value={
+          formData.logos as { primary: string | null; secondary: string | null }
+        }
+        onValueChange={(v) => setFormData({ ...formData, logos: v })}
+      />
     )
   }
 
   // List Inputs
   if (
-    [
-      "visualReferences",
-      "dislikedReferences",
-      "competitors",
-      "desiredPerceptions",
-    ].includes(currentStepId)
-  ) {
-    return renderListInput(
-      (value as string[]) || [""],
-      currentStepId.substring(0, 3).toUpperCase()
+    ["visualReferences", "dislikedReferences", "competitors"].includes(
+      currentStepId
     )
+  ) {
+    return renderListInput((value as string[]) || [""])
   }
 
   // Default TextArea
@@ -254,7 +197,7 @@ export function BriefingStepEditor({
       value={value as string}
       onChange={(e) => onValueChange(e.target.value)}
       className="w-full min-h-[300px] resize-none bg-transparent text-2xl font-medium leading-relaxed text-foreground placeholder:text-muted-foreground/20 focus:outline-none xl:text-3xl"
-      placeholder="Escreva sua resposta aqui..."
+      placeholder={t("answer_label")}
       autoFocus
     />
   )

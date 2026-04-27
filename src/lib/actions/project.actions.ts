@@ -9,6 +9,7 @@ import {
 import {
   addBriefingNoteAction as addBriefingNoteActionImpl,
   createBriefingNoteAction as createBriefingNoteActionImpl,
+  resetProjectBriefingAction as resetProjectBriefingActionImpl,
   savePartialBriefingAction as savePartialBriefingActionImpl,
   updateProjectBriefingAction as updateProjectBriefingActionImpl,
 } from "./project-briefing.actions"
@@ -95,6 +96,12 @@ export async function updateProjectBriefingAction(
   ...args: Parameters<typeof updateProjectBriefingActionImpl>
 ): ReturnType<typeof updateProjectBriefingActionImpl> {
   return updateProjectBriefingActionImpl(...args)
+}
+
+export async function resetProjectBriefingAction(
+  ...args: Parameters<typeof resetProjectBriefingActionImpl>
+): ReturnType<typeof resetProjectBriefingActionImpl> {
+  return resetProjectBriefingActionImpl(...args)
 }
 
 export async function savePartialBriefingAction(

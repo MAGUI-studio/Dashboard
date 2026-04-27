@@ -92,19 +92,19 @@ export async function ClientBriefingView({
         </Card>
       ))}
 
-      {visualReferences.length > 0 && (
-        <Card className="col-span-full rounded-[1.75rem] border-border/20 bg-muted/5">
-          <CardHeader className="p-5 pb-3 sm:p-6 sm:pb-4">
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
-                <NotePencil weight="duotone" className="size-5" />
-              </div>
-              <CardTitle className="font-heading text-base font-black uppercase tracking-tight text-foreground/75">
-                {t("visualReferences.label")}
-              </CardTitle>
+      <Card className="col-span-full rounded-[1.75rem] border-border/20 bg-muted/5">
+        <CardHeader className="p-5 pb-3 sm:p-6 sm:pb-4">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+              <NotePencil weight="duotone" className="size-5" />
             </div>
-          </CardHeader>
-          <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
+            <CardTitle className="font-heading text-base font-black uppercase tracking-tight text-foreground/75">
+              {t("visualReferences.label")}
+            </CardTitle>
+          </div>
+        </CardHeader>
+        <CardContent className="px-5 pb-5 sm:px-6 sm:pb-6">
+          {visualReferences.length > 0 ? (
             <div className="flex flex-wrap gap-2">
               {visualReferences.map((ref, i) => (
                 <a
@@ -118,9 +118,13 @@ export async function ClientBriefingView({
                 </a>
               ))}
             </div>
-          </CardContent>
-        </Card>
-      )}
+          ) : (
+            <CardDescription className="text-sm font-medium leading-relaxed text-muted-foreground/75 italic">
+              Nenhuma referência visual fornecida.
+            </CardDescription>
+          )}
+        </CardContent>
+      </Card>
     </div>
   )
 }

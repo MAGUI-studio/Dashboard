@@ -10,6 +10,7 @@ import {
 } from "@/src/generated/client/enums"
 import { addDays } from "date-fns"
 
+import { triggerProductEvent } from "@/src/lib/email/events"
 import { logger } from "@/src/lib/logger"
 import prisma from "@/src/lib/prisma"
 import {
@@ -23,11 +24,11 @@ import { briefingSchema } from "@/src/lib/validations/project"
 
 async function verifyAndCreateMissingBriefingTasks(
   projectId: string,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  briefing: any,
+  briefing: unknown,
   tx: Prisma.TransactionClient
 ) {
-  const data = briefing
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const data = (briefing as Record<string, any>) || {}
   const missingTasks = []
 
   if (!data.logos?.primary) {
@@ -113,8 +114,7 @@ export async function updateProjectBriefingAction(
       })
 
       // Verify missing critical data and create tasks
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (verifyAndCreateMissingBriefingTasks as any)(
+      await verifyAndCreateMissingBriefingTasks(
         projectId,
         validatedBriefing.data,
         tx
@@ -349,5 +349,80 @@ export async function addBriefingNoteAction(input: {
   } catch (error) {
     logger.error({ error }, "Add Briefing Note Error:")
     return { error: "Erro ao adicionar nota de briefing" }
+  }
+}
+
+export async function resetProjectBriefingAction(
+  projectId: string
+): Promise<{ error?: string; success?: boolean }> {
+  try {
+    const { user, project } = await ensureProjectAccess(projectId, [
+      UserRole.ADMIN,
+    ])
+
+    await prisma.$transaction(async (tx) => {
+      // Clear briefing data - Use empty object to ensure it's "not filled" but valid JSON
+      await tx.project.update({
+        where: { id: projectId },
+        data: { briefing: {} },
+      })
+
+      // Reset kickoff checklist (using upsert to avoid failure if not exists)
+      await tx.projectKickoffChecklist.upsert({
+        where: { projectId },
+        create: {
+          projectId,
+          briefingCompleted: false,
+        },
+        update: {
+          briefingCompleted: false,
+        },
+      })
+
+      await createAuditLog(
+        {
+          action: "project.briefing_reset",
+          entityType: "Project",
+          entityId: projectId,
+          summary: `Briefing do projeto ${project.name} resetado para novo preenchimento.`,
+          actorId: user.id,
+          actorType: AuditActorType.USER,
+          projectId,
+          metadata: {
+            origin: getAuditOriginLabel({
+              actorType: AuditActorType.USER,
+              role: user.role,
+            }),
+          },
+        },
+        tx
+      )
+
+      // Notify client via notification
+      await tx.notification.create({
+        data: {
+          userId: project.clientId,
+          projectId,
+          type: NotificationType.OPERATIONAL_REMINDER,
+          title: "Novo preenchimento de briefing solicitado",
+          message: `A equipe solicitou que você preencha novamente o briefing do projeto ${project.name}.`,
+          ctaPath: `/projects/${projectId}/briefing`,
+        },
+      })
+    })
+
+    // Trigger transactional email via Resend
+    await triggerProductEvent({
+      type: "BRIEFING_REQUESTED",
+      projectId: projectId,
+    })
+
+    revalidatePath(`/admin/projects/${projectId}`)
+    revalidatePath(`/projects/${projectId}/briefing`)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    logger.error({ error }, "Reset Briefing Error:")
+    return { error: "Erro ao resetar briefing" }
   }
 }

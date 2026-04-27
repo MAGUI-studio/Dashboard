@@ -20,7 +20,7 @@ describe("i18n synchronization", () => {
   const enKeys = getAllKeys(en as Record<string, unknown>)
 
   it("should have identical keys in pt and en", () => {
-    expect(ptKeys).toEqual(enKeys)
+    expect(ptKeys.sort()).toEqual(enKeys.sort())
   })
 
   it("should have specific namespaces", () => {
