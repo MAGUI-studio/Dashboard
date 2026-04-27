@@ -3,77 +3,77 @@ import { revalidateTag } from "next/cache"
 import { cacheTags } from "./cache-tags"
 
 export function revalidateProjectData(projectId?: string) {
-  revalidateTag(cacheTags.clientProjects, "default")
-  revalidateTag(cacheTags.clientProject, "default")
+  revalidateTag(cacheTags.clientProjects)
+  revalidateTag(cacheTags.clientProject)
   if (projectId) {
-    revalidateTag(`client:project:${projectId}`, "default")
+    revalidateTag(`client:project:${projectId}`)
   }
-  revalidateTag(cacheTags.clientPendingApprovals, "default")
-  revalidateTag(cacheTags.clientHome, "default")
-  revalidateTag(cacheTags.adminClientOptions, "default")
-  revalidateTag(cacheTags.adminProjects, "default")
-  revalidateTag(cacheTags.adminDashboard, "default")
-  revalidateTag(cacheTags.adminSearch, "default")
+  revalidateTag(cacheTags.clientPendingApprovals)
+  revalidateTag(cacheTags.clientHome)
+  revalidateTag(cacheTags.adminClientOptions)
+  revalidateTag(cacheTags.adminProjects)
+  revalidateTag(cacheTags.adminDashboard)
+  revalidateTag(cacheTags.adminSearch)
 }
 
 export function revalidateCrmData() {
-  revalidateTag(cacheTags.adminCrm, "default")
-  revalidateTag(cacheTags.adminDashboard, "default")
+  revalidateTag(cacheTags.adminCrm)
+  revalidateTag(cacheTags.adminDashboard)
 }
 
 export function revalidateCrmLeads() {
-  revalidateTag(cacheTags.adminCrmLeads, "default")
-  revalidateTag(cacheTags.adminDashboard, "default")
+  revalidateTag(cacheTags.adminCrmLeads)
+  revalidateTag(cacheTags.adminDashboard)
 }
 
 export function revalidateCrmLead(id: string) {
-  revalidateTag(cacheTags.adminLead(id), "default")
+  revalidateTag(cacheTags.adminLead(id))
 }
 
 export function revalidateCrmTemplates() {
-  revalidateTag(cacheTags.adminCrmTemplates, "default")
+  revalidateTag(cacheTags.adminCrmTemplates)
 }
 
 export function revalidateCrmViews(userId: string) {
-  revalidateTag(cacheTags.adminCrmViews(userId), "default")
+  revalidateTag(cacheTags.adminCrmViews(userId))
 }
 
 export function revalidateCrmPrefs(userId: string) {
-  revalidateTag(cacheTags.adminCrmPrefs(userId), "default")
+  revalidateTag(cacheTags.adminCrmPrefs(userId))
 }
 
 export function revalidateProjectTimeline(projectId: string) {
-  revalidateTag(cacheTags.projectTimeline(projectId), "default")
-  revalidateTag(cacheTags.adminDashboard, "default")
+  revalidateTag(cacheTags.projectTimeline(projectId))
+  revalidateTag(cacheTags.adminDashboard)
 }
 
 export function revalidateProjectAssets(projectId: string) {
-  revalidateTag(cacheTags.projectAssets(projectId), "default")
+  revalidateTag(cacheTags.projectAssets(projectId))
 }
 
 export function revalidateProjectMembers(projectId: string) {
-  revalidateTag(cacheTags.projectMembers(projectId), "default")
-  revalidateTag(cacheTags.adminProject(projectId), "default")
+  revalidateTag(cacheTags.projectMembers(projectId))
+  revalidateTag(cacheTags.adminProject(projectId))
 }
 
 export function revalidateProjectBriefing(projectId: string) {
-  revalidateTag(cacheTags.projectBriefing(projectId), "default")
+  revalidateTag(cacheTags.projectBriefing(projectId))
 }
 
 export function revalidateProjectThreads(projectId: string) {
-  revalidateTag(cacheTags.projectThreads(projectId), "default")
+  revalidateTag(cacheTags.projectThreads(projectId))
 }
 
 export function revalidateProjectDecisions(projectId: string) {
-  revalidateTag(cacheTags.projectDecisions(projectId), "default")
+  revalidateTag(cacheTags.projectDecisions(projectId))
 }
 
 export function revalidateProjectStatus(projectId: string) {
-  revalidateTag(cacheTags.adminProject(projectId), "default")
-  revalidateTag(cacheTags.clientProject, "default")
+  revalidateTag(cacheTags.adminProject(projectId))
+  revalidateTag(cacheTags.clientProject)
 }
 
 export function revalidateClientNotifications() {
-  revalidateTag(cacheTags.clientNotifications, "default")
-  revalidateTag(cacheTags.clientPendingApprovals, "default")
+  revalidateTag(cacheTags.clientNotifications)
+  revalidateTag(cacheTags.clientPendingApprovals)
 }

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache"
 
-import { Prisma } from "@/src/generated/client/client"
+import { Prisma } from "@/src/generated/client"
 import {
   AuditActorType,
   LeadActivityType,

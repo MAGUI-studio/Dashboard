@@ -36,11 +36,11 @@ type SavedViewType = Prisma.SavedViewGetPayload<Record<string, never>>
 
 export const toLeadDto = (lead: LeadWithRelations): Lead => ({
   ...lead,
-  activities: lead.activities.map((a) => ({
+  activities: (lead.activities || []).map((a) => ({
     ...a,
     metadata: (a.metadata as Record<string, unknown>) || {},
   })),
-  followUpNotes: lead.followUpNotes.map((n) => ({
+  followUpNotes: (lead.followUpNotes || []).map((n) => ({
     ...n,
   })),
 })
@@ -56,6 +56,10 @@ export const toSavedViewDto = (view: SavedViewType): SavedView => ({
   filtersJson: (view.filtersJson as Record<string, unknown>) || {},
 })
 
+/**
+ * Fetch leads with caching.
+ * The parameters MUST be part of the cache key for stable invalidation and unique entries.
+ */
 const getLeadsCached = unstable_cache(
   async (page: number, limit: number) => {
     const skip = (page - 1) * limit
@@ -85,7 +89,7 @@ const getLeadsCached = unstable_cache(
     ])
     return { leads, totalCount, totalPages: Math.ceil(totalCount / limit) }
   },
-  ["crm-leads"],
+  ["admin-crm-leads-list"],
   {
     revalidate: CACHE_TTL.LEADS,
     tags: [cacheTags.adminCrmLeads, cacheTags.adminCrm],
@@ -94,10 +98,13 @@ const getLeadsCached = unstable_cache(
 
 export const getLeads = async (page: number = 1, limit: number = 100) => {
   const { leads } = await getLeadsCached(page, limit)
+
+  // Important: Explicitly map the leads to ensure all fields like 'status' are preserved
+  // and the notes placeholder count is correct for the UI.
   return leads.map((l) => ({
     ...l,
     activities: [],
-    followUpNotes: Array(l._count.followUpNotes).fill({}), // Placeholder with correct length for UI
+    followUpNotes: Array(l._count.followUpNotes).fill({}),
   })) as unknown as Lead[]
 }
 
@@ -127,8 +134,11 @@ const getLeadDetailsRawCached = unstable_cache(
       },
     })
   },
-  ["crm-lead-details-raw"],
-  { revalidate: CACHE_TTL.LEADS }
+  ["admin:crm:lead:details"],
+  {
+    revalidate: CACHE_TTL.LEADS,
+    tags: [cacheTags.adminCrm],
+  }
 )
 
 export const getLeadDetails = async (id: string) => {
@@ -143,8 +153,11 @@ const getMessageTemplatesRawCached = unstable_cache(
       orderBy: { createdAt: "asc" },
     })
   },
-  ["crm-message-templates-raw"],
-  { revalidate: CACHE_TTL.USER_PREFERENCES, tags: [cacheTags.adminCrm] }
+  ["admin:crm:templates:list"],
+  {
+    revalidate: CACHE_TTL.USER_PREFERENCES,
+    tags: [cacheTags.adminCrmTemplates, cacheTags.adminCrm],
+  }
 )
 
 export const getMessageTemplates = async (scope: string = "LEAD") => {
@@ -162,8 +175,11 @@ const getSavedCrmViewsRawCached = unstable_cache(
       orderBy: { updatedAt: "desc" },
     })
   },
-  ["crm-saved-views-raw"],
-  { revalidate: CACHE_TTL.LEADS }
+  ["admin:crm:views:list"],
+  {
+    revalidate: CACHE_TTL.LEADS,
+    tags: [cacheTags.adminCrm],
+  }
 )
 
 export const getSavedCrmViews = async (userId: string) => {
@@ -181,8 +197,11 @@ const getCrmPreferencesRawCached = unstable_cache(
       },
     })
   },
-  ["crm-preferences-raw"],
-  { revalidate: CACHE_TTL.LEADS }
+  ["admin:crm:preferences:default"],
+  {
+    revalidate: CACHE_TTL.LEADS,
+    tags: [cacheTags.adminCrm],
+  }
 )
 
 export const getCrmPreferences = async (userId: string) => {
@@ -198,9 +217,9 @@ export const getLeadProposals = unstable_cache(
       orderBy: { createdAt: "desc" },
     })
   },
-  ["crm-lead-proposals"],
+  ["admin:crm:lead:proposals"],
   {
     revalidate: CACHE_TTL.LEADS,
-    tags: [cacheTags.adminCrm], // Note: cacheTags.adminLead(leadId) is dynamic, unstable_cache handles params
+    tags: [cacheTags.adminCrm],
   }
 )
