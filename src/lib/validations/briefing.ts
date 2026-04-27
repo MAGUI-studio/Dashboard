@@ -20,80 +20,68 @@ const assetSchema = z.object({
 })
 
 export const briefingSchema = z.object({
-  // 1. Contexto de Negócio (Existing + New)
-  companyName: z.string().optional(),
-  projectName: z.string().optional(),
+  // 1. Contexto de Negócio
   businessDescription: z
     .string()
     .trim()
-    .min(10, "Descreva o negócio")
-    .optional(),
-  brandTone: z.string().trim().min(10, "Descreva o tom da marca"),
-  businessGoals: z.string().trim().min(10, "Defina os objetivos do projeto"),
-  primaryCta: z.string().trim().min(3, "Informe a principal conversão"),
-  targetAudience: z.string().trim().min(10, "Descreva o público-alvo"),
-  differentiators: z.string().trim().min(10, "Liste os diferenciais da marca"),
+    .min(50, "Descreva o negócio (mínimo 50 caracteres)"),
+  brandTone: z.string().trim().min(50, "Descreva o tom da marca (mínimo 50)"),
+  businessGoals: z
+    .string()
+    .trim()
+    .min(50, "Defina os objetivos do projeto (mínimo 50)"),
+  primaryCta: z.string().trim().min(10, "Informe a principal conversão"),
+  targetAudience: z
+    .string()
+    .trim()
+    .min(50, "Descreva o público-alvo (mínimo 50)"),
+  differentiators: z
+    .string()
+    .trim()
+    .min(50, "Liste os diferenciais da marca (mínimo 50)"),
 
   // 2. Identidade da Marca
   logos: z
     .object({
-      primary: assetSchema.optional(),
-      secondary: assetSchema.optional(),
-      light: assetSchema.optional(),
-      dark: assetSchema.optional(),
+      primary: assetSchema.nullable().optional(),
+      secondary: assetSchema.nullable().optional(),
+    })
+    .refine((data) => data.primary || data.secondary, {
+      message: "Envie pelo menos um logo (Principal ou Secundário)",
     })
     .optional(),
   palette: z
     .object({
       primary: z
         .string()
-        .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Hex inválido")
+        .transform((v) => (v === "" ? undefined : v))
+        .pipe(
+          z
+            .string()
+            .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Hex inválido")
+            .optional()
+        )
+        .nullable()
         .optional(),
       secondary: z
         .string()
-        .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Hex inválido")
-        .optional(),
-      accent: z
-        .string()
-        .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Hex inválido")
+        .transform((v) => (v === "" ? undefined : v))
+        .pipe(
+          z
+            .string()
+            .regex(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/, "Hex inválido")
+            .optional()
+        )
+        .nullable()
         .optional(),
       extra: z.array(z.string()).optional(),
     })
     .optional(),
-  typography: z
-    .object({
-      primary: z.string().optional(),
-      secondary: z.string().optional(),
-    })
-    .optional(),
-  brandbook: assetSchema.optional(),
 
   // 3. Direção Visual
   visualReferences: optionalUrlList,
   dislikedReferences: optionalUrlList,
   competitors: z.array(z.string()).optional(),
-  desiredPerceptions: z.array(z.string()).optional(),
-  forbiddenPerceptions: z.array(z.string()).optional(),
-
-  // 4. Acessos e Infra
-  infrastructure: z
-    .object({
-      domain: z.string().optional(),
-      hosting: z.string().optional(),
-      analytics: z.string().optional(),
-      socialMedia: z.record(z.string(), z.string().url()).optional(),
-      technicalNotes: z.string().optional(),
-    })
-    .optional(),
-
-  // 5. Regras Operacionais
-  governance: z
-    .object({
-      primaryApprover: z.string().min(2, "Informe o aprovador principal"),
-      financialApprover: z.string().optional(),
-      preferredCommunication: z.string().default("PLATFORM"),
-    })
-    .optional(),
 })
 
 export type BriefingInput = z.infer<typeof briefingSchema>

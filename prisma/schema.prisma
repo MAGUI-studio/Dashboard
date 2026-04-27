@@ -272,6 +272,7 @@ model User {
 
   billingProfile BillingProfile?
   emailLogs      EmailLog[]
+  stripeCustomerId String? @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -755,6 +756,7 @@ model ActionItem {
   status      ActionStatus     @default(PENDING)
   dueDate     DateTime?
   targetRole  ActionTargetRole @default(ADMIN)
+  ctaPath     String?
 
   projectId String
   project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
@@ -1000,6 +1002,9 @@ model Installment {
   paidAt   DateTime?
   proofUrl String? // Payment proof file
   proofKey String?
+
+  stripeCheckoutSessionId String? @unique
+  stripePaymentIntentId    String? @unique
 
   paymentEvents PaymentEvent[]
 

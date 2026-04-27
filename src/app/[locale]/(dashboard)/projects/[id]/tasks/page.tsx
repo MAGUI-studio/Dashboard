@@ -2,6 +2,7 @@ import * as React from "react"
 
 import { notFound } from "next/navigation"
 
+import { ClientPortalActionItem } from "@/src/types/client-portal"
 import { auth } from "@clerk/nextjs/server"
 
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
@@ -10,6 +11,9 @@ import { ClientTaskList } from "@/src/components/client/ClientTaskList"
 import { getClientProjectTasks } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 export const metadata = dashboardMetadata({
   title: "Tarefas do projeto",
@@ -47,7 +51,9 @@ export default async function TasksPage({
         description="Pendencias, respostas e envios que ajudam o time a seguir sem travar o projeto."
       />
 
-      <ClientTaskList tasks={clientTasks} />
+      <ClientTaskList
+        tasks={clientTasks as unknown as ClientPortalActionItem[]}
+      />
     </div>
   )
 }

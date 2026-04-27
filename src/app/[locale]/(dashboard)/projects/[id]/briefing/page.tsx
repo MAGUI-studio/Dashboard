@@ -18,6 +18,9 @@ import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 import { toHref } from "@/src/lib/utils/navigation"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export const metadata = dashboardMetadata({
   title: "Briefing do projeto",
   description: "Briefing autenticado, respostas e complementos do projeto.",

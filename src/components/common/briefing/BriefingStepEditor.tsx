@@ -13,15 +13,17 @@ import {
   PopoverTrigger,
 } from "@/src/components/ui/popover"
 
+import { markActionItemAsCompletedAction } from "@/src/lib/actions/project-briefing.actions"
+
 import { StepId } from "@/src/hooks/use-briefing-form"
 
 import { LogoUploadEditor } from "./LogoUploadEditor"
 
 interface BriefingStepEditorProps {
+  projectId: string
   currentStepId: StepId
   formData: Record<string, unknown>
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFormData: React.Dispatch<React.SetStateAction<any>>
+  setFormData: React.Dispatch<React.SetStateAction<Record<string, unknown>>>
 }
 
 interface PaletteData {
@@ -31,6 +33,7 @@ interface PaletteData {
 }
 
 export function BriefingStepEditor({
+  projectId,
   currentStepId,
   formData,
   setFormData,
@@ -38,8 +41,7 @@ export function BriefingStepEditor({
   const t = useTranslations("Briefing")
   const value = formData[currentStepId]
   const onValueChange = (v: unknown) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    setFormData((f: any) => ({ ...f, [currentStepId]: v }))
+    setFormData((f) => ({ ...f, [currentStepId]: v }))
   }
 
   // Render Generic List Input (References, Competitors, Perceptions)
@@ -94,80 +96,74 @@ export function BriefingStepEditor({
       secondary: "#FFFFFF",
       accent: "",
     }
+
+    const handleColorChange = async (key: keyof PaletteData, color: string) => {
+      setFormData((prev: Record<string, unknown>) => ({
+        ...prev,
+        palette: { ...(prev.palette as PaletteData), [key]: color },
+      }))
+      if (key === "primary" && color.startsWith("#")) {
+        await markActionItemAsCompletedAction(
+          projectId,
+          "Definir cores principais da marca (HEX)"
+        )
+      }
+    }
+
     return (
       <div className="space-y-12 pt-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div className="space-y-4">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+            <label className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/60">
               Cor Principal (HEX)
             </label>
             <div className="flex items-center gap-4">
               <Popover>
                 <PopoverTrigger asChild>
                   <button
-                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20"
+                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20 transition-transform hover:scale-95"
                     style={{ backgroundColor: p.primary }}
                   />
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none">
+                <PopoverContent className="w-auto p-0 border-none shadow-2xl">
                   <HexColorPicker
                     color={p.primary}
-                    onChange={(color) =>
-                      setFormData({
-                        ...formData,
-                        palette: { ...p, primary: color },
-                      })
-                    }
+                    onChange={(color) => handleColorChange("primary", color)}
                   />
                 </PopoverContent>
               </Popover>
               <input
                 type="text"
                 value={p.primary}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    palette: { ...p, primary: e.target.value },
-                  })
-                }
-                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
+                onChange={(e) => handleColorChange("primary", e.target.value)}
+                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary font-mono"
               />
             </div>
           </div>
           <div className="space-y-4">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
+            <label className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/60">
               Cor Secundária (HEX)
             </label>
             <div className="flex items-center gap-4">
               <Popover>
                 <PopoverTrigger asChild>
                   <button
-                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20"
+                    className="size-16 rounded-2xl cursor-pointer bg-transparent border-2 border-border/20 transition-transform hover:scale-95"
                     style={{ backgroundColor: p.secondary }}
                   />
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0 border-none">
+                <PopoverContent className="w-auto p-0 border-none shadow-2xl">
                   <HexColorPicker
                     color={p.secondary}
-                    onChange={(color) =>
-                      setFormData({
-                        ...formData,
-                        palette: { ...p, secondary: color },
-                      })
-                    }
+                    onChange={(color) => handleColorChange("secondary", color)}
                   />
                 </PopoverContent>
               </Popover>
               <input
                 type="text"
                 value={p.secondary}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    palette: { ...p, secondary: e.target.value },
-                  })
-                }
-                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary"
+                onChange={(e) => handleColorChange("secondary", e.target.value)}
+                className="bg-transparent border-b border-border/40 text-2xl font-bold uppercase outline-none focus:border-brand-primary font-mono"
               />
             </div>
           </div>
@@ -180,10 +176,22 @@ export function BriefingStepEditor({
   if (currentStepId === "logos") {
     return (
       <LogoUploadEditor
+        projectId={projectId}
         value={
-          formData.logos as { primary: string | null; secondary: string | null }
+          formData.logos as {
+            primary: { name: string; url: string; key: string } | null
+            secondary: { name: string; url: string; key: string } | null
+          }
         }
-        onValueChange={(v) => setFormData({ ...formData, logos: v })}
+        onValueChange={(key, asset) =>
+          setFormData((prev: Record<string, unknown>) => ({
+            ...prev,
+            logos: {
+              ...(prev.logos as Record<string, unknown>),
+              [key]: asset,
+            },
+          }))
+        }
       />
     )
   }

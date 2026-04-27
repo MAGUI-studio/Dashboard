@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 
 import { Prisma } from "@/src/generated/client"
 import {
@@ -20,65 +20,96 @@ import {
   getAuditOriginLabel,
   getInternalNotificationRecipients,
 } from "@/src/lib/project-governance"
+import {
+  revalidateProjectBriefing,
+  revalidateProjectData,
+} from "@/src/lib/revalidate"
 import { briefingSchema } from "@/src/lib/validations/project"
+
+import { cacheTags } from "../cache-tags"
 
 async function verifyAndCreateMissingBriefingTasks(
   projectId: string,
   briefing: unknown,
   tx: Prisma.TransactionClient
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = (briefing as Record<string, any>) || {}
-  const missingTasks = []
+  const data = (briefing as Record<string, unknown>) || {}
 
-  if (!data.logos?.primary) {
-    missingTasks.push({
-      label: "Enviar logo principal da marca (Vetor/PNG)",
-      type: "SYSTEM",
+  const logoTaskTitle = "Enviar logo principal da marca (Vetor/PNG)"
+  const paletteTaskTitle = "Definir cores principais da marca (HEX)"
+
+  // 1. Handle Logo Task - Robust Check
+  const logos = data.logos as Record<string, { url?: string }> | undefined
+  const primaryLogo = logos?.primary
+  const hasPrimaryLogo =
+    !!primaryLogo &&
+    (typeof primaryLogo === "string"
+      ? (primaryLogo as string).length > 10
+      : !!primaryLogo.url)
+
+  if (hasPrimaryLogo) {
+    // NUCLEAR: Mark ANY task that mentions "logo" for this project as COMPLETED
+    await tx.actionItem.updateMany({
+      where: {
+        projectId,
+        title: { contains: "logo", mode: "insensitive" },
+        status: "PENDING",
+      },
+      data: { status: "COMPLETED" },
     })
-  }
-
-  if (!data.palette?.primary) {
-    missingTasks.push({
-      label: "Definir cores principais da marca (HEX)",
-      type: "SYSTEM",
+  } else {
+    const exists = await tx.actionItem.findFirst({
+      where: { projectId, title: logoTaskTitle, status: "PENDING" },
     })
-  }
-
-  if (!data.visualReferences || data.visualReferences.length === 0) {
-    missingTasks.push({
-      label: "Adicionar referências visuais e inspirações",
-      type: "SYSTEM",
-    })
-  }
-
-  if (!data.governance?.primaryApprover) {
-    missingTasks.push({
-      label: "Definir aprovador oficial do projeto",
-      type: "SYSTEM",
-    })
-  }
-
-  if (missingTasks.length > 0) {
-    for (const task of missingTasks) {
-      // Check if task already exists to avoid duplicates
-      const exists = await tx.actionItem.findFirst({
-        where: { projectId, title: task.label, status: "PENDING" },
+    if (!exists) {
+      await tx.actionItem.create({
+        data: {
+          projectId,
+          title: logoTaskTitle,
+          description:
+            "Item obrigatório para avanço operacional identificado via briefing.",
+          status: "PENDING",
+          dueDate: addDays(new Date(), 2),
+          targetRole: "CLIENT",
+          ctaPath: `/projects/${projectId}/briefing`,
+        },
       })
+    }
+  }
 
-      if (!exists) {
-        await tx.actionItem.create({
-          data: {
-            projectId,
-            title: task.label,
-            description:
-              "Item obrigatório para avanço operacional identificado via briefing.",
-            status: "PENDING",
-            dueDate: addDays(new Date(), 2),
-            targetRole: "CLIENT",
-          },
-        })
-      }
+  // 2. Handle Palette Task - Robust Check
+  const palette = data.palette as { primary?: string } | undefined
+  const hasPrimaryPalette =
+    !!palette?.primary &&
+    typeof palette.primary === "string" &&
+    palette.primary.startsWith("#")
+
+  if (hasPrimaryPalette) {
+    await tx.actionItem.updateMany({
+      where: {
+        projectId,
+        title: { contains: "cores", mode: "insensitive" },
+        status: "PENDING",
+      },
+      data: { status: "COMPLETED" },
+    })
+  } else {
+    const exists = await tx.actionItem.findFirst({
+      where: { projectId, title: paletteTaskTitle, status: "PENDING" },
+    })
+    if (!exists) {
+      await tx.actionItem.create({
+        data: {
+          projectId,
+          title: paletteTaskTitle,
+          description:
+            "Item obrigatório para avanço operacional identificado via briefing.",
+          status: "PENDING",
+          dueDate: addDays(new Date(), 2),
+          targetRole: "CLIENT",
+          ctaPath: `/projects/${projectId}/briefing`,
+        },
+      })
     }
   }
 }
@@ -90,8 +121,11 @@ export async function updateProjectBriefingAction(
   const validatedBriefing = briefingSchema.safeParse(briefing)
 
   if (!validatedBriefing.success) {
+    const errorMessages = validatedBriefing.error.issues
+      .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+      .join("; ")
     return {
-      error: validatedBriefing.error.issues[0]?.message ?? "Briefing inválido",
+      error: `Briefing inválido: ${errorMessages}`,
     }
   }
 
@@ -168,12 +202,15 @@ export async function updateProjectBriefingAction(
       }
     })
 
+    revalidateProjectData(projectId)
     revalidatePath("/")
     revalidatePath(`/admin/projects/${projectId}`)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Update Briefing Error:")
-    return { error: "Erro ao atualizar briefing" }
+    return {
+      error: `Erro ao atualizar briefing: ${error instanceof Error ? error.message : "Desconhecido"}`,
+    }
   }
 }
 
@@ -210,11 +247,11 @@ export async function savePartialBriefingAction(
 
       await tx.project.update({
         where: { id: projectId },
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: { briefing: updatedBriefing as any },
+        data: { briefing: updatedBriefing as Prisma.InputJsonValue },
       })
     })
 
+    revalidateProjectBriefing(projectId)
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Save Partial Briefing Error:")
@@ -417,6 +454,7 @@ export async function resetProjectBriefingAction(
       projectId: projectId,
     })
 
+    revalidateProjectData(projectId)
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath(`/projects/${projectId}/briefing`)
     revalidatePath("/")
@@ -424,5 +462,38 @@ export async function resetProjectBriefingAction(
   } catch (error) {
     logger.error({ error }, "Reset Briefing Error:")
     return { error: "Erro ao resetar briefing" }
+  }
+}
+
+export async function markActionItemAsCompletedAction(
+  projectId: string,
+  title: string
+): Promise<{ success: boolean }> {
+  try {
+    // Determine a search term to be flexible (e.g. "logo", "cores" or "identidade")
+    const searchTerm = title.toLowerCase().includes("logo")
+      ? "logo"
+      : title.toLowerCase().includes("cores")
+        ? "cores"
+        : title.toLowerCase().includes("identidade")
+          ? "identidade"
+          : title
+
+    await prisma.actionItem.updateMany({
+      where: {
+        projectId,
+        title: { contains: searchTerm, mode: "insensitive" },
+        status: "PENDING",
+      },
+      data: {
+        status: "COMPLETED",
+      },
+    })
+    revalidateProjectData(projectId)
+    revalidatePath("/")
+    return { success: true }
+  } catch (error) {
+    console.error("Mark Task Error:", error)
+    return { success: false }
   }
 }

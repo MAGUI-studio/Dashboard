@@ -2,11 +2,14 @@
 
 import * as React from "react"
 
+import { useSearchParams } from "next/navigation"
+
 import { Prisma } from "@/src/generated/client"
 import {
   Bank,
   CheckCircle,
   Clock,
+  CreditCard,
   DotsThreeVertical,
   FilePdf,
   Receipt,
@@ -60,10 +63,23 @@ export function ProjectFinancialTab({
   projectId,
   invoices,
 }: ProjectFinancialTabProps) {
+  const searchParams = useSearchParams()
   const [selectedInstallment, setSelectedInstallment] = React.useState<
     InvoiceWithInstallments["installments"][number] | null
   >(null)
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = React.useState(false)
+  const [isStripeLoading, setIsStripeLoading] = React.useState<string | null>(
+    null
+  )
+
+  React.useEffect(() => {
+    if (searchParams.get("success")) {
+      toast.success("Pagamento realizado com sucesso!")
+    }
+    if (searchParams.get("canceled")) {
+      toast.error("O pagamento foi cancelado.")
+    }
+  }, [searchParams])
 
   const totalValue = invoices.reduce((acc, inv) => acc + inv.totalAmount, 0)
   const paidValue = invoices.reduce((acc, inv) => {
@@ -93,6 +109,31 @@ export function ProjectFinancialTab({
       setIsPaymentDialogOpen(false)
     } else {
       toast.error(result.error)
+    }
+  }
+
+  const handleStripePayment = async (installmentId: string) => {
+    try {
+      setIsStripeLoading(installmentId)
+      const response = await fetch("/api/stripe/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ installmentId }),
+      })
+
+      const data = await response.json()
+
+      if (data.url) {
+        window.location.href = data.url
+      } else {
+        throw new Error(data.error || "Erro ao criar sessão de checkout")
+      }
+    } catch (error: unknown) {
+      toast.error(error instanceof Error ? error.message : "Erro desconhecido")
+    } finally {
+      setIsStripeLoading(null)
     }
   }
 
@@ -255,18 +296,42 @@ export function ProjectFinancialTab({
                             className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl"
                           >
                             {inst.status !== "PAID" && (
-                              <DropdownMenuItem
-                                onClick={() => {
-                                  setSelectedInstallment(inst)
-                                  setIsPaymentDialogOpen(true)
-                                }}
-                                className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-emerald-500/10 focus:text-emerald-600"
-                              >
-                                <Bank weight="bold" className="mr-2.5 size-4" />
-                                <span className="font-bold uppercase text-[10px]">
-                                  Registrar Pagamento
-                                </span>
-                              </DropdownMenuItem>
+                              <>
+                                <DropdownMenuItem
+                                  onClick={() => handleStripePayment(inst.id)}
+                                  disabled={!!isStripeLoading}
+                                  className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary"
+                                >
+                                  <CreditCard
+                                    weight="bold"
+                                    className={cn(
+                                      "mr-2.5 size-4",
+                                      isStripeLoading === inst.id &&
+                                        "animate-spin"
+                                    )}
+                                  />
+                                  <span className="font-bold uppercase text-[10px]">
+                                    {isStripeLoading === inst.id
+                                      ? "Processando..."
+                                      : "Pagar com Cartão"}
+                                  </span>
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                  onClick={() => {
+                                    setSelectedInstallment(inst)
+                                    setIsPaymentDialogOpen(true)
+                                  }}
+                                  className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-emerald-500/10 focus:text-emerald-600"
+                                >
+                                  <Bank
+                                    weight="bold"
+                                    className="mr-2.5 size-4"
+                                  />
+                                  <span className="font-bold uppercase text-[10px]">
+                                    Registrar Pagamento
+                                  </span>
+                                </DropdownMenuItem>
+                              </>
                             )}
                             <DropdownMenuItem className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary">
                               <FilePdf

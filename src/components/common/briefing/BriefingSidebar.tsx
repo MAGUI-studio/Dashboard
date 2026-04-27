@@ -6,11 +6,13 @@ import { useTranslations } from "next-intl"
 
 import { WarningCircle } from "@phosphor-icons/react"
 
+import { markActionItemAsCompletedAction } from "@/src/lib/actions/project-briefing.actions"
 import { cn } from "@/src/lib/utils/utils"
 
 import { StepId, stepsConfig } from "@/src/hooks/use-briefing-form"
 
 interface BriefingSidebarProps {
+  projectId: string
   currentStepId: StepId
   onStepClick: (id: StepId) => void
   isFieldMissing: (id: string) => boolean
@@ -19,6 +21,7 @@ interface BriefingSidebarProps {
 }
 
 export function BriefingSidebar({
+  projectId,
   currentStepId,
   onStepClick,
   isFieldMissing,
@@ -26,6 +29,20 @@ export function BriefingSidebar({
   currentIndex,
 }: BriefingSidebarProps) {
   const t = useTranslations("Briefing")
+
+  const handleStepClick = async (id: StepId) => {
+    // If moving from a business step that's now complete, mark related tasks as done
+    if (
+      ["businessDescription", "brandTone", "businessGoals"].includes(
+        currentStepId
+      )
+    ) {
+      if (!isFieldMissing(currentStepId)) {
+        await markActionItemAsCompletedAction(projectId, "negócio")
+      }
+    }
+    onStepClick(id)
+  }
 
   return (
     <aside className="w-full xl:w-64 shrink-0 flex flex-col gap-12">
@@ -46,7 +63,8 @@ export function BriefingSidebar({
           return (
             <button
               key={item.id}
-              onClick={() => onStepClick(item.id)}
+              type="button"
+              onClick={() => handleStepClick(item.id)}
               className="group relative flex items-center gap-5 text-left outline-none"
             >
               <div

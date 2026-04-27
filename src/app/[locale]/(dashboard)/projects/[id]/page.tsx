@@ -23,6 +23,9 @@ import { getClientProjectOverview } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { toHref } from "@/src/lib/utils/navigation"
 
+export const dynamic = "force-dynamic"
+export const revalidate = 0
+
 export default async function ProjectDetailPage({
   params,
 }: {

@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { Link } from "@/src/i18n/navigation"
 import { ClientPortalActionItem } from "@/src/types/client-portal"
 import {
   ArrowRight,
@@ -31,12 +32,8 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
     <div className="grid gap-4">
       {tasks.map((task) => {
         const isOverdue = task.dueDate && new Date(task.dueDate) < new Date()
-
-        return (
-          <article
-            key={task.id}
-            className="group rounded-[1.75rem] border border-border/20 bg-muted/5 p-5 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background sm:p-6 lg:p-7"
-          >
+        const Content = (
+          <article className="group rounded-[1.75rem] border border-border/20 bg-muted/5 p-5 transition hover:-translate-y-0.5 hover:border-brand-primary/25 hover:bg-background sm:p-6 lg:p-7">
             <div className="grid gap-5 md:grid-cols-[auto_minmax(0,1fr)_auto] md:items-center">
               <div
                 className={`flex size-14 shrink-0 items-center justify-center rounded-[1.25rem] sm:size-16 ${
@@ -95,6 +92,16 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
             </div>
           </article>
         )
+
+        if (task.ctaPath) {
+          return (
+            <Link key={task.id} href={task.ctaPath as string}>
+              {Content}
+            </Link>
+          )
+        }
+
+        return <div key={task.id}>{Content}</div>
       })}
     </div>
   )

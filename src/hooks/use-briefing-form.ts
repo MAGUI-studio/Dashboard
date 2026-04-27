@@ -3,10 +3,7 @@ import * as React from "react"
 import { Prisma } from "@/src/generated/client"
 import { toast } from "sonner"
 
-import {
-  savePartialBriefingAction,
-  updateProjectBriefingAction,
-} from "@/src/lib/actions/project.actions"
+import { updateProjectBriefingAction } from "@/src/lib/actions/project.actions"
 
 export const stepsConfig = [
   // 1. Contexto de Negócio
@@ -18,7 +15,7 @@ export const stepsConfig = [
   { id: "differentiators", min: 50 },
 
   // 2. Identidade da Marca
-  { id: "logos", min: 0 },
+  { id: "logos", min: 1 },
   { id: "palette", min: 0 },
 
   // 3. Direção Visual
@@ -29,15 +26,35 @@ export const stepsConfig = [
 
 export type StepId = (typeof stepsConfig)[number]["id"]
 
+export interface BriefingFormData {
+  businessDescription: string
+  businessGoals: string
+  brandTone: string
+  primaryCta: string
+  targetAudience: string
+  differentiators: string
+  logos: {
+    primary: { name: string; url: string; key: string } | null
+    secondary: { name: string; url: string; key: string } | null
+  }
+  palette: {
+    primary: string
+    secondary: string
+    extra: string[]
+  }
+  visualReferences: string[]
+  dislikedReferences: string[]
+  competitors: string[]
+}
+
 export function useBriefingForm(
   projectId: string,
   initialData: Prisma.JsonValue | null | undefined,
   currentStepId: StepId,
   setCurrentStepId: (step: StepId) => void
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const data = (initialData as any) || {}
-  const [formData, setFormData] = React.useState({
+  const data = (initialData as Record<string, unknown>) || {}
+  const [formData, setFormData] = React.useState<Record<string, unknown>>({
     businessDescription: String(data?.businessDescription || ""),
     businessGoals: String(data?.businessGoals || ""),
     brandTone: String(data?.brandTone || ""),
@@ -45,16 +62,13 @@ export function useBriefingForm(
     targetAudience: String(data?.targetAudience || ""),
     differentiators: String(data?.differentiators || ""),
 
-    logos: data?.logos || {
+    logos: (data?.logos as Record<string, unknown>) || {
       primary: null,
       secondary: null,
-      light: null,
-      dark: null,
     },
-    palette: data?.palette || {
+    palette: (data?.palette as Record<string, unknown>) || {
       primary: "#000000",
       secondary: "#FFFFFF",
-      accent: "",
       extra: [],
     },
 
@@ -76,39 +90,62 @@ export function useBriefingForm(
   const isFieldMissing = (id: string) => {
     const config = stepsConfig.find((s) => s.id === id)
     if (!config || config.min === 0) return false
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const val = (formData as any)[id]
+    const val = formData[id]
+
+    if (id === "logos") {
+      const logos = val as {
+        primary?: { url: string }
+        secondary?: { url: string }
+      } | null
+      const hasPrimary = logos?.primary?.url
+      const hasSecondary = logos?.secondary?.url
+      return !hasPrimary && !hasSecondary
+    }
+
     if (typeof val === "string") return val.trim().length < config.min
     return false
   }
 
-  const saveCurrent = async () => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const val = (formData as any)[currentStepId]
-    if (val)
-      await savePartialBriefingAction(projectId, { [currentStepId]: val })
-  }
-
   const handleNext = async () => {
+    if (isFieldMissing(currentStepId)) {
+      setShowErrors(true)
+      toast.error("Preencha este campo obrigatório para prosseguir.")
+      return
+    }
+
     if (currentStepIndex < stepsConfig.length - 1) {
-      await saveCurrent()
       setCurrentStepId(stepsConfig[currentStepIndex + 1].id)
     }
   }
 
   const handleSubmit = async () => {
+    // BLOQUEIO CRÍTICO: Só envia se for o último passo
+    if (currentStepIndex < stepsConfig.length - 1) {
+      console.warn("Tentativa de envio bloqueada: não é o último passo.")
+      return
+    }
+
     if (stepsConfig.some((s) => isFieldMissing(s.id))) {
       setShowErrors(true)
       toast.error("Preencha todos os campos obrigatórios.")
       return
     }
+
     setIsLoading(true)
     const result = await updateProjectBriefingAction(
       projectId,
       formData as Prisma.InputJsonValue
     )
-    if (result.success) setIsFinished(true)
-    else toast.error(result.error || "Erro ao salvar.")
+
+    if (result.success) {
+      toast.success("Briefing enviado com sucesso!")
+      setIsFinished(true)
+    } else {
+      console.error("Briefing Submit Error:", result.error)
+      toast.error(result.error || "Erro ao salvar o briefing.")
+      setIsLoading(false)
+      return
+    }
     setIsLoading(false)
   }
 
@@ -124,6 +161,8 @@ export function useBriefingForm(
     isFieldMissing,
     handleNext,
     handleSubmit,
-    saveCurrent,
+    saveCurrent: async () => {
+      // Desativado
+    },
   }
 }

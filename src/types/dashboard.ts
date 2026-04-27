@@ -189,6 +189,7 @@ export interface DashboardActionItem {
   description: string | null
   status: ActionStatus
   targetRole: ActionTargetRole
+  ctaPath?: string | null
   dueDate: Date | string | null
   projectId: string
   project: {

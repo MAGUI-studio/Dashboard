@@ -7,6 +7,7 @@ export function revalidateProjectData(projectId?: string) {
   revalidateTag(cacheTags.clientProject, "default")
   if (projectId) {
     revalidateTag(`client:project:${projectId}`, "default")
+    revalidateTag(cacheTags.projectBriefing(projectId), "default")
   }
   revalidateTag(cacheTags.clientPendingApprovals, "default")
   revalidateTag(cacheTags.clientHome, "default")
@@ -16,9 +17,10 @@ export function revalidateProjectData(projectId?: string) {
   revalidateTag(cacheTags.adminSearch, "default")
 }
 
-export function revalidateCrmData() {
-  revalidateTag(cacheTags.adminCrm, "default")
-  revalidateTag(cacheTags.adminDashboard, "default")
+export function revalidateProjectStatus(projectId: string) {
+  revalidateTag(cacheTags.adminProject(projectId), "default")
+  revalidateTag(cacheTags.clientProject, "default")
+  revalidateTag(`client:project:${projectId}`, "default")
 }
 
 export function revalidateCrmLeads() {
@@ -66,11 +68,6 @@ export function revalidateProjectThreads(projectId: string) {
 
 export function revalidateProjectDecisions(projectId: string) {
   revalidateTag(cacheTags.projectDecisions(projectId), "default")
-}
-
-export function revalidateProjectStatus(projectId: string) {
-  revalidateTag(cacheTags.adminProject(projectId), "default")
-  revalidateTag(cacheTags.clientProject, "default")
 }
 
 export function revalidateClientNotifications() {

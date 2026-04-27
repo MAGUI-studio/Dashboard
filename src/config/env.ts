@@ -53,6 +53,9 @@ const envSchema = z.object({
     .default("https://api.autentique.com.br/v2/graphql"),
   RESEND_API_KEY: z.string().optional(),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string().optional(),
+  STRIPE_PUBLISHABLE_KEY: z.string().optional(),
+  STRIPE_SECRET_KEY: z.string().optional(),
+  STRIPE_WEBHOOK_SECRET: z.string().optional(),
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
@@ -99,6 +102,9 @@ const parsedEnv = envSchema.safeParse({
   AUTENTIQUE_URL: process.env.AUTENTIQUE_URL,
   RESEND_API_KEY: process.env.RESEND_API_KEY,
   GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+  STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
+  STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
+  STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
   NODE_ENV: process.env.NODE_ENV,
 })
 
