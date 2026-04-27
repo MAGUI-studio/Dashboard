@@ -52,7 +52,8 @@ export function BriefingForm({
     saveCurrent,
   } = useBriefingForm(
     projectId,
-    initialData as Record<string, unknown>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    initialData as any,
     currentStepId,
     setCurrentStepId
   )
