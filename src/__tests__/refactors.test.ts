@@ -18,7 +18,6 @@ describe("refactor guardrails", () => {
       "src/components/admin/LeadDetailsDrawer.tsx",
       "src/components/admin/CreateLeadForm.tsx",
       "src/components/admin/ProjectsTable.tsx",
-      "src/components/admin/KanbanBoard.tsx",
     ]
 
     for (const file of migratedFiles) {

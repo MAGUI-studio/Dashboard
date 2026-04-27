@@ -1,5 +1,3 @@
-import { cache } from "react"
-
 import { unstable_cache } from "next/cache"
 
 import { Prisma } from "@/src/generated/client/client"
@@ -58,48 +56,52 @@ export const toSavedViewDto = (view: SavedViewType): SavedView => ({
   filtersJson: (view.filtersJson as Record<string, unknown>) || {},
 })
 
-const getLeadsCached = (page: number = 1, limit: number = 50) =>
-  unstable_cache(
-    async () => {
-      const skip = (page - 1) * limit
-      const [leads, totalCount] = await Promise.all([
-        prisma.lead.findMany({
-          where: {
-            status: {
-              not: LeadStatus.DESCARTADO,
-            },
+const getLeadsCached = unstable_cache(
+  async (page: number, limit: number) => {
+    const skip = (page - 1) * limit
+    const [leads, totalCount] = await Promise.all([
+      prisma.lead.findMany({
+        where: {
+          status: {
+            not: LeadStatus.DESCARTADO,
           },
-          orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
-          skip,
-          take: limit,
-        }),
-        prisma.lead.count({
-          where: {
-            status: {
-              not: LeadStatus.DESCARTADO,
-            },
+        },
+        include: {
+          _count: {
+            select: { followUpNotes: true },
           },
-        }),
-      ])
-      return { leads, totalCount, totalPages: Math.ceil(totalCount / limit) }
-    },
-    ["crm-leads", page.toString(), limit.toString()],
-    {
-      revalidate: CACHE_TTL.LEADS,
-      tags: [cacheTags.adminCrmLeads, cacheTags.adminCrm],
-    }
-  )()
+        },
+        orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
+        skip,
+        take: limit,
+      }),
+      prisma.lead.count({
+        where: {
+          status: {
+            not: LeadStatus.DESCARTADO,
+          },
+        },
+      }),
+    ])
+    return { leads, totalCount, totalPages: Math.ceil(totalCount / limit) }
+  },
+  ["crm-leads"],
+  {
+    revalidate: CACHE_TTL.LEADS,
+    tags: [cacheTags.adminCrmLeads, cacheTags.adminCrm],
+  }
+)
 
 export const getLeads = async (page: number = 1, limit: number = 100) => {
   const { leads } = await getLeadsCached(page, limit)
   return leads.map((l) => ({
     ...l,
     activities: [],
-    followUpNotes: [],
-  })) as Lead[]
+    followUpNotes: Array(l._count.followUpNotes).fill({}), // Placeholder with correct length for UI
+  })) as unknown as Lead[]
 }
 
-const getLeadDetailsCached = unstable_cache(
+const getLeadDetailsRawCached = unstable_cache(
   async (id: string) => {
     return prisma.lead.findUnique({
       where: { id },
@@ -125,64 +127,32 @@ const getLeadDetailsCached = unstable_cache(
       },
     })
   },
-  ["crm-lead-details"],
+  ["crm-lead-details-raw"],
   { revalidate: CACHE_TTL.LEADS }
 )
 
-export const getLeadDetails = (id: string) =>
-  unstable_cache(
-    async () => {
-      const lead = await getLeadDetailsCached(id)
-      return lead ? toLeadDto(lead as LeadWithRelations) : null
-    },
-    ["crm-lead-details", id],
-    {
-      revalidate: CACHE_TTL.LEADS,
-      tags: [cacheTags.adminLead(id), cacheTags.adminCrm],
-    }
-  )()
+export const getLeadDetails = async (id: string) => {
+  const lead = await getLeadDetailsRawCached(id)
+  return lead ? toLeadDto(lead as LeadWithRelations) : null
+}
 
-const getMessageTemplatesCached = unstable_cache(
-  async (scope: string = "LEAD") => {
+const getMessageTemplatesRawCached = unstable_cache(
+  async (scope: string) => {
     return prisma.messageTemplate.findMany({
       where: { scope },
       orderBy: { createdAt: "asc" },
     })
   },
-  ["crm-message-templates"],
+  ["crm-message-templates-raw"],
   { revalidate: CACHE_TTL.USER_PREFERENCES, tags: [cacheTags.adminCrm] }
 )
 
-export const getLeadProposals = (leadId: string) =>
-  unstable_cache(
-    async () => {
-      return prisma.proposal.findMany({
-        where: { leadId },
-        include: { items: { orderBy: { order: "asc" } } },
-        orderBy: { createdAt: "desc" },
-      })
-    },
-    ["crm-lead-proposals", leadId],
-    {
-      revalidate: CACHE_TTL.LEADS,
-      tags: [cacheTags.adminLead(leadId), cacheTags.adminCrm],
-    }
-  )()
+export const getMessageTemplates = async (scope: string = "LEAD") => {
+  const templates = await getMessageTemplatesRawCached(scope)
+  return (templates as MessageTemplateType[]).map(toMessageTemplateDto)
+}
 
-export const getMessageTemplates = (scope: string = "LEAD") =>
-  unstable_cache(
-    async () => {
-      const templates = await getMessageTemplatesCached(scope)
-      return (templates as MessageTemplateType[]).map(toMessageTemplateDto)
-    },
-    ["crm-message-templates", scope],
-    {
-      revalidate: CACHE_TTL.TEMPLATES,
-      tags: [cacheTags.adminCrmTemplates, cacheTags.adminCrm],
-    }
-  )()
-
-const getSavedCrmViewsCached = unstable_cache(
+const getSavedCrmViewsRawCached = unstable_cache(
   async (userId: string) => {
     return prisma.savedView.findMany({
       where: {
@@ -192,24 +162,16 @@ const getSavedCrmViewsCached = unstable_cache(
       orderBy: { updatedAt: "desc" },
     })
   },
-  ["crm-saved-views"],
+  ["crm-saved-views-raw"],
   { revalidate: CACHE_TTL.LEADS }
 )
 
-export const getSavedCrmViews = (userId: string) =>
-  unstable_cache(
-    async () => {
-      const views = await getSavedCrmViewsCached(userId)
-      return (views as SavedViewType[]).map(toSavedViewDto)
-    },
-    ["crm-saved-views", userId],
-    {
-      revalidate: CACHE_TTL.USER_PREFERENCES,
-      tags: [cacheTags.adminCrmViews(userId), cacheTags.adminCrm],
-    }
-  )()
+export const getSavedCrmViews = async (userId: string) => {
+  const views = await getSavedCrmViewsRawCached(userId)
+  return (views as SavedViewType[]).map(toSavedViewDto)
+}
 
-const getCrmPreferencesCached = unstable_cache(
+const getCrmPreferencesRawCached = unstable_cache(
   async (userId: string) => {
     return prisma.savedView.findFirst({
       where: {
@@ -219,19 +181,26 @@ const getCrmPreferencesCached = unstable_cache(
       },
     })
   },
-  ["crm-preferences"],
+  ["crm-preferences-raw"],
   { revalidate: CACHE_TTL.LEADS }
 )
 
-export const getCrmPreferences = (userId: string) =>
-  unstable_cache(
-    async () => {
-      const prefs = await getCrmPreferencesCached(userId)
-      return prefs ? toSavedViewDto(prefs as SavedViewType) : null
-    },
-    ["crm-preferences", userId],
-    {
-      revalidate: CACHE_TTL.USER_PREFERENCES,
-      tags: [cacheTags.adminCrmPrefs(userId), cacheTags.adminCrm],
-    }
-  )()
+export const getCrmPreferences = async (userId: string) => {
+  const prefs = await getCrmPreferencesRawCached(userId)
+  return prefs ? toSavedViewDto(prefs as SavedViewType) : null
+}
+
+export const getLeadProposals = unstable_cache(
+  async (leadId: string) => {
+    return prisma.proposal.findMany({
+      where: { leadId },
+      include: { items: { orderBy: { order: "asc" } } },
+      orderBy: { createdAt: "desc" },
+    })
+  },
+  ["crm-lead-proposals"],
+  {
+    revalidate: CACHE_TTL.LEADS,
+    tags: [cacheTags.adminCrm], // Note: cacheTags.adminLead(leadId) is dynamic, unstable_cache handles params
+  }
+)

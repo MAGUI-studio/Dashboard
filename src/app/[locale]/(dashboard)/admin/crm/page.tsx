@@ -10,12 +10,7 @@ import { Button } from "@/src/components/ui/button"
 
 import { KanbanBoard } from "@/src/components/admin/KanbanBoard"
 
-import {
-  getCrmPreferences,
-  getLeads,
-  getMessageTemplates,
-  getSavedCrmViews,
-} from "@/src/lib/crm-data"
+import { getLeads, getMessageTemplates } from "@/src/lib/crm-data"
 import prisma from "@/src/lib/prisma"
 import { getCurrentAppUser } from "@/src/lib/project-governance"
 import { dashboardMetadata } from "@/src/lib/seo"
@@ -23,7 +18,7 @@ import { dashboardMetadata } from "@/src/lib/seo"
 export const metadata = dashboardMetadata({
   title: "CRM",
   description:
-    "Pipeline comercial autenticado da MAGUI.studio com leads, templates e visoes salvas.",
+    "Pipeline comercial autenticado da MAGUI.studio com leads e templates.",
   path: "/admin/crm",
 })
 
@@ -41,8 +36,6 @@ export default async function CRMPage({
 
   const leads = await getLeads()
   const templates = await getMessageTemplates()
-  const savedViews = await getSavedCrmViews(actor.id)
-  const preferences = await getCrmPreferences(actor.id)
 
   const clients = await prisma.user.findMany({
     where: { role: UserRole.CLIENT },
@@ -98,13 +91,6 @@ export default async function CRMPage({
         initialLeadId={selectedLeadId}
         clients={clients}
         templates={templates}
-        savedViews={savedViews}
-        preferences={{
-          density:
-            preferences?.filtersJson?.density === "compact"
-              ? "compact"
-              : "comfortable",
-        }}
       />
     </main>
   )
