@@ -24,6 +24,12 @@ interface BriefingStepEditorProps {
   setFormData: React.Dispatch<React.SetStateAction<any>>
 }
 
+interface PaletteData {
+  primary: string
+  secondary: string
+  accent?: string
+}
+
 export function BriefingStepEditor({
   currentStepId,
   formData,
@@ -83,7 +89,7 @@ export function BriefingStepEditor({
 
   // 1. Branding Palette Editor
   if (currentStepId === "palette") {
-    const p = formData.palette || {
+    const p = (formData.palette as PaletteData) || {
       primary: "#000000",
       secondary: "#FFFFFF",
       accent: "",
