@@ -22,6 +22,7 @@ import {
   getCurrentAppUser,
   getInternalNotificationRecipients,
 } from "@/src/lib/project-governance"
+import { revalidateProjectTimeline } from "@/src/lib/revalidate"
 import {
   addProjectTimelineSchema,
   rejectProjectUpdateSchema,
@@ -235,6 +236,7 @@ export async function addProjectTimelineAction(
       })
     }
 
+    revalidateProjectTimeline(projectId)
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
     revalidatePath("/notifications")
@@ -330,6 +332,7 @@ export async function approveUpdateAction(
       return { update: updatedUpdate }
     })
 
+    revalidateProjectTimeline(projectId)
     revalidatePath("/")
     revalidatePath("/admin")
     revalidatePath("/admin/projects")
@@ -438,6 +441,7 @@ export async function rejectUpdateAction(input: {
       return { update: updatedUpdate }
     })
 
+    revalidateProjectTimeline(validated.data.projectId)
     revalidatePath("/")
     revalidatePath("/admin")
     revalidatePath("/admin/projects")
@@ -489,6 +493,7 @@ export async function deleteProjectTimelineAction(
       )
     })
 
+    revalidateProjectTimeline(projectId)
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
     return { success: true }
