@@ -220,7 +220,7 @@ export function ProjectTabs({
         value="financial"
         className="mt-0 focus-visible:outline-none"
       >
-        <ProjectFinancialTab invoices={invoices} />
+        <ProjectFinancialTab projectId={projectId} invoices={invoices} />
       </TabsContent>
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">

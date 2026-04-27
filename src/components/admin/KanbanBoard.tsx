@@ -74,7 +74,7 @@ export function KanbanBoard({
     handleDragStart,
     handleDragOver,
     handleDragEnd,
-  } = useKanbanState(leads)
+  } = useKanbanState(leads, () => router.refresh())
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } })
@@ -203,45 +203,47 @@ export function KanbanBoard({
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
-          {CRM_STATUS_ORDER.map((status) => (
-            <KanbanColumn
-              key={status}
-              status={status}
-              leadIds={filteredColumnMap[status]}
-              leadMap={boardState.leadMap}
-              dragDisabled={hasOpenDrawer}
-              density={density}
-              selectedLeadId={selectedLeadId}
-              clients={clients}
-              templates={templates}
-              onDrawerOpenChange={(id, open) => {
-                setSelectedLeadId(open ? id : null)
-                setHasOpenDrawer(open)
-                if (!open && initialLeadId)
-                  router.replace(pathname, { scroll: false })
-              }}
-              onLeadUpdated={(next) =>
-                setBoardState((curr) => ({
-                  ...curr,
-                  leadMap: { ...curr.leadMap, [next.id]: next },
-                }))
-              }
-              onLeadDeleted={(id) =>
-                setBoardState((curr) => ({
-                  leadMap: Object.fromEntries(
-                    Object.entries(curr.leadMap).filter(([k]) => k !== id)
-                  ),
-                  columnMap: Object.fromEntries(
-                    Object.entries(curr.columnMap).map(([k, v]) => [
-                      k,
-                      v.filter((lid) => lid !== id),
-                    ])
-                  ) as Record<LeadStatus, string[]>,
-                }))
-              }
-            />
-          ))}
+        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+          {CRM_STATUS_ORDER.filter((s) => s !== LeadStatus.CONVERTIDO).map(
+            (status) => (
+              <KanbanColumn
+                key={status}
+                status={status}
+                leadIds={filteredColumnMap[status]}
+                leadMap={boardState.leadMap}
+                dragDisabled={hasOpenDrawer}
+                density={density}
+                selectedLeadId={selectedLeadId}
+                clients={clients}
+                templates={templates}
+                onDrawerOpenChange={(id, open) => {
+                  setSelectedLeadId(open ? id : null)
+                  setHasOpenDrawer(open)
+                  if (!open && initialLeadId)
+                    router.replace(pathname, { scroll: false })
+                }}
+                onLeadUpdated={(next) =>
+                  setBoardState((curr) => ({
+                    ...curr,
+                    leadMap: { ...curr.leadMap, [next.id]: next },
+                  }))
+                }
+                onLeadDeleted={(id) =>
+                  setBoardState((curr) => ({
+                    leadMap: Object.fromEntries(
+                      Object.entries(curr.leadMap).filter(([k]) => k !== id)
+                    ),
+                    columnMap: Object.fromEntries(
+                      Object.entries(curr.columnMap).map(([k, v]) => [
+                        k,
+                        v.filter((lid) => lid !== id),
+                      ])
+                    ) as Record<LeadStatus, string[]>,
+                  }))
+                }
+              />
+            )
+          )}
         </div>
         <DragOverlay>
           {activeLeadId ? (

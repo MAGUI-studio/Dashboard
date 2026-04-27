@@ -155,7 +155,7 @@
         "cancel": "Cancelar Operação"
       },
       "status": {
-        "GARIMPAGEM": "Garimpagem",
+        "GARIMPAGEM": "Prospecção",
         "CONTATO_REALIZADO": "Contato Realizado",
         "NEGOCIACAO": "Negociação",
         "CONVERTIDO": "Convertido",

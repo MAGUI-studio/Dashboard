@@ -45,6 +45,7 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
       />
 
       <ProjectFinancialTab
+        projectId={id}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         invoices={invoices as any}
       />

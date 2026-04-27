@@ -39,6 +39,8 @@ import {
 import { registerPaymentAction } from "@/src/lib/actions/financial.actions"
 import { cn } from "@/src/lib/utils/utils"
 
+import { AddInvoiceForm } from "./AddInvoiceForm"
+
 type InvoiceWithInstallments = Prisma.InvoiceGetPayload<{
   include: {
     installments: {
@@ -50,10 +52,14 @@ type InvoiceWithInstallments = Prisma.InvoiceGetPayload<{
 }>
 
 interface ProjectFinancialTabProps {
+  projectId: string
   invoices: InvoiceWithInstallments[]
 }
 
-export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
+export function ProjectFinancialTab({
+  projectId,
+  invoices,
+}: ProjectFinancialTabProps) {
   const [selectedInstallment, setSelectedInstallment] = React.useState<
     InvoiceWithInstallments["installments"][number] | null
   >(null)
@@ -130,140 +136,163 @@ export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
         </Card>
       </div>
 
-      <div className="space-y-6">
-        {invoices.map((invoice) => (
-          <Card
-            key={invoice.id}
-            className="rounded-[2.5rem] border-border/40 bg-background/40 overflow-hidden shadow-sm"
-          >
-            <CardHeader className="bg-muted/10 border-b border-border/40 py-6 px-8">
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
-                    <Receipt weight="fill" className="size-5" />
-                  </div>
-                  <div>
-                    <CardTitle className="font-heading text-lg font-black uppercase tracking-tight">
-                      {invoice.title}
-                    </CardTitle>
-                    <p className="text-[9px] font-bold text-muted-foreground/60 uppercase">
-                      Emitido em{" "}
-                      {format(new Date(invoice.createdAt), "dd/MM/yyyy")}
-                    </p>
-                  </div>
-                </div>
-                <Badge
-                  variant="outline"
-                  className="rounded-full border-border/40 bg-background/50 px-4 py-1 text-[9px] font-black uppercase tracking-widest"
-                >
-                  {invoice.status}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent className="p-8">
-              <div className="grid gap-4">
-                {invoice.installments.map((inst) => (
-                  <div
-                    key={inst.id}
-                    className={cn(
-                      "flex items-center justify-between p-6 rounded-2xl border transition-all",
-                      inst.status === "PAID"
-                        ? "border-emerald-500/20 bg-emerald-500/[0.02]"
-                        : "border-border/40 bg-muted/5"
-                    )}
-                  >
-                    <div className="flex items-center gap-6">
-                      <div
-                        className={cn(
-                          "flex size-10 items-center justify-center rounded-full border",
-                          inst.status === "PAID"
-                            ? "border-emerald-500/40 bg-emerald-500 text-white"
-                            : "border-border/60 text-muted-foreground/40"
-                        )}
-                      >
-                        {inst.status === "PAID" ? (
-                          <CheckCircle weight="bold" className="size-5" />
-                        ) : (
-                          <Clock className="size-5" />
-                        )}
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                          Parcela {inst.number}
-                        </p>
-                        <p className="text-lg font-black uppercase tracking-tight">
-                          R${" "}
-                          {inst.amount.toLocaleString("pt-BR", {
-                            minimumFractionDigits: 2,
-                          })}
-                        </p>
-                      </div>
+      <div className="flex flex-col gap-6">
+        <div className="flex items-center justify-between border-b border-border/20 pb-4">
+          <h3 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
+            Gestão de Faturas
+          </h3>
+          <AddInvoiceForm projectId={projectId} />
+        </div>
+
+        <div className="space-y-6">
+          {invoices.length === 0 && (
+            <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border/40 rounded-[2.5rem] bg-muted/5">
+              <Receipt
+                weight="thin"
+                className="size-16 text-muted-foreground/20 mb-4"
+              />
+              <p className="text-sm font-bold text-muted-foreground/40 uppercase tracking-widest">
+                Nenhuma fatura emitida para este projeto.
+              </p>
+            </div>
+          )}
+          {invoices.map((invoice) => (
+            <Card
+              key={invoice.id}
+              className="rounded-[2.5rem] border-border/40 bg-background/40 overflow-hidden shadow-sm"
+            >
+              <CardHeader className="bg-muted/10 border-b border-border/40 py-6 px-8">
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
+                      <Receipt weight="fill" className="size-5" />
                     </div>
-
-                    <div className="flex items-center gap-8">
-                      <div className="text-right space-y-1">
-                        <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">
-                          Vencimento
-                        </p>
-                        <p className="text-xs font-bold">
-                          {format(new Date(inst.dueDate), "dd 'de' MMMM", {
-                            locale: ptBR,
-                          })}
-                        </p>
+                    <div>
+                      <CardTitle className="font-heading text-lg font-black uppercase tracking-tight">
+                        {invoice.title}
+                      </CardTitle>
+                      <p className="text-[9px] font-bold text-muted-foreground/60 uppercase">
+                        Emitido em{" "}
+                        {format(new Date(invoice.createdAt), "dd/MM/yyyy")}
+                      </p>
+                    </div>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="rounded-full border-border/40 bg-background/50 px-4 py-1 text-[9px] font-black uppercase tracking-widest"
+                  >
+                    {invoice.status}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="p-8">
+                <div className="grid gap-4">
+                  {invoice.installments.map((inst) => (
+                    <div
+                      key={inst.id}
+                      className={cn(
+                        "flex items-center justify-between p-6 rounded-2xl border transition-all",
+                        inst.status === "PAID"
+                          ? "border-emerald-500/20 bg-emerald-500/[0.02]"
+                          : "border-border/40 bg-muted/5"
+                      )}
+                    >
+                      <div className="flex items-center gap-6">
+                        <div
+                          className={cn(
+                            "flex size-10 items-center justify-center rounded-full border",
+                            inst.status === "PAID"
+                              ? "border-emerald-500/40 bg-emerald-500 text-white"
+                              : "border-border/60 text-muted-foreground/40"
+                          )}
+                        >
+                          {inst.status === "PAID" ? (
+                            <CheckCircle weight="bold" className="size-5" />
+                          ) : (
+                            <Clock className="size-5" />
+                          )}
+                        </div>
+                        <div className="space-y-1">
+                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+                            Parcela {inst.number}
+                          </p>
+                          <p className="text-lg font-black uppercase tracking-tight">
+                            R${" "}
+                            {inst.amount.toLocaleString("pt-BR", {
+                              minimumFractionDigits: 2,
+                            })}
+                          </p>
+                        </div>
                       </div>
 
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-10 rounded-full hover:bg-muted/20"
-                          >
-                            <DotsThreeVertical
-                              weight="bold"
-                              className="size-5"
-                            />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent
-                          align="end"
-                          className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl"
-                        >
-                          {inst.status !== "PAID" && (
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setSelectedInstallment(inst)
-                                setIsPaymentDialogOpen(true)
-                              }}
-                              className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-emerald-500/10 focus:text-emerald-600"
+                      <div className="flex items-center gap-8">
+                        <div className="text-right space-y-1">
+                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">
+                            Vencimento
+                          </p>
+                          <p className="text-xs font-bold text-foreground">
+                            {format(new Date(inst.dueDate), "dd 'de' MMMM", {
+                              locale: ptBR,
+                            })}
+                          </p>
+                        </div>
+
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-10 rounded-full hover:bg-muted/20 text-foreground"
                             >
-                              <Bank weight="bold" className="mr-2.5 size-4" />
+                              <DotsThreeVertical
+                                weight="bold"
+                                className="size-5"
+                              />
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent
+                            align="end"
+                            className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl"
+                          >
+                            {inst.status !== "PAID" && (
+                              <DropdownMenuItem
+                                onClick={() => {
+                                  setSelectedInstallment(inst)
+                                  setIsPaymentDialogOpen(true)
+                                }}
+                                className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-emerald-500/10 focus:text-emerald-600"
+                              >
+                                <Bank weight="bold" className="mr-2.5 size-4" />
+                                <span className="font-bold uppercase text-[10px]">
+                                  Registrar Pagamento
+                                </span>
+                              </DropdownMenuItem>
+                            )}
+                            <DropdownMenuItem className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary">
+                              <FilePdf
+                                weight="bold"
+                                className="mr-2.5 size-4"
+                              />
                               <span className="font-bold uppercase text-[10px]">
-                                Registrar Pagamento
+                                Gerar Recibo
                               </span>
                             </DropdownMenuItem>
-                          )}
-                          <DropdownMenuItem className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary">
-                            <FilePdf weight="bold" className="mr-2.5 size-4" />
-                            <span className="font-bold uppercase text-[10px]">
-                              Gerar Recibo
-                            </span>
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
       </div>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
         <DialogContent className="rounded-[2.5rem] sm:max-w-[450px] border-border/10 bg-background/95 backdrop-blur-xl">
           <DialogHeader className="mb-6">
-            <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight">
+            <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight text-foreground">
               Registrar Pagamento
             </DialogTitle>
           </DialogHeader>
@@ -287,7 +316,7 @@ export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
                 </label>
                 <select
                   name="type"
-                  className="w-full h-12 rounded-full border border-border/40 bg-muted/10 px-6 font-bold text-sm outline-none focus:border-brand-primary"
+                  className="w-full h-12 rounded-full border border-border/40 bg-muted/10 px-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
                 >
                   <option value="PIX">PIX</option>
                   <option value="TED">Transferência (TED/DOC)</option>
@@ -303,7 +332,7 @@ export function ProjectFinancialTab({ invoices }: ProjectFinancialTabProps) {
                 <textarea
                   name="note"
                   placeholder="Ex: Comprovante enviado via e-mail..."
-                  className="w-full min-h-[80px] rounded-2xl border border-border/40 bg-muted/10 p-6 font-bold text-sm outline-none focus:border-brand-primary"
+                  className="w-full min-h-[80px] rounded-2xl border border-border/40 bg-muted/10 p-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
                 />
               </div>
             </div>

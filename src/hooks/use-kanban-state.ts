@@ -35,7 +35,7 @@ function findContainer(
   return CRM_STATUS_ORDER.find((status) => columnMap[status].includes(id))
 }
 
-export function useKanbanState(initialLeads: Lead[]) {
+export function useKanbanState(initialLeads: Lead[], onMove?: () => void) {
   const [boardState, setBoardState] = React.useState(() =>
     buildBoardState(initialLeads)
   )
@@ -60,7 +60,12 @@ export function useKanbanState(initialLeads: Lead[]) {
     const activeContainer = findContainer(activeId, boardState.columnMap)
     const overContainer = findContainer(overId, boardState.columnMap)
 
-    if (!activeContainer || !overContainer || activeContainer === overContainer)
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeContainer === overContainer ||
+      overContainer === LeadStatus.CONVERTIDO
+    )
       return
 
     setBoardState((curr) => {
@@ -106,6 +111,14 @@ export function useKanbanState(initialLeads: Lead[]) {
       return
     }
 
+    if (overContainer === LeadStatus.CONVERTIDO) {
+      setBoardState(buildBoardState(initialLeads))
+      toast.error(
+        "Para converter o lead, utilize o botão de conversão no menu de detalhes."
+      )
+      return
+    }
+
     if (activeContainer === overContainer) {
       const activeIndex =
         boardState.columnMap[activeContainer].indexOf(activeId)
@@ -138,6 +151,7 @@ export function useKanbanState(initialLeads: Lead[]) {
       toast.error("Erro ao mover lead.")
     } else {
       toast.success("Lead movido.")
+      if (onMove) onMove()
     }
   }
 
