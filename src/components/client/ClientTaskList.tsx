@@ -95,7 +95,8 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
 
         if (task.ctaPath) {
           return (
-            <Link key={task.id} href={task.ctaPath as string}>
+            /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+            <Link key={task.id} href={task.ctaPath as any}>
               {Content}
             </Link>
           )
