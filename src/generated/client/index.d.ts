@@ -9545,6 +9545,7 @@ export namespace Prisma {
     position: string | null
     avatarUrl: string | null
     taxId: string | null
+    stripeCustomerId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9560,6 +9561,7 @@ export namespace Prisma {
     position: string | null
     avatarUrl: string | null
     taxId: string | null
+    stripeCustomerId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -9575,6 +9577,7 @@ export namespace Prisma {
     position: number
     avatarUrl: number
     taxId: number
+    stripeCustomerId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -9591,6 +9594,7 @@ export namespace Prisma {
     position?: true
     avatarUrl?: true
     taxId?: true
+    stripeCustomerId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9606,6 +9610,7 @@ export namespace Prisma {
     position?: true
     avatarUrl?: true
     taxId?: true
+    stripeCustomerId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -9621,6 +9626,7 @@ export namespace Prisma {
     position?: true
     avatarUrl?: true
     taxId?: true
+    stripeCustomerId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -9712,6 +9718,7 @@ export namespace Prisma {
     position: string | null
     avatarUrl: string | null
     taxId: string | null
+    stripeCustomerId: string | null
     createdAt: Date
     updatedAt: Date
     _count: UserCountAggregateOutputType | null
@@ -9745,6 +9752,7 @@ export namespace Prisma {
       position?: boolean
       avatarUrl?: boolean
       taxId?: boolean
+      stripeCustomerId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
       projects?: boolean | User$projectsArgs<ExtArgs>
@@ -9784,6 +9792,7 @@ export namespace Prisma {
       position?: boolean
       avatarUrl?: boolean
       taxId?: boolean
+      stripeCustomerId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
     },
@@ -9804,6 +9813,7 @@ export namespace Prisma {
       position?: boolean
       avatarUrl?: boolean
       taxId?: boolean
+      stripeCustomerId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
     },
@@ -9821,6 +9831,7 @@ export namespace Prisma {
     position?: boolean
     avatarUrl?: boolean
     taxId?: boolean
+    stripeCustomerId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -9838,6 +9849,7 @@ export namespace Prisma {
     | "position"
     | "avatarUrl"
     | "taxId"
+    | "stripeCustomerId"
     | "createdAt"
     | "updatedAt",
     ExtArgs["result"]["user"]
@@ -9906,6 +9918,7 @@ export namespace Prisma {
         position: string | null
         avatarUrl: string | null
         taxId: string | null
+        stripeCustomerId: string | null
         createdAt: Date
         updatedAt: Date
       },
@@ -10683,6 +10696,7 @@ export namespace Prisma {
     readonly position: FieldRef<"User", "String">
     readonly avatarUrl: FieldRef<"User", "String">
     readonly taxId: FieldRef<"User", "String">
+    readonly stripeCustomerId: FieldRef<"User", "String">
     readonly createdAt: FieldRef<"User", "DateTime">
     readonly updatedAt: FieldRef<"User", "DateTime">
   }
@@ -40954,6 +40968,7 @@ export namespace Prisma {
     status: $Enums.ActionStatus | null
     dueDate: Date | null
     targetRole: $Enums.ActionTargetRole | null
+    ctaPath: string | null
     projectId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -40966,6 +40981,7 @@ export namespace Prisma {
     status: $Enums.ActionStatus | null
     dueDate: Date | null
     targetRole: $Enums.ActionTargetRole | null
+    ctaPath: string | null
     projectId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -40978,6 +40994,7 @@ export namespace Prisma {
     status: number
     dueDate: number
     targetRole: number
+    ctaPath: number
     projectId: number
     createdAt: number
     updatedAt: number
@@ -40991,6 +41008,7 @@ export namespace Prisma {
     status?: true
     dueDate?: true
     targetRole?: true
+    ctaPath?: true
     projectId?: true
     createdAt?: true
     updatedAt?: true
@@ -41003,6 +41021,7 @@ export namespace Prisma {
     status?: true
     dueDate?: true
     targetRole?: true
+    ctaPath?: true
     projectId?: true
     createdAt?: true
     updatedAt?: true
@@ -41015,6 +41034,7 @@ export namespace Prisma {
     status?: true
     dueDate?: true
     targetRole?: true
+    ctaPath?: true
     projectId?: true
     createdAt?: true
     updatedAt?: true
@@ -41105,6 +41125,7 @@ export namespace Prisma {
     status: $Enums.ActionStatus
     dueDate: Date | null
     targetRole: $Enums.ActionTargetRole
+    ctaPath: string | null
     projectId: string
     createdAt: Date
     updatedAt: Date
@@ -41136,6 +41157,7 @@ export namespace Prisma {
       status?: boolean
       dueDate?: boolean
       targetRole?: boolean
+      ctaPath?: boolean
       projectId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -41154,6 +41176,7 @@ export namespace Prisma {
       status?: boolean
       dueDate?: boolean
       targetRole?: boolean
+      ctaPath?: boolean
       projectId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -41172,6 +41195,7 @@ export namespace Prisma {
       status?: boolean
       dueDate?: boolean
       targetRole?: boolean
+      ctaPath?: boolean
       projectId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -41187,6 +41211,7 @@ export namespace Prisma {
     status?: boolean
     dueDate?: boolean
     targetRole?: boolean
+    ctaPath?: boolean
     projectId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -41201,6 +41226,7 @@ export namespace Prisma {
     | "status"
     | "dueDate"
     | "targetRole"
+    | "ctaPath"
     | "projectId"
     | "createdAt"
     | "updatedAt",
@@ -41237,6 +41263,7 @@ export namespace Prisma {
         status: $Enums.ActionStatus
         dueDate: Date | null
         targetRole: $Enums.ActionTargetRole
+        ctaPath: string | null
         projectId: string
         createdAt: Date
         updatedAt: Date
@@ -41850,6 +41877,7 @@ export namespace Prisma {
     readonly status: FieldRef<"ActionItem", "ActionStatus">
     readonly dueDate: FieldRef<"ActionItem", "DateTime">
     readonly targetRole: FieldRef<"ActionItem", "ActionTargetRole">
+    readonly ctaPath: FieldRef<"ActionItem", "String">
     readonly projectId: FieldRef<"ActionItem", "String">
     readonly createdAt: FieldRef<"ActionItem", "DateTime">
     readonly updatedAt: FieldRef<"ActionItem", "DateTime">
@@ -56918,6 +56946,8 @@ export namespace Prisma {
     paidAt: Date | null
     proofUrl: string | null
     proofKey: string | null
+    stripeCheckoutSessionId: string | null
+    stripePaymentIntentId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -56932,6 +56962,8 @@ export namespace Prisma {
     paidAt: Date | null
     proofUrl: string | null
     proofKey: string | null
+    stripeCheckoutSessionId: string | null
+    stripePaymentIntentId: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -56946,6 +56978,8 @@ export namespace Prisma {
     paidAt: number
     proofUrl: number
     proofKey: number
+    stripeCheckoutSessionId: number
+    stripePaymentIntentId: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -56971,6 +57005,8 @@ export namespace Prisma {
     paidAt?: true
     proofUrl?: true
     proofKey?: true
+    stripeCheckoutSessionId?: true
+    stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -56985,6 +57021,8 @@ export namespace Prisma {
     paidAt?: true
     proofUrl?: true
     proofKey?: true
+    stripeCheckoutSessionId?: true
+    stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -56999,6 +57037,8 @@ export namespace Prisma {
     paidAt?: true
     proofUrl?: true
     proofKey?: true
+    stripeCheckoutSessionId?: true
+    stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -57106,6 +57146,8 @@ export namespace Prisma {
     paidAt: Date | null
     proofUrl: string | null
     proofKey: string | null
+    stripeCheckoutSessionId: string | null
+    stripePaymentIntentId: string | null
     createdAt: Date
     updatedAt: Date
     _count: InstallmentCountAggregateOutputType | null
@@ -57142,6 +57184,8 @@ export namespace Prisma {
       paidAt?: boolean
       proofUrl?: boolean
       proofKey?: boolean
+      stripeCheckoutSessionId?: boolean
+      stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
       invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
@@ -57164,6 +57208,8 @@ export namespace Prisma {
       paidAt?: boolean
       proofUrl?: boolean
       proofKey?: boolean
+      stripeCheckoutSessionId?: boolean
+      stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
       invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
@@ -57184,6 +57230,8 @@ export namespace Prisma {
       paidAt?: boolean
       proofUrl?: boolean
       proofKey?: boolean
+      stripeCheckoutSessionId?: boolean
+      stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
       invoice?: boolean | InvoiceDefaultArgs<ExtArgs>
@@ -57201,6 +57249,8 @@ export namespace Prisma {
     paidAt?: boolean
     proofUrl?: boolean
     proofKey?: boolean
+    stripeCheckoutSessionId?: boolean
+    stripePaymentIntentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
@@ -57217,6 +57267,8 @@ export namespace Prisma {
     | "paidAt"
     | "proofUrl"
     | "proofKey"
+    | "stripeCheckoutSessionId"
+    | "stripePaymentIntentId"
     | "createdAt"
     | "updatedAt",
     ExtArgs["result"]["installment"]
@@ -57258,6 +57310,8 @@ export namespace Prisma {
         paidAt: Date | null
         proofUrl: string | null
         proofKey: string | null
+        stripeCheckoutSessionId: string | null
+        stripePaymentIntentId: string | null
         createdAt: Date
         updatedAt: Date
       },
@@ -57884,6 +57938,8 @@ export namespace Prisma {
     readonly paidAt: FieldRef<"Installment", "DateTime">
     readonly proofUrl: FieldRef<"Installment", "String">
     readonly proofKey: FieldRef<"Installment", "String">
+    readonly stripeCheckoutSessionId: FieldRef<"Installment", "String">
+    readonly stripePaymentIntentId: FieldRef<"Installment", "String">
     readonly createdAt: FieldRef<"Installment", "DateTime">
     readonly updatedAt: FieldRef<"Installment", "DateTime">
   }
@@ -61310,6 +61366,7 @@ export namespace Prisma {
     position: "position"
     avatarUrl: "avatarUrl"
     taxId: "taxId"
+    stripeCustomerId: "stripeCustomerId"
     createdAt: "createdAt"
     updatedAt: "updatedAt"
   }
@@ -61643,6 +61700,7 @@ export namespace Prisma {
     status: "status"
     dueDate: "dueDate"
     targetRole: "targetRole"
+    ctaPath: "ctaPath"
     projectId: "projectId"
     createdAt: "createdAt"
     updatedAt: "updatedAt"
@@ -61835,6 +61893,8 @@ export namespace Prisma {
     paidAt: "paidAt"
     proofUrl: "proofUrl"
     proofKey: "proofKey"
+    stripeCheckoutSessionId: "stripeCheckoutSessionId"
+    stripePaymentIntentId: "stripePaymentIntentId"
     createdAt: "createdAt"
     updatedAt: "updatedAt"
   }
@@ -62659,6 +62719,7 @@ export namespace Prisma {
     position?: StringNullableFilter<"User"> | string | null
     avatarUrl?: StringNullableFilter<"User"> | string | null
     taxId?: StringNullableFilter<"User"> | string | null
+    stripeCustomerId?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
     projects?: ProjectListRelationFilter
@@ -62693,6 +62754,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     taxId?: SortOrderInput | SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     projects?: ProjectOrderByRelationAggregateInput
@@ -62718,6 +62780,7 @@ export namespace Prisma {
       id?: string
       clerkId?: string
       email?: string
+      stripeCustomerId?: string
       AND?: UserWhereInput | UserWhereInput[]
       OR?: UserWhereInput[]
       NOT?: UserWhereInput | UserWhereInput[]
@@ -62750,7 +62813,7 @@ export namespace Prisma {
       > | null
       emailLogs?: EmailLogListRelationFilter
     },
-    "id" | "clerkId" | "email"
+    "id" | "clerkId" | "email" | "stripeCustomerId"
   >
 
   export type UserOrderByWithAggregationInput = {
@@ -62764,6 +62827,7 @@ export namespace Prisma {
     position?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
     taxId?: SortOrderInput | SortOrder
+    stripeCustomerId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: UserCountOrderByAggregateInput
@@ -62789,6 +62853,10 @@ export namespace Prisma {
     position?: StringNullableWithAggregatesFilter<"User"> | string | null
     avatarUrl?: StringNullableWithAggregatesFilter<"User"> | string | null
     taxId?: StringNullableWithAggregatesFilter<"User"> | string | null
+    stripeCustomerId?:
+      | StringNullableWithAggregatesFilter<"User">
+      | string
+      | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
   }
@@ -64847,6 +64915,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFilter<"ActionItem">
       | $Enums.ActionTargetRole
+    ctaPath?: StringNullableFilter<"ActionItem"> | string | null
     projectId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -64860,6 +64929,7 @@ export namespace Prisma {
     status?: SortOrder
     dueDate?: SortOrderInput | SortOrder
     targetRole?: SortOrder
+    ctaPath?: SortOrderInput | SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -64879,6 +64949,7 @@ export namespace Prisma {
       targetRole?:
         | EnumActionTargetRoleFilter<"ActionItem">
         | $Enums.ActionTargetRole
+      ctaPath?: StringNullableFilter<"ActionItem"> | string | null
       projectId?: StringFilter<"ActionItem"> | string
       createdAt?: DateTimeFilter<"ActionItem"> | Date | string
       updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -64894,6 +64965,7 @@ export namespace Prisma {
     status?: SortOrder
     dueDate?: SortOrderInput | SortOrder
     targetRole?: SortOrder
+    ctaPath?: SortOrderInput | SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -64927,6 +64999,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleWithAggregatesFilter<"ActionItem">
       | $Enums.ActionTargetRole
+    ctaPath?: StringNullableWithAggregatesFilter<"ActionItem"> | string | null
     projectId?: StringWithAggregatesFilter<"ActionItem"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ActionItem"> | Date | string
@@ -66072,6 +66145,11 @@ export namespace Prisma {
     paidAt?: DateTimeNullableFilter<"Installment"> | Date | string | null
     proofUrl?: StringNullableFilter<"Installment"> | string | null
     proofKey?: StringNullableFilter<"Installment"> | string | null
+    stripeCheckoutSessionId?:
+      | StringNullableFilter<"Installment">
+      | string
+      | null
+    stripePaymentIntentId?: StringNullableFilter<"Installment"> | string | null
     createdAt?: DateTimeFilter<"Installment"> | Date | string
     updatedAt?: DateTimeFilter<"Installment"> | Date | string
     invoice?: XOR<InvoiceScalarRelationFilter, InvoiceWhereInput>
@@ -66088,6 +66166,8 @@ export namespace Prisma {
     paidAt?: SortOrderInput | SortOrder
     proofUrl?: SortOrderInput | SortOrder
     proofKey?: SortOrderInput | SortOrder
+    stripeCheckoutSessionId?: SortOrderInput | SortOrder
+    stripePaymentIntentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     invoice?: InvoiceOrderByWithRelationInput
@@ -66097,6 +66177,8 @@ export namespace Prisma {
   export type InstallmentWhereUniqueInput = Prisma.AtLeast<
     {
       id?: string
+      stripeCheckoutSessionId?: string
+      stripePaymentIntentId?: string
       AND?: InstallmentWhereInput | InstallmentWhereInput[]
       OR?: InstallmentWhereInput[]
       NOT?: InstallmentWhereInput | InstallmentWhereInput[]
@@ -66115,7 +66197,7 @@ export namespace Prisma {
       invoice?: XOR<InvoiceScalarRelationFilter, InvoiceWhereInput>
       paymentEvents?: PaymentEventListRelationFilter
     },
-    "id"
+    "id" | "stripeCheckoutSessionId" | "stripePaymentIntentId"
   >
 
   export type InstallmentOrderByWithAggregationInput = {
@@ -66128,6 +66210,8 @@ export namespace Prisma {
     paidAt?: SortOrderInput | SortOrder
     proofUrl?: SortOrderInput | SortOrder
     proofKey?: SortOrderInput | SortOrder
+    stripeCheckoutSessionId?: SortOrderInput | SortOrder
+    stripePaymentIntentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: InstallmentCountOrderByAggregateInput
@@ -66160,6 +66244,14 @@ export namespace Prisma {
       | null
     proofUrl?: StringNullableWithAggregatesFilter<"Installment"> | string | null
     proofKey?: StringNullableWithAggregatesFilter<"Installment"> | string | null
+    stripeCheckoutSessionId?:
+      | StringNullableWithAggregatesFilter<"Installment">
+      | string
+      | null
+    stripePaymentIntentId?:
+      | StringNullableWithAggregatesFilter<"Installment">
+      | string
+      | null
     createdAt?: DateTimeWithAggregatesFilter<"Installment"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Installment"> | Date | string
   }
@@ -66646,6 +66738,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -66677,6 +66770,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -66708,6 +66802,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -66739,6 +66834,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -66770,6 +66866,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -66785,6 +66882,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -66800,6 +66898,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68850,6 +68949,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     project: ProjectCreateNestedOneWithoutActionItemsInput
@@ -68862,6 +68962,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     projectId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -68876,6 +68977,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     project?: ProjectUpdateOneRequiredWithoutActionItemsNestedInput
@@ -68890,6 +68992,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -68902,6 +69005,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     projectId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -68916,6 +69020,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -68929,6 +69034,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     projectId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -70049,6 +70155,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoice: InvoiceCreateNestedOneWithoutInstallmentsInput
@@ -70065,6 +70173,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentEvents?: PaymentEventUncheckedCreateNestedManyWithoutInstallmentInput
@@ -70081,6 +70191,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice?: InvoiceUpdateOneRequiredWithoutInstallmentsNestedInput
@@ -70099,6 +70217,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentEvents?: PaymentEventUncheckedUpdateManyWithoutInstallmentNestedInput
@@ -70114,6 +70240,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -70129,6 +70257,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -70145,6 +70281,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -70959,6 +71103,7 @@ export namespace Prisma {
     position?: SortOrder
     avatarUrl?: SortOrder
     taxId?: SortOrder
+    stripeCustomerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -70974,6 +71119,7 @@ export namespace Prisma {
     position?: SortOrder
     avatarUrl?: SortOrder
     taxId?: SortOrder
+    stripeCustomerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -70989,6 +71135,7 @@ export namespace Prisma {
     position?: SortOrder
     avatarUrl?: SortOrder
     taxId?: SortOrder
+    stripeCustomerId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -72446,6 +72593,7 @@ export namespace Prisma {
     status?: SortOrder
     dueDate?: SortOrder
     targetRole?: SortOrder
+    ctaPath?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -72458,6 +72606,7 @@ export namespace Prisma {
     status?: SortOrder
     dueDate?: SortOrder
     targetRole?: SortOrder
+    ctaPath?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -72470,6 +72619,7 @@ export namespace Prisma {
     status?: SortOrder
     dueDate?: SortOrder
     targetRole?: SortOrder
+    ctaPath?: SortOrder
     projectId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -73308,6 +73458,8 @@ export namespace Prisma {
     paidAt?: SortOrder
     proofUrl?: SortOrder
     proofKey?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
+    stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -73327,6 +73479,8 @@ export namespace Prisma {
     paidAt?: SortOrder
     proofUrl?: SortOrder
     proofKey?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
+    stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -73341,6 +73495,8 @@ export namespace Prisma {
     paidAt?: SortOrder
     proofUrl?: SortOrder
     proofKey?: SortOrder
+    stripeCheckoutSessionId?: SortOrder
+    stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -81501,6 +81657,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -81531,6 +81688,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -81757,6 +81915,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -81787,6 +81946,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -82005,6 +82165,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -82035,6 +82196,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -82191,6 +82353,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -82221,6 +82384,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -82307,6 +82471,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -82337,6 +82502,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -82493,6 +82659,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -82523,6 +82690,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -82586,6 +82754,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMemberships?: ProjectMemberCreateNestedManyWithoutUserInput
@@ -82616,6 +82785,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projectMemberships?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
@@ -82765,6 +82935,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -82776,6 +82947,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -83281,6 +83453,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMemberships?: ProjectMemberUpdateManyWithoutUserNestedInput
@@ -83311,6 +83484,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projectMemberships?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
@@ -83489,6 +83663,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFilter<"ActionItem">
       | $Enums.ActionTargetRole
+    ctaPath?: StringNullableFilter<"ActionItem"> | string | null
     projectId?: StringFilter<"ActionItem"> | string
     createdAt?: DateTimeFilter<"ActionItem"> | Date | string
     updatedAt?: DateTimeFilter<"ActionItem"> | Date | string
@@ -83928,6 +84103,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -83958,6 +84134,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -84342,6 +84519,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -84372,6 +84550,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -84687,6 +84866,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -84717,6 +84897,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -84847,6 +85028,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -84877,6 +85059,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -85909,6 +86092,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -85939,6 +86123,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -86009,6 +86194,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -86039,6 +86225,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -86097,6 +86284,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -86127,6 +86315,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -86221,6 +86410,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -86251,6 +86441,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -86387,6 +86578,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -86417,6 +86609,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -86609,6 +86802,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -86639,6 +86833,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -86907,6 +87102,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -86937,6 +87133,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -87085,6 +87282,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -87115,6 +87313,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -87595,6 +87794,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -87625,6 +87825,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -87747,6 +87948,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -87777,6 +87979,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -88299,6 +88502,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -88329,6 +88533,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -88461,6 +88666,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -88491,6 +88697,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -88611,6 +88818,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -88641,6 +88849,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -88699,6 +88908,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -88729,6 +88939,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -88759,6 +88970,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -88789,6 +89001,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -88921,6 +89134,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -88951,6 +89165,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -89754,6 +89969,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -89784,6 +90000,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -89842,6 +90059,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -89872,6 +90090,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -90072,6 +90291,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentEvents?: PaymentEventCreateNestedManyWithoutInstallmentInput
@@ -90086,6 +90307,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     paymentEvents?: PaymentEventUncheckedCreateNestedManyWithoutInstallmentInput
@@ -90389,6 +90612,11 @@ export namespace Prisma {
     paidAt?: DateTimeNullableFilter<"Installment"> | Date | string | null
     proofUrl?: StringNullableFilter<"Installment"> | string | null
     proofKey?: StringNullableFilter<"Installment"> | string | null
+    stripeCheckoutSessionId?:
+      | StringNullableFilter<"Installment">
+      | string
+      | null
+    stripePaymentIntentId?: StringNullableFilter<"Installment"> | string | null
     createdAt?: DateTimeFilter<"Installment"> | Date | string
     updatedAt?: DateTimeFilter<"Installment"> | Date | string
   }
@@ -90577,6 +90805,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     invoice: InvoiceCreateNestedOneWithoutInstallmentsInput
@@ -90592,6 +90822,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -90635,6 +90867,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     invoice?: InvoiceUpdateOneRequiredWithoutInstallmentsNestedInput
@@ -90652,6 +90892,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -90667,6 +90915,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectCreateNestedManyWithoutClientInput
@@ -90697,6 +90946,7 @@ export namespace Prisma {
     position?: string | null
     avatarUrl?: string | null
     taxId?: string | null
+    stripeCustomerId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
     projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
@@ -90755,6 +91005,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUpdateManyWithoutClientNestedInput
@@ -90785,6 +91036,7 @@ export namespace Prisma {
     position?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
     taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
@@ -92088,6 +92340,7 @@ export namespace Prisma {
     status?: $Enums.ActionStatus
     dueDate?: Date | string | null
     targetRole?: $Enums.ActionTargetRole
+    ctaPath?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -92377,6 +92630,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -92390,6 +92644,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -92403,6 +92658,7 @@ export namespace Prisma {
     targetRole?:
       | EnumActionTargetRoleFieldUpdateOperationsInput
       | $Enums.ActionTargetRole
+    ctaPath?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -93326,6 +93582,8 @@ export namespace Prisma {
     paidAt?: Date | string | null
     proofUrl?: string | null
     proofKey?: string | null
+    stripeCheckoutSessionId?: string | null
+    stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93341,6 +93599,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentEvents?: PaymentEventUpdateManyWithoutInstallmentNestedInput
@@ -93357,6 +93623,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     paymentEvents?: PaymentEventUncheckedUpdateManyWithoutInstallmentNestedInput
@@ -93373,6 +93647,14 @@ export namespace Prisma {
     paidAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     proofUrl?: NullableStringFieldUpdateOperationsInput | string | null
     proofKey?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCheckoutSessionId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    stripePaymentIntentId?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -167,6 +167,7 @@ exports.Prisma.UserScalarFieldEnum = {
   position: 'position',
   avatarUrl: 'avatarUrl',
   taxId: 'taxId',
+  stripeCustomerId: 'stripeCustomerId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -437,6 +438,7 @@ exports.Prisma.ActionItemScalarFieldEnum = {
   status: 'status',
   dueDate: 'dueDate',
   targetRole: 'targetRole',
+  ctaPath: 'ctaPath',
   projectId: 'projectId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -596,6 +598,8 @@ exports.Prisma.InstallmentScalarFieldEnum = {
   paidAt: 'paidAt',
   proofUrl: 'proofUrl',
   proofKey: 'proofKey',
+  stripeCheckoutSessionId: 'stripeCheckoutSessionId',
+  stripePaymentIntentId: 'stripePaymentIntentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
