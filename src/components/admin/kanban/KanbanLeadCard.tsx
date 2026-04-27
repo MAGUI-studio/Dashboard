@@ -3,24 +3,33 @@
 import * as React from "react"
 
 import { useTranslations } from "next-intl"
+import { useRouter } from "next/navigation"
 
+import { LeadStatus } from "@/src/generated/client/enums"
 import { Lead, MessageTemplate } from "@/src/types/crm"
-import { useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
-import { InstagramLogo, NotePencil, Phone } from "@phosphor-icons/react"
-import { motion } from "framer-motion"
+import {
+  CaretLeft,
+  CaretRight,
+  InstagramLogo,
+  NotePencil,
+  Phone,
+} from "@phosphor-icons/react"
+import { toast } from "sonner"
 
 import { Button } from "@/src/components/ui/button"
 
 import { LeadDetailsDrawer } from "@/src/components/admin/LeadDetailsDrawer"
 
-import { getLeadDaysWithoutMovement, isLeadStagnant } from "@/src/lib/utils/crm"
+import { updateLeadStatus } from "@/src/lib/actions/crm.actions"
+import {
+  CRM_STATUS_ORDER,
+  getLeadDaysWithoutMovement,
+  isLeadStagnant,
+} from "@/src/lib/utils/crm"
 
 interface KanbanLeadCardProps {
   lead: Lead
   density?: "comfortable" | "compact"
-  dragDisabled?: boolean
-  dragging?: boolean
   isOpen?: boolean
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
@@ -32,8 +41,6 @@ interface KanbanLeadCardProps {
 export function KanbanLeadCard({
   lead,
   density = "comfortable",
-  dragDisabled = false,
-  dragging: _dragging = false,
   isOpen = false,
   clients,
   templates,
@@ -42,42 +49,82 @@ export function KanbanLeadCard({
   onLeadDeleted,
 }: KanbanLeadCardProps) {
   const t = useTranslations("Admin.crm")
+  const router = useRouter()
   const stagnant = isLeadStagnant(lead)
+  const [isMoving, setIsMoving] = React.useState(false)
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    transition,
-    isDragging,
-  } = useSortable({
-    id: lead.id,
-    disabled: dragDisabled,
-  })
+  // Status excluding CONVERTIDO for manual movement restriction
+  const availableStatus = CRM_STATUS_ORDER.filter(
+    (s) => s !== LeadStatus.CONVERTIDO
+  )
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const currentIndex = availableStatus.indexOf(lead.status as any)
 
-  const style: React.CSSProperties = {
-    transform: CSS.Transform.toString(transform),
-    transition,
+  const canMovePrev = currentIndex > 0
+  const canMoveNext = currentIndex < availableStatus.length - 1
+
+  const handleMove = async (direction: "next" | "prev") => {
+    if (isMoving) return
+    setIsMoving(true)
+
+    const nextIndex = direction === "next" ? currentIndex + 1 : currentIndex - 1
+    const nextStatus = availableStatus[nextIndex]
+
+    if (!nextStatus) {
+      setIsMoving(false)
+      return
+    }
+
+    const result = await updateLeadStatus(lead.id, nextStatus)
+
+    if (result.success) {
+      toast.success(`Lead movido para ${t(`status.${nextStatus}`)}`)
+      router.refresh()
+    } else {
+      toast.error(result.error || "Erro ao mover lead")
+    }
+
+    setIsMoving(false)
   }
 
   return (
-    <motion.article
-      ref={setNodeRef}
-      layout
-      style={style}
-      {...attributes}
-      {...(listeners ?? {})}
-      className={`group rounded-[1.5rem] border bg-background/95 p-4 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.45)] transition-all ${
+    <article
+      className={`group relative rounded-[1.5rem] border bg-background/95 p-4 shadow-[0_24px_60px_-42px_rgba(15,23,42,0.45)] transition-all ${
         stagnant
           ? "border-amber-500/25"
           : "border-border/50 hover:border-border/70"
-      } ${isDragging || _dragging ? "cursor-grabbing opacity-90 shadow-[0_32px_80px_-38px_rgba(15,23,42,0.55)]" : "cursor-grab"}`}
+      }`}
     >
       <div className="min-w-0 space-y-2">
-        <p className="truncate text-base font-black tracking-tight text-foreground">
-          {lead.companyName}
-        </p>
+        <div className="flex items-start justify-between gap-2">
+          <p className="truncate text-base font-black tracking-tight text-foreground">
+            {lead.companyName}
+          </p>
+          <div className="flex shrink-0 items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+            {canMovePrev && (
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isMoving}
+                onClick={() => handleMove("prev")}
+                className="size-7 rounded-full bg-muted/20 hover:bg-muted/40"
+              >
+                <CaretLeft weight="bold" className="size-3" />
+              </Button>
+            )}
+            {canMoveNext && (
+              <Button
+                variant="ghost"
+                size="icon"
+                disabled={isMoving}
+                onClick={() => handleMove("next")}
+                className="size-7 rounded-full bg-muted/20 hover:bg-muted/40"
+              >
+                <CaretRight weight="bold" className="size-3" />
+              </Button>
+            )}
+          </div>
+        </div>
         {lead.contactName && (
           <p className="truncate text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/55">
             {lead.contactName}
@@ -140,12 +187,11 @@ export function KanbanLeadCard({
           <Button
             variant="outline"
             className="rounded-full px-4 text-[10px] font-black uppercase tracking-[0.2em]"
-            onPointerDown={(e) => e.stopPropagation()}
           >
             Abrir
           </Button>
         </LeadDetailsDrawer>
       </div>
-    </motion.article>
+    </article>
   )
 }

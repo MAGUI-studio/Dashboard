@@ -6,9 +6,6 @@ import { useTranslations } from "next-intl"
 
 import { LeadStatus } from "@/src/generated/client/enums"
 import { Lead, MessageTemplate } from "@/src/types/crm"
-import { useDroppable } from "@dnd-kit/core"
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable"
-import { motion } from "framer-motion"
 
 import { LEAD_STATUS_STYLES } from "@/src/lib/utils/crm"
 
@@ -18,7 +15,6 @@ interface KanbanColumnProps {
   status: LeadStatus
   leadIds: string[]
   leadMap: Record<string, Lead>
-  dragDisabled: boolean
   density: "comfortable" | "compact"
   onDrawerOpenChange: (leadId: string, open: boolean) => void
   selectedLeadId: string | null
@@ -32,7 +28,6 @@ export function KanbanColumn({
   status,
   leadIds,
   leadMap,
-  dragDisabled,
   density,
   onDrawerOpenChange,
   selectedLeadId,
@@ -42,14 +37,11 @@ export function KanbanColumn({
   onLeadDeleted,
 }: KanbanColumnProps) {
   const t = useTranslations("Admin.crm")
-  const { setNodeRef, isOver } = useDroppable({ id: status })
   const leads = leadIds.map((id) => leadMap[id]).filter(Boolean)
 
   return (
-    <motion.section
-      ref={setNodeRef}
-      layout
-      className={`flex min-h-[32rem] flex-col rounded-[1.9rem] border p-4 ${LEAD_STATUS_STYLES[status].column} ${isOver ? "ring-2 ring-brand-primary/20" : ""}`}
+    <section
+      className={`flex min-h-[32rem] flex-col rounded-[1.9rem] border p-4 ${LEAD_STATUS_STYLES[status].column}`}
     >
       <div className="rounded-[1.4rem] border border-border/35 bg-background/80 px-4 py-4">
         <p
@@ -57,31 +49,31 @@ export function KanbanColumn({
         >
           {t(`status.${status}`)}
         </p>
-        <p className="text-2xl font-black tracking-tight">{leads.length}</p>
+        <p className="text-2xl font-black tracking-tight text-foreground">
+          {leads.length}
+        </p>
       </div>
-      <SortableContext items={leadIds} strategy={verticalListSortingStrategy}>
-        <div className="mt-4 grid flex-1 content-start gap-3">
-          {leads.map((lead) => (
-            <KanbanLeadCard
-              key={lead.id}
-              lead={lead}
-              dragDisabled={dragDisabled}
-              density={density}
-              onDrawerOpenChange={onDrawerOpenChange}
-              isOpen={selectedLeadId === lead.id}
-              clients={clients}
-              templates={templates}
-              onLeadUpdated={onLeadUpdated}
-              onLeadDeleted={onLeadDeleted}
-            />
-          ))}
-          {leads.length === 0 && (
-            <div className="grid min-h-40 place-items-center rounded-[1.4rem] border border-dashed border-border/40 bg-background/50 px-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
-              Arraste um lead para ca
-            </div>
-          )}
-        </div>
-      </SortableContext>
-    </motion.section>
+
+      <div className="mt-4 grid flex-1 content-start gap-3">
+        {leads.map((lead) => (
+          <KanbanLeadCard
+            key={lead.id}
+            lead={lead}
+            density={density}
+            onDrawerOpenChange={onDrawerOpenChange}
+            isOpen={selectedLeadId === lead.id}
+            clients={clients}
+            templates={templates}
+            onLeadUpdated={onLeadUpdated}
+            onLeadDeleted={onLeadDeleted}
+          />
+        ))}
+        {leads.length === 0 && (
+          <div className="grid min-h-40 place-items-center rounded-[1.4rem] border border-dashed border-border/40 bg-background/50 px-4 text-center text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
+            Nenhum lead nesta etapa
+          </div>
+        )}
+      </div>
+    </section>
   )
 }

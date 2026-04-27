@@ -7,21 +7,10 @@ import { useRouter } from "next/navigation"
 import { LeadStatus } from "@/src/generated/client/enums"
 import { usePathname } from "@/src/i18n/navigation"
 import { Lead, MessageTemplate } from "@/src/types/crm"
-import {
-  DndContext,
-  DragOverlay,
-  PointerSensor,
-  closestCorners,
-  useSensor,
-  useSensors,
-} from "@dnd-kit/core"
 
 import { CRM_STATUS_ORDER } from "@/src/lib/utils/crm"
 
-import { useKanbanState } from "@/src/hooks/use-kanban-state"
-
 import { KanbanColumn } from "./kanban/KanbanColumn"
-import { KanbanLeadCard } from "./kanban/KanbanLeadCard"
 
 export function KanbanBoard({
   leads,
@@ -34,91 +23,72 @@ export function KanbanBoard({
   clients: Array<{ id: string; name: string | null; email: string }>
   templates: MessageTemplate[]
 }) {
-  const [hasOpenDrawer, setHasOpenDrawer] = React.useState(false)
+  const router = useRouter()
+  const pathname = usePathname()
   const [selectedLeadId, setSelectedLeadId] = React.useState<string | null>(
     initialLeadId
   )
 
-  const router = useRouter()
-  const pathname = usePathname()
-  const {
-    boardState,
-    setBoardState,
-    activeLeadId,
-    handleDragStart,
-    handleDragOver,
-    handleDragEnd,
-  } = useKanbanState(leads, () => router.refresh())
+  // Local state for basic filtering/mapping without DnD complexity
+  const [boardLeads, setBoardLeads] = React.useState(leads)
 
-  const sensors = useSensors(
-    useSensor(PointerSensor, { activationConstraint: { distance: 4 } })
-  )
+  React.useEffect(() => {
+    setBoardLeads(leads)
+  }, [leads])
+
+  const columnMap = React.useMemo(() => {
+    return CRM_STATUS_ORDER.reduce(
+      (acc, status) => {
+        acc[status] = boardLeads
+          .filter((l) => l.status === status)
+          .map((l) => l.id)
+        return acc
+      },
+      {} as Record<LeadStatus, string[]>
+    )
+  }, [boardLeads])
+
+  const leadMap = React.useMemo(() => {
+    return boardLeads.reduce(
+      (acc, l) => {
+        acc[l.id] = l
+        return acc
+      },
+      {} as Record<string, Lead>
+    )
+  }, [boardLeads])
 
   return (
     <div className="grid gap-6">
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={handleDragStart}
-        onDragOver={handleDragOver}
-        onDragEnd={handleDragEnd}
-      >
-        <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
-          {CRM_STATUS_ORDER.filter((s) => s !== LeadStatus.CONVERTIDO).map(
-            (status) => (
-              <KanbanColumn
-                key={status}
-                status={status}
-                leadIds={boardState.columnMap[status]}
-                leadMap={boardState.leadMap}
-                dragDisabled={hasOpenDrawer}
-                density="comfortable"
-                selectedLeadId={selectedLeadId}
-                clients={clients}
-                templates={templates}
-                onDrawerOpenChange={(id, open) => {
-                  setSelectedLeadId(open ? id : null)
-                  setHasOpenDrawer(open)
-                  if (!open && initialLeadId)
-                    router.replace(pathname, { scroll: false })
-                }}
-                onLeadUpdated={(next) =>
-                  setBoardState((curr) => ({
-                    ...curr,
-                    leadMap: { ...curr.leadMap, [next.id]: next },
-                  }))
-                }
-                onLeadDeleted={(id) =>
-                  setBoardState((curr) => ({
-                    leadMap: Object.fromEntries(
-                      Object.entries(curr.leadMap).filter(([k]) => k !== id)
-                    ),
-                    columnMap: Object.fromEntries(
-                      Object.entries(curr.columnMap).map(([k, v]) => [
-                        k,
-                        v.filter((lid) => lid !== id),
-                      ])
-                    ) as Record<LeadStatus, string[]>,
-                  }))
-                }
-              />
-            )
-          )}
-        </div>
-        <DragOverlay>
-          {activeLeadId ? (
-            <KanbanLeadCard
-              lead={boardState.leadMap[activeLeadId]}
-              dragging
+      <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-3">
+        {CRM_STATUS_ORDER.filter((s) => s !== LeadStatus.CONVERTIDO).map(
+          (status) => (
+            <KanbanColumn
+              key={status}
+              status={status}
+              leadIds={columnMap[status]}
+              leadMap={leadMap}
+              density="comfortable"
+              selectedLeadId={selectedLeadId}
               clients={clients}
               templates={templates}
-              onDrawerOpenChange={() => {}}
-              onLeadUpdated={() => {}}
-              onLeadDeleted={() => {}}
+              onDrawerOpenChange={(id, open) => {
+                setSelectedLeadId(open ? id : null)
+                if (!open && initialLeadId)
+                  router.replace(pathname, { scroll: false })
+              }}
+              onLeadUpdated={(next) =>
+                setBoardLeads((curr) =>
+                  curr.map((l) => (l.id === next.id ? next : l))
+                )
+              }
+              onLeadDeleted={(id) =>
+                setBoardLeads((curr) => curr.filter((l) => l.id !== id))
+              }
             />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+          )
+        )}
+      </div>
     </div>
   )
 }
