@@ -8,6 +8,7 @@ import {
   LeadActivityType,
   LeadSource,
   LeadStatus,
+  PaymentMethod,
   ProjectCategory,
   ProjectStatus,
 } from "@/src/generated/client"
