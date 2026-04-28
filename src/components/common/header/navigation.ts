@@ -10,8 +10,6 @@ type HeaderStaticPath =
   | "/admin/projects/register"
   | "/admin/service-categories"
   | "/admin/service-categories/new"
-  | "/admin/documents"
-  | "/admin/documents/new"
   | "/projects"
 
 export type HeaderNavLeaf = {
@@ -24,7 +22,6 @@ export type HeaderNavLeaf = {
     | "projects"
     | "clients"
     | "crm"
-    | "documents"
     | "tag"
   label: string
   matchPrefix?: HeaderStaticPath
@@ -32,7 +29,7 @@ export type HeaderNavLeaf = {
 }
 
 export type HeaderNavGroup = {
-  icon: "crm" | "projects" | "clients" | "documents"
+  icon: "crm" | "projects" | "clients"
   label: string
   items: HeaderNavLeaf[]
 }
@@ -123,24 +120,6 @@ export function getAdminHeaderNav(t: (key: string) => string): {
             href: "/admin/clients/register",
             icon: "plus",
             label: t("clients.create"),
-            exact: true,
-          },
-        ],
-      },
-      {
-        icon: "documents",
-        label: t("documents.title"),
-        items: [
-          {
-            href: "/admin/documents",
-            icon: "list",
-            label: t("documents.list"),
-            matchPrefix: "/admin/documents",
-          },
-          {
-            href: "/admin/documents/new",
-            icon: "plus",
-            label: t("documents.create"),
             exact: true,
           },
         ],

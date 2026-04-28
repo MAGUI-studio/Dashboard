@@ -10,6 +10,7 @@ import {
   ChatCircleDots,
   Clock,
   CurrencyCircleDollar,
+  Files,
   Info,
   NoteBlank,
   Sliders,
@@ -24,6 +25,7 @@ import {
   TabsTrigger,
 } from "@/src/components/ui/tabs"
 
+import { ProjectAssetsTab } from "@/src/components/admin/ProjectAssetsTab"
 import { ProjectBriefingTab } from "@/src/components/admin/ProjectBriefingTab"
 import { ProjectEngineeringTab } from "@/src/components/admin/ProjectEngineeringTab"
 import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
@@ -131,6 +133,13 @@ export function ProjectTabs({
             {t("tabs.briefing", { fallback: "Briefing" })}
           </TabsTrigger>
           <TabsTrigger
+            value="assets"
+            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+          >
+            <Files weight="duotone" className="mr-2 size-4" />
+            {t("tabs.assets")}
+          </TabsTrigger>
+          <TabsTrigger
             value="settings"
             className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
           >
@@ -177,6 +186,10 @@ export function ProjectTabs({
 
       <TabsContent value="briefing" className="mt-0 focus-visible:outline-none">
         <ProjectBriefingTab projectId={projectId} briefing={project.briefing} />
+      </TabsContent>
+
+      <TabsContent value="assets" className="mt-0 focus-visible:outline-none">
+        <ProjectAssetsTab projectId={projectId} assets={project.assets} />
       </TabsContent>
 
       <TabsContent value="settings" className="mt-0 focus-visible:outline-none">

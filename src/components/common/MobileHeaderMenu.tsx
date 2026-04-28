@@ -71,8 +71,6 @@ function NavIcon({
       return <ChartLineUp weight="duotone" className={className} />
     case "clients":
       return <Users weight="duotone" className={className} />
-    case "documents":
-      return <Files weight="duotone" className={className} />
     case "projects":
       return <ProjectorScreen weight="duotone" className={className} />
     case "tag":

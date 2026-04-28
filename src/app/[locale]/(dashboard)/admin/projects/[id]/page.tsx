@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { notFound, redirect } from "next/navigation"
 
-import { DashboardAuditLog, DashboardProject } from "@/src/types/dashboard"
+import { DashboardProject } from "@/src/types/dashboard"
 
 import { ProjectDetailsHeader } from "@/src/components/admin/ProjectDetailsHeader"
 import { ProjectTabs } from "@/src/components/admin/ProjectTabs"
@@ -16,6 +16,7 @@ import { getProjectInvoices } from "@/src/lib/financial-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import {
+  getAdminProjectAssets,
   getAdminProjectOverview,
   getAdminProjectTimeline,
 } from "@/src/lib/project-data"
@@ -30,9 +31,10 @@ function toDashboardProject(input: {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   project: any
   timeline: any
+  assets: any
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }): DashboardProject {
-  const { project, timeline } = input
+  const { project, timeline, assets } = input
 
   return {
     ...project,
@@ -51,7 +53,7 @@ function toDashboardProject(input: {
       ...update,
       project: { name: project.name },
     })),
-    assets: [],
+    assets: assets?.assets ?? [],
     auditLogs: [],
   }
 }
@@ -83,6 +85,7 @@ export default async function AdminProjectDetailPage({
   const [
     project,
     timeline,
+    assets,
     clients,
     threads,
     decisions,
@@ -91,6 +94,7 @@ export default async function AdminProjectDetailPage({
   ] = await Promise.all([
     getAdminProjectOverview(id),
     getAdminProjectTimeline(id),
+    getAdminProjectAssets(id),
     getAdminClientOptions(),
     getProjectThreadsCached(id),
     getProjectDecisionsCached(id),
@@ -105,6 +109,7 @@ export default async function AdminProjectDetailPage({
   const dashboardProject = toDashboardProject({
     project,
     timeline,
+    assets,
   })
 
   const projectHeader = {

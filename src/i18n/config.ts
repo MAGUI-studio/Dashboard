@@ -83,22 +83,6 @@ export const pathnames = {
     pt: "/admin/categorias-de-servico/[id]",
     en: "/admin/service-categories/[id]",
   },
-  "/admin/documents": {
-    pt: "/admin/documentos",
-    en: "/admin/documents",
-  },
-  "/admin/documents/new": {
-    pt: "/admin/documentos/novo",
-    en: "/admin/documents/new",
-  },
-  "/admin/documents/[id]": {
-    pt: "/admin/documentos/[id]",
-    en: "/admin/documents/[id]",
-  },
-  "/admin/documents/[id]/edit": {
-    pt: "/admin/documentos/[id]/editar",
-    en: "/admin/documents/[id]/edit",
-  },
   "/projects": {
     pt: "/projetos",
     en: "/projects",
