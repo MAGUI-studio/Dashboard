@@ -24,6 +24,8 @@ export type HeaderNavLeaf = {
     | "crm"
     | "tag"
   label: string
+  description?: string
+  featured?: boolean
   matchPrefix?: HeaderStaticPath
   exact?: boolean
 }
@@ -43,6 +45,7 @@ export function getAdminHeaderNav(t: (key: string) => string): {
       href: "/",
       icon: "dashboard",
       label: t("dashboard"),
+      description: "Visão consolidada da operação",
       exact: true,
     },
     groups: [
@@ -54,24 +57,29 @@ export function getAdminHeaderNav(t: (key: string) => string): {
             href: "/admin/crm",
             icon: "list",
             label: t("commercial.list"),
+            description: "Gestão ativa de leads e funil",
             matchPrefix: "/admin/crm",
           },
           {
             href: "/admin/crm/register",
             icon: "plus",
             label: t("commercial.create"),
+            description: "Catalogar nova oportunidade",
             exact: true,
           },
           {
             href: "/admin/crm/proposals",
             icon: "list",
             label: t("commercial.proposals"),
+            description: "Controle de propostas enviadas",
             matchPrefix: "/admin/crm/proposals",
           },
           {
             href: "/admin/crm/proposals/new",
             icon: "plus",
             label: t("commercial.proposal_create"),
+            description: "Gerar novo documento comercial",
+            featured: true,
             exact: true,
           },
         ],
@@ -84,25 +92,23 @@ export function getAdminHeaderNav(t: (key: string) => string): {
             href: "/admin/projects",
             icon: "list",
             label: t("projects.list"),
+            description: "Monitoramento de execução",
             matchPrefix: "/admin/projects",
           },
           {
             href: "/admin/projects/register",
             icon: "plus",
             label: t("projects.create"),
+            description: "Inicializar novo projeto",
+            featured: true,
             exact: true,
           },
           {
             href: "/admin/service-categories",
             icon: "tag",
             label: t("projects.categories_all"),
+            description: "Configurações de serviços",
             matchPrefix: "/admin/service-categories",
-          },
-          {
-            href: "/admin/service-categories/new",
-            icon: "plus",
-            label: t("projects.categories_new"),
-            exact: true,
           },
         ],
       },
@@ -114,12 +120,14 @@ export function getAdminHeaderNav(t: (key: string) => string): {
             href: "/admin/clients",
             icon: "list",
             label: t("clients.list"),
+            description: "Portal de acessos e usuários",
             matchPrefix: "/admin/clients",
           },
           {
             href: "/admin/clients/register",
             icon: "plus",
             label: t("clients.create"),
+            description: "Registrar novo acesso",
             exact: true,
           },
         ],

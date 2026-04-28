@@ -101,7 +101,7 @@ export function CreateLeadForm(): React.JSX.Element {
     <form onSubmit={handleSubmit} className="grid gap-8">
       <div className="grid gap-6">
         <div className="space-y-4">
-          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-muted-foreground/60">
             Empresa
           </h3>
 
@@ -123,7 +123,7 @@ export function CreateLeadForm(): React.JSX.Element {
                   name="companyName"
                   required
                   placeholder="Ex: Nome da Empresa Ltda"
-                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10 focus:ring-brand-primary/20"
+                  className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20 focus:ring-brand-primary/20"
                 />
               </div>
             </div>
@@ -144,7 +144,7 @@ export function CreateLeadForm(): React.JSX.Element {
                   id="contactName"
                   name="contactName"
                   placeholder="Nome da pessoa"
-                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                  className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
                 />
               </div>
             </div>
@@ -152,7 +152,7 @@ export function CreateLeadForm(): React.JSX.Element {
         </div>
 
         <div className="space-y-4 pt-4">
-          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-muted-foreground/60">
             Contato
           </h3>
 
@@ -174,7 +174,7 @@ export function CreateLeadForm(): React.JSX.Element {
                   name="email"
                   type="email"
                   placeholder="contato@empresa.com"
-                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                  className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
                 />
               </div>
             </div>
@@ -195,7 +195,7 @@ export function CreateLeadForm(): React.JSX.Element {
                   id="phone"
                   name="phone"
                   placeholder="(00) 00000-0000"
-                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                  className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export function CreateLeadForm(): React.JSX.Element {
         </div>
 
         <div className="space-y-4 pt-4">
-          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-muted-foreground/60">
             Acompanhamento
           </h3>
 
@@ -224,7 +224,7 @@ export function CreateLeadForm(): React.JSX.Element {
                 >
                   <SelectTrigger
                     size="lg"
-                    className="h-12 w-full rounded-xl border-border/40 bg-muted/5 pl-12 text-left"
+                    className="h-12 w-full rounded-2xl border-border/40 bg-muted/10 pl-12 text-left"
                   >
                     <SelectValue placeholder="Selecione a origem" />
                   </SelectTrigger>
@@ -260,7 +260,7 @@ export function CreateLeadForm(): React.JSX.Element {
                     id="instagram"
                     name="instagram"
                     placeholder={sourceFieldPlaceholder}
-                    className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                    className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
                   />
                 </div>
               </div>
@@ -284,7 +284,7 @@ export function CreateLeadForm(): React.JSX.Element {
                     name="website"
                     type="url"
                     placeholder={sourceFieldPlaceholder}
-                    className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                    className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
                   />
                 </div>
               </div>
@@ -293,7 +293,7 @@ export function CreateLeadForm(): React.JSX.Element {
         </div>
 
         <div className="space-y-4 pt-4">
-          <h3 className="border-l-2 border-brand-primary pl-3 text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.28em] text-muted-foreground/60">
             Observacoes
           </h3>
 
@@ -313,7 +313,7 @@ export function CreateLeadForm(): React.JSX.Element {
                 id="notes"
                 name="notes"
                 placeholder="Anote o contexto do possivel cliente, o que chamou atencao e onde esta a conversa."
-                className="min-h-[120px] rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
+                className="min-h-[120px] rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
               />
             </div>
           </div>
@@ -326,14 +326,14 @@ export function CreateLeadForm(): React.JSX.Element {
           variant="ghost"
           onClick={() => router.push("/admin/crm")}
           disabled={isLoading}
-          className="rounded-full px-6 text-[10px] font-bold uppercase tracking-widest"
+          className="rounded-2xl px-6 text-[10px] font-bold uppercase tracking-widest"
         >
           {t("details.cancel")}
         </Button>
         <Button
           type="submit"
           disabled={isLoading}
-          className="h-12 rounded-full bg-brand-primary px-12 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95 hover:bg-brand-primary/90"
+          className="h-12 rounded-2xl bg-brand-primary px-12 text-[10px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-105 active:scale-95 hover:bg-brand-primary/90"
         >
           {isLoading ? (
             <CircleNotch

@@ -9,7 +9,6 @@ import {
   CaretDown,
   ChartLineUp,
   ChartPie,
-  Files,
   House,
   List,
   Plus,
@@ -19,14 +18,8 @@ import {
 } from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu"
 
+import { MegaMenu } from "./MegaMenu"
 import {
   type HeaderNavLeaf,
   getAdminHeaderNav,
@@ -75,22 +68,22 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
   const adminNav = getAdminHeaderNav(t)
 
   return (
-    <nav className="hidden items-center gap-2 md:flex">
+    <nav className="hidden items-center gap-1.5 md:flex">
       {isAdmin ? (
         <>
           <Button
             variant="ghost"
             asChild
-            className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+            className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
               isNavItemActive(pathname, adminNav.dashboard)
-                ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
+                ? "bg-brand-primary/12 text-brand-primary"
+                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
             }`}
           >
             <Link href={adminNav.dashboard.href}>
               <NavIcon
                 icon={adminNav.dashboard.icon}
-                className="mr-1.5 size-3.5"
+                className="mr-2 size-3.5"
               />
               {adminNav.dashboard.label}
             </Link>
@@ -104,59 +97,30 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
             return (
               <div
                 key={group.label}
+                className="relative"
                 onMouseEnter={() => setOpenGroup(group.label)}
-                onMouseLeave={() =>
-                  setOpenGroup((current) =>
-                    current === group.label ? null : current
-                  )
-                }
+                onMouseLeave={() => setOpenGroup(null)}
               >
-                <DropdownMenu
-                  modal={false}
-                  open={openGroup === group.label}
-                  onOpenChange={(open) =>
-                    setOpenGroup(open ? group.label : null)
-                  }
+                <Button
+                  variant="ghost"
+                  className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                    isActive
+                      ? "bg-brand-primary/12 text-brand-primary"
+                      : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                  }`}
                 >
-                  <DropdownMenuTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                        isActive
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
-                      }`}
-                    >
-                      <NavIcon icon={group.icon} className="mr-1.5 size-3.5" />
-                      {group.label}
-                      <CaretDown className="ml-1.5 size-3 opacity-60" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    align="start"
-                    className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 shadow-2xl backdrop-blur-xl"
-                  >
-                    <DropdownMenuGroup className="grid gap-0.5">
-                      {group.items.map((item) => (
-                        <DropdownMenuItem
-                          key={item.href}
-                          asChild
-                          className="rounded-lg px-2.5 py-2 outline-none transition-colors focus:bg-brand-primary/10 focus:text-brand-primary"
-                        >
-                          <Link href={item.href} className="flex items-center">
-                            <NavIcon
-                              icon={item.icon}
-                              className="mr-2.5 size-3.5 text-brand-primary/60"
-                            />
-                            <span className="text-[10px] font-bold uppercase tracking-tight">
-                              {item.label}
-                            </span>
-                          </Link>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuGroup>
-                  </DropdownMenuContent>
-                </DropdownMenu>
+                  <NavIcon icon={group.icon} className="mr-2 size-3.5" />
+                  {group.label}
+                  <CaretDown
+                    className={`ml-1.5 size-3 transition-transform duration-300 ${openGroup === group.label ? "rotate-180" : ""}`}
+                  />
+                </Button>
+
+                <MegaMenu
+                  isOpen={openGroup === group.label}
+                  items={group.items}
+                  onClose={() => setOpenGroup(null)}
+                />
               </div>
             )
           })}
@@ -167,14 +131,14 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
             key={item.href}
             variant="ghost"
             asChild
-            className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+            className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
               isNavItemActive(pathname, item)
-                ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
+                ? "bg-brand-primary/12 text-brand-primary"
+                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
             }`}
           >
             <Link href={item.href}>
-              <NavIcon icon={item.icon} className="mr-1.5 size-3.5" />
+              <NavIcon icon={item.icon} className="mr-2 size-3.5" />
               {item.label}
             </Link>
           </Button>

@@ -41,64 +41,65 @@ export function UserMenu({ viewer }: UserMenuProps) {
     >
       <DropdownMenu modal={false} open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <button className="group flex items-center gap-2 rounded-full p-1 transition-all outline-none focus-visible:ring-0 focus:ring-0">
-            <Avatar className="size-8 rounded-full border border-brand-primary/20 shadow-sm transition-transform group-hover:scale-105">
+          <button className="group flex items-center gap-2 rounded-2xl bg-background px-2.5 py-1.5 transition-all outline-none focus-visible:ring-0 focus:ring-0 hover:bg-muted/40">
+            <Avatar className="size-8 rounded-xl shadow-sm transition-transform group-hover:scale-105">
               <AvatarImage
                 src={viewer.imageUrl ?? undefined}
                 alt={viewer.fullName || ""}
               />
-              <AvatarFallback className="rounded-full bg-brand-primary/10 text-[8px] font-black uppercase text-brand-primary">
+              <AvatarFallback className="rounded-xl bg-brand-primary/10 text-[9px] font-black uppercase text-brand-primary">
                 {viewer.fullName?.charAt(0) || "U"}
               </AvatarFallback>
             </Avatar>
             <div className="hidden lg:grid text-left leading-tight">
-              <span className="max-w-40 truncate text-[9px] font-black uppercase tracking-[0.2em] text-foreground/55 group-hover:text-foreground/85 transition-colors">
+              <span className="max-w-32 truncate text-[9px] font-black uppercase tracking-[0.18em] text-foreground transition-colors">
                 {viewer.firstName || viewer.fullName?.split(" ")[0]}
               </span>
-              <span className="max-w-40 truncate text-[8px] font-bold tracking-[0.12em] text-muted-foreground/60 transition-colors group-hover:text-muted-foreground/80">
-                {viewer.email}
+              <span className="max-w-32 truncate text-[8px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
+                {viewer.isAdmin ? "Administrador" : "Cliente"}
               </span>
             </div>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="end"
-          className="w-64 rounded-3xl border-border/40 bg-background/95 p-3 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+          sideOffset={10}
+          className="w-64 rounded-[1.75rem] bg-background p-3 shadow-[0_28px_48px_-18px_rgba(0,0,0,0.28)] animate-in fade-in zoom-in-95 duration-200"
         >
-          <div className="flex items-center gap-4 p-3 mb-2 rounded-2xl bg-muted/5">
-            <Avatar className="h-10 w-10 rounded-full shadow-md">
+          <div className="mb-3 flex items-center gap-3 rounded-[1.5rem] bg-muted/20 p-3">
+            <Avatar className="h-11 w-11 rounded-2xl shadow-md">
               <AvatarImage
                 src={viewer.imageUrl ?? undefined}
                 alt={viewer.fullName || ""}
               />
-              <AvatarFallback className="rounded-xl text-brand-primary font-black uppercase">
+              <AvatarFallback className="rounded-2xl text-brand-primary font-black uppercase">
                 {viewer.fullName?.charAt(0) || "U"}
               </AvatarFallback>
             </Avatar>
-            <div className="grid flex-1 text-left leading-tight overflow-hidden">
+            <div className="grid flex-1 overflow-hidden text-left leading-tight">
               <span className="truncate font-heading text-sm font-black uppercase tracking-tight text-foreground">
                 {viewer.fullName}
               </span>
-              <span className="truncate font-sans font-bold text-[9px] text-muted-foreground/60 uppercase tracking-widest">
+              <span className="mt-0.5 truncate font-sans text-[9px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                 {viewer.email}
               </span>
             </div>
           </div>
 
-          <div className="grid gap-3 px-3 py-2">
+          <div className="grid gap-2 p-1">
             <HeaderLanguageSwitcher />
             <HeaderThemeToggle />
           </div>
 
-          <DropdownMenuSeparator className="bg-border/10 my-2" />
+          <DropdownMenuSeparator className="my-3 bg-muted/50" />
 
           <SignOutButton>
-            <DropdownMenuItem className="rounded-xl px-4 py-3 cursor-pointer text-red-500 transition-all hover:bg-red-500/5 focus:bg-red-500/5 group/item outline-none focus:ring-0">
+            <DropdownMenuItem className="group/item cursor-pointer rounded-2xl px-4 py-3 text-red-500 transition-all hover:bg-red-500/8 focus:bg-red-500/8 outline-none focus:ring-0">
               <SignOut
                 weight="bold"
-                className="size-5 text-red-500/60 group-hover/item:text-red-500"
+                className="size-4.5 text-red-500/70 group-hover/item:text-red-500"
               />
-              <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
+              <span className="ml-2 font-sans text-[10px] font-black uppercase tracking-[0.18em]">
                 {t("user.signOut")}
               </span>
             </DropdownMenuItem>

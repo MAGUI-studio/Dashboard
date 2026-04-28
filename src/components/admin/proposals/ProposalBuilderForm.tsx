@@ -563,7 +563,7 @@ export function ProposalBuilderForm({
               onClick={handleAddItem}
               variant="outline"
               size="sm"
-              className="h-10 rounded-full border-border/40 px-4 text-[9px] font-black uppercase tracking-widest"
+              className="h-10 rounded-2xl border-border/40 px-4 text-[9px] font-black uppercase tracking-widest"
             >
               <Plus className="mr-1.5 size-3" weight="bold" />
               Adicionar Item
@@ -585,7 +585,7 @@ export function ProposalBuilderForm({
                       onClick={() => handleRemoveItem(index)}
                       variant="ghost"
                       size="icon"
-                      className="size-9 rounded-full text-muted-foreground/35 transition-colors hover:bg-destructive/10 hover:text-destructive"
+                      className="size-9 rounded-2xl text-muted-foreground/35 transition-colors hover:bg-destructive/10 hover:text-destructive"
                     >
                       <Trash size={18} />
                     </Button>
@@ -605,7 +605,7 @@ export function ProposalBuilderForm({
                           handleItemChange(index, "description", e.target.value)
                         }
                         placeholder="Ex: Landing page comercial"
-                        className="h-12 rounded-xl border-border/40 bg-muted/10 px-4 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                        className="h-12 rounded-2xl border-border/40 bg-muted/10 px-4 text-sm font-medium shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                       />
                       <div className="flex flex-wrap gap-1.5">
                         {PROPOSAL_PRESETS.itemDescriptions.map((preset) => (
@@ -643,7 +643,7 @@ export function ProposalBuilderForm({
                             parseCurrencyInput(e.target.value)
                           )
                         }
-                        className="h-12 rounded-xl border-border/40 bg-muted/10 px-4 text-sm font-mono font-bold shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                        className="h-12 rounded-2xl border-border/40 bg-muted/10 px-4 text-sm font-mono font-bold shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                       />
                     </div>
                   </div>
@@ -662,7 +662,7 @@ export function ProposalBuilderForm({
                           Number(e.target.value)
                         )
                       }
-                      className="h-12 rounded-xl border-border/40 bg-muted/10 px-3 text-center text-sm font-bold shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
+                      className="h-12 rounded-2xl border-border/40 bg-muted/10 px-3 text-center text-sm font-bold shadow-none focus-visible:ring-1 focus-visible:ring-brand-primary/30"
                     />
                   </div>
 

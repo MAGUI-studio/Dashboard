@@ -251,7 +251,7 @@ export function LeadDetailsDrawer({
                 {localLead.status !== LeadStatus.CONVERTIDO ? (
                   <Button
                     onClick={() => setIsConvertDialogOpen(true)}
-                    className="h-14 rounded-full bg-brand-primary text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.02] hover:bg-brand-primary/90 active:scale-95"
+                    className="h-14 rounded-2xl bg-brand-primary text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.02] hover:bg-brand-primary/90 active:scale-95"
                   >
                     <RocketLaunch size={20} weight="bold" className="mr-3" />
                     Converter Lead
@@ -260,7 +260,7 @@ export function LeadDetailsDrawer({
                   <Button
                     asChild
                     variant="outline"
-                    className="h-14 rounded-full border-green-500/30 bg-green-500/5 text-[11px] font-black uppercase tracking-widest text-green-600 shadow-sm"
+                    className="h-14 rounded-2xl border-green-500/30 bg-green-500/5 text-[11px] font-black uppercase tracking-widest text-green-600 shadow-sm"
                   >
                     <Link
                       href={{
@@ -274,7 +274,7 @@ export function LeadDetailsDrawer({
                   </Button>
                 )}
 
-                <div className="flex h-14 items-center justify-between rounded-full border border-border/15 bg-muted/5 px-8">
+                <div className="flex h-14 items-center justify-between rounded-2xl border border-border/15 bg-muted/10 px-8">
                   <div className="flex flex-col">
                     <span className="text-[8px] font-black uppercase tracking-widest text-muted-foreground/40">
                       Última Interação
@@ -342,7 +342,7 @@ export function LeadDetailsDrawer({
                     <Button
                       asChild
                       variant="outline"
-                      className="h-14 w-full justify-start rounded-full border-brand-primary/25 bg-brand-primary/5 px-6 text-[11px] font-black uppercase tracking-widest text-brand-primary shadow-sm"
+                      className="h-14 w-full justify-start rounded-2xl border-brand-primary/25 bg-brand-primary/5 px-6 text-[11px] font-black uppercase tracking-widest text-brand-primary shadow-sm"
                     >
                       <Link
                         href={{
@@ -365,7 +365,7 @@ export function LeadDetailsDrawer({
                           key={s}
                           onClick={() => handleStatusChange(s)}
                           disabled={Boolean(isUpdatingStatus)}
-                          className={`flex items-center rounded-full border px-6 py-3 transition-all active:scale-95 ${
+                          className={`flex items-center rounded-2xl border px-6 py-3 transition-all active:scale-95 ${
                             localLead.status === s
                               ? "border-brand-primary bg-brand-primary text-white shadow-lg shadow-brand-primary/20"
                               : "border-border/40 bg-background text-muted-foreground/60 hover:border-border/80"
@@ -396,14 +396,14 @@ export function LeadDetailsDrawer({
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
                         placeholder="Descreva pontos críticos da negociação..."
-                        className="min-h-[140px] resize-none rounded-[2rem] border-border/15 bg-muted/5 p-8 text-sm font-medium transition-all focus:bg-background focus:ring-1 focus:ring-brand-primary/20 shadow-inner"
+                        className="min-h-[140px] resize-none rounded-[2rem] border-border/15 bg-muted/10 p-8 text-sm font-medium transition-all focus:bg-background focus:ring-1 focus:ring-brand-primary/20 shadow-inner"
                       />
                       <Button
                         onClick={async () => {
                           if (await handleAddNote(note)) setNote("")
                         }}
                         disabled={isSavingNote || note.trim().length < 2}
-                        className="absolute bottom-4 right-4 h-11 rounded-full bg-foreground px-8 text-[10px] font-black uppercase tracking-widest text-background shadow-xl active:scale-95"
+                        className="absolute bottom-4 right-4 h-11 rounded-2xl bg-foreground px-8 text-[10px] font-black uppercase tracking-widest text-background shadow-xl active:scale-95"
                       >
                         {isSavingNote ? (
                           <CircleNotch size={14} className="animate-spin" />
@@ -424,7 +424,7 @@ export function LeadDetailsDrawer({
                       title="Templates de Contato"
                       icon={WhatsappLogo}
                     />
-                    <div className="rounded-[2.5rem] border border-border/15 bg-muted/5 p-8 shadow-sm">
+                    <div className="rounded-[2.5rem] border border-border/15 bg-muted/10 p-8 shadow-sm">
                       <LeadQuickActions
                         lead={localLead}
                         templates={templates}

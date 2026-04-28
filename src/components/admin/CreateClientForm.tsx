@@ -341,7 +341,7 @@ export function CreateClientForm() {
         <Button
           type="submit"
           disabled={isPending}
-          className="group relative h-16 w-full overflow-hidden rounded-full font-sans font-black uppercase tracking-[0.3em] shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-70 sm:w-max sm:px-12"
+          className="group relative h-16 w-full overflow-hidden rounded-2xl font-sans font-black uppercase tracking-[0.3em] shadow-xl shadow-brand-primary/20 transition-all hover:scale-[1.01] active:scale-95 disabled:opacity-70 sm:w-max sm:self-end sm:px-12"
         >
           {isPending ? (
             <div className="flex items-center gap-3">

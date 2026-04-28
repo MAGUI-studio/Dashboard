@@ -144,7 +144,7 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                 >
                   <TableCell className="px-8 py-6">
                     <div className="flex items-center gap-4">
-                      <div className="flex size-11 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                      <div className="flex size-11 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
                         <ProjectorScreen weight="duotone" className="size-6" />
                       </div>
                       <div className="flex flex-col gap-0.5">
@@ -195,7 +195,7 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                         asChild
                         variant="outline"
                         size="sm"
-                        className="h-10 rounded-full px-5 text-[10px] font-black uppercase tracking-widest"
+                        className="h-10 rounded-2xl px-5 text-[10px] font-black uppercase tracking-widest"
                       >
                         <Link
                           href={{
@@ -211,7 +211,7 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                         asChild
                         variant="ghost"
                         size="sm"
-                        className="h-10 rounded-full px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
+                        className="h-10 rounded-2xl px-6 text-[10px] font-black uppercase tracking-widest transition-all hover:bg-brand-primary hover:text-white"
                       >
                         <Link
                           href={{
@@ -228,7 +228,7 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
                           <Button
                             variant="outline"
                             size="sm"
-                            className="h-10 rounded-full border-red-500/20 px-5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10"
+                            className="h-10 rounded-2xl border-red-500/20 px-5 text-[10px] font-black uppercase tracking-widest text-red-500 hover:bg-red-500/10"
                           >
                             <Trash className="mr-2 size-4" weight="bold" />
                             Excluir
@@ -266,17 +266,14 @@ export function ProjectsTable({ initialProjects }: ProjectsTableProps) {
 
                           <DialogFooter>
                             <DialogClose asChild>
-                              <Button
-                                variant="outline"
-                                className="rounded-full"
-                              >
+                              <Button variant="outline" className="rounded-2xl">
                                 Cancelar
                               </Button>
                             </DialogClose>
                             <Button
                               onClick={() => handleDelete(project.id)}
                               disabled={pendingDeletion}
-                              className="rounded-full bg-red-500 hover:bg-red-500/90"
+                              className="rounded-2xl bg-red-500 hover:bg-red-500/90"
                             >
                               Confirmar exclusao
                             </Button>
