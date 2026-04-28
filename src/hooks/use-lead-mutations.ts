@@ -87,7 +87,6 @@ export function useLeadMutations(
       instagram: String(data.instagram || ""),
       notes: String(data.notes || ""),
       source: (data.source as unknown as Lead["source"]) || "OTHER",
-      nextActionAt: String(data.nextActionAt || ""),
       value: String(data.value || ""),
     })
 

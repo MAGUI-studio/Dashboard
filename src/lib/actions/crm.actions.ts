@@ -43,7 +43,6 @@ const LeadSchema = z.object({
   value: z.string().optional(),
   status: z.nativeEnum(LeadStatus).optional(),
   source: z.nativeEnum(LeadSource).default(LeadSource.OTHER),
-  nextActionAt: z.string().optional(),
 })
 
 const LeadNoteSchema = z.object({
@@ -79,9 +78,6 @@ export async function createLead(
           ...validatedData,
           email: validatedData.email === "" ? null : validatedData.email,
           website: validatedData.website === "" ? null : validatedData.website,
-          nextActionAt: validatedData.nextActionAt
-            ? new Date(validatedData.nextActionAt)
-            : null,
         },
       })
 
@@ -174,9 +170,6 @@ export async function updateLead(
           notes: validatedData.notes || null,
           value: validatedData.value || null,
           source: validatedData.source,
-          nextActionAt: validatedData.nextActionAt
-            ? new Date(validatedData.nextActionAt)
-            : null,
         },
       })
 

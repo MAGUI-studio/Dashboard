@@ -199,7 +199,7 @@ const getAdminDashboardAgendaCached = unstable_cache(
     const today = new Date(todayIso)
     const nextSevenDays = new Date(today.getTime() + 7 * 86_400_000)
 
-    const [deadlines, actionItems, followUps] = await Promise.all([
+    const [deadlines, actionItems] = await Promise.all([
       prisma.project.findMany({
         where: {
           status: { not: ProjectStatus.LAUNCHED },
@@ -223,19 +223,9 @@ const getAdminDashboardAgendaCached = unstable_cache(
         orderBy: { dueDate: "asc" },
         take: 10,
       }),
-      prisma.lead.findMany({
-        where: { nextActionAt: { gt: today, lt: nextSevenDays } },
-        select: {
-          id: true,
-          companyName: true,
-          contactName: true,
-          nextActionAt: true,
-        },
-        take: 10,
-      }),
     ])
 
-    return { deadlines, actionItems, followUps }
+    return { deadlines, actionItems }
   },
   ["admin-dashboard-agenda"],
   { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }

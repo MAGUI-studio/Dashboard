@@ -114,7 +114,7 @@ export function BriefingForm({
             <h2 className="font-heading text-4xl font-black uppercase tracking-tight md:text-6xl xl:text-[5rem] xl:leading-[1.1] flex items-start gap-4">
               {t(`steps.${currentStepId}.label`)}
               {currentStep.min > 0 ? (
-                <span className="text-destructive text-2xl md:text-4xl">*</span>
+                <span className="text-red-500 text-2xl md:text-4xl">*</span>
               ) : (
                 <span className="text-xs md:text-sm font-normal mt-4 lowercase tracking-normal!">
                   {t("optional")}

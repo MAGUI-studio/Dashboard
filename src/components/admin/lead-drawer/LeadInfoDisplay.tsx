@@ -8,7 +8,6 @@ import { LeadSource } from "@/src/generated/client/enums"
 import { Lead } from "@/src/types/crm"
 import {
   ChatCircleText,
-  Clock,
   Copy,
   Globe,
   WhatsappLogo,
@@ -36,31 +35,6 @@ export function LeadInfoDisplay({ lead }: LeadInfoDisplayProps) {
 
   return (
     <div className="grid gap-8">
-      {/* Reminders & Urgency */}
-      {lead.nextActionAt && (
-        <div className="flex items-center justify-between rounded-3xl border border-brand-primary/10 bg-brand-primary/[0.03] p-5">
-          <div className="flex items-center gap-4">
-            <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
-              <Clock size={20} weight="bold" />
-            </div>
-            <div>
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary/60">
-                Ação Agendada
-              </p>
-              <p className="text-sm font-bold text-foreground">
-                {new Date(lead.nextActionAt).toLocaleDateString("pt-BR")}
-              </p>
-            </div>
-          </div>
-          <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10">
-            <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-primary opacity-75"></span>
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-primary"></span>
-            </span>
-          </div>
-        </div>
-      )}
-
       <div className="grid gap-6 md:grid-cols-2">
         {/* Contact Intelligence */}
         <section className="space-y-4 rounded-[2rem] border border-border/40 bg-muted/5 p-6">

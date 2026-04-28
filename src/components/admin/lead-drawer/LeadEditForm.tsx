@@ -44,9 +44,6 @@ export function LeadEditForm({ lead, onSave, isSaving }: LeadEditFormProps) {
     instagram: lead.instagram ?? "",
     notes: lead.notes ?? "",
     source: lead.source as LeadSourceValue,
-    nextActionAt: lead.nextActionAt
-      ? new Date(lead.nextActionAt).toISOString().split("T")[0]
-      : "",
   })
 
   const showInstagramField = form.source === "INSTAGRAM"
@@ -97,19 +94,6 @@ export function LeadEditForm({ lead, onSave, isSaving }: LeadEditFormProps) {
           <Input
             value={form.email}
             onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-            className="h-12 rounded-[1rem]"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground/55">
-            Lembrar de retomar em
-          </Label>
-          <Input
-            type="date"
-            value={form.nextActionAt}
-            onChange={(e) =>
-              setForm((f) => ({ ...f, nextActionAt: e.target.value }))
-            }
             className="h-12 rounded-[1rem]"
           />
         </div>

@@ -8,7 +8,6 @@ import { useRouter } from "@/src/i18n/navigation"
 import {
   Building,
   CircleNotch,
-  Clock,
   Envelope,
   Funnel,
   Globe,
@@ -82,7 +81,6 @@ export function CreateLeadForm(): React.JSX.Element {
       website: showWebsiteField ? websiteValue : "",
       instagram: showInstagramField ? instagramValue : "",
       notes: formData.get("notes") as string,
-      nextActionAt: formData.get("nextActionAt") as string,
       value: "",
       source,
     })
@@ -113,8 +111,7 @@ export function CreateLeadForm(): React.JSX.Element {
                 htmlFor="companyName"
                 className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
               >
-                {t("form.company")}{" "}
-                <span className="text-brand-primary">*</span>
+                {t("form.company")} <span className="text-red-500">*</span>
               </Label>
               <div className="group relative">
                 <Building
@@ -211,27 +208,6 @@ export function CreateLeadForm(): React.JSX.Element {
           </h3>
 
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div className="space-y-2">
-              <Label
-                htmlFor="nextActionAt"
-                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
-              >
-                Lembrar de retomar em
-              </Label>
-              <div className="group relative">
-                <Clock
-                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
-                  size={18}
-                />
-                <Input
-                  id="nextActionAt"
-                  name="nextActionAt"
-                  type="date"
-                  className="h-12 rounded-xl border-border/40 bg-muted/5 pl-12 transition-all focus:bg-muted/10"
-                />
-              </div>
-            </div>
-
             <div className="space-y-2">
               <Label className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">
                 Origem

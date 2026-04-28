@@ -116,25 +116,7 @@ export async function DashboardAttentionWidget() {
           params: { id: item.project.id },
         },
       })),
-    ...agenda.followUps
-      .filter(
-        (lead) =>
-          lead.nextActionAt &&
-          isAfter(new Date(lead.nextActionAt), today) &&
-          isBefore(new Date(lead.nextActionAt), nextSevenDays)
-      )
-      .slice(0, 4)
-      .map((lead) => ({
-        id: `agenda-lead-${lead.id}`,
-        title: lead.companyName,
-        dateLabel: `Retomar contato • ${new Date(lead.nextActionAt!).toLocaleDateString("pt-BR")}`,
-        dateValue: lead.nextActionAt!.toISOString(),
-        context: lead.contactName || "Lead sem contato principal definido",
-        kind: "lead" as const,
-        href: `/admin/crm?lead=${lead.id}`,
-      })),
   ].slice(0, 10)
-
   return (
     <section className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
       <AdminAttentionPanel items={attentionItems} />
