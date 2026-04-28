@@ -421,14 +421,10 @@
           "submit": "Registrar Evolução"
         },
         "categories": {
-          "WEB_APP": "Web App",
-          "MOBILE_APP": "App Mobile",
-          "BRANDING": "Branding",
           "LANDING_PAGE": "Landing Page",
-          "SALES_PAGE": "Página de Vendas",
           "INSTITUTIONAL_SITE": "Site Institucional",
-          "E_COMMERCE": "E-commerce",
-          "UI_UX_DESIGN": "Design UI/UX"
+          "BOOKING_PLATFORM": "Plataforma de Agendamento",
+          "STABILITY_PLAN": "Plano de Estabilidade"
         },
         "priorities": {
           "LOW": "Baixa",
