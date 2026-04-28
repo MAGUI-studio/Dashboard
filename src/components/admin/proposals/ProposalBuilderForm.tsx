@@ -5,7 +5,6 @@ import * as React from "react"
 import { useRouter } from "@/src/i18n/navigation"
 import {
   Calculator,
-  CheckCircle,
   ClockCountdown,
   FilePdf,
   ListChecks,
@@ -14,7 +13,6 @@ import {
   ShieldCheck,
   Sparkle,
   Trash,
-  Warning,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -36,8 +34,6 @@ import {
   PROPOSAL_PRESETS,
   type ProposalPreset,
 } from "@/src/config/proposal-presets"
-
-import { ProposalPreview } from "./ProposalPreview"
 
 interface ProposalBuilderFormProps {
   leads: Array<{ id: string; companyName: string }>
@@ -102,13 +98,12 @@ export function ProposalBuilderForm({
   const [notIncluded, setNotIncluded] = React.useState("")
   const [warranty, setWarranty] = React.useState("")
   const [platformFlow, setPlatformFlow] = React.useState(DEFAULT_PLATFORM_FLOW)
-  const [currency, setCurrency] = React.useState("BRL")
+  const currency = "BRL"
   const [nextSteps, setNextSteps] = React.useState("")
   const [notes, setNotes] = React.useState("")
   const [items, setItems] = React.useState<ProposalItemForm[]>([
     { ...EMPTY_ITEM },
   ])
-  const [showPreview, setShowPreview] = React.useState(false)
 
   React.useEffect(() => {
     const selectedLead = leads.find((lead) => lead.id === selectedLeadId)
@@ -336,40 +331,6 @@ export function ProposalBuilderForm({
     setIsSubmitting(false)
   }
 
-  if (showPreview) {
-    const selectedLead = leads.find((lead) => lead.id === selectedLeadId)
-    return (
-      <ProposalPreview
-        isSubmitting={isSubmitting}
-        onBack={() => setShowPreview(false)}
-        onConfirm={handleSubmit}
-        data={{
-          title,
-          leadName: selectedLead?.companyName ?? "Cliente",
-          executiveSummary,
-          objectives,
-          expectedImpact,
-          differentials,
-          timeline,
-          paymentTerms,
-          acceptanceCriteria,
-          notIncluded,
-          warranty,
-          platformFlow,
-          nextSteps,
-          notes,
-          items: items.map((item) => ({
-            ...item,
-            longDescription: item.longDescription.trim(),
-          })),
-          total,
-          validUntil,
-          currency,
-        }}
-      />
-    )
-  }
-
   return (
     <div className="space-y-10">
       <section className="space-y-8">
@@ -386,8 +347,8 @@ export function ProposalBuilderForm({
             </h2>
             <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground/75">
               Preencha o contexto, as entregas e os acordos do projeto em uma
-              leitura mais limpa. O PDF final vai puxar essas informações para
-              gerar uma proposta mais legível, explicativa e orientada a valor.
+              leitura mais limpa. A proposta sera criada imediatamente e podera
+              ser ajustada depois, sem etapa separada de revisao.
             </p>
           </div>
         </div>
@@ -446,38 +407,15 @@ export function ProposalBuilderForm({
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
               Título do documento <span className="text-destructive">*</span>
             </Label>
-            <div className="flex gap-3">
-              <Input
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="h-14 flex-1 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
-              />
-              <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="h-14 w-24 rounded-2xl border-border/20 bg-muted/5 px-4 font-mono text-[10px] font-black">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="rounded-2xl border-border/40">
-                  <SelectItem
-                    value="BRL"
-                    className="font-mono text-[10px] font-bold"
-                  >
-                    BRL
-                  </SelectItem>
-                  <SelectItem
-                    value="USD"
-                    className="font-mono text-[10px] font-bold"
-                  >
-                    USD
-                  </SelectItem>
-                  <SelectItem
-                    value="EUR"
-                    className="font-mono text-[10px] font-bold"
-                  >
-                    EUR
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="h-14 flex-1 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
+            />
+            <p className="pl-1 text-[11px] text-muted-foreground/65">
+              Moeda fixa em BRL para reduzir friccao no preenchimento e manter
+              leitura comercial mais direta.
+            </p>
           </div>
 
           <div className="space-y-2 md:max-w-sm">
@@ -850,10 +788,11 @@ export function ProposalBuilderForm({
           Cancelar
         </Button>
         <Button
-          onClick={() => setShowPreview(true)}
+          onClick={handleSubmit}
+          disabled={isSubmitting}
           className="h-14 rounded-2xl bg-brand-primary px-8 text-[10px] font-black uppercase tracking-widest text-white shadow-2xl shadow-brand-primary/30 transition-all hover:scale-[1.02] hover:bg-brand-primary/90 active:scale-[0.98]"
         >
-          Revisar Proposta
+          {isSubmitting ? "Gerando proposta..." : "Gerar Proposta"}
         </Button>
       </div>
     </div>

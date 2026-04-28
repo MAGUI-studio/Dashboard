@@ -893,6 +893,15 @@ export function MaguiProposalTemplate({
 
   const overviewBlocks: ContentBlock[] = [
     ...createTextBlocks("bullets", "Objetivos desta proposta", objectives, 120),
+    ...(parsedNotes.paymentTerms.length > 0
+      ? createTextBlocks(
+          "bullets",
+          "Condicoes de pagamento",
+          parsedNotes.paymentTerms,
+          120
+        )
+      : []),
+    ...createTextBlocks("bullets", "Prazo e ativacao", processLines, 120),
     ...proposal.items.map(
       (item, index) =>
         ({
@@ -909,12 +918,6 @@ export function MaguiProposalTemplate({
       "bullets",
       "Diferenciais da proposta",
       differentials,
-      120
-    ),
-    ...createTextBlocks(
-      "bullets",
-      "Como o trabalho será conduzido",
-      processLines,
       120
     ),
     ...(parsedNotes.acceptanceCriteria.length > 0
@@ -934,14 +937,6 @@ export function MaguiProposalTemplate({
       platformFlow,
       120
     ),
-    ...(parsedNotes.paymentTerms.length > 0
-      ? createTextBlocks(
-          "bullets",
-          "Condições de pagamento",
-          parsedNotes.paymentTerms,
-          120
-        )
-      : []),
     ...(parsedNotes.notIncluded.length > 0
       ? createTextBlocks(
           "bullets",
