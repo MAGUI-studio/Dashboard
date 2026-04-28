@@ -115,21 +115,37 @@
           "general": "Ocorreu um erro ao processar sua solicitação."
         },
         "categories": {
-          "WEB_APP": "Web App",
-          "MOBILE_APP": "App Mobile",
-          "BRANDING": "Branding",
-          "LANDING_PAGE": "Landing Page",
-          "SALES_PAGE": "Página de Vendas",
+          "LANDING_PAGE": "Landing Page de Alta Conversão",
           "INSTITUTIONAL_SITE": "Site Institucional",
-          "E_COMMERCE": "E-commerce",
-          "UI_UX_DESIGN": "Design UI/UX"
-        },
-        "priorities": {
-          "LOW": "Baixa",
-          "MEDIUM": "Média",
-          "HIGH": "Alta",
-          "URGENT": "Urgente"
+          "BOOKING_PLATFORM": "Plataforma com Agendamento",
+          "STABILITY_PLAN": "Plano de Estabilidade e Suporte"
         }
+      }
+    },
+    "service_categories": {
+      "LANDING_PAGE": {
+        "title": "Landing Page de Alta Conversão",
+        "approach": "Desenvolvimento de página única focada em transformar visitantes em clientes, com carregamento instantâneo e otimização total para celular.",
+        "suggested_value": "R$ 1.200",
+        "third_party": "Domínio e Hospedagem"
+      },
+      "INSTITUTIONAL_SITE": {
+        "title": "Site Institucional",
+        "approach": "Presença digital completa para sua empresa, com arquitetura moderna para transmitir autoridade e facilitar o contato do cliente.",
+        "suggested_value": "R$ 1.800",
+        "third_party": "Domínio e Hospedagem"
+      },
+      "BOOKING_PLATFORM": {
+        "title": "Plataforma com Agendamento",
+        "approach": "Sistema inteligente para automação de reservas e gestão de horários, eliminando trabalho manual e erros de agenda.",
+        "suggested_value": "R$ 2.500+",
+        "third_party": "Domínio e Hospedagem"
+      },
+      "STABILITY_PLAN": {
+        "title": "Plano de Estabilidade e Suporte",
+        "approach": "Gestão técnica completa para garantir que sua empresa nunca fique offline, com atualizações de segurança e monitoramento 24/7.",
+        "suggested_value": "R$ 100/mês",
+        "third_party": "Pago à Magui.studio"
       }
     },
     "crm": {
@@ -593,7 +609,10 @@
     "projects": {
       "title": "Projetos",
       "list": "Todos os Projetos",
-      "create": "Iniciar Projeto"
+      "create": "Iniciar Projeto",
+      "categories": "Categorias de Servico",
+      "categories_all": "Todas as Categorias",
+      "categories_new": "Nova Categoria"
     },
     "commercial": {
       "title": "Comercial",
@@ -632,6 +651,7 @@
       "quick_links_eyebrow": "Caminhos rápidos",
       "quick_links_description": "Acesse os pontos que mais movem o projeto sem procurar em menus.",
       "status": {
+        "payment_pending": "Pagamento pendente",
         "on_track": "Tudo em dia",
         "awaiting_approval": "Aguardando sua aprovação",
         "need_shipment": "Precisamos de um envio",
@@ -647,6 +667,7 @@
       },
       "cta": {
         "type": {
+          "payment": "Pagamento Pendente",
           "briefing": "Briefing Pendente",
           "approval": "Entrega para Revisão",
           "task_overdue": "Solicitação Atrasada",
@@ -655,6 +676,7 @@
           "default": "Seu Projeto"
         },
         "label": {
+          "payment": "Ver pagamento",
           "briefing": "Continuar briefing",
           "approval": "Revisar entrega",
           "task_overdue": "Resolver agora",
@@ -663,6 +685,7 @@
           "default": "Ver projeto"
         },
         "description": {
+          "payment": "Existe um pagamento pendente neste projeto. Quite essa etapa primeiro para liberar o briefing e o restante do fluxo.",
           "briefing": "Complete os dados para iniciarmos a engenharia do seu sistema.",
           "approval": "Uma nova entrega estratégica aguarda sua validação formal.",
           "task": "Temos uma solicitação operacional em aberto para você.",

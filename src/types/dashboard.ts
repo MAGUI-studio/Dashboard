@@ -5,12 +5,12 @@ import {
   AssetOrigin,
   AssetType,
   AssetVisibility,
-  Priority,
+  PaymentMethod,
   ProjectCategory,
   ProjectMemberRole,
   ProjectStatus,
   UserRole,
-} from "@/src/generated/client/enums"
+} from "@/src/generated/client"
 
 export interface DashboardProject {
   id: string
@@ -18,13 +18,15 @@ export interface DashboardProject {
   description: string | null
   status: ProjectStatus
   progress: number
-  budget: string | null
+  budget: number | null
+  customValue: boolean
+  paymentMethod: PaymentMethod
+  serviceCategoryId: string | null
   deadline: Date | null
   startDate: Date
   liveUrl: string | null
   repositoryUrl: string | null
   category: ProjectCategory
-  priority: Priority
   clientId: string
   briefing: {
     brandTone: string

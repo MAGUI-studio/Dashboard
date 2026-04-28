@@ -491,7 +491,6 @@ export async function createNotification(
   if (data.projectId) {
     revalidatePath(`/admin/projects/${data.projectId}`)
   }
-  revalidatePath("/notifications")
 }
 
 export async function createNotificationsMany(
@@ -530,5 +529,4 @@ export async function createNotificationsMany(
   for (const pid of projectIds) {
     revalidatePath(`/admin/projects/${pid}`)
   }
-  revalidatePath("/notifications")
 }

@@ -21,6 +21,7 @@ import { Label } from "@/src/components/ui/label"
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createInvoiceAction } from "@/src/lib/actions/financial.actions"
+import { parseCurrencyBRLToCents } from "@/src/lib/utils/utils"
 
 interface AddInvoiceFormProps {
   projectId: string
@@ -38,42 +39,42 @@ export function AddInvoiceForm({ projectId }: AddInvoiceFormProps) {
     const formData = new FormData(e.currentTarget)
     const title = formData.get("title") as string
     const description = formData.get("description") as string
-    const totalAmount = parseFloat(formData.get("totalAmount") as string)
+    const totalAmountCents = parseCurrencyBRLToCents(
+      String(formData.get("totalAmount") || "")
+    )
     const installmentsCount = parseInt(formData.get("installments") as string)
     const firstDueDateStr = formData.get("firstDueDate") as string
     const firstDueDate = new Date(firstDueDateStr + "T12:00:00") // Use midday to avoid TZ issues
 
-    if (isNaN(totalAmount) || totalAmount <= 0) {
+    if (isNaN(totalAmountCents) || totalAmountCents <= 0) {
       toast.error("Valor total inválido")
       setIsLoading(false)
       return
     }
 
     const installments = []
-    const amountPerInstallment = totalAmount / installmentsCount
+    const amountPerInstallment = Math.floor(
+      totalAmountCents / installmentsCount
+    )
+    const remainder =
+      totalAmountCents - amountPerInstallment * installmentsCount
 
     for (let i = 1; i <= installmentsCount; i++) {
       installments.push({
         number: i,
-        amount: parseFloat(amountPerInstallment.toFixed(2)),
+        amount:
+          amountPerInstallment + (i === installmentsCount ? remainder : 0),
         dueDate: addMonths(firstDueDate, i - 1),
       })
     }
 
-    // Adjust last installment for rounding issues
-    const sum = installments.reduce((acc, inst) => acc + inst.amount, 0)
-    const diff = totalAmount - sum
-    if (Math.abs(diff) > 0.001) {
-      installments[installments.length - 1].amount = parseFloat(
-        (installments[installments.length - 1].amount + diff).toFixed(2)
-      )
-    }
+    // amounts are integers in cents; remainder is added to last installment above
 
     const result = await createInvoiceAction({
       title,
       description: description || undefined,
       projectId,
-      totalAmount,
+      totalAmount: totalAmountCents,
       currency: "BRL",
       installments,
     })

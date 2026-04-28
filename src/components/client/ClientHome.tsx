@@ -10,6 +10,7 @@ import {
   NotePencil,
   ShieldCheck,
 } from "@phosphor-icons/react/dist/ssr"
+import { differenceInCalendarDays, startOfDay } from "date-fns"
 
 import { Button } from "@/src/components/ui/button"
 
@@ -37,6 +38,24 @@ export async function ClientHome({
 
   const activeProject = data.projects[0]
 
+  // New logical states for payment
+  const allInstallments =
+    activeProject?.invoices.flatMap((inv) => inv.installments) || []
+  const hasPaidAtLeastOne = allInstallments.some(
+    (inst) => inst.status === "PAID"
+  )
+  const hasAnyDueSoon = allInstallments.some((inst) => {
+    if (inst.status === "PAID") return false
+    const diff = differenceInCalendarDays(
+      startOfDay(new Date(inst.dueDate)),
+      startOfDay(new Date())
+    )
+    return diff <= 5
+  })
+
+  const isBlockedByPayment = !hasPaidAtLeastOne
+  const shouldShowPaymentWarning = !hasPaidAtLeastOne || hasAnyDueSoon
+
   let nextAction: React.ComponentProps<typeof ClientActionBanner> = {
     type: "default",
     eyebrow: t("cta.type.default"),
@@ -46,7 +65,17 @@ export async function ClientHome({
     label: t("cta.label.default"),
   }
 
-  if (isBriefingEmpty && activeProject) {
+  if (shouldShowPaymentWarning && activeProject) {
+    nextAction = {
+      type: "payment",
+      eyebrow: t("cta.type.payment"),
+      title: t("cta.type.payment"),
+      description: t("cta.description.payment"),
+      href: toHref(`/projects/${activeProject.id}/financial`),
+      label: t("cta.label.payment"),
+      projectName: activeProject.name,
+    }
+  } else if (isBriefingEmpty && activeProject) {
     nextAction = {
       type: "briefing",
       eyebrow: t("cta.type.briefing"),
@@ -81,18 +110,22 @@ export async function ClientHome({
   }
 
   const heroStatus:
+    | "payment_pending"
     | "on_track"
     | "awaiting_approval"
     | "need_shipment"
-    | "briefing_incomplete" = isBriefingEmpty
-    ? "briefing_incomplete"
-    : data.pendingApprovals.length > 0
-      ? "awaiting_approval"
-      : data.pendingTasks.length > 0
-        ? "need_shipment"
-        : "on_track"
+    | "briefing_incomplete" = shouldShowPaymentWarning
+    ? "payment_pending"
+    : isBriefingEmpty
+      ? "briefing_incomplete"
+      : data.pendingApprovals.length > 0
+        ? "awaiting_approval"
+        : data.pendingTasks.length > 0
+          ? "need_shipment"
+          : "on_track"
 
   const heroStatusLabel = {
+    payment_pending: t("status.payment_pending"),
     on_track: t("status.on_track"),
     awaiting_approval: t("status.awaiting_approval"),
     need_shipment: t("status.need_shipment"),
@@ -234,6 +267,9 @@ export async function ClientHome({
                   description={link.description}
                   href={link.href}
                   icon={link.icon}
+                  isLocked={
+                    isBlockedByPayment && link.label !== t("links.financial")
+                  }
                 />
               ))}
             </div>

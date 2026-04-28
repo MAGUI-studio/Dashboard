@@ -56,8 +56,8 @@ export async function processProjectHandoffAction(proposalId: string) {
         data: {
           name: proposal.title,
           clientId: clientUser.id,
-          category: ProjectCategory.WEB_APP, // Default, can be adjusted later
-          budget: `${proposal.currency} ${proposal.totalValue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
+          category: ProjectCategory.LANDING_PAGE, // Default aligned with current offering
+          budget: proposal.totalValue,
           status: ProjectStatus.STRATEGY,
           description: proposal.notes,
           progress: 0,

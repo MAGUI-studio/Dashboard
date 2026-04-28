@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl"
 
 import { Link, usePathname } from "@/src/i18n/navigation"
 import {
+  CaretDown,
   ChartLineUp,
   ChartPie,
   Files,
@@ -13,6 +14,7 @@ import {
   List,
   Plus,
   ProjectorScreen,
+  Tag,
   Users,
 } from "@phosphor-icons/react"
 
@@ -25,348 +27,160 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu"
 
+import {
+  type HeaderNavLeaf,
+  getAdminHeaderNav,
+  getClientHeaderNav,
+  isNavItemActive,
+} from "./navigation"
+
 interface AdminNavProps {
   isAdmin?: boolean
+}
+
+function NavIcon({
+  icon,
+  className,
+}: {
+  icon: HeaderNavLeaf["icon"]
+  className?: string
+}) {
+  switch (icon) {
+    case "dashboard":
+      return <ChartPie weight="duotone" className={className} />
+    case "home":
+      return <House weight="duotone" className={className} />
+    case "crm":
+      return <ChartLineUp weight="duotone" className={className} />
+    case "clients":
+      return <Users weight="duotone" className={className} />
+    case "documents":
+      return <Files weight="duotone" className={className} />
+    case "projects":
+      return <ProjectorScreen weight="duotone" className={className} />
+    case "plus":
+      return <Plus weight="bold" className={className} />
+    case "tag":
+      return <Tag weight="bold" className={className} />
+    case "list":
+    default:
+      return <List weight="bold" className={className} />
+  }
 }
 
 export function AdminNav({ isAdmin }: AdminNavProps) {
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
+  const [openGroup, setOpenGroup] = React.useState<string | null>(null)
 
-  const [isClientsOpen, setIsClientsOpen] = React.useState(false)
-  const [isCommercialOpen, setIsCommercialOpen] = React.useState(false)
-  const [isDocumentsOpen, setIsDocumentsOpen] = React.useState(false)
-  const [isProjectsOpen, setIsProjectsOpen] = React.useState(false)
+  const clientItems = getClientHeaderNav(t)
+  const adminNav = getAdminHeaderNav(t)
 
   return (
     <nav className="hidden items-center gap-2 md:flex">
-      <Button
-        variant="ghost"
-        asChild
-        className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-          pathname === "/"
-            ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-            : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-        }`}
-      >
-        <Link href="/">
-          {isAdmin ? (
-            <ChartPie weight="duotone" className="mr-1.5 size-3.5" />
-          ) : (
-            <House weight="duotone" className="mr-1.5 size-3.5" />
-          )}
-          {isAdmin ? t("dashboard") : t("client.home")}
-        </Link>
-      </Button>
-
-      {!isAdmin && (
-        <Button
-          variant="ghost"
-          asChild
-          className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-            pathname.startsWith("/projects")
-              ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-              : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-          }`}
-        >
-          <Link href="/projects">
-            <ProjectorScreen weight="duotone" className="mr-1.5 size-3.5" />
-            {t("client.projects")}
-          </Link>
-        </Button>
-      )}
-
-      {isAdmin && (
+      {isAdmin ? (
         <>
-          <div
-            onMouseEnter={() => setIsCommercialOpen(true)}
-            onMouseLeave={() => setIsCommercialOpen(false)}
+          <Button
+            variant="ghost"
+            asChild
+            className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              isNavItemActive(pathname, adminNav.dashboard)
+                ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
+            }`}
           >
-            <DropdownMenu
-              modal={false}
-              open={isCommercialOpen}
-              onOpenChange={setIsCommercialOpen}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                    pathname.startsWith("/admin/crm")
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-                  }`}
-                >
-                  <ChartLineUp weight="duotone" className="mr-1.5 size-3.5" />
-                  {t("commercial.title")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
-              >
-                <DropdownMenuGroup className="grid gap-0.5">
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link href="/admin/crm" className="flex items-center">
-                      <List
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("commercial.list")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/crm/register"
-                      className="flex items-center"
-                    >
-                      <Plus
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("commercial.create")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/crm/proposals"
-                      className="flex items-center"
-                    >
-                      <List
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("commercial.proposals")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/crm/proposals/new"
-                      className="flex items-center"
-                    >
-                      <Plus
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("commercial.proposal_create")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+            <Link href={adminNav.dashboard.href}>
+              <NavIcon
+                icon={adminNav.dashboard.icon}
+                className="mr-1.5 size-3.5"
+              />
+              {adminNav.dashboard.label}
+            </Link>
+          </Button>
 
-          <div
-            onMouseEnter={() => setIsClientsOpen(true)}
-            onMouseLeave={() => setIsClientsOpen(false)}
-          >
-            <DropdownMenu
-              modal={false}
-              open={isClientsOpen}
-              onOpenChange={setIsClientsOpen}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                    pathname.startsWith("/admin/clients")
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-                  }`}
-                >
-                  <Users weight="duotone" className="mr-1.5 size-3.5" />
-                  {t("clients.title")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
-              >
-                <DropdownMenuGroup className="grid gap-0.5">
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link href="/admin/clients" className="flex items-center">
-                      <List
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("clients.list")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/clients/register"
-                      className="flex items-center"
-                    >
-                      <Plus
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("clients.create")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+          {adminNav.groups.map((group) => {
+            const isActive = group.items.some((item) =>
+              isNavItemActive(pathname, item)
+            )
 
-          <div
-            onMouseEnter={() => setIsDocumentsOpen(true)}
-            onMouseLeave={() => setIsDocumentsOpen(false)}
-          >
-            <DropdownMenu
-              modal={false}
-              open={isDocumentsOpen}
-              onOpenChange={setIsDocumentsOpen}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                    pathname.startsWith("/admin/documents")
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-                  }`}
-                >
-                  <Files weight="duotone" className="mr-1.5 size-3.5" />
-                  {t("documents.title")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
+            return (
+              <div
+                key={group.label}
+                onMouseEnter={() => setOpenGroup(group.label)}
+                onMouseLeave={() =>
+                  setOpenGroup((current) =>
+                    current === group.label ? null : current
+                  )
+                }
               >
-                <DropdownMenuGroup className="grid gap-0.5">
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link href="/admin/documents" className="flex items-center">
-                      <List
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("documents.list")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/documents/new"
-                      className="flex items-center"
-                    >
-                      <Plus
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("documents.create")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-
-          <div
-            onMouseEnter={() => setIsProjectsOpen(true)}
-            onMouseLeave={() => setIsProjectsOpen(false)}
-          >
-            <DropdownMenu
-              modal={false}
-              open={isProjectsOpen}
-              onOpenChange={setIsProjectsOpen}
-            >
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className={`h-8 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
-                    pathname.startsWith("/admin/projects")
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/40 hover:bg-muted/10 hover:text-foreground"
-                  }`}
+                <DropdownMenu
+                  modal={false}
+                  open={openGroup === group.label}
+                  onOpenChange={(open) =>
+                    setOpenGroup(open ? group.label : null)
+                  }
                 >
-                  <ProjectorScreen
-                    weight="duotone"
-                    className="mr-1.5 size-3.5"
-                  />
-                  {t("projects.title")}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="w-48 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl animate-in fade-in zoom-in-95 duration-200"
-              >
-                <DropdownMenuGroup className="grid gap-0.5">
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link href="/admin/projects" className="flex items-center">
-                      <List
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("projects.list")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    asChild
-                    className="rounded-lg px-2.5 py-2 cursor-pointer transition-colors focus:bg-brand-primary/10 focus:text-brand-primary outline-none focus:ring-0"
-                  >
-                    <Link
-                      href="/admin/projects/register"
-                      className="flex items-center"
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+                        isActive
+                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                          : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
+                      }`}
                     >
-                      <Plus
-                        weight="bold"
-                        className="mr-2.5 size-3.5 text-brand-primary/60"
-                      />
-                      <span className="font-bold uppercase tracking-tight text-[10px]">
-                        {t("projects.create")}
-                      </span>
-                    </Link>
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
+                      <NavIcon icon={group.icon} className="mr-1.5 size-3.5" />
+                      {group.label}
+                      <CaretDown className="ml-1.5 size-3 opacity-60" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="start"
+                    className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 shadow-2xl backdrop-blur-xl"
+                  >
+                    <DropdownMenuGroup className="grid gap-0.5">
+                      {group.items.map((item) => (
+                        <DropdownMenuItem
+                          key={item.href}
+                          asChild
+                          className="rounded-lg px-2.5 py-2 outline-none transition-colors focus:bg-brand-primary/10 focus:text-brand-primary"
+                        >
+                          <Link href={item.href} className="flex items-center">
+                            <NavIcon
+                              icon={item.icon}
+                              className="mr-2.5 size-3.5 text-brand-primary/60"
+                            />
+                            <span className="text-[10px] font-bold uppercase tracking-tight">
+                              {item.label}
+                            </span>
+                          </Link>
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            )
+          })}
         </>
+      ) : (
+        clientItems.map((item) => (
+          <Button
+            key={item.href}
+            variant="ghost"
+            asChild
+            className={`h-9 rounded-full px-4 text-[8.5px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
+              isNavItemActive(pathname, item)
+                ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                : "text-muted-foreground/55 hover:bg-muted/10 hover:text-foreground"
+            }`}
+          >
+            <Link href={item.href}>
+              <NavIcon icon={item.icon} className="mr-1.5 size-3.5" />
+              {item.label}
+            </Link>
+          </Button>
+        ))
       )}
     </nav>
   )

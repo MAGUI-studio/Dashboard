@@ -4,16 +4,8 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { Link } from "@/src/i18n/navigation"
 import { SignOutButton } from "@clerk/nextjs"
-import {
-  ChartLineUp,
-  ChartPie,
-  House,
-  Plus,
-  ProjectorScreen,
-  SignOut,
-} from "@phosphor-icons/react"
+import { SignOut } from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
@@ -91,117 +83,6 @@ export function UserMenu({ viewer }: UserMenuProps) {
                 {viewer.email}
               </span>
             </div>
-          </div>
-
-          <div className="lg:hidden p-2 grid gap-1 border-b border-border/10 mb-2">
-            <DropdownMenuItem
-              asChild
-              className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-            >
-              <Link href="/" className="flex items-center">
-                {viewer.isAdmin ? (
-                  <ChartPie
-                    weight="duotone"
-                    className="mr-3 size-4 text-brand-primary/60"
-                  />
-                ) : (
-                  <House
-                    weight="duotone"
-                    className="mr-3 size-4 text-brand-primary/60"
-                  />
-                )}
-                <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                  {viewer.isAdmin ? t("dashboard") : t("client.home")}
-                </span>
-              </Link>
-            </DropdownMenuItem>
-
-            {!viewer.isAdmin && (
-              <DropdownMenuItem
-                asChild
-                className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-              >
-                <Link href="/projects" className="flex items-center">
-                  <ProjectorScreen
-                    weight="duotone"
-                    className="mr-3 size-4 text-brand-primary/60"
-                  />
-                  <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                    {t("client.projects")}
-                  </span>
-                </Link>
-              </DropdownMenuItem>
-            )}
-
-            {viewer.isAdmin && (
-              <>
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-                >
-                  <Link href="/admin/crm" className="flex items-center">
-                    <ChartLineUp
-                      weight="duotone"
-                      className="mr-3 size-4 text-brand-primary/60"
-                    />
-                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                      {t("commercial.list")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-                >
-                  <Link
-                    href="/admin/crm/register"
-                    className="flex items-center"
-                  >
-                    <Plus
-                      weight="duotone"
-                      className="mr-3 size-4 text-brand-primary/60"
-                    />
-                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                      {t("commercial.create")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-                >
-                  <Link
-                    href="/admin/crm/proposals"
-                    className="flex items-center"
-                  >
-                    <ChartLineUp
-                      weight="duotone"
-                      className="mr-3 size-4 text-brand-primary/60"
-                    />
-                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                      {t("commercial.proposals")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  asChild
-                  className="rounded-xl px-4 py-3 outline-none focus:ring-0"
-                >
-                  <Link
-                    href="/admin/crm/proposals/new"
-                    className="flex items-center"
-                  >
-                    <Plus
-                      weight="duotone"
-                      className="mr-3 size-4 text-brand-primary/60"
-                    />
-                    <span className="font-sans font-bold uppercase tracking-widest text-[9px]">
-                      {t("commercial.proposal_create")}
-                    </span>
-                  </Link>
-                </DropdownMenuItem>
-              </>
-            )}
           </div>
 
           <div className="grid gap-3 px-3 py-2">

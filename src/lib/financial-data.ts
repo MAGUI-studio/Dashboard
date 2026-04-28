@@ -4,6 +4,12 @@ export async function getProjectInvoices(projectId: string) {
   return prisma.invoice.findMany({
     where: { projectId },
     include: {
+      project: {
+        select: {
+          id: true,
+          name: true,
+        },
+      },
       installments: {
         orderBy: { number: "asc" },
         include: {

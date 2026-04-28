@@ -1,8 +1,4 @@
-import {
-  Priority,
-  ProjectCategory,
-  ProjectStatus,
-} from "@/src/generated/client/enums"
+import { ProjectCategory, ProjectStatus } from "@/src/generated/client"
 
 import {
   DashboardActionItem,
@@ -37,18 +33,27 @@ export interface ClientHomeProject {
   description: string | null
   status: ProjectStatus
   progress: number
-  budget: string | null
+  budget: number | null
   deadline: Date | null
   startDate: Date
   liveUrl: string | null
   repositoryUrl: string | null
   category: ProjectCategory
-  priority: Priority
   clientId: string
   briefing: unknown
   createdAt: Date
   updatedAt: Date
   updates: ClientPortalUpdate[]
+  invoices: Array<{
+    id: string
+    status: string
+    installments: Array<{
+      id: string
+      status: string
+      dueDate: Date | string
+      paidAt: Date | string | null
+    }>
+  }>
   _count: {
     updates: number
     actionItems: number

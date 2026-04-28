@@ -7,6 +7,7 @@ import { Greetings } from "@/src/components/common/Greetings"
 interface ClientHeroStatusProps {
   userName: string
   status:
+    | "payment_pending"
     | "on_track"
     | "awaiting_approval"
     | "need_shipment"
@@ -20,6 +21,10 @@ export async function ClientHeroStatus({
   const t = await getTranslations("Dashboard.client_home")
 
   const statusMap = {
+    payment_pending: {
+      label: t("status.payment_pending"),
+      color: "bg-yellow-500",
+    },
     on_track: {
       label: t("status.on_track"),
       color: "bg-emerald-500",

@@ -2,7 +2,7 @@ import * as React from "react"
 
 import { getTranslations } from "next-intl/server"
 
-import { UserRole } from "@/src/generated/client/enums"
+import { UserRole } from "@/src/generated/client"
 
 import { CreateProjectForm } from "@/src/components/admin/CreateProjectForm"
 
@@ -29,6 +29,10 @@ export default async function CreateProjectPage(): Promise<React.JSX.Element> {
     orderBy: { name: "asc" },
   })
 
+  const serviceCategories = await prisma.serviceCategory.findMany({
+    orderBy: { suggestedValue: "asc" },
+  })
+
   return (
     <main className="relative flex flex-col bg-background/50 p-6 lg:p-12 overflow-hidden">
       <div className="absolute top-0 right-0 -z-10 size-96 translate-x-1/2 -translate-y-1/2 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
@@ -51,7 +55,10 @@ export default async function CreateProjectPage(): Promise<React.JSX.Element> {
         </div>
 
         <div className="w-full">
-          <CreateProjectForm clients={clients} />
+          <CreateProjectForm
+            clients={clients}
+            serviceCategories={serviceCategories}
+          />
         </div>
       </div>
     </main>

@@ -17,6 +17,16 @@ export function formatCurrencyBRL(value: string | number): string {
   }).format(amount)
 }
 
+export function formatCurrencyBRLFromCents(cents: number | null | undefined) {
+  const safe = typeof cents === "number" && Number.isFinite(cents) ? cents : 0
+  return formatCurrencyBRL(safe / 100)
+}
+
+export function parseCurrencyBRLToCents(value: string): number {
+  const reais = parseCurrencyBRL(value)
+  return Math.round(reais * 100)
+}
+
 export function parseCurrencyBRL(value: string): number {
   if (!value) return 0
   // Handle strings that might have R$, dots for thousands and comma for decimals

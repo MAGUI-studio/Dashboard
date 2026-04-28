@@ -1,9 +1,9 @@
 import {
   AssetType,
-  Priority,
+  PaymentMethod,
   ProjectCategory,
   ProjectStatus,
-} from "@/src/generated/client/enums"
+} from "@/src/generated/client"
 import { z } from "zod"
 
 import { briefingSchema } from "@/src/lib/validations/briefing"
@@ -15,18 +15,10 @@ export const createProjectSchema = z.object({
   budget: z.string().optional(),
   deadline: z.string().optional(),
   startDate: z.string().optional(),
-  liveUrl: z
-    .string()
-    .url("URL de produção inválida")
-    .optional()
-    .or(z.literal("")),
-  repositoryUrl: z
-    .string()
-    .url("URL do repositório inválida")
-    .optional()
-    .or(z.literal("")),
   category: z.nativeEnum(ProjectCategory),
-  priority: z.nativeEnum(Priority),
+  serviceCategoryId: z.string().optional(),
+  customValue: z.string().transform((v) => v === "true"),
+  paymentMethod: z.nativeEnum(PaymentMethod),
   installments: z
     .array(
       z.object({
@@ -44,6 +36,16 @@ export const updateProjectStatusSchema = z.object({
   id: z.string(),
   status: z.nativeEnum(ProjectStatus),
   progress: z.number().min(0).max(100),
+  liveUrl: z
+    .string()
+    .url("URL de produção inválida")
+    .optional()
+    .or(z.literal("")),
+  repositoryUrl: z
+    .string()
+    .url("URL do repositório inválida")
+    .optional()
+    .or(z.literal("")),
 })
 
 const updateAttachmentSchema = z.object({

@@ -18,12 +18,6 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
 export type DashboardMetricSnapshot =
   $Result.DefaultSelection<Prisma.$DashboardMetricSnapshotPayload>
 /**
- * Model SearchDocument
- *
- */
-export type SearchDocument =
-  $Result.DefaultSelection<Prisma.$SearchDocumentPayload>
-/**
  * Model EventOutbox
  *
  */
@@ -59,6 +53,12 @@ export type MessageTemplate =
  *
  */
 export type SavedView = $Result.DefaultSelection<Prisma.$SavedViewPayload>
+/**
+ * Model ServiceCategory
+ *
+ */
+export type ServiceCategory =
+  $Result.DefaultSelection<Prisma.$ServiceCategoryPayload>
 /**
  * Model Project
  *
@@ -282,27 +282,21 @@ export namespace $Enums {
   export type ProjectStatus = (typeof ProjectStatus)[keyof typeof ProjectStatus]
 
   export const ProjectCategory: {
-    WEB_APP: "WEB_APP"
-    MOBILE_APP: "MOBILE_APP"
-    BRANDING: "BRANDING"
     LANDING_PAGE: "LANDING_PAGE"
-    SALES_PAGE: "SALES_PAGE"
     INSTITUTIONAL_SITE: "INSTITUTIONAL_SITE"
-    E_COMMERCE: "E_COMMERCE"
-    UI_UX_DESIGN: "UI_UX_DESIGN"
+    BOOKING_PLATFORM: "BOOKING_PLATFORM"
+    STABILITY_PLAN: "STABILITY_PLAN"
   }
 
   export type ProjectCategory =
     (typeof ProjectCategory)[keyof typeof ProjectCategory]
 
-  export const Priority: {
-    LOW: "LOW"
-    MEDIUM: "MEDIUM"
-    HIGH: "HIGH"
-    URGENT: "URGENT"
+  export const PaymentMethod: {
+    FIFTY_FIFTY: "FIFTY_FIFTY"
+    MONTHLY_INSTALLMENTS: "MONTHLY_INSTALLMENTS"
   }
 
-  export type Priority = (typeof Priority)[keyof typeof Priority]
+  export type PaymentMethod = (typeof PaymentMethod)[keyof typeof PaymentMethod]
 
   export const AssetType: {
     CONTRACT: "CONTRACT"
@@ -521,9 +515,9 @@ export type ProjectCategory = $Enums.ProjectCategory
 
 export const ProjectCategory: typeof $Enums.ProjectCategory
 
-export type Priority = $Enums.Priority
+export type PaymentMethod = $Enums.PaymentMethod
 
-export const Priority: typeof $Enums.Priority
+export const PaymentMethod: typeof $Enums.PaymentMethod
 
 export type AssetType = $Enums.AssetType
 
@@ -774,16 +768,6 @@ export class PrismaClient<
   >
 
   /**
-   * `prisma.searchDocument`: Exposes CRUD operations for the **SearchDocument** model.
-   * Example usage:
-   * ```ts
-   * // Fetch zero or more SearchDocuments
-   * const searchDocuments = await prisma.searchDocument.findMany()
-   * ```
-   */
-  get searchDocument(): Prisma.SearchDocumentDelegate<ExtArgs, ClientOptions>
-
-  /**
    * `prisma.eventOutbox`: Exposes CRUD operations for the **EventOutbox** model.
    * Example usage:
    * ```ts
@@ -852,6 +836,16 @@ export class PrismaClient<
    * ```
    */
   get savedView(): Prisma.SavedViewDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.serviceCategory`: Exposes CRUD operations for the **ServiceCategory** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more ServiceCategories
+   * const serviceCategories = await prisma.serviceCategory.findMany()
+   * ```
+   */
+  get serviceCategory(): Prisma.ServiceCategoryDelegate<ExtArgs, ClientOptions>
 
   /**
    * `prisma.project`: Exposes CRUD operations for the **Project** model.
@@ -1602,7 +1596,6 @@ export namespace Prisma {
 
   export const ModelName: {
     DashboardMetricSnapshot: "DashboardMetricSnapshot"
-    SearchDocument: "SearchDocument"
     EventOutbox: "EventOutbox"
     User: "User"
     Lead: "Lead"
@@ -1610,6 +1603,7 @@ export namespace Prisma {
     LeadActivity: "LeadActivity"
     MessageTemplate: "MessageTemplate"
     SavedView: "SavedView"
+    ServiceCategory: "ServiceCategory"
     Project: "Project"
     Document: "Document"
     DocumentVersion: "DocumentVersion"
@@ -1663,7 +1657,6 @@ export namespace Prisma {
     meta: {
       modelProps:
         | "dashboardMetricSnapshot"
-        | "searchDocument"
         | "eventOutbox"
         | "user"
         | "lead"
@@ -1671,6 +1664,7 @@ export namespace Prisma {
         | "leadActivity"
         | "messageTemplate"
         | "savedView"
+        | "serviceCategory"
         | "project"
         | "document"
         | "documentVersion"
@@ -1775,82 +1769,6 @@ export namespace Prisma {
             args: Prisma.DashboardMetricSnapshotCountArgs<ExtArgs>
             result:
               | $Utils.Optional<DashboardMetricSnapshotCountAggregateOutputType>
-              | number
-          }
-        }
-      }
-      SearchDocument: {
-        payload: Prisma.$SearchDocumentPayload<ExtArgs>
-        fields: Prisma.SearchDocumentFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.SearchDocumentFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.SearchDocumentFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          findFirst: {
-            args: Prisma.SearchDocumentFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.SearchDocumentFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          findMany: {
-            args: Prisma.SearchDocumentFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>[]
-          }
-          create: {
-            args: Prisma.SearchDocumentCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          createMany: {
-            args: Prisma.SearchDocumentCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.SearchDocumentCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>[]
-          }
-          delete: {
-            args: Prisma.SearchDocumentDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          update: {
-            args: Prisma.SearchDocumentUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          deleteMany: {
-            args: Prisma.SearchDocumentDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.SearchDocumentUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.SearchDocumentUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>[]
-          }
-          upsert: {
-            args: Prisma.SearchDocumentUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$SearchDocumentPayload>
-          }
-          aggregate: {
-            args: Prisma.SearchDocumentAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateSearchDocument>
-          }
-          groupBy: {
-            args: Prisma.SearchDocumentGroupByArgs<ExtArgs>
-            result: $Utils.Optional<SearchDocumentGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.SearchDocumentCountArgs<ExtArgs>
-            result:
-              | $Utils.Optional<SearchDocumentCountAggregateOutputType>
               | number
           }
         }
@@ -2376,6 +2294,82 @@ export namespace Prisma {
           count: {
             args: Prisma.SavedViewCountArgs<ExtArgs>
             result: $Utils.Optional<SavedViewCountAggregateOutputType> | number
+          }
+        }
+      }
+      ServiceCategory: {
+        payload: Prisma.$ServiceCategoryPayload<ExtArgs>
+        fields: Prisma.ServiceCategoryFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.ServiceCategoryFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.ServiceCategoryFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          findFirst: {
+            args: Prisma.ServiceCategoryFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.ServiceCategoryFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          findMany: {
+            args: Prisma.ServiceCategoryFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>[]
+          }
+          create: {
+            args: Prisma.ServiceCategoryCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          createMany: {
+            args: Prisma.ServiceCategoryCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.ServiceCategoryCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>[]
+          }
+          delete: {
+            args: Prisma.ServiceCategoryDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          update: {
+            args: Prisma.ServiceCategoryUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          deleteMany: {
+            args: Prisma.ServiceCategoryDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.ServiceCategoryUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.ServiceCategoryUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>[]
+          }
+          upsert: {
+            args: Prisma.ServiceCategoryUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$ServiceCategoryPayload>
+          }
+          aggregate: {
+            args: Prisma.ServiceCategoryAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateServiceCategory>
+          }
+          groupBy: {
+            args: Prisma.ServiceCategoryGroupByArgs<ExtArgs>
+            result: $Utils.Optional<ServiceCategoryGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.ServiceCategoryCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<ServiceCategoryCountAggregateOutputType>
+              | number
           }
         }
       }
@@ -4670,7 +4664,6 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     dashboardMetricSnapshot?: DashboardMetricSnapshotOmit
-    searchDocument?: SearchDocumentOmit
     eventOutbox?: EventOutboxOmit
     user?: UserOmit
     lead?: LeadOmit
@@ -4678,6 +4671,7 @@ export namespace Prisma {
     leadActivity?: LeadActivityOmit
     messageTemplate?: MessageTemplateOmit
     savedView?: SavedViewOmit
+    serviceCategory?: ServiceCategoryOmit
     project?: ProjectOmit
     document?: DocumentOmit
     documentVersion?: DocumentVersionOmit
@@ -5047,6 +5041,42 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: DocumentWhereInput
+  }
+
+  /**
+   * Count Type ServiceCategoryCountOutputType
+   */
+
+  export type ServiceCategoryCountOutputType = {
+    projects: number
+  }
+
+  export type ServiceCategoryCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    projects?: boolean | ServiceCategoryCountOutputTypeCountProjectsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * ServiceCategoryCountOutputType without action
+   */
+  export type ServiceCategoryCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategoryCountOutputType
+     */
+    select?: ServiceCategoryCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * ServiceCategoryCountOutputType without action
+   */
+  export type ServiceCategoryCountOutputTypeCountProjectsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ProjectWhereInput
   }
 
   /**
@@ -6919,1298 +6949,6 @@ export namespace Prisma {
      * Omit specific fields from the DashboardMetricSnapshot
      */
     omit?: DashboardMetricSnapshotOmit<ExtArgs> | null
-  }
-
-  /**
-   * Model SearchDocument
-   */
-
-  export type AggregateSearchDocument = {
-    _count: SearchDocumentCountAggregateOutputType | null
-    _min: SearchDocumentMinAggregateOutputType | null
-    _max: SearchDocumentMaxAggregateOutputType | null
-  }
-
-  export type SearchDocumentMinAggregateOutputType = {
-    id: string | null
-    entityType: string | null
-    entityId: string | null
-    projectId: string | null
-    title: string | null
-    subtitle: string | null
-    body: string | null
-    updatedAt: Date | null
-  }
-
-  export type SearchDocumentMaxAggregateOutputType = {
-    id: string | null
-    entityType: string | null
-    entityId: string | null
-    projectId: string | null
-    title: string | null
-    subtitle: string | null
-    body: string | null
-    updatedAt: Date | null
-  }
-
-  export type SearchDocumentCountAggregateOutputType = {
-    id: number
-    entityType: number
-    entityId: number
-    projectId: number
-    title: number
-    subtitle: number
-    body: number
-    metadata: number
-    updatedAt: number
-    _all: number
-  }
-
-  export type SearchDocumentMinAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    projectId?: true
-    title?: true
-    subtitle?: true
-    body?: true
-    updatedAt?: true
-  }
-
-  export type SearchDocumentMaxAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    projectId?: true
-    title?: true
-    subtitle?: true
-    body?: true
-    updatedAt?: true
-  }
-
-  export type SearchDocumentCountAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    projectId?: true
-    title?: true
-    subtitle?: true
-    body?: true
-    metadata?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type SearchDocumentAggregateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which SearchDocument to aggregate.
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of SearchDocuments to fetch.
-     */
-    orderBy?:
-      | SearchDocumentOrderByWithRelationInput
-      | SearchDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the start position
-     */
-    cursor?: SearchDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` SearchDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` SearchDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Count returned SearchDocuments
-     **/
-    _count?: true | SearchDocumentCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the minimum value
-     **/
-    _min?: SearchDocumentMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the maximum value
-     **/
-    _max?: SearchDocumentMaxAggregateInputType
-  }
-
-  export type GetSearchDocumentAggregateType<
-    T extends SearchDocumentAggregateArgs,
-  > = {
-    [P in keyof T & keyof AggregateSearchDocument]: P extends "_count" | "count"
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateSearchDocument[P]>
-      : GetScalarType<T[P], AggregateSearchDocument[P]>
-  }
-
-  export type SearchDocumentGroupByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: SearchDocumentWhereInput
-    orderBy?:
-      | SearchDocumentOrderByWithAggregationInput
-      | SearchDocumentOrderByWithAggregationInput[]
-    by: SearchDocumentScalarFieldEnum[] | SearchDocumentScalarFieldEnum
-    having?: SearchDocumentScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: SearchDocumentCountAggregateInputType | true
-    _min?: SearchDocumentMinAggregateInputType
-    _max?: SearchDocumentMaxAggregateInputType
-  }
-
-  export type SearchDocumentGroupByOutputType = {
-    id: string
-    entityType: string
-    entityId: string
-    projectId: string | null
-    title: string
-    subtitle: string | null
-    body: string | null
-    metadata: JsonValue | null
-    updatedAt: Date
-    _count: SearchDocumentCountAggregateOutputType | null
-    _min: SearchDocumentMinAggregateOutputType | null
-    _max: SearchDocumentMaxAggregateOutputType | null
-  }
-
-  type GetSearchDocumentGroupByPayload<T extends SearchDocumentGroupByArgs> =
-    Prisma.PrismaPromise<
-      Array<
-        PickEnumerable<SearchDocumentGroupByOutputType, T["by"]> & {
-          [P in keyof T &
-            keyof SearchDocumentGroupByOutputType]: P extends "_count"
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], SearchDocumentGroupByOutputType[P]>
-            : GetScalarType<T[P], SearchDocumentGroupByOutputType[P]>
-        }
-      >
-    >
-
-  export type SearchDocumentSelect<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      projectId?: boolean
-      title?: boolean
-      subtitle?: boolean
-      body?: boolean
-      metadata?: boolean
-      updatedAt?: boolean
-    },
-    ExtArgs["result"]["searchDocument"]
-  >
-
-  export type SearchDocumentSelectCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      projectId?: boolean
-      title?: boolean
-      subtitle?: boolean
-      body?: boolean
-      metadata?: boolean
-      updatedAt?: boolean
-    },
-    ExtArgs["result"]["searchDocument"]
-  >
-
-  export type SearchDocumentSelectUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      projectId?: boolean
-      title?: boolean
-      subtitle?: boolean
-      body?: boolean
-      metadata?: boolean
-      updatedAt?: boolean
-    },
-    ExtArgs["result"]["searchDocument"]
-  >
-
-  export type SearchDocumentSelectScalar = {
-    id?: boolean
-    entityType?: boolean
-    entityId?: boolean
-    projectId?: boolean
-    title?: boolean
-    subtitle?: boolean
-    body?: boolean
-    metadata?: boolean
-    updatedAt?: boolean
-  }
-
-  export type SearchDocumentOmit<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetOmit<
-    | "id"
-    | "entityType"
-    | "entityId"
-    | "projectId"
-    | "title"
-    | "subtitle"
-    | "body"
-    | "metadata"
-    | "updatedAt",
-    ExtArgs["result"]["searchDocument"]
-  >
-
-  export type $SearchDocumentPayload<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    name: "SearchDocument"
-    objects: {}
-    scalars: $Extensions.GetPayloadResult<
-      {
-        id: string
-        entityType: string
-        entityId: string
-        projectId: string | null
-        title: string
-        subtitle: string | null
-        body: string | null
-        metadata: Prisma.JsonValue | null
-        updatedAt: Date
-      },
-      ExtArgs["result"]["searchDocument"]
-    >
-    composites: {}
-  }
-
-  type SearchDocumentGetPayload<
-    S extends boolean | null | undefined | SearchDocumentDefaultArgs,
-  > = $Result.GetResult<Prisma.$SearchDocumentPayload, S>
-
-  type SearchDocumentCountArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<
-    SearchDocumentFindManyArgs,
-    "select" | "include" | "distinct" | "omit"
-  > & {
-    select?: SearchDocumentCountAggregateInputType | true
-  }
-
-  export interface SearchDocumentDelegate<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > {
-    [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["SearchDocument"]
-      meta: { name: "SearchDocument" }
-    }
-    /**
-     * Find zero or one SearchDocument that matches the filter.
-     * @param {SearchDocumentFindUniqueArgs} args - Arguments to find a SearchDocument
-     * @example
-     * // Get one SearchDocument
-     * const searchDocument = await prisma.searchDocument.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends SearchDocumentFindUniqueArgs>(
-      args: SelectSubset<T, SearchDocumentFindUniqueArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "findUnique",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find one SearchDocument that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {SearchDocumentFindUniqueOrThrowArgs} args - Arguments to find a SearchDocument
-     * @example
-     * // Get one SearchDocument
-     * const searchDocument = await prisma.searchDocument.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends SearchDocumentFindUniqueOrThrowArgs>(
-      args: SelectSubset<T, SearchDocumentFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first SearchDocument that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentFindFirstArgs} args - Arguments to find a SearchDocument
-     * @example
-     * // Get one SearchDocument
-     * const searchDocument = await prisma.searchDocument.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends SearchDocumentFindFirstArgs>(
-      args?: SelectSubset<T, SearchDocumentFindFirstArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "findFirst",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first SearchDocument that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentFindFirstOrThrowArgs} args - Arguments to find a SearchDocument
-     * @example
-     * // Get one SearchDocument
-     * const searchDocument = await prisma.searchDocument.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends SearchDocumentFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, SearchDocumentFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "findFirstOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find zero or more SearchDocuments that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all SearchDocuments
-     * const searchDocuments = await prisma.searchDocument.findMany()
-     *
-     * // Get first 10 SearchDocuments
-     * const searchDocuments = await prisma.searchDocument.findMany({ take: 10 })
-     *
-     * // Only select the `id`
-     * const searchDocumentWithIdOnly = await prisma.searchDocument.findMany({ select: { id: true } })
-     *
-     */
-    findMany<T extends SearchDocumentFindManyArgs>(
-      args?: SelectSubset<T, SearchDocumentFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "findMany",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create a SearchDocument.
-     * @param {SearchDocumentCreateArgs} args - Arguments to create a SearchDocument.
-     * @example
-     * // Create one SearchDocument
-     * const SearchDocument = await prisma.searchDocument.create({
-     *   data: {
-     *     // ... data to create a SearchDocument
-     *   }
-     * })
-     *
-     */
-    create<T extends SearchDocumentCreateArgs>(
-      args: SelectSubset<T, SearchDocumentCreateArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "create",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Create many SearchDocuments.
-     * @param {SearchDocumentCreateManyArgs} args - Arguments to create many SearchDocuments.
-     * @example
-     * // Create many SearchDocuments
-     * const searchDocument = await prisma.searchDocument.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     */
-    createMany<T extends SearchDocumentCreateManyArgs>(
-      args?: SelectSubset<T, SearchDocumentCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many SearchDocuments and returns the data saved in the database.
-     * @param {SearchDocumentCreateManyAndReturnArgs} args - Arguments to create many SearchDocuments.
-     * @example
-     * // Create many SearchDocuments
-     * const searchDocument = await prisma.searchDocument.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Create many SearchDocuments and only return the `id`
-     * const searchDocumentWithIdOnly = await prisma.searchDocument.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    createManyAndReturn<T extends SearchDocumentCreateManyAndReturnArgs>(
-      args?: SelectSubset<T, SearchDocumentCreateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "createManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Delete a SearchDocument.
-     * @param {SearchDocumentDeleteArgs} args - Arguments to delete one SearchDocument.
-     * @example
-     * // Delete one SearchDocument
-     * const SearchDocument = await prisma.searchDocument.delete({
-     *   where: {
-     *     // ... filter to delete one SearchDocument
-     *   }
-     * })
-     *
-     */
-    delete<T extends SearchDocumentDeleteArgs>(
-      args: SelectSubset<T, SearchDocumentDeleteArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "delete",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Update one SearchDocument.
-     * @param {SearchDocumentUpdateArgs} args - Arguments to update one SearchDocument.
-     * @example
-     * // Update one SearchDocument
-     * const searchDocument = await prisma.searchDocument.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    update<T extends SearchDocumentUpdateArgs>(
-      args: SelectSubset<T, SearchDocumentUpdateArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "update",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Delete zero or more SearchDocuments.
-     * @param {SearchDocumentDeleteManyArgs} args - Arguments to filter SearchDocuments to delete.
-     * @example
-     * // Delete a few SearchDocuments
-     * const { count } = await prisma.searchDocument.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     *
-     */
-    deleteMany<T extends SearchDocumentDeleteManyArgs>(
-      args?: SelectSubset<T, SearchDocumentDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SearchDocuments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many SearchDocuments
-     * const searchDocument = await prisma.searchDocument.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    updateMany<T extends SearchDocumentUpdateManyArgs>(
-      args: SelectSubset<T, SearchDocumentUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more SearchDocuments and returns the data updated in the database.
-     * @param {SearchDocumentUpdateManyAndReturnArgs} args - Arguments to update many SearchDocuments.
-     * @example
-     * // Update many SearchDocuments
-     * const searchDocument = await prisma.searchDocument.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Update zero or more SearchDocuments and only return the `id`
-     * const searchDocumentWithIdOnly = await prisma.searchDocument.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    updateManyAndReturn<T extends SearchDocumentUpdateManyAndReturnArgs>(
-      args: SelectSubset<T, SearchDocumentUpdateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "updateManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create or update one SearchDocument.
-     * @param {SearchDocumentUpsertArgs} args - Arguments to update or create a SearchDocument.
-     * @example
-     * // Update or create a SearchDocument
-     * const searchDocument = await prisma.searchDocument.upsert({
-     *   create: {
-     *     // ... data to create a SearchDocument
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the SearchDocument we want to update
-     *   }
-     * })
-     */
-    upsert<T extends SearchDocumentUpsertArgs>(
-      args: SelectSubset<T, SearchDocumentUpsertArgs<ExtArgs>>
-    ): Prisma__SearchDocumentClient<
-      $Result.GetResult<
-        Prisma.$SearchDocumentPayload<ExtArgs>,
-        T,
-        "upsert",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Count the number of SearchDocuments.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentCountArgs} args - Arguments to filter SearchDocuments to count.
-     * @example
-     * // Count the number of SearchDocuments
-     * const count = await prisma.searchDocument.count({
-     *   where: {
-     *     // ... the filter for the SearchDocuments we want to count
-     *   }
-     * })
-     **/
-    count<T extends SearchDocumentCountArgs>(
-      args?: Subset<T, SearchDocumentCountArgs>
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
-          ? number
-          : GetScalarType<T["select"], SearchDocumentCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a SearchDocument.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-     **/
-    aggregate<T extends SearchDocumentAggregateArgs>(
-      args: Subset<T, SearchDocumentAggregateArgs>
-    ): Prisma.PrismaPromise<GetSearchDocumentAggregateType<T>>
-
-    /**
-     * Group by SearchDocument.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {SearchDocumentGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     *
-     **/
-    groupBy<
-      T extends SearchDocumentGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: SearchDocumentGroupByArgs["orderBy"] }
-        : { orderBy?: SearchDocumentGroupByArgs["orderBy"] },
-      OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
-      >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-          ? {
-              [P in HavingFields]: P extends ByFields
-                ? never
-                : P extends string
-                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-                  : [
-                      Error,
-                      "Field ",
-                      P,
-                      ` in "having" needs to be provided in "by"`,
-                    ]
-            }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
-              ? ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields]
-              : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
-                ? ByValid extends True
-                  ? {}
-                  : {
-                      [P in OrderFields]: P extends ByFields
-                        ? never
-                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                    }[OrderFields]
-                : 'Error: If you provide "skip", you also need to provide "orderBy"'
-              : ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields],
-    >(
-      args: SubsetIntersection<T, SearchDocumentGroupByArgs, OrderByArg> &
-        InputErrors
-    ): {} extends InputErrors
-      ? GetSearchDocumentGroupByPayload<T>
-      : Prisma.PrismaPromise<InputErrors>
-    /**
-     * Fields of the SearchDocument model
-     */
-    readonly fields: SearchDocumentFieldRefs
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for SearchDocument.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__SearchDocumentClient<
-    T,
-    Null = never,
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(
-      onfulfilled?:
-        | ((value: T) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
-      onrejected?:
-        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(
-      onrejected?:
-        | ((reason: any) => TResult | PromiseLike<TResult>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-  /**
-   * Fields of the SearchDocument model
-   */
-  interface SearchDocumentFieldRefs {
-    readonly id: FieldRef<"SearchDocument", "String">
-    readonly entityType: FieldRef<"SearchDocument", "String">
-    readonly entityId: FieldRef<"SearchDocument", "String">
-    readonly projectId: FieldRef<"SearchDocument", "String">
-    readonly title: FieldRef<"SearchDocument", "String">
-    readonly subtitle: FieldRef<"SearchDocument", "String">
-    readonly body: FieldRef<"SearchDocument", "String">
-    readonly metadata: FieldRef<"SearchDocument", "Json">
-    readonly updatedAt: FieldRef<"SearchDocument", "DateTime">
-  }
-
-  // Custom InputTypes
-  /**
-   * SearchDocument findUnique
-   */
-  export type SearchDocumentFindUniqueArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter, which SearchDocument to fetch.
-     */
-    where: SearchDocumentWhereUniqueInput
-  }
-
-  /**
-   * SearchDocument findUniqueOrThrow
-   */
-  export type SearchDocumentFindUniqueOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter, which SearchDocument to fetch.
-     */
-    where: SearchDocumentWhereUniqueInput
-  }
-
-  /**
-   * SearchDocument findFirst
-   */
-  export type SearchDocumentFindFirstArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter, which SearchDocument to fetch.
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of SearchDocuments to fetch.
-     */
-    orderBy?:
-      | SearchDocumentOrderByWithRelationInput
-      | SearchDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for SearchDocuments.
-     */
-    cursor?: SearchDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` SearchDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` SearchDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of SearchDocuments.
-     */
-    distinct?: SearchDocumentScalarFieldEnum | SearchDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SearchDocument findFirstOrThrow
-   */
-  export type SearchDocumentFindFirstOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter, which SearchDocument to fetch.
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of SearchDocuments to fetch.
-     */
-    orderBy?:
-      | SearchDocumentOrderByWithRelationInput
-      | SearchDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for SearchDocuments.
-     */
-    cursor?: SearchDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` SearchDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` SearchDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of SearchDocuments.
-     */
-    distinct?: SearchDocumentScalarFieldEnum | SearchDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SearchDocument findMany
-   */
-  export type SearchDocumentFindManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter, which SearchDocuments to fetch.
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of SearchDocuments to fetch.
-     */
-    orderBy?:
-      | SearchDocumentOrderByWithRelationInput
-      | SearchDocumentOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for listing SearchDocuments.
-     */
-    cursor?: SearchDocumentWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` SearchDocuments from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` SearchDocuments.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of SearchDocuments.
-     */
-    distinct?: SearchDocumentScalarFieldEnum | SearchDocumentScalarFieldEnum[]
-  }
-
-  /**
-   * SearchDocument create
-   */
-  export type SearchDocumentCreateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * The data needed to create a SearchDocument.
-     */
-    data: XOR<SearchDocumentCreateInput, SearchDocumentUncheckedCreateInput>
-  }
-
-  /**
-   * SearchDocument createMany
-   */
-  export type SearchDocumentCreateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to create many SearchDocuments.
-     */
-    data: SearchDocumentCreateManyInput | SearchDocumentCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * SearchDocument createManyAndReturn
-   */
-  export type SearchDocumentCreateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * The data used to create many SearchDocuments.
-     */
-    data: SearchDocumentCreateManyInput | SearchDocumentCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * SearchDocument update
-   */
-  export type SearchDocumentUpdateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * The data needed to update a SearchDocument.
-     */
-    data: XOR<SearchDocumentUpdateInput, SearchDocumentUncheckedUpdateInput>
-    /**
-     * Choose, which SearchDocument to update.
-     */
-    where: SearchDocumentWhereUniqueInput
-  }
-
-  /**
-   * SearchDocument updateMany
-   */
-  export type SearchDocumentUpdateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to update SearchDocuments.
-     */
-    data: XOR<
-      SearchDocumentUpdateManyMutationInput,
-      SearchDocumentUncheckedUpdateManyInput
-    >
-    /**
-     * Filter which SearchDocuments to update
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * Limit how many SearchDocuments to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SearchDocument updateManyAndReturn
-   */
-  export type SearchDocumentUpdateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * The data used to update SearchDocuments.
-     */
-    data: XOR<
-      SearchDocumentUpdateManyMutationInput,
-      SearchDocumentUncheckedUpdateManyInput
-    >
-    /**
-     * Filter which SearchDocuments to update
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * Limit how many SearchDocuments to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * SearchDocument upsert
-   */
-  export type SearchDocumentUpsertArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * The filter to search for the SearchDocument to update in case it exists.
-     */
-    where: SearchDocumentWhereUniqueInput
-    /**
-     * In case the SearchDocument found by the `where` argument doesn't exist, create a new SearchDocument with this data.
-     */
-    create: XOR<SearchDocumentCreateInput, SearchDocumentUncheckedCreateInput>
-    /**
-     * In case the SearchDocument was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<SearchDocumentUpdateInput, SearchDocumentUncheckedUpdateInput>
-  }
-
-  /**
-   * SearchDocument delete
-   */
-  export type SearchDocumentDeleteArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
-    /**
-     * Filter which SearchDocument to delete.
-     */
-    where: SearchDocumentWhereUniqueInput
-  }
-
-  /**
-   * SearchDocument deleteMany
-   */
-  export type SearchDocumentDeleteManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which SearchDocuments to delete
-     */
-    where?: SearchDocumentWhereInput
-    /**
-     * Limit how many SearchDocuments to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * SearchDocument without action
-   */
-  export type SearchDocumentDefaultArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the SearchDocument
-     */
-    select?: SearchDocumentSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the SearchDocument
-     */
-    omit?: SearchDocumentOmit<ExtArgs> | null
   }
 
   /**
@@ -18529,6 +17267,1433 @@ export namespace Prisma {
   }
 
   /**
+   * Model ServiceCategory
+   */
+
+  export type AggregateServiceCategory = {
+    _count: ServiceCategoryCountAggregateOutputType | null
+    _avg: ServiceCategoryAvgAggregateOutputType | null
+    _sum: ServiceCategorySumAggregateOutputType | null
+    _min: ServiceCategoryMinAggregateOutputType | null
+    _max: ServiceCategoryMaxAggregateOutputType | null
+  }
+
+  export type ServiceCategoryAvgAggregateOutputType = {
+    suggestedValue: number | null
+  }
+
+  export type ServiceCategorySumAggregateOutputType = {
+    suggestedValue: number | null
+  }
+
+  export type ServiceCategoryMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    approach: string | null
+    suggestedValue: number | null
+    imageUrl: string | null
+    isSubscription: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceCategoryMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    description: string | null
+    approach: string | null
+    suggestedValue: number | null
+    imageUrl: string | null
+    isSubscription: boolean | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type ServiceCategoryCountAggregateOutputType = {
+    id: number
+    name: number
+    description: number
+    approach: number
+    suggestedValue: number
+    imageUrl: number
+    isSubscription: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type ServiceCategoryAvgAggregateInputType = {
+    suggestedValue?: true
+  }
+
+  export type ServiceCategorySumAggregateInputType = {
+    suggestedValue?: true
+  }
+
+  export type ServiceCategoryMinAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    approach?: true
+    suggestedValue?: true
+    imageUrl?: true
+    isSubscription?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceCategoryMaxAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    approach?: true
+    suggestedValue?: true
+    imageUrl?: true
+    isSubscription?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type ServiceCategoryCountAggregateInputType = {
+    id?: true
+    name?: true
+    description?: true
+    approach?: true
+    suggestedValue?: true
+    imageUrl?: true
+    isSubscription?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type ServiceCategoryAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ServiceCategory to aggregate.
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ServiceCategories to fetch.
+     */
+    orderBy?:
+      | ServiceCategoryOrderByWithRelationInput
+      | ServiceCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: ServiceCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ServiceCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ServiceCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned ServiceCategories
+     **/
+    _count?: true | ServiceCategoryCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: ServiceCategoryAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: ServiceCategorySumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: ServiceCategoryMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: ServiceCategoryMaxAggregateInputType
+  }
+
+  export type GetServiceCategoryAggregateType<
+    T extends ServiceCategoryAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateServiceCategory]: P extends
+      | "_count"
+      | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateServiceCategory[P]>
+      : GetScalarType<T[P], AggregateServiceCategory[P]>
+  }
+
+  export type ServiceCategoryGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: ServiceCategoryWhereInput
+    orderBy?:
+      | ServiceCategoryOrderByWithAggregationInput
+      | ServiceCategoryOrderByWithAggregationInput[]
+    by: ServiceCategoryScalarFieldEnum[] | ServiceCategoryScalarFieldEnum
+    having?: ServiceCategoryScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: ServiceCategoryCountAggregateInputType | true
+    _avg?: ServiceCategoryAvgAggregateInputType
+    _sum?: ServiceCategorySumAggregateInputType
+    _min?: ServiceCategoryMinAggregateInputType
+    _max?: ServiceCategoryMaxAggregateInputType
+  }
+
+  export type ServiceCategoryGroupByOutputType = {
+    id: string
+    name: string
+    description: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl: string | null
+    isSubscription: boolean
+    createdAt: Date
+    updatedAt: Date
+    _count: ServiceCategoryCountAggregateOutputType | null
+    _avg: ServiceCategoryAvgAggregateOutputType | null
+    _sum: ServiceCategorySumAggregateOutputType | null
+    _min: ServiceCategoryMinAggregateOutputType | null
+    _max: ServiceCategoryMaxAggregateOutputType | null
+  }
+
+  type GetServiceCategoryGroupByPayload<T extends ServiceCategoryGroupByArgs> =
+    Prisma.PrismaPromise<
+      Array<
+        PickEnumerable<ServiceCategoryGroupByOutputType, T["by"]> & {
+          [P in keyof T &
+            keyof ServiceCategoryGroupByOutputType]: P extends "_count"
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], ServiceCategoryGroupByOutputType[P]>
+            : GetScalarType<T[P], ServiceCategoryGroupByOutputType[P]>
+        }
+      >
+    >
+
+  export type ServiceCategorySelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      name?: boolean
+      description?: boolean
+      approach?: boolean
+      suggestedValue?: boolean
+      imageUrl?: boolean
+      isSubscription?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      projects?: boolean | ServiceCategory$projectsArgs<ExtArgs>
+      _count?: boolean | ServiceCategoryCountOutputTypeDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["serviceCategory"]
+  >
+
+  export type ServiceCategorySelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      name?: boolean
+      description?: boolean
+      approach?: boolean
+      suggestedValue?: boolean
+      imageUrl?: boolean
+      isSubscription?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs["result"]["serviceCategory"]
+  >
+
+  export type ServiceCategorySelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      name?: boolean
+      description?: boolean
+      approach?: boolean
+      suggestedValue?: boolean
+      imageUrl?: boolean
+      isSubscription?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+    },
+    ExtArgs["result"]["serviceCategory"]
+  >
+
+  export type ServiceCategorySelectScalar = {
+    id?: boolean
+    name?: boolean
+    description?: boolean
+    approach?: boolean
+    suggestedValue?: boolean
+    imageUrl?: boolean
+    isSubscription?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type ServiceCategoryOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "name"
+    | "description"
+    | "approach"
+    | "suggestedValue"
+    | "imageUrl"
+    | "isSubscription"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["serviceCategory"]
+  >
+  export type ServiceCategoryInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    projects?: boolean | ServiceCategory$projectsArgs<ExtArgs>
+    _count?: boolean | ServiceCategoryCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type ServiceCategoryIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {}
+  export type ServiceCategoryIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {}
+
+  export type $ServiceCategoryPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "ServiceCategory"
+    objects: {
+      projects: Prisma.$ProjectPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        name: string
+        description: string | null
+        approach: string
+        suggestedValue: number
+        imageUrl: string | null
+        isSubscription: boolean
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs["result"]["serviceCategory"]
+    >
+    composites: {}
+  }
+
+  type ServiceCategoryGetPayload<
+    S extends boolean | null | undefined | ServiceCategoryDefaultArgs,
+  > = $Result.GetResult<Prisma.$ServiceCategoryPayload, S>
+
+  type ServiceCategoryCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    ServiceCategoryFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: ServiceCategoryCountAggregateInputType | true
+  }
+
+  export interface ServiceCategoryDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["ServiceCategory"]
+      meta: { name: "ServiceCategory" }
+    }
+    /**
+     * Find zero or one ServiceCategory that matches the filter.
+     * @param {ServiceCategoryFindUniqueArgs} args - Arguments to find a ServiceCategory
+     * @example
+     * // Get one ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends ServiceCategoryFindUniqueArgs>(
+      args: SelectSubset<T, ServiceCategoryFindUniqueArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one ServiceCategory that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {ServiceCategoryFindUniqueOrThrowArgs} args - Arguments to find a ServiceCategory
+     * @example
+     * // Get one ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends ServiceCategoryFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, ServiceCategoryFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ServiceCategory that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryFindFirstArgs} args - Arguments to find a ServiceCategory
+     * @example
+     * // Get one ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends ServiceCategoryFindFirstArgs>(
+      args?: SelectSubset<T, ServiceCategoryFindFirstArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first ServiceCategory that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryFindFirstOrThrowArgs} args - Arguments to find a ServiceCategory
+     * @example
+     * // Get one ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends ServiceCategoryFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, ServiceCategoryFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more ServiceCategories that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all ServiceCategories
+     * const serviceCategories = await prisma.serviceCategory.findMany()
+     *
+     * // Get first 10 ServiceCategories
+     * const serviceCategories = await prisma.serviceCategory.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const serviceCategoryWithIdOnly = await prisma.serviceCategory.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends ServiceCategoryFindManyArgs>(
+      args?: SelectSubset<T, ServiceCategoryFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a ServiceCategory.
+     * @param {ServiceCategoryCreateArgs} args - Arguments to create a ServiceCategory.
+     * @example
+     * // Create one ServiceCategory
+     * const ServiceCategory = await prisma.serviceCategory.create({
+     *   data: {
+     *     // ... data to create a ServiceCategory
+     *   }
+     * })
+     *
+     */
+    create<T extends ServiceCategoryCreateArgs>(
+      args: SelectSubset<T, ServiceCategoryCreateArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many ServiceCategories.
+     * @param {ServiceCategoryCreateManyArgs} args - Arguments to create many ServiceCategories.
+     * @example
+     * // Create many ServiceCategories
+     * const serviceCategory = await prisma.serviceCategory.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends ServiceCategoryCreateManyArgs>(
+      args?: SelectSubset<T, ServiceCategoryCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many ServiceCategories and returns the data saved in the database.
+     * @param {ServiceCategoryCreateManyAndReturnArgs} args - Arguments to create many ServiceCategories.
+     * @example
+     * // Create many ServiceCategories
+     * const serviceCategory = await prisma.serviceCategory.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many ServiceCategories and only return the `id`
+     * const serviceCategoryWithIdOnly = await prisma.serviceCategory.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends ServiceCategoryCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, ServiceCategoryCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a ServiceCategory.
+     * @param {ServiceCategoryDeleteArgs} args - Arguments to delete one ServiceCategory.
+     * @example
+     * // Delete one ServiceCategory
+     * const ServiceCategory = await prisma.serviceCategory.delete({
+     *   where: {
+     *     // ... filter to delete one ServiceCategory
+     *   }
+     * })
+     *
+     */
+    delete<T extends ServiceCategoryDeleteArgs>(
+      args: SelectSubset<T, ServiceCategoryDeleteArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one ServiceCategory.
+     * @param {ServiceCategoryUpdateArgs} args - Arguments to update one ServiceCategory.
+     * @example
+     * // Update one ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends ServiceCategoryUpdateArgs>(
+      args: SelectSubset<T, ServiceCategoryUpdateArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more ServiceCategories.
+     * @param {ServiceCategoryDeleteManyArgs} args - Arguments to filter ServiceCategories to delete.
+     * @example
+     * // Delete a few ServiceCategories
+     * const { count } = await prisma.serviceCategory.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends ServiceCategoryDeleteManyArgs>(
+      args?: SelectSubset<T, ServiceCategoryDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many ServiceCategories
+     * const serviceCategory = await prisma.serviceCategory.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends ServiceCategoryUpdateManyArgs>(
+      args: SelectSubset<T, ServiceCategoryUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more ServiceCategories and returns the data updated in the database.
+     * @param {ServiceCategoryUpdateManyAndReturnArgs} args - Arguments to update many ServiceCategories.
+     * @example
+     * // Update many ServiceCategories
+     * const serviceCategory = await prisma.serviceCategory.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more ServiceCategories and only return the `id`
+     * const serviceCategoryWithIdOnly = await prisma.serviceCategory.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends ServiceCategoryUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, ServiceCategoryUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one ServiceCategory.
+     * @param {ServiceCategoryUpsertArgs} args - Arguments to update or create a ServiceCategory.
+     * @example
+     * // Update or create a ServiceCategory
+     * const serviceCategory = await prisma.serviceCategory.upsert({
+     *   create: {
+     *     // ... data to create a ServiceCategory
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the ServiceCategory we want to update
+     *   }
+     * })
+     */
+    upsert<T extends ServiceCategoryUpsertArgs>(
+      args: SelectSubset<T, ServiceCategoryUpsertArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of ServiceCategories.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryCountArgs} args - Arguments to filter ServiceCategories to count.
+     * @example
+     * // Count the number of ServiceCategories
+     * const count = await prisma.serviceCategory.count({
+     *   where: {
+     *     // ... the filter for the ServiceCategories we want to count
+     *   }
+     * })
+     **/
+    count<T extends ServiceCategoryCountArgs>(
+      args?: Subset<T, ServiceCategoryCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], ServiceCategoryCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a ServiceCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends ServiceCategoryAggregateArgs>(
+      args: Subset<T, ServiceCategoryAggregateArgs>
+    ): Prisma.PrismaPromise<GetServiceCategoryAggregateType<T>>
+
+    /**
+     * Group by ServiceCategory.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {ServiceCategoryGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends ServiceCategoryGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: ServiceCategoryGroupByArgs["orderBy"] }
+        : { orderBy?: ServiceCategoryGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, ServiceCategoryGroupByArgs, OrderByArg> &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetServiceCategoryGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the ServiceCategory model
+     */
+    readonly fields: ServiceCategoryFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for ServiceCategory.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__ServiceCategoryClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    projects<T extends ServiceCategory$projectsArgs<ExtArgs> = {}>(
+      args?: Subset<T, ServiceCategory$projectsArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$ProjectPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the ServiceCategory model
+   */
+  interface ServiceCategoryFieldRefs {
+    readonly id: FieldRef<"ServiceCategory", "String">
+    readonly name: FieldRef<"ServiceCategory", "String">
+    readonly description: FieldRef<"ServiceCategory", "String">
+    readonly approach: FieldRef<"ServiceCategory", "String">
+    readonly suggestedValue: FieldRef<"ServiceCategory", "Int">
+    readonly imageUrl: FieldRef<"ServiceCategory", "String">
+    readonly isSubscription: FieldRef<"ServiceCategory", "Boolean">
+    readonly createdAt: FieldRef<"ServiceCategory", "DateTime">
+    readonly updatedAt: FieldRef<"ServiceCategory", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * ServiceCategory findUnique
+   */
+  export type ServiceCategoryFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCategory to fetch.
+     */
+    where: ServiceCategoryWhereUniqueInput
+  }
+
+  /**
+   * ServiceCategory findUniqueOrThrow
+   */
+  export type ServiceCategoryFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCategory to fetch.
+     */
+    where: ServiceCategoryWhereUniqueInput
+  }
+
+  /**
+   * ServiceCategory findFirst
+   */
+  export type ServiceCategoryFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCategory to fetch.
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ServiceCategories to fetch.
+     */
+    orderBy?:
+      | ServiceCategoryOrderByWithRelationInput
+      | ServiceCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ServiceCategories.
+     */
+    cursor?: ServiceCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ServiceCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ServiceCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ServiceCategories.
+     */
+    distinct?: ServiceCategoryScalarFieldEnum | ServiceCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCategory findFirstOrThrow
+   */
+  export type ServiceCategoryFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCategory to fetch.
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ServiceCategories to fetch.
+     */
+    orderBy?:
+      | ServiceCategoryOrderByWithRelationInput
+      | ServiceCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for ServiceCategories.
+     */
+    cursor?: ServiceCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ServiceCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ServiceCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ServiceCategories.
+     */
+    distinct?: ServiceCategoryScalarFieldEnum | ServiceCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCategory findMany
+   */
+  export type ServiceCategoryFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter, which ServiceCategories to fetch.
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of ServiceCategories to fetch.
+     */
+    orderBy?:
+      | ServiceCategoryOrderByWithRelationInput
+      | ServiceCategoryOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing ServiceCategories.
+     */
+    cursor?: ServiceCategoryWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` ServiceCategories from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` ServiceCategories.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of ServiceCategories.
+     */
+    distinct?: ServiceCategoryScalarFieldEnum | ServiceCategoryScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCategory create
+   */
+  export type ServiceCategoryCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to create a ServiceCategory.
+     */
+    data: XOR<ServiceCategoryCreateInput, ServiceCategoryUncheckedCreateInput>
+  }
+
+  /**
+   * ServiceCategory createMany
+   */
+  export type ServiceCategoryCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many ServiceCategories.
+     */
+    data: ServiceCategoryCreateManyInput | ServiceCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ServiceCategory createManyAndReturn
+   */
+  export type ServiceCategoryCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to create many ServiceCategories.
+     */
+    data: ServiceCategoryCreateManyInput | ServiceCategoryCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * ServiceCategory update
+   */
+  export type ServiceCategoryUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * The data needed to update a ServiceCategory.
+     */
+    data: XOR<ServiceCategoryUpdateInput, ServiceCategoryUncheckedUpdateInput>
+    /**
+     * Choose, which ServiceCategory to update.
+     */
+    where: ServiceCategoryWhereUniqueInput
+  }
+
+  /**
+   * ServiceCategory updateMany
+   */
+  export type ServiceCategoryUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update ServiceCategories.
+     */
+    data: XOR<
+      ServiceCategoryUpdateManyMutationInput,
+      ServiceCategoryUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which ServiceCategories to update
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * Limit how many ServiceCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceCategory updateManyAndReturn
+   */
+  export type ServiceCategoryUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * The data used to update ServiceCategories.
+     */
+    data: XOR<
+      ServiceCategoryUpdateManyMutationInput,
+      ServiceCategoryUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which ServiceCategories to update
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * Limit how many ServiceCategories to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceCategory upsert
+   */
+  export type ServiceCategoryUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * The filter to search for the ServiceCategory to update in case it exists.
+     */
+    where: ServiceCategoryWhereUniqueInput
+    /**
+     * In case the ServiceCategory found by the `where` argument doesn't exist, create a new ServiceCategory with this data.
+     */
+    create: XOR<ServiceCategoryCreateInput, ServiceCategoryUncheckedCreateInput>
+    /**
+     * In case the ServiceCategory was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<ServiceCategoryUpdateInput, ServiceCategoryUncheckedUpdateInput>
+  }
+
+  /**
+   * ServiceCategory delete
+   */
+  export type ServiceCategoryDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    /**
+     * Filter which ServiceCategory to delete.
+     */
+    where: ServiceCategoryWhereUniqueInput
+  }
+
+  /**
+   * ServiceCategory deleteMany
+   */
+  export type ServiceCategoryDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which ServiceCategories to delete
+     */
+    where?: ServiceCategoryWhereInput
+    /**
+     * Limit how many ServiceCategories to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * ServiceCategory.projects
+   */
+  export type ServiceCategory$projectsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the Project
+     */
+    select?: ProjectSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Project
+     */
+    omit?: ProjectOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ProjectInclude<ExtArgs> | null
+    where?: ProjectWhereInput
+    orderBy?:
+      | ProjectOrderByWithRelationInput
+      | ProjectOrderByWithRelationInput[]
+    cursor?: ProjectWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: ProjectScalarFieldEnum | ProjectScalarFieldEnum[]
+  }
+
+  /**
+   * ServiceCategory without action
+   */
+  export type ServiceCategoryDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+  }
+
+  /**
    * Model Project
    */
 
@@ -18542,10 +18707,12 @@ export namespace Prisma {
 
   export type ProjectAvgAggregateOutputType = {
     progress: number | null
+    budget: number | null
   }
 
   export type ProjectSumAggregateOutputType = {
     progress: number | null
+    budget: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -18554,9 +18721,11 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus | null
     category: $Enums.ProjectCategory | null
-    priority: $Enums.Priority | null
     progress: number | null
-    budget: string | null
+    budget: number | null
+    customValue: boolean | null
+    paymentMethod: $Enums.PaymentMethod | null
+    serviceCategoryId: string | null
     startDate: Date | null
     deadline: Date | null
     liveUrl: string | null
@@ -18572,9 +18741,11 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus | null
     category: $Enums.ProjectCategory | null
-    priority: $Enums.Priority | null
     progress: number | null
-    budget: string | null
+    budget: number | null
+    customValue: boolean | null
+    paymentMethod: $Enums.PaymentMethod | null
+    serviceCategoryId: string | null
     startDate: Date | null
     deadline: Date | null
     liveUrl: string | null
@@ -18590,9 +18761,11 @@ export namespace Prisma {
     description: number
     status: number
     category: number
-    priority: number
     progress: number
     budget: number
+    customValue: number
+    paymentMethod: number
+    serviceCategoryId: number
     briefing: number
     startDate: number
     deadline: number
@@ -18606,10 +18779,12 @@ export namespace Prisma {
 
   export type ProjectAvgAggregateInputType = {
     progress?: true
+    budget?: true
   }
 
   export type ProjectSumAggregateInputType = {
     progress?: true
+    budget?: true
   }
 
   export type ProjectMinAggregateInputType = {
@@ -18618,9 +18793,11 @@ export namespace Prisma {
     description?: true
     status?: true
     category?: true
-    priority?: true
     progress?: true
     budget?: true
+    customValue?: true
+    paymentMethod?: true
+    serviceCategoryId?: true
     startDate?: true
     deadline?: true
     liveUrl?: true
@@ -18636,9 +18813,11 @@ export namespace Prisma {
     description?: true
     status?: true
     category?: true
-    priority?: true
     progress?: true
     budget?: true
+    customValue?: true
+    paymentMethod?: true
+    serviceCategoryId?: true
     startDate?: true
     deadline?: true
     liveUrl?: true
@@ -18654,9 +18833,11 @@ export namespace Prisma {
     description?: true
     status?: true
     category?: true
-    priority?: true
     progress?: true
     budget?: true
+    customValue?: true
+    paymentMethod?: true
+    serviceCategoryId?: true
     briefing?: true
     startDate?: true
     deadline?: true
@@ -18765,9 +18946,11 @@ export namespace Prisma {
     description: string | null
     status: $Enums.ProjectStatus
     category: $Enums.ProjectCategory
-    priority: $Enums.Priority
     progress: number
-    budget: string | null
+    budget: number | null
+    customValue: boolean
+    paymentMethod: $Enums.PaymentMethod
+    serviceCategoryId: string | null
     briefing: JsonValue | null
     startDate: Date
     deadline: Date | null
@@ -18805,9 +18988,11 @@ export namespace Prisma {
       description?: boolean
       status?: boolean
       category?: boolean
-      priority?: boolean
       progress?: boolean
       budget?: boolean
+      customValue?: boolean
+      paymentMethod?: boolean
+      serviceCategoryId?: boolean
       briefing?: boolean
       startDate?: boolean
       deadline?: boolean
@@ -18816,6 +19001,7 @@ export namespace Prisma {
       clientId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
+      serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
       briefingNotes?: boolean | Project$briefingNotesArgs<ExtArgs>
       client?: boolean | UserDefaultArgs<ExtArgs>
       members?: boolean | Project$membersArgs<ExtArgs>
@@ -18846,9 +19032,11 @@ export namespace Prisma {
       description?: boolean
       status?: boolean
       category?: boolean
-      priority?: boolean
       progress?: boolean
       budget?: boolean
+      customValue?: boolean
+      paymentMethod?: boolean
+      serviceCategoryId?: boolean
       briefing?: boolean
       startDate?: boolean
       deadline?: boolean
@@ -18857,6 +19045,7 @@ export namespace Prisma {
       clientId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
+      serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
       client?: boolean | UserDefaultArgs<ExtArgs>
     },
     ExtArgs["result"]["project"]
@@ -18871,9 +19060,11 @@ export namespace Prisma {
       description?: boolean
       status?: boolean
       category?: boolean
-      priority?: boolean
       progress?: boolean
       budget?: boolean
+      customValue?: boolean
+      paymentMethod?: boolean
+      serviceCategoryId?: boolean
       briefing?: boolean
       startDate?: boolean
       deadline?: boolean
@@ -18882,6 +19073,7 @@ export namespace Prisma {
       clientId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
+      serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
       client?: boolean | UserDefaultArgs<ExtArgs>
     },
     ExtArgs["result"]["project"]
@@ -18893,9 +19085,11 @@ export namespace Prisma {
     description?: boolean
     status?: boolean
     category?: boolean
-    priority?: boolean
     progress?: boolean
     budget?: boolean
+    customValue?: boolean
+    paymentMethod?: boolean
+    serviceCategoryId?: boolean
     briefing?: boolean
     startDate?: boolean
     deadline?: boolean
@@ -18914,9 +19108,11 @@ export namespace Prisma {
     | "description"
     | "status"
     | "category"
-    | "priority"
     | "progress"
     | "budget"
+    | "customValue"
+    | "paymentMethod"
+    | "serviceCategoryId"
     | "briefing"
     | "startDate"
     | "deadline"
@@ -18930,6 +19126,7 @@ export namespace Prisma {
   export type ProjectInclude<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
+    serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
     briefingNotes?: boolean | Project$briefingNotesArgs<ExtArgs>
     client?: boolean | UserDefaultArgs<ExtArgs>
     members?: boolean | Project$membersArgs<ExtArgs>
@@ -18951,11 +19148,13 @@ export namespace Prisma {
   export type ProjectIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
+    serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
     client?: boolean | UserDefaultArgs<ExtArgs>
   }
   export type ProjectIncludeUpdateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
+    serviceCategory?: boolean | Project$serviceCategoryArgs<ExtArgs>
     client?: boolean | UserDefaultArgs<ExtArgs>
   }
 
@@ -18964,6 +19163,7 @@ export namespace Prisma {
   > = {
     name: "Project"
     objects: {
+      serviceCategory: Prisma.$ServiceCategoryPayload<ExtArgs> | null
       briefingNotes: Prisma.$BriefingEntryPayload<ExtArgs>[]
       client: Prisma.$UserPayload<ExtArgs>
       members: Prisma.$ProjectMemberPayload<ExtArgs>[]
@@ -18988,9 +19188,11 @@ export namespace Prisma {
         description: string | null
         status: $Enums.ProjectStatus
         category: $Enums.ProjectCategory
-        priority: $Enums.Priority
         progress: number
-        budget: string | null
+        budget: number | null
+        customValue: boolean
+        paymentMethod: $Enums.PaymentMethod
+        serviceCategoryId: string | null
         briefing: Prisma.JsonValue | null
         startDate: Date
         deadline: Date | null
@@ -19545,6 +19747,19 @@ export namespace Prisma {
     GlobalOmitOptions = {},
   > extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    serviceCategory<T extends Project$serviceCategoryArgs<ExtArgs> = {}>(
+      args?: Subset<T, Project$serviceCategoryArgs<ExtArgs>>
+    ): Prisma__ServiceCategoryClient<
+      $Result.GetResult<
+        Prisma.$ServiceCategoryPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
     briefingNotes<T extends Project$briefingNotesArgs<ExtArgs> = {}>(
       args?: Subset<T, Project$briefingNotesArgs<ExtArgs>>
     ): Prisma.PrismaPromise<
@@ -19773,9 +19988,11 @@ export namespace Prisma {
     readonly description: FieldRef<"Project", "String">
     readonly status: FieldRef<"Project", "ProjectStatus">
     readonly category: FieldRef<"Project", "ProjectCategory">
-    readonly priority: FieldRef<"Project", "Priority">
     readonly progress: FieldRef<"Project", "Int">
-    readonly budget: FieldRef<"Project", "String">
+    readonly budget: FieldRef<"Project", "Int">
+    readonly customValue: FieldRef<"Project", "Boolean">
+    readonly paymentMethod: FieldRef<"Project", "PaymentMethod">
+    readonly serviceCategoryId: FieldRef<"Project", "String">
     readonly briefing: FieldRef<"Project", "Json">
     readonly startDate: FieldRef<"Project", "DateTime">
     readonly deadline: FieldRef<"Project", "DateTime">
@@ -20215,6 +20432,27 @@ export namespace Prisma {
      * Limit how many Projects to delete.
      */
     limit?: number
+  }
+
+  /**
+   * Project.serviceCategory
+   */
+  export type Project$serviceCategoryArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the ServiceCategory
+     */
+    select?: ServiceCategorySelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the ServiceCategory
+     */
+    omit?: ServiceCategoryOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: ServiceCategoryInclude<ExtArgs> | null
+    where?: ServiceCategoryWhereInput
   }
 
   /**
@@ -50608,7 +50846,7 @@ export namespace Prisma {
     readonly title: FieldRef<"Proposal", "String">
     readonly status: FieldRef<"Proposal", "ProposalStatus">
     readonly validUntil: FieldRef<"Proposal", "DateTime">
-    readonly totalValue: FieldRef<"Proposal", "Float">
+    readonly totalValue: FieldRef<"Proposal", "Int">
     readonly currency: FieldRef<"Proposal", "String">
     readonly notes: FieldRef<"Proposal", "String">
     readonly acceptedAt: FieldRef<"Proposal", "DateTime">
@@ -52123,7 +52361,7 @@ export namespace Prisma {
     readonly id: FieldRef<"ProposalItem", "String">
     readonly description: FieldRef<"ProposalItem", "String">
     readonly longDescription: FieldRef<"ProposalItem", "String">
-    readonly unitValue: FieldRef<"ProposalItem", "Float">
+    readonly unitValue: FieldRef<"ProposalItem", "Int">
     readonly quantity: FieldRef<"ProposalItem", "Int">
     readonly order: FieldRef<"ProposalItem", "Int">
     readonly proposalId: FieldRef<"ProposalItem", "String">
@@ -56364,7 +56602,7 @@ export namespace Prisma {
     readonly projectId: FieldRef<"Invoice", "String">
     readonly proposalId: FieldRef<"Invoice", "String">
     readonly documentId: FieldRef<"Invoice", "String">
-    readonly totalAmount: FieldRef<"Invoice", "Float">
+    readonly totalAmount: FieldRef<"Invoice", "Int">
     readonly currency: FieldRef<"Invoice", "String">
     readonly issuedAt: FieldRef<"Invoice", "DateTime">
     readonly dueDate: FieldRef<"Invoice", "DateTime">
@@ -57945,7 +58183,7 @@ export namespace Prisma {
     readonly id: FieldRef<"Installment", "String">
     readonly invoiceId: FieldRef<"Installment", "String">
     readonly number: FieldRef<"Installment", "Int">
-    readonly amount: FieldRef<"Installment", "Float">
+    readonly amount: FieldRef<"Installment", "Int">
     readonly dueDate: FieldRef<"Installment", "DateTime">
     readonly status: FieldRef<"Installment", "InstallmentStatus">
     readonly paidAt: FieldRef<"Installment", "DateTime">
@@ -59403,7 +59641,7 @@ export namespace Prisma {
     readonly id: FieldRef<"PaymentEvent", "String">
     readonly installmentId: FieldRef<"PaymentEvent", "String">
     readonly type: FieldRef<"PaymentEvent", "String">
-    readonly amount: FieldRef<"PaymentEvent", "Float">
+    readonly amount: FieldRef<"PaymentEvent", "Int">
     readonly date: FieldRef<"PaymentEvent", "DateTime">
     readonly note: FieldRef<"PaymentEvent", "String">
     readonly attachmentUrl: FieldRef<"PaymentEvent", "String">
@@ -61340,21 +61578,6 @@ export namespace Prisma {
   export type DashboardMetricSnapshotScalarFieldEnum =
     (typeof DashboardMetricSnapshotScalarFieldEnum)[keyof typeof DashboardMetricSnapshotScalarFieldEnum]
 
-  export const SearchDocumentScalarFieldEnum: {
-    id: "id"
-    entityType: "entityType"
-    entityId: "entityId"
-    projectId: "projectId"
-    title: "title"
-    subtitle: "subtitle"
-    body: "body"
-    metadata: "metadata"
-    updatedAt: "updatedAt"
-  }
-
-  export type SearchDocumentScalarFieldEnum =
-    (typeof SearchDocumentScalarFieldEnum)[keyof typeof SearchDocumentScalarFieldEnum]
-
   export const EventOutboxScalarFieldEnum: {
     id: "id"
     type: "type"
@@ -61463,15 +61686,32 @@ export namespace Prisma {
   export type SavedViewScalarFieldEnum =
     (typeof SavedViewScalarFieldEnum)[keyof typeof SavedViewScalarFieldEnum]
 
+  export const ServiceCategoryScalarFieldEnum: {
+    id: "id"
+    name: "name"
+    description: "description"
+    approach: "approach"
+    suggestedValue: "suggestedValue"
+    imageUrl: "imageUrl"
+    isSubscription: "isSubscription"
+    createdAt: "createdAt"
+    updatedAt: "updatedAt"
+  }
+
+  export type ServiceCategoryScalarFieldEnum =
+    (typeof ServiceCategoryScalarFieldEnum)[keyof typeof ServiceCategoryScalarFieldEnum]
+
   export const ProjectScalarFieldEnum: {
     id: "id"
     name: "name"
     description: "description"
     status: "status"
     category: "category"
-    priority: "priority"
     progress: "progress"
     budget: "budget"
+    customValue: "customValue"
+    paymentMethod: "paymentMethod"
+    serviceCategoryId: "serviceCategoryId"
     briefing: "briefing"
     startDate: "startDate"
     deadline: "deadline"
@@ -61959,6 +62199,13 @@ export namespace Prisma {
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
+  export const JsonNullValueInput: {
+    JsonNull: typeof JsonNull
+  }
+
+  export type JsonNullValueInput =
+    (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
   export const NullableJsonNullValueInput: {
     DbNull: typeof DbNull
     JsonNull: typeof JsonNull
@@ -61966,13 +62213,6 @@ export namespace Prisma {
 
   export type NullableJsonNullValueInput =
     (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
-
-  export const JsonNullValueInput: {
-    JsonNull: typeof JsonNull
-  }
-
-  export type JsonNullValueInput =
-    (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
 
   export const QueryMode: {
     default: "default"
@@ -62142,6 +62382,14 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, "LeadActivityType[]">
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "Boolean"
+  >
+
+  /**
    * Reference to a field of type 'ProjectStatus'
    */
   export type EnumProjectStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -62168,20 +62416,18 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, "ProjectCategory[]">
 
   /**
-   * Reference to a field of type 'Priority'
+   * Reference to a field of type 'PaymentMethod'
    */
-  export type EnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<
+  export type EnumPaymentMethodFieldRefInput<$PrismaModel> = FieldRefInputType<
     $PrismaModel,
-    "Priority"
+    "PaymentMethod"
   >
 
   /**
-   * Reference to a field of type 'Priority[]'
+   * Reference to a field of type 'PaymentMethod[]'
    */
-  export type ListEnumPriorityFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "Priority[]"
-  >
+  export type ListEnumPaymentMethodFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, "PaymentMethod[]">
 
   /**
    * Reference to a field of type 'DocumentType'
@@ -62222,14 +62468,6 @@ export namespace Prisma {
    */
   export type ListEnumSignatureProviderFieldRefInput<$PrismaModel> =
     FieldRefInputType<$PrismaModel, "SignatureProvider[]">
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "Boolean"
-  >
 
   /**
    * Reference to a field of type 'ThreadStatus'
@@ -62553,91 +62791,6 @@ export namespace Prisma {
       | DateTimeWithAggregatesFilter<"DashboardMetricSnapshot">
       | Date
       | string
-  }
-
-  export type SearchDocumentWhereInput = {
-    AND?: SearchDocumentWhereInput | SearchDocumentWhereInput[]
-    OR?: SearchDocumentWhereInput[]
-    NOT?: SearchDocumentWhereInput | SearchDocumentWhereInput[]
-    id?: StringFilter<"SearchDocument"> | string
-    entityType?: StringFilter<"SearchDocument"> | string
-    entityId?: StringFilter<"SearchDocument"> | string
-    projectId?: StringNullableFilter<"SearchDocument"> | string | null
-    title?: StringFilter<"SearchDocument"> | string
-    subtitle?: StringNullableFilter<"SearchDocument"> | string | null
-    body?: StringNullableFilter<"SearchDocument"> | string | null
-    metadata?: JsonNullableFilter<"SearchDocument">
-    updatedAt?: DateTimeFilter<"SearchDocument"> | Date | string
-  }
-
-  export type SearchDocumentOrderByWithRelationInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    projectId?: SortOrderInput | SortOrder
-    title?: SortOrder
-    subtitle?: SortOrderInput | SortOrder
-    body?: SortOrderInput | SortOrder
-    metadata?: SortOrderInput | SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SearchDocumentWhereUniqueInput = Prisma.AtLeast<
-    {
-      id?: string
-      AND?: SearchDocumentWhereInput | SearchDocumentWhereInput[]
-      OR?: SearchDocumentWhereInput[]
-      NOT?: SearchDocumentWhereInput | SearchDocumentWhereInput[]
-      entityType?: StringFilter<"SearchDocument"> | string
-      entityId?: StringFilter<"SearchDocument"> | string
-      projectId?: StringNullableFilter<"SearchDocument"> | string | null
-      title?: StringFilter<"SearchDocument"> | string
-      subtitle?: StringNullableFilter<"SearchDocument"> | string | null
-      body?: StringNullableFilter<"SearchDocument"> | string | null
-      metadata?: JsonNullableFilter<"SearchDocument">
-      updatedAt?: DateTimeFilter<"SearchDocument"> | Date | string
-    },
-    "id"
-  >
-
-  export type SearchDocumentOrderByWithAggregationInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    projectId?: SortOrderInput | SortOrder
-    title?: SortOrder
-    subtitle?: SortOrderInput | SortOrder
-    body?: SortOrderInput | SortOrder
-    metadata?: SortOrderInput | SortOrder
-    updatedAt?: SortOrder
-    _count?: SearchDocumentCountOrderByAggregateInput
-    _max?: SearchDocumentMaxOrderByAggregateInput
-    _min?: SearchDocumentMinOrderByAggregateInput
-  }
-
-  export type SearchDocumentScalarWhereWithAggregatesInput = {
-    AND?:
-      | SearchDocumentScalarWhereWithAggregatesInput
-      | SearchDocumentScalarWhereWithAggregatesInput[]
-    OR?: SearchDocumentScalarWhereWithAggregatesInput[]
-    NOT?:
-      | SearchDocumentScalarWhereWithAggregatesInput
-      | SearchDocumentScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"SearchDocument"> | string
-    entityType?: StringWithAggregatesFilter<"SearchDocument"> | string
-    entityId?: StringWithAggregatesFilter<"SearchDocument"> | string
-    projectId?:
-      | StringNullableWithAggregatesFilter<"SearchDocument">
-      | string
-      | null
-    title?: StringWithAggregatesFilter<"SearchDocument"> | string
-    subtitle?:
-      | StringNullableWithAggregatesFilter<"SearchDocument">
-      | string
-      | null
-    body?: StringNullableWithAggregatesFilter<"SearchDocument"> | string | null
-    metadata?: JsonNullableWithAggregatesFilter<"SearchDocument">
-    updatedAt?: DateTimeWithAggregatesFilter<"SearchDocument"> | Date | string
   }
 
   export type EventOutboxWhereInput = {
@@ -63324,6 +63477,96 @@ export namespace Prisma {
     updatedAt?: DateTimeWithAggregatesFilter<"SavedView"> | Date | string
   }
 
+  export type ServiceCategoryWhereInput = {
+    AND?: ServiceCategoryWhereInput | ServiceCategoryWhereInput[]
+    OR?: ServiceCategoryWhereInput[]
+    NOT?: ServiceCategoryWhereInput | ServiceCategoryWhereInput[]
+    id?: StringFilter<"ServiceCategory"> | string
+    name?: StringFilter<"ServiceCategory"> | string
+    description?: StringNullableFilter<"ServiceCategory"> | string | null
+    approach?: StringFilter<"ServiceCategory"> | string
+    suggestedValue?: IntFilter<"ServiceCategory"> | number
+    imageUrl?: StringNullableFilter<"ServiceCategory"> | string | null
+    isSubscription?: BoolFilter<"ServiceCategory"> | boolean
+    createdAt?: DateTimeFilter<"ServiceCategory"> | Date | string
+    updatedAt?: DateTimeFilter<"ServiceCategory"> | Date | string
+    projects?: ProjectListRelationFilter
+  }
+
+  export type ServiceCategoryOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    approach?: SortOrder
+    suggestedValue?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    isSubscription?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    projects?: ProjectOrderByRelationAggregateInput
+  }
+
+  export type ServiceCategoryWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      AND?: ServiceCategoryWhereInput | ServiceCategoryWhereInput[]
+      OR?: ServiceCategoryWhereInput[]
+      NOT?: ServiceCategoryWhereInput | ServiceCategoryWhereInput[]
+      name?: StringFilter<"ServiceCategory"> | string
+      description?: StringNullableFilter<"ServiceCategory"> | string | null
+      approach?: StringFilter<"ServiceCategory"> | string
+      suggestedValue?: IntFilter<"ServiceCategory"> | number
+      imageUrl?: StringNullableFilter<"ServiceCategory"> | string | null
+      isSubscription?: BoolFilter<"ServiceCategory"> | boolean
+      createdAt?: DateTimeFilter<"ServiceCategory"> | Date | string
+      updatedAt?: DateTimeFilter<"ServiceCategory"> | Date | string
+      projects?: ProjectListRelationFilter
+    },
+    "id"
+  >
+
+  export type ServiceCategoryOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrderInput | SortOrder
+    approach?: SortOrder
+    suggestedValue?: SortOrder
+    imageUrl?: SortOrderInput | SortOrder
+    isSubscription?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: ServiceCategoryCountOrderByAggregateInput
+    _avg?: ServiceCategoryAvgOrderByAggregateInput
+    _max?: ServiceCategoryMaxOrderByAggregateInput
+    _min?: ServiceCategoryMinOrderByAggregateInput
+    _sum?: ServiceCategorySumOrderByAggregateInput
+  }
+
+  export type ServiceCategoryScalarWhereWithAggregatesInput = {
+    AND?:
+      | ServiceCategoryScalarWhereWithAggregatesInput
+      | ServiceCategoryScalarWhereWithAggregatesInput[]
+    OR?: ServiceCategoryScalarWhereWithAggregatesInput[]
+    NOT?:
+      | ServiceCategoryScalarWhereWithAggregatesInput
+      | ServiceCategoryScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"ServiceCategory"> | string
+    name?: StringWithAggregatesFilter<"ServiceCategory"> | string
+    description?:
+      | StringNullableWithAggregatesFilter<"ServiceCategory">
+      | string
+      | null
+    approach?: StringWithAggregatesFilter<"ServiceCategory"> | string
+    suggestedValue?: IntWithAggregatesFilter<"ServiceCategory"> | number
+    imageUrl?:
+      | StringNullableWithAggregatesFilter<"ServiceCategory">
+      | string
+      | null
+    isSubscription?: BoolWithAggregatesFilter<"ServiceCategory"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"ServiceCategory"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"ServiceCategory"> | Date | string
+  }
+
   export type ProjectWhereInput = {
     AND?: ProjectWhereInput | ProjectWhereInput[]
     OR?: ProjectWhereInput[]
@@ -63333,9 +63576,11 @@ export namespace Prisma {
     description?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     category?: EnumProjectCategoryFilter<"Project"> | $Enums.ProjectCategory
-    priority?: EnumPriorityFilter<"Project"> | $Enums.Priority
     progress?: IntFilter<"Project"> | number
-    budget?: StringNullableFilter<"Project"> | string | null
+    budget?: IntNullableFilter<"Project"> | number | null
+    customValue?: BoolFilter<"Project"> | boolean
+    paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
+    serviceCategoryId?: StringNullableFilter<"Project"> | string | null
     briefing?: JsonNullableFilter<"Project">
     startDate?: DateTimeFilter<"Project"> | Date | string
     deadline?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -63344,6 +63589,10 @@ export namespace Prisma {
     clientId?: StringFilter<"Project"> | string
     createdAt?: DateTimeFilter<"Project"> | Date | string
     updatedAt?: DateTimeFilter<"Project"> | Date | string
+    serviceCategory?: XOR<
+      ServiceCategoryNullableScalarRelationFilter,
+      ServiceCategoryWhereInput
+    > | null
     briefingNotes?: BriefingEntryListRelationFilter
     client?: XOR<UserScalarRelationFilter, UserWhereInput>
     members?: ProjectMemberListRelationFilter
@@ -63374,9 +63623,11 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     category?: SortOrder
-    priority?: SortOrder
     progress?: SortOrder
     budget?: SortOrderInput | SortOrder
+    customValue?: SortOrder
+    paymentMethod?: SortOrder
+    serviceCategoryId?: SortOrderInput | SortOrder
     briefing?: SortOrderInput | SortOrder
     startDate?: SortOrder
     deadline?: SortOrderInput | SortOrder
@@ -63385,6 +63636,7 @@ export namespace Prisma {
     clientId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    serviceCategory?: ServiceCategoryOrderByWithRelationInput
     briefingNotes?: BriefingEntryOrderByRelationAggregateInput
     client?: UserOrderByWithRelationInput
     members?: ProjectMemberOrderByRelationAggregateInput
@@ -63413,9 +63665,11 @@ export namespace Prisma {
       description?: StringNullableFilter<"Project"> | string | null
       status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
       category?: EnumProjectCategoryFilter<"Project"> | $Enums.ProjectCategory
-      priority?: EnumPriorityFilter<"Project"> | $Enums.Priority
       progress?: IntFilter<"Project"> | number
-      budget?: StringNullableFilter<"Project"> | string | null
+      budget?: IntNullableFilter<"Project"> | number | null
+      customValue?: BoolFilter<"Project"> | boolean
+      paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
+      serviceCategoryId?: StringNullableFilter<"Project"> | string | null
       briefing?: JsonNullableFilter<"Project">
       startDate?: DateTimeFilter<"Project"> | Date | string
       deadline?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -63424,6 +63678,10 @@ export namespace Prisma {
       clientId?: StringFilter<"Project"> | string
       createdAt?: DateTimeFilter<"Project"> | Date | string
       updatedAt?: DateTimeFilter<"Project"> | Date | string
+      serviceCategory?: XOR<
+        ServiceCategoryNullableScalarRelationFilter,
+        ServiceCategoryWhereInput
+      > | null
       briefingNotes?: BriefingEntryListRelationFilter
       client?: XOR<UserScalarRelationFilter, UserWhereInput>
       members?: ProjectMemberListRelationFilter
@@ -63456,9 +63714,11 @@ export namespace Prisma {
     description?: SortOrderInput | SortOrder
     status?: SortOrder
     category?: SortOrder
-    priority?: SortOrder
     progress?: SortOrder
     budget?: SortOrderInput | SortOrder
+    customValue?: SortOrder
+    paymentMethod?: SortOrder
+    serviceCategoryId?: SortOrderInput | SortOrder
     briefing?: SortOrderInput | SortOrder
     startDate?: SortOrder
     deadline?: SortOrderInput | SortOrder
@@ -63491,9 +63751,16 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryWithAggregatesFilter<"Project">
       | $Enums.ProjectCategory
-    priority?: EnumPriorityWithAggregatesFilter<"Project"> | $Enums.Priority
     progress?: IntWithAggregatesFilter<"Project"> | number
-    budget?: StringNullableWithAggregatesFilter<"Project"> | string | null
+    budget?: IntNullableWithAggregatesFilter<"Project"> | number | null
+    customValue?: BoolWithAggregatesFilter<"Project"> | boolean
+    paymentMethod?:
+      | EnumPaymentMethodWithAggregatesFilter<"Project">
+      | $Enums.PaymentMethod
+    serviceCategoryId?:
+      | StringNullableWithAggregatesFilter<"Project">
+      | string
+      | null
     briefing?: JsonNullableWithAggregatesFilter<"Project">
     startDate?: DateTimeWithAggregatesFilter<"Project"> | Date | string
     deadline?:
@@ -65579,7 +65846,7 @@ export namespace Prisma {
     title?: StringFilter<"Proposal"> | string
     status?: EnumProposalStatusFilter<"Proposal"> | $Enums.ProposalStatus
     validUntil?: DateTimeNullableFilter<"Proposal"> | Date | string | null
-    totalValue?: FloatFilter<"Proposal"> | number
+    totalValue?: IntFilter<"Proposal"> | number
     currency?: StringFilter<"Proposal"> | string
     notes?: StringNullableFilter<"Proposal"> | string | null
     acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
@@ -65630,7 +65897,7 @@ export namespace Prisma {
       title?: StringFilter<"Proposal"> | string
       status?: EnumProposalStatusFilter<"Proposal"> | $Enums.ProposalStatus
       validUntil?: DateTimeNullableFilter<"Proposal"> | Date | string | null
-      totalValue?: FloatFilter<"Proposal"> | number
+      totalValue?: IntFilter<"Proposal"> | number
       currency?: StringFilter<"Proposal"> | string
       notes?: StringNullableFilter<"Proposal"> | string | null
       acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
@@ -65695,7 +65962,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatWithAggregatesFilter<"Proposal"> | number
+    totalValue?: IntWithAggregatesFilter<"Proposal"> | number
     currency?: StringWithAggregatesFilter<"Proposal"> | string
     notes?: StringNullableWithAggregatesFilter<"Proposal"> | string | null
     acceptedAt?:
@@ -65717,7 +65984,7 @@ export namespace Prisma {
     id?: StringFilter<"ProposalItem"> | string
     description?: StringFilter<"ProposalItem"> | string
     longDescription?: StringNullableFilter<"ProposalItem"> | string | null
-    unitValue?: FloatFilter<"ProposalItem"> | number
+    unitValue?: IntFilter<"ProposalItem"> | number
     quantity?: IntFilter<"ProposalItem"> | number
     order?: IntFilter<"ProposalItem"> | number
     proposalId?: StringFilter<"ProposalItem"> | string
@@ -65747,7 +66014,7 @@ export namespace Prisma {
       NOT?: ProposalItemWhereInput | ProposalItemWhereInput[]
       description?: StringFilter<"ProposalItem"> | string
       longDescription?: StringNullableFilter<"ProposalItem"> | string | null
-      unitValue?: FloatFilter<"ProposalItem"> | number
+      unitValue?: IntFilter<"ProposalItem"> | number
       quantity?: IntFilter<"ProposalItem"> | number
       order?: IntFilter<"ProposalItem"> | number
       proposalId?: StringFilter<"ProposalItem"> | string
@@ -65789,7 +66056,7 @@ export namespace Prisma {
       | StringNullableWithAggregatesFilter<"ProposalItem">
       | string
       | null
-    unitValue?: FloatWithAggregatesFilter<"ProposalItem"> | number
+    unitValue?: IntWithAggregatesFilter<"ProposalItem"> | number
     quantity?: IntWithAggregatesFilter<"ProposalItem"> | number
     order?: IntWithAggregatesFilter<"ProposalItem"> | number
     proposalId?: StringWithAggregatesFilter<"ProposalItem"> | string
@@ -66022,7 +66289,7 @@ export namespace Prisma {
     projectId?: StringNullableFilter<"Invoice"> | string | null
     proposalId?: StringNullableFilter<"Invoice"> | string | null
     documentId?: StringNullableFilter<"Invoice"> | string | null
-    totalAmount?: FloatFilter<"Invoice"> | number
+    totalAmount?: IntFilter<"Invoice"> | number
     currency?: StringFilter<"Invoice"> | string
     issuedAt?: DateTimeFilter<"Invoice"> | Date | string
     dueDate?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -66072,7 +66339,7 @@ export namespace Prisma {
       projectId?: StringNullableFilter<"Invoice"> | string | null
       proposalId?: StringNullableFilter<"Invoice"> | string | null
       documentId?: StringNullableFilter<"Invoice"> | string | null
-      totalAmount?: FloatFilter<"Invoice"> | number
+      totalAmount?: IntFilter<"Invoice"> | number
       currency?: StringFilter<"Invoice"> | string
       issuedAt?: DateTimeFilter<"Invoice"> | Date | string
       dueDate?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -66133,7 +66400,7 @@ export namespace Prisma {
     projectId?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     proposalId?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
     documentId?: StringNullableWithAggregatesFilter<"Invoice"> | string | null
-    totalAmount?: FloatWithAggregatesFilter<"Invoice"> | number
+    totalAmount?: IntWithAggregatesFilter<"Invoice"> | number
     currency?: StringWithAggregatesFilter<"Invoice"> | string
     issuedAt?: DateTimeWithAggregatesFilter<"Invoice"> | Date | string
     dueDate?:
@@ -66152,7 +66419,7 @@ export namespace Prisma {
     id?: StringFilter<"Installment"> | string
     invoiceId?: StringFilter<"Installment"> | string
     number?: IntFilter<"Installment"> | number
-    amount?: FloatFilter<"Installment"> | number
+    amount?: IntFilter<"Installment"> | number
     dueDate?: DateTimeFilter<"Installment"> | Date | string
     status?:
       | EnumInstallmentStatusFilter<"Installment">
@@ -66201,7 +66468,7 @@ export namespace Prisma {
       NOT?: InstallmentWhereInput | InstallmentWhereInput[]
       invoiceId?: StringFilter<"Installment"> | string
       number?: IntFilter<"Installment"> | number
-      amount?: FloatFilter<"Installment"> | number
+      amount?: IntFilter<"Installment"> | number
       dueDate?: DateTimeFilter<"Installment"> | Date | string
       status?:
         | EnumInstallmentStatusFilter<"Installment">
@@ -66251,7 +66518,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Installment"> | string
     invoiceId?: StringWithAggregatesFilter<"Installment"> | string
     number?: IntWithAggregatesFilter<"Installment"> | number
-    amount?: FloatWithAggregatesFilter<"Installment"> | number
+    amount?: IntWithAggregatesFilter<"Installment"> | number
     dueDate?: DateTimeWithAggregatesFilter<"Installment"> | Date | string
     status?:
       | EnumInstallmentStatusWithAggregatesFilter<"Installment">
@@ -66286,7 +66553,7 @@ export namespace Prisma {
     id?: StringFilter<"PaymentEvent"> | string
     installmentId?: StringFilter<"PaymentEvent"> | string
     type?: StringFilter<"PaymentEvent"> | string
-    amount?: FloatFilter<"PaymentEvent"> | number
+    amount?: IntFilter<"PaymentEvent"> | number
     date?: DateTimeFilter<"PaymentEvent"> | Date | string
     note?: StringNullableFilter<"PaymentEvent"> | string | null
     attachmentUrl?: StringNullableFilter<"PaymentEvent"> | string | null
@@ -66318,7 +66585,7 @@ export namespace Prisma {
       NOT?: PaymentEventWhereInput | PaymentEventWhereInput[]
       installmentId?: StringFilter<"PaymentEvent"> | string
       type?: StringFilter<"PaymentEvent"> | string
-      amount?: FloatFilter<"PaymentEvent"> | number
+      amount?: IntFilter<"PaymentEvent"> | number
       date?: DateTimeFilter<"PaymentEvent"> | Date | string
       note?: StringNullableFilter<"PaymentEvent"> | string | null
       attachmentUrl?: StringNullableFilter<"PaymentEvent"> | string | null
@@ -66359,7 +66626,7 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"PaymentEvent"> | string
     installmentId?: StringWithAggregatesFilter<"PaymentEvent"> | string
     type?: StringWithAggregatesFilter<"PaymentEvent"> | string
-    amount?: FloatWithAggregatesFilter<"PaymentEvent"> | number
+    amount?: IntWithAggregatesFilter<"PaymentEvent"> | number
     date?: DateTimeWithAggregatesFilter<"PaymentEvent"> | Date | string
     note?: StringNullableWithAggregatesFilter<"PaymentEvent"> | string | null
     attachmentUrl?:
@@ -66571,90 +66838,6 @@ export namespace Prisma {
     negotiationValue?: FloatFieldUpdateOperationsInput | number
     avgApprovalHours?: FloatFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SearchDocumentCreateInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    projectId?: string | null
-    title: string
-    subtitle?: string | null
-    body?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: Date | string
-  }
-
-  export type SearchDocumentUncheckedCreateInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    projectId?: string | null
-    title: string
-    subtitle?: string | null
-    body?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: Date | string
-  }
-
-  export type SearchDocumentUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    subtitle?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SearchDocumentUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    subtitle?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SearchDocumentCreateManyInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    projectId?: string | null
-    title: string
-    subtitle?: string | null
-    body?: string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: Date | string
-  }
-
-  export type SearchDocumentUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    subtitle?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type SearchDocumentUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    title?: StringFieldUpdateOperationsInput | string
-    subtitle?: NullableStringFieldUpdateOperationsInput | string | null
-    body?: NullableStringFieldUpdateOperationsInput | string | null
-    metadata?: NullableJsonNullValueInput | InputJsonValue
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type EventOutboxCreateInput = {
@@ -67425,15 +67608,104 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type ServiceCategoryCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl?: string | null
+    isSubscription?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutServiceCategoryInput
+  }
+
+  export type ServiceCategoryUncheckedCreateInput = {
+    id?: string
+    name: string
+    description?: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl?: string | null
+    isSubscription?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutServiceCategoryInput
+  }
+
+  export type ServiceCategoryUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutServiceCategoryNestedInput
+  }
+
+  export type ServiceCategoryUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutServiceCategoryNestedInput
+  }
+
+  export type ServiceCategoryCreateManyInput = {
+    id?: string
+    name: string
+    description?: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl?: string | null
+    isSubscription?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCategoryUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCategoryUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateInput = {
     id?: string
     name: string
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -67441,6 +67713,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -67465,9 +67738,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -67501,9 +67776,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67511,6 +67789,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -67537,9 +67816,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67571,9 +67854,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -67592,9 +67877,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -67612,9 +67900,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -69661,7 +69953,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -69691,7 +69983,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -69738,7 +70030,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -69763,7 +70055,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -69806,7 +70098,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69818,7 +70110,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     proposalId?: StringFieldUpdateOperationsInput | string
@@ -69842,7 +70134,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -69853,7 +70145,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     proposalId?: StringFieldUpdateOperationsInput | string
@@ -70095,7 +70387,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70115,7 +70407,7 @@ export namespace Prisma {
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70145,7 +70437,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70161,7 +70453,7 @@ export namespace Prisma {
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -70208,7 +70500,7 @@ export namespace Prisma {
   export type InstallmentUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -70235,7 +70527,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     invoiceId?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -70277,7 +70569,7 @@ export namespace Prisma {
   export type InstallmentUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -70302,7 +70594,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     invoiceId?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -70352,7 +70644,7 @@ export namespace Prisma {
   export type PaymentEventUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70366,7 +70658,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     installmentId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70391,7 +70683,7 @@ export namespace Prisma {
   export type PaymentEventUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70404,7 +70696,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     installmentId?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -70694,147 +70986,6 @@ export namespace Prisma {
     _min?: NestedFloatFilter<$PrismaModel>
     _max?: NestedFloatFilter<$PrismaModel>
   }
-
-  export type StringNullableFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableFilter<$PrismaModel> | string | null
-  }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<JsonNullableFilterBase<$PrismaModel>>,
-          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, "path">
-        >,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, "path">>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type SortOrderInput = {
-    sort: SortOrder
-    nulls?: NullsOrder
-  }
-
-  export type SearchDocumentCountOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    projectId?: SortOrder
-    title?: SortOrder
-    subtitle?: SortOrder
-    body?: SortOrder
-    metadata?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SearchDocumentMaxOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    projectId?: SortOrder
-    title?: SortOrder
-    subtitle?: SortOrder
-    body?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type SearchDocumentMinOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    projectId?: SortOrder
-    title?: SortOrder
-    subtitle?: SortOrder
-    body?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    mode?: QueryMode
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-          Exclude<
-            keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-            "path"
-          >
-        >,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<
-        Omit<
-          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-          "path"
-        >
-      >
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
-  }
   export type JsonFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<
@@ -70865,6 +71016,21 @@ export namespace Prisma {
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -70874,6 +71040,11 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
   }
 
   export type EventOutboxCountOrderByAggregateInput = {
@@ -70950,6 +71121,24 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedJsonFilter<$PrismaModel>
     _max?: NestedJsonFilter<$PrismaModel>
+  }
+
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
   }
 
   export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -71339,6 +71528,35 @@ export namespace Prisma {
       | NestedEnumLeadActivityTypeFilter<$PrismaModel>
       | $Enums.LeadActivityType
   }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonNullableFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, "path">
+        >,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, "path">>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
 
   export type LeadActivityCountOrderByAggregateInput = {
     id?: SortOrder
@@ -71387,6 +71605,46 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
     _max?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+          Exclude<
+            keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+            "path"
+          >
+        >,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<
+        Omit<
+          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+          "path"
+        >
+      >
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type MessageTemplateCountOrderByAggregateInput = {
@@ -71453,6 +71711,63 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type ServiceCategoryCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    approach?: SortOrder
+    suggestedValue?: SortOrder
+    imageUrl?: SortOrder
+    isSubscription?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCategoryAvgOrderByAggregateInput = {
+    suggestedValue?: SortOrder
+  }
+
+  export type ServiceCategoryMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    approach?: SortOrder
+    suggestedValue?: SortOrder
+    imageUrl?: SortOrder
+    isSubscription?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCategoryMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    description?: SortOrder
+    approach?: SortOrder
+    suggestedValue?: SortOrder
+    imageUrl?: SortOrder
+    isSubscription?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type ServiceCategorySumOrderByAggregateInput = {
+    suggestedValue?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type EnumProjectStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
     in?:
@@ -71477,11 +71792,31 @@ export namespace Prisma {
     not?: NestedEnumProjectCategoryFilter<$PrismaModel> | $Enums.ProjectCategory
   }
 
-  export type EnumPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
+  export type IntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type EnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
+  }
+
+  export type ServiceCategoryNullableScalarRelationFilter = {
+    is?: ServiceCategoryWhereInput | null
+    isNot?: ServiceCategoryWhereInput | null
   }
 
   export type BriefingEntryListRelationFilter = {
@@ -71575,9 +71910,11 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    priority?: SortOrder
     progress?: SortOrder
     budget?: SortOrder
+    customValue?: SortOrder
+    paymentMethod?: SortOrder
+    serviceCategoryId?: SortOrder
     briefing?: SortOrder
     startDate?: SortOrder
     deadline?: SortOrder
@@ -71590,6 +71927,7 @@ export namespace Prisma {
 
   export type ProjectAvgOrderByAggregateInput = {
     progress?: SortOrder
+    budget?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -71598,9 +71936,11 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    priority?: SortOrder
     progress?: SortOrder
     budget?: SortOrder
+    customValue?: SortOrder
+    paymentMethod?: SortOrder
+    serviceCategoryId?: SortOrder
     startDate?: SortOrder
     deadline?: SortOrder
     liveUrl?: SortOrder
@@ -71616,9 +71956,11 @@ export namespace Prisma {
     description?: SortOrder
     status?: SortOrder
     category?: SortOrder
-    priority?: SortOrder
     progress?: SortOrder
     budget?: SortOrder
+    customValue?: SortOrder
+    paymentMethod?: SortOrder
+    serviceCategoryId?: SortOrder
     startDate?: SortOrder
     deadline?: SortOrder
     liveUrl?: SortOrder
@@ -71630,6 +71972,7 @@ export namespace Prisma {
 
   export type ProjectSumOrderByAggregateInput = {
     progress?: SortOrder
+    budget?: SortOrder
   }
 
   export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -71666,14 +72009,36 @@ export namespace Prisma {
     _max?: NestedEnumProjectCategoryFilter<$PrismaModel>
   }
 
-  export type EnumPriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityWithAggregatesFilter<$PrismaModel> | $Enums.Priority
+  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type EnumPaymentMethodWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?:
+      | NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel>
+      | $Enums.PaymentMethod
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPriorityFilter<$PrismaModel>
-    _max?: NestedEnumPriorityFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
   export type EnumDocumentTypeFilter<$PrismaModel = never> = {
@@ -71886,11 +72251,6 @@ export namespace Prisma {
     versionNumber?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type DocumentClauseCountOrderByAggregateInput = {
     id?: SortOrder
     documentId?: SortOrder
@@ -71931,14 +72291,6 @@ export namespace Prisma {
 
   export type DocumentClauseSumOrderByAggregateInput = {
     order?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type DocumentSignerCountOrderByAggregateInput = {
@@ -72474,17 +72826,6 @@ export namespace Prisma {
     not?: NestedEnumAssetTypeFilter<$PrismaModel> | $Enums.AssetType
   }
 
-  export type IntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-
   export type UpdateScalarRelationFilter = {
     is?: UpdateWhereInput
     isNot?: UpdateWhereInput
@@ -72547,22 +72888,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAssetTypeFilter<$PrismaModel>
     _max?: NestedEnumAssetTypeFilter<$PrismaModel>
-  }
-
-  export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type ApprovalEventCountOrderByAggregateInput = {
@@ -75574,6 +75899,105 @@ export namespace Prisma {
     >
   }
 
+  export type ProjectCreateNestedManyWithoutServiceCategoryInput = {
+    create?:
+      | XOR<
+          ProjectCreateWithoutServiceCategoryInput,
+          ProjectUncheckedCreateWithoutServiceCategoryInput
+        >
+      | ProjectCreateWithoutServiceCategoryInput[]
+      | ProjectUncheckedCreateWithoutServiceCategoryInput[]
+    connectOrCreate?:
+      | ProjectCreateOrConnectWithoutServiceCategoryInput
+      | ProjectCreateOrConnectWithoutServiceCategoryInput[]
+    createMany?: ProjectCreateManyServiceCategoryInputEnvelope
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type ProjectUncheckedCreateNestedManyWithoutServiceCategoryInput = {
+    create?:
+      | XOR<
+          ProjectCreateWithoutServiceCategoryInput,
+          ProjectUncheckedCreateWithoutServiceCategoryInput
+        >
+      | ProjectCreateWithoutServiceCategoryInput[]
+      | ProjectUncheckedCreateWithoutServiceCategoryInput[]
+    connectOrCreate?:
+      | ProjectCreateOrConnectWithoutServiceCategoryInput
+      | ProjectCreateOrConnectWithoutServiceCategoryInput[]
+    createMany?: ProjectCreateManyServiceCategoryInputEnvelope
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type ProjectUpdateManyWithoutServiceCategoryNestedInput = {
+    create?:
+      | XOR<
+          ProjectCreateWithoutServiceCategoryInput,
+          ProjectUncheckedCreateWithoutServiceCategoryInput
+        >
+      | ProjectCreateWithoutServiceCategoryInput[]
+      | ProjectUncheckedCreateWithoutServiceCategoryInput[]
+    connectOrCreate?:
+      | ProjectCreateOrConnectWithoutServiceCategoryInput
+      | ProjectCreateOrConnectWithoutServiceCategoryInput[]
+    upsert?:
+      | ProjectUpsertWithWhereUniqueWithoutServiceCategoryInput
+      | ProjectUpsertWithWhereUniqueWithoutServiceCategoryInput[]
+    createMany?: ProjectCreateManyServiceCategoryInputEnvelope
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?:
+      | ProjectUpdateWithWhereUniqueWithoutServiceCategoryInput
+      | ProjectUpdateWithWhereUniqueWithoutServiceCategoryInput[]
+    updateMany?:
+      | ProjectUpdateManyWithWhereWithoutServiceCategoryInput
+      | ProjectUpdateManyWithWhereWithoutServiceCategoryInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutServiceCategoryNestedInput = {
+    create?:
+      | XOR<
+          ProjectCreateWithoutServiceCategoryInput,
+          ProjectUncheckedCreateWithoutServiceCategoryInput
+        >
+      | ProjectCreateWithoutServiceCategoryInput[]
+      | ProjectUncheckedCreateWithoutServiceCategoryInput[]
+    connectOrCreate?:
+      | ProjectCreateOrConnectWithoutServiceCategoryInput
+      | ProjectCreateOrConnectWithoutServiceCategoryInput[]
+    upsert?:
+      | ProjectUpsertWithWhereUniqueWithoutServiceCategoryInput
+      | ProjectUpsertWithWhereUniqueWithoutServiceCategoryInput[]
+    createMany?: ProjectCreateManyServiceCategoryInputEnvelope
+    set?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    disconnect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    delete?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
+    update?:
+      | ProjectUpdateWithWhereUniqueWithoutServiceCategoryInput
+      | ProjectUpdateWithWhereUniqueWithoutServiceCategoryInput[]
+    updateMany?:
+      | ProjectUpdateManyWithWhereWithoutServiceCategoryInput
+      | ProjectUpdateManyWithWhereWithoutServiceCategoryInput[]
+    deleteMany?: ProjectScalarWhereInput | ProjectScalarWhereInput[]
+  }
+
+  export type ServiceCategoryCreateNestedOneWithoutProjectsInput = {
+    create?: XOR<
+      ServiceCategoryCreateWithoutProjectsInput,
+      ServiceCategoryUncheckedCreateWithoutProjectsInput
+    >
+    connectOrCreate?: ServiceCategoryCreateOrConnectWithoutProjectsInput
+    connect?: ServiceCategoryWhereUniqueInput
+  }
+
   export type BriefingEntryCreateNestedManyWithoutProjectInput = {
     create?:
       | XOR<
@@ -76018,8 +76442,35 @@ export namespace Prisma {
     set?: $Enums.ProjectCategory
   }
 
-  export type EnumPriorityFieldUpdateOperationsInput = {
-    set?: $Enums.Priority
+  export type NullableIntFieldUpdateOperationsInput = {
+    set?: number | null
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
+  }
+
+  export type EnumPaymentMethodFieldUpdateOperationsInput = {
+    set?: $Enums.PaymentMethod
+  }
+
+  export type ServiceCategoryUpdateOneWithoutProjectsNestedInput = {
+    create?: XOR<
+      ServiceCategoryCreateWithoutProjectsInput,
+      ServiceCategoryUncheckedCreateWithoutProjectsInput
+    >
+    connectOrCreate?: ServiceCategoryCreateOrConnectWithoutProjectsInput
+    upsert?: ServiceCategoryUpsertWithoutProjectsInput
+    disconnect?: ServiceCategoryWhereInput | boolean
+    delete?: ServiceCategoryWhereInput | boolean
+    connect?: ServiceCategoryWhereUniqueInput
+    update?: XOR<
+      XOR<
+        ServiceCategoryUpdateToOneWithWhereWithoutProjectsInput,
+        ServiceCategoryUpdateWithoutProjectsInput
+      >,
+      ServiceCategoryUncheckedUpdateWithoutProjectsInput
+    >
   }
 
   export type BriefingEntryUpdateManyWithoutProjectNestedInput = {
@@ -77379,10 +77830,6 @@ export namespace Prisma {
     connect?: DocumentWhereUniqueInput
   }
 
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type DocumentUpdateOneRequiredWithoutClausesNestedInput = {
     create?: XOR<
       DocumentCreateWithoutClausesInput,
@@ -78201,14 +78648,6 @@ export namespace Prisma {
 
   export type EnumAssetTypeFieldUpdateOperationsInput = {
     set?: $Enums.AssetType
-  }
-
-  export type NullableIntFieldUpdateOperationsInput = {
-    set?: number | null
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
   }
 
   export type UpdateUpdateOneRequiredWithoutAttachmentsNestedInput = {
@@ -79334,68 +79773,6 @@ export namespace Prisma {
     not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
-  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: string | StringFieldRefInput<$PrismaModel> | null
-    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
-    lt?: string | StringFieldRefInput<$PrismaModel>
-    lte?: string | StringFieldRefInput<$PrismaModel>
-    gt?: string | StringFieldRefInput<$PrismaModel>
-    gte?: string | StringFieldRefInput<$PrismaModel>
-    contains?: string | StringFieldRefInput<$PrismaModel>
-    startsWith?: string | StringFieldRefInput<$PrismaModel>
-    endsWith?: string | StringFieldRefInput<$PrismaModel>
-    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedStringNullableFilter<$PrismaModel>
-    _max?: NestedStringNullableFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableFilter<$PrismaModel> | number | null
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<NestedJsonNullableFilterBase<$PrismaModel>>,
-          Exclude<
-            keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>,
-            "path"
-          >
-        >,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<
-        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, "path">
-      >
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
   export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
@@ -79434,6 +79811,34 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> =
@@ -79544,6 +79949,53 @@ export namespace Prisma {
     _min?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
     _max?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
   }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<NestedJsonNullableFilterBase<$PrismaModel>>,
+          Exclude<
+            keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>,
+            "path"
+          >
+        >,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<
+        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, "path">
+      >
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
 
   export type NestedEnumProjectStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.ProjectStatus | EnumProjectStatusFieldRefInput<$PrismaModel>
@@ -79569,11 +80021,15 @@ export namespace Prisma {
     not?: NestedEnumProjectCategoryFilter<$PrismaModel> | $Enums.ProjectCategory
   }
 
-  export type NestedEnumPriorityFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityFilter<$PrismaModel> | $Enums.Priority
+  export type NestedEnumPaymentMethodFilter<$PrismaModel = never> = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?: NestedEnumPaymentMethodFilter<$PrismaModel> | $Enums.PaymentMethod
   }
 
   export type NestedEnumProjectStatusWithAggregatesFilter<
@@ -79614,14 +80070,49 @@ export namespace Prisma {
     _max?: NestedEnumProjectCategoryFilter<$PrismaModel>
   }
 
-  export type NestedEnumPriorityWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.Priority | EnumPriorityFieldRefInput<$PrismaModel>
-    in?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    notIn?: $Enums.Priority[] | ListEnumPriorityFieldRefInput<$PrismaModel>
-    not?: NestedEnumPriorityWithAggregatesFilter<$PrismaModel> | $Enums.Priority
+  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _avg?: NestedFloatNullableFilter<$PrismaModel>
+    _sum?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedIntNullableFilter<$PrismaModel>
+    _max?: NestedIntNullableFilter<$PrismaModel>
+  }
+
+  export type NestedFloatNullableFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
+  }
+
+  export type NestedEnumPaymentMethodWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?: $Enums.PaymentMethod | EnumPaymentMethodFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.PaymentMethod[]
+      | ListEnumPaymentMethodFieldRefInput<$PrismaModel>
+    not?:
+      | NestedEnumPaymentMethodWithAggregatesFilter<$PrismaModel>
+      | $Enums.PaymentMethod
     _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumPriorityFilter<$PrismaModel>
-    _max?: NestedEnumPriorityFilter<$PrismaModel>
+    _min?: NestedEnumPaymentMethodFilter<$PrismaModel>
+    _max?: NestedEnumPaymentMethodFilter<$PrismaModel>
   }
 
   export type NestedEnumDocumentTypeFilter<$PrismaModel = never> = {
@@ -79716,30 +80207,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumSignatureProviderFilter<$PrismaModel>
     _max?: NestedEnumSignatureProviderFilter<$PrismaModel>
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
-  }
-
-  export type NestedFloatNullableFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel> | null
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -79893,22 +80360,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumAssetTypeFilter<$PrismaModel>
     _max?: NestedEnumAssetTypeFilter<$PrismaModel>
-  }
-
-  export type NestedIntNullableWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel> | null
-    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntNullableWithAggregatesFilter<$PrismaModel> | number | null
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _avg?: NestedFloatNullableFilter<$PrismaModel>
-    _sum?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedIntNullableFilter<$PrismaModel>
-    _max?: NestedIntNullableFilter<$PrismaModel>
   }
 
   export type NestedEnumActionStatusFilter<$PrismaModel = never> = {
@@ -80270,9 +80721,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -80280,6 +80732,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
     updates?: UpdateCreateNestedManyWithoutProjectInput
@@ -80303,9 +80756,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -80984,9 +81439,11 @@ export namespace Prisma {
     description?: StringNullableFilter<"Project"> | string | null
     status?: EnumProjectStatusFilter<"Project"> | $Enums.ProjectStatus
     category?: EnumProjectCategoryFilter<"Project"> | $Enums.ProjectCategory
-    priority?: EnumPriorityFilter<"Project"> | $Enums.Priority
     progress?: IntFilter<"Project"> | number
-    budget?: StringNullableFilter<"Project"> | string | null
+    budget?: IntNullableFilter<"Project"> | number | null
+    customValue?: BoolFilter<"Project"> | boolean
+    paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
+    serviceCategoryId?: StringNullableFilter<"Project"> | string | null
     briefing?: JsonNullableFilter<"Project">
     startDate?: DateTimeFilter<"Project"> | Date | string
     deadline?: DateTimeNullableFilter<"Project"> | Date | string | null
@@ -82092,7 +82549,7 @@ export namespace Prisma {
     title?: StringFilter<"Proposal"> | string
     status?: EnumProposalStatusFilter<"Proposal"> | $Enums.ProposalStatus
     validUntil?: DateTimeNullableFilter<"Proposal"> | Date | string | null
-    totalValue?: FloatFilter<"Proposal"> | number
+    totalValue?: IntFilter<"Proposal"> | number
     currency?: StringFilter<"Proposal"> | string
     notes?: StringNullableFilter<"Proposal"> | string | null
     acceptedAt?: DateTimeNullableFilter<"Proposal"> | Date | string | null
@@ -82741,6 +83198,151 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type ProjectCreateWithoutServiceCategoryInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.ProjectStatus
+    category?: $Enums.ProjectCategory
+    progress?: number
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: Date | string
+    deadline?: Date | string | null
+    liveUrl?: string | null
+    repositoryUrl?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
+    client: UserCreateNestedOneWithoutProjectsInput
+    members?: ProjectMemberCreateNestedManyWithoutProjectInput
+    updates?: UpdateCreateNestedManyWithoutProjectInput
+    assets?: AssetCreateNestedManyWithoutProjectInput
+    actionItems?: ActionItemCreateNestedManyWithoutProjectInput
+    versions?: VersionCreateNestedManyWithoutProjectInput
+    notifications?: NotificationCreateNestedManyWithoutProjectInput
+    auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
+    proposals?: ProposalCreateNestedManyWithoutProjectInput
+    threads?: ThreadCreateNestedManyWithoutProjectInput
+    decisions?: DecisionCreateNestedManyWithoutProjectInput
+    handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
+    kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
+    documents?: DocumentCreateNestedManyWithoutProjectInput
+    invoices?: InvoiceCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectUncheckedCreateWithoutServiceCategoryInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.ProjectStatus
+    category?: $Enums.ProjectCategory
+    progress?: number
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: Date | string
+    deadline?: Date | string | null
+    liveUrl?: string | null
+    repositoryUrl?: string | null
+    clientId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    briefingNotes?: BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
+    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
+    updates?: UpdateUncheckedCreateNestedManyWithoutProjectInput
+    assets?: AssetUncheckedCreateNestedManyWithoutProjectInput
+    actionItems?: ActionItemUncheckedCreateNestedManyWithoutProjectInput
+    versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
+    proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
+    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
+    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
+    handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
+    kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
+    invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
+  }
+
+  export type ProjectCreateOrConnectWithoutServiceCategoryInput = {
+    where: ProjectWhereUniqueInput
+    create: XOR<
+      ProjectCreateWithoutServiceCategoryInput,
+      ProjectUncheckedCreateWithoutServiceCategoryInput
+    >
+  }
+
+  export type ProjectCreateManyServiceCategoryInputEnvelope = {
+    data:
+      | ProjectCreateManyServiceCategoryInput
+      | ProjectCreateManyServiceCategoryInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type ProjectUpsertWithWhereUniqueWithoutServiceCategoryInput = {
+    where: ProjectWhereUniqueInput
+    update: XOR<
+      ProjectUpdateWithoutServiceCategoryInput,
+      ProjectUncheckedUpdateWithoutServiceCategoryInput
+    >
+    create: XOR<
+      ProjectCreateWithoutServiceCategoryInput,
+      ProjectUncheckedCreateWithoutServiceCategoryInput
+    >
+  }
+
+  export type ProjectUpdateWithWhereUniqueWithoutServiceCategoryInput = {
+    where: ProjectWhereUniqueInput
+    data: XOR<
+      ProjectUpdateWithoutServiceCategoryInput,
+      ProjectUncheckedUpdateWithoutServiceCategoryInput
+    >
+  }
+
+  export type ProjectUpdateManyWithWhereWithoutServiceCategoryInput = {
+    where: ProjectScalarWhereInput
+    data: XOR<
+      ProjectUpdateManyMutationInput,
+      ProjectUncheckedUpdateManyWithoutServiceCategoryInput
+    >
+  }
+
+  export type ServiceCategoryCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl?: string | null
+    isSubscription?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCategoryUncheckedCreateWithoutProjectsInput = {
+    id?: string
+    name: string
+    description?: string | null
+    approach: string
+    suggestedValue: number
+    imageUrl?: string | null
+    isSubscription?: boolean
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ServiceCategoryCreateOrConnectWithoutProjectsInput = {
+    where: ServiceCategoryWhereUniqueInput
+    create: XOR<
+      ServiceCategoryCreateWithoutProjectsInput,
+      ServiceCategoryUncheckedCreateWithoutProjectsInput
+    >
   }
 
   export type BriefingEntryCreateWithoutProjectInput = {
@@ -83414,6 +84016,50 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type ServiceCategoryUpsertWithoutProjectsInput = {
+    update: XOR<
+      ServiceCategoryUpdateWithoutProjectsInput,
+      ServiceCategoryUncheckedUpdateWithoutProjectsInput
+    >
+    create: XOR<
+      ServiceCategoryCreateWithoutProjectsInput,
+      ServiceCategoryUncheckedCreateWithoutProjectsInput
+    >
+    where?: ServiceCategoryWhereInput
+  }
+
+  export type ServiceCategoryUpdateToOneWithWhereWithoutProjectsInput = {
+    where?: ServiceCategoryWhereInput
+    data: XOR<
+      ServiceCategoryUpdateWithoutProjectsInput,
+      ServiceCategoryUncheckedUpdateWithoutProjectsInput
+    >
+  }
+
+  export type ServiceCategoryUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ServiceCategoryUncheckedUpdateWithoutProjectsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    approach?: StringFieldUpdateOperationsInput | string
+    suggestedValue?: IntFieldUpdateOperationsInput | number
+    imageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    isSubscription?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BriefingEntryUpsertWithWhereUniqueWithoutProjectInput = {
     where: BriefingEntryWhereUniqueInput
     update: XOR<
@@ -84061,7 +84707,7 @@ export namespace Prisma {
     projectId?: StringNullableFilter<"Invoice"> | string | null
     proposalId?: StringNullableFilter<"Invoice"> | string | null
     documentId?: StringNullableFilter<"Invoice"> | string | null
-    totalAmount?: FloatFilter<"Invoice"> | number
+    totalAmount?: IntFilter<"Invoice"> | number
     currency?: StringFilter<"Invoice"> | string
     issuedAt?: DateTimeFilter<"Invoice"> | Date | string
     dueDate?: DateTimeNullableFilter<"Invoice"> | Date | string | null
@@ -84201,9 +84847,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -84211,6 +84858,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -84234,9 +84882,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -84631,9 +85281,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -84641,6 +85294,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -84666,9 +85320,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85366,9 +86024,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85376,6 +86035,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -85399,9 +86059,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85508,9 +86170,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85518,6 +86183,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -85543,9 +86209,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85602,7 +86272,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -85631,7 +86301,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -85654,9 +86324,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85664,6 +86335,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -85687,9 +86359,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85750,9 +86424,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85760,6 +86437,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -85785,9 +86463,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -85818,9 +86500,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85828,6 +86511,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -85851,9 +86535,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -85996,9 +86682,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86006,6 +86695,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -86031,9 +86721,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86532,9 +87226,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -86542,6 +87237,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -86565,9 +87261,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -86742,9 +87440,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86752,6 +87453,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -86777,9 +87479,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86892,9 +87598,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -86902,6 +87609,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
     updates?: UpdateCreateNestedManyWithoutProjectInput
@@ -86925,9 +87633,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -86988,9 +87698,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -86998,6 +87711,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
     updates?: UpdateUpdateManyWithoutProjectNestedInput
@@ -87023,9 +87737,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87056,9 +87774,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -87066,6 +87785,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     updates?: UpdateCreateNestedManyWithoutProjectInput
@@ -87089,9 +87809,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -87222,9 +87944,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87232,6 +87957,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     updates?: UpdateUpdateManyWithoutProjectNestedInput
@@ -87257,9 +87983,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87372,9 +88102,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -87382,6 +88113,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -87405,9 +88137,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -87538,9 +88272,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -87548,6 +88285,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -87573,9 +88311,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88038,9 +88780,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88048,6 +88791,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -88071,9 +88815,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88134,9 +88880,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88144,6 +88893,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -88169,9 +88919,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88202,9 +88956,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88212,6 +88967,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -88235,9 +88991,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88298,9 +89056,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88308,6 +89069,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -88333,9 +89095,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88366,9 +89132,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88376,6 +89143,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -88399,9 +89167,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88462,9 +89232,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88472,6 +89245,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -88497,9 +89271,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88600,9 +89378,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88610,6 +89389,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -88633,9 +89413,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -88778,9 +89560,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -88788,6 +89573,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -88813,9 +89599,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -89068,9 +89858,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -89078,6 +89869,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -89101,9 +89893,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -89246,9 +90040,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -89256,6 +90053,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -89281,9 +90079,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -89370,9 +90172,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -89380,6 +90183,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -89403,9 +90207,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -89684,9 +90490,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -89694,6 +90503,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -89719,9 +90529,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -89831,7 +90645,7 @@ export namespace Prisma {
     id?: StringFilter<"ProposalItem"> | string
     description?: StringFilter<"ProposalItem"> | string
     longDescription?: StringNullableFilter<"ProposalItem"> | string | null
-    unitValue?: FloatFilter<"ProposalItem"> | number
+    unitValue?: IntFilter<"ProposalItem"> | number
     quantity?: IntFilter<"ProposalItem"> | number
     order?: IntFilter<"ProposalItem"> | number
     proposalId?: StringFilter<"ProposalItem"> | string
@@ -89945,7 +90759,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -89974,7 +90788,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -90149,9 +90963,10 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -90159,6 +90974,7 @@ export namespace Prisma {
     repositoryUrl?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
     briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
     client: UserCreateNestedOneWithoutProjectsInput
     members?: ProjectMemberCreateNestedManyWithoutProjectInput
@@ -90182,9 +90998,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -90392,9 +91210,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90402,6 +91223,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     client?: UserUpdateOneRequiredWithoutProjectsNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
@@ -90427,9 +91249,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90486,7 +91312,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -90515,7 +91341,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -90639,7 +91465,7 @@ export namespace Prisma {
     id?: StringFilter<"Installment"> | string
     invoiceId?: StringFilter<"Installment"> | string
     number?: IntFilter<"Installment"> | number
-    amount?: FloatFilter<"Installment"> | number
+    amount?: IntFilter<"Installment"> | number
     dueDate?: DateTimeFilter<"Installment"> | Date | string
     status?:
       | EnumInstallmentStatusFilter<"Installment">
@@ -90761,7 +91587,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90780,7 +91606,7 @@ export namespace Prisma {
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -90823,7 +91649,7 @@ export namespace Prisma {
     id?: StringFilter<"PaymentEvent"> | string
     installmentId?: StringFilter<"PaymentEvent"> | string
     type?: StringFilter<"PaymentEvent"> | string
-    amount?: FloatFilter<"PaymentEvent"> | number
+    amount?: IntFilter<"PaymentEvent"> | number
     date?: DateTimeFilter<"PaymentEvent"> | Date | string
     note?: StringNullableFilter<"PaymentEvent"> | string | null
     attachmentUrl?: StringNullableFilter<"PaymentEvent"> | string | null
@@ -90897,7 +91723,7 @@ export namespace Prisma {
   export type InstallmentUpdateWithoutPaymentEventsInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -90923,7 +91749,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     invoiceId?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -91102,9 +91928,11 @@ export namespace Prisma {
     description?: string | null
     status?: $Enums.ProjectStatus
     category?: $Enums.ProjectCategory
-    priority?: $Enums.Priority
     progress?: number
-    budget?: string | null
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
     deadline?: Date | string | null
@@ -91299,9 +92127,12 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91309,6 +92140,7 @@ export namespace Prisma {
     repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
     briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
     members?: ProjectMemberUpdateManyWithoutProjectNestedInput
     updates?: UpdateUpdateManyWithoutProjectNestedInput
@@ -91334,9 +92166,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -91369,9 +92205,13 @@ export namespace Prisma {
     category?:
       | EnumProjectCategoryFieldUpdateOperationsInput
       | $Enums.ProjectCategory
-    priority?: EnumPriorityFieldUpdateOperationsInput | $Enums.Priority
     progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableStringFieldUpdateOperationsInput | string | null
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: DateTimeFieldUpdateOperationsInput | Date | string
     deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -92183,7 +93023,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -92212,7 +93052,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -92241,7 +93081,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -92325,6 +93165,128 @@ export namespace Prisma {
     contractingData?: NullableJsonNullValueInput | InputJsonValue
     commercialData?: NullableJsonNullValueInput | InputJsonValue
     currentVersionId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type ProjectCreateManyServiceCategoryInput = {
+    id?: string
+    name: string
+    description?: string | null
+    status?: $Enums.ProjectStatus
+    category?: $Enums.ProjectCategory
+    progress?: number
+    budget?: number | null
+    customValue?: boolean
+    paymentMethod?: $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: Date | string
+    deadline?: Date | string | null
+    liveUrl?: string | null
+    repositoryUrl?: string | null
+    clientId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type ProjectUpdateWithoutServiceCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    category?:
+      | EnumProjectCategoryFieldUpdateOperationsInput
+      | $Enums.ProjectCategory
+    progress?: IntFieldUpdateOperationsInput | number
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
+    client?: UserUpdateOneRequiredWithoutProjectsNestedInput
+    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
+    updates?: UpdateUpdateManyWithoutProjectNestedInput
+    assets?: AssetUpdateManyWithoutProjectNestedInput
+    actionItems?: ActionItemUpdateManyWithoutProjectNestedInput
+    versions?: VersionUpdateManyWithoutProjectNestedInput
+    notifications?: NotificationUpdateManyWithoutProjectNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
+    proposals?: ProposalUpdateManyWithoutProjectNestedInput
+    threads?: ThreadUpdateManyWithoutProjectNestedInput
+    decisions?: DecisionUpdateManyWithoutProjectNestedInput
+    handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
+    kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
+    documents?: DocumentUpdateManyWithoutProjectNestedInput
+    invoices?: InvoiceUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateWithoutServiceCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    category?:
+      | EnumProjectCategoryFieldUpdateOperationsInput
+      | $Enums.ProjectCategory
+    progress?: IntFieldUpdateOperationsInput | number
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    briefingNotes?: BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
+    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
+    updates?: UpdateUncheckedUpdateManyWithoutProjectNestedInput
+    assets?: AssetUncheckedUpdateManyWithoutProjectNestedInput
+    actionItems?: ActionItemUncheckedUpdateManyWithoutProjectNestedInput
+    versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
+    proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
+    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
+    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
+    handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
+    kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
+    invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
+  }
+
+  export type ProjectUncheckedUpdateManyWithoutServiceCategoryInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
+    category?:
+      | EnumProjectCategoryFieldUpdateOperationsInput
+      | $Enums.ProjectCategory
+    progress?: IntFieldUpdateOperationsInput | number
+    budget?: NullableIntFieldUpdateOperationsInput | number | null
+    customValue?: BoolFieldUpdateOperationsInput | boolean
+    paymentMethod?:
+      | EnumPaymentMethodFieldUpdateOperationsInput
+      | $Enums.PaymentMethod
+    briefing?: NullableJsonNullValueInput | InputJsonValue
+    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
+    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    clientId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -92835,7 +93797,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -92864,7 +93826,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -92893,7 +93855,7 @@ export namespace Prisma {
       | Date
       | string
       | null
-    totalValue?: FloatFieldUpdateOperationsInput | number
+    totalValue?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     notes?: NullableStringFieldUpdateOperationsInput | string | null
     acceptedAt?:
@@ -93065,7 +94027,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93083,7 +94045,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93099,7 +94061,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93255,7 +94217,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93273,7 +94235,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93289,7 +94251,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     proposalId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93537,7 +94499,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93548,7 +94510,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93559,7 +94521,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     description?: StringFieldUpdateOperationsInput | string
     longDescription?: NullableStringFieldUpdateOperationsInput | string | null
-    unitValue?: FloatFieldUpdateOperationsInput | number
+    unitValue?: IntFieldUpdateOperationsInput | number
     quantity?: IntFieldUpdateOperationsInput | number
     order?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -93571,7 +94533,7 @@ export namespace Prisma {
     title?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93589,7 +94551,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93605,7 +94567,7 @@ export namespace Prisma {
     status?: EnumInvoiceStatusFieldUpdateOperationsInput | $Enums.InvoiceStatus
     projectId?: NullableStringFieldUpdateOperationsInput | string | null
     documentId?: NullableStringFieldUpdateOperationsInput | string | null
-    totalAmount?: FloatFieldUpdateOperationsInput | number
+    totalAmount?: IntFieldUpdateOperationsInput | number
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
@@ -93632,7 +94594,7 @@ export namespace Prisma {
   export type InstallmentUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -93657,7 +94619,7 @@ export namespace Prisma {
   export type InstallmentUncheckedUpdateWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -93682,7 +94644,7 @@ export namespace Prisma {
   export type InstallmentUncheckedUpdateManyWithoutInvoiceInput = {
     id?: StringFieldUpdateOperationsInput | string
     number?: IntFieldUpdateOperationsInput | number
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     dueDate?: DateTimeFieldUpdateOperationsInput | Date | string
     status?:
       | EnumInstallmentStatusFieldUpdateOperationsInput
@@ -93718,7 +94680,7 @@ export namespace Prisma {
   export type PaymentEventUpdateWithoutInstallmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93730,7 +94692,7 @@ export namespace Prisma {
   export type PaymentEventUncheckedUpdateWithoutInstallmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null
@@ -93742,7 +94704,7 @@ export namespace Prisma {
   export type PaymentEventUncheckedUpdateManyWithoutInstallmentInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
-    amount?: FloatFieldUpdateOperationsInput | number
+    amount?: IntFieldUpdateOperationsInput | number
     date?: DateTimeFieldUpdateOperationsInput | Date | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     attachmentUrl?: NullableStringFieldUpdateOperationsInput | string | null

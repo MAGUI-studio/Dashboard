@@ -9,7 +9,8 @@ import {
 } from "@/src/types/dashboard"
 import { AnimatePresence, motion } from "framer-motion"
 
-import { GlobalSearch } from "@/src/components/common/GlobalSearch"
+import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
+import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
 import { MobileHeaderMenu } from "@/src/components/common/MobileHeaderMenu"
 import { NotificationsDrawer } from "@/src/components/common/NotificationsDrawer"
 import { Logo } from "@/src/components/common/logo"
@@ -62,7 +63,7 @@ export function Header({
         transition={{ delay: 0.08, duration: 0.4, ease: "easeOut" }}
         className="mx-auto flex h-20 w-full max-w-440 items-center justify-between px-6 lg:px-12"
       >
-        <div className="flex items-center gap-12">
+        <div className="flex items-center gap-8 lg:gap-12">
           <Link
             href="/"
             className="transition-all hover:opacity-60 active:scale-95 outline-none focus-visible:ring-0"
@@ -78,8 +79,11 @@ export function Header({
             <div className="size-8 rounded-full bg-muted/20 animate-pulse" />
           ) : (
             <div className="flex items-center gap-2 lg:gap-3">
-              {viewer.isAdmin ? <GlobalSearch /> : null}
               <NotificationsDrawer notifications={notifications} />
+              <div className="hidden items-center gap-2 lg:flex">
+                <HeaderLanguageSwitcher compact />
+                <HeaderThemeToggle compact />
+              </div>
               <MobileHeaderMenu viewer={viewer} />
               <UserMenu viewer={viewer} />
             </div>

@@ -36,7 +36,7 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             <div className="flex flex-col gap-2">
               <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                Categoria
+                Categoria de Serviço
               </span>
               <div className="flex items-center gap-3">
                 <Tag weight="duotone" className="size-5 text-brand-primary" />
@@ -48,14 +48,14 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
 
             <div className="flex flex-col gap-2">
               <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                Prioridade
+                Condição de Pagamento
               </span>
               <div className="flex items-center gap-3">
-                <div
-                  className={`size-2 rounded-full ${project.priority === "URGENT" ? "bg-red-500 animate-pulse" : "bg-brand-primary"}`}
-                />
+                <div className="size-2 rounded-full bg-brand-primary" />
                 <span className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
-                  {t(`priorities.${project.priority}`)}
+                  {project.paymentMethod === "FIFTY_FIFTY"
+                    ? "50% Entrada + 50% Entrega"
+                    : "Parcelamento Mensal"}
                 </span>
               </div>
             </div>

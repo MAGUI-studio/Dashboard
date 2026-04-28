@@ -15,6 +15,7 @@ import {
   Wallet,
 } from "@phosphor-icons/react"
 import { format } from "date-fns"
+import { differenceInCalendarDays, isAfter, startOfDay } from "date-fns"
 import { ptBR } from "date-fns/locale"
 import { toast } from "sonner"
 
@@ -29,7 +30,7 @@ import {
 } from "@/src/components/ui/dialog"
 
 import { registerPaymentAction } from "@/src/lib/actions/financial.actions"
-import { cn } from "@/src/lib/utils/utils"
+import { cn, formatCurrencyBRLFromCents } from "@/src/lib/utils/utils"
 
 import { usePermissions } from "@/src/hooks/use-permissions"
 
@@ -37,6 +38,12 @@ import { AddInvoiceForm } from "./AddInvoiceForm"
 
 type InvoiceWithInstallments = Prisma.InvoiceGetPayload<{
   include: {
+    project: {
+      select: {
+        id: true
+        name: true
+      }
+    }
     installments: {
       include: {
         paymentEvents: true
@@ -48,11 +55,13 @@ type InvoiceWithInstallments = Prisma.InvoiceGetPayload<{
 interface ProjectFinancialTabProps {
   projectId: string
   invoices: InvoiceWithInstallments[]
+  projectName?: string
 }
 
 export function ProjectFinancialTab({
   projectId,
   invoices,
+  projectName,
 }: ProjectFinancialTabProps) {
   const { isAdmin } = usePermissions()
   const searchParams = useSearchParams()
@@ -83,13 +92,38 @@ export function ProjectFinancialTab({
     )
   }, 0)
 
-  const formatBRL = (val: number) => {
-    return val.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2,
-    })
+  const formatBRL = (cents: number) => formatCurrencyBRLFromCents(cents)
+  const pendingValue = totalValue - paidValue
+
+  const getDueBadge = (
+    inst: InvoiceWithInstallments["installments"][number]
+  ): { label: string; className: string } | null => {
+    if (inst.status === "PAID") return null
+
+    const today = startOfDay(new Date())
+    const dueDate = startOfDay(new Date(inst.dueDate))
+    const diff = differenceInCalendarDays(dueDate, today)
+
+    if (diff < 0 || diff > 5) return null
+
+    if (diff === 0) {
+      return {
+        label: "Vence hoje",
+        className: "border-red-500/20 bg-red-500/10 text-red-600",
+      }
+    }
+
+    if (diff === 1) {
+      return {
+        label: "Vence amanha",
+        className: "border-amber-500/20 bg-amber-500/10 text-amber-700",
+      }
+    }
+
+    return {
+      label: `Vence em ${diff} dias`,
+      className: "border-amber-500/20 bg-amber-500/10 text-amber-700",
+    }
   }
 
   const handleRegisterPayment = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -142,10 +176,10 @@ export function ProjectFinancialTab({
   return (
     <div className="space-y-12">
       {/* Resumo Financeiro */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="rounded-[2.5rem] border-none bg-muted/5 overflow-hidden shadow-none">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1.15fr_0.85fr_0.85fr]">
+        <Card className="overflow-hidden rounded-[2.5rem] border border-border/20 bg-linear-to-br from-foreground/[0.03] via-background to-muted/10 shadow-none">
           <CardContent className="p-8">
-            <div className="flex items-center gap-3 mb-4">
+            <div className="mb-4 flex items-center gap-3">
               <div className="flex size-8 items-center justify-center rounded-xl bg-foreground/5 text-foreground/40">
                 <Receipt size={18} weight="duotone" />
               </div>
@@ -156,10 +190,15 @@ export function ProjectFinancialTab({
             <p className="text-4xl font-black uppercase tracking-tight text-foreground">
               {formatBRL(totalValue)}
             </p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted-foreground/65">
+              {projectName
+                ? `Resumo consolidado do investimento do projeto ${projectName}.`
+                : "Resumo consolidado do investimento deste projeto."}
+            </p>
           </CardContent>
         </Card>
 
-        <Card className="rounded-[2.5rem] border-none bg-emerald-500/[0.03] overflow-hidden shadow-none">
+        <Card className="overflow-hidden rounded-[2.5rem] border border-emerald-500/10 bg-emerald-500/[0.03] shadow-none">
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-4">
               <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600">
@@ -175,18 +214,23 @@ export function ProjectFinancialTab({
           </CardContent>
         </Card>
 
-        <Card className="rounded-[2.5rem] border-none bg-brand-primary/[0.03] overflow-hidden shadow-none">
+        <Card className="overflow-hidden rounded-[2.5rem] border border-red-500/10 bg-red-500/[0.03] shadow-none">
           <CardContent className="p-8">
             <div className="flex items-center gap-3 mb-4">
-              <div className="flex size-8 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-red-500/10 text-red-600">
                 <Wallet size={18} weight="duotone" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary/60">
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600/70">
                 Saldo devedor
               </span>
             </div>
-            <p className="text-4xl font-black uppercase tracking-tight text-brand-primary">
-              {formatBRL(totalValue - paidValue)}
+            <p className="text-4xl font-black uppercase tracking-tight text-red-600">
+              {formatBRL(pendingValue)}
+            </p>
+            <p className="mt-3 text-sm leading-relaxed text-red-600/70">
+              {pendingValue > 0
+                ? "Valor ainda pendente para liberar a operacao completa."
+                : "Nao existe saldo em aberto neste momento."}
             </p>
           </CardContent>
         </Card>
@@ -219,11 +263,31 @@ export function ProjectFinancialTab({
           )}
           {invoices.map((invoice) => (
             <div key={invoice.id} className="space-y-4">
-              <div className="flex items-center gap-4 ml-2">
-                <Badge className="bg-foreground text-background font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
-                  FATURA: {invoice.title}
-                </Badge>
-                <div className="h-px flex-1 bg-border/20" />
+              <div className="rounded-[2rem] border border-border/20 bg-muted/5 p-5">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <Badge className="rounded-full bg-foreground px-3 py-1 font-mono text-[9px] font-black uppercase tracking-widest text-background">
+                        FATURA
+                      </Badge>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
+                        {invoice.title}
+                      </span>
+                    </div>
+                    <p className="text-sm font-medium text-muted-foreground/70">
+                      {invoice.description ||
+                        "Cobranca vinculada a este projeto."}
+                    </p>
+                  </div>
+                  <div className="text-left sm:text-right">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/45">
+                      Projeto relacionado
+                    </p>
+                    <p className="text-sm font-black uppercase tracking-tight text-foreground">
+                      {invoice.project?.name || projectName || "Projeto"}
+                    </p>
+                  </div>
+                </div>
               </div>
 
               <div className="grid gap-4">
@@ -236,6 +300,13 @@ export function ProjectFinancialTab({
                     (p) => p.status !== "PAID"
                   )
 
+                  const dueBadge = getDueBadge(inst)
+                  const isOverdue =
+                    isAfter(
+                      startOfDay(new Date()),
+                      startOfDay(new Date(inst.dueDate))
+                    ) && inst.status !== "PAID"
+
                   return (
                     <div
                       key={inst.id}
@@ -245,7 +316,9 @@ export function ProjectFinancialTab({
                           ? "border-emerald-500/10 bg-emerald-500/[0.01] opacity-60"
                           : hasUnpaidPrevious
                             ? "border-border/20 bg-muted/2 opacity-40 grayscale"
-                            : "border-border/40 bg-muted/5 hover:border-brand-primary/30 hover:bg-brand-primary/[0.02]"
+                            : isOverdue
+                              ? "border-red-500/20 bg-red-500/[0.03] hover:border-red-500/30"
+                              : "border-border/40 bg-muted/5 hover:border-brand-primary/30 hover:bg-brand-primary/[0.02]"
                       )}
                     >
                       <div className="flex items-center gap-8">
@@ -274,24 +347,58 @@ export function ProjectFinancialTab({
                             <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
                               Parcela {inst.number}
                             </p>
-                            {inst.status !== "PAID" && (
+                            {inst.status !== "PAID" && !dueBadge && (
                               <span
                                 className={cn(
                                   "text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full",
                                   hasUnpaidPrevious
                                     ? "bg-muted/10 text-muted-foreground/40 border border-border/10"
-                                    : "bg-amber-500/10 text-amber-600 border border-amber-500/10"
+                                    : isOverdue
+                                      ? "border border-red-500/20 bg-red-500/10 text-red-600"
+                                      : "bg-muted/10 text-muted-foreground/60 border border-border/10"
                                 )}
                               >
                                 {hasUnpaidPrevious
                                   ? "Aguardando anterior"
-                                  : `Vence em ${format(new Date(inst.dueDate), "dd/MM", { locale: ptBR })}`}
+                                  : isOverdue
+                                    ? "Vencida"
+                                    : `Vencimento ${format(new Date(inst.dueDate), "dd/MM", { locale: ptBR })}`}
                               </span>
                             )}
+                            {dueBadge && !hasUnpaidPrevious ? (
+                              <span
+                                className={cn(
+                                  "rounded-full border px-2 py-0.5 text-[8px] font-bold uppercase tracking-widest",
+                                  dueBadge.className
+                                )}
+                              >
+                                {dueBadge.label}
+                              </span>
+                            ) : null}
                           </div>
                           <p className="text-3xl font-black uppercase tracking-tighter text-foreground">
                             {formatBRL(inst.amount)}
                           </p>
+                          <div className="space-y-1">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-muted-foreground/45">
+                              Projeto
+                            </p>
+                            <p className="text-xs font-bold text-foreground/75">
+                              {invoice.project?.name ||
+                                projectName ||
+                                "Projeto"}
+                            </p>
+                            <p className="text-xs font-medium text-muted-foreground/60">
+                              Vencimento em{" "}
+                              {format(
+                                new Date(inst.dueDate),
+                                "dd 'de' MMMM 'de' yyyy",
+                                {
+                                  locale: ptBR,
+                                }
+                              )}
+                            </p>
+                          </div>
                         </div>
                       </div>
 

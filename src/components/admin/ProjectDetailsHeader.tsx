@@ -20,11 +20,13 @@ import { Button } from "@/src/components/ui/button"
 
 import { ExportProjectSummaryButton } from "@/src/components/admin/ExportProjectSummaryButton"
 
+import { formatCurrencyBRL } from "@/src/lib/utils/utils"
+
 interface ProjectDetailsHeaderProps {
   project: {
     id: string
     name: string
-    budget: string | null
+    budget: number | null
     deadline: Date | null
     client: {
       id: string
@@ -53,6 +55,10 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
       return `FALTAM ${diffDays} ${diffDays === 1 ? "DIA" : "DIAS"}`
     }
   }
+
+  const budgetDisplay = project.budget
+    ? formatCurrencyBRL(project.budget.toString())
+    : t("no_budget")
 
   return (
     <div className="flex flex-col gap-10">
@@ -114,7 +120,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
                   {t("budget_label", { fallback: "Investimento" })}
                 </span>
                 <span className="text-sm font-bold text-foreground">
-                  {project.budget || t("no_budget")}
+                  {budgetDisplay}
                 </span>
               </div>
             </div>

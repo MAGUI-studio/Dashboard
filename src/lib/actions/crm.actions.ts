@@ -10,7 +10,7 @@ import {
   LeadStatus,
   ProjectCategory,
   ProjectStatus,
-} from "@/src/generated/client/enums"
+} from "@/src/generated/client"
 import { LeadActivity, LeadNote } from "@/src/types/crm"
 import { z } from "zod"
 
@@ -295,6 +295,7 @@ export async function convertLeadToProjectAction(input: {
     category: ProjectCategory
     budget?: string
     deadline?: string
+    paymentMethod?: "FIFTY_FIFTY" | "MONTHLY_INSTALLMENTS"
   }
 }): Promise<{ success: boolean; error?: string; projectId?: string }> {
   try {
@@ -343,11 +344,18 @@ export async function convertLeadToProjectAction(input: {
 
       if (!finalUserId) throw new Error("Client must be selected.")
 
+      const budgetStr = input.projectData.budget || lead.value
+      const budgetValue = budgetStr
+        ? parseFloat(budgetStr.replace(/[^\d.,]/g, "").replace(",", "."))
+        : null
+
       const project = await tx.project.create({
         data: {
           name: input.projectData.name,
-          category: input.projectData.category || ProjectCategory.WEB_APP,
-          budget: input.projectData.budget || lead.value,
+          category: input.projectData.category || ProjectCategory.LANDING_PAGE,
+          budget: budgetValue,
+          paymentMethod:
+            (input.projectData.paymentMethod as PaymentMethod) || "FIFTY_FIFTY",
           deadline: input.projectData.deadline
             ? new Date(input.projectData.deadline)
             : null,

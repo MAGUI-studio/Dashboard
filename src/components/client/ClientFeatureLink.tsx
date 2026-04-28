@@ -1,7 +1,7 @@
 import * as React from "react"
 
 import { Link } from "@/src/i18n/navigation"
-import { ArrowRight } from "@phosphor-icons/react/dist/ssr"
+import { ArrowRight, LockKey } from "@phosphor-icons/react/dist/ssr"
 
 import type { AppHref } from "@/src/lib/utils/navigation"
 
@@ -14,6 +14,7 @@ interface ClientFeatureLinkProps {
     className?: string
   }>
   meta?: string
+  isLocked?: boolean
 }
 
 export function ClientFeatureLink({
@@ -22,7 +23,28 @@ export function ClientFeatureLink({
   href,
   icon: IconComponent,
   meta,
+  isLocked,
 }: ClientFeatureLinkProps): React.JSX.Element {
+  if (isLocked) {
+    return (
+      <div className="group flex min-h-36 flex-col justify-between rounded-2xl border border-border/25 bg-muted/5 p-5 opacity-60 grayscale transition sm:min-h-44 sm:p-6 cursor-not-allowed">
+        <div className="flex items-start justify-between gap-5">
+          <div className="flex size-12 items-center justify-center rounded-xl bg-muted/20 text-muted-foreground">
+            <LockKey weight="duotone" className="size-6" />
+          </div>
+        </div>
+        <div className="space-y-2 mt-5">
+          <h3 className="font-heading text-2xl font-black uppercase leading-none tracking-tight">
+            {title}
+          </h3>
+          <p className="text-sm font-medium leading-relaxed text-muted-foreground/70">
+            Aguardando pagamento inicial para liberação.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Link
       href={href}

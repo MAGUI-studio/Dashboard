@@ -11,6 +11,14 @@ export async function getClientHomeData(userId: string) {
         take: 5,
         include: { attachments: true },
       },
+      invoices: {
+        where: { status: { not: "CANCELLED" } },
+        include: {
+          installments: {
+            orderBy: { dueDate: "asc" },
+          },
+        },
+      },
       _count: {
         select: {
           updates: {
@@ -160,9 +168,13 @@ export async function getClientProjectBreadcrumb(id: string, userId: string) {
       id: true,
       name: true,
       invoices: {
-        select: { status: true },
-        take: 1,
-        orderBy: { createdAt: "asc" },
+        where: { status: { not: "CANCELLED" } },
+        select: {
+          status: true,
+          installments: {
+            select: { status: true },
+          },
+        },
       },
     },
   })

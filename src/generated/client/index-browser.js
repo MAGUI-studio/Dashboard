@@ -133,18 +133,6 @@ exports.Prisma.DashboardMetricSnapshotScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
-exports.Prisma.SearchDocumentScalarFieldEnum = {
-  id: 'id',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  projectId: 'projectId',
-  title: 'title',
-  subtitle: 'subtitle',
-  body: 'body',
-  metadata: 'metadata',
-  updatedAt: 'updatedAt'
-};
-
 exports.Prisma.EventOutboxScalarFieldEnum = {
   id: 'id',
   type: 'type',
@@ -232,15 +220,29 @@ exports.Prisma.SavedViewScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.ServiceCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  description: 'description',
+  approach: 'approach',
+  suggestedValue: 'suggestedValue',
+  imageUrl: 'imageUrl',
+  isSubscription: 'isSubscription',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.ProjectScalarFieldEnum = {
   id: 'id',
   name: 'name',
   description: 'description',
   status: 'status',
   category: 'category',
-  priority: 'priority',
   progress: 'progress',
   budget: 'budget',
+  customValue: 'customValue',
+  paymentMethod: 'paymentMethod',
+  serviceCategoryId: 'serviceCategoryId',
   briefing: 'briefing',
   startDate: 'startDate',
   deadline: 'deadline',
@@ -639,12 +641,12 @@ exports.Prisma.SortOrder = {
   desc: 'desc'
 };
 
-exports.Prisma.NullableJsonNullValueInput = {
-  DbNull: Prisma.DbNull,
+exports.Prisma.JsonNullValueInput = {
   JsonNull: Prisma.JsonNull
 };
 
-exports.Prisma.JsonNullValueInput = {
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull
 };
 
@@ -709,21 +711,15 @@ exports.ProjectStatus = exports.$Enums.ProjectStatus = {
 };
 
 exports.ProjectCategory = exports.$Enums.ProjectCategory = {
-  WEB_APP: 'WEB_APP',
-  MOBILE_APP: 'MOBILE_APP',
-  BRANDING: 'BRANDING',
   LANDING_PAGE: 'LANDING_PAGE',
-  SALES_PAGE: 'SALES_PAGE',
   INSTITUTIONAL_SITE: 'INSTITUTIONAL_SITE',
-  E_COMMERCE: 'E_COMMERCE',
-  UI_UX_DESIGN: 'UI_UX_DESIGN'
+  BOOKING_PLATFORM: 'BOOKING_PLATFORM',
+  STABILITY_PLAN: 'STABILITY_PLAN'
 };
 
-exports.Priority = exports.$Enums.Priority = {
-  LOW: 'LOW',
-  MEDIUM: 'MEDIUM',
-  HIGH: 'HIGH',
-  URGENT: 'URGENT'
+exports.PaymentMethod = exports.$Enums.PaymentMethod = {
+  FIFTY_FIFTY: 'FIFTY_FIFTY',
+  MONTHLY_INSTALLMENTS: 'MONTHLY_INSTALLMENTS'
 };
 
 exports.DocumentType = exports.$Enums.DocumentType = {
@@ -870,7 +866,6 @@ exports.InstallmentStatus = exports.$Enums.InstallmentStatus = {
 
 exports.Prisma.ModelName = {
   DashboardMetricSnapshot: 'DashboardMetricSnapshot',
-  SearchDocument: 'SearchDocument',
   EventOutbox: 'EventOutbox',
   User: 'User',
   Lead: 'Lead',
@@ -878,6 +873,7 @@ exports.Prisma.ModelName = {
   LeadActivity: 'LeadActivity',
   MessageTemplate: 'MessageTemplate',
   SavedView: 'SavedView',
+  ServiceCategory: 'ServiceCategory',
   Project: 'Project',
   Document: 'Document',
   DocumentVersion: 'DocumentVersion',

@@ -5,11 +5,10 @@ import { getTranslations } from "next-intl/server"
 import {
   AuditActorType,
   NotificationType,
-  Priority,
   ProjectCategory,
   ProjectMemberRole,
   ProjectStatus,
-} from "@/src/generated/client/enums"
+} from "@/src/generated/client"
 import { addDays } from "date-fns"
 
 import { logger } from "@/src/lib/logger"
@@ -24,7 +23,7 @@ import {
   revalidateProjectStatus,
 } from "@/src/lib/revalidate"
 import { getOrCreateStripeCustomer } from "@/src/lib/stripe-actions"
-import { parseCurrencyBRL } from "@/src/lib/utils/utils"
+import { parseCurrencyBRLToCents } from "@/src/lib/utils/utils"
 import {
   createProjectSchema,
   updateProjectStatusSchema,
@@ -51,10 +50,10 @@ export async function createProjectAction(
     budget: formData.get("budget"),
     deadline: formData.get("deadline"),
     startDate: formData.get("startDate"),
-    liveUrl: formData.get("liveUrl"),
-    repositoryUrl: formData.get("repositoryUrl"),
     category: formData.get("category"),
-    priority: formData.get("priority"),
+    serviceCategoryId: formData.get("serviceCategoryId"),
+    customValue: formData.get("customValue"),
+    paymentMethod: formData.get("paymentMethod"),
     installments: formData.get("installments")
       ? JSON.parse(formData.get("installments") as string)
       : undefined,
@@ -75,13 +74,13 @@ export async function createProjectAction(
         data: {
           name: data.projectName,
           description: data.projectDescription ?? null,
-          budget: data.budget ?? null,
+          budget: data.budget ? parseCurrencyBRLToCents(data.budget) : null,
+          customValue: data.customValue,
+          paymentMethod: data.paymentMethod,
+          serviceCategoryId: data.serviceCategoryId || null,
           deadline: data.deadline ? new Date(data.deadline) : null,
           startDate: data.startDate ? new Date(data.startDate) : new Date(),
-          liveUrl: data.liveUrl || null,
-          repositoryUrl: data.repositoryUrl || null,
           category: data.category as ProjectCategory,
-          priority: data.priority as Priority,
           clientId: data.clientId,
           status: ProjectStatus.STRATEGY,
           progress: 0,
@@ -129,13 +128,11 @@ export async function createProjectAction(
               role: actor?.role,
             }),
             category: p.category,
-            priority: p.priority,
             initialUpdateId: initialUpdate.id,
             after: {
               status: p.status,
               progress: p.progress,
               category: p.category,
-              priority: p.priority,
               budget: p.budget,
               deadline: p.deadline?.toISOString() ?? null,
             },
@@ -183,7 +180,7 @@ export async function createProjectAction(
 
     // AUTO-BILLING: If installments exist or budget exists
     const installmentsData = data.installments
-    const budgetAmount = parseCurrencyBRL(data.budget || "")
+    const budgetAmountCents = parseCurrencyBRLToCents(data.budget || "")
 
     if (installmentsData && installmentsData.length > 0) {
       try {
@@ -210,19 +207,19 @@ export async function createProjectAction(
           "Failed to create dynamic initial invoice"
         )
       }
-    } else if (!isNaN(budgetAmount) && budgetAmount > 0) {
+    } else if (!isNaN(budgetAmountCents) && budgetAmountCents > 0) {
       try {
         await createInvoiceAction({
           projectId: project.id,
           title: `Pagamento Inicial - ${project.name}`,
           description: `Fatura automática gerada para o projeto ${project.name}.`,
-          totalAmount: budgetAmount,
+          totalAmount: budgetAmountCents,
           currency: "BRL",
           dueDate: addDays(new Date(), 7),
           installments: [
             {
               number: 1,
-              amount: budgetAmount,
+              amount: budgetAmountCents,
               dueDate: addDays(new Date(), 7),
             },
           ],
@@ -258,6 +255,8 @@ export async function updateProjectStatusAction(
     id: formData.get("id"),
     status: formData.get("status"),
     progress: Number(formData.get("progress")),
+    liveUrl: formData.get("liveUrl"),
+    repositoryUrl: formData.get("repositoryUrl"),
   })
 
   if (!validatedFields.success) {
@@ -265,7 +264,7 @@ export async function updateProjectStatusAction(
     return { error }
   }
 
-  const { id, status, progress } = validatedFields.data
+  const { id, status, progress, liveUrl, repositoryUrl } = validatedFields.data
   const actor = await getCurrentAppUser()
 
   try {
@@ -275,6 +274,8 @@ export async function updateProjectStatusAction(
         select: {
           status: true,
           progress: true,
+          liveUrl: true,
+          repositoryUrl: true,
         },
       })
 
@@ -283,6 +284,8 @@ export async function updateProjectStatusAction(
         data: {
           status: status as ProjectStatus,
           progress,
+          liveUrl: liveUrl || null,
+          repositoryUrl: repositoryUrl || null,
         },
         include: {
           client: {

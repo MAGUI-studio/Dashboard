@@ -14,7 +14,6 @@ export function revalidateProjectData(projectId?: string) {
   revalidateTag(cacheTags.adminClientOptions, "default")
   revalidateTag(cacheTags.adminProjects, "default")
   revalidateTag(cacheTags.adminDashboard, "default")
-  revalidateTag(cacheTags.adminSearch, "default")
 }
 
 export function revalidateProjectStatus(projectId: string) {

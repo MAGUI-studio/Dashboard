@@ -365,7 +365,6 @@ export async function syncOperationalReminders(options?: {
   if (options?.revalidate !== false) {
     revalidatePath("/", "layout")
     revalidatePath("/admin")
-    revalidatePath("/notifications")
   }
 }
 

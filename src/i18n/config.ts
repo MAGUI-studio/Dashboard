@@ -55,10 +55,6 @@ export const pathnames = {
     pt: "/admin/prospeccao/leads/[id]/propostas",
     en: "/admin/crm/leads/[id]/proposals",
   },
-  "/admin/search": {
-    pt: "/admin/busca",
-    en: "/admin/search",
-  },
   "/admin/projects": {
     pt: "/admin/projetos",
     en: "/admin/projects",
@@ -74,6 +70,18 @@ export const pathnames = {
   "/admin/projects/[id]/assets": {
     pt: "/admin/projetos/[id]/ativos",
     en: "/admin/projects/[id]/assets",
+  },
+  "/admin/service-categories": {
+    pt: "/admin/categorias-de-servico",
+    en: "/admin/service-categories",
+  },
+  "/admin/service-categories/new": {
+    pt: "/admin/categorias-de-servico/nova",
+    en: "/admin/service-categories/new",
+  },
+  "/admin/service-categories/[id]": {
+    pt: "/admin/categorias-de-servico/[id]",
+    en: "/admin/service-categories/[id]",
   },
   "/admin/documents": {
     pt: "/admin/documentos",
@@ -126,10 +134,6 @@ export const pathnames = {
   "/projects/[id]/financial": {
     pt: "/projetos/[id]/investimento",
     en: "/projects/[id]/financial",
-  },
-  "/notifications": {
-    pt: "/notificacoes",
-    en: "/notifications",
   },
   "/docs": {
     pt: "/docs",

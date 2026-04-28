@@ -53,21 +53,15 @@ enum ProjectStatus {
 }
 
 enum ProjectCategory {
-  WEB_APP
-  MOBILE_APP
-  BRANDING
   LANDING_PAGE
-  SALES_PAGE
   INSTITUTIONAL_SITE
-  E_COMMERCE
-  UI_UX_DESIGN
+  BOOKING_PLATFORM
+  STABILITY_PLAN
 }
 
-enum Priority {
-  LOW
-  MEDIUM
-  HIGH
-  URGENT
+enum PaymentMethod {
+  FIFTY_FIFTY
+  MONTHLY_INSTALLMENTS
 }
 
 enum AssetType {
@@ -205,24 +199,6 @@ model DashboardMetricSnapshot {
   createdAt DateTime @default(now())
 
   @@index([date])
-}
-
-model SearchDocument {
-  id         String  @id @default(cuid())
-  entityType String // User, Project, Lead, Asset, Update
-  entityId   String
-  projectId  String?
-
-  title    String
-  subtitle String?
-  body     String? @db.Text
-
-  metadata Json?
-
-  updatedAt DateTime @default(now())
-
-  @@index([entityType, entityId])
-  @@index([projectId])
 }
 
 model EventOutbox {
@@ -403,15 +379,34 @@ enum SignatureProvider {
   OTHER
 }
 
+model ServiceCategory {
+  id              String  @id @default(cuid())
+  name            String
+  description     String? @db.Text
+  approach        String  @db.Text
+  suggestedValue  Int // cents
+  imageUrl        String?
+  isSubscription  Boolean @default(false)
+
+  projects Project[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 model Project {
   id          String          @id @default(cuid())
   name        String
   description String?         @db.Text
   status      ProjectStatus   @default(STRATEGY)
-  category    ProjectCategory @default(WEB_APP)
-  priority    Priority        @default(MEDIUM)
+  category    ProjectCategory @default(LANDING_PAGE)
   progress    Int             @default(0)
-  budget      String?
+  budget      Int? // cents
+  customValue Boolean         @default(false)
+  paymentMethod PaymentMethod @default(FIFTY_FIFTY)
+
+  serviceCategoryId String?
+  serviceCategory   ServiceCategory? @relation(fields: [serviceCategoryId], references: [id], onDelete: SetNull)
 
   briefing      Json?           @default("{}")
   briefingNotes BriefingEntry[]
@@ -444,6 +439,7 @@ model Project {
 
   @@index([status, updatedAt])
   @@index([clientId, updatedAt])
+  @@index([serviceCategoryId])
 }
 
 model Document {
@@ -882,7 +878,7 @@ model Proposal {
   title      String
   status     ProposalStatus @default(DRAFT)
   validUntil DateTime?
-  totalValue Float          @default(0)
+  totalValue Int            @default(0) // cents
   currency   String         @default("BRL")
   notes      String?        @db.Text
 
@@ -911,7 +907,7 @@ model ProposalItem {
   id              String  @id @default(cuid())
   description     String
   longDescription String? @db.Text
-  unitValue       Float   @default(0)
+  unitValue       Int    @default(0) // cents
   quantity        Int     @default(1)
   order           Int     @default(0)
 
@@ -974,7 +970,7 @@ model Invoice {
   documentId String?
   document   Document? @relation(fields: [documentId], references: [id], onDelete: SetNull)
 
-  totalAmount Float
+  totalAmount Int // cents
   currency    String @default("BRL")
 
   issuedAt DateTime  @default(now())
@@ -995,7 +991,7 @@ model Installment {
   invoice   Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
 
   number  Int
-  amount  Float
+  amount  Int // cents
   dueDate DateTime
   status  InstallmentStatus @default(PENDING)
 
@@ -1022,7 +1018,7 @@ model PaymentEvent {
   installment    Installment @relation(fields: [installmentId], references: [id], onDelete: Cascade)
 
   type           String   // PIX, TRANSFER, CREDIT_CARD, etc.
-  amount         Float
+  amount         Int // cents
   date           DateTime @default(now())
   note           String?  @db.Text
   attachmentUrl  String?

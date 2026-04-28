@@ -48,7 +48,6 @@ export async function markNotificationsAsReadAction(
     })
 
     revalidatePath("/", "layout")
-    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Mark Notifications As Read Error:")

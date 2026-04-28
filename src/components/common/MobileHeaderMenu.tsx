@@ -7,18 +7,26 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { SignOutButton } from "@clerk/nextjs"
 import {
+  CaretDown,
   ChartLineUp,
   ChartPie,
+  Files,
   House,
   List,
   ProjectorScreen,
   SignOut,
+  Tag,
   Users,
   X,
 } from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { Button } from "@/src/components/ui/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/src/components/ui/collapsible"
 import {
   Sheet,
   SheetClose,
@@ -30,6 +38,12 @@ import {
 
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
+import {
+  type HeaderNavLeaf,
+  getAdminHeaderNav,
+  getClientHeaderNav,
+  isNavItemActive,
+} from "@/src/components/common/header/navigation"
 
 interface MobileHeaderMenuProps {
   viewer: {
@@ -41,16 +55,49 @@ interface MobileHeaderMenuProps {
   } | null
 }
 
+function NavIcon({
+  icon,
+  className,
+}: {
+  icon: HeaderNavLeaf["icon"]
+  className?: string
+}) {
+  switch (icon) {
+    case "dashboard":
+      return <ChartPie weight="duotone" className={className} />
+    case "home":
+      return <House weight="duotone" className={className} />
+    case "crm":
+      return <ChartLineUp weight="duotone" className={className} />
+    case "clients":
+      return <Users weight="duotone" className={className} />
+    case "documents":
+      return <Files weight="duotone" className={className} />
+    case "projects":
+      return <ProjectorScreen weight="duotone" className={className} />
+    case "tag":
+      return <Tag weight="bold" className={className} />
+    case "list":
+    case "plus":
+    default:
+      return <List weight="duotone" className={className} />
+  }
+}
+
 export function MobileHeaderMenu({
   viewer,
 }: MobileHeaderMenuProps): React.JSX.Element {
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
 
-  if (!viewer)
+  if (!viewer) {
     return (
-      <div className="size-9 rounded-full bg-muted/20 animate-pulse lg:hidden" />
+      <div className="size-9 animate-pulse rounded-full bg-muted/20 lg:hidden" />
     )
+  }
+
+  const adminNav = getAdminHeaderNav(t)
+  const clientNav = getClientHeaderNav(t)
 
   return (
     <Sheet>
@@ -58,7 +105,7 @@ export function MobileHeaderMenu({
         <Button
           variant="ghost"
           size="icon"
-          className="size-9 rounded-full bg-muted/5 hover:bg-muted/10 lg:hidden focus-visible:ring-0"
+          className="size-9 rounded-full bg-muted/5 hover:bg-muted/10 lg:hidden"
           aria-label={t("menu")}
         >
           <List weight="bold" className="size-5" />
@@ -74,7 +121,7 @@ export function MobileHeaderMenu({
               <SheetTitle className="font-heading text-xs font-black uppercase tracking-[0.3em] text-muted-foreground/50">
                 {t("menu")}
               </SheetTitle>
-              <SheetClose className="rounded-full p-2 hover:bg-muted/10 transition-colors">
+              <SheetClose className="rounded-full p-2 transition-colors hover:bg-muted/10">
                 <X weight="bold" className="size-5" />
               </SheetClose>
             </div>
@@ -89,7 +136,7 @@ export function MobileHeaderMenu({
                   {viewer.fullName?.charAt(0) || "U"}
                 </AvatarFallback>
               </Avatar>
-              <div className="grid flex-1 text-left leading-tight overflow-hidden">
+              <div className="grid min-w-0 flex-1 text-left leading-tight">
                 <span className="truncate font-heading text-base font-black uppercase tracking-tight text-foreground">
                   {viewer.fullName}
                 </span>
@@ -102,144 +149,87 @@ export function MobileHeaderMenu({
 
           <div className="flex-1 overflow-y-auto p-5">
             <nav className="grid gap-2">
-              <SheetClose asChild>
-                <Link
-                  href="/"
-                  className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                    pathname === "/"
-                      ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                      : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                  }`}
-                >
-                  {viewer.isAdmin ? (
-                    <ChartPie weight="duotone" className="size-6" />
-                  ) : (
-                    <House weight="duotone" className="size-6" />
-                  )}
-                  <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                    {viewer.isAdmin ? t("dashboard") : t("client.home")}
-                  </span>
-                </Link>
-              </SheetClose>
-
-              {!viewer.isAdmin && (
-                <SheetClose asChild>
-                  <Link
-                    href="/projects"
-                    className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                      pathname.startsWith("/projects")
-                        ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                        : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                    }`}
-                  >
-                    <ProjectorScreen weight="duotone" className="size-6" />
-                    <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                      {t("client.projects")}
-                    </span>
-                  </Link>
-                </SheetClose>
-              )}
-
-              {viewer.isAdmin && (
+              {viewer.isAdmin ? (
                 <>
-                  <div className="my-4 h-px bg-border/5" />
-
                   <SheetClose asChild>
                     <Link
-                      href="/admin/crm"
+                      href={adminNav.dashboard.href}
                       className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname.startsWith("/admin/crm")
+                        isNavItemActive(pathname, adminNav.dashboard)
                           ? "bg-brand-primary/10 text-brand-primary shadow-sm"
                           : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
                       }`}
                     >
-                      <ChartLineUp weight="duotone" className="size-6" />
+                      <NavIcon
+                        icon={adminNav.dashboard.icon}
+                        className="size-6"
+                      />
                       <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("commercial.title")}
+                        {adminNav.dashboard.label}
                       </span>
                     </Link>
                   </SheetClose>
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/admin/crm/register"
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname === "/admin/crm/register"
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                      }`}
-                    >
-                      <ChartLineUp weight="duotone" className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("commercial.create")}
-                      </span>
-                    </Link>
-                  </SheetClose>
+                  {adminNav.groups.map((group) => {
+                    const defaultOpen = group.items.some((item) =>
+                      isNavItemActive(pathname, item)
+                    )
 
-                  <SheetClose asChild>
-                    <Link
-                      href="/admin/crm/proposals"
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname.startsWith("/admin/crm/proposals")
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                      }`}
-                    >
-                      <ChartLineUp weight="duotone" className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("commercial.proposals")}
-                      </span>
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href="/admin/crm/proposals/new"
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname === "/admin/crm/proposals/new"
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                      }`}
-                    >
-                      <ChartLineUp weight="duotone" className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("commercial.proposal_create")}
-                      </span>
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href="/admin/clients"
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname.startsWith("/admin/clients")
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                      }`}
-                    >
-                      <Users weight="duotone" className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("clients.title")}
-                      </span>
-                    </Link>
-                  </SheetClose>
-
-                  <SheetClose asChild>
-                    <Link
-                      href="/admin/projects"
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
-                        pathname.startsWith("/admin/projects")
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
-                      }`}
-                    >
-                      <ProjectorScreen weight="duotone" className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                        {t("projects.title")}
-                      </span>
-                    </Link>
-                  </SheetClose>
+                    return (
+                      <Collapsible key={group.label} defaultOpen={defaultOpen}>
+                        <CollapsibleTrigger className="flex h-14 w-full items-center justify-between rounded-2xl px-5 text-left transition-all hover:bg-muted/5">
+                          <div className="flex items-center gap-4">
+                            <NavIcon
+                              icon={group.icon}
+                              className="size-6 text-brand-primary/70"
+                            />
+                            <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em] text-foreground">
+                              {group.label}
+                            </span>
+                          </div>
+                          <CaretDown className="size-4 text-muted-foreground/50" />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent className="mt-2 grid gap-2 pl-4">
+                          {group.items.map((item) => (
+                            <SheetClose asChild key={item.href}>
+                              <Link
+                                href={item.href}
+                                className={`flex min-h-12 items-center gap-3 rounded-2xl px-4 transition-all active:scale-[0.98] ${
+                                  isNavItemActive(pathname, item)
+                                    ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                                    : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                                }`}
+                              >
+                                <NavIcon icon={item.icon} className="size-4" />
+                                <span className="font-sans text-[10px] font-black uppercase tracking-[0.18em]">
+                                  {item.label}
+                                </span>
+                              </Link>
+                            </SheetClose>
+                          ))}
+                        </CollapsibleContent>
+                      </Collapsible>
+                    )
+                  })}
                 </>
+              ) : (
+                clientNav.map((item) => (
+                  <SheetClose asChild key={item.href}>
+                    <Link
+                      href={item.href}
+                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
+                        isNavItemActive(pathname, item)
+                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
+                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                      }`}
+                    >
+                      <NavIcon icon={item.icon} className="size-6" />
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                        {item.label}
+                      </span>
+                    </Link>
+                  </SheetClose>
+                ))
               )}
             </nav>
 

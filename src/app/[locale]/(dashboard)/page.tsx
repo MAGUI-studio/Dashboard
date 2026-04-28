@@ -3,7 +3,7 @@ import { Suspense } from "react"
 
 import { getTranslations } from "next-intl/server"
 
-import { UserRole } from "@/src/generated/client/enums"
+import { UserRole } from "@/src/generated/client"
 import { Link } from "@/src/i18n/navigation"
 import { ClientHomeData } from "@/src/types/client-portal"
 import { auth, currentUser } from "@clerk/nextjs/server"
@@ -171,7 +171,7 @@ export default async function DashboardPage({
               variant="outline"
               className="rounded-full border-border/40 bg-background/50 px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]"
             >
-              <Link href="/notifications">Minhas Notificações</Link>
+              <Link href="/projects">Meus Projetos</Link>
             </Button>
           </div>
         </div>

@@ -68,13 +68,13 @@ export default async function ProjectLayout({
 
   if (!project) return notFound()
 
-  // LOCKDOWN LOGIC: Check if at least one invoice is PAID
-  const firstInvoice = project.invoices[0]
-  const isPaid = firstInvoice?.status === "PAID"
+  // LOCKDOWN LOGIC: Check if at least one installment is PAID across all invoices
+  const allInstallments = project.invoices.flatMap((inv) => inv.installments)
+  const isPaid = allInstallments.some((inst) => inst.status === "PAID")
 
   // Access is allowed if:
   // 1. User is Admin
-  // 2. Project is already paid
+  // 2. Project has at least one paid installment
   // 3. Current route is the financial page
   const canAccessFullProject =
     user.role === "ADMIN" || isPaid || isFinancialPage

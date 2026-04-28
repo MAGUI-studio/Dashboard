@@ -5,7 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
-import { ProjectCategory } from "@/src/generated/client/enums"
+import { ProjectCategory } from "@/src/generated/client"
 import { Lead } from "@/src/types/crm"
 import { CheckCircle, CircleNotch, RocketLaunch } from "@phosphor-icons/react"
 import { toast } from "sonner"
@@ -54,7 +54,7 @@ export function ConvertLeadDialog({
   const [selectedClientId, setSelectedClientId] = React.useState<string>("")
   const [projectName, setProjectName] = React.useState(lead.companyName)
   const [category, setCategory] = React.useState<ProjectCategory>(
-    ProjectCategory.WEB_APP
+    ProjectCategory.LANDING_PAGE
   )
   const [budget, setBudget] = React.useState(lead.value || "")
   const [deadline] = React.useState("")
@@ -86,6 +86,7 @@ export function ConvertLeadDialog({
         category,
         budget,
         deadline: deadline || undefined,
+        paymentMethod: "FIFTY_FIFTY",
       },
     })
 
@@ -103,6 +104,7 @@ export function ConvertLeadDialog({
   }
 
   const categories = Object.values(ProjectCategory)
+  const catT = useTranslations("Admin.projects.form.categories")
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -205,7 +207,7 @@ export function ConvertLeadDialog({
                     <SelectContent>
                       {categories.map((c) => (
                         <SelectItem key={c} value={c}>
-                          {c.replace("_", " ")}
+                          {catT(c)}
                         </SelectItem>
                       ))}
                     </SelectContent>

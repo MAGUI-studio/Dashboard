@@ -40,7 +40,14 @@ export async function createCheckoutSession(installmentId: string) {
       invoice: {
         include: {
           project: {
-            select: { id: true, clientId: true, name: true },
+            select: {
+              id: true,
+              clientId: true,
+              name: true,
+              serviceCategory: {
+                select: { name: true, description: true, imageUrl: true },
+              },
+            },
           },
         },
       },
@@ -80,8 +87,13 @@ export async function createCheckoutSession(installmentId: string) {
   const successUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?success=true&session_id={CHECKOUT_SESSION_ID}`
   const cancelUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?canceled=true`
 
+  const serviceCategory = installment.invoice.project?.serviceCategory
   const productDescription =
-    "Criação de uma página estratégica, moderna e otimizada para conversão, desenvolvida para apresentar seu produto ou serviço de forma clara, atrativa e eficiente."
+    serviceCategory?.description || installment.invoice.description || undefined
+
+  const productImages = serviceCategory?.imageUrl
+    ? [serviceCategory.imageUrl]
+    : ["https://magui.studio/og-image.png"]
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
@@ -92,9 +104,10 @@ export async function createCheckoutSession(installmentId: string) {
           product_data: {
             name: `${installment.invoice.title} - Parcela ${installment.number}`,
             description: productDescription,
-            images: ["https://magui.studio/og-image.png"],
+            images: productImages,
           },
-          unit_amount: Math.round(installment.amount * 100),
+          // Amount is stored in cents already
+          unit_amount: installment.amount,
         },
         quantity: 1,
       },

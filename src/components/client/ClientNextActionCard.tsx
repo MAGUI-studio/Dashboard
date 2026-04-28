@@ -19,6 +19,7 @@ import type { AppHref } from "@/src/lib/utils/navigation"
 interface ClientNextActionCardProps {
   action: {
     type:
+      | "payment"
       | "briefing"
       | "approval"
       | "task_overdue"
@@ -38,6 +39,7 @@ export async function ClientNextActionCard({
   const t = await getTranslations("Dashboard.client_home.cta")
 
   const iconMap = {
+    payment: Warning,
     briefing: NotePencil,
     approval: CheckCircle,
     task_overdue: Warning,

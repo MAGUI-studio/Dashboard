@@ -239,7 +239,6 @@ export async function addProjectTimelineAction(
     revalidateProjectTimeline(projectId)
     revalidatePath(`/admin/projects/${projectId}`)
     revalidatePath("/")
-    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Add Timeline Error:")
@@ -337,7 +336,6 @@ export async function approveUpdateAction(
     revalidatePath("/admin")
     revalidatePath("/admin/projects")
     revalidatePath(`/admin/projects/${projectId}`)
-    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Approve Update Error:")
@@ -446,7 +444,6 @@ export async function rejectUpdateAction(input: {
     revalidatePath("/admin")
     revalidatePath("/admin/projects")
     revalidatePath(`/admin/projects/${validated.data.projectId}`)
-    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Reject Update Error:")

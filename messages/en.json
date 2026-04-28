@@ -115,21 +115,37 @@
           "general": "An error occurred while processing your request."
         },
         "categories": {
-          "WEB_APP": "Web App",
-          "MOBILE_APP": "Mobile App",
-          "BRANDING": "Branding",
-          "LANDING_PAGE": "Landing Page",
-          "SALES_PAGE": "Sales Page",
+          "LANDING_PAGE": "High-Conversion Landing Page",
           "INSTITUTIONAL_SITE": "Institutional Website",
-          "E_COMMERCE": "E-commerce",
-          "UI_UX_DESIGN": "UI/UX Design"
-        },
-        "priorities": {
-          "LOW": "Low",
-          "MEDIUM": "Medium",
-          "HIGH": "High",
-          "URGENT": "Urgent"
+          "BOOKING_PLATFORM": "Booking Platform",
+          "STABILITY_PLAN": "Stability & Support Plan"
         }
+      }
+    },
+    "service_categories": {
+      "LANDING_PAGE": {
+        "title": "High-Conversion Landing Page",
+        "approach": "Single-page development focused on converting visitors into customers, with instant loading and full mobile optimization.",
+        "suggested_value": "R$ 1.200",
+        "third_party": "Domain and Hosting"
+      },
+      "INSTITUTIONAL_SITE": {
+        "title": "Institutional Website",
+        "approach": "Complete digital presence for your company, with modern architecture to convey authority and facilitate customer contact.",
+        "suggested_value": "R$ 1.800",
+        "third_party": "Domain and Hosting"
+      },
+      "BOOKING_PLATFORM": {
+        "title": "Booking Platform",
+        "approach": "Intelligent system for automated reservations and schedule management, eliminating manual work and scheduling errors.",
+        "suggested_value": "R$ 2.500+",
+        "third_party": "Domain and Hosting"
+      },
+      "STABILITY_PLAN": {
+        "title": "Stability & Support Plan",
+        "approach": "Complete technical management to ensure your company never goes offline, with security updates and 24/7 monitoring.",
+        "suggested_value": "R$ 100/month",
+        "third_party": "Paid to Magui.studio"
       }
     },
     "crm": {
@@ -593,7 +609,10 @@
     "projects": {
       "title": "Projects",
       "list": "All Projects",
-      "create": "Start Project"
+      "create": "Start Project",
+      "categories": "Service Categories",
+      "categories_all": "All Categories",
+      "categories_new": "New Category"
     },
     "commercial": {
       "title": "Commercial",
@@ -632,6 +651,7 @@
       "quick_links_eyebrow": "Quick paths",
       "quick_links_description": "Access the points that move the project most without searching menus.",
       "status": {
+        "payment_pending": "Payment pending",
         "on_track": "Everything on track",
         "awaiting_approval": "Awaiting your approval",
         "need_shipment": "Need a shipment",
@@ -647,6 +667,7 @@
       },
       "cta": {
         "type": {
+          "payment": "Payment Pending",
           "briefing": "Pending Briefing",
           "approval": "Delivery for Review",
           "task_overdue": "Overdue Request",
@@ -655,6 +676,7 @@
           "default": "Your Project"
         },
         "label": {
+          "payment": "View payment",
           "briefing": "Continue briefing",
           "approval": "Review delivery",
           "task_overdue": "Solve now",
@@ -663,6 +685,7 @@
           "default": "See project"
         },
         "description": {
+          "payment": "There is a pending payment on this project. Settle it first to unlock the briefing and the rest of the flow.",
           "briefing": "Complete the data so we can start the engineering of your system.",
           "approval": "A new strategic delivery awaits your formal validation.",
           "task": "We have an open operational request for you.",

@@ -298,7 +298,6 @@ export async function createProjectAssetAction(data: {
     revalidatePath(`/admin/projects/${data.projectId}`)
     revalidatePath(`/admin/projects/${data.projectId}/assets`)
     revalidatePath("/")
-    revalidatePath("/notifications")
     return { success: true }
   } catch (error) {
     logger.error({ error }, "Create Asset Error:")

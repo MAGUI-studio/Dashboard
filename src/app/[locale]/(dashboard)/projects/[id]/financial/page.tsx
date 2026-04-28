@@ -4,7 +4,7 @@ import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 
-import { ProjectFinancialTab } from "@/src/components/admin/financial/ProjectFinancialTab"
+import { ClientFinancialView } from "@/src/components/client/ClientFinancialView"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
 import { getProjectInvoices } from "@/src/lib/financial-data"
@@ -29,10 +29,9 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
 
   if (!user) return null
 
-  // Verify access
   const project = await prisma.project.findUnique({
     where: { id, clientId: user.id },
-    select: { id: true },
+    select: { id: true, name: true },
   })
 
   if (!project) return notFound()
@@ -42,13 +41,14 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
   return (
     <div className="flex flex-col gap-10">
       <ClientSectionHeader
-        eyebrow="Gestão de Investimento"
-        title="Financeiro e Pagamentos"
-        description="Acompanhe o status das parcelas, faturas e envie seus comprovantes de pagamento."
+        eyebrow="Gestao de investimento"
+        title="Financeiro e pagamentos"
+        description="Veja parcelas em aberto, vencimentos e pagamentos ja compensados em um painel simples e seguro."
       />
 
-      <ProjectFinancialTab
+      <ClientFinancialView
         projectId={id}
+        projectName={project.name}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         invoices={invoices as any}
       />

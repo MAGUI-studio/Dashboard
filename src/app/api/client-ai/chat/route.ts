@@ -109,7 +109,7 @@ Regras OBRIGATÓRIAS:
             total: totalValue,
             paid: paidValue,
             pending: totalValue - paidValue,
-            currency: project.budget?.split(" ")[0] || "BRL",
+            currency: "BRL",
           }
         },
       }),

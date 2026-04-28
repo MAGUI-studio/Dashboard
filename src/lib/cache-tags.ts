@@ -4,7 +4,6 @@ export const cacheTags = {
   adminClientOptions: "admin:client-options",
   adminClient: (id: string) => `admin:client:${id}`,
   adminDashboard: "admin:dashboard",
-  adminSearch: "admin:search",
   adminCrm: "admin:crm",
   adminCrmLeads: "admin:crm:leads",
   adminCrmTemplates: "admin:crm:templates",
