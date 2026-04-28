@@ -52,8 +52,11 @@ export default async function ProjectDetailPage({
   const statusLabel = tStatus(project.status)
   const pendingApprovals = project.updates
   const clientTasks = project.actionItems ?? []
-  const primaryHref =
-    pendingApprovals[0] !== undefined
+  const hasPendingPayment = project._count.invoices > 0
+
+  const primaryHref = hasPendingPayment
+    ? toHref(`/projects/${project.id}/financial`)
+    : pendingApprovals[0] !== undefined
       ? toHref(`/projects/${project.id}/approvals`)
       : clientTasks[0] !== undefined
         ? toHref(`/projects/${project.id}/tasks`)
@@ -71,8 +74,9 @@ export default async function ProjectDetailPage({
         statusLabel={statusLabel}
         variant="project"
         primaryAction={{
-          label:
-            pendingApprovals.length > 0
+          label: hasPendingPayment
+            ? "Ver pendência financeira"
+            : pendingApprovals.length > 0
               ? "Revisar entrega"
               : clientTasks.length > 0
                 ? "Responder solicitacao"
@@ -104,25 +108,38 @@ export default async function ProjectDetailPage({
         ]}
       />
 
-      {(pendingApprovals.length > 0 || clientTasks.length > 0) && (
+      {hasPendingPayment && (
         <ClientActionBanner
-          type={pendingApprovals.length > 0 ? "approval" : "task"}
-          eyebrow="Precisa da sua atencao"
-          title={pendingApprovals[0]?.title ?? clientTasks[0]?.title ?? ""}
-          description={
-            pendingApprovals.length > 0
-              ? "Tem uma entrega pronta para sua validacao. Aprove ou peca ajuste para o time seguir."
-              : "Tem uma solicitacao aberta para destravar a proxima etapa do projeto."
-          }
-          href={primaryHref}
-          label={
-            pendingApprovals.length > 0
-              ? "Revisar agora"
-              : "Responder solicitacao"
-          }
+          type="task"
+          eyebrow="Pagamento pendente"
+          title="Fatura aguardando pagamento"
+          description="Identificamos uma fatura em aberto para este projeto. Utilize o link do Stripe para regularizar seu investimento."
+          href={toHref(`/projects/${project.id}/financial`)}
+          label="Ir para o financeiro"
           projectName={project.name}
         />
       )}
+
+      {!hasPendingPayment &&
+        (pendingApprovals.length > 0 || clientTasks.length > 0) && (
+          <ClientActionBanner
+            type={pendingApprovals.length > 0 ? "approval" : "task"}
+            eyebrow="Precisa da sua atencao"
+            title={pendingApprovals[0]?.title ?? clientTasks[0]?.title ?? ""}
+            description={
+              pendingApprovals.length > 0
+                ? "Tem uma entrega pronta para sua validacao. Aprove ou peca ajuste para o time seguir."
+                : "Tem uma solicitacao aberta para destravar a proxima etapa do projeto."
+            }
+            href={primaryHref}
+            label={
+              pendingApprovals.length > 0
+                ? "Revisar agora"
+                : "Responder solicitacao"
+            }
+            projectName={project.name}
+          />
+        )}
 
       <section className="grid gap-6">
         <ClientSectionHeader

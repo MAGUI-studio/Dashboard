@@ -10,9 +10,9 @@ import {
   CheckCircle,
   Clock,
   CreditCard,
-  DotsThreeVertical,
   FilePdf,
   Receipt,
+  Wallet,
 } from "@phosphor-icons/react"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
@@ -20,27 +20,18 @@ import { toast } from "sonner"
 
 import { Badge } from "@/src/components/ui/badge"
 import { Button } from "@/src/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/src/components/ui/card"
+import { Card, CardContent } from "@/src/components/ui/card"
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/src/components/ui/dropdown-menu"
 
 import { registerPaymentAction } from "@/src/lib/actions/financial.actions"
 import { cn } from "@/src/lib/utils/utils"
+
+import { usePermissions } from "@/src/hooks/use-permissions"
 
 import { AddInvoiceForm } from "./AddInvoiceForm"
 
@@ -63,6 +54,7 @@ export function ProjectFinancialTab({
   projectId,
   invoices,
 }: ProjectFinancialTabProps) {
+  const { isAdmin } = usePermissions()
   const searchParams = useSearchParams()
   const [selectedInstallment, setSelectedInstallment] = React.useState<
     InvoiceWithInstallments["installments"][number] | null
@@ -91,6 +83,15 @@ export function ProjectFinancialTab({
     )
   }, 0)
 
+  const formatBRL = (val: number) => {
+    return val.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    })
+  }
+
   const handleRegisterPayment = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (!selectedInstallment) return
@@ -115,9 +116,8 @@ export function ProjectFinancialTab({
   const handleStripePayment = async (
     inst: InvoiceWithInstallments["installments"][number]
   ) => {
-    // If we already have a URL, just redirect
     if (inst.stripeCheckoutUrl) {
-      window.location.href = inst.stripeCheckoutUrl
+      window.open(inst.stripeCheckoutUrl, "_blank")
       return
     }
 
@@ -125,19 +125,13 @@ export function ProjectFinancialTab({
       setIsStripeLoading(inst.id)
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ installmentId: inst.id }),
       })
 
       const data = await response.json()
-
-      if (data.url) {
-        window.location.href = data.url
-      } else {
-        throw new Error(data.error || "Erro ao criar sessão de checkout")
-      }
+      if (data.url) window.open(data.url, "_blank")
+      else throw new Error(data.error || "Erro ao criar sessão")
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : "Erro desconhecido")
     } finally {
@@ -145,299 +139,287 @@ export function ProjectFinancialTab({
     }
   }
 
-  const copyPaymentLink = (url: string) => {
-    navigator.clipboard.writeText(url)
-    toast.success("Link de pagamento copiado!")
-  }
-
   return (
-    <div className="space-y-8">
+    <div className="space-y-12">
+      {/* Resumo Financeiro */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="rounded-[2rem] border-border/40 bg-background/40">
-          <CardContent className="pt-6">
-            <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-              Total do Projeto
-            </span>
-            <p className="text-3xl font-black uppercase tracking-tight mt-1 text-foreground">
-              R${" "}
-              {totalValue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+        <Card className="rounded-[2.5rem] border-none bg-muted/5 overflow-hidden shadow-none">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-foreground/5 text-foreground/40">
+                <Receipt size={18} weight="duotone" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+                Investimento Total
+              </span>
+            </div>
+            <p className="text-4xl font-black uppercase tracking-tight text-foreground">
+              {formatBRL(totalValue)}
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-[2rem] border-emerald-500/20 bg-emerald-500/[0.02]">
-          <CardContent className="pt-6">
-            <span className="text-[10px] font-black uppercase tracking-widest text-emerald-600/60">
-              Total Pago
-            </span>
-            <p className="text-3xl font-black uppercase tracking-tight mt-1 text-emerald-600">
-              R${" "}
-              {paidValue.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
+
+        <Card className="rounded-[2.5rem] border-none bg-emerald-500/[0.03] overflow-hidden shadow-none">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600">
+                <CheckCircle size={18} weight="duotone" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-emerald-600/60">
+                Total Liquidado
+              </span>
+            </div>
+            <p className="text-4xl font-black uppercase tracking-tight text-emerald-600">
+              {formatBRL(paidValue)}
             </p>
           </CardContent>
         </Card>
-        <Card className="rounded-[2rem] border-amber-500/20 bg-amber-500/[0.02]">
-          <CardContent className="pt-6">
-            <span className="text-[10px] font-black uppercase tracking-widest text-amber-600/60">
-              A Receber
-            </span>
-            <p className="text-3xl font-black uppercase tracking-tight mt-1 text-amber-600">
-              R${" "}
-              {(totalValue - paidValue).toLocaleString("pt-BR", {
-                minimumFractionDigits: 2,
-              })}
+
+        <Card className="rounded-[2.5rem] border-none bg-brand-primary/[0.03] overflow-hidden shadow-none">
+          <CardContent className="p-8">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="flex size-8 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary">
+                <Wallet size={18} weight="duotone" />
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-primary/60">
+                Saldo devedor
+              </span>
+            </div>
+            <p className="text-4xl font-black uppercase tracking-tight text-brand-primary">
+              {formatBRL(totalValue - paidValue)}
             </p>
           </CardContent>
         </Card>
       </div>
 
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between border-b border-border/20 pb-4">
-          <h3 className="font-heading text-lg font-black uppercase tracking-tight text-foreground">
-            Gestão de Faturas
-          </h3>
-          <AddInvoiceForm projectId={projectId} />
+      <div className="flex flex-col gap-8">
+        <div className="flex items-center justify-between border-b border-border/20 pb-6">
+          <div className="space-y-1">
+            <h3 className="font-heading text-2xl font-black uppercase tracking-tight text-foreground">
+              Cronograma Financeiro
+            </h3>
+            <p className="text-xs font-medium text-muted-foreground/50">
+              Acompanhe suas faturas e realize pagamentos de forma segura.
+            </p>
+          </div>
+          {isAdmin && <AddInvoiceForm projectId={projectId} />}
         </div>
 
         <div className="space-y-6">
           {invoices.length === 0 && (
-            <div className="flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border/40 rounded-[2.5rem] bg-muted/5">
+            <div className="flex flex-col items-center justify-center py-24 text-center border-2 border-dashed border-border/20 rounded-[3rem] bg-muted/2">
               <Receipt
                 weight="thin"
-                className="size-16 text-muted-foreground/20 mb-4"
+                className="size-20 text-muted-foreground/10 mb-6"
               />
-              <p className="text-sm font-bold text-muted-foreground/40 uppercase tracking-widest">
-                Nenhuma fatura emitida para este projeto.
+              <p className="text-xs font-black uppercase tracking-[0.3em] text-muted-foreground/30">
+                Nenhum registro financeiro encontrado.
               </p>
             </div>
           )}
           {invoices.map((invoice) => (
-            <Card
-              key={invoice.id}
-              className="rounded-[2.5rem] border-border/40 bg-background/40 overflow-hidden shadow-sm"
-            >
-              <CardHeader className="bg-muted/10 border-b border-border/40 py-6 px-8">
-                <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-4">
-                    <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary">
-                      <Receipt weight="fill" className="size-5" />
-                    </div>
-                    <div>
-                      <CardTitle className="font-heading text-lg font-black uppercase tracking-tight">
-                        {invoice.title}
-                      </CardTitle>
-                      <p className="text-[9px] font-bold text-muted-foreground/60 uppercase">
-                        Emitido em{" "}
-                        {format(new Date(invoice.createdAt), "dd/MM/yyyy")}
-                      </p>
-                    </div>
-                  </div>
-                  <Badge
-                    variant="outline"
-                    className="rounded-full border-border/40 bg-background/50 px-4 py-1 text-[9px] font-black uppercase tracking-widest"
-                  >
-                    {invoice.status}
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="p-8">
-                <div className="grid gap-4">
-                  {invoice.installments.map((inst) => (
+            <div key={invoice.id} className="space-y-4">
+              <div className="flex items-center gap-4 ml-2">
+                <Badge className="bg-foreground text-background font-mono text-[9px] font-black uppercase tracking-widest px-3 py-1 rounded-full">
+                  FATURA: {invoice.title}
+                </Badge>
+                <div className="h-px flex-1 bg-border/20" />
+              </div>
+
+              <div className="grid gap-4">
+                {invoice.installments.map((inst, index) => {
+                  const previousInstallments = invoice.installments.slice(
+                    0,
+                    index
+                  )
+                  const hasUnpaidPrevious = previousInstallments.some(
+                    (p) => p.status !== "PAID"
+                  )
+
+                  return (
                     <div
                       key={inst.id}
                       className={cn(
-                        "flex items-center justify-between p-6 rounded-2xl border transition-all",
+                        "group relative flex flex-col md:flex-row md:items-center justify-between p-8 rounded-[2rem] border transition-all duration-500",
                         inst.status === "PAID"
-                          ? "border-emerald-500/20 bg-emerald-500/[0.02]"
-                          : "border-border/40 bg-muted/5"
+                          ? "border-emerald-500/10 bg-emerald-500/[0.01] opacity-60"
+                          : hasUnpaidPrevious
+                            ? "border-border/20 bg-muted/2 opacity-40 grayscale"
+                            : "border-border/40 bg-muted/5 hover:border-brand-primary/30 hover:bg-brand-primary/[0.02]"
                       )}
                     >
-                      <div className="flex items-center gap-6">
+                      <div className="flex items-center gap-8">
                         <div
                           className={cn(
-                            "flex size-10 items-center justify-center rounded-full border",
+                            "flex size-14 items-center justify-center rounded-2xl border-2 transition-all",
                             inst.status === "PAID"
-                              ? "border-emerald-500/40 bg-emerald-500 text-white"
-                              : "border-border/60 text-muted-foreground/40"
+                              ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-600"
+                              : "border-border/60 bg-background text-muted-foreground/30"
                           )}
                         >
                           {inst.status === "PAID" ? (
-                            <CheckCircle weight="bold" className="size-5" />
+                            <CheckCircle weight="fill" className="size-8" />
+                          ) : hasUnpaidPrevious ? (
+                            <Clock
+                              weight="duotone"
+                              className="size-8 opacity-20"
+                            />
                           ) : (
-                            <Clock className="size-5" />
+                            <Clock weight="duotone" className="size-8" />
                           )}
                         </div>
-                        <div className="space-y-1">
-                          <p className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-                            Parcela {inst.number}
-                          </p>
-                          <p className="text-lg font-black uppercase tracking-tight">
-                            R${" "}
-                            {inst.amount.toLocaleString("pt-BR", {
-                              minimumFractionDigits: 2,
-                            })}
+
+                        <div className="space-y-1.5">
+                          <div className="flex items-center gap-3">
+                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/40">
+                              Parcela {inst.number}
+                            </p>
+                            {inst.status !== "PAID" && (
+                              <span
+                                className={cn(
+                                  "text-[8px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full",
+                                  hasUnpaidPrevious
+                                    ? "bg-muted/10 text-muted-foreground/40 border border-border/10"
+                                    : "bg-amber-500/10 text-amber-600 border border-amber-500/10"
+                                )}
+                              >
+                                {hasUnpaidPrevious
+                                  ? "Aguardando anterior"
+                                  : `Vence em ${format(new Date(inst.dueDate), "dd/MM", { locale: ptBR })}`}
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-3xl font-black uppercase tracking-tighter text-foreground">
+                            {formatBRL(inst.amount)}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-8">
-                        <div className="text-right space-y-1">
-                          <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/60">
-                            Vencimento
-                          </p>
-                          <p className="text-xs font-bold text-foreground">
-                            {format(new Date(inst.dueDate), "dd 'de' MMMM", {
-                              locale: ptBR,
-                            })}
-                          </p>
-                        </div>
+                      <div className="flex flex-wrap items-center gap-4 mt-6 md:mt-0">
+                        {inst.status !== "PAID" ? (
+                          <>
+                            <Button
+                              onClick={() => handleStripePayment(inst)}
+                              disabled={!!isStripeLoading || hasUnpaidPrevious}
+                              className={cn(
+                                "h-14 px-10 rounded-2xl font-mono text-[11px] font-black uppercase tracking-[0.2em] transition-all gap-3",
+                                hasUnpaidPrevious
+                                  ? "bg-muted text-muted-foreground/50 border-none shadow-none pointer-events-none"
+                                  : "bg-brand-primary text-white shadow-2xl shadow-brand-primary/20 hover:scale-[1.02] active:scale-95"
+                              )}
+                            >
+                              {isStripeLoading === inst.id ? (
+                                <Clock className="size-4 animate-spin" />
+                              ) : (
+                                <CreditCard weight="fill" className="size-5" />
+                              )}
+                              {hasUnpaidPrevious ? "Bloqueado" : "Pagar Agora"}
+                            </Button>
 
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
+                            {isAdmin && (
+                              <Button
+                                variant="outline"
+                                onClick={() => {
+                                  setSelectedInstallment(inst)
+                                  setIsPaymentDialogOpen(true)
+                                }}
+                                className="h-14 px-8 rounded-2xl border-emerald-500/20 text-emerald-600 hover:bg-emerald-500/5 font-mono text-[10px] font-black uppercase tracking-widest"
+                              >
+                                Baixa Manual
+                              </Button>
+                            )}
+                          </>
+                        ) : (
+                          <div className="flex items-center gap-4">
+                            <div className="text-right mr-4 hidden md:block">
+                              <p className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40">
+                                Pago em
+                              </p>
+                              <p className="text-xs font-bold text-emerald-600/60">
+                                {inst.paidAt
+                                  ? format(
+                                      new Date(inst.paidAt),
+                                      "dd 'de' MMMM",
+                                      { locale: ptBR }
+                                    )
+                                  : "-"}
+                              </p>
+                            </div>
                             <Button
                               variant="ghost"
-                              size="icon"
-                              className="size-10 rounded-full hover:bg-muted/20 text-foreground"
+                              className="h-14 px-6 rounded-2xl text-muted-foreground/40 hover:text-brand-primary transition-all font-mono text-[9px] font-black uppercase tracking-[0.2em] gap-2"
                             >
-                              <DotsThreeVertical
-                                weight="bold"
-                                className="size-5"
-                              />
+                              <FilePdf size={18} weight="fill" />
+                              Recibo
                             </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent
-                            align="end"
-                            className="w-56 rounded-2xl border-border/40 bg-background/95 p-1.5 backdrop-blur-xl shadow-2xl"
-                          >
-                            {inst.status !== "PAID" && (
-                              <>
-                                <DropdownMenuItem
-                                  onClick={() => handleStripePayment(inst)}
-                                  disabled={!!isStripeLoading}
-                                  className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary"
-                                >
-                                  <CreditCard
-                                    weight="bold"
-                                    className={cn(
-                                      "mr-2.5 size-4",
-                                      isStripeLoading === inst.id &&
-                                        "animate-spin"
-                                    )}
-                                  />
-                                  <span className="font-bold uppercase text-[10px]">
-                                    {isStripeLoading === inst.id
-                                      ? "Processando..."
-                                      : "Pagar com Cartão"}
-                                  </span>
-                                </DropdownMenuItem>
-
-                                {inst.stripeCheckoutUrl && (
-                                  <DropdownMenuItem
-                                    onClick={() =>
-                                      copyPaymentLink(inst.stripeCheckoutUrl!)
-                                    }
-                                    className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary"
-                                  >
-                                    <Receipt
-                                      weight="bold"
-                                      className="mr-2.5 size-4"
-                                    />
-                                    <span className="font-bold uppercase text-[10px]">
-                                      Copiar Link de Pagamento
-                                    </span>
-                                  </DropdownMenuItem>
-                                )}
-
-                                <DropdownMenuItem
-                                  onClick={() => {
-                                    setSelectedInstallment(inst)
-                                    setIsPaymentDialogOpen(true)
-                                  }}
-                                  className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-emerald-500/10 focus:text-emerald-600"
-                                >
-                                  <Bank
-                                    weight="bold"
-                                    className="mr-2.5 size-4"
-                                  />
-                                  <span className="font-bold uppercase text-[10px]">
-                                    Registrar Pagamento
-                                  </span>
-                                </DropdownMenuItem>
-                              </>
-                            )}
-                            <DropdownMenuItem className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary">
-                              <FilePdf
-                                weight="bold"
-                                className="mr-2.5 size-4"
-                              />
-                              <span className="font-bold uppercase text-[10px]">
-                                Gerar Recibo
-                              </span>
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                          </div>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+                  )
+                })}
+              </div>
+            </div>
           ))}
         </div>
       </div>
 
       <Dialog open={isPaymentDialogOpen} onOpenChange={setIsPaymentDialogOpen}>
-        <DialogContent className="rounded-[2.5rem] sm:max-w-[450px] border-border/10 bg-background/95 backdrop-blur-xl">
-          <DialogHeader className="mb-6">
-            <DialogTitle className="font-heading text-2xl font-black uppercase tracking-tight text-foreground">
-              Registrar Pagamento
+        <DialogContent className="rounded-[3rem] sm:max-w-[500px] border-border/10 bg-background/95 backdrop-blur-3xl p-10">
+          <DialogHeader className="mb-8">
+            <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tighter text-foreground">
+              <p className="text-xs font-medium text-muted-foreground/50 mt-2">
+                Utilize esta opção apenas para pagamentos recebidos fora do
+                Stripe (PIX direto, TED, etc).
+              </p>
+              Baixa Manual
             </DialogTitle>
           </DialogHeader>
-          <form onSubmit={handleRegisterPayment} className="space-y-6">
-            <div className="space-y-4">
-              <div className="p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/10">
-                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600/60 mb-1">
-                  Valor da Parcela
+          <form onSubmit={handleRegisterPayment} className="space-y-8">
+            <div className="space-y-6">
+              <div className="p-8 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10">
+                <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600/60 mb-2">
+                  Valor a ser liquidado
                 </p>
-                <p className="text-2xl font-black text-emerald-700">
-                  R${" "}
-                  {selectedInstallment?.amount.toLocaleString("pt-BR", {
-                    minimumFractionDigits: 2,
-                  })}
+                <p className="text-4xl font-black text-emerald-700 tracking-tighter">
+                  {selectedInstallment
+                    ? formatBRL(selectedInstallment.amount)
+                    : "R$ 0,00"}
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-2">
-                  Método de Pagamento
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 ml-4">
+                  Origem do Recurso
                 </label>
                 <select
                   name="type"
-                  className="w-full h-12 rounded-full border border-border/40 bg-muted/10 px-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
+                  className="w-full h-14 rounded-2xl border border-border/40 bg-muted/5 px-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
                 >
-                  <option value="PIX">PIX</option>
-                  <option value="TED">Transferência (TED/DOC)</option>
-                  <option value="CREDIT_CARD">Cartão de Crédito</option>
-                  <option value="BOLETO">Boleto Bancário</option>
+                  <option value="PIX">PIX Direto</option>
+                  <option value="TED">Transferência Bancária</option>
+                  <option value="CASH">Dinheiro / Espécie</option>
+                  <option value="OTHER">Outros</option>
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60 ml-2">
-                  Observações
+              <div className="space-y-3">
+                <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 ml-4">
+                  Notas de Auditoria
                 </label>
                 <textarea
                   name="note"
-                  placeholder="Ex: Comprovante enviado via e-mail..."
-                  className="w-full min-h-[80px] rounded-2xl border border-border/40 bg-muted/10 p-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
+                  placeholder="Descreva detalhes do recebimento..."
+                  className="w-full min-h-[120px] rounded-3xl border border-border/40 bg-muted/5 p-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground resize-none"
                 />
               </div>
             </div>
 
             <Button
               type="submit"
-              className="h-14 w-full rounded-full bg-emerald-600 text-[11px] font-black uppercase tracking-widest text-white shadow-xl shadow-emerald-500/20 transition-all hover:bg-emerald-700"
+              className="h-16 w-full rounded-2xl bg-emerald-600 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 hover:scale-[1.01]"
             >
-              Confirmar Pagamento
+              Confirmar Recebimento
             </Button>
           </form>
         </DialogContent>

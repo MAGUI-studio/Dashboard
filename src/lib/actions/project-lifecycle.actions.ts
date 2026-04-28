@@ -1,7 +1,6 @@
 "use server"
 
 import { getTranslations } from "next-intl/server"
-import { revalidatePath } from "next/cache"
 
 import {
   AuditActorType,
@@ -11,6 +10,7 @@ import {
   ProjectMemberRole,
   ProjectStatus,
 } from "@/src/generated/client/enums"
+import { addDays } from "date-fns"
 
 import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
@@ -24,11 +24,13 @@ import {
   revalidateProjectStatus,
 } from "@/src/lib/revalidate"
 import { getOrCreateStripeCustomer } from "@/src/lib/stripe-actions"
+import { parseCurrencyBRL } from "@/src/lib/utils/utils"
 import {
   createProjectSchema,
   updateProjectStatusSchema,
 } from "@/src/lib/validations/project"
 
+import { createInvoiceAction } from "./financial.actions"
 import { getDashboardPath } from "./project-action-utils"
 
 export async function createProjectAction(
@@ -53,6 +55,9 @@ export async function createProjectAction(
     repositoryUrl: formData.get("repositoryUrl"),
     category: formData.get("category"),
     priority: formData.get("priority"),
+    installments: formData.get("installments")
+      ? JSON.parse(formData.get("installments") as string)
+      : undefined,
   })
 
   if (!validatedFields.success) {
@@ -65,8 +70,8 @@ export async function createProjectAction(
   const actor = await getCurrentAppUser()
 
   try {
-    await prisma.$transaction(async (tx) => {
-      const project = await tx.project.create({
+    const project = await prisma.$transaction(async (tx) => {
+      const p = await tx.project.create({
         data: {
           name: data.projectName,
           description: data.projectDescription ?? null,
@@ -95,7 +100,7 @@ export async function createProjectAction(
         data: {
           title: "Projeto iniciado",
           description: "Fase de estratégia iniciada com sucesso.",
-          projectId: project.id,
+          projectId: p.id,
           isMilestone: true,
           timezone: (formData.get("timezone") as string) || "America/Sao_Paulo",
         },
@@ -103,8 +108,8 @@ export async function createProjectAction(
 
       await tx.projectMember.create({
         data: {
-          projectId: project.id,
-          userId: project.client.id,
+          projectId: p.id,
+          userId: p.client.id,
           role: ProjectMemberRole.OWNER,
         },
       })
@@ -113,37 +118,37 @@ export async function createProjectAction(
         data: {
           action: "project.created",
           entityType: "Project",
-          entityId: project.id,
-          summary: `Projeto ${project.name} criado para ${project.client.name ?? "cliente"}.`,
+          entityId: p.id,
+          summary: `Projeto ${p.name} criado para ${p.client.name ?? "cliente"}.`,
           actorId: actor?.id,
           actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
-          projectId: project.id,
+          projectId: p.id,
           metadata: {
             origin: getAuditOriginLabel({
               actorType: actor ? AuditActorType.USER : AuditActorType.SYSTEM,
               role: actor?.role,
             }),
-            category: project.category,
-            priority: project.priority,
+            category: p.category,
+            priority: p.priority,
             initialUpdateId: initialUpdate.id,
             after: {
-              status: project.status,
-              progress: project.progress,
-              category: project.category,
-              priority: project.priority,
-              budget: project.budget,
-              deadline: project.deadline?.toISOString() ?? null,
+              status: p.status,
+              progress: p.progress,
+              category: p.category,
+              priority: p.priority,
+              budget: p.budget,
+              deadline: p.deadline?.toISOString() ?? null,
             },
             relatedEntities: [
               {
                 type: "Project",
-                id: project.id,
-                label: project.name,
+                id: p.id,
+                label: p.name,
               },
               {
                 type: "Client",
-                id: project.client.id,
-                label: project.client.name ?? "Cliente",
+                id: p.client.id,
+                label: p.client.name ?? "Cliente",
               },
               {
                 type: "Update",
@@ -158,15 +163,15 @@ export async function createProjectAction(
       await tx.notification.create({
         data: {
           userId: data.clientId,
-          projectId: project.id,
+          projectId: p.id,
           type: NotificationType.PROJECT_STATUS_CHANGED,
           title: "Novo projeto liberado no painel",
-          message: `O projeto ${project.name} já está disponível para acompanhamento.`,
-          ctaPath: getDashboardPath(project.id),
+          message: `O projeto ${p.name} já está disponível para acompanhamento.`,
+          ctaPath: getDashboardPath(p.id),
         },
       })
 
-      return project
+      return p
     })
 
     // Ensure Stripe customer exists for future billing
@@ -174,7 +179,60 @@ export async function createProjectAction(
       await getOrCreateStripeCustomer(data.clientId)
     } catch (stripeError) {
       logger.error({ stripeError }, "Failed to ensure Stripe customer")
-      // Don't fail the whole action if Stripe fails, we can try again later
+    }
+
+    // AUTO-BILLING: If installments exist or budget exists
+    const installmentsData = data.installments
+    const budgetAmount = parseCurrencyBRL(data.budget || "")
+
+    if (installmentsData && installmentsData.length > 0) {
+      try {
+        const totalAmount = installmentsData.reduce(
+          (sum, inst) => sum + inst.amount,
+          0
+        )
+        await createInvoiceAction({
+          projectId: project.id,
+          title: `Pagamento Inicial - ${project.name}`,
+          description: `Fatura automática gerada para o projeto ${project.name}.`,
+          totalAmount: totalAmount,
+          currency: "BRL",
+          dueDate: new Date(installmentsData[0].dueDate),
+          installments: installmentsData.map((inst) => ({
+            number: inst.number,
+            amount: inst.amount,
+            dueDate: new Date(inst.dueDate),
+          })),
+        })
+      } catch (billingError) {
+        logger.error(
+          { billingError },
+          "Failed to create dynamic initial invoice"
+        )
+      }
+    } else if (!isNaN(budgetAmount) && budgetAmount > 0) {
+      try {
+        await createInvoiceAction({
+          projectId: project.id,
+          title: `Pagamento Inicial - ${project.name}`,
+          description: `Fatura automática gerada para o projeto ${project.name}.`,
+          totalAmount: budgetAmount,
+          currency: "BRL",
+          dueDate: addDays(new Date(), 7),
+          installments: [
+            {
+              number: 1,
+              amount: budgetAmount,
+              dueDate: addDays(new Date(), 7),
+            },
+          ],
+        })
+      } catch (billingError) {
+        logger.error(
+          { billingError },
+          "Failed to create automatic initial invoice"
+        )
+      }
     }
 
     revalidateProjectData()

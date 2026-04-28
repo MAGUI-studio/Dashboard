@@ -49,6 +49,11 @@ export interface ClientHomeProject {
   createdAt: Date
   updatedAt: Date
   updates: ClientPortalUpdate[]
+  _count: {
+    updates: number
+    actionItems: number
+    invoices: number
+  }
 }
 
 export interface ClientHomeData {
@@ -74,6 +79,11 @@ export type ClientProjectSummary = Pick<
   "id" | "name" | "status" | "progress" | "deadline" | "updatedAt"
 > & {
   lastUpdate?: ClientPortalUpdate
+  _count: {
+    updates: number
+    actionItems: number
+    invoices: number
+  }
 }
 
 export type ClientPortalAsset = DashboardAsset

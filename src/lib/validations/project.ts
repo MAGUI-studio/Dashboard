@@ -27,6 +27,15 @@ export const createProjectSchema = z.object({
     .or(z.literal("")),
   category: z.nativeEnum(ProjectCategory),
   priority: z.nativeEnum(Priority),
+  installments: z
+    .array(
+      z.object({
+        number: z.number().int().min(1),
+        amount: z.number().positive(),
+        dueDate: z.string(),
+      })
+    )
+    .optional(),
 })
 
 export type CreateProjectInput = z.infer<typeof createProjectSchema>

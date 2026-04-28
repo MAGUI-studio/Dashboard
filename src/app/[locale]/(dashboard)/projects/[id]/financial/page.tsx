@@ -7,8 +7,11 @@ import { auth } from "@clerk/nextjs/server"
 import { ProjectFinancialTab } from "@/src/components/admin/financial/ProjectFinancialTab"
 import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader"
 
-import { getProjectInvoicesCached } from "@/src/lib/financial-data"
+import { getProjectInvoices } from "@/src/lib/financial-data"
 import prisma from "@/src/lib/prisma"
+
+export const dynamic = "force-dynamic"
+export const revalidate = 0
 
 interface PageProps {
   params: Promise<{ id: string }>
@@ -34,7 +37,7 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
 
   if (!project) return notFound()
 
-  const invoices = await getProjectInvoicesCached(id)
+  const invoices = await getProjectInvoices(id)
 
   return (
     <div className="flex flex-col gap-10">

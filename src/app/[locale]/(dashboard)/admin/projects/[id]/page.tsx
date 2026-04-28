@@ -12,7 +12,7 @@ import {
   getProjectDecisionsCached,
   getProjectThreadsCached,
 } from "@/src/lib/communication-data"
-import { getProjectInvoicesCached } from "@/src/lib/financial-data"
+import { getProjectInvoices } from "@/src/lib/financial-data"
 import {
   getProjectHandoffCached,
   getProjectKickoffCached,
@@ -120,7 +120,7 @@ export default async function AdminProjectDetailPage({
     getCurrentAppUser(),
     getProjectHandoffCached(id),
     getProjectKickoffCached(id),
-    getProjectInvoicesCached(id),
+    getProjectInvoices(id),
   ])
 
   if (!project) {

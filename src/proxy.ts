@@ -17,18 +17,26 @@ const isPublicRoute = createRouteMatcher([
   "/sign-up(.*)",
   "/api/og(.*)",
   "/api/uploadthing(.*)",
+  "/api/stripe/webhook(.*)",
 ])
 
 const isAdminRoute = createRouteMatcher(["/admin(.*)"])
 const isApiRoute = createRouteMatcher(["/api(.*)"])
 
 export default clerkMiddleware(async (auth, req) => {
+  const requestHeaders = new Headers(req.headers)
+  requestHeaders.set("x-pathname", req.nextUrl.pathname)
+
   if (isApiRoute(req)) {
     if (!isPublicRoute(req)) {
       await auth.protect()
     }
 
-    return NextResponse.next()
+    return NextResponse.next({
+      request: {
+        headers: requestHeaders,
+      },
+    })
   }
 
   if (!isPublicRoute(req)) {
@@ -40,7 +48,9 @@ export default clerkMiddleware(async (auth, req) => {
     }
   }
 
-  return intlMiddleware(req)
+  const response = intlMiddleware(req)
+  response.headers.set("x-pathname", req.nextUrl.pathname)
+  return response
 })
 
 export const config = {

@@ -17,6 +17,18 @@ export function formatCurrencyBRL(value: string | number): string {
   }).format(amount)
 }
 
+export function parseCurrencyBRL(value: string): number {
+  if (!value) return 0
+  // Handle strings that might have R$, dots for thousands and comma for decimals
+  const cleanValue = value
+    .replace("R$", "")
+    .replace(/\s/g, "")
+    .replace(/\./g, "")
+    .replace(",", ".")
+  const parsed = parseFloat(cleanValue)
+  return isNaN(parsed) ? 0 : parsed
+}
+
 export function formatLocalTime(date: Date, timezone: string): string {
   try {
     const tz = timezone || "America/Sao_Paulo"

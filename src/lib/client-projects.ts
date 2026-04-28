@@ -22,6 +22,9 @@ export async function getClientHomeData(userId: string) {
           actionItems: {
             where: { status: "PENDING" },
           },
+          invoices: {
+            where: { status: { not: "PAID" } },
+          },
         },
       },
     },
@@ -156,6 +159,11 @@ export async function getClientProjectBreadcrumb(id: string, userId: string) {
     select: {
       id: true,
       name: true,
+      invoices: {
+        select: { status: true },
+        take: 1,
+        orderBy: { createdAt: "asc" },
+      },
     },
   })
 }
@@ -200,6 +208,9 @@ export async function getClientProjectOverview(id: string, userId: string) {
           updates: true,
           actionItems: {
             where: { targetRole: "CLIENT", status: "PENDING" },
+          },
+          invoices: {
+            where: { status: { not: "PAID" } },
           },
         },
       },

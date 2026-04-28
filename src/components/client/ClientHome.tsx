@@ -161,8 +161,14 @@ export async function ClientHome({
             />
             <ClientProjectCard
               project={{
-                ...activeProject,
+                id: activeProject.id,
+                name: activeProject.name,
+                status: activeProject.status,
+                progress: activeProject.progress,
+                deadline: activeProject.deadline,
+                updatedAt: activeProject.updatedAt,
                 lastUpdate: activeProject.updates?.[0],
+                _count: activeProject._count,
               }}
             />
           </div>

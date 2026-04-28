@@ -16,11 +16,13 @@ import {
   GithubLogo,
   Globe,
   Monitor,
+  Plus,
   ShieldCheck,
   Tag,
+  Trash,
   User,
 } from "@phosphor-icons/react"
-import { format } from "date-fns"
+import { addDays, format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
 import { Badge } from "@/src/components/ui/badge"
@@ -62,7 +64,7 @@ import {
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProjectAction } from "@/src/lib/actions/project.actions"
-import { cn, formatCurrencyBRL } from "@/src/lib/utils/utils"
+import { cn, formatCurrencyBRL, parseCurrencyBRL } from "@/src/lib/utils/utils"
 
 interface ClientSelection {
   id: string
@@ -85,6 +87,37 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
   const [startDate, setStartDate] = React.useState<Date | undefined>(new Date())
   const [budgetValue, setBudgetValue] = React.useState("")
 
+  const [installments, setInstallments] = React.useState<
+    Array<{ id: string; amount: string; dueDate: Date }>
+  >([])
+
+  const addInstallment = () => {
+    setInstallments([
+      ...installments,
+      {
+        id: Math.random().toString(36).substr(2, 9),
+        amount: "",
+        dueDate: addDays(new Date(), 7 * (installments.length + 1)),
+      },
+    ])
+  }
+
+  const removeInstallment = (id: string) => {
+    setInstallments(installments.filter((inst) => inst.id !== id))
+  }
+
+  const updateInstallment = (
+    id: string,
+    key: "amount" | "dueDate",
+    value: string | Date | undefined
+  ) => {
+    setInstallments(
+      installments.map((inst) =>
+        inst.id === id ? { ...inst, [key]: value } : inst
+      )
+    )
+  }
+
   const setDeadlineByDays = (days: number) => {
     const date = new Date()
     date.setDate(date.getDate() + days)
@@ -97,6 +130,16 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
       formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
       if (deadline) formData.set("deadline", deadline.toISOString())
       if (startDate) formData.set("startDate", startDate.toISOString())
+
+      // Add installments data
+      if (installments.length > 0) {
+        const installmentsData = installments.map((inst, index) => ({
+          number: index + 1,
+          amount: parseCurrencyBRL(inst.amount),
+          dueDate: inst.dueDate.toISOString(),
+        }))
+        formData.set("installments", JSON.stringify(installmentsData))
+      }
 
       const result = await createProjectAction(formData)
       if (result.success) {
@@ -331,6 +374,117 @@ export function CreateProjectForm({ clients }: CreateProjectFormProps) {
                 />
               </InputGroup>
             </Field>
+          </div>
+
+          <div className="mt-12 space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <h4 className="text-[11px] font-black uppercase tracking-[0.3em] text-foreground">
+                  Parcelamento do Projeto
+                </h4>
+                <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                  Defina as faturas que serão geradas para este projeto.
+                </p>
+              </div>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addInstallment}
+                className="h-10 rounded-full border-brand-primary/20 text-brand-primary hover:bg-brand-primary/5 px-4 font-mono text-[9px] font-black uppercase tracking-widest gap-2"
+              >
+                <Plus weight="bold" className="size-3" />
+                Adicionar Parcela
+              </Button>
+            </div>
+
+            {installments.length > 0 && (
+              <div className="grid gap-4">
+                {installments.map((inst, index) => (
+                  <div
+                    key={inst.id}
+                    className="flex flex-col md:flex-row gap-6 p-6 rounded-3xl border border-border/40 bg-muted/5 animate-in fade-in slide-in-from-top-2"
+                  >
+                    <div className="flex items-center gap-4 flex-1">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-brand-primary/10 text-brand-primary text-[10px] font-black font-mono">
+                        {index + 1}
+                      </div>
+                      <div className="flex-1 space-y-2">
+                        <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40 ml-2">
+                          Valor da Parcela
+                        </label>
+                        <InputGroup className="h-12 rounded-xl border-border/40 bg-background/50 transition-all focus-within:bg-background">
+                          <InputGroupAddon>
+                            <CurrencyDollar
+                              weight="bold"
+                              className="size-3 text-brand-primary/60"
+                            />
+                          </InputGroupAddon>
+                          <InputGroupInput
+                            value={inst.amount}
+                            onChange={(e) =>
+                              updateInstallment(
+                                inst.id,
+                                "amount",
+                                formatCurrencyBRL(e.target.value)
+                              )
+                            }
+                            placeholder="R$ 0,00"
+                            className="text-xs font-bold font-mono"
+                          />
+                        </InputGroup>
+                      </div>
+                    </div>
+
+                    <div className="flex-1 space-y-2">
+                      <label className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40 ml-2">
+                        Data de Vencimento
+                      </label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="outline"
+                            className="h-12 w-full justify-start text-left font-mono text-xs font-bold rounded-xl border-border/40 bg-background/50 hover:bg-background"
+                          >
+                            <CalendarIcon
+                              className="mr-3 size-3 text-brand-primary/60"
+                              weight="bold"
+                            />
+                            {format(inst.dueDate, "dd/MM/yyyy", {
+                              locale: ptBR,
+                            })}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0 rounded-2xl">
+                          <Calendar
+                            mode="single"
+                            selected={inst.dueDate}
+                            onSelect={(date) =>
+                              date &&
+                              updateInstallment(inst.id, "dueDate", date)
+                            }
+                            initialFocus
+                            locale={ptBR}
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+
+                    <div className="flex items-end pb-1">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeInstallment(inst.id)}
+                        className="size-12 rounded-xl text-destructive hover:bg-destructive/5 hover:text-destructive"
+                      >
+                        <Trash weight="bold" className="size-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mt-8">

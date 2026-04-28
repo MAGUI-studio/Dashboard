@@ -67,6 +67,15 @@ export async function ClientProjectCard({
                 </p>
               </div>
             )}
+
+            {project._count.invoices > 0 && (
+              <div className="flex items-center gap-3 rounded-2xl bg-amber-500/10 p-5 w-fit border border-amber-500/20">
+                <div className="size-2 rounded-full bg-amber-500 animate-pulse" />
+                <p className="text-sm font-black uppercase tracking-widest text-amber-600">
+                  Pagamento pendente
+                </p>
+              </div>
+            )}
           </div>
 
           <div className="grid gap-3">
