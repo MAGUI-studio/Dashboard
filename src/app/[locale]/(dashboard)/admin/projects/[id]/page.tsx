@@ -13,15 +13,9 @@ import {
   getProjectThreadsCached,
 } from "@/src/lib/communication-data"
 import { getProjectInvoices } from "@/src/lib/financial-data"
-import {
-  getProjectHandoffCached,
-  getProjectKickoffCached,
-} from "@/src/lib/handoff-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import {
-  getAdminProjectAssets,
-  getAdminProjectAudit,
   getAdminProjectOverview,
   getAdminProjectTimeline,
 } from "@/src/lib/project-data"
@@ -36,11 +30,9 @@ function toDashboardProject(input: {
   /* eslint-disable @typescript-eslint/no-explicit-any */
   project: any
   timeline: any
-  assets: any
-  auditLogs: any
   /* eslint-enable @typescript-eslint/no-explicit-any */
 }): DashboardProject {
-  const { project, timeline, assets, auditLogs } = input
+  const { project, timeline } = input
 
   return {
     ...project,
@@ -59,17 +51,8 @@ function toDashboardProject(input: {
       ...update,
       project: { name: project.name },
     })),
-    assets: assets?.assets ?? [],
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    auditLogs: (auditLogs || []).map((log: any) => ({
-      ...log,
-      metadata:
-        log.metadata &&
-        typeof log.metadata === "object" &&
-        !Array.isArray(log.metadata)
-          ? (log.metadata as DashboardAuditLog["metadata"])
-          : null,
-    })),
+    assets: [],
+    auditLogs: [],
   }
 }
 
@@ -100,26 +83,18 @@ export default async function AdminProjectDetailPage({
   const [
     project,
     timeline,
-    assets,
-    auditLogs,
     clients,
     threads,
     decisions,
     currentUser,
-    handoff,
-    kickoff,
     invoices,
   ] = await Promise.all([
     getAdminProjectOverview(id),
     getAdminProjectTimeline(id),
-    getAdminProjectAssets(id),
-    getAdminProjectAudit(id),
     getAdminClientOptions(),
     getProjectThreadsCached(id),
     getProjectDecisionsCached(id),
     getCurrentAppUser(),
-    getProjectHandoffCached(id),
-    getProjectKickoffCached(id),
     getProjectInvoices(id),
   ])
 
@@ -130,8 +105,6 @@ export default async function AdminProjectDetailPage({
   const dashboardProject = toDashboardProject({
     project,
     timeline,
-    assets,
-    auditLogs,
   })
 
   const projectHeader = {
@@ -159,8 +132,6 @@ export default async function AdminProjectDetailPage({
         threads={threads}
         decisions={decisions}
         currentUserId={currentUser?.id || ""}
-        handoff={handoff}
-        kickoff={kickoff}
         invoices={invoices}
       />
     </main>

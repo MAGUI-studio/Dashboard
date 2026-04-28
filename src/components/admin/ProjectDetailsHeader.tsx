@@ -18,8 +18,6 @@ import dayjs from "dayjs"
 
 import { Button } from "@/src/components/ui/button"
 
-import { ExportProjectSummaryButton } from "@/src/components/admin/ExportProjectSummaryButton"
-
 import { formatCurrencyBRL } from "@/src/lib/utils/utils"
 
 interface ProjectDetailsHeaderProps {
@@ -152,8 +150,6 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
             </div>
           </div>
         </div>
-
-        <ExportProjectSummaryButton projectId={project.id} />
       </div>
     </div>
   )

@@ -14,10 +14,6 @@ import {
   updateProjectBriefingAction as updateProjectBriefingActionImpl,
 } from "./project-briefing.actions"
 import {
-  exportProjectApprovalsHtmlAction as exportProjectApprovalsHtmlActionImpl,
-  exportProjectSummaryHtmlAction as exportProjectSummaryHtmlActionImpl,
-} from "./project-export.actions"
-import {
   createProjectAction as createProjectActionImpl,
   deleteProjectAction as deleteProjectActionImpl,
   updateProjectStatusAction as updateProjectStatusActionImpl,
@@ -120,18 +116,6 @@ export async function addBriefingNoteAction(
   ...args: Parameters<typeof addBriefingNoteActionImpl>
 ): ReturnType<typeof addBriefingNoteActionImpl> {
   return addBriefingNoteActionImpl(...args)
-}
-
-export async function exportProjectApprovalsHtmlAction(
-  ...args: Parameters<typeof exportProjectApprovalsHtmlActionImpl>
-): ReturnType<typeof exportProjectApprovalsHtmlActionImpl> {
-  return exportProjectApprovalsHtmlActionImpl(...args)
-}
-
-export async function exportProjectSummaryHtmlAction(
-  ...args: Parameters<typeof exportProjectSummaryHtmlActionImpl>
-): ReturnType<typeof exportProjectSummaryHtmlActionImpl> {
-  return exportProjectSummaryHtmlActionImpl(...args)
 }
 
 export async function addProjectMemberAction(
