@@ -25,6 +25,9 @@ interface ProposalPreviewProps {
     differentials: string
     timeline: string
     paymentTerms: string
+    acceptanceCriteria: string
+    notIncluded: string
+    warranty: string
     platformFlow: string
     nextSteps: string
     notes: string
@@ -258,6 +261,80 @@ export function ProposalPreview({
           </div>
         </div>
 
+        {/* Section: Acceptance & Extras */}
+        {(data.acceptanceCriteria || data.notIncluded || data.warranty) && (
+          <div className="grid gap-16 bg-slate-50/30 p-16 sm:p-24 md:grid-cols-3">
+            {data.acceptanceCriteria && (
+              <div className="space-y-6">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#0093C8]">
+                  Critérios de Aceite
+                </h3>
+                <div className="space-y-4">
+                  {data.acceptanceCriteria
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <div key={i} className="flex gap-2">
+                        <CheckCircle
+                          size={14}
+                          weight="fill"
+                          className="text-[#0093C8] shrink-0 mt-0.5"
+                        />
+                        <p className="text-xs font-semibold text-slate-600">
+                          {line.replace(/^- /, "")}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+            {data.notIncluded && (
+              <div className="space-y-6">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-slate-400">
+                  Não está Incluso
+                </h3>
+                <div className="space-y-4">
+                  {data.notIncluded
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <div key={i} className="flex gap-2">
+                        <div className="h-1 w-1 rounded-full bg-slate-300 shrink-0 mt-1.5" />
+                        <p className="text-xs font-semibold text-slate-500">
+                          {line.replace(/^- /, "")}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+            {data.warranty && (
+              <div className="space-y-6">
+                <h3 className="text-[10px] font-black uppercase tracking-[0.25em] text-[#0093C8]">
+                  Garantia e Suporte
+                </h3>
+                <div className="space-y-4">
+                  {data.warranty
+                    .split("\n")
+                    .filter(Boolean)
+                    .map((line, i) => (
+                      <div key={i} className="flex gap-2">
+                        <CheckCircle
+                          size={14}
+                          weight="fill"
+                          className="text-[#0093C8] shrink-0 mt-0.5"
+                        />
+                        <p className="text-xs font-semibold text-slate-600">
+                          {line.replace(/^- /, "")}
+                        </p>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Section: Governance */}
         <div className="space-y-8 border-t border-slate-100 p-16 sm:p-24">
           <div className="space-y-4">
@@ -295,7 +372,7 @@ export function ProposalPreview({
                   <CurrencyDollar weight="bold" /> Condições de Pagamento
                 </h4>
                 <p className="text-sm font-bold leading-relaxed">
-                  {data.paymentTerms || "A combinar no kickoff."}
+                  {data.paymentTerms || "A combinar na aprovação."}
                 </p>
               </div>
               <div className="space-y-4">
@@ -317,7 +394,7 @@ export function ProposalPreview({
               <ArrowLeft className="rotate-180" weight="bold" /> Próximos Passos
             </h4>
             <p className="text-sm font-medium leading-relaxed text-slate-500">
-              {data.nextSteps || "Aprovação e kickoff inicial."}
+              {data.nextSteps || "Aprovação e alinhamento inicial."}
             </p>
           </div>
 

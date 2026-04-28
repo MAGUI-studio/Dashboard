@@ -5,13 +5,16 @@ import * as React from "react"
 import { useRouter } from "@/src/i18n/navigation"
 import {
   Calculator,
+  CheckCircle,
   ClockCountdown,
   FilePdf,
   ListChecks,
   MagicWand,
   Plus,
+  ShieldCheck,
   Sparkle,
   Trash,
+  Warning,
 } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
@@ -81,6 +84,8 @@ export function ProposalBuilderForm({
   const [selectedLeadId, setSelectedLeadId] = React.useState(
     initialLead?.id ?? ""
   )
+  const [projectCategory, setProjectCategory] =
+    React.useState<string>("landing-page")
   const [title, setTitle] = React.useState(
     initialLead
       ? `Proposta Comercial - ${initialLead.companyName}`
@@ -93,6 +98,9 @@ export function ProposalBuilderForm({
   const [differentials, setDifferentials] = React.useState("")
   const [timeline, setTimeline] = React.useState("")
   const [paymentTerms, setPaymentTerms] = React.useState("")
+  const [acceptanceCriteria, setAcceptanceCriteria] = React.useState("")
+  const [notIncluded, setNotIncluded] = React.useState("")
+  const [warranty, setWarranty] = React.useState("")
   const [platformFlow, setPlatformFlow] = React.useState(DEFAULT_PLATFORM_FLOW)
   const [currency, setCurrency] = React.useState("BRL")
   const [nextSteps, setNextSteps] = React.useState("")
@@ -143,18 +151,113 @@ export function ProposalBuilderForm({
 
   const handleApplyPreset = (
     setter: (value: string | ((prev: string) => string)) => void,
-    content: string
+    content: string,
+    mode: "replace" | "append" = "replace"
   ) => {
     const selectedLead = leads.find((l) => l.id === selectedLeadId)
     const processedContent = content.replace(
-      "[Empresa]",
+      /\[Empresa\]/g,
       selectedLead?.companyName ?? "empresa"
     )
 
-    setter((prev) => {
-      if (!prev.trim()) return processedContent
-      return `${prev}\n\n${processedContent}`
-    })
+    if (mode === "replace") {
+      setter(processedContent)
+    } else {
+      setter((prev) =>
+        prev ? `${prev}\n\n${processedContent}` : processedContent
+      )
+    }
+  }
+
+  const handleCategoryChange = (category: string) => {
+    setProjectCategory(category)
+
+    // Auto-fill presets based on category
+    const selectedLead = leads.find((l) => l.id === selectedLeadId)
+    const company = selectedLead?.companyName ?? "empresa"
+
+    if (category === "landing-page") {
+      setExecutiveSummary(
+        PROPOSAL_PRESETS.executiveSummary[0].content.replace(
+          /\[Empresa\]/g,
+          company
+        )
+      )
+      setObjectives(
+        PROPOSAL_PRESETS.objectives[0].content.replace(/\[Empresa\]/g, company)
+      )
+      setItems([
+        {
+          description: PROPOSAL_PRESETS.itemDescriptions[0].content,
+          longDescription: PROPOSAL_PRESETS.itemLongDescriptions[0].content,
+          unitValue: 0,
+          quantity: 1,
+        },
+      ])
+    } else if (category === "institucional") {
+      setExecutiveSummary(
+        PROPOSAL_PRESETS.executiveSummary[1].content.replace(
+          /\[Empresa\]/g,
+          company
+        )
+      )
+      setObjectives(
+        PROPOSAL_PRESETS.objectives[1].content.replace(/\[Empresa\]/g, company)
+      )
+      setItems([
+        {
+          description: PROPOSAL_PRESETS.itemDescriptions[1].content,
+          longDescription: PROPOSAL_PRESETS.itemLongDescriptions[1].content,
+          unitValue: 0,
+          quantity: 1,
+        },
+      ])
+    } else if (category === "booking") {
+      setExecutiveSummary(
+        PROPOSAL_PRESETS.executiveSummary[0].content.replace(
+          /\[Empresa\]/g,
+          company
+        )
+      )
+      setObjectives(
+        PROPOSAL_PRESETS.objectives[2].content.replace(/\[Empresa\]/g, company)
+      )
+      setItems([
+        {
+          description: PROPOSAL_PRESETS.itemDescriptions[2].content,
+          longDescription: PROPOSAL_PRESETS.itemLongDescriptions[2].content,
+          unitValue: 0,
+          quantity: 1,
+        },
+      ])
+    } else if (category === "estabilidade") {
+      setExecutiveSummary(
+        PROPOSAL_PRESETS.executiveSummary[2].content.replace(
+          /\[Empresa\]/g,
+          company
+        )
+      )
+      setObjectives(
+        PROPOSAL_PRESETS.objectives[3].content.replace(/\[Empresa\]/g, company)
+      )
+      setItems([
+        {
+          description: PROPOSAL_PRESETS.itemDescriptions[3].content,
+          longDescription: PROPOSAL_PRESETS.itemLongDescriptions[3].content,
+          unitValue: 0,
+          quantity: 1,
+        },
+      ])
+    }
+
+    // Common presets for all categories
+    setExpectedImpact(PROPOSAL_PRESETS.expectedImpact[0].content)
+    setDifferentials(PROPOSAL_PRESETS.differentials[0].content)
+    setTimeline(PROPOSAL_PRESETS.timeline[0].content)
+    setPaymentTerms(PROPOSAL_PRESETS.paymentTerms[0].content)
+    setNextSteps(PROPOSAL_PRESETS.nextSteps[0].content)
+    setAcceptanceCriteria(PROPOSAL_PRESETS.acceptanceCriteria[0].content)
+    setWarranty(PROPOSAL_PRESETS.warranty[0].content)
   }
 
   const buildProposalNotes = () => {
@@ -165,6 +268,9 @@ export function ProposalBuilderForm({
       ["Diferenciais da entrega", differentials],
       ["Prazo estimado", timeline],
       ["Condições de pagamento", paymentTerms],
+      ["Critérios de aceite", acceptanceCriteria],
+      ["O que não está incluso", notIncluded],
+      ["Garantia e ajustes", warranty],
       ["Operação pela plataforma", platformFlow],
       ["Próximos passos", nextSteps],
       ["Observações adicionais", notes],
@@ -179,6 +285,23 @@ export function ProposalBuilderForm({
   const handleSubmit = async () => {
     if (!selectedLeadId) {
       toast.error("Selecione o lead para vincular a proposta")
+      return
+    }
+
+    const requiredTextFields = [
+      { value: executiveSummary, label: "Resumo executivo" },
+      { value: objectives, label: "Objetivos do projeto" },
+      { value: expectedImpact, label: "Impacto esperado" },
+      { value: differentials, label: "Diferenciais da entrega" },
+      { value: timeline, label: "Prazo estimado" },
+      { value: paymentTerms, label: "Condições de pagamento" },
+      { value: platformFlow, label: "Operação pela plataforma" },
+      { value: nextSteps, label: "Próximos passos" },
+    ]
+
+    const missingField = requiredTextFields.find((field) => !field.value.trim())
+    if (missingField) {
+      toast.error(`O campo "${missingField.label}" é obrigatório`)
       return
     }
 
@@ -229,6 +352,9 @@ export function ProposalBuilderForm({
           differentials,
           timeline,
           paymentTerms,
+          acceptanceCriteria,
+          notIncluded,
+          warranty,
           platformFlow,
           nextSteps,
           notes,
@@ -266,17 +392,17 @@ export function ProposalBuilderForm({
           </div>
         </div>
 
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div className="space-y-2">
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-              Lead / cliente
+              Lead / cliente <span className="text-destructive">*</span>
             </Label>
             <Select value={selectedLeadId} onValueChange={setSelectedLeadId}>
               <SelectTrigger
                 size="lg"
                 className="h-14 w-full rounded-2xl border-border/40 bg-muted/10 px-5 text-left font-sans font-bold text-foreground transition-all focus:ring-brand-primary/20 data-[placeholder]:text-muted-foreground"
               >
-                <SelectValue placeholder="Selecione o lead da proposta" />
+                <SelectValue placeholder="Selecione o lead" />
               </SelectTrigger>
               <SelectContent
                 position="popper"
@@ -293,7 +419,32 @@ export function ProposalBuilderForm({
 
           <div className="space-y-2">
             <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
-              Título do documento
+              Categoria do projeto <span className="text-destructive">*</span>
+            </Label>
+            <Select
+              value={projectCategory}
+              onValueChange={handleCategoryChange}
+            >
+              <SelectTrigger
+                size="lg"
+                className="h-14 w-full rounded-2xl border-border/40 bg-muted/10 px-5 text-left font-sans font-bold text-foreground transition-all focus:ring-brand-primary/20"
+              >
+                <SelectValue placeholder="Selecione a categoria" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="landing-page">Landing Page</SelectItem>
+                <SelectItem value="institucional">Institucional</SelectItem>
+                <SelectItem value="booking">Booking / Agendamento</SelectItem>
+                <SelectItem value="estabilidade">
+                  Plano de Estabilidade
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
+              Título do documento <span className="text-destructive">*</span>
             </Label>
             <div className="flex gap-3">
               <Input
@@ -302,17 +453,26 @@ export function ProposalBuilderForm({
                 className="h-14 flex-1 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
               />
               <Select value={currency} onValueChange={setCurrency}>
-                <SelectTrigger className="h-14 w-28 rounded-2xl border-border/40 bg-muted/10 px-4 font-mono font-bold">
+                <SelectTrigger className="h-14 w-24 rounded-2xl border-border/20 bg-muted/5 px-4 font-mono text-[10px] font-black">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl border-border/40">
-                  <SelectItem value="BRL" className="font-mono">
+                  <SelectItem
+                    value="BRL"
+                    className="font-mono text-[10px] font-bold"
+                  >
                     BRL
                   </SelectItem>
-                  <SelectItem value="USD" className="font-mono">
+                  <SelectItem
+                    value="USD"
+                    className="font-mono text-[10px] font-bold"
+                  >
                     USD
                   </SelectItem>
-                  <SelectItem value="EUR" className="font-mono">
+                  <SelectItem
+                    value="EUR"
+                    className="font-mono text-[10px] font-bold"
+                  >
                     EUR
                   </SelectItem>
                 </SelectContent>
@@ -342,7 +502,7 @@ export function ProposalBuilderForm({
 
       <section className="space-y-8">
         <FieldBlock
-          label="Resumo executivo"
+          label="Resumo executivo *"
           value={executiveSummary}
           onChange={setExecutiveSummary}
           placeholder="Apresente a leitura do momento, a oportunidade e a transformação que esta proposta pretende viabilizar."
@@ -353,7 +513,7 @@ export function ProposalBuilderForm({
           }
         />
         <FieldBlock
-          label="Objetivos do projeto"
+          label="Objetivos do projeto *"
           value={objectives}
           onChange={setObjectives}
           placeholder="Ex: estruturar a presença digital, elevar percepção de valor e melhorar a conversa comercial."
@@ -361,7 +521,7 @@ export function ProposalBuilderForm({
           onApplyPreset={(content) => handleApplyPreset(setObjectives, content)}
         />
         <FieldBlock
-          label="Impacto esperado"
+          label="Impacto esperado *"
           value={expectedImpact}
           onChange={setExpectedImpact}
           placeholder="Ex: mais clareza na oferta, melhor apresentação da marca e mais confiança no processo comercial."
@@ -374,7 +534,7 @@ export function ProposalBuilderForm({
 
       <section className="space-y-8">
         <FieldBlock
-          label="Diferenciais da entrega"
+          label="Diferenciais da entrega *"
           value={differentials}
           onChange={setDifferentials}
           placeholder="Ex: condução centralizada, linguagem premium, aprovações organizadas e leitura mais profissional do projeto."
@@ -384,15 +544,15 @@ export function ProposalBuilderForm({
           }
         />
         <FieldBlock
-          label="Prazo estimado"
+          label="Prazo estimado *"
           value={timeline}
           onChange={setTimeline}
-          placeholder="Ex: 20 dias úteis a partir da aprovação, kickoff e recebimento dos materiais."
+          placeholder="Ex: 20 dias úteis a partir da aprovação e recebimento dos materiais."
           presets={PROPOSAL_PRESETS.timeline}
           onApplyPreset={(content) => handleApplyPreset(setTimeline, content)}
         />
         <FieldBlock
-          label="Condições de pagamento"
+          label="Condições de pagamento *"
           value={paymentTerms}
           onChange={setPaymentTerms}
           placeholder="Ex: 50% na aprovação e 50% na etapa final, via PIX ou transferência."
@@ -400,6 +560,46 @@ export function ProposalBuilderForm({
           onApplyPreset={(content) =>
             handleApplyPreset(setPaymentTerms, content)
           }
+        />
+      </section>
+
+      <SectionHeading
+        icon={ShieldCheck}
+        title="Governança e Aceite"
+        description="Defina critérios claros de sucesso, o que está fora do escopo e as garantias pós-entrega."
+      />
+
+      <section className="space-y-8">
+        <FieldBlock
+          label="Critérios de aceite"
+          value={acceptanceCriteria}
+          onChange={setAcceptanceCriteria}
+          description="O que define que o projeto foi entregue com sucesso."
+          placeholder="Ex: performance acima de 90, design fiel ao aprovado, sem erros técnicos."
+          presets={PROPOSAL_PRESETS.acceptanceCriteria}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setAcceptanceCriteria, content)
+          }
+        />
+        <FieldBlock
+          label="O que não está incluso"
+          value={notIncluded}
+          onChange={setNotIncluded}
+          description="Importante para evitar ruídos de expectativa."
+          placeholder="Ex: produção de fotos, gestão de tráfego pago, custos de APIs de terceiros."
+          presets={PROPOSAL_PRESETS.notIncluded}
+          onApplyPreset={(content) =>
+            handleApplyPreset(setNotIncluded, content)
+          }
+        />
+        <FieldBlock
+          label="Garantia e ajustes"
+          value={warranty}
+          onChange={setWarranty}
+          description="Prazos e condições para correções após o lançamento."
+          placeholder="Ex: 30 dias de garantia para bugs técnicos."
+          presets={PROPOSAL_PRESETS.warranty}
+          onApplyPreset={(content) => handleApplyPreset(setWarranty, content)}
         />
       </section>
 
@@ -457,7 +657,8 @@ export function ProposalBuilderForm({
                 <div className="grid gap-6 md:grid-cols-12">
                   <div className="space-y-2 md:col-span-6">
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Nome da entrega
+                      Nome da entrega{" "}
+                      <span className="text-destructive">*</span>
                     </Label>
                     <div className="space-y-2">
                       <Input
@@ -490,7 +691,7 @@ export function ProposalBuilderForm({
 
                   <div className="space-y-2 md:col-span-4">
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Valor unitário
+                      Valor unitário <span className="text-destructive">*</span>
                     </Label>
                     <div className="relative">
                       <Input
@@ -511,7 +712,7 @@ export function ProposalBuilderForm({
 
                   <div className="space-y-2 md:col-span-2">
                     <Label className="pl-1 text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                      Qtd
+                      Qtd <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       type="number"
@@ -549,11 +750,11 @@ export function ProposalBuilderForm({
                           <button
                             key={preset.id}
                             onClick={() => {
-                              const currentVal = item.longDescription
-                              const newVal = !currentVal.trim()
-                                ? preset.content
-                                : `${currentVal}\n\n${preset.content}`
-                              handleItemChange(index, "longDescription", newVal)
+                              handleItemChange(
+                                index,
+                                "longDescription",
+                                preset.content
+                              )
                             }}
                             className="flex items-center gap-1.5 rounded-full bg-muted/10 px-3 py-1.5 text-[9px] font-bold uppercase tracking-wide text-muted-foreground/70 transition-all hover:bg-brand-primary/5 hover:text-brand-primary"
                           >
@@ -611,7 +812,7 @@ export function ProposalBuilderForm({
 
       <section className="grid gap-8 md:grid-cols-2">
         <FieldBlock
-          label="Operação pela plataforma"
+          label="Operação pela plataforma *"
           value={platformFlow}
           onChange={setPlatformFlow}
           description="Texto padrão de governança para reforçar a centralização da comunicação, aprovações e materiais."
@@ -622,10 +823,10 @@ export function ProposalBuilderForm({
           }
         />
         <FieldBlock
-          label="Próximos passos"
+          label="Próximos passos *"
           value={nextSteps}
           onChange={setNextSteps}
-          placeholder="Ex: aprovação da proposta, assinatura, kickoff e envio dos materiais necessários."
+          placeholder="Ex: aprovação da proposta, assinatura e envio dos materiais necessários."
           presets={PROPOSAL_PRESETS.nextSteps}
           onApplyPreset={(content) => handleApplyPreset(setNextSteps, content)}
         />

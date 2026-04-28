@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-import { useTranslations } from "next-intl"
+import { useLocale, useTranslations } from "next-intl"
 import { useRouter } from "next/navigation"
 
 import { ProjectCategory } from "@/src/generated/client"
@@ -46,6 +46,7 @@ export function ConvertLeadDialog({
   onConverted,
 }: ConvertLeadDialogProps): React.JSX.Element {
   const t = useTranslations("Admin.crm.convert")
+  const locale = useLocale()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = React.useState(false)
   const [clientMode, setClientMode] = React.useState<"existing" | "create">(
@@ -104,7 +105,20 @@ export function ConvertLeadDialog({
   }
 
   const categories = Object.values(ProjectCategory)
-  const catT = useTranslations("Admin.projects.form.categories")
+  const categoryLabels: Record<string, string> =
+    locale === "pt"
+      ? {
+          LANDING_PAGE: "Landing Page",
+          INSTITUTIONAL_SITE: "Site Institucional",
+          BOOKING_PLATFORM: "Plataforma de Agendamento",
+          STABILITY_PLAN: "Plano de Estabilidade",
+        }
+      : {
+          LANDING_PAGE: "Landing Page",
+          INSTITUTIONAL_SITE: "Institutional Website",
+          BOOKING_PLATFORM: "Booking Platform",
+          STABILITY_PLAN: "Stability Plan",
+        }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -207,7 +221,7 @@ export function ConvertLeadDialog({
                     <SelectContent>
                       {categories.map((c) => (
                         <SelectItem key={c} value={c}>
-                          {catT(c)}
+                          {categoryLabels[c] ?? c}
                         </SelectItem>
                       ))}
                     </SelectContent>

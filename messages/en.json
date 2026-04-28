@@ -421,14 +421,10 @@
           "submit": "Register Evolution"
         },
         "categories": {
-          "WEB_APP": "Web App",
-          "MOBILE_APP": "Mobile App",
-          "BRANDING": "Branding",
           "LANDING_PAGE": "Landing Page",
-          "SALES_PAGE": "Sales Page",
           "INSTITUTIONAL_SITE": "Institutional Website",
-          "E_COMMERCE": "E-commerce",
-          "UI_UX_DESIGN": "UI/UX Design"
+          "BOOKING_PLATFORM": "Booking Platform",
+          "STABILITY_PLAN": "Stability Plan"
         },
         "priorities": {
           "LOW": "Low",

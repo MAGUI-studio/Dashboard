@@ -298,6 +298,9 @@ interface ParsedNotes {
   differentials: string[]
   timeline: string[]
   paymentTerms: string[]
+  acceptanceCriteria: string[]
+  notIncluded: string[]
+  warranty: string[]
   platformFlow: string[]
   nextSteps: string[]
   additionalNotes: string[]
@@ -395,6 +398,9 @@ function parseProposalNotes(notes?: string | null): ParsedNotes {
     differentials: [],
     timeline: [],
     paymentTerms: [],
+    acceptanceCriteria: [],
+    notIncluded: [],
+    warranty: [],
     platformFlow: [],
     nextSteps: [],
     additionalNotes: [],
@@ -422,6 +428,9 @@ function parseProposalNotes(notes?: string | null): ParsedNotes {
     else if (title === "diferenciais da entrega") parsed.differentials = lines
     else if (title === "prazo estimado") parsed.timeline = lines
     else if (title === "condições de pagamento") parsed.paymentTerms = lines
+    else if (title === "critérios de aceite") parsed.acceptanceCriteria = lines
+    else if (title === "o que não está incluso") parsed.notIncluded = lines
+    else if (title === "garantia e ajustes") parsed.warranty = lines
     else if (title === "operação pela plataforma") parsed.platformFlow = lines
     else if (title === "próximos passos") parsed.nextSteps = lines
     else if (title === "observações adicionais") parsed.additionalNotes = lines
@@ -434,6 +443,9 @@ function parseProposalNotes(notes?: string | null): ParsedNotes {
     parsed.differentials.length === 0 &&
     parsed.timeline.length === 0 &&
     parsed.paymentTerms.length === 0 &&
+    parsed.acceptanceCriteria.length === 0 &&
+    parsed.notIncluded.length === 0 &&
+    parsed.warranty.length === 0 &&
     parsed.platformFlow.length === 0 &&
     parsed.nextSteps.length === 0 &&
     parsed.additionalNotes.length === 0
@@ -522,7 +534,7 @@ function buildNextSteps(
 
   return [
     "Aprovação desta proposta para consolidação do escopo e do investimento.",
-    "Kickoff com alinhamento final de prioridades, cronograma e materiais de entrada.",
+    "Alinhamento final de prioridades, cronograma e materiais de entrada.",
     `Validade comercial deste documento: ${toDateLabel(validUntil)}.`,
   ]
 }
@@ -905,6 +917,14 @@ export function MaguiProposalTemplate({
       processLines,
       120
     ),
+    ...(parsedNotes.acceptanceCriteria.length > 0
+      ? createTextBlocks(
+          "bullets",
+          "Critérios de aceite",
+          parsedNotes.acceptanceCriteria,
+          120
+        )
+      : []),
   ]
 
   const commercialBlocks: ContentBlock[] = [
@@ -919,6 +939,22 @@ export function MaguiProposalTemplate({
           "bullets",
           "Condições de pagamento",
           parsedNotes.paymentTerms,
+          120
+        )
+      : []),
+    ...(parsedNotes.notIncluded.length > 0
+      ? createTextBlocks(
+          "bullets",
+          "O que não está incluso",
+          parsedNotes.notIncluded,
+          120
+        )
+      : []),
+    ...(parsedNotes.warranty.length > 0
+      ? createTextBlocks(
+          "bullets",
+          "Garantia e ajustes",
+          parsedNotes.warranty,
           120
         )
       : []),
