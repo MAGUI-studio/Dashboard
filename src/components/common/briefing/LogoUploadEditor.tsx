@@ -49,7 +49,7 @@ export function LogoUploadEditor({
     if (!files.length) return
 
     setActiveUpload(key)
-    const res = await startUpload(files, { projectId, scope: "assets" })
+    const res = await startUpload(files)
 
     if (res && res[0]) {
       const asset = {

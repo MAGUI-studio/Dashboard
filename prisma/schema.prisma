@@ -1004,6 +1004,7 @@ model Installment {
   proofKey String?
 
   stripeCheckoutSessionId String? @unique
+  stripeCheckoutUrl       String? @db.Text
   stripePaymentIntentId    String? @unique
 
   paymentEvents PaymentEvent[]

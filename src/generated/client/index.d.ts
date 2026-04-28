@@ -56947,6 +56947,7 @@ export namespace Prisma {
     proofUrl: string | null
     proofKey: string | null
     stripeCheckoutSessionId: string | null
+    stripeCheckoutUrl: string | null
     stripePaymentIntentId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -56963,6 +56964,7 @@ export namespace Prisma {
     proofUrl: string | null
     proofKey: string | null
     stripeCheckoutSessionId: string | null
+    stripeCheckoutUrl: string | null
     stripePaymentIntentId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -56979,6 +56981,7 @@ export namespace Prisma {
     proofUrl: number
     proofKey: number
     stripeCheckoutSessionId: number
+    stripeCheckoutUrl: number
     stripePaymentIntentId: number
     createdAt: number
     updatedAt: number
@@ -57006,6 +57009,7 @@ export namespace Prisma {
     proofUrl?: true
     proofKey?: true
     stripeCheckoutSessionId?: true
+    stripeCheckoutUrl?: true
     stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
@@ -57022,6 +57026,7 @@ export namespace Prisma {
     proofUrl?: true
     proofKey?: true
     stripeCheckoutSessionId?: true
+    stripeCheckoutUrl?: true
     stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
@@ -57038,6 +57043,7 @@ export namespace Prisma {
     proofUrl?: true
     proofKey?: true
     stripeCheckoutSessionId?: true
+    stripeCheckoutUrl?: true
     stripePaymentIntentId?: true
     createdAt?: true
     updatedAt?: true
@@ -57147,6 +57153,7 @@ export namespace Prisma {
     proofUrl: string | null
     proofKey: string | null
     stripeCheckoutSessionId: string | null
+    stripeCheckoutUrl: string | null
     stripePaymentIntentId: string | null
     createdAt: Date
     updatedAt: Date
@@ -57185,6 +57192,7 @@ export namespace Prisma {
       proofUrl?: boolean
       proofKey?: boolean
       stripeCheckoutSessionId?: boolean
+      stripeCheckoutUrl?: boolean
       stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -57209,6 +57217,7 @@ export namespace Prisma {
       proofUrl?: boolean
       proofKey?: boolean
       stripeCheckoutSessionId?: boolean
+      stripeCheckoutUrl?: boolean
       stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -57231,6 +57240,7 @@ export namespace Prisma {
       proofUrl?: boolean
       proofKey?: boolean
       stripeCheckoutSessionId?: boolean
+      stripeCheckoutUrl?: boolean
       stripePaymentIntentId?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -57250,6 +57260,7 @@ export namespace Prisma {
     proofUrl?: boolean
     proofKey?: boolean
     stripeCheckoutSessionId?: boolean
+    stripeCheckoutUrl?: boolean
     stripePaymentIntentId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -57268,6 +57279,7 @@ export namespace Prisma {
     | "proofUrl"
     | "proofKey"
     | "stripeCheckoutSessionId"
+    | "stripeCheckoutUrl"
     | "stripePaymentIntentId"
     | "createdAt"
     | "updatedAt",
@@ -57311,6 +57323,7 @@ export namespace Prisma {
         proofUrl: string | null
         proofKey: string | null
         stripeCheckoutSessionId: string | null
+        stripeCheckoutUrl: string | null
         stripePaymentIntentId: string | null
         createdAt: Date
         updatedAt: Date
@@ -57939,6 +57952,7 @@ export namespace Prisma {
     readonly proofUrl: FieldRef<"Installment", "String">
     readonly proofKey: FieldRef<"Installment", "String">
     readonly stripeCheckoutSessionId: FieldRef<"Installment", "String">
+    readonly stripeCheckoutUrl: FieldRef<"Installment", "String">
     readonly stripePaymentIntentId: FieldRef<"Installment", "String">
     readonly createdAt: FieldRef<"Installment", "DateTime">
     readonly updatedAt: FieldRef<"Installment", "DateTime">
@@ -61894,6 +61908,7 @@ export namespace Prisma {
     proofUrl: "proofUrl"
     proofKey: "proofKey"
     stripeCheckoutSessionId: "stripeCheckoutSessionId"
+    stripeCheckoutUrl: "stripeCheckoutUrl"
     stripePaymentIntentId: "stripePaymentIntentId"
     createdAt: "createdAt"
     updatedAt: "updatedAt"
@@ -66149,6 +66164,7 @@ export namespace Prisma {
       | StringNullableFilter<"Installment">
       | string
       | null
+    stripeCheckoutUrl?: StringNullableFilter<"Installment"> | string | null
     stripePaymentIntentId?: StringNullableFilter<"Installment"> | string | null
     createdAt?: DateTimeFilter<"Installment"> | Date | string
     updatedAt?: DateTimeFilter<"Installment"> | Date | string
@@ -66167,6 +66183,7 @@ export namespace Prisma {
     proofUrl?: SortOrderInput | SortOrder
     proofKey?: SortOrderInput | SortOrder
     stripeCheckoutSessionId?: SortOrderInput | SortOrder
+    stripeCheckoutUrl?: SortOrderInput | SortOrder
     stripePaymentIntentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -66192,6 +66209,7 @@ export namespace Prisma {
       paidAt?: DateTimeNullableFilter<"Installment"> | Date | string | null
       proofUrl?: StringNullableFilter<"Installment"> | string | null
       proofKey?: StringNullableFilter<"Installment"> | string | null
+      stripeCheckoutUrl?: StringNullableFilter<"Installment"> | string | null
       createdAt?: DateTimeFilter<"Installment"> | Date | string
       updatedAt?: DateTimeFilter<"Installment"> | Date | string
       invoice?: XOR<InvoiceScalarRelationFilter, InvoiceWhereInput>
@@ -66211,6 +66229,7 @@ export namespace Prisma {
     proofUrl?: SortOrderInput | SortOrder
     proofKey?: SortOrderInput | SortOrder
     stripeCheckoutSessionId?: SortOrderInput | SortOrder
+    stripeCheckoutUrl?: SortOrderInput | SortOrder
     stripePaymentIntentId?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -66245,6 +66264,10 @@ export namespace Prisma {
     proofUrl?: StringNullableWithAggregatesFilter<"Installment"> | string | null
     proofKey?: StringNullableWithAggregatesFilter<"Installment"> | string | null
     stripeCheckoutSessionId?:
+      | StringNullableWithAggregatesFilter<"Installment">
+      | string
+      | null
+    stripeCheckoutUrl?:
       | StringNullableWithAggregatesFilter<"Installment">
       | string
       | null
@@ -70156,6 +70179,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -70174,6 +70198,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -70195,6 +70220,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -70221,6 +70247,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -70241,6 +70268,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -70261,6 +70289,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -70285,6 +70314,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -73459,6 +73489,7 @@ export namespace Prisma {
     proofUrl?: SortOrder
     proofKey?: SortOrder
     stripeCheckoutSessionId?: SortOrder
+    stripeCheckoutUrl?: SortOrder
     stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -73480,6 +73511,7 @@ export namespace Prisma {
     proofUrl?: SortOrder
     proofKey?: SortOrder
     stripeCheckoutSessionId?: SortOrder
+    stripeCheckoutUrl?: SortOrder
     stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -73496,6 +73528,7 @@ export namespace Prisma {
     proofUrl?: SortOrder
     proofKey?: SortOrder
     stripeCheckoutSessionId?: SortOrder
+    stripeCheckoutUrl?: SortOrder
     stripePaymentIntentId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -90292,6 +90325,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -90308,6 +90342,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -90616,6 +90651,7 @@ export namespace Prisma {
       | StringNullableFilter<"Installment">
       | string
       | null
+    stripeCheckoutUrl?: StringNullableFilter<"Installment"> | string | null
     stripePaymentIntentId?: StringNullableFilter<"Installment"> | string | null
     createdAt?: DateTimeFilter<"Installment"> | Date | string
     updatedAt?: DateTimeFilter<"Installment"> | Date | string
@@ -90806,6 +90842,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -90823,6 +90860,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -90871,6 +90909,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -90896,6 +90935,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -93583,6 +93623,7 @@ export namespace Prisma {
     proofUrl?: string | null
     proofKey?: string | null
     stripeCheckoutSessionId?: string | null
+    stripeCheckoutUrl?: string | null
     stripePaymentIntentId?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -93603,6 +93644,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -93627,6 +93669,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string
@@ -93651,6 +93694,7 @@ export namespace Prisma {
       | NullableStringFieldUpdateOperationsInput
       | string
       | null
+    stripeCheckoutUrl?: NullableStringFieldUpdateOperationsInput | string | null
     stripePaymentIntentId?:
       | NullableStringFieldUpdateOperationsInput
       | string

@@ -15,14 +15,7 @@ export async function POST(req: NextRequest) {
       )
     }
 
-    const successUrl = `${env.NEXT_PUBLIC_SITE_URL}/financial?success=true`
-    const cancelUrl = `${env.NEXT_PUBLIC_SITE_URL}/financial?canceled=true`
-
-    const session = await createCheckoutSession(
-      installmentId,
-      successUrl,
-      cancelUrl
-    )
+    const session = await createCheckoutSession(installmentId)
 
     return NextResponse.json({ url: session.url })
   } catch (error: unknown) {

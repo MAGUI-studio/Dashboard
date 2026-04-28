@@ -1,3 +1,6 @@
+import { env } from "@/src/config/env"
+
+import { logger } from "./logger"
 import prisma from "./prisma"
 import { stripe } from "./stripe"
 
@@ -31,18 +34,14 @@ export async function getOrCreateStripeCustomer(userId: string) {
   return customer.id
 }
 
-export async function createCheckoutSession(
-  installmentId: string,
-  successUrl: string,
-  cancelUrl: string
-) {
+export async function createCheckoutSession(installmentId: string) {
   const installment = await prisma.installment.findUnique({
     where: { id: installmentId },
     include: {
       invoice: {
         include: {
           project: {
-            select: { clientId: true, name: true },
+            select: { id: true, clientId: true, name: true },
           },
         },
       },
@@ -63,6 +62,9 @@ export async function createCheckoutSession(
   }
 
   const stripeCustomerId = await getOrCreateStripeCustomer(clientId)
+
+  const successUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?success=true&session_id={CHECKOUT_SESSION_ID}`
+  const cancelUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?canceled=true`
 
   const session = await stripe.checkout.sessions.create({
     customer: stripeCustomerId,
@@ -97,6 +99,7 @@ export async function createCheckoutSession(
     where: { id: installmentId },
     data: {
       stripeCheckoutSessionId: session.id,
+      stripeCheckoutUrl: session.url,
     },
   })
 

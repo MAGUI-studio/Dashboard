@@ -599,6 +599,7 @@ exports.Prisma.InstallmentScalarFieldEnum = {
   proofUrl: 'proofUrl',
   proofKey: 'proofKey',
   stripeCheckoutSessionId: 'stripeCheckoutSessionId',
+  stripeCheckoutUrl: 'stripeCheckoutUrl',
   stripePaymentIntentId: 'stripePaymentIntentId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'

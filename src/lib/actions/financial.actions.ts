@@ -14,6 +14,7 @@ import { logger } from "@/src/lib/logger"
 import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import { createAuditLog, getCurrentAppUser } from "@/src/lib/project-governance"
+import { createCheckoutSession } from "@/src/lib/stripe-actions"
 import {
   BillingProfileSchema,
   CreateInvoiceSchema,
@@ -68,6 +69,23 @@ export async function createInvoiceAction(
 
       return inv
     })
+
+    // Create Stripe Checkout Sessions for all installments
+    try {
+      const installments = await prisma.installment.findMany({
+        where: { invoiceId: invoice.id },
+        select: { id: true },
+      })
+
+      await Promise.all(
+        installments.map((inst) => createCheckoutSession(inst.id))
+      )
+    } catch (stripeError) {
+      logger.error(
+        { stripeError },
+        "Failed to create Stripe sessions for installments"
+      )
+    }
 
     // Trigger email notification
     await triggerProductEvent({ type: "INVOICE_SENT", invoiceId: invoice.id })

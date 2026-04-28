@@ -23,6 +23,7 @@ import {
   revalidateProjectData,
   revalidateProjectStatus,
 } from "@/src/lib/revalidate"
+import { getOrCreateStripeCustomer } from "@/src/lib/stripe-actions"
 import {
   createProjectSchema,
   updateProjectStatusSchema,
@@ -167,6 +168,14 @@ export async function createProjectAction(
 
       return project
     })
+
+    // Ensure Stripe customer exists for future billing
+    try {
+      await getOrCreateStripeCustomer(data.clientId)
+    } catch (stripeError) {
+      logger.error({ stripeError }, "Failed to ensure Stripe customer")
+      // Don't fail the whole action if Stripe fails, we can try again later
+    }
 
     revalidateProjectData()
     return { success: true }

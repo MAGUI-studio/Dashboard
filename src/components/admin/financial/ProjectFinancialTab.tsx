@@ -112,15 +112,23 @@ export function ProjectFinancialTab({
     }
   }
 
-  const handleStripePayment = async (installmentId: string) => {
+  const handleStripePayment = async (
+    inst: InvoiceWithInstallments["installments"][number]
+  ) => {
+    // If we already have a URL, just redirect
+    if (inst.stripeCheckoutUrl) {
+      window.location.href = inst.stripeCheckoutUrl
+      return
+    }
+
     try {
-      setIsStripeLoading(installmentId)
+      setIsStripeLoading(inst.id)
       const response = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ installmentId }),
+        body: JSON.stringify({ installmentId: inst.id }),
       })
 
       const data = await response.json()
@@ -135,6 +143,11 @@ export function ProjectFinancialTab({
     } finally {
       setIsStripeLoading(null)
     }
+  }
+
+  const copyPaymentLink = (url: string) => {
+    navigator.clipboard.writeText(url)
+    toast.success("Link de pagamento copiado!")
   }
 
   return (
@@ -298,7 +311,7 @@ export function ProjectFinancialTab({
                             {inst.status !== "PAID" && (
                               <>
                                 <DropdownMenuItem
-                                  onClick={() => handleStripePayment(inst.id)}
+                                  onClick={() => handleStripePayment(inst)}
                                   disabled={!!isStripeLoading}
                                   className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary"
                                 >
@@ -316,6 +329,24 @@ export function ProjectFinancialTab({
                                       : "Pagar com Cartão"}
                                   </span>
                                 </DropdownMenuItem>
+
+                                {inst.stripeCheckoutUrl && (
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      copyPaymentLink(inst.stripeCheckoutUrl!)
+                                    }
+                                    className="rounded-lg px-2.5 py-2 cursor-pointer focus:bg-brand-primary/10 focus:text-brand-primary"
+                                  >
+                                    <Receipt
+                                      weight="bold"
+                                      className="mr-2.5 size-4"
+                                    />
+                                    <span className="font-bold uppercase text-[10px]">
+                                      Copiar Link de Pagamento
+                                    </span>
+                                  </DropdownMenuItem>
+                                )}
+
                                 <DropdownMenuItem
                                   onClick={() => {
                                     setSelectedInstallment(inst)
