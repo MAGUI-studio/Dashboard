@@ -45,10 +45,6 @@ export const InvoiceSentEmail = ({
           {totalAmount}
         </Text>
       </div>
-      <Text className="text-base">
-        Você pode visualizar o cronograma de parcelas, baixar o PDF e anexar
-        comprovantes de pagamento diretamente pelo seu portal.
-      </Text>
     </BaseEmailLayout>
   )
 }

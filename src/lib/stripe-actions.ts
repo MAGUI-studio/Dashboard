@@ -44,6 +44,8 @@ export async function createCheckoutSession(installmentId: string) {
               id: true,
               clientId: true,
               name: true,
+              category: true,
+              hasInternationalization: true,
               serviceCategory: {
                 select: { name: true, description: true, imageUrl: true },
               },
@@ -87,9 +89,23 @@ export async function createCheckoutSession(installmentId: string) {
   const successUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?success=true&session_id={CHECKOUT_SESSION_ID}`
   const cancelUrl = `${env.NEXT_PUBLIC_SITE_URL}/projects/${installment.invoice.project?.id}/financial?canceled=true`
 
-  const serviceCategory = installment.invoice.project?.serviceCategory
+  const project = installment.invoice.project
+  const serviceCategory = project?.serviceCategory
+
+  // Dynamic description based on project settings instead of static boilerplate
+  const categoryNames: Record<string, string> = {
+    LANDING_PAGE: "Landing Page",
+    INSTITUTIONAL_SITE: "Site Institucional",
+    BOOKING_PLATFORM: "Sistema / Agendamento",
+    STABILITY_PLAN: "Plano de Estabilidade",
+  }
+
+  const baseName =
+    categoryNames[project?.category || ""] || serviceCategory?.name || "Projeto"
+  const i18nSuffix = project?.hasInternationalization ? " (com i18n)" : ""
+
   const productDescription =
-    serviceCategory?.description || installment.invoice.description || undefined
+    installment.invoice.description || `${baseName}${i18nSuffix}`
 
   const productImages = serviceCategory?.imageUrl
     ? [serviceCategory.imageUrl]

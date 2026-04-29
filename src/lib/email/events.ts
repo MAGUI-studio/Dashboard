@@ -95,7 +95,7 @@ export async function triggerProductEvent(event: ProductEvent) {
             contactName: proposal.lead.contactName || proposal.lead.companyName,
             proposalTitle: proposal.title,
             proposalUrl: `${env.NEXT_PUBLIC_SITE_URL}/proposals/${proposal.id}`,
-            totalValue: `${proposal.currency} ${proposal.totalValue.toLocaleString("pt-BR")}`,
+            totalValue: `${proposal.currency} ${(proposal.totalValue / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
           }),
           templateKey: "PROPOSAL_SENT",
           entityType: "Proposal",
@@ -147,7 +147,7 @@ export async function triggerProductEvent(event: ProductEvent) {
                   locale: ptBR,
                 })
               : "N/D",
-            totalAmount: `${invoice.currency} ${invoice.totalAmount.toLocaleString("pt-BR")}`,
+            totalAmount: `${invoice.currency} ${(invoice.totalAmount / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`,
           }),
           templateKey: "INVOICE_SENT",
           entityType: "Invoice",
