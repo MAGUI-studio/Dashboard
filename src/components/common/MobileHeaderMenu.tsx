@@ -17,7 +17,6 @@ import {
   SignOut,
   Tag,
   Users,
-  X,
 } from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
@@ -103,66 +102,71 @@ export function MobileHeaderMenu({
         <Button
           variant="ghost"
           size="icon"
-          className="size-9 rounded-full bg-muted/5 hover:bg-muted/10 lg:hidden"
+          className="size-10 rounded-[1.15rem] border border-white/10 bg-background/80 text-foreground shadow-[0_14px_30px_-18px_rgba(0,0,0,0.45)] backdrop-blur-md transition-all hover:scale-[1.02] hover:border-brand-primary/20 hover:bg-background lg:hidden"
           aria-label={t("menu")}
         >
-          <List weight="bold" className="size-5" />
+          <List weight="bold" className="size-4.5" />
         </Button>
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-full border-l border-border/30 bg-background/90 p-0 shadow-2xl backdrop-blur-2xl sm:max-w-md"
+        className="border-l border-white/10 bg-background/95 p-0 shadow-[0_32px_80px_-24px_rgba(0,0,0,0.45)] backdrop-blur-2xl sm:max-w-md"
       >
         <div className="flex h-full flex-col">
-          <SheetHeader className="border-b border-border/10 p-8 text-left">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="font-heading text-[10px] font-black uppercase tracking-[0.5em] text-brand-primary">
-                {t("menu")}
-              </SheetTitle>
-              <SheetClose className="rounded-2xl bg-muted/5 p-3 transition-colors hover:bg-muted/10">
-                <X weight="bold" className="size-6" />
-              </SheetClose>
-            </div>
+          <SheetHeader className="border-b border-white/10 px-5 pt-5 pb-4 text-left">
+            <SheetTitle className="font-heading text-[9px] font-black uppercase tracking-[0.42em] text-brand-primary">
+              {t("menu")}
+            </SheetTitle>
 
-            <div className="mt-12 flex items-center gap-5 rounded-[2rem] bg-brand-primary/5 p-6 ring-1 ring-brand-primary/10">
-              <Avatar className="h-16 w-16 rounded-2xl border border-brand-primary/20 shadow-xl">
-                <AvatarImage
-                  src={viewer.imageUrl ?? undefined}
-                  alt={viewer.fullName || ""}
-                />
-                <AvatarFallback className="rounded-2xl bg-brand-primary/10 text-xl font-black uppercase text-brand-primary">
-                  {viewer.fullName?.charAt(0) || "U"}
-                </AvatarFallback>
-              </Avatar>
-              <div className="grid min-w-0 flex-1 text-left leading-tight">
-                <span className="truncate font-heading text-xl font-black uppercase tracking-tight text-foreground">
-                  {viewer.fullName}
-                </span>
-                <span className="truncate font-sans text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40 mt-1">
-                  {viewer.email}
-                </span>
+            <div className="mt-4 overflow-hidden rounded-[1.65rem] border border-white/10 bg-transparent px-3.5 py-3 shadow-none">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-11 w-11 rounded-[1.1rem] border border-white/20 shadow-sm">
+                  <AvatarImage
+                    src={viewer.imageUrl ?? undefined}
+                    alt={viewer.fullName || ""}
+                  />
+                  <AvatarFallback className="rounded-[1.1rem] bg-muted text-sm font-black uppercase text-foreground">
+                    {viewer.fullName?.charAt(0) || "U"}
+                  </AvatarFallback>
+                </Avatar>
+                <div className="grid min-w-0 flex-1 text-left leading-tight">
+                  <span className="truncate font-heading text-sm font-black uppercase tracking-[0.04em] text-foreground">
+                    {viewer.firstName || viewer.fullName?.split(" ")[0]}
+                  </span>
+                  <span className="mt-0.5 truncate font-sans text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {viewer.isAdmin ? "Administrador" : "Cliente"}
+                  </span>
+                  <span className="mt-1 truncate text-[11px] text-muted-foreground/80">
+                    {viewer.email}
+                  </span>
+                </div>
               </div>
             </div>
           </SheetHeader>
 
-          <div className="flex-1 overflow-y-auto px-6 py-8">
-            <nav className="grid gap-3">
+          <div className="flex-1 overflow-y-auto px-4 py-4">
+            <div className="mb-4 flex items-center gap-2">
+              <HeaderLanguageSwitcher compact />
+              <HeaderThemeToggle compact />
+            </div>
+
+            <nav className="grid gap-2.5">
               {viewer.isAdmin ? (
                 <>
                   <SheetClose asChild>
                     <Link
                       href={adminNav.dashboard.href}
-                      className={`flex h-16 items-center gap-5 rounded-3xl px-6 transition-all active:scale-[0.98] ${
+                      className={`flex min-h-[52px] items-center gap-3.5 rounded-[1.4rem] border px-4 transition-all active:scale-[0.98] ${
                         isNavItemActive(pathname, adminNav.dashboard)
-                          ? "bg-brand-primary text-white shadow-xl shadow-brand-primary/20"
-                          : "bg-muted/5 text-muted-foreground/60 hover:bg-muted/10 hover:text-foreground"
+                          ? "border-brand-primary/20 bg-brand-primary text-white shadow-[0_18px_30px_-20px_rgba(0,147,200,0.9)]"
+                          : "border-white/10 bg-white/55 text-muted-foreground/80 hover:border-brand-primary/10 hover:bg-white/75 hover:text-foreground dark:bg-white/5 dark:hover:bg-white/8"
                       }`}
                     >
                       <NavIcon
                         icon={adminNav.dashboard.icon}
-                        className="size-7"
+                        className="size-5"
                       />
-                      <span className="font-sans text-xs font-black uppercase tracking-[0.3em]">
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.22em]">
                         {adminNav.dashboard.label}
                       </span>
                     </Link>
@@ -179,36 +183,39 @@ export function MobileHeaderMenu({
                         defaultOpen={defaultOpen}
                         className="group/collapsible"
                       >
-                        <CollapsibleTrigger className="flex h-16 w-full items-center justify-between rounded-3xl bg-muted/5 px-6 text-left transition-all hover:bg-muted/10">
-                          <div className="flex items-center gap-5">
+                        <CollapsibleTrigger className="flex min-h-[52px] w-full items-center justify-between rounded-[1.4rem] border border-white/10 bg-white/45 px-4 text-left transition-all hover:border-brand-primary/10 hover:bg-white/70 dark:bg-white/5 dark:hover:bg-white/8">
+                          <div className="flex items-center gap-3.5">
                             <NavIcon
                               icon={group.icon}
-                              className="size-7 text-brand-primary"
+                              className="size-5 text-brand-primary"
                             />
-                            <span className="font-sans text-xs font-black uppercase tracking-[0.3em] text-foreground">
+                            <span className="font-sans text-[11px] font-black uppercase tracking-[0.22em] text-foreground">
                               {group.label}
                             </span>
                           </div>
-                          <CaretDown className="size-5 text-muted-foreground/50 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                          <CaretDown className="size-4 text-muted-foreground/50 transition-transform group-data-[state=open]/collapsible:rotate-180" />
                         </CollapsibleTrigger>
-                        <CollapsibleContent className="mt-3 grid gap-3 pl-6">
+                        <CollapsibleContent className="mt-2.5 grid gap-2 pl-3">
                           {group.items.map((item) => (
                             <SheetClose asChild key={item.href}>
                               <Link
                                 href={item.href}
-                                className={`flex min-h-[56px] items-center gap-4 rounded-[1.5rem] px-5 transition-all active:scale-[0.98] ${
+                                className={`flex min-h-[48px] items-center gap-3 rounded-[1.2rem] border px-4 transition-all active:scale-[0.98] ${
                                   isNavItemActive(pathname, item)
-                                    ? "bg-brand-primary/10 text-brand-primary ring-1 ring-brand-primary/20"
-                                    : "bg-muted/5 text-muted-foreground/60 hover:bg-muted/10 hover:text-foreground"
+                                    ? "border-brand-primary/18 bg-brand-primary/10 text-brand-primary shadow-[0_14px_24px_-24px_rgba(0,147,200,0.9)]"
+                                    : "border-transparent bg-white/35 text-muted-foreground/75 hover:border-white/10 hover:bg-white/55 hover:text-foreground dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                                 }`}
                               >
-                                <NavIcon icon={item.icon} className="size-5" />
+                                <NavIcon
+                                  icon={item.icon}
+                                  className="size-4.5"
+                                />
                                 <div className="flex flex-col">
-                                  <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                                  <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em]">
                                     {item.label}
                                   </span>
                                   {item.description && (
-                                    <span className="mt-0.5 text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40 leading-tight">
+                                    <span className="mt-0.5 text-[8px] font-bold uppercase tracking-[0.14em] text-muted-foreground/55 leading-tight">
                                       {item.description}
                                     </span>
                                   )}
@@ -226,14 +233,14 @@ export function MobileHeaderMenu({
                   <SheetClose asChild key={item.href}>
                     <Link
                       href={item.href}
-                      className={`flex h-14 items-center gap-4 rounded-2xl px-5 transition-all active:scale-[0.98] ${
+                      className={`flex min-h-[50px] items-center gap-3 rounded-[1.2rem] border px-4 transition-all active:scale-[0.98] ${
                         isNavItemActive(pathname, item)
-                          ? "bg-brand-primary/10 text-brand-primary shadow-sm"
-                          : "text-muted-foreground/60 hover:bg-muted/5 hover:text-foreground"
+                          ? "border-brand-primary/18 bg-brand-primary/10 text-brand-primary shadow-[0_14px_24px_-24px_rgba(0,147,200,0.9)]"
+                          : "border-white/10 bg-white/45 text-muted-foreground/80 hover:border-brand-primary/10 hover:bg-white/70 hover:text-foreground dark:bg-white/5 dark:hover:bg-white/8"
                       }`}
                     >
-                      <NavIcon icon={item.icon} className="size-6" />
-                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
+                      <NavIcon icon={item.icon} className="size-4.5" />
+                      <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em]">
                         {item.label}
                       </span>
                     </Link>
@@ -241,27 +248,24 @@ export function MobileHeaderMenu({
                 ))
               )}
             </nav>
-
-            <div className="mt-8 grid gap-4 border-t border-border/10 pt-8">
-              <div className="px-2">
-                <HeaderLanguageSwitcher />
-              </div>
-              <div className="px-2">
-                <HeaderThemeToggle />
-              </div>
-            </div>
           </div>
 
-          <div className="mt-auto border-t border-border/10 p-5">
+          <div className="mt-auto border-t border-white/10 p-4">
             <SignOutButton>
-              <button className="group flex w-full items-center gap-4 rounded-2xl bg-red-500/5 p-4 text-red-500 transition-all active:scale-[0.98]">
-                <SignOut
-                  weight="bold"
-                  className="size-6 opacity-60 group-hover:opacity-100"
-                />
-                <span className="font-sans text-[11px] font-black uppercase tracking-[0.2em]">
-                  {t("user.signOut")}
-                </span>
+              <button className="group flex w-full items-center justify-between rounded-[1.25rem] border border-border/60 bg-background/70 px-4 py-3 text-foreground/88 shadow-sm transition-all active:scale-[0.98] hover:border-red-500/20 hover:bg-red-500/[0.04] hover:text-red-500">
+                <div className="flex items-center gap-3">
+                  <div className="flex size-9 items-center justify-center rounded-xl bg-muted/60 text-foreground/70 transition-colors group-hover:bg-red-500/10 group-hover:text-red-500">
+                    <SignOut weight="bold" className="size-4.5" />
+                  </div>
+                  <div className="flex flex-col text-left leading-tight">
+                    <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em]">
+                      {t("user.signOut")}
+                    </span>
+                    <span className="text-[11px] text-muted-foreground transition-colors group-hover:text-red-500/70">
+                      Encerrar sessao
+                    </span>
+                  </div>
+                </div>
               </button>
             </SignOutButton>
           </div>

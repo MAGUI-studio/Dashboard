@@ -2,7 +2,7 @@ import { env } from "./env"
 
 export const siteConfig = {
   name: "MAGUI.studio",
-  shortName: "MAGUI",
+  shortName: "MAGUI.studio",
   description:
     "Estúdio de engenharia visual e interface focado em transformar desafios de negócios em sistemas digitais de alta performance.",
   url: env.NEXT_PUBLIC_SITE_URL,

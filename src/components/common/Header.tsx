@@ -49,7 +49,7 @@ export function Header({
       initial={{ opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: "easeOut" }}
-      className="sticky top-0 z-50 w-full bg-background shadow-[0_14px_40px_-24px_rgba(0,0,0,0.55)]"
+      className="sticky top-0 z-50 w-full bg-background"
     >
       <AnimatePresence>
         {pendingApprovals.length > 0 && (

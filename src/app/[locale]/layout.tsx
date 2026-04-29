@@ -14,6 +14,7 @@ import { extractRouterConfig } from "uploadthing/server"
 import { Toaster } from "@/src/components/ui/sonner"
 
 import { PwaInstallPrompt } from "@/src/components/common/PwaInstallPrompt"
+import { PwaLaunchScreen } from "@/src/components/common/PwaLaunchScreen"
 import { ThemeProvider } from "@/src/components/common/themeProvider"
 
 import { cn } from "@/src/lib/utils/utils"
@@ -190,6 +191,7 @@ export default async function RootLayout({
             <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <ThemeProvider>
               <NuqsAdapter>{children}</NuqsAdapter>
+              <PwaLaunchScreen />
               <Toaster />
               <PwaInstallPrompt />
             </ThemeProvider>

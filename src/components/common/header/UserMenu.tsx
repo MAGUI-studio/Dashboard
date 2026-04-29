@@ -94,14 +94,18 @@ export function UserMenu({ viewer }: UserMenuProps) {
           <DropdownMenuSeparator className="my-3 bg-muted/50" />
 
           <SignOutButton>
-            <DropdownMenuItem className="group/item cursor-pointer rounded-2xl px-4 py-3 text-red-500 transition-all hover:bg-red-500/8 focus:bg-red-500/8 outline-none focus:ring-0">
-              <SignOut
-                weight="bold"
-                className="size-4.5 text-red-500/70 group-hover/item:text-red-500"
-              />
-              <span className="ml-2 font-sans text-[10px] font-black uppercase tracking-[0.18em]">
-                {t("user.signOut")}
-              </span>
+            <DropdownMenuItem className="group/item cursor-pointer rounded-[1.25rem] px-3 py-2.5 text-foreground/88 transition-all hover:bg-red-500/[0.05] hover:text-red-500 focus:bg-red-500/[0.05] focus:text-red-500 outline-none focus:ring-0">
+              <div className="flex size-9 items-center justify-center rounded-xl bg-muted/60 text-foreground/70 transition-colors group-hover/item:bg-red-500/10 group-hover/item:text-red-500">
+                <SignOut weight="bold" className="size-4.5" />
+              </div>
+              <div className="ml-3 flex flex-col leading-tight">
+                <span className="font-sans text-[10px] font-black uppercase tracking-[0.18em]">
+                  {t("user.signOut")}
+                </span>
+                <span className="text-[11px] text-muted-foreground transition-colors group-hover/item:text-red-500/70">
+                  Encerrar sessao
+                </span>
+              </div>
             </DropdownMenuItem>
           </SignOutButton>
         </DropdownMenuContent>
