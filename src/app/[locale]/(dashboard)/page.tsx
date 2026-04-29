@@ -13,7 +13,6 @@ import { Button } from "@/src/components/ui/button"
 
 import { DashboardActivityWidget } from "@/src/components/admin/dashboard/DashboardActivityWidget"
 import { DashboardAttentionWidget } from "@/src/components/admin/dashboard/DashboardAttentionWidget"
-import { DashboardHealthWidget } from "@/src/components/admin/dashboard/DashboardHealthWidget"
 import { DashboardPerformanceWidget } from "@/src/components/admin/dashboard/DashboardPerformanceWidget"
 import { DashboardRecentUpdatesWidget } from "@/src/components/admin/dashboard/DashboardRecentUpdatesWidget"
 import { DashboardRemindersWidget } from "@/src/components/admin/dashboard/DashboardRemindersWidget"
@@ -113,7 +112,6 @@ export default async function DashboardPage({
             <DashboardRemindersWidget userId={user.id} />
             <DashboardActivityWidget />
             <DashboardPerformanceWidget />
-            <DashboardHealthWidget />
             <DashboardRecentUpdatesWidget />
             <DashboardTemplatesWidget />
           </Suspense>

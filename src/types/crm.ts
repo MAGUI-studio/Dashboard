@@ -19,6 +19,8 @@ export interface Lead {
   lastContactAt: Date | string | null
   nextActionAt: Date | string | null
   assignedToId: string | null
+  proposalCount?: number
+  acceptedProposalCount?: number
 
   convertedProjectId: string | null
   convertedAt: Date | string | null

@@ -13,7 +13,6 @@ import {
 import { cacheTags } from "@/src/lib/cache-tags"
 import prisma from "@/src/lib/prisma"
 import { getLeadHealth } from "@/src/lib/utils/lead-health"
-import { getProjectHealth } from "@/src/lib/utils/project-health"
 
 import { CACHE_TTL } from "@/src/config/cache"
 
@@ -362,60 +361,11 @@ export const getAdminDashboardPerformance = cache(
 
 const getAdminDashboardHealthCached = unstable_cache(
   async () => {
-    const [projects, leads] = await Promise.all([
-      prisma.project.findMany({
-        where: { status: { not: ProjectStatus.LAUNCHED } },
-        include: {
-          client: { select: { name: true, email: true } },
-          updates: {
-            select: { createdAt: true },
-            orderBy: { createdAt: "desc" },
-            take: 1,
-          },
-          actionItems: {
-            where: { status: { not: "COMPLETED" } },
-            select: { dueDate: true, status: true },
-          },
-        },
-        take: 10,
-        orderBy: { updatedAt: "desc" },
-      }),
-      prisma.lead.findMany({
-        where: { status: { not: LeadStatus.CONVERTIDO } },
-        orderBy: { updatedAt: "desc" },
-        take: 10,
-      }),
-    ])
-
-    const today = new Date()
-
-    const projectHealth = projects
-      .map((project) => {
-        const pendingApprovalCount = 0 // Optimized out of this view for now
-        const overdueActionItemCount = project.actionItems.filter(
-          (item) => item.dueDate && item.dueDate < today
-        ).length
-
-        const health = getProjectHealth({
-          status: project.status,
-          progress: project.progress,
-          deadline: project.deadline,
-          updatedAt: project.updatedAt,
-          lastUpdateAt: project.updates[0]?.createdAt ?? null,
-          pendingApprovalCount,
-          overdueActionItemCount,
-        })
-
-        return {
-          id: project.id,
-          name: project.name,
-          clientName: project.client.name || project.client.email,
-          progress: project.progress,
-          ...health,
-        }
-      })
-      .sort((a, b) => a.score - b.score)
-      .slice(0, 5)
+    const leads = await prisma.lead.findMany({
+      where: { status: { not: LeadStatus.CONVERTIDO } },
+      orderBy: { updatedAt: "desc" },
+      take: 10,
+    })
 
     const commercialHealth = leads
       .map((lead) => {
@@ -443,7 +393,7 @@ const getAdminDashboardHealthCached = unstable_cache(
       .sort((a, b) => a.score - b.score)
       .slice(0, 5)
 
-    return { projectHealth, commercialHealth }
+    return { commercialHealth }
   },
   ["admin-dashboard-health"],
   { revalidate: CACHE_TTL.DASHBOARD, tags: [cacheTags.adminDashboard] }

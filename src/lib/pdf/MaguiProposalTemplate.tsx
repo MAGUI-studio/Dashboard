@@ -252,6 +252,28 @@ const styles = StyleSheet.create({
     color: "#94A3B8",
     maxWidth: 420,
   },
+  investmentMiniGrid: {
+    flexDirection: "row",
+    gap: 18,
+    marginTop: 12,
+  },
+  investmentMiniCard: {
+    flex: 1,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "rgba(255,255,255,0.06)",
+  },
+  investmentMiniLabel: {
+    fontSize: 7,
+    color: "#94A3B8",
+    textTransform: "uppercase",
+    marginBottom: 4,
+  },
+  investmentMiniValue: {
+    fontSize: 11,
+    color: "#FFFFFF",
+    fontWeight: "bold",
+  },
   footer: {
     position: "absolute",
     bottom: 40,
@@ -329,6 +351,7 @@ interface InvestmentBlock {
   kind: "investment"
   totalValue: number
   currency: string
+  itemCount: number
 }
 
 type ContentBlock =
@@ -678,6 +701,23 @@ function renderBlock(block: ContentBlock, currency: string) {
           leitura pensada para decisão comercial clara e condução mais
           previsível do projeto.
         </Text>
+        <View style={styles.investmentMiniGrid}>
+          <View style={styles.investmentMiniCard}>
+            <Text style={styles.investmentMiniLabel}>Total de entregas</Text>
+            <Text style={styles.investmentMiniValue}>
+              {String(block.itemCount).padStart(2, "0")}
+            </Text>
+          </View>
+          <View style={styles.investmentMiniCard}>
+            <Text style={styles.investmentMiniLabel}>Ticket medio</Text>
+            <Text style={styles.investmentMiniValue}>
+              {formatCurrency(
+                block.itemCount > 0 ? block.totalValue / block.itemCount : 0,
+                block.currency
+              )}
+            </Text>
+          </View>
+        </View>
       </View>
     )
   }
@@ -973,7 +1013,12 @@ export function MaguiProposalTemplate({
           currency,
         }) satisfies PricingSectionBlock
     ),
-    { kind: "investment", totalValue: proposal.totalValue, currency },
+    {
+      kind: "investment",
+      totalValue: proposal.totalValue,
+      currency,
+      itemCount: proposal.items.length,
+    },
     ...createTextBlocks("bullets", "Próximos passos", nextSteps, 120),
   ]
 

@@ -78,7 +78,7 @@ export default async function BriefingPage({
 
       {isEditing ? (
         <div className="animate-in fade-in slide-in-from-bottom-4 duration-700">
-          <BriefingForm projectId={id} initialData={briefingData} />
+          <BriefingForm projectId={project.id} initialData={briefingData} />
         </div>
       ) : (
         <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
@@ -90,7 +90,7 @@ export default async function BriefingPage({
           </div>
 
           <ClientBriefingComplement
-            projectId={id}
+            projectId={project.id}
             notes={project.briefingNotes}
           />
         </div>

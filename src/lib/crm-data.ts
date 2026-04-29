@@ -36,6 +36,8 @@ type SavedViewType = Prisma.SavedViewGetPayload<Record<string, never>>
 
 export const toLeadDto = (lead: LeadWithRelations): Lead => ({
   ...lead,
+  proposalCount: 0,
+  acceptedProposalCount: 0,
   activities: (lead.activities || []).map((a) => ({
     ...a,
     metadata: (a.metadata as Record<string, unknown>) || {},
@@ -74,6 +76,9 @@ const getLeadsCached = unstable_cache(
           _count: {
             select: { followUpNotes: true },
           },
+          proposals: {
+            select: { status: true },
+          },
         },
         orderBy: [{ nextActionAt: "asc" }, { createdAt: "desc" }],
         skip,
@@ -103,6 +108,9 @@ export const getLeads = async (page: number = 1, limit: number = 100) => {
   // and the notes placeholder count is correct for the UI.
   return leads.map((l) => ({
     ...l,
+    proposalCount: l.proposals.length,
+    acceptedProposalCount: l.proposals.filter((p) => p.status === "ACCEPTED")
+      .length,
     activities: [],
     followUpNotes: Array(l._count.followUpNotes).fill({}),
   })) as unknown as Lead[]
@@ -142,7 +150,29 @@ const getLeadDetailsRawCached = unstable_cache(
 )
 
 export const getLeadDetails = async (id: string) => {
-  const lead = await getLeadDetailsRawCached(id)
+  const lead = await prisma.lead.findUnique({
+    where: { id },
+    include: {
+      activities: {
+        orderBy: { createdAt: "desc" },
+        include: {
+          author: {
+            select: { id: true, name: true },
+          },
+        },
+      },
+      followUpNotes: {
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: {
+            select: { id: true, name: true },
+          },
+        },
+      },
+    },
+  })
   return lead ? toLeadDto(lead as LeadWithRelations) : null
 }
 

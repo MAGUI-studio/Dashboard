@@ -11,6 +11,7 @@ import {
   PaymentMethod,
   ProjectCategory,
   ProjectStatus,
+  ProposalStatus,
 } from "@/src/generated/client"
 import { LeadActivity, LeadNote } from "@/src/types/crm"
 import { z } from "zod"
@@ -298,9 +299,51 @@ export async function convertLeadToProjectAction(input: {
 
     const lead = await prisma.lead.findUnique({
       where: { id: input.leadId },
+      include: {
+        proposals: {
+          select: { status: true },
+        },
+      },
     })
 
     if (!lead) return { success: false, error: "Lead not found" }
+
+    const trimmedProjectName = input.projectData.name.trim()
+    const hasAcceptedProposal = lead.proposals.some(
+      (proposal) => proposal.status === ProposalStatus.ACCEPTED
+    )
+    const hasAnyProposal = lead.proposals.length > 0
+    const budgetStr = input.projectData.budget || lead.value
+
+    if (!trimmedProjectName) {
+      return { success: false, error: "Defina o nome do projeto." }
+    }
+
+    if (!lead.contactName?.trim()) {
+      return {
+        success: false,
+        error: "Defina o contato principal do lead antes de converter.",
+      }
+    }
+
+    if (!lead.email?.trim()) {
+      return {
+        success: false,
+        error: "Defina um e-mail principal antes de converter o lead.",
+      }
+    }
+
+    if (!input.projectData.category) {
+      return { success: false, error: "Selecione a categoria do projeto." }
+    }
+
+    if (!budgetStr && !hasAcceptedProposal) {
+      return {
+        success: false,
+        error:
+          "Informe um valor estimado ou vincule uma proposta aceita antes de converter.",
+      }
+    }
 
     const result = await prisma.$transaction(async (tx) => {
       let finalUserId = input.userId
@@ -338,7 +381,6 @@ export async function convertLeadToProjectAction(input: {
 
       if (!finalUserId) throw new Error("Client must be selected.")
 
-      const budgetStr = input.projectData.budget || lead.value
       const budgetValue = budgetStr
         ? parseFloat(budgetStr.replace(/[^\d.,]/g, "").replace(",", "."))
         : null
@@ -375,7 +417,11 @@ export async function convertLeadToProjectAction(input: {
           type: LeadActivityType.CONVERTED_TO_PROJECT,
           title: "Lead convertido em projeto",
           content: `Projeto "${project.name}" criado com sucesso.`,
-          metadata: { projectId: project.id },
+          metadata: {
+            projectId: project.id,
+            convertedWithoutAcceptedProposal: !hasAcceptedProposal,
+            proposalContext: hasAnyProposal ? "existing" : "missing",
+          },
           authorId: actor?.id,
         },
       })

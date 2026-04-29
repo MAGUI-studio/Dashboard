@@ -144,6 +144,12 @@ export function LeadDetailsDrawer({
     LeadStatus.NEGOCIACAO,
     LeadStatus.CONVERTIDO,
   ]
+  const missingCriticalInfo = [
+    !localLead.source || localLead.source === "OTHER" ? "Origem" : null,
+    !localLead.value?.trim() ? "Valor" : null,
+    !localLead.nextActionAt ? "Proximo passo" : null,
+    !localLead.assignedToId ? "Responsavel" : null,
+  ].filter(Boolean)
 
   return (
     <Sheet open={open} onOpenChange={handleSheetOpenChange}>
@@ -180,6 +186,18 @@ export function LeadDetailsDrawer({
                       {t(`source.${localLead.source}`)}
                     </span>
                   </div>
+                  {missingCriticalInfo.length > 0 ? (
+                    <div className="flex flex-wrap gap-2 pt-2">
+                      {missingCriticalInfo.map((item) => (
+                        <span
+                          key={item}
+                          className="rounded-full bg-amber-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-amber-700"
+                        >
+                          Falta {item}
+                        </span>
+                      ))}
+                    </div>
+                  ) : null}
                 </div>
 
                 <DropdownMenu>
@@ -388,14 +406,14 @@ export function LeadDetailsDrawer({
                   {/* Notes Strategy */}
                   <div className="space-y-6">
                     <SectionHeader
-                      title="Insight Estratégico"
+                      title="Contexto comercial"
                       icon={NotePencil}
                     />
                     <div className="relative">
                       <Textarea
                         value={note}
                         onChange={(e) => setNote(e.target.value)}
-                        placeholder="Descreva pontos críticos da negociação..."
+                        placeholder="Registre contexto, proximo passo, decisor e qualquer bloqueio real da negociacao."
                         className="min-h-[140px] resize-none rounded-[2rem] border-border/15 bg-muted/10 p-8 text-sm font-medium transition-all focus:bg-background focus:ring-1 focus:ring-brand-primary/20 shadow-inner"
                       />
                       <Button

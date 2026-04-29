@@ -24,6 +24,7 @@ import { updateLeadStatus } from "@/src/lib/actions/crm.actions"
 import {
   CRM_STATUS_ORDER,
   getLeadDaysWithoutMovement,
+  getNextActionMeta,
   isLeadStagnant,
 } from "@/src/lib/utils/crm"
 
@@ -51,6 +52,12 @@ export function KanbanLeadCard({
   const t = useTranslations("Admin.crm")
   const router = useRouter()
   const stagnant = isLeadStagnant(lead)
+  const nextAction = getNextActionMeta(lead.nextActionAt)
+  const missingCriticalInfo = [
+    !lead.value?.trim() ? "sem valor" : null,
+    !lead.assignedToId ? "sem responsavel" : null,
+    !lead.nextActionAt ? "sem follow-up" : null,
+  ].filter(Boolean)
   const [isMoving, setIsMoving] = React.useState(false)
 
   // Status excluding CONVERTIDO for manual movement restriction
@@ -144,6 +151,21 @@ export function KanbanLeadCard({
               {getLeadDaysWithoutMovement(lead)}d parado
             </span>
           )}
+        </div>
+        <div className="flex flex-wrap items-center gap-2">
+          <span
+            className={`text-[10px] font-black uppercase tracking-[0.16em] ${nextAction.tone}`}
+          >
+            {nextAction.label}
+          </span>
+          {missingCriticalInfo.map((item) => (
+            <span
+              key={item}
+              className="rounded-full bg-amber-500/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-amber-700"
+            >
+              {item}
+            </span>
+          ))}
         </div>
         {(lead.instagram || lead.phone) && (
           <div className="grid gap-2 text-sm text-foreground/80">

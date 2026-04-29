@@ -8,6 +8,7 @@ import { useRouter } from "@/src/i18n/navigation"
 import {
   Building,
   CircleNotch,
+  CurrencyDollar,
   Envelope,
   Funnel,
   Globe,
@@ -81,7 +82,7 @@ export function CreateLeadForm(): React.JSX.Element {
       website: showWebsiteField ? websiteValue : "",
       instagram: showInstagramField ? instagramValue : "",
       notes: formData.get("notes") as string,
-      value: "",
+      value: formData.get("value") as string,
       source,
     })
 
@@ -243,6 +244,27 @@ export function CreateLeadForm(): React.JSX.Element {
               </div>
             </div>
 
+            <div className="space-y-2">
+              <Label
+                htmlFor="value"
+                className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground"
+              >
+                Valor estimado
+              </Label>
+              <div className="group relative">
+                <CurrencyDollar
+                  className="absolute top-1/2 left-4 -translate-y-1/2 text-muted-foreground/40 transition-colors group-focus-within:text-brand-primary"
+                  size={18}
+                />
+                <Input
+                  id="value"
+                  name="value"
+                  placeholder="Ex: R$ 12.000"
+                  className="h-12 rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
+                />
+              </div>
+            </div>
+
             {showInstagramField ? (
               <div className="space-y-2 md:col-span-2">
                 <Label
@@ -312,10 +334,14 @@ export function CreateLeadForm(): React.JSX.Element {
               <Textarea
                 id="notes"
                 name="notes"
-                placeholder="Anote o contexto do possivel cliente, o que chamou atencao e onde esta a conversa."
+                placeholder="Registre contexto, momento da conversa, proximo passo e qualquer sinal que fortaleça a qualificacao."
                 className="min-h-[120px] rounded-2xl border-border/40 bg-muted/10 pl-12 transition-all focus:bg-muted/20"
               />
             </div>
+            <p className="pl-1 text-[11px] text-muted-foreground/60">
+              Boas notas deixam claro origem, valor, responsavel pela conversa e
+              qual eh o proximo movimento comercial.
+            </p>
           </div>
         </div>
       </div>

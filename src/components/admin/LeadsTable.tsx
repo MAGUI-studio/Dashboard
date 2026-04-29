@@ -25,6 +25,7 @@ import { LeadStatusBadge } from "@/src/components/admin/LeadStatusBadge"
 import {
   formatLeadValue,
   getLeadDaysWithoutMovement,
+  getNextActionMeta,
   isLeadStagnant,
 } from "@/src/lib/utils/crm"
 
@@ -133,6 +134,12 @@ export function LeadsTable({
             ) : (
               filteredLeads.map((lead) => {
                 const stagnant = isLeadStagnant(lead)
+                const nextAction = getNextActionMeta(lead.nextActionAt)
+                const missingCriticalInfo = [
+                  !lead.value?.trim() ? "Sem valor" : null,
+                  !lead.assignedToId ? "Sem responsavel" : null,
+                  !lead.nextActionAt ? "Sem follow-up" : null,
+                ].filter(Boolean)
 
                 return (
                   <TableRow
@@ -157,6 +164,21 @@ export function LeadsTable({
                             {new Date(lead.updatedAt).toLocaleDateString(
                               "pt-BR"
                             )}
+                          </div>
+                          <div className="mt-2 flex flex-wrap items-center gap-2">
+                            <span
+                              className={`text-[10px] font-black uppercase tracking-[0.18em] ${nextAction.tone}`}
+                            >
+                              {nextAction.label}
+                            </span>
+                            {missingCriticalInfo.map((item) => (
+                              <span
+                                key={item}
+                                className="rounded-full bg-amber-500/10 px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.16em] text-amber-700"
+                              >
+                                {item}
+                              </span>
+                            ))}
                           </div>
                         </div>
                       </div>

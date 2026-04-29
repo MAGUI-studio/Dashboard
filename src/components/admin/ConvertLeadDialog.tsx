@@ -59,6 +59,18 @@ export function ConvertLeadDialog({
   )
   const [budget, setBudget] = React.useState(lead.value || "")
   const [deadline] = React.useState("")
+  const hasAcceptedProposal = (lead.acceptedProposalCount ?? 0) > 0
+  const hasAnyProposal = (lead.proposalCount ?? 0) > 0
+  const readinessChecks = [
+    { label: "Contato principal", ok: Boolean(lead.contactName?.trim()) },
+    { label: "E-mail principal", ok: Boolean(lead.email?.trim()) },
+    { label: "Categoria", ok: Boolean(category) },
+    {
+      label: "Valor ou proposta aceita",
+      ok: Boolean(budget.trim()) || hasAcceptedProposal,
+    },
+  ]
+  const isReadyToConvert = readinessChecks.every((item) => item.ok)
 
   const handleConvert = async () => {
     if (clientMode === "existing" && !selectedClientId) {
@@ -68,6 +80,12 @@ export function ConvertLeadDialog({
 
     if (clientMode === "create" && !lead.email) {
       toast.error(t("email_required_error"))
+      return
+    }
+
+    const failedCheck = readinessChecks.find((item) => !item.ok)
+    if (failedCheck) {
+      toast.error(`Complete "${failedCheck.label}" antes de converter.`)
       return
     }
 
@@ -140,6 +158,34 @@ export function ConvertLeadDialog({
         </div>
 
         <div className="p-10 pt-8 space-y-8">
+          <div className="rounded-[2rem] border border-border/20 bg-muted/10 p-6">
+            <div className="flex flex-wrap items-center gap-2">
+              {readinessChecks.map((item) => (
+                <span
+                  key={item.label}
+                  className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${
+                    item.ok
+                      ? "bg-emerald-500/10 text-emerald-700"
+                      : "bg-amber-500/10 text-amber-700"
+                  }`}
+                >
+                  {item.ok ? "OK" : "Pendente"} · {item.label}
+                </span>
+              ))}
+            </div>
+            <p className="mt-4 text-sm text-muted-foreground/75">
+              Esta conversao abre projeto operacional. Garanta contexto
+              comercial minimo antes de seguir.
+            </p>
+            {!hasAcceptedProposal ? (
+              <p className="mt-3 rounded-2xl bg-amber-500/10 px-4 py-3 text-sm font-medium text-amber-800">
+                {hasAnyProposal
+                  ? "Lead ainda nao tem proposta aceita. Conversao segue, mas projeto nasce sem aprovacao comercial formal."
+                  : "Lead sera convertido sem proposta aceita vinculada. Use so quando alinhamento comercial ja estiver fechado por outro caminho."}
+              </p>
+            ) : null}
+          </div>
+
           <div className="grid gap-6">
             <div className="space-y-2">
               <Label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/60">
@@ -257,6 +303,7 @@ export function ConvertLeadDialog({
               disabled={
                 isSubmitting ||
                 !projectName ||
+                !isReadyToConvert ||
                 (clientMode === "existing" && !selectedClientId) ||
                 (clientMode === "create" && !lead.email)
               }

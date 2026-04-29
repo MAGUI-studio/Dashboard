@@ -7,6 +7,7 @@ import {
   Calculator,
   ClockCountdown,
   FilePdf,
+  Info,
   ListChecks,
   MagicWand,
   Plus,
@@ -104,6 +105,18 @@ export function ProposalBuilderForm({
   const [items, setItems] = React.useState<ProposalItemForm[]>([
     { ...EMPTY_ITEM },
   ])
+  const requiredSections = [
+    { label: "Lead", ok: Boolean(selectedLeadId) },
+    { label: "Resumo executivo", ok: executiveSummary.trim().length > 0 },
+    { label: "Objetivos", ok: objectives.trim().length > 0 },
+    { label: "Impacto esperado", ok: expectedImpact.trim().length > 0 },
+    { label: "Prazo", ok: timeline.trim().length > 0 },
+    { label: "Pagamento", ok: paymentTerms.trim().length > 0 },
+    { label: "Proximos passos", ok: nextSteps.trim().length > 0 },
+  ]
+  const hasInvalidItems = items.some(
+    (item) => !item.description.trim() || item.unitValue <= 0
+  )
 
   React.useEffect(() => {
     const selectedLead = leads.find((lead) => lead.id === selectedLeadId)
@@ -300,7 +313,7 @@ export function ProposalBuilderForm({
       return
     }
 
-    if (items.some((item) => !item.description.trim() || item.unitValue <= 0)) {
+    if (hasInvalidItems) {
       toast.error("Preencha nome e valor de todos os itens da proposta")
       return
     }
@@ -413,8 +426,8 @@ export function ProposalBuilderForm({
               className="h-14 flex-1 rounded-2xl border-border/40 bg-muted/10 px-5 text-sm font-semibold transition-all focus:border-brand-primary/50 focus:bg-muted/20"
             />
             <p className="pl-1 text-[11px] text-muted-foreground/65">
-              Moeda fixa em BRL para reduzir friccao no preenchimento e manter
-              leitura comercial mais direta.
+              Titulo direto, moeda fixa em BRL e menos ruido ajudam manter
+              leitura mais executiva.
             </p>
           </div>
 
@@ -439,6 +452,38 @@ export function ProposalBuilderForm({
       />
 
       <section className="space-y-8">
+        <div className="rounded-[2rem] border border-border/20 bg-muted/10 p-5">
+          <div className="flex items-center gap-2">
+            <Info className="size-4 text-brand-primary" weight="bold" />
+            <p className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/60">
+              Checklist da proposta
+            </p>
+          </div>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {requiredSections.map((section) => (
+              <span
+                key={section.label}
+                className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${
+                  section.ok
+                    ? "bg-emerald-500/10 text-emerald-700"
+                    : "bg-amber-500/10 text-amber-700"
+                }`}
+              >
+                {section.ok ? "OK" : "Pendente"} · {section.label}
+              </span>
+            ))}
+            <span
+              className={`rounded-full px-3 py-1 text-[10px] font-black uppercase tracking-widest ${
+                hasInvalidItems
+                  ? "bg-amber-500/10 text-amber-700"
+                  : "bg-emerald-500/10 text-emerald-700"
+              }`}
+            >
+              {hasInvalidItems ? "Pendente" : "OK"} · Itens com valor
+            </span>
+          </div>
+        </div>
+
         <FieldBlock
           label="Resumo executivo *"
           value={executiveSummary}
