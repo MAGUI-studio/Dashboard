@@ -31,12 +31,14 @@ interface ClientFinancialViewProps {
   projectId: string
   projectName: string
   invoices: ClientInvoice[]
+  verifyingInstallmentId?: string | null
 }
 
 export function ClientFinancialView({
   projectId,
   projectName,
   invoices,
+  verifyingInstallmentId,
 }: ClientFinancialViewProps): React.JSX.Element {
   const searchParams = useSearchParams()
   const [isStripeLoading, setIsStripeLoading] = React.useState<string | null>(
@@ -47,10 +49,12 @@ export function ClientFinancialView({
   )
 
   React.useEffect(() => {
-    if (searchParams.get("success"))
+    // Only show toast if we aren't still verifying
+    if (searchParams.get("success") && !verifyingInstallmentId) {
       toast.success("Pagamento realizado com sucesso!")
+    }
     if (searchParams.get("canceled")) toast.error("O pagamento foi cancelado.")
-  }, [searchParams])
+  }, [searchParams, verifyingInstallmentId])
 
   const totalValue = invoices.reduce((acc, inv) => acc + inv.totalAmount, 0)
   const paidValue = invoices.reduce(
@@ -187,6 +191,7 @@ export function ClientFinancialView({
                   {invoice.installments.map((inst) => {
                     const due = getDueMeta(inst.dueDate, inst.status)
                     const isPaid = inst.status === "PAID"
+                    const isVerifying = verifyingInstallmentId === inst.id
 
                     return (
                       <div
@@ -237,12 +242,23 @@ export function ClientFinancialView({
                               Status
                             </p>
                             <div className="mt-1 flex items-center gap-2">
-                              <div
-                                className={`size-2 rounded-full ${isPaid ? "bg-emerald-500" : "bg-red-500"}`}
-                              />
-                              <span className="text-sm font-black uppercase tracking-widest">
-                                {isPaid ? "Pago" : "Aberto"}
-                              </span>
+                              {isVerifying && !isPaid ? (
+                                <>
+                                  <div className="size-2 animate-pulse rounded-full bg-amber-500" />
+                                  <span className="text-sm font-black uppercase tracking-widest text-amber-600">
+                                    Verificando...
+                                  </span>
+                                </>
+                              ) : (
+                                <>
+                                  <div
+                                    className={`size-2 rounded-full ${isPaid ? "bg-emerald-500" : "bg-red-500"}`}
+                                  />
+                                  <span className="text-sm font-black uppercase tracking-widest">
+                                    {isPaid ? "Pago" : "Aberto"}
+                                  </span>
+                                </>
+                              )}
                             </div>
                           </div>
                         </div>
@@ -260,6 +276,13 @@ export function ClientFinancialView({
                                 weight="bold"
                               />
                               Recibo
+                            </Button>
+                          ) : isVerifying ? (
+                            <Button
+                              disabled
+                              className="h-12 rounded-full bg-muted/20 px-8 text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50"
+                            >
+                              Sincronizando...
                             </Button>
                           ) : (
                             <Button
