@@ -167,6 +167,9 @@ export default async function RootLayout({
               userButtonInnerIdentifier:
                 "max-w-[120px] truncate text-[10px] leading-tight text-muted-foreground",
               userButtonAvatarBox: "size-8",
+              userButtonAvatarImage: "border-0 shadow-none ring-0",
+              avatarBox: "border-0 shadow-none ring-0",
+              avatarImage: "border-0 shadow-none ring-0",
               userPreview: "gap-2",
               userPreviewMainIdentifier:
                 "truncate text-sm leading-tight font-medium",

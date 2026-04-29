@@ -126,9 +126,9 @@ export function MobileHeaderMenu({
               {t("menu")}
             </SheetTitle>
 
-            <div className="mt-4 overflow-hidden rounded-[1.65rem] border border-white/10 bg-transparent px-3.5 py-3 shadow-none">
+            <div className="mt-4 overflow-hidden bg-transparent px-3.5 py-3 shadow-none">
               <div className="flex items-center gap-3">
-                <Avatar className="h-11 w-11 rounded-[1.1rem] border border-white/20 shadow-sm">
+                <Avatar className="h-11 w-11 shadow-sm">
                   <AvatarImage
                     src={viewer.imageUrl ?? undefined}
                     alt={viewer.fullName || ""}
