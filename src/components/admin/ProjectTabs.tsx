@@ -4,6 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
+import { Prisma } from "@/src/generated/client"
 import { DashboardProject } from "@/src/types/dashboard"
 import {
   Clock,
@@ -40,7 +41,21 @@ interface ProjectTabsProps {
     email: string
     companyName: string | null
   }>
-  invoices: unknown[]
+  invoices: Prisma.InvoiceGetPayload<{
+    include: {
+      project: {
+        select: {
+          id: true
+          name: true
+        }
+      }
+      installments: {
+        include: {
+          paymentEvents: true
+        }
+      }
+    }
+  }>[]
 }
 
 export function ProjectTabs({

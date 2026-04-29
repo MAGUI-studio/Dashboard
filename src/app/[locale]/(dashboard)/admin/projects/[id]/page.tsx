@@ -51,6 +51,13 @@ function toDashboardProject(input: {
       ...update,
       project: { name: project.name },
     })),
+    members: (project.members || []).map((member) => ({
+      ...member,
+      user: {
+        ...member.user,
+        companyName: null,
+      },
+    })),
     assets: assets?.assets ?? [],
     auditLogs: [],
   }
