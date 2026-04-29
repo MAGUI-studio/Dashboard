@@ -36,13 +36,19 @@ export const viewport: Viewport = {
   userScalable: false,
 }
 
-export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("Config")
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>
+}): Promise<Metadata> {
+  const { locale } = await params
+  const t = await getTranslations({ locale, namespace: "Config" })
   const ogUrl = new URL(`${siteConfig.url}/api/og`)
   ogUrl.searchParams.set("title", t("name"))
   ogUrl.searchParams.set("description", t("description"))
 
   return {
+    metadataBase: new URL(siteConfig.url),
     title: {
       default: t("name"),
       template: `%s | ${t("name")}`,
@@ -53,9 +59,17 @@ export async function generateMetadata(): Promise<Metadata> {
       .map((k) => k.trim()),
     authors: siteConfig.authors,
     creator: siteConfig.creator,
+    alternates: {
+      canonical: locale === siteConfig.defaultLocale ? "/" : `/${locale}`,
+      languages: {
+        pt: "/pt",
+        en: "/en",
+        "x-default": "/",
+      },
+    },
     openGraph: {
       type: "website",
-      url: siteConfig.url,
+      url: locale === siteConfig.defaultLocale ? "/" : `/${locale}`,
       title: t("name"),
       description: t("description"),
       siteName: t("name"),
@@ -67,12 +81,16 @@ export async function generateMetadata(): Promise<Metadata> {
           alt: t("name"),
         },
       ],
+      locale: locale === "pt" ? "pt_BR" : "en_US",
     },
     twitter: {
       card: "summary_large_image",
       title: t("name"),
       description: t("description"),
       images: [ogUrl.toString()],
+      creator: siteConfig.links.twitter
+        ? `@${siteConfig.links.twitter.split("/").pop()}`
+        : undefined,
     },
     icons: {
       icon: "/favicon.ico",
@@ -129,7 +147,36 @@ export default async function RootLayout({
         <ClerkProvider
           localization={clerkLocalization}
           publishableKey={env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-          appearance={{ theme: shadcn }}
+          appearance={{
+            theme: shadcn,
+            elements: {
+              card: "border-0 shadow-none",
+              navbar: "border-0 shadow-none",
+              pageScrollBox: "gap-4",
+              profileSectionPrimaryButton:
+                "border-0 shadow-none ring-0 text-xs",
+              profileSection__danger: "border-0",
+              formButtonPrimary: "border-0 shadow-none text-xs",
+              formFieldInput: "border-0 shadow-none ring-0",
+              formFieldLabel: "text-xs",
+              userButtonBox: "max-w-[180px] gap-2",
+              userButtonTrigger:
+                "rounded-xl border-0 px-2 py-1.5 shadow-none ring-0",
+              userButtonOuterIdentifier:
+                "max-w-[120px] truncate text-[11px] leading-tight",
+              userButtonInnerIdentifier:
+                "max-w-[120px] truncate text-[10px] leading-tight text-muted-foreground",
+              userButtonAvatarBox: "size-8",
+              userPreview: "gap-2",
+              userPreviewMainIdentifier:
+                "truncate text-sm leading-tight font-medium",
+              userPreviewSecondaryIdentifier:
+                "truncate text-xs leading-tight text-muted-foreground",
+              badge: "border-0 shadow-none text-[10px]",
+              accordionTriggerButton: "border-0",
+              accordionContent: "border-0",
+            },
+          }}
           signInUrl={env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signUpUrl={env.NEXT_PUBLIC_CLERK_SIGN_IN_URL}
           signInFallbackRedirectUrl={

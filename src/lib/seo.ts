@@ -20,6 +20,7 @@ export function pageMetadata({
   const url = new URL(path, siteConfig.url).toString()
 
   return {
+    metadataBase: new URL(siteConfig.url),
     title,
     description,
     alternates: {
