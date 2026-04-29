@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { Plus, Trash } from "@phosphor-icons/react"
+import { PlusIcon, TrashIcon } from "@phosphor-icons/react"
 import { HexColorPicker } from "react-colorful"
 
 import {
@@ -44,14 +44,10 @@ export function BriefingStepEditor({
     setFormData((f) => ({ ...f, [currentStepId]: v }))
   }
 
-  // Render Generic List Input (References, Competitors, Perceptions)
   const renderListInput = (list: string[]) => (
     <div className="space-y-6">
       {list.map((item, i) => (
         <div key={i} className="group relative flex items-center">
-          <span className="absolute left-0 font-mono text-[10px] font-bold text-muted-foreground/30 uppercase tracking-widest">
-            {t(`steps.${currentStepId}.label`)}
-          </span>
           <input
             type="text"
             value={item}
@@ -61,7 +57,7 @@ export function BriefingStepEditor({
               onValueChange(n)
             }}
             placeholder={t(`steps.${currentStepId}.placeholder`)}
-            className="w-full bg-transparent border-b border-border/30 pl-48 pr-12 py-6 text-xl text-foreground font-medium focus:border-brand-primary outline-none"
+            className="w-full bg-transparent border-b border-border/30 pr-12 py-6 text-xl text-foreground font-medium focus:border-brand-primary outline-none"
           />
           {list.length > 1 && (
             <button
@@ -72,7 +68,7 @@ export function BriefingStepEditor({
               }}
               className="absolute right-0 size-10 text-muted-foreground/20 hover:text-destructive"
             >
-              <Trash size={20} weight="fill" />
+              <TrashIcon size={20} weight="fill" />
             </button>
           )}
         </div>
@@ -82,14 +78,13 @@ export function BriefingStepEditor({
         className="group mt-8 flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-brand-primary hover:opacity-70"
       >
         <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10">
-          <Plus size={14} weight="bold" />
+          <PlusIcon size={14} weight="bold" />
         </div>
         {t("add_item", { fallback: "Adicionar Item" })}
       </button>
     </div>
   )
 
-  // 1. Branding Palette Editor
   if (currentStepId === "palette") {
     const p = (formData.palette as PaletteData) || {
       primary: "#000000",
@@ -172,7 +167,6 @@ export function BriefingStepEditor({
     )
   }
 
-  // Logo Uploader
   if (currentStepId === "logos") {
     return (
       <LogoUploadEditor
@@ -196,7 +190,6 @@ export function BriefingStepEditor({
     )
   }
 
-  // List Inputs
   if (
     ["visualReferences", "dislikedReferences", "competitors"].includes(
       currentStepId
@@ -205,12 +198,11 @@ export function BriefingStepEditor({
     return renderListInput((value as string[]) || [""])
   }
 
-  // Default TextArea
   return (
     <textarea
       value={value as string}
       onChange={(e) => onValueChange(e.target.value)}
-      className="w-full min-h-[300px] resize-none bg-transparent text-2xl font-medium leading-relaxed text-foreground placeholder:text-muted-foreground/20 focus:outline-none xl:text-3xl"
+      className="w-full min-h-30 lg:min-h-60 resize-none bg-transparent text-2xl font-medium leading-relaxed text-foreground placeholder:text-muted-foreground/20 focus:outline-none xl:text-3xl"
       placeholder={t("answer_label")}
       autoFocus
     />

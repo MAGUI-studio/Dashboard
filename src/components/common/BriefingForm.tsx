@@ -5,7 +5,11 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { Prisma } from "@/src/generated/client"
-import { ArrowLeft, ArrowRight, CircleNotch } from "@phosphor-icons/react"
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  CircleNotchIcon,
+} from "@phosphor-icons/react"
 
 import { Button } from "@/src/components/ui/button"
 
@@ -28,7 +32,6 @@ export function BriefingForm({
 }) {
   const t = useTranslations("Briefing")
 
-  // Always start at step 0 to avoid jumping to the end automatically
   const [currentStepId, setCurrentStepId] = React.useState<StepId>(
     stepsConfig[0].id
   )
@@ -98,7 +101,7 @@ export function BriefingForm({
   const missing = currentStep.min > 0 && len < currentStep.min
 
   return (
-    <div className="flex flex-col xl:flex-row w-full gap-16 xl:gap-32 py-10">
+    <div className="flex flex-col-reverse xl:flex-row w-full gap-16 xl:gap-32 py-10">
       <BriefingSidebar
         projectId={projectId}
         currentStepId={currentStepId}
@@ -108,19 +111,24 @@ export function BriefingForm({
         currentIndex={currentStepIndex}
       />
 
-      <section className="flex-1 flex flex-col min-w-0 pb-32 xl:pb-0">
+      <section className="flex-1 flex flex-col min-w-0 md:pb-32 xl:pb-0">
         <div className="animate-in fade-in slide-in-from-bottom-8 duration-700 flex-1">
           <div className="mb-12">
-            <h2 className="font-heading text-4xl font-black uppercase tracking-tight md:text-6xl xl:text-[5rem] xl:leading-[1.1] flex items-start gap-4">
-              {t(`steps.${currentStepId}.label`)}
-              {currentStep.min > 0 ? (
-                <span className="text-red-500 text-2xl md:text-4xl">*</span>
-              ) : (
-                <span className="text-xs md:text-sm font-normal mt-4 lowercase tracking-normal!">
-                  {t("optional")}
-                </span>
-              )}
-            </h2>
+            <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between">
+              <h2 className="font-heading text-4xl font-black uppercase tracking-tight md:text-6xl xl:text-[5rem] xl:leading-[1.1] flex items-start gap-4">
+                {t(`steps.${currentStepId}.label`)}
+              </h2>
+              <span>
+                {currentStep.min > 0 ? (
+                  <span className="text-red-500 text-2xl md:text-4xl">*</span>
+                ) : (
+                  <span className="text-xs md:text-sm font-normal mt-4 lowercase tracking-normal!">
+                    {t("optional")}
+                  </span>
+                )}
+              </span>
+            </div>
+
             <div className="mt-6 flex items-start justify-between gap-8">
               <p className="text-base md:text-lg text-muted-foreground/60 max-w-2xl border-l-2 border-brand-primary/30 pl-4">
                 {t(`steps.${currentStepId}.placeholder`)}
@@ -146,14 +154,14 @@ export function BriefingForm({
           />
         </div>
 
-        <div className="mt-16 flex flex-wrap items-center justify-between gap-6 border-t border-border/20 pt-8">
+        <div className="flex items-center justify-between gap-6 border-t border-border/20 pt-8">
           <button
             type="button"
             onClick={handleBack}
             disabled={currentStepIndex === 0 || isLoading}
             className="group flex items-center gap-3 font-mono text-[10px] font-bold uppercase tracking-[0.3em] text-muted-foreground/50 hover:text-foreground transition-all"
           >
-            <ArrowLeft size={16} /> {t("back_button")}
+            <ArrowLeftIcon size={16} /> {t("back_button")}
           </button>
           <div className="flex items-center gap-4">
             {currentStepIndex < stepsConfig.length - 1 ? (
@@ -162,7 +170,7 @@ export function BriefingForm({
                 onClick={handleNextStable}
                 className="h-14 bg-foreground px-10 font-mono text-[10px] font-black uppercase tracking-[0.3em] text-background hover:bg-brand-primary hover:text-white transition-all"
               >
-                {t("next_step")} <ArrowRight size={16} className="ml-3" />
+                {t("next_step")} <ArrowRightIcon size={16} className="ml-3" />
               </Button>
             ) : (
               <Button
@@ -172,7 +180,7 @@ export function BriefingForm({
                 className="h-14 px-12 font-mono text-[10px] font-black uppercase tracking-[0.3em] bg-brand-primary text-white transition-all"
               >
                 {isLoading && (
-                  <CircleNotch size={16} className="mr-3 animate-spin" />
+                  <CircleNotchIcon size={16} className="mr-3 animate-spin" />
                 )}{" "}
                 {t("submit")}
               </Button>

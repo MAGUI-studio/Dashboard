@@ -1,10 +1,7 @@
 "use client"
-
-import * as React from "react"
-
 import { useTranslations } from "next-intl"
 
-import { WarningCircle } from "@phosphor-icons/react"
+import { WarningCircleIcon } from "@phosphor-icons/react"
 
 import { markActionItemAsCompletedAction } from "@/src/lib/actions/project-briefing.actions"
 import { cn } from "@/src/lib/utils/utils"
@@ -31,7 +28,6 @@ export function BriefingSidebar({
   const t = useTranslations("Briefing")
 
   const handleStepClick = async (id: StepId) => {
-    // If moving from a business step that's now complete, mark related tasks as done
     if (
       ["businessDescription", "brandTone", "businessGoals"].includes(
         currentStepId
@@ -50,7 +46,7 @@ export function BriefingSidebar({
         <p className="font-mono text-[10px] font-bold uppercase tracking-[0.4em] text-brand-primary">
           {t("onboarding_protocol")}
         </p>
-        <p className="text-xs font-medium text-muted-foreground/50 leading-relaxed">
+        <p className="text-xs font-medium leading-relaxed">
           {t("description")}
         </p>
       </div>
@@ -92,7 +88,7 @@ export function BriefingSidebar({
                     0{i + 1}
                   </span>
                   {error && (
-                    <WarningCircle
+                    <WarningCircleIcon
                       size={14}
                       weight="fill"
                       className="text-destructive animate-pulse"

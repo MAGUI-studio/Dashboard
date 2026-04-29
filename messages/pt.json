@@ -442,7 +442,7 @@
     "submit": "Enviar Briefing",
     "success": "Briefing enviado! Nossa equipe analisará os dados.",
     "success_description": "O briefing entrou no radar estratégico do time.",
-    "onboarding_protocol": "Onboarding Protocol",
+    "onboarding_protocol": "Protocolo de Onboarding",
     "step_strategy": "Etapa estratégica",
     "answer_label": "Resposta",
     "optional": "(opcional)",
@@ -513,7 +513,7 @@
       "dislikedReferences": {
         "label": "O que Evitar",
         "slug": "evitar",
-        "placeholder": "O que você definitivamente NÃO gosta ou quer evitar?"
+        "placeholder": "O que você NÃO gosta ou quer evitar?"
       },
       "competitors": {
         "label": "Concorrentes",
