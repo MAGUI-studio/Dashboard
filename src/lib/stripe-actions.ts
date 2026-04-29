@@ -183,7 +183,11 @@ export async function verifyAndSyncStripePayment(sessionId: string) {
     })
 
     if (existing?.status === "PAID") {
-      return { success: true, message: "Already marked as paid" }
+      return {
+        success: true,
+        message: "Already marked as paid",
+        installmentId,
+      }
     }
 
     await prisma.$transaction(async (tx) => {
@@ -229,7 +233,11 @@ export async function verifyAndSyncStripePayment(sessionId: string) {
       })
     })
 
-    return { success: true, message: "Payment synchronized successfully" }
+    return {
+      success: true,
+      message: "Payment synchronized successfully",
+      installmentId,
+    }
   } catch (error) {
     console.error("Error verifying Stripe payment:", error)
     return { success: false, message: "Verification failed" }

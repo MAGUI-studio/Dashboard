@@ -42,9 +42,14 @@ export default async function ProjectFinancialPage({
 
   if (!project) return notFound()
 
+  let verifiedInstallmentId: string | null = null
+
   // Fallback: If returned from Stripe with session_id, verify manually
   if (session_id) {
-    await verifyAndSyncStripePayment(session_id)
+    const result = await verifyAndSyncStripePayment(session_id)
+    if (result.success && result.installmentId) {
+      verifiedInstallmentId = result.installmentId
+    }
   }
 
   const invoices = await getProjectInvoices(id)
@@ -62,6 +67,7 @@ export default async function ProjectFinancialPage({
         projectName={project.name}
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         invoices={invoices as any}
+        verifyingInstallmentId={verifiedInstallmentId}
       />
     </div>
   )
