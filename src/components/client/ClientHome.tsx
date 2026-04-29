@@ -166,7 +166,7 @@ export async function ClientHome({
         ]}
       />
 
-      <section className="mx-auto flex w-full max-w-440 flex-col gap-10 p-5">
+      <section className="mx-auto flex w-full max-w-440 flex-col gap-10">
         <ClientActionBanner {...nextAction} />
 
         {activeProject && (
