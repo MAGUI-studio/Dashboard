@@ -483,10 +483,6 @@ export function ProjectFinancialTab({
         <DialogContent className="rounded-[3rem] sm:max-w-[500px] border-border/10 bg-background/95 backdrop-blur-3xl p-10">
           <DialogHeader className="mb-8">
             <DialogTitle className="font-heading text-3xl font-black uppercase tracking-tighter text-foreground">
-              <p className="text-xs font-medium text-muted-foreground/50 mt-2">
-                Utilize esta opção apenas para pagamentos recebidos fora do
-                Stripe (PIX direto, TED, etc).
-              </p>
               Baixa Manual
             </DialogTitle>
           </DialogHeader>
