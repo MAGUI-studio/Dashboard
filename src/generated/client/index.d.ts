@@ -100,21 +100,6 @@ export type ProjectHandoff =
 export type ProjectKickoffChecklist =
   $Result.DefaultSelection<Prisma.$ProjectKickoffChecklistPayload>
 /**
- * Model Thread
- *
- */
-export type Thread = $Result.DefaultSelection<Prisma.$ThreadPayload>
-/**
- * Model Message
- *
- */
-export type Message = $Result.DefaultSelection<Prisma.$MessagePayload>
-/**
- * Model Decision
- *
- */
-export type Decision = $Result.DefaultSelection<Prisma.$DecisionPayload>
-/**
  * Model BriefingEntry
  *
  */
@@ -394,34 +379,10 @@ export namespace $Enums {
     PROJECT_STATUS_CHANGED: "PROJECT_STATUS_CHANGED"
     LEAD_ASSIGNED: "LEAD_ASSIGNED"
     OPERATIONAL_REMINDER: "OPERATIONAL_REMINDER"
-    NEW_THREAD: "NEW_THREAD"
-    NEW_MESSAGE: "NEW_MESSAGE"
-    DECISION_REGISTERED: "DECISION_REGISTERED"
-    THREAD_RESOLVED: "THREAD_RESOLVED"
   }
 
   export type NotificationType =
     (typeof NotificationType)[keyof typeof NotificationType]
-
-  export const ThreadStatus: {
-    OPEN: "OPEN"
-    RESOLVED: "RESOLVED"
-    ARCHIVED: "ARCHIVED"
-  }
-
-  export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus]
-
-  export const MessageType: {
-    INFORMATIVE: "INFORMATIVE"
-    REQUIRES_RESPONSE: "REQUIRES_RESPONSE"
-    REQUIRES_APPROVAL: "REQUIRES_APPROVAL"
-    REQUIRES_ASSET: "REQUIRES_ASSET"
-    FINANCIAL: "FINANCIAL"
-    LEGAL: "LEGAL"
-    CALL_SUMMARY: "CALL_SUMMARY"
-  }
-
-  export type MessageType = (typeof MessageType)[keyof typeof MessageType]
 
   export const ScheduledReminderType: {
     LEAD_STALLED: "LEAD_STALLED"
@@ -558,14 +519,6 @@ export const LeadActivityType: typeof $Enums.LeadActivityType
 export type NotificationType = $Enums.NotificationType
 
 export const NotificationType: typeof $Enums.NotificationType
-
-export type ThreadStatus = $Enums.ThreadStatus
-
-export const ThreadStatus: typeof $Enums.ThreadStatus
-
-export type MessageType = $Enums.MessageType
-
-export const MessageType: typeof $Enums.MessageType
 
 export type ScheduledReminderType = $Enums.ScheduledReminderType
 
@@ -919,36 +872,6 @@ export class PrismaClient<
     ExtArgs,
     ClientOptions
   >
-
-  /**
-   * `prisma.thread`: Exposes CRUD operations for the **Thread** model.
-   * Example usage:
-   * ```ts
-   * // Fetch zero or more Threads
-   * const threads = await prisma.thread.findMany()
-   * ```
-   */
-  get thread(): Prisma.ThreadDelegate<ExtArgs, ClientOptions>
-
-  /**
-   * `prisma.message`: Exposes CRUD operations for the **Message** model.
-   * Example usage:
-   * ```ts
-   * // Fetch zero or more Messages
-   * const messages = await prisma.message.findMany()
-   * ```
-   */
-  get message(): Prisma.MessageDelegate<ExtArgs, ClientOptions>
-
-  /**
-   * `prisma.decision`: Exposes CRUD operations for the **Decision** model.
-   * Example usage:
-   * ```ts
-   * // Fetch zero or more Decisions
-   * const decisions = await prisma.decision.findMany()
-   * ```
-   */
-  get decision(): Prisma.DecisionDelegate<ExtArgs, ClientOptions>
 
   /**
    * `prisma.briefingEntry`: Exposes CRUD operations for the **BriefingEntry** model.
@@ -1611,9 +1534,6 @@ export namespace Prisma {
     DocumentSigner: "DocumentSigner"
     ProjectHandoff: "ProjectHandoff"
     ProjectKickoffChecklist: "ProjectKickoffChecklist"
-    Thread: "Thread"
-    Message: "Message"
-    Decision: "Decision"
     BriefingEntry: "BriefingEntry"
     ProjectMember: "ProjectMember"
     Update: "Update"
@@ -1672,9 +1592,6 @@ export namespace Prisma {
         | "documentSigner"
         | "projectHandoff"
         | "projectKickoffChecklist"
-        | "thread"
-        | "message"
-        | "decision"
         | "briefingEntry"
         | "projectMember"
         | "update"
@@ -2898,228 +2815,6 @@ export namespace Prisma {
             result:
               | $Utils.Optional<ProjectKickoffChecklistCountAggregateOutputType>
               | number
-          }
-        }
-      }
-      Thread: {
-        payload: Prisma.$ThreadPayload<ExtArgs>
-        fields: Prisma.ThreadFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.ThreadFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.ThreadFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          findFirst: {
-            args: Prisma.ThreadFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.ThreadFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          findMany: {
-            args: Prisma.ThreadFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>[]
-          }
-          create: {
-            args: Prisma.ThreadCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          createMany: {
-            args: Prisma.ThreadCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.ThreadCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>[]
-          }
-          delete: {
-            args: Prisma.ThreadDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          update: {
-            args: Prisma.ThreadUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          deleteMany: {
-            args: Prisma.ThreadDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.ThreadUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.ThreadUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>[]
-          }
-          upsert: {
-            args: Prisma.ThreadUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$ThreadPayload>
-          }
-          aggregate: {
-            args: Prisma.ThreadAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateThread>
-          }
-          groupBy: {
-            args: Prisma.ThreadGroupByArgs<ExtArgs>
-            result: $Utils.Optional<ThreadGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.ThreadCountArgs<ExtArgs>
-            result: $Utils.Optional<ThreadCountAggregateOutputType> | number
-          }
-        }
-      }
-      Message: {
-        payload: Prisma.$MessagePayload<ExtArgs>
-        fields: Prisma.MessageFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.MessageFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.MessageFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          findFirst: {
-            args: Prisma.MessageFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.MessageFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          findMany: {
-            args: Prisma.MessageFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
-          }
-          create: {
-            args: Prisma.MessageCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          createMany: {
-            args: Prisma.MessageCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.MessageCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
-          }
-          delete: {
-            args: Prisma.MessageDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          update: {
-            args: Prisma.MessageUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          deleteMany: {
-            args: Prisma.MessageDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.MessageUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.MessageUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>[]
-          }
-          upsert: {
-            args: Prisma.MessageUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$MessagePayload>
-          }
-          aggregate: {
-            args: Prisma.MessageAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateMessage>
-          }
-          groupBy: {
-            args: Prisma.MessageGroupByArgs<ExtArgs>
-            result: $Utils.Optional<MessageGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.MessageCountArgs<ExtArgs>
-            result: $Utils.Optional<MessageCountAggregateOutputType> | number
-          }
-        }
-      }
-      Decision: {
-        payload: Prisma.$DecisionPayload<ExtArgs>
-        fields: Prisma.DecisionFieldRefs
-        operations: {
-          findUnique: {
-            args: Prisma.DecisionFindUniqueArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload> | null
-          }
-          findUniqueOrThrow: {
-            args: Prisma.DecisionFindUniqueOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          findFirst: {
-            args: Prisma.DecisionFindFirstArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload> | null
-          }
-          findFirstOrThrow: {
-            args: Prisma.DecisionFindFirstOrThrowArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          findMany: {
-            args: Prisma.DecisionFindManyArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>[]
-          }
-          create: {
-            args: Prisma.DecisionCreateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          createMany: {
-            args: Prisma.DecisionCreateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          createManyAndReturn: {
-            args: Prisma.DecisionCreateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>[]
-          }
-          delete: {
-            args: Prisma.DecisionDeleteArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          update: {
-            args: Prisma.DecisionUpdateArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          deleteMany: {
-            args: Prisma.DecisionDeleteManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateMany: {
-            args: Prisma.DecisionUpdateManyArgs<ExtArgs>
-            result: BatchPayload
-          }
-          updateManyAndReturn: {
-            args: Prisma.DecisionUpdateManyAndReturnArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>[]
-          }
-          upsert: {
-            args: Prisma.DecisionUpsertArgs<ExtArgs>
-            result: $Utils.PayloadToResult<Prisma.$DecisionPayload>
-          }
-          aggregate: {
-            args: Prisma.DecisionAggregateArgs<ExtArgs>
-            result: $Utils.Optional<AggregateDecision>
-          }
-          groupBy: {
-            args: Prisma.DecisionGroupByArgs<ExtArgs>
-            result: $Utils.Optional<DecisionGroupByOutputType>[]
-          }
-          count: {
-            args: Prisma.DecisionCountArgs<ExtArgs>
-            result: $Utils.Optional<DecisionCountAggregateOutputType> | number
           }
         }
       }
@@ -4679,9 +4374,6 @@ export namespace Prisma {
     documentSigner?: DocumentSignerOmit
     projectHandoff?: ProjectHandoffOmit
     projectKickoffChecklist?: ProjectKickoffChecklistOmit
-    thread?: ThreadOmit
-    message?: MessageOmit
-    decision?: DecisionOmit
     briefingEntry?: BriefingEntryOmit
     projectMember?: ProjectMemberOmit
     update?: UpdateOmit
@@ -4792,9 +4484,6 @@ export namespace Prisma {
     scheduledReminders: number
     approvalEvents: number
     leadActivities: number
-    messages: number
-    resolvedMessages: number
-    decisions: number
     documents: number
     createdDocumentVersions: number
     emailLogs: number
@@ -4816,9 +4505,6 @@ export namespace Prisma {
       | UserCountOutputTypeCountScheduledRemindersArgs
     approvalEvents?: boolean | UserCountOutputTypeCountApprovalEventsArgs
     leadActivities?: boolean | UserCountOutputTypeCountLeadActivitiesArgs
-    messages?: boolean | UserCountOutputTypeCountMessagesArgs
-    resolvedMessages?: boolean | UserCountOutputTypeCountResolvedMessagesArgs
-    decisions?: boolean | UserCountOutputTypeCountDecisionsArgs
     documents?: boolean | UserCountOutputTypeCountDocumentsArgs
     createdDocumentVersions?:
       | boolean
@@ -4918,33 +4604,6 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: LeadActivityWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountMessagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MessageWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountResolvedMessagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MessageWhereInput
-  }
-
-  /**
-   * UserCountOutputType without action
-   */
-  export type UserCountOutputTypeCountDecisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: DecisionWhereInput
   }
 
   /**
@@ -5093,8 +4752,6 @@ export namespace Prisma {
     notifications: number
     auditLogs: number
     proposals: number
-    threads: number
-    decisions: number
     documents: number
     invoices: number
   }
@@ -5111,8 +4768,6 @@ export namespace Prisma {
     notifications?: boolean | ProjectCountOutputTypeCountNotificationsArgs
     auditLogs?: boolean | ProjectCountOutputTypeCountAuditLogsArgs
     proposals?: boolean | ProjectCountOutputTypeCountProposalsArgs
-    threads?: boolean | ProjectCountOutputTypeCountThreadsArgs
-    decisions?: boolean | ProjectCountOutputTypeCountDecisionsArgs
     documents?: boolean | ProjectCountOutputTypeCountDocumentsArgs
     invoices?: boolean | ProjectCountOutputTypeCountInvoicesArgs
   }
@@ -5214,24 +4869,6 @@ export namespace Prisma {
   /**
    * ProjectCountOutputType without action
    */
-  export type ProjectCountOutputTypeCountThreadsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: ThreadWhereInput
-  }
-
-  /**
-   * ProjectCountOutputType without action
-   */
-  export type ProjectCountOutputTypeCountDecisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: DecisionWhereInput
-  }
-
-  /**
-   * ProjectCountOutputType without action
-   */
   export type ProjectCountOutputTypeCountDocumentsArgs<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
@@ -5314,53 +4951,6 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: InvoiceWhereInput
-  }
-
-  /**
-   * Count Type ThreadCountOutputType
-   */
-
-  export type ThreadCountOutputType = {
-    messages: number
-    decisions: number
-  }
-
-  export type ThreadCountOutputTypeSelect<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    messages?: boolean | ThreadCountOutputTypeCountMessagesArgs
-    decisions?: boolean | ThreadCountOutputTypeCountDecisionsArgs
-  }
-
-  // Custom InputTypes
-  /**
-   * ThreadCountOutputType without action
-   */
-  export type ThreadCountOutputTypeDefaultArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the ThreadCountOutputType
-     */
-    select?: ThreadCountOutputTypeSelect<ExtArgs> | null
-  }
-
-  /**
-   * ThreadCountOutputType without action
-   */
-  export type ThreadCountOutputTypeCountMessagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MessageWhereInput
-  }
-
-  /**
-   * ThreadCountOutputType without action
-   */
-  export type ThreadCountOutputTypeCountDecisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: DecisionWhereInput
   }
 
   /**
@@ -8502,9 +8092,6 @@ export namespace Prisma {
       scheduledReminders?: boolean | User$scheduledRemindersArgs<ExtArgs>
       approvalEvents?: boolean | User$approvalEventsArgs<ExtArgs>
       leadActivities?: boolean | User$leadActivitiesArgs<ExtArgs>
-      messages?: boolean | User$messagesArgs<ExtArgs>
-      resolvedMessages?: boolean | User$resolvedMessagesArgs<ExtArgs>
-      decisions?: boolean | User$decisionsArgs<ExtArgs>
       documents?: boolean | User$documentsArgs<ExtArgs>
       createdDocumentVersions?:
         | boolean
@@ -8604,9 +8191,6 @@ export namespace Prisma {
     scheduledReminders?: boolean | User$scheduledRemindersArgs<ExtArgs>
     approvalEvents?: boolean | User$approvalEventsArgs<ExtArgs>
     leadActivities?: boolean | User$leadActivitiesArgs<ExtArgs>
-    messages?: boolean | User$messagesArgs<ExtArgs>
-    resolvedMessages?: boolean | User$resolvedMessagesArgs<ExtArgs>
-    decisions?: boolean | User$decisionsArgs<ExtArgs>
     documents?: boolean | User$documentsArgs<ExtArgs>
     createdDocumentVersions?:
       | boolean
@@ -8636,9 +8220,6 @@ export namespace Prisma {
       scheduledReminders: Prisma.$ScheduledReminderPayload<ExtArgs>[]
       approvalEvents: Prisma.$ApprovalEventPayload<ExtArgs>[]
       leadActivities: Prisma.$LeadActivityPayload<ExtArgs>[]
-      messages: Prisma.$MessagePayload<ExtArgs>[]
-      resolvedMessages: Prisma.$MessagePayload<ExtArgs>[]
-      decisions: Prisma.$DecisionPayload<ExtArgs>[]
       documents: Prisma.$DocumentPayload<ExtArgs>[]
       createdDocumentVersions: Prisma.$DocumentVersionPayload<ExtArgs>[]
       billingProfile: Prisma.$BillingProfilePayload<ExtArgs> | null
@@ -9297,39 +8878,6 @@ export namespace Prisma {
     ): Prisma.PrismaPromise<
       | $Result.GetResult<
           Prisma.$LeadActivityPayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    messages<T extends User$messagesArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$messagesArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$MessagePayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    resolvedMessages<T extends User$resolvedMessagesArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$resolvedMessagesArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$MessagePayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    decisions<T extends User$decisionsArgs<ExtArgs> = {}>(
-      args?: Subset<T, User$decisionsArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$DecisionPayload<ExtArgs>,
           T,
           "findMany",
           GlobalOmitOptions
@@ -10106,90 +9654,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: LeadActivityScalarFieldEnum | LeadActivityScalarFieldEnum[]
-  }
-
-  /**
-   * User.messages
-   */
-  export type User$messagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    where?: MessageWhereInput
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    cursor?: MessageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * User.resolvedMessages
-   */
-  export type User$resolvedMessagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    where?: MessageWhereInput
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    cursor?: MessageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * User.decisions
-   */
-  export type User$decisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    where?: DecisionWhereInput
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    cursor?: DecisionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
   }
 
   /**
@@ -18708,11 +18172,13 @@ export namespace Prisma {
   export type ProjectAvgAggregateOutputType = {
     progress: number | null
     budget: number | null
+    internationalizationFee: number | null
   }
 
   export type ProjectSumAggregateOutputType = {
     progress: number | null
     budget: number | null
+    internationalizationFee: number | null
   }
 
   export type ProjectMinAggregateOutputType = {
@@ -18724,6 +18190,8 @@ export namespace Prisma {
     progress: number | null
     budget: number | null
     customValue: boolean | null
+    hasInternationalization: boolean | null
+    internationalizationFee: number | null
     paymentMethod: $Enums.PaymentMethod | null
     serviceCategoryId: string | null
     startDate: Date | null
@@ -18744,6 +18212,8 @@ export namespace Prisma {
     progress: number | null
     budget: number | null
     customValue: boolean | null
+    hasInternationalization: boolean | null
+    internationalizationFee: number | null
     paymentMethod: $Enums.PaymentMethod | null
     serviceCategoryId: string | null
     startDate: Date | null
@@ -18764,6 +18234,8 @@ export namespace Prisma {
     progress: number
     budget: number
     customValue: number
+    hasInternationalization: number
+    internationalizationFee: number
     paymentMethod: number
     serviceCategoryId: number
     briefing: number
@@ -18780,11 +18252,13 @@ export namespace Prisma {
   export type ProjectAvgAggregateInputType = {
     progress?: true
     budget?: true
+    internationalizationFee?: true
   }
 
   export type ProjectSumAggregateInputType = {
     progress?: true
     budget?: true
+    internationalizationFee?: true
   }
 
   export type ProjectMinAggregateInputType = {
@@ -18796,6 +18270,8 @@ export namespace Prisma {
     progress?: true
     budget?: true
     customValue?: true
+    hasInternationalization?: true
+    internationalizationFee?: true
     paymentMethod?: true
     serviceCategoryId?: true
     startDate?: true
@@ -18816,6 +18292,8 @@ export namespace Prisma {
     progress?: true
     budget?: true
     customValue?: true
+    hasInternationalization?: true
+    internationalizationFee?: true
     paymentMethod?: true
     serviceCategoryId?: true
     startDate?: true
@@ -18836,6 +18314,8 @@ export namespace Prisma {
     progress?: true
     budget?: true
     customValue?: true
+    hasInternationalization?: true
+    internationalizationFee?: true
     paymentMethod?: true
     serviceCategoryId?: true
     briefing?: true
@@ -18949,6 +18429,8 @@ export namespace Prisma {
     progress: number
     budget: number | null
     customValue: boolean
+    hasInternationalization: boolean
+    internationalizationFee: number | null
     paymentMethod: $Enums.PaymentMethod
     serviceCategoryId: string | null
     briefing: JsonValue | null
@@ -18991,6 +18473,8 @@ export namespace Prisma {
       progress?: boolean
       budget?: boolean
       customValue?: boolean
+      hasInternationalization?: boolean
+      internationalizationFee?: boolean
       paymentMethod?: boolean
       serviceCategoryId?: boolean
       briefing?: boolean
@@ -19012,8 +18496,6 @@ export namespace Prisma {
       notifications?: boolean | Project$notificationsArgs<ExtArgs>
       auditLogs?: boolean | Project$auditLogsArgs<ExtArgs>
       proposals?: boolean | Project$proposalsArgs<ExtArgs>
-      threads?: boolean | Project$threadsArgs<ExtArgs>
-      decisions?: boolean | Project$decisionsArgs<ExtArgs>
       handoff?: boolean | Project$handoffArgs<ExtArgs>
       kickoff?: boolean | Project$kickoffArgs<ExtArgs>
       documents?: boolean | Project$documentsArgs<ExtArgs>
@@ -19035,6 +18517,8 @@ export namespace Prisma {
       progress?: boolean
       budget?: boolean
       customValue?: boolean
+      hasInternationalization?: boolean
+      internationalizationFee?: boolean
       paymentMethod?: boolean
       serviceCategoryId?: boolean
       briefing?: boolean
@@ -19063,6 +18547,8 @@ export namespace Prisma {
       progress?: boolean
       budget?: boolean
       customValue?: boolean
+      hasInternationalization?: boolean
+      internationalizationFee?: boolean
       paymentMethod?: boolean
       serviceCategoryId?: boolean
       briefing?: boolean
@@ -19088,6 +18574,8 @@ export namespace Prisma {
     progress?: boolean
     budget?: boolean
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: boolean
     paymentMethod?: boolean
     serviceCategoryId?: boolean
     briefing?: boolean
@@ -19111,6 +18599,8 @@ export namespace Prisma {
     | "progress"
     | "budget"
     | "customValue"
+    | "hasInternationalization"
+    | "internationalizationFee"
     | "paymentMethod"
     | "serviceCategoryId"
     | "briefing"
@@ -19137,8 +18627,6 @@ export namespace Prisma {
     notifications?: boolean | Project$notificationsArgs<ExtArgs>
     auditLogs?: boolean | Project$auditLogsArgs<ExtArgs>
     proposals?: boolean | Project$proposalsArgs<ExtArgs>
-    threads?: boolean | Project$threadsArgs<ExtArgs>
-    decisions?: boolean | Project$decisionsArgs<ExtArgs>
     handoff?: boolean | Project$handoffArgs<ExtArgs>
     kickoff?: boolean | Project$kickoffArgs<ExtArgs>
     documents?: boolean | Project$documentsArgs<ExtArgs>
@@ -19174,8 +18662,6 @@ export namespace Prisma {
       notifications: Prisma.$NotificationPayload<ExtArgs>[]
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
       proposals: Prisma.$ProposalPayload<ExtArgs>[]
-      threads: Prisma.$ThreadPayload<ExtArgs>[]
-      decisions: Prisma.$DecisionPayload<ExtArgs>[]
       handoff: Prisma.$ProjectHandoffPayload<ExtArgs> | null
       kickoff: Prisma.$ProjectKickoffChecklistPayload<ExtArgs> | null
       documents: Prisma.$DocumentPayload<ExtArgs>[]
@@ -19191,6 +18677,8 @@ export namespace Prisma {
         progress: number
         budget: number | null
         customValue: boolean
+        hasInternationalization: boolean
+        internationalizationFee: number | null
         paymentMethod: $Enums.PaymentMethod
         serviceCategoryId: string | null
         briefing: Prisma.JsonValue | null
@@ -19873,28 +19361,6 @@ export namespace Prisma {
         >
       | Null
     >
-    threads<T extends Project$threadsArgs<ExtArgs> = {}>(
-      args?: Subset<T, Project$threadsArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$ThreadPayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    decisions<T extends Project$decisionsArgs<ExtArgs> = {}>(
-      args?: Subset<T, Project$decisionsArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$DecisionPayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
     handoff<T extends Project$handoffArgs<ExtArgs> = {}>(
       args?: Subset<T, Project$handoffArgs<ExtArgs>>
     ): Prisma__ProjectHandoffClient<
@@ -19991,6 +19457,8 @@ export namespace Prisma {
     readonly progress: FieldRef<"Project", "Int">
     readonly budget: FieldRef<"Project", "Int">
     readonly customValue: FieldRef<"Project", "Boolean">
+    readonly hasInternationalization: FieldRef<"Project", "Boolean">
+    readonly internationalizationFee: FieldRef<"Project", "Int">
     readonly paymentMethod: FieldRef<"Project", "PaymentMethod">
     readonly serviceCategoryId: FieldRef<"Project", "String">
     readonly briefing: FieldRef<"Project", "Json">
@@ -20701,60 +20169,6 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: ProposalScalarFieldEnum | ProposalScalarFieldEnum[]
-  }
-
-  /**
-   * Project.threads
-   */
-  export type Project$threadsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    where?: ThreadWhereInput
-    orderBy?: ThreadOrderByWithRelationInput | ThreadOrderByWithRelationInput[]
-    cursor?: ThreadWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: ThreadScalarFieldEnum | ThreadScalarFieldEnum[]
-  }
-
-  /**
-   * Project.decisions
-   */
-  export type Project$decisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    where?: DecisionWhereInput
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    cursor?: DecisionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
   }
 
   /**
@@ -29762,4429 +29176,6 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: ProjectKickoffChecklistInclude<ExtArgs> | null
-  }
-
-  /**
-   * Model Thread
-   */
-
-  export type AggregateThread = {
-    _count: ThreadCountAggregateOutputType | null
-    _min: ThreadMinAggregateOutputType | null
-    _max: ThreadMaxAggregateOutputType | null
-  }
-
-  export type ThreadMinAggregateOutputType = {
-    id: string | null
-    entityType: string | null
-    entityId: string | null
-    title: string | null
-    status: $Enums.ThreadStatus | null
-    projectId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ThreadMaxAggregateOutputType = {
-    id: string | null
-    entityType: string | null
-    entityId: string | null
-    title: string | null
-    status: $Enums.ThreadStatus | null
-    projectId: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type ThreadCountAggregateOutputType = {
-    id: number
-    entityType: number
-    entityId: number
-    title: number
-    status: number
-    projectId: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-  export type ThreadMinAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    title?: true
-    status?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ThreadMaxAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    title?: true
-    status?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type ThreadCountAggregateInputType = {
-    id?: true
-    entityType?: true
-    entityId?: true
-    title?: true
-    status?: true
-    projectId?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type ThreadAggregateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Thread to aggregate.
-     */
-    where?: ThreadWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Threads to fetch.
-     */
-    orderBy?: ThreadOrderByWithRelationInput | ThreadOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the start position
-     */
-    cursor?: ThreadWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Threads from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Threads.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Count returned Threads
-     **/
-    _count?: true | ThreadCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the minimum value
-     **/
-    _min?: ThreadMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the maximum value
-     **/
-    _max?: ThreadMaxAggregateInputType
-  }
-
-  export type GetThreadAggregateType<T extends ThreadAggregateArgs> = {
-    [P in keyof T & keyof AggregateThread]: P extends "_count" | "count"
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateThread[P]>
-      : GetScalarType<T[P], AggregateThread[P]>
-  }
-
-  export type ThreadGroupByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: ThreadWhereInput
-    orderBy?:
-      | ThreadOrderByWithAggregationInput
-      | ThreadOrderByWithAggregationInput[]
-    by: ThreadScalarFieldEnum[] | ThreadScalarFieldEnum
-    having?: ThreadScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: ThreadCountAggregateInputType | true
-    _min?: ThreadMinAggregateInputType
-    _max?: ThreadMaxAggregateInputType
-  }
-
-  export type ThreadGroupByOutputType = {
-    id: string
-    entityType: string
-    entityId: string
-    title: string | null
-    status: $Enums.ThreadStatus
-    projectId: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: ThreadCountAggregateOutputType | null
-    _min: ThreadMinAggregateOutputType | null
-    _max: ThreadMaxAggregateOutputType | null
-  }
-
-  type GetThreadGroupByPayload<T extends ThreadGroupByArgs> =
-    Prisma.PrismaPromise<
-      Array<
-        PickEnumerable<ThreadGroupByOutputType, T["by"]> & {
-          [P in keyof T & keyof ThreadGroupByOutputType]: P extends "_count"
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], ThreadGroupByOutputType[P]>
-            : GetScalarType<T[P], ThreadGroupByOutputType[P]>
-        }
-      >
-    >
-
-  export type ThreadSelect<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      title?: boolean
-      status?: boolean
-      projectId?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      project?: boolean | Thread$projectArgs<ExtArgs>
-      messages?: boolean | Thread$messagesArgs<ExtArgs>
-      decisions?: boolean | Thread$decisionsArgs<ExtArgs>
-      _count?: boolean | ThreadCountOutputTypeDefaultArgs<ExtArgs>
-    },
-    ExtArgs["result"]["thread"]
-  >
-
-  export type ThreadSelectCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      title?: boolean
-      status?: boolean
-      projectId?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      project?: boolean | Thread$projectArgs<ExtArgs>
-    },
-    ExtArgs["result"]["thread"]
-  >
-
-  export type ThreadSelectUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      entityType?: boolean
-      entityId?: boolean
-      title?: boolean
-      status?: boolean
-      projectId?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      project?: boolean | Thread$projectArgs<ExtArgs>
-    },
-    ExtArgs["result"]["thread"]
-  >
-
-  export type ThreadSelectScalar = {
-    id?: boolean
-    entityType?: boolean
-    entityId?: boolean
-    title?: boolean
-    status?: boolean
-    projectId?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type ThreadOmit<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetOmit<
-    | "id"
-    | "entityType"
-    | "entityId"
-    | "title"
-    | "status"
-    | "projectId"
-    | "createdAt"
-    | "updatedAt",
-    ExtArgs["result"]["thread"]
-  >
-  export type ThreadInclude<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    project?: boolean | Thread$projectArgs<ExtArgs>
-    messages?: boolean | Thread$messagesArgs<ExtArgs>
-    decisions?: boolean | Thread$decisionsArgs<ExtArgs>
-    _count?: boolean | ThreadCountOutputTypeDefaultArgs<ExtArgs>
-  }
-  export type ThreadIncludeCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    project?: boolean | Thread$projectArgs<ExtArgs>
-  }
-  export type ThreadIncludeUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    project?: boolean | Thread$projectArgs<ExtArgs>
-  }
-
-  export type $ThreadPayload<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    name: "Thread"
-    objects: {
-      project: Prisma.$ProjectPayload<ExtArgs> | null
-      messages: Prisma.$MessagePayload<ExtArgs>[]
-      decisions: Prisma.$DecisionPayload<ExtArgs>[]
-    }
-    scalars: $Extensions.GetPayloadResult<
-      {
-        id: string
-        entityType: string
-        entityId: string
-        title: string | null
-        status: $Enums.ThreadStatus
-        projectId: string | null
-        createdAt: Date
-        updatedAt: Date
-      },
-      ExtArgs["result"]["thread"]
-    >
-    composites: {}
-  }
-
-  type ThreadGetPayload<
-    S extends boolean | null | undefined | ThreadDefaultArgs,
-  > = $Result.GetResult<Prisma.$ThreadPayload, S>
-
-  type ThreadCountArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<ThreadFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
-    select?: ThreadCountAggregateInputType | true
-  }
-
-  export interface ThreadDelegate<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > {
-    [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["Thread"]
-      meta: { name: "Thread" }
-    }
-    /**
-     * Find zero or one Thread that matches the filter.
-     * @param {ThreadFindUniqueArgs} args - Arguments to find a Thread
-     * @example
-     * // Get one Thread
-     * const thread = await prisma.thread.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends ThreadFindUniqueArgs>(
-      args: SelectSubset<T, ThreadFindUniqueArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findUnique",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find one Thread that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {ThreadFindUniqueOrThrowArgs} args - Arguments to find a Thread
-     * @example
-     * // Get one Thread
-     * const thread = await prisma.thread.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends ThreadFindUniqueOrThrowArgs>(
-      args: SelectSubset<T, ThreadFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Thread that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadFindFirstArgs} args - Arguments to find a Thread
-     * @example
-     * // Get one Thread
-     * const thread = await prisma.thread.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends ThreadFindFirstArgs>(
-      args?: SelectSubset<T, ThreadFindFirstArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findFirst",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Thread that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadFindFirstOrThrowArgs} args - Arguments to find a Thread
-     * @example
-     * // Get one Thread
-     * const thread = await prisma.thread.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends ThreadFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, ThreadFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findFirstOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find zero or more Threads that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Threads
-     * const threads = await prisma.thread.findMany()
-     *
-     * // Get first 10 Threads
-     * const threads = await prisma.thread.findMany({ take: 10 })
-     *
-     * // Only select the `id`
-     * const threadWithIdOnly = await prisma.thread.findMany({ select: { id: true } })
-     *
-     */
-    findMany<T extends ThreadFindManyArgs>(
-      args?: SelectSubset<T, ThreadFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findMany",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create a Thread.
-     * @param {ThreadCreateArgs} args - Arguments to create a Thread.
-     * @example
-     * // Create one Thread
-     * const Thread = await prisma.thread.create({
-     *   data: {
-     *     // ... data to create a Thread
-     *   }
-     * })
-     *
-     */
-    create<T extends ThreadCreateArgs>(
-      args: SelectSubset<T, ThreadCreateArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "create",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Create many Threads.
-     * @param {ThreadCreateManyArgs} args - Arguments to create many Threads.
-     * @example
-     * // Create many Threads
-     * const thread = await prisma.thread.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     */
-    createMany<T extends ThreadCreateManyArgs>(
-      args?: SelectSubset<T, ThreadCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Threads and returns the data saved in the database.
-     * @param {ThreadCreateManyAndReturnArgs} args - Arguments to create many Threads.
-     * @example
-     * // Create many Threads
-     * const thread = await prisma.thread.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Create many Threads and only return the `id`
-     * const threadWithIdOnly = await prisma.thread.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    createManyAndReturn<T extends ThreadCreateManyAndReturnArgs>(
-      args?: SelectSubset<T, ThreadCreateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "createManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Delete a Thread.
-     * @param {ThreadDeleteArgs} args - Arguments to delete one Thread.
-     * @example
-     * // Delete one Thread
-     * const Thread = await prisma.thread.delete({
-     *   where: {
-     *     // ... filter to delete one Thread
-     *   }
-     * })
-     *
-     */
-    delete<T extends ThreadDeleteArgs>(
-      args: SelectSubset<T, ThreadDeleteArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "delete",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Update one Thread.
-     * @param {ThreadUpdateArgs} args - Arguments to update one Thread.
-     * @example
-     * // Update one Thread
-     * const thread = await prisma.thread.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    update<T extends ThreadUpdateArgs>(
-      args: SelectSubset<T, ThreadUpdateArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "update",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Delete zero or more Threads.
-     * @param {ThreadDeleteManyArgs} args - Arguments to filter Threads to delete.
-     * @example
-     * // Delete a few Threads
-     * const { count } = await prisma.thread.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     *
-     */
-    deleteMany<T extends ThreadDeleteManyArgs>(
-      args?: SelectSubset<T, ThreadDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Threads.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Threads
-     * const thread = await prisma.thread.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    updateMany<T extends ThreadUpdateManyArgs>(
-      args: SelectSubset<T, ThreadUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Threads and returns the data updated in the database.
-     * @param {ThreadUpdateManyAndReturnArgs} args - Arguments to update many Threads.
-     * @example
-     * // Update many Threads
-     * const thread = await prisma.thread.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Update zero or more Threads and only return the `id`
-     * const threadWithIdOnly = await prisma.thread.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    updateManyAndReturn<T extends ThreadUpdateManyAndReturnArgs>(
-      args: SelectSubset<T, ThreadUpdateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "updateManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create or update one Thread.
-     * @param {ThreadUpsertArgs} args - Arguments to update or create a Thread.
-     * @example
-     * // Update or create a Thread
-     * const thread = await prisma.thread.upsert({
-     *   create: {
-     *     // ... data to create a Thread
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Thread we want to update
-     *   }
-     * })
-     */
-    upsert<T extends ThreadUpsertArgs>(
-      args: SelectSubset<T, ThreadUpsertArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "upsert",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Count the number of Threads.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadCountArgs} args - Arguments to filter Threads to count.
-     * @example
-     * // Count the number of Threads
-     * const count = await prisma.thread.count({
-     *   where: {
-     *     // ... the filter for the Threads we want to count
-     *   }
-     * })
-     **/
-    count<T extends ThreadCountArgs>(
-      args?: Subset<T, ThreadCountArgs>
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
-          ? number
-          : GetScalarType<T["select"], ThreadCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Thread.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-     **/
-    aggregate<T extends ThreadAggregateArgs>(
-      args: Subset<T, ThreadAggregateArgs>
-    ): Prisma.PrismaPromise<GetThreadAggregateType<T>>
-
-    /**
-     * Group by Thread.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {ThreadGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     *
-     **/
-    groupBy<
-      T extends ThreadGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: ThreadGroupByArgs["orderBy"] }
-        : { orderBy?: ThreadGroupByArgs["orderBy"] },
-      OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
-      >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-          ? {
-              [P in HavingFields]: P extends ByFields
-                ? never
-                : P extends string
-                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-                  : [
-                      Error,
-                      "Field ",
-                      P,
-                      ` in "having" needs to be provided in "by"`,
-                    ]
-            }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
-              ? ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields]
-              : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
-                ? ByValid extends True
-                  ? {}
-                  : {
-                      [P in OrderFields]: P extends ByFields
-                        ? never
-                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                    }[OrderFields]
-                : 'Error: If you provide "skip", you also need to provide "orderBy"'
-              : ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields],
-    >(
-      args: SubsetIntersection<T, ThreadGroupByArgs, OrderByArg> & InputErrors
-    ): {} extends InputErrors
-      ? GetThreadGroupByPayload<T>
-      : Prisma.PrismaPromise<InputErrors>
-    /**
-     * Fields of the Thread model
-     */
-    readonly fields: ThreadFieldRefs
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Thread.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__ThreadClient<
-    T,
-    Null = never,
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    project<T extends Thread$projectArgs<ExtArgs> = {}>(
-      args?: Subset<T, Thread$projectArgs<ExtArgs>>
-    ): Prisma__ProjectClient<
-      $Result.GetResult<
-        Prisma.$ProjectPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    messages<T extends Thread$messagesArgs<ExtArgs> = {}>(
-      args?: Subset<T, Thread$messagesArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$MessagePayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    decisions<T extends Thread$decisionsArgs<ExtArgs> = {}>(
-      args?: Subset<T, Thread$decisionsArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      | $Result.GetResult<
-          Prisma.$DecisionPayload<ExtArgs>,
-          T,
-          "findMany",
-          GlobalOmitOptions
-        >
-      | Null
-    >
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(
-      onfulfilled?:
-        | ((value: T) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
-      onrejected?:
-        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(
-      onrejected?:
-        | ((reason: any) => TResult | PromiseLike<TResult>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-  /**
-   * Fields of the Thread model
-   */
-  interface ThreadFieldRefs {
-    readonly id: FieldRef<"Thread", "String">
-    readonly entityType: FieldRef<"Thread", "String">
-    readonly entityId: FieldRef<"Thread", "String">
-    readonly title: FieldRef<"Thread", "String">
-    readonly status: FieldRef<"Thread", "ThreadStatus">
-    readonly projectId: FieldRef<"Thread", "String">
-    readonly createdAt: FieldRef<"Thread", "DateTime">
-    readonly updatedAt: FieldRef<"Thread", "DateTime">
-  }
-
-  // Custom InputTypes
-  /**
-   * Thread findUnique
-   */
-  export type ThreadFindUniqueArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter, which Thread to fetch.
-     */
-    where: ThreadWhereUniqueInput
-  }
-
-  /**
-   * Thread findUniqueOrThrow
-   */
-  export type ThreadFindUniqueOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter, which Thread to fetch.
-     */
-    where: ThreadWhereUniqueInput
-  }
-
-  /**
-   * Thread findFirst
-   */
-  export type ThreadFindFirstArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter, which Thread to fetch.
-     */
-    where?: ThreadWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Threads to fetch.
-     */
-    orderBy?: ThreadOrderByWithRelationInput | ThreadOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Threads.
-     */
-    cursor?: ThreadWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Threads from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Threads.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Threads.
-     */
-    distinct?: ThreadScalarFieldEnum | ThreadScalarFieldEnum[]
-  }
-
-  /**
-   * Thread findFirstOrThrow
-   */
-  export type ThreadFindFirstOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter, which Thread to fetch.
-     */
-    where?: ThreadWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Threads to fetch.
-     */
-    orderBy?: ThreadOrderByWithRelationInput | ThreadOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Threads.
-     */
-    cursor?: ThreadWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Threads from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Threads.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Threads.
-     */
-    distinct?: ThreadScalarFieldEnum | ThreadScalarFieldEnum[]
-  }
-
-  /**
-   * Thread findMany
-   */
-  export type ThreadFindManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter, which Threads to fetch.
-     */
-    where?: ThreadWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Threads to fetch.
-     */
-    orderBy?: ThreadOrderByWithRelationInput | ThreadOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for listing Threads.
-     */
-    cursor?: ThreadWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Threads from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Threads.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Threads.
-     */
-    distinct?: ThreadScalarFieldEnum | ThreadScalarFieldEnum[]
-  }
-
-  /**
-   * Thread create
-   */
-  export type ThreadCreateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Thread.
-     */
-    data: XOR<ThreadCreateInput, ThreadUncheckedCreateInput>
-  }
-
-  /**
-   * Thread createMany
-   */
-  export type ThreadCreateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to create many Threads.
-     */
-    data: ThreadCreateManyInput | ThreadCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Thread createManyAndReturn
-   */
-  export type ThreadCreateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * The data used to create many Threads.
-     */
-    data: ThreadCreateManyInput | ThreadCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Thread update
-   */
-  export type ThreadUpdateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Thread.
-     */
-    data: XOR<ThreadUpdateInput, ThreadUncheckedUpdateInput>
-    /**
-     * Choose, which Thread to update.
-     */
-    where: ThreadWhereUniqueInput
-  }
-
-  /**
-   * Thread updateMany
-   */
-  export type ThreadUpdateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to update Threads.
-     */
-    data: XOR<ThreadUpdateManyMutationInput, ThreadUncheckedUpdateManyInput>
-    /**
-     * Filter which Threads to update
-     */
-    where?: ThreadWhereInput
-    /**
-     * Limit how many Threads to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Thread updateManyAndReturn
-   */
-  export type ThreadUpdateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * The data used to update Threads.
-     */
-    data: XOR<ThreadUpdateManyMutationInput, ThreadUncheckedUpdateManyInput>
-    /**
-     * Filter which Threads to update
-     */
-    where?: ThreadWhereInput
-    /**
-     * Limit how many Threads to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Thread upsert
-   */
-  export type ThreadUpsertArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Thread to update in case it exists.
-     */
-    where: ThreadWhereUniqueInput
-    /**
-     * In case the Thread found by the `where` argument doesn't exist, create a new Thread with this data.
-     */
-    create: XOR<ThreadCreateInput, ThreadUncheckedCreateInput>
-    /**
-     * In case the Thread was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<ThreadUpdateInput, ThreadUncheckedUpdateInput>
-  }
-
-  /**
-   * Thread delete
-   */
-  export type ThreadDeleteArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    /**
-     * Filter which Thread to delete.
-     */
-    where: ThreadWhereUniqueInput
-  }
-
-  /**
-   * Thread deleteMany
-   */
-  export type ThreadDeleteManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Threads to delete
-     */
-    where?: ThreadWhereInput
-    /**
-     * Limit how many Threads to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Thread.project
-   */
-  export type Thread$projectArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Project
-     */
-    select?: ProjectSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Project
-     */
-    omit?: ProjectOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ProjectInclude<ExtArgs> | null
-    where?: ProjectWhereInput
-  }
-
-  /**
-   * Thread.messages
-   */
-  export type Thread$messagesArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    where?: MessageWhereInput
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    cursor?: MessageWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * Thread.decisions
-   */
-  export type Thread$decisionsArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    where?: DecisionWhereInput
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    cursor?: DecisionWhereUniqueInput
-    take?: number
-    skip?: number
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
-  }
-
-  /**
-   * Thread without action
-   */
-  export type ThreadDefaultArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-  }
-
-  /**
-   * Model Message
-   */
-
-  export type AggregateMessage = {
-    _count: MessageCountAggregateOutputType | null
-    _min: MessageMinAggregateOutputType | null
-    _max: MessageMaxAggregateOutputType | null
-  }
-
-  export type MessageMinAggregateOutputType = {
-    id: string | null
-    content: string | null
-    type: $Enums.MessageType | null
-    authorId: string | null
-    threadId: string | null
-    requiresResponse: boolean | null
-    resolvedAt: Date | null
-    resolvedById: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type MessageMaxAggregateOutputType = {
-    id: string | null
-    content: string | null
-    type: $Enums.MessageType | null
-    authorId: string | null
-    threadId: string | null
-    requiresResponse: boolean | null
-    resolvedAt: Date | null
-    resolvedById: string | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type MessageCountAggregateOutputType = {
-    id: number
-    content: number
-    type: number
-    authorId: number
-    threadId: number
-    attachments: number
-    requiresResponse: number
-    resolvedAt: number
-    resolvedById: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-  export type MessageMinAggregateInputType = {
-    id?: true
-    content?: true
-    type?: true
-    authorId?: true
-    threadId?: true
-    requiresResponse?: true
-    resolvedAt?: true
-    resolvedById?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type MessageMaxAggregateInputType = {
-    id?: true
-    content?: true
-    type?: true
-    authorId?: true
-    threadId?: true
-    requiresResponse?: true
-    resolvedAt?: true
-    resolvedById?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type MessageCountAggregateInputType = {
-    id?: true
-    content?: true
-    type?: true
-    authorId?: true
-    threadId?: true
-    attachments?: true
-    requiresResponse?: true
-    resolvedAt?: true
-    resolvedById?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type MessageAggregateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Message to aggregate.
-     */
-    where?: MessageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Messages to fetch.
-     */
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the start position
-     */
-    cursor?: MessageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Messages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Messages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Count returned Messages
-     **/
-    _count?: true | MessageCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the minimum value
-     **/
-    _min?: MessageMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the maximum value
-     **/
-    _max?: MessageMaxAggregateInputType
-  }
-
-  export type GetMessageAggregateType<T extends MessageAggregateArgs> = {
-    [P in keyof T & keyof AggregateMessage]: P extends "_count" | "count"
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateMessage[P]>
-      : GetScalarType<T[P], AggregateMessage[P]>
-  }
-
-  export type MessageGroupByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: MessageWhereInput
-    orderBy?:
-      | MessageOrderByWithAggregationInput
-      | MessageOrderByWithAggregationInput[]
-    by: MessageScalarFieldEnum[] | MessageScalarFieldEnum
-    having?: MessageScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: MessageCountAggregateInputType | true
-    _min?: MessageMinAggregateInputType
-    _max?: MessageMaxAggregateInputType
-  }
-
-  export type MessageGroupByOutputType = {
-    id: string
-    content: string
-    type: $Enums.MessageType
-    authorId: string | null
-    threadId: string
-    attachments: JsonValue | null
-    requiresResponse: boolean
-    resolvedAt: Date | null
-    resolvedById: string | null
-    createdAt: Date
-    updatedAt: Date
-    _count: MessageCountAggregateOutputType | null
-    _min: MessageMinAggregateOutputType | null
-    _max: MessageMaxAggregateOutputType | null
-  }
-
-  type GetMessageGroupByPayload<T extends MessageGroupByArgs> =
-    Prisma.PrismaPromise<
-      Array<
-        PickEnumerable<MessageGroupByOutputType, T["by"]> & {
-          [P in keyof T & keyof MessageGroupByOutputType]: P extends "_count"
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], MessageGroupByOutputType[P]>
-            : GetScalarType<T[P], MessageGroupByOutputType[P]>
-        }
-      >
-    >
-
-  export type MessageSelect<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      content?: boolean
-      type?: boolean
-      authorId?: boolean
-      threadId?: boolean
-      attachments?: boolean
-      requiresResponse?: boolean
-      resolvedAt?: boolean
-      resolvedById?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      author?: boolean | Message$authorArgs<ExtArgs>
-      thread?: boolean | ThreadDefaultArgs<ExtArgs>
-      resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["message"]
-  >
-
-  export type MessageSelectCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      content?: boolean
-      type?: boolean
-      authorId?: boolean
-      threadId?: boolean
-      attachments?: boolean
-      requiresResponse?: boolean
-      resolvedAt?: boolean
-      resolvedById?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      author?: boolean | Message$authorArgs<ExtArgs>
-      thread?: boolean | ThreadDefaultArgs<ExtArgs>
-      resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["message"]
-  >
-
-  export type MessageSelectUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      content?: boolean
-      type?: boolean
-      authorId?: boolean
-      threadId?: boolean
-      attachments?: boolean
-      requiresResponse?: boolean
-      resolvedAt?: boolean
-      resolvedById?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      author?: boolean | Message$authorArgs<ExtArgs>
-      thread?: boolean | ThreadDefaultArgs<ExtArgs>
-      resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["message"]
-  >
-
-  export type MessageSelectScalar = {
-    id?: boolean
-    content?: boolean
-    type?: boolean
-    authorId?: boolean
-    threadId?: boolean
-    attachments?: boolean
-    requiresResponse?: boolean
-    resolvedAt?: boolean
-    resolvedById?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type MessageOmit<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetOmit<
-    | "id"
-    | "content"
-    | "type"
-    | "authorId"
-    | "threadId"
-    | "attachments"
-    | "requiresResponse"
-    | "resolvedAt"
-    | "resolvedById"
-    | "createdAt"
-    | "updatedAt",
-    ExtArgs["result"]["message"]
-  >
-  export type MessageInclude<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    author?: boolean | Message$authorArgs<ExtArgs>
-    thread?: boolean | ThreadDefaultArgs<ExtArgs>
-    resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-  }
-  export type MessageIncludeCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    author?: boolean | Message$authorArgs<ExtArgs>
-    thread?: boolean | ThreadDefaultArgs<ExtArgs>
-    resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-  }
-  export type MessageIncludeUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    author?: boolean | Message$authorArgs<ExtArgs>
-    thread?: boolean | ThreadDefaultArgs<ExtArgs>
-    resolvedBy?: boolean | Message$resolvedByArgs<ExtArgs>
-  }
-
-  export type $MessagePayload<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    name: "Message"
-    objects: {
-      author: Prisma.$UserPayload<ExtArgs> | null
-      thread: Prisma.$ThreadPayload<ExtArgs>
-      resolvedBy: Prisma.$UserPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<
-      {
-        id: string
-        content: string
-        type: $Enums.MessageType
-        authorId: string | null
-        threadId: string
-        attachments: Prisma.JsonValue | null
-        requiresResponse: boolean
-        resolvedAt: Date | null
-        resolvedById: string | null
-        createdAt: Date
-        updatedAt: Date
-      },
-      ExtArgs["result"]["message"]
-    >
-    composites: {}
-  }
-
-  type MessageGetPayload<
-    S extends boolean | null | undefined | MessageDefaultArgs,
-  > = $Result.GetResult<Prisma.$MessagePayload, S>
-
-  type MessageCountArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<MessageFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
-    select?: MessageCountAggregateInputType | true
-  }
-
-  export interface MessageDelegate<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > {
-    [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["Message"]
-      meta: { name: "Message" }
-    }
-    /**
-     * Find zero or one Message that matches the filter.
-     * @param {MessageFindUniqueArgs} args - Arguments to find a Message
-     * @example
-     * // Get one Message
-     * const message = await prisma.message.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends MessageFindUniqueArgs>(
-      args: SelectSubset<T, MessageFindUniqueArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "findUnique",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find one Message that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {MessageFindUniqueOrThrowArgs} args - Arguments to find a Message
-     * @example
-     * // Get one Message
-     * const message = await prisma.message.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends MessageFindUniqueOrThrowArgs>(
-      args: SelectSubset<T, MessageFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Message that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindFirstArgs} args - Arguments to find a Message
-     * @example
-     * // Get one Message
-     * const message = await prisma.message.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends MessageFindFirstArgs>(
-      args?: SelectSubset<T, MessageFindFirstArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "findFirst",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Message that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindFirstOrThrowArgs} args - Arguments to find a Message
-     * @example
-     * // Get one Message
-     * const message = await prisma.message.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends MessageFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, MessageFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "findFirstOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find zero or more Messages that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Messages
-     * const messages = await prisma.message.findMany()
-     *
-     * // Get first 10 Messages
-     * const messages = await prisma.message.findMany({ take: 10 })
-     *
-     * // Only select the `id`
-     * const messageWithIdOnly = await prisma.message.findMany({ select: { id: true } })
-     *
-     */
-    findMany<T extends MessageFindManyArgs>(
-      args?: SelectSubset<T, MessageFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "findMany",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create a Message.
-     * @param {MessageCreateArgs} args - Arguments to create a Message.
-     * @example
-     * // Create one Message
-     * const Message = await prisma.message.create({
-     *   data: {
-     *     // ... data to create a Message
-     *   }
-     * })
-     *
-     */
-    create<T extends MessageCreateArgs>(
-      args: SelectSubset<T, MessageCreateArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "create",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Create many Messages.
-     * @param {MessageCreateManyArgs} args - Arguments to create many Messages.
-     * @example
-     * // Create many Messages
-     * const message = await prisma.message.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     */
-    createMany<T extends MessageCreateManyArgs>(
-      args?: SelectSubset<T, MessageCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Messages and returns the data saved in the database.
-     * @param {MessageCreateManyAndReturnArgs} args - Arguments to create many Messages.
-     * @example
-     * // Create many Messages
-     * const message = await prisma.message.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Create many Messages and only return the `id`
-     * const messageWithIdOnly = await prisma.message.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    createManyAndReturn<T extends MessageCreateManyAndReturnArgs>(
-      args?: SelectSubset<T, MessageCreateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "createManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Delete a Message.
-     * @param {MessageDeleteArgs} args - Arguments to delete one Message.
-     * @example
-     * // Delete one Message
-     * const Message = await prisma.message.delete({
-     *   where: {
-     *     // ... filter to delete one Message
-     *   }
-     * })
-     *
-     */
-    delete<T extends MessageDeleteArgs>(
-      args: SelectSubset<T, MessageDeleteArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "delete",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Update one Message.
-     * @param {MessageUpdateArgs} args - Arguments to update one Message.
-     * @example
-     * // Update one Message
-     * const message = await prisma.message.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    update<T extends MessageUpdateArgs>(
-      args: SelectSubset<T, MessageUpdateArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "update",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Delete zero or more Messages.
-     * @param {MessageDeleteManyArgs} args - Arguments to filter Messages to delete.
-     * @example
-     * // Delete a few Messages
-     * const { count } = await prisma.message.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     *
-     */
-    deleteMany<T extends MessageDeleteManyArgs>(
-      args?: SelectSubset<T, MessageDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Messages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Messages
-     * const message = await prisma.message.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    updateMany<T extends MessageUpdateManyArgs>(
-      args: SelectSubset<T, MessageUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Messages and returns the data updated in the database.
-     * @param {MessageUpdateManyAndReturnArgs} args - Arguments to update many Messages.
-     * @example
-     * // Update many Messages
-     * const message = await prisma.message.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Update zero or more Messages and only return the `id`
-     * const messageWithIdOnly = await prisma.message.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    updateManyAndReturn<T extends MessageUpdateManyAndReturnArgs>(
-      args: SelectSubset<T, MessageUpdateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "updateManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create or update one Message.
-     * @param {MessageUpsertArgs} args - Arguments to update or create a Message.
-     * @example
-     * // Update or create a Message
-     * const message = await prisma.message.upsert({
-     *   create: {
-     *     // ... data to create a Message
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Message we want to update
-     *   }
-     * })
-     */
-    upsert<T extends MessageUpsertArgs>(
-      args: SelectSubset<T, MessageUpsertArgs<ExtArgs>>
-    ): Prisma__MessageClient<
-      $Result.GetResult<
-        Prisma.$MessagePayload<ExtArgs>,
-        T,
-        "upsert",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Count the number of Messages.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageCountArgs} args - Arguments to filter Messages to count.
-     * @example
-     * // Count the number of Messages
-     * const count = await prisma.message.count({
-     *   where: {
-     *     // ... the filter for the Messages we want to count
-     *   }
-     * })
-     **/
-    count<T extends MessageCountArgs>(
-      args?: Subset<T, MessageCountArgs>
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
-          ? number
-          : GetScalarType<T["select"], MessageCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Message.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-     **/
-    aggregate<T extends MessageAggregateArgs>(
-      args: Subset<T, MessageAggregateArgs>
-    ): Prisma.PrismaPromise<GetMessageAggregateType<T>>
-
-    /**
-     * Group by Message.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {MessageGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     *
-     **/
-    groupBy<
-      T extends MessageGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: MessageGroupByArgs["orderBy"] }
-        : { orderBy?: MessageGroupByArgs["orderBy"] },
-      OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
-      >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-          ? {
-              [P in HavingFields]: P extends ByFields
-                ? never
-                : P extends string
-                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-                  : [
-                      Error,
-                      "Field ",
-                      P,
-                      ` in "having" needs to be provided in "by"`,
-                    ]
-            }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
-              ? ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields]
-              : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
-                ? ByValid extends True
-                  ? {}
-                  : {
-                      [P in OrderFields]: P extends ByFields
-                        ? never
-                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                    }[OrderFields]
-                : 'Error: If you provide "skip", you also need to provide "orderBy"'
-              : ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields],
-    >(
-      args: SubsetIntersection<T, MessageGroupByArgs, OrderByArg> & InputErrors
-    ): {} extends InputErrors
-      ? GetMessageGroupByPayload<T>
-      : Prisma.PrismaPromise<InputErrors>
-    /**
-     * Fields of the Message model
-     */
-    readonly fields: MessageFieldRefs
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Message.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__MessageClient<
-    T,
-    Null = never,
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    author<T extends Message$authorArgs<ExtArgs> = {}>(
-      args?: Subset<T, Message$authorArgs<ExtArgs>>
-    ): Prisma__UserClient<
-      $Result.GetResult<
-        Prisma.$UserPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    thread<T extends ThreadDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, ThreadDefaultArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      | $Result.GetResult<
-          Prisma.$ThreadPayload<ExtArgs>,
-          T,
-          "findUniqueOrThrow",
-          GlobalOmitOptions
-        >
-      | Null,
-      Null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    resolvedBy<T extends Message$resolvedByArgs<ExtArgs> = {}>(
-      args?: Subset<T, Message$resolvedByArgs<ExtArgs>>
-    ): Prisma__UserClient<
-      $Result.GetResult<
-        Prisma.$UserPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(
-      onfulfilled?:
-        | ((value: T) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
-      onrejected?:
-        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(
-      onrejected?:
-        | ((reason: any) => TResult | PromiseLike<TResult>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-  /**
-   * Fields of the Message model
-   */
-  interface MessageFieldRefs {
-    readonly id: FieldRef<"Message", "String">
-    readonly content: FieldRef<"Message", "String">
-    readonly type: FieldRef<"Message", "MessageType">
-    readonly authorId: FieldRef<"Message", "String">
-    readonly threadId: FieldRef<"Message", "String">
-    readonly attachments: FieldRef<"Message", "Json">
-    readonly requiresResponse: FieldRef<"Message", "Boolean">
-    readonly resolvedAt: FieldRef<"Message", "DateTime">
-    readonly resolvedById: FieldRef<"Message", "String">
-    readonly createdAt: FieldRef<"Message", "DateTime">
-    readonly updatedAt: FieldRef<"Message", "DateTime">
-  }
-
-  // Custom InputTypes
-  /**
-   * Message findUnique
-   */
-  export type MessageFindUniqueArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter, which Message to fetch.
-     */
-    where: MessageWhereUniqueInput
-  }
-
-  /**
-   * Message findUniqueOrThrow
-   */
-  export type MessageFindUniqueOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter, which Message to fetch.
-     */
-    where: MessageWhereUniqueInput
-  }
-
-  /**
-   * Message findFirst
-   */
-  export type MessageFindFirstArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter, which Message to fetch.
-     */
-    where?: MessageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Messages to fetch.
-     */
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Messages.
-     */
-    cursor?: MessageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Messages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Messages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Messages.
-     */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * Message findFirstOrThrow
-   */
-  export type MessageFindFirstOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter, which Message to fetch.
-     */
-    where?: MessageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Messages to fetch.
-     */
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Messages.
-     */
-    cursor?: MessageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Messages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Messages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Messages.
-     */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * Message findMany
-   */
-  export type MessageFindManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter, which Messages to fetch.
-     */
-    where?: MessageWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Messages to fetch.
-     */
-    orderBy?:
-      | MessageOrderByWithRelationInput
-      | MessageOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for listing Messages.
-     */
-    cursor?: MessageWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Messages from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Messages.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Messages.
-     */
-    distinct?: MessageScalarFieldEnum | MessageScalarFieldEnum[]
-  }
-
-  /**
-   * Message create
-   */
-  export type MessageCreateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Message.
-     */
-    data: XOR<MessageCreateInput, MessageUncheckedCreateInput>
-  }
-
-  /**
-   * Message createMany
-   */
-  export type MessageCreateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to create many Messages.
-     */
-    data: MessageCreateManyInput | MessageCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Message createManyAndReturn
-   */
-  export type MessageCreateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * The data used to create many Messages.
-     */
-    data: MessageCreateManyInput | MessageCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Message update
-   */
-  export type MessageUpdateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Message.
-     */
-    data: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
-    /**
-     * Choose, which Message to update.
-     */
-    where: MessageWhereUniqueInput
-  }
-
-  /**
-   * Message updateMany
-   */
-  export type MessageUpdateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to update Messages.
-     */
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
-    /**
-     * Filter which Messages to update
-     */
-    where?: MessageWhereInput
-    /**
-     * Limit how many Messages to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Message updateManyAndReturn
-   */
-  export type MessageUpdateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * The data used to update Messages.
-     */
-    data: XOR<MessageUpdateManyMutationInput, MessageUncheckedUpdateManyInput>
-    /**
-     * Filter which Messages to update
-     */
-    where?: MessageWhereInput
-    /**
-     * Limit how many Messages to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Message upsert
-   */
-  export type MessageUpsertArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Message to update in case it exists.
-     */
-    where: MessageWhereUniqueInput
-    /**
-     * In case the Message found by the `where` argument doesn't exist, create a new Message with this data.
-     */
-    create: XOR<MessageCreateInput, MessageUncheckedCreateInput>
-    /**
-     * In case the Message was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<MessageUpdateInput, MessageUncheckedUpdateInput>
-  }
-
-  /**
-   * Message delete
-   */
-  export type MessageDeleteArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-    /**
-     * Filter which Message to delete.
-     */
-    where: MessageWhereUniqueInput
-  }
-
-  /**
-   * Message deleteMany
-   */
-  export type MessageDeleteManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Messages to delete
-     */
-    where?: MessageWhereInput
-    /**
-     * Limit how many Messages to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Message.author
-   */
-  export type Message$authorArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * Message.resolvedBy
-   */
-  export type Message$resolvedByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * Message without action
-   */
-  export type MessageDefaultArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Message
-     */
-    select?: MessageSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Message
-     */
-    omit?: MessageOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: MessageInclude<ExtArgs> | null
-  }
-
-  /**
-   * Model Decision
-   */
-
-  export type AggregateDecision = {
-    _count: DecisionCountAggregateOutputType | null
-    _min: DecisionMinAggregateOutputType | null
-    _max: DecisionMaxAggregateOutputType | null
-  }
-
-  export type DecisionMinAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    decision: string | null
-    impactScope: string | null
-    impactDeadline: string | null
-    impactFinancial: string | null
-    threadId: string | null
-    projectId: string | null
-    decidedById: string | null
-    decidedAt: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type DecisionMaxAggregateOutputType = {
-    id: string | null
-    title: string | null
-    description: string | null
-    decision: string | null
-    impactScope: string | null
-    impactDeadline: string | null
-    impactFinancial: string | null
-    threadId: string | null
-    projectId: string | null
-    decidedById: string | null
-    decidedAt: Date | null
-    createdAt: Date | null
-    updatedAt: Date | null
-  }
-
-  export type DecisionCountAggregateOutputType = {
-    id: number
-    title: number
-    description: number
-    decision: number
-    impactScope: number
-    impactDeadline: number
-    impactFinancial: number
-    threadId: number
-    projectId: number
-    decidedById: number
-    decidedAt: number
-    createdAt: number
-    updatedAt: number
-    _all: number
-  }
-
-  export type DecisionMinAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    decision?: true
-    impactScope?: true
-    impactDeadline?: true
-    impactFinancial?: true
-    threadId?: true
-    projectId?: true
-    decidedById?: true
-    decidedAt?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type DecisionMaxAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    decision?: true
-    impactScope?: true
-    impactDeadline?: true
-    impactFinancial?: true
-    threadId?: true
-    projectId?: true
-    decidedById?: true
-    decidedAt?: true
-    createdAt?: true
-    updatedAt?: true
-  }
-
-  export type DecisionCountAggregateInputType = {
-    id?: true
-    title?: true
-    description?: true
-    decision?: true
-    impactScope?: true
-    impactDeadline?: true
-    impactFinancial?: true
-    threadId?: true
-    projectId?: true
-    decidedById?: true
-    decidedAt?: true
-    createdAt?: true
-    updatedAt?: true
-    _all?: true
-  }
-
-  export type DecisionAggregateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Decision to aggregate.
-     */
-    where?: DecisionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Decisions to fetch.
-     */
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the start position
-     */
-    cursor?: DecisionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Decisions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Decisions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Count returned Decisions
-     **/
-    _count?: true | DecisionCountAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the minimum value
-     **/
-    _min?: DecisionMinAggregateInputType
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
-     *
-     * Select which fields to find the maximum value
-     **/
-    _max?: DecisionMaxAggregateInputType
-  }
-
-  export type GetDecisionAggregateType<T extends DecisionAggregateArgs> = {
-    [P in keyof T & keyof AggregateDecision]: P extends "_count" | "count"
-      ? T[P] extends true
-        ? number
-        : GetScalarType<T[P], AggregateDecision[P]>
-      : GetScalarType<T[P], AggregateDecision[P]>
-  }
-
-  export type DecisionGroupByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    where?: DecisionWhereInput
-    orderBy?:
-      | DecisionOrderByWithAggregationInput
-      | DecisionOrderByWithAggregationInput[]
-    by: DecisionScalarFieldEnum[] | DecisionScalarFieldEnum
-    having?: DecisionScalarWhereWithAggregatesInput
-    take?: number
-    skip?: number
-    _count?: DecisionCountAggregateInputType | true
-    _min?: DecisionMinAggregateInputType
-    _max?: DecisionMaxAggregateInputType
-  }
-
-  export type DecisionGroupByOutputType = {
-    id: string
-    title: string
-    description: string | null
-    decision: string
-    impactScope: string | null
-    impactDeadline: string | null
-    impactFinancial: string | null
-    threadId: string | null
-    projectId: string
-    decidedById: string | null
-    decidedAt: Date
-    createdAt: Date
-    updatedAt: Date
-    _count: DecisionCountAggregateOutputType | null
-    _min: DecisionMinAggregateOutputType | null
-    _max: DecisionMaxAggregateOutputType | null
-  }
-
-  type GetDecisionGroupByPayload<T extends DecisionGroupByArgs> =
-    Prisma.PrismaPromise<
-      Array<
-        PickEnumerable<DecisionGroupByOutputType, T["by"]> & {
-          [P in keyof T & keyof DecisionGroupByOutputType]: P extends "_count"
-            ? T[P] extends boolean
-              ? number
-              : GetScalarType<T[P], DecisionGroupByOutputType[P]>
-            : GetScalarType<T[P], DecisionGroupByOutputType[P]>
-        }
-      >
-    >
-
-  export type DecisionSelect<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      title?: boolean
-      description?: boolean
-      decision?: boolean
-      impactScope?: boolean
-      impactDeadline?: boolean
-      impactFinancial?: boolean
-      threadId?: boolean
-      projectId?: boolean
-      decidedById?: boolean
-      decidedAt?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      thread?: boolean | Decision$threadArgs<ExtArgs>
-      project?: boolean | ProjectDefaultArgs<ExtArgs>
-      decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["decision"]
-  >
-
-  export type DecisionSelectCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      title?: boolean
-      description?: boolean
-      decision?: boolean
-      impactScope?: boolean
-      impactDeadline?: boolean
-      impactFinancial?: boolean
-      threadId?: boolean
-      projectId?: boolean
-      decidedById?: boolean
-      decidedAt?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      thread?: boolean | Decision$threadArgs<ExtArgs>
-      project?: boolean | ProjectDefaultArgs<ExtArgs>
-      decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["decision"]
-  >
-
-  export type DecisionSelectUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetSelect<
-    {
-      id?: boolean
-      title?: boolean
-      description?: boolean
-      decision?: boolean
-      impactScope?: boolean
-      impactDeadline?: boolean
-      impactFinancial?: boolean
-      threadId?: boolean
-      projectId?: boolean
-      decidedById?: boolean
-      decidedAt?: boolean
-      createdAt?: boolean
-      updatedAt?: boolean
-      thread?: boolean | Decision$threadArgs<ExtArgs>
-      project?: boolean | ProjectDefaultArgs<ExtArgs>
-      decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-    },
-    ExtArgs["result"]["decision"]
-  >
-
-  export type DecisionSelectScalar = {
-    id?: boolean
-    title?: boolean
-    description?: boolean
-    decision?: boolean
-    impactScope?: boolean
-    impactDeadline?: boolean
-    impactFinancial?: boolean
-    threadId?: boolean
-    projectId?: boolean
-    decidedById?: boolean
-    decidedAt?: boolean
-    createdAt?: boolean
-    updatedAt?: boolean
-  }
-
-  export type DecisionOmit<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = $Extensions.GetOmit<
-    | "id"
-    | "title"
-    | "description"
-    | "decision"
-    | "impactScope"
-    | "impactDeadline"
-    | "impactFinancial"
-    | "threadId"
-    | "projectId"
-    | "decidedById"
-    | "decidedAt"
-    | "createdAt"
-    | "updatedAt",
-    ExtArgs["result"]["decision"]
-  >
-  export type DecisionInclude<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    thread?: boolean | Decision$threadArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-  }
-  export type DecisionIncludeCreateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    thread?: boolean | Decision$threadArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-  }
-  export type DecisionIncludeUpdateManyAndReturn<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    thread?: boolean | Decision$threadArgs<ExtArgs>
-    project?: boolean | ProjectDefaultArgs<ExtArgs>
-    decidedBy?: boolean | Decision$decidedByArgs<ExtArgs>
-  }
-
-  export type $DecisionPayload<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    name: "Decision"
-    objects: {
-      thread: Prisma.$ThreadPayload<ExtArgs> | null
-      project: Prisma.$ProjectPayload<ExtArgs>
-      decidedBy: Prisma.$UserPayload<ExtArgs> | null
-    }
-    scalars: $Extensions.GetPayloadResult<
-      {
-        id: string
-        title: string
-        description: string | null
-        decision: string
-        impactScope: string | null
-        impactDeadline: string | null
-        impactFinancial: string | null
-        threadId: string | null
-        projectId: string
-        decidedById: string | null
-        decidedAt: Date
-        createdAt: Date
-        updatedAt: Date
-      },
-      ExtArgs["result"]["decision"]
-    >
-    composites: {}
-  }
-
-  type DecisionGetPayload<
-    S extends boolean | null | undefined | DecisionDefaultArgs,
-  > = $Result.GetResult<Prisma.$DecisionPayload, S>
-
-  type DecisionCountArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = Omit<DecisionFindManyArgs, "select" | "include" | "distinct" | "omit"> & {
-    select?: DecisionCountAggregateInputType | true
-  }
-
-  export interface DecisionDelegate<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > {
-    [K: symbol]: {
-      types: Prisma.TypeMap<ExtArgs>["model"]["Decision"]
-      meta: { name: "Decision" }
-    }
-    /**
-     * Find zero or one Decision that matches the filter.
-     * @param {DecisionFindUniqueArgs} args - Arguments to find a Decision
-     * @example
-     * // Get one Decision
-     * const decision = await prisma.decision.findUnique({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUnique<T extends DecisionFindUniqueArgs>(
-      args: SelectSubset<T, DecisionFindUniqueArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "findUnique",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find one Decision that matches the filter or throw an error with `error.code='P2025'`
-     * if no matches were found.
-     * @param {DecisionFindUniqueOrThrowArgs} args - Arguments to find a Decision
-     * @example
-     * // Get one Decision
-     * const decision = await prisma.decision.findUniqueOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findUniqueOrThrow<T extends DecisionFindUniqueOrThrowArgs>(
-      args: SelectSubset<T, DecisionFindUniqueOrThrowArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Decision that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionFindFirstArgs} args - Arguments to find a Decision
-     * @example
-     * // Get one Decision
-     * const decision = await prisma.decision.findFirst({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirst<T extends DecisionFindFirstArgs>(
-      args?: SelectSubset<T, DecisionFindFirstArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "findFirst",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find the first Decision that matches the filter or
-     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionFindFirstOrThrowArgs} args - Arguments to find a Decision
-     * @example
-     * // Get one Decision
-     * const decision = await prisma.decision.findFirstOrThrow({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     */
-    findFirstOrThrow<T extends DecisionFindFirstOrThrowArgs>(
-      args?: SelectSubset<T, DecisionFindFirstOrThrowArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "findFirstOrThrow",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Find zero or more Decisions that matches the filter.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionFindManyArgs} args - Arguments to filter and select certain fields only.
-     * @example
-     * // Get all Decisions
-     * const decisions = await prisma.decision.findMany()
-     *
-     * // Get first 10 Decisions
-     * const decisions = await prisma.decision.findMany({ take: 10 })
-     *
-     * // Only select the `id`
-     * const decisionWithIdOnly = await prisma.decision.findMany({ select: { id: true } })
-     *
-     */
-    findMany<T extends DecisionFindManyArgs>(
-      args?: SelectSubset<T, DecisionFindManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "findMany",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create a Decision.
-     * @param {DecisionCreateArgs} args - Arguments to create a Decision.
-     * @example
-     * // Create one Decision
-     * const Decision = await prisma.decision.create({
-     *   data: {
-     *     // ... data to create a Decision
-     *   }
-     * })
-     *
-     */
-    create<T extends DecisionCreateArgs>(
-      args: SelectSubset<T, DecisionCreateArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "create",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Create many Decisions.
-     * @param {DecisionCreateManyArgs} args - Arguments to create many Decisions.
-     * @example
-     * // Create many Decisions
-     * const decision = await prisma.decision.createMany({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     */
-    createMany<T extends DecisionCreateManyArgs>(
-      args?: SelectSubset<T, DecisionCreateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Create many Decisions and returns the data saved in the database.
-     * @param {DecisionCreateManyAndReturnArgs} args - Arguments to create many Decisions.
-     * @example
-     * // Create many Decisions
-     * const decision = await prisma.decision.createManyAndReturn({
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Create many Decisions and only return the `id`
-     * const decisionWithIdOnly = await prisma.decision.createManyAndReturn({
-     *   select: { id: true },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    createManyAndReturn<T extends DecisionCreateManyAndReturnArgs>(
-      args?: SelectSubset<T, DecisionCreateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "createManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Delete a Decision.
-     * @param {DecisionDeleteArgs} args - Arguments to delete one Decision.
-     * @example
-     * // Delete one Decision
-     * const Decision = await prisma.decision.delete({
-     *   where: {
-     *     // ... filter to delete one Decision
-     *   }
-     * })
-     *
-     */
-    delete<T extends DecisionDeleteArgs>(
-      args: SelectSubset<T, DecisionDeleteArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "delete",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Update one Decision.
-     * @param {DecisionUpdateArgs} args - Arguments to update one Decision.
-     * @example
-     * // Update one Decision
-     * const decision = await prisma.decision.update({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    update<T extends DecisionUpdateArgs>(
-      args: SelectSubset<T, DecisionUpdateArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "update",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Delete zero or more Decisions.
-     * @param {DecisionDeleteManyArgs} args - Arguments to filter Decisions to delete.
-     * @example
-     * // Delete a few Decisions
-     * const { count } = await prisma.decision.deleteMany({
-     *   where: {
-     *     // ... provide filter here
-     *   }
-     * })
-     *
-     */
-    deleteMany<T extends DecisionDeleteManyArgs>(
-      args?: SelectSubset<T, DecisionDeleteManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Decisions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionUpdateManyArgs} args - Arguments to update one or more rows.
-     * @example
-     * // Update many Decisions
-     * const decision = await prisma.decision.updateMany({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: {
-     *     // ... provide data here
-     *   }
-     * })
-     *
-     */
-    updateMany<T extends DecisionUpdateManyArgs>(
-      args: SelectSubset<T, DecisionUpdateManyArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<BatchPayload>
-
-    /**
-     * Update zero or more Decisions and returns the data updated in the database.
-     * @param {DecisionUpdateManyAndReturnArgs} args - Arguments to update many Decisions.
-     * @example
-     * // Update many Decisions
-     * const decision = await prisma.decision.updateManyAndReturn({
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     *
-     * // Update zero or more Decisions and only return the `id`
-     * const decisionWithIdOnly = await prisma.decision.updateManyAndReturn({
-     *   select: { id: true },
-     *   where: {
-     *     // ... provide filter here
-     *   },
-     *   data: [
-     *     // ... provide data here
-     *   ]
-     * })
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     *
-     */
-    updateManyAndReturn<T extends DecisionUpdateManyAndReturnArgs>(
-      args: SelectSubset<T, DecisionUpdateManyAndReturnArgs<ExtArgs>>
-    ): Prisma.PrismaPromise<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "updateManyAndReturn",
-        GlobalOmitOptions
-      >
-    >
-
-    /**
-     * Create or update one Decision.
-     * @param {DecisionUpsertArgs} args - Arguments to update or create a Decision.
-     * @example
-     * // Update or create a Decision
-     * const decision = await prisma.decision.upsert({
-     *   create: {
-     *     // ... data to create a Decision
-     *   },
-     *   update: {
-     *     // ... in case it already exists, update
-     *   },
-     *   where: {
-     *     // ... the filter for the Decision we want to update
-     *   }
-     * })
-     */
-    upsert<T extends DecisionUpsertArgs>(
-      args: SelectSubset<T, DecisionUpsertArgs<ExtArgs>>
-    ): Prisma__DecisionClient<
-      $Result.GetResult<
-        Prisma.$DecisionPayload<ExtArgs>,
-        T,
-        "upsert",
-        GlobalOmitOptions
-      >,
-      never,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-
-    /**
-     * Count the number of Decisions.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionCountArgs} args - Arguments to filter Decisions to count.
-     * @example
-     * // Count the number of Decisions
-     * const count = await prisma.decision.count({
-     *   where: {
-     *     // ... the filter for the Decisions we want to count
-     *   }
-     * })
-     **/
-    count<T extends DecisionCountArgs>(
-      args?: Subset<T, DecisionCountArgs>
-    ): Prisma.PrismaPromise<
-      T extends $Utils.Record<"select", any>
-        ? T["select"] extends true
-          ? number
-          : GetScalarType<T["select"], DecisionCountAggregateOutputType>
-        : number
-    >
-
-    /**
-     * Allows you to perform aggregations operations on a Decision.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
-     * @example
-     * // Ordered by age ascending
-     * // Where email contains prisma.io
-     * // Limited to the 10 users
-     * const aggregations = await prisma.user.aggregate({
-     *   _avg: {
-     *     age: true,
-     *   },
-     *   where: {
-     *     email: {
-     *       contains: "prisma.io",
-     *     },
-     *   },
-     *   orderBy: {
-     *     age: "asc",
-     *   },
-     *   take: 10,
-     * })
-     **/
-    aggregate<T extends DecisionAggregateArgs>(
-      args: Subset<T, DecisionAggregateArgs>
-    ): Prisma.PrismaPromise<GetDecisionAggregateType<T>>
-
-    /**
-     * Group by Decision.
-     * Note, that providing `undefined` is treated as the value not being there.
-     * Read more here: https://pris.ly/d/null-undefined
-     * @param {DecisionGroupByArgs} args - Group by arguments.
-     * @example
-     * // Group by city, order by createdAt, get count
-     * const result = await prisma.user.groupBy({
-     *   by: ['city', 'createdAt'],
-     *   orderBy: {
-     *     createdAt: true
-     *   },
-     *   _count: {
-     *     _all: true
-     *   },
-     * })
-     *
-     **/
-    groupBy<
-      T extends DecisionGroupByArgs,
-      HasSelectOrTake extends Or<
-        Extends<"skip", Keys<T>>,
-        Extends<"take", Keys<T>>
-      >,
-      OrderByArg extends True extends HasSelectOrTake
-        ? { orderBy: DecisionGroupByArgs["orderBy"] }
-        : { orderBy?: DecisionGroupByArgs["orderBy"] },
-      OrderFields extends ExcludeUnderscoreKeys<
-        Keys<MaybeTupleToUnion<T["orderBy"]>>
-      >,
-      ByFields extends MaybeTupleToUnion<T["by"]>,
-      ByValid extends Has<ByFields, OrderFields>,
-      HavingFields extends GetHavingFields<T["having"]>,
-      HavingValid extends Has<ByFields, HavingFields>,
-      ByEmpty extends T["by"] extends never[] ? True : False,
-      InputErrors extends ByEmpty extends True
-        ? `Error: "by" must not be empty.`
-        : HavingValid extends False
-          ? {
-              [P in HavingFields]: P extends ByFields
-                ? never
-                : P extends string
-                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
-                  : [
-                      Error,
-                      "Field ",
-                      P,
-                      ` in "having" needs to be provided in "by"`,
-                    ]
-            }[HavingFields]
-          : "take" extends Keys<T>
-            ? "orderBy" extends Keys<T>
-              ? ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields]
-              : 'Error: If you provide "take", you also need to provide "orderBy"'
-            : "skip" extends Keys<T>
-              ? "orderBy" extends Keys<T>
-                ? ByValid extends True
-                  ? {}
-                  : {
-                      [P in OrderFields]: P extends ByFields
-                        ? never
-                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                    }[OrderFields]
-                : 'Error: If you provide "skip", you also need to provide "orderBy"'
-              : ByValid extends True
-                ? {}
-                : {
-                    [P in OrderFields]: P extends ByFields
-                      ? never
-                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
-                  }[OrderFields],
-    >(
-      args: SubsetIntersection<T, DecisionGroupByArgs, OrderByArg> & InputErrors
-    ): {} extends InputErrors
-      ? GetDecisionGroupByPayload<T>
-      : Prisma.PrismaPromise<InputErrors>
-    /**
-     * Fields of the Decision model
-     */
-    readonly fields: DecisionFieldRefs
-  }
-
-  /**
-   * The delegate class that acts as a "Promise-like" for Decision.
-   * Why is this prefixed with `Prisma__`?
-   * Because we want to prevent naming conflicts as mentioned in
-   * https://github.com/prisma/prisma-client-js/issues/707
-   */
-  export interface Prisma__DecisionClient<
-    T,
-    Null = never,
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-    GlobalOmitOptions = {},
-  > extends Prisma.PrismaPromise<T> {
-    readonly [Symbol.toStringTag]: "PrismaPromise"
-    thread<T extends Decision$threadArgs<ExtArgs> = {}>(
-      args?: Subset<T, Decision$threadArgs<ExtArgs>>
-    ): Prisma__ThreadClient<
-      $Result.GetResult<
-        Prisma.$ThreadPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    project<T extends ProjectDefaultArgs<ExtArgs> = {}>(
-      args?: Subset<T, ProjectDefaultArgs<ExtArgs>>
-    ): Prisma__ProjectClient<
-      | $Result.GetResult<
-          Prisma.$ProjectPayload<ExtArgs>,
-          T,
-          "findUniqueOrThrow",
-          GlobalOmitOptions
-        >
-      | Null,
-      Null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    decidedBy<T extends Decision$decidedByArgs<ExtArgs> = {}>(
-      args?: Subset<T, Decision$decidedByArgs<ExtArgs>>
-    ): Prisma__UserClient<
-      $Result.GetResult<
-        Prisma.$UserPayload<ExtArgs>,
-        T,
-        "findUniqueOrThrow",
-        GlobalOmitOptions
-      > | null,
-      null,
-      ExtArgs,
-      GlobalOmitOptions
-    >
-    /**
-     * Attaches callbacks for the resolution and/or rejection of the Promise.
-     * @param onfulfilled The callback to execute when the Promise is resolved.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of which ever callback is executed.
-     */
-    then<TResult1 = T, TResult2 = never>(
-      onfulfilled?:
-        | ((value: T) => TResult1 | PromiseLike<TResult1>)
-        | undefined
-        | null,
-      onrejected?:
-        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<TResult1 | TResult2>
-    /**
-     * Attaches a callback for only the rejection of the Promise.
-     * @param onrejected The callback to execute when the Promise is rejected.
-     * @returns A Promise for the completion of the callback.
-     */
-    catch<TResult = never>(
-      onrejected?:
-        | ((reason: any) => TResult | PromiseLike<TResult>)
-        | undefined
-        | null
-    ): $Utils.JsPromise<T | TResult>
-    /**
-     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
-     * resolved value cannot be modified from the callback.
-     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
-     * @returns A Promise for the completion of the callback.
-     */
-    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
-  }
-
-  /**
-   * Fields of the Decision model
-   */
-  interface DecisionFieldRefs {
-    readonly id: FieldRef<"Decision", "String">
-    readonly title: FieldRef<"Decision", "String">
-    readonly description: FieldRef<"Decision", "String">
-    readonly decision: FieldRef<"Decision", "String">
-    readonly impactScope: FieldRef<"Decision", "String">
-    readonly impactDeadline: FieldRef<"Decision", "String">
-    readonly impactFinancial: FieldRef<"Decision", "String">
-    readonly threadId: FieldRef<"Decision", "String">
-    readonly projectId: FieldRef<"Decision", "String">
-    readonly decidedById: FieldRef<"Decision", "String">
-    readonly decidedAt: FieldRef<"Decision", "DateTime">
-    readonly createdAt: FieldRef<"Decision", "DateTime">
-    readonly updatedAt: FieldRef<"Decision", "DateTime">
-  }
-
-  // Custom InputTypes
-  /**
-   * Decision findUnique
-   */
-  export type DecisionFindUniqueArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter, which Decision to fetch.
-     */
-    where: DecisionWhereUniqueInput
-  }
-
-  /**
-   * Decision findUniqueOrThrow
-   */
-  export type DecisionFindUniqueOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter, which Decision to fetch.
-     */
-    where: DecisionWhereUniqueInput
-  }
-
-  /**
-   * Decision findFirst
-   */
-  export type DecisionFindFirstArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter, which Decision to fetch.
-     */
-    where?: DecisionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Decisions to fetch.
-     */
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Decisions.
-     */
-    cursor?: DecisionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Decisions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Decisions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Decisions.
-     */
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
-  }
-
-  /**
-   * Decision findFirstOrThrow
-   */
-  export type DecisionFindFirstOrThrowArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter, which Decision to fetch.
-     */
-    where?: DecisionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Decisions to fetch.
-     */
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for searching for Decisions.
-     */
-    cursor?: DecisionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Decisions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Decisions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Decisions.
-     */
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
-  }
-
-  /**
-   * Decision findMany
-   */
-  export type DecisionFindManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter, which Decisions to fetch.
-     */
-    where?: DecisionWhereInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
-     *
-     * Determine the order of Decisions to fetch.
-     */
-    orderBy?:
-      | DecisionOrderByWithRelationInput
-      | DecisionOrderByWithRelationInput[]
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
-     *
-     * Sets the position for listing Decisions.
-     */
-    cursor?: DecisionWhereUniqueInput
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Take `±n` Decisions from the position of the cursor.
-     */
-    take?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
-     *
-     * Skip the first `n` Decisions.
-     */
-    skip?: number
-    /**
-     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
-     *
-     * Filter by unique combinations of Decisions.
-     */
-    distinct?: DecisionScalarFieldEnum | DecisionScalarFieldEnum[]
-  }
-
-  /**
-   * Decision create
-   */
-  export type DecisionCreateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * The data needed to create a Decision.
-     */
-    data: XOR<DecisionCreateInput, DecisionUncheckedCreateInput>
-  }
-
-  /**
-   * Decision createMany
-   */
-  export type DecisionCreateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to create many Decisions.
-     */
-    data: DecisionCreateManyInput | DecisionCreateManyInput[]
-    skipDuplicates?: boolean
-  }
-
-  /**
-   * Decision createManyAndReturn
-   */
-  export type DecisionCreateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelectCreateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * The data used to create many Decisions.
-     */
-    data: DecisionCreateManyInput | DecisionCreateManyInput[]
-    skipDuplicates?: boolean
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionIncludeCreateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Decision update
-   */
-  export type DecisionUpdateArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * The data needed to update a Decision.
-     */
-    data: XOR<DecisionUpdateInput, DecisionUncheckedUpdateInput>
-    /**
-     * Choose, which Decision to update.
-     */
-    where: DecisionWhereUniqueInput
-  }
-
-  /**
-   * Decision updateMany
-   */
-  export type DecisionUpdateManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * The data used to update Decisions.
-     */
-    data: XOR<DecisionUpdateManyMutationInput, DecisionUncheckedUpdateManyInput>
-    /**
-     * Filter which Decisions to update
-     */
-    where?: DecisionWhereInput
-    /**
-     * Limit how many Decisions to update.
-     */
-    limit?: number
-  }
-
-  /**
-   * Decision updateManyAndReturn
-   */
-  export type DecisionUpdateManyAndReturnArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelectUpdateManyAndReturn<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * The data used to update Decisions.
-     */
-    data: XOR<DecisionUpdateManyMutationInput, DecisionUncheckedUpdateManyInput>
-    /**
-     * Filter which Decisions to update
-     */
-    where?: DecisionWhereInput
-    /**
-     * Limit how many Decisions to update.
-     */
-    limit?: number
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionIncludeUpdateManyAndReturn<ExtArgs> | null
-  }
-
-  /**
-   * Decision upsert
-   */
-  export type DecisionUpsertArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * The filter to search for the Decision to update in case it exists.
-     */
-    where: DecisionWhereUniqueInput
-    /**
-     * In case the Decision found by the `where` argument doesn't exist, create a new Decision with this data.
-     */
-    create: XOR<DecisionCreateInput, DecisionUncheckedCreateInput>
-    /**
-     * In case the Decision was found with the provided `where` argument, update it with this data.
-     */
-    update: XOR<DecisionUpdateInput, DecisionUncheckedUpdateInput>
-  }
-
-  /**
-   * Decision delete
-   */
-  export type DecisionDeleteArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
-    /**
-     * Filter which Decision to delete.
-     */
-    where: DecisionWhereUniqueInput
-  }
-
-  /**
-   * Decision deleteMany
-   */
-  export type DecisionDeleteManyArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Filter which Decisions to delete
-     */
-    where?: DecisionWhereInput
-    /**
-     * Limit how many Decisions to delete.
-     */
-    limit?: number
-  }
-
-  /**
-   * Decision.thread
-   */
-  export type Decision$threadArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Thread
-     */
-    select?: ThreadSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Thread
-     */
-    omit?: ThreadOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: ThreadInclude<ExtArgs> | null
-    where?: ThreadWhereInput
-  }
-
-  /**
-   * Decision.decidedBy
-   */
-  export type Decision$decidedByArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the User
-     */
-    select?: UserSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the User
-     */
-    omit?: UserOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: UserInclude<ExtArgs> | null
-    where?: UserWhereInput
-  }
-
-  /**
-   * Decision without action
-   */
-  export type DecisionDefaultArgs<
-    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
-  > = {
-    /**
-     * Select specific fields to fetch from the Decision
-     */
-    select?: DecisionSelect<ExtArgs> | null
-    /**
-     * Omit specific fields from the Decision
-     */
-    omit?: DecisionOmit<ExtArgs> | null
-    /**
-     * Choose, which related nodes to fetch as well
-     */
-    include?: DecisionInclude<ExtArgs> | null
   }
 
   /**
@@ -61710,6 +56701,8 @@ export namespace Prisma {
     progress: "progress"
     budget: "budget"
     customValue: "customValue"
+    hasInternationalization: "hasInternationalization"
+    internationalizationFee: "internationalizationFee"
     paymentMethod: "paymentMethod"
     serviceCategoryId: "serviceCategoryId"
     briefing: "briefing"
@@ -61825,56 +56818,6 @@ export namespace Prisma {
 
   export type ProjectKickoffChecklistScalarFieldEnum =
     (typeof ProjectKickoffChecklistScalarFieldEnum)[keyof typeof ProjectKickoffChecklistScalarFieldEnum]
-
-  export const ThreadScalarFieldEnum: {
-    id: "id"
-    entityType: "entityType"
-    entityId: "entityId"
-    title: "title"
-    status: "status"
-    projectId: "projectId"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
-  }
-
-  export type ThreadScalarFieldEnum =
-    (typeof ThreadScalarFieldEnum)[keyof typeof ThreadScalarFieldEnum]
-
-  export const MessageScalarFieldEnum: {
-    id: "id"
-    content: "content"
-    type: "type"
-    authorId: "authorId"
-    threadId: "threadId"
-    attachments: "attachments"
-    requiresResponse: "requiresResponse"
-    resolvedAt: "resolvedAt"
-    resolvedById: "resolvedById"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
-  }
-
-  export type MessageScalarFieldEnum =
-    (typeof MessageScalarFieldEnum)[keyof typeof MessageScalarFieldEnum]
-
-  export const DecisionScalarFieldEnum: {
-    id: "id"
-    title: "title"
-    description: "description"
-    decision: "decision"
-    impactScope: "impactScope"
-    impactDeadline: "impactDeadline"
-    impactFinancial: "impactFinancial"
-    threadId: "threadId"
-    projectId: "projectId"
-    decidedById: "decidedById"
-    decidedAt: "decidedAt"
-    createdAt: "createdAt"
-    updatedAt: "updatedAt"
-  }
-
-  export type DecisionScalarFieldEnum =
-    (typeof DecisionScalarFieldEnum)[keyof typeof DecisionScalarFieldEnum]
 
   export const BriefingEntryScalarFieldEnum: {
     id: "id"
@@ -62470,34 +57413,6 @@ export namespace Prisma {
     FieldRefInputType<$PrismaModel, "SignatureProvider[]">
 
   /**
-   * Reference to a field of type 'ThreadStatus'
-   */
-  export type EnumThreadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "ThreadStatus"
-  >
-
-  /**
-   * Reference to a field of type 'ThreadStatus[]'
-   */
-  export type ListEnumThreadStatusFieldRefInput<$PrismaModel> =
-    FieldRefInputType<$PrismaModel, "ThreadStatus[]">
-
-  /**
-   * Reference to a field of type 'MessageType'
-   */
-  export type EnumMessageTypeFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "MessageType"
-  >
-
-  /**
-   * Reference to a field of type 'MessageType[]'
-   */
-  export type ListEnumMessageTypeFieldRefInput<$PrismaModel> =
-    FieldRefInputType<$PrismaModel, "MessageType[]">
-
-  /**
    * Reference to a field of type 'ProjectMemberRole'
    */
   export type EnumProjectMemberRoleFieldRefInput<$PrismaModel> =
@@ -62899,9 +57814,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderListRelationFilter
     approvalEvents?: ApprovalEventListRelationFilter
     leadActivities?: LeadActivityListRelationFilter
-    messages?: MessageListRelationFilter
-    resolvedMessages?: MessageListRelationFilter
-    decisions?: DecisionListRelationFilter
     documents?: DocumentListRelationFilter
     createdDocumentVersions?: DocumentVersionListRelationFilter
     billingProfile?: XOR<
@@ -62934,9 +57846,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderOrderByRelationAggregateInput
     approvalEvents?: ApprovalEventOrderByRelationAggregateInput
     leadActivities?: LeadActivityOrderByRelationAggregateInput
-    messages?: MessageOrderByRelationAggregateInput
-    resolvedMessages?: MessageOrderByRelationAggregateInput
-    decisions?: DecisionOrderByRelationAggregateInput
     documents?: DocumentOrderByRelationAggregateInput
     createdDocumentVersions?: DocumentVersionOrderByRelationAggregateInput
     billingProfile?: BillingProfileOrderByWithRelationInput
@@ -62970,9 +57879,6 @@ export namespace Prisma {
       scheduledReminders?: ScheduledReminderListRelationFilter
       approvalEvents?: ApprovalEventListRelationFilter
       leadActivities?: LeadActivityListRelationFilter
-      messages?: MessageListRelationFilter
-      resolvedMessages?: MessageListRelationFilter
-      decisions?: DecisionListRelationFilter
       documents?: DocumentListRelationFilter
       createdDocumentVersions?: DocumentVersionListRelationFilter
       billingProfile?: XOR<
@@ -63579,6 +58485,8 @@ export namespace Prisma {
     progress?: IntFilter<"Project"> | number
     budget?: IntNullableFilter<"Project"> | number | null
     customValue?: BoolFilter<"Project"> | boolean
+    hasInternationalization?: BoolFilter<"Project"> | boolean
+    internationalizationFee?: IntNullableFilter<"Project"> | number | null
     paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
     serviceCategoryId?: StringNullableFilter<"Project"> | string | null
     briefing?: JsonNullableFilter<"Project">
@@ -63603,8 +58511,6 @@ export namespace Prisma {
     notifications?: NotificationListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     proposals?: ProposalListRelationFilter
-    threads?: ThreadListRelationFilter
-    decisions?: DecisionListRelationFilter
     handoff?: XOR<
       ProjectHandoffNullableScalarRelationFilter,
       ProjectHandoffWhereInput
@@ -63626,6 +58532,8 @@ export namespace Prisma {
     progress?: SortOrder
     budget?: SortOrderInput | SortOrder
     customValue?: SortOrder
+    hasInternationalization?: SortOrder
+    internationalizationFee?: SortOrderInput | SortOrder
     paymentMethod?: SortOrder
     serviceCategoryId?: SortOrderInput | SortOrder
     briefing?: SortOrderInput | SortOrder
@@ -63647,8 +58555,6 @@ export namespace Prisma {
     notifications?: NotificationOrderByRelationAggregateInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
     proposals?: ProposalOrderByRelationAggregateInput
-    threads?: ThreadOrderByRelationAggregateInput
-    decisions?: DecisionOrderByRelationAggregateInput
     handoff?: ProjectHandoffOrderByWithRelationInput
     kickoff?: ProjectKickoffChecklistOrderByWithRelationInput
     documents?: DocumentOrderByRelationAggregateInput
@@ -63668,6 +58574,8 @@ export namespace Prisma {
       progress?: IntFilter<"Project"> | number
       budget?: IntNullableFilter<"Project"> | number | null
       customValue?: BoolFilter<"Project"> | boolean
+      hasInternationalization?: BoolFilter<"Project"> | boolean
+      internationalizationFee?: IntNullableFilter<"Project"> | number | null
       paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
       serviceCategoryId?: StringNullableFilter<"Project"> | string | null
       briefing?: JsonNullableFilter<"Project">
@@ -63692,8 +58600,6 @@ export namespace Prisma {
       notifications?: NotificationListRelationFilter
       auditLogs?: AuditLogListRelationFilter
       proposals?: ProposalListRelationFilter
-      threads?: ThreadListRelationFilter
-      decisions?: DecisionListRelationFilter
       handoff?: XOR<
         ProjectHandoffNullableScalarRelationFilter,
         ProjectHandoffWhereInput
@@ -63717,6 +58623,8 @@ export namespace Prisma {
     progress?: SortOrder
     budget?: SortOrderInput | SortOrder
     customValue?: SortOrder
+    hasInternationalization?: SortOrder
+    internationalizationFee?: SortOrderInput | SortOrder
     paymentMethod?: SortOrder
     serviceCategoryId?: SortOrderInput | SortOrder
     briefing?: SortOrderInput | SortOrder
@@ -63754,6 +58662,11 @@ export namespace Prisma {
     progress?: IntWithAggregatesFilter<"Project"> | number
     budget?: IntNullableWithAggregatesFilter<"Project"> | number | null
     customValue?: BoolWithAggregatesFilter<"Project"> | boolean
+    hasInternationalization?: BoolWithAggregatesFilter<"Project"> | boolean
+    internationalizationFee?:
+      | IntNullableWithAggregatesFilter<"Project">
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodWithAggregatesFilter<"Project">
       | $Enums.PaymentMethod
@@ -64439,310 +59352,6 @@ export namespace Prisma {
       | DateTimeWithAggregatesFilter<"ProjectKickoffChecklist">
       | Date
       | string
-  }
-
-  export type ThreadWhereInput = {
-    AND?: ThreadWhereInput | ThreadWhereInput[]
-    OR?: ThreadWhereInput[]
-    NOT?: ThreadWhereInput | ThreadWhereInput[]
-    id?: StringFilter<"Thread"> | string
-    entityType?: StringFilter<"Thread"> | string
-    entityId?: StringFilter<"Thread"> | string
-    title?: StringNullableFilter<"Thread"> | string | null
-    status?: EnumThreadStatusFilter<"Thread"> | $Enums.ThreadStatus
-    projectId?: StringNullableFilter<"Thread"> | string | null
-    createdAt?: DateTimeFilter<"Thread"> | Date | string
-    updatedAt?: DateTimeFilter<"Thread"> | Date | string
-    project?: XOR<ProjectNullableScalarRelationFilter, ProjectWhereInput> | null
-    messages?: MessageListRelationFilter
-    decisions?: DecisionListRelationFilter
-  }
-
-  export type ThreadOrderByWithRelationInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    title?: SortOrderInput | SortOrder
-    status?: SortOrder
-    projectId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    project?: ProjectOrderByWithRelationInput
-    messages?: MessageOrderByRelationAggregateInput
-    decisions?: DecisionOrderByRelationAggregateInput
-  }
-
-  export type ThreadWhereUniqueInput = Prisma.AtLeast<
-    {
-      id?: string
-      AND?: ThreadWhereInput | ThreadWhereInput[]
-      OR?: ThreadWhereInput[]
-      NOT?: ThreadWhereInput | ThreadWhereInput[]
-      entityType?: StringFilter<"Thread"> | string
-      entityId?: StringFilter<"Thread"> | string
-      title?: StringNullableFilter<"Thread"> | string | null
-      status?: EnumThreadStatusFilter<"Thread"> | $Enums.ThreadStatus
-      projectId?: StringNullableFilter<"Thread"> | string | null
-      createdAt?: DateTimeFilter<"Thread"> | Date | string
-      updatedAt?: DateTimeFilter<"Thread"> | Date | string
-      project?: XOR<
-        ProjectNullableScalarRelationFilter,
-        ProjectWhereInput
-      > | null
-      messages?: MessageListRelationFilter
-      decisions?: DecisionListRelationFilter
-    },
-    "id"
-  >
-
-  export type ThreadOrderByWithAggregationInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    title?: SortOrderInput | SortOrder
-    status?: SortOrder
-    projectId?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: ThreadCountOrderByAggregateInput
-    _max?: ThreadMaxOrderByAggregateInput
-    _min?: ThreadMinOrderByAggregateInput
-  }
-
-  export type ThreadScalarWhereWithAggregatesInput = {
-    AND?:
-      | ThreadScalarWhereWithAggregatesInput
-      | ThreadScalarWhereWithAggregatesInput[]
-    OR?: ThreadScalarWhereWithAggregatesInput[]
-    NOT?:
-      | ThreadScalarWhereWithAggregatesInput
-      | ThreadScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Thread"> | string
-    entityType?: StringWithAggregatesFilter<"Thread"> | string
-    entityId?: StringWithAggregatesFilter<"Thread"> | string
-    title?: StringNullableWithAggregatesFilter<"Thread"> | string | null
-    status?:
-      | EnumThreadStatusWithAggregatesFilter<"Thread">
-      | $Enums.ThreadStatus
-    projectId?: StringNullableWithAggregatesFilter<"Thread"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Thread"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Thread"> | Date | string
-  }
-
-  export type MessageWhereInput = {
-    AND?: MessageWhereInput | MessageWhereInput[]
-    OR?: MessageWhereInput[]
-    NOT?: MessageWhereInput | MessageWhereInput[]
-    id?: StringFilter<"Message"> | string
-    content?: StringFilter<"Message"> | string
-    type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
-    authorId?: StringNullableFilter<"Message"> | string | null
-    threadId?: StringFilter<"Message"> | string
-    attachments?: JsonNullableFilter<"Message">
-    requiresResponse?: BoolFilter<"Message"> | boolean
-    resolvedAt?: DateTimeNullableFilter<"Message"> | Date | string | null
-    resolvedById?: StringNullableFilter<"Message"> | string | null
-    createdAt?: DateTimeFilter<"Message"> | Date | string
-    updatedAt?: DateTimeFilter<"Message"> | Date | string
-    author?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    thread?: XOR<ThreadScalarRelationFilter, ThreadWhereInput>
-    resolvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-  }
-
-  export type MessageOrderByWithRelationInput = {
-    id?: SortOrder
-    content?: SortOrder
-    type?: SortOrder
-    authorId?: SortOrderInput | SortOrder
-    threadId?: SortOrder
-    attachments?: SortOrderInput | SortOrder
-    requiresResponse?: SortOrder
-    resolvedAt?: SortOrderInput | SortOrder
-    resolvedById?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    author?: UserOrderByWithRelationInput
-    thread?: ThreadOrderByWithRelationInput
-    resolvedBy?: UserOrderByWithRelationInput
-  }
-
-  export type MessageWhereUniqueInput = Prisma.AtLeast<
-    {
-      id?: string
-      AND?: MessageWhereInput | MessageWhereInput[]
-      OR?: MessageWhereInput[]
-      NOT?: MessageWhereInput | MessageWhereInput[]
-      content?: StringFilter<"Message"> | string
-      type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
-      authorId?: StringNullableFilter<"Message"> | string | null
-      threadId?: StringFilter<"Message"> | string
-      attachments?: JsonNullableFilter<"Message">
-      requiresResponse?: BoolFilter<"Message"> | boolean
-      resolvedAt?: DateTimeNullableFilter<"Message"> | Date | string | null
-      resolvedById?: StringNullableFilter<"Message"> | string | null
-      createdAt?: DateTimeFilter<"Message"> | Date | string
-      updatedAt?: DateTimeFilter<"Message"> | Date | string
-      author?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-      thread?: XOR<ThreadScalarRelationFilter, ThreadWhereInput>
-      resolvedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    },
-    "id"
-  >
-
-  export type MessageOrderByWithAggregationInput = {
-    id?: SortOrder
-    content?: SortOrder
-    type?: SortOrder
-    authorId?: SortOrderInput | SortOrder
-    threadId?: SortOrder
-    attachments?: SortOrderInput | SortOrder
-    requiresResponse?: SortOrder
-    resolvedAt?: SortOrderInput | SortOrder
-    resolvedById?: SortOrderInput | SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: MessageCountOrderByAggregateInput
-    _max?: MessageMaxOrderByAggregateInput
-    _min?: MessageMinOrderByAggregateInput
-  }
-
-  export type MessageScalarWhereWithAggregatesInput = {
-    AND?:
-      | MessageScalarWhereWithAggregatesInput
-      | MessageScalarWhereWithAggregatesInput[]
-    OR?: MessageScalarWhereWithAggregatesInput[]
-    NOT?:
-      | MessageScalarWhereWithAggregatesInput
-      | MessageScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Message"> | string
-    content?: StringWithAggregatesFilter<"Message"> | string
-    type?: EnumMessageTypeWithAggregatesFilter<"Message"> | $Enums.MessageType
-    authorId?: StringNullableWithAggregatesFilter<"Message"> | string | null
-    threadId?: StringWithAggregatesFilter<"Message"> | string
-    attachments?: JsonNullableWithAggregatesFilter<"Message">
-    requiresResponse?: BoolWithAggregatesFilter<"Message"> | boolean
-    resolvedAt?:
-      | DateTimeNullableWithAggregatesFilter<"Message">
-      | Date
-      | string
-      | null
-    resolvedById?: StringNullableWithAggregatesFilter<"Message"> | string | null
-    createdAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Message"> | Date | string
-  }
-
-  export type DecisionWhereInput = {
-    AND?: DecisionWhereInput | DecisionWhereInput[]
-    OR?: DecisionWhereInput[]
-    NOT?: DecisionWhereInput | DecisionWhereInput[]
-    id?: StringFilter<"Decision"> | string
-    title?: StringFilter<"Decision"> | string
-    description?: StringNullableFilter<"Decision"> | string | null
-    decision?: StringFilter<"Decision"> | string
-    impactScope?: StringNullableFilter<"Decision"> | string | null
-    impactDeadline?: StringNullableFilter<"Decision"> | string | null
-    impactFinancial?: StringNullableFilter<"Decision"> | string | null
-    threadId?: StringNullableFilter<"Decision"> | string | null
-    projectId?: StringFilter<"Decision"> | string
-    decidedById?: StringNullableFilter<"Decision"> | string | null
-    decidedAt?: DateTimeFilter<"Decision"> | Date | string
-    createdAt?: DateTimeFilter<"Decision"> | Date | string
-    updatedAt?: DateTimeFilter<"Decision"> | Date | string
-    thread?: XOR<ThreadNullableScalarRelationFilter, ThreadWhereInput> | null
-    project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-    decidedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-  }
-
-  export type DecisionOrderByWithRelationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    decision?: SortOrder
-    impactScope?: SortOrderInput | SortOrder
-    impactDeadline?: SortOrderInput | SortOrder
-    impactFinancial?: SortOrderInput | SortOrder
-    threadId?: SortOrderInput | SortOrder
-    projectId?: SortOrder
-    decidedById?: SortOrderInput | SortOrder
-    decidedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    thread?: ThreadOrderByWithRelationInput
-    project?: ProjectOrderByWithRelationInput
-    decidedBy?: UserOrderByWithRelationInput
-  }
-
-  export type DecisionWhereUniqueInput = Prisma.AtLeast<
-    {
-      id?: string
-      AND?: DecisionWhereInput | DecisionWhereInput[]
-      OR?: DecisionWhereInput[]
-      NOT?: DecisionWhereInput | DecisionWhereInput[]
-      title?: StringFilter<"Decision"> | string
-      description?: StringNullableFilter<"Decision"> | string | null
-      decision?: StringFilter<"Decision"> | string
-      impactScope?: StringNullableFilter<"Decision"> | string | null
-      impactDeadline?: StringNullableFilter<"Decision"> | string | null
-      impactFinancial?: StringNullableFilter<"Decision"> | string | null
-      threadId?: StringNullableFilter<"Decision"> | string | null
-      projectId?: StringFilter<"Decision"> | string
-      decidedById?: StringNullableFilter<"Decision"> | string | null
-      decidedAt?: DateTimeFilter<"Decision"> | Date | string
-      createdAt?: DateTimeFilter<"Decision"> | Date | string
-      updatedAt?: DateTimeFilter<"Decision"> | Date | string
-      thread?: XOR<ThreadNullableScalarRelationFilter, ThreadWhereInput> | null
-      project?: XOR<ProjectScalarRelationFilter, ProjectWhereInput>
-      decidedBy?: XOR<UserNullableScalarRelationFilter, UserWhereInput> | null
-    },
-    "id"
-  >
-
-  export type DecisionOrderByWithAggregationInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrderInput | SortOrder
-    decision?: SortOrder
-    impactScope?: SortOrderInput | SortOrder
-    impactDeadline?: SortOrderInput | SortOrder
-    impactFinancial?: SortOrderInput | SortOrder
-    threadId?: SortOrderInput | SortOrder
-    projectId?: SortOrder
-    decidedById?: SortOrderInput | SortOrder
-    decidedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-    _count?: DecisionCountOrderByAggregateInput
-    _max?: DecisionMaxOrderByAggregateInput
-    _min?: DecisionMinOrderByAggregateInput
-  }
-
-  export type DecisionScalarWhereWithAggregatesInput = {
-    AND?:
-      | DecisionScalarWhereWithAggregatesInput
-      | DecisionScalarWhereWithAggregatesInput[]
-    OR?: DecisionScalarWhereWithAggregatesInput[]
-    NOT?:
-      | DecisionScalarWhereWithAggregatesInput
-      | DecisionScalarWhereWithAggregatesInput[]
-    id?: StringWithAggregatesFilter<"Decision"> | string
-    title?: StringWithAggregatesFilter<"Decision"> | string
-    description?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    decision?: StringWithAggregatesFilter<"Decision"> | string
-    impactScope?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    impactDeadline?:
-      | StringNullableWithAggregatesFilter<"Decision">
-      | string
-      | null
-    impactFinancial?:
-      | StringNullableWithAggregatesFilter<"Decision">
-      | string
-      | null
-    threadId?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    projectId?: StringWithAggregatesFilter<"Decision"> | string
-    decidedById?: StringNullableWithAggregatesFilter<"Decision"> | string | null
-    decidedAt?: DateTimeWithAggregatesFilter<"Decision"> | Date | string
-    createdAt?: DateTimeWithAggregatesFilter<"Decision"> | Date | string
-    updatedAt?: DateTimeWithAggregatesFilter<"Decision"> | Date | string
   }
 
   export type BriefingEntryWhereInput = {
@@ -66956,9 +61565,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -66988,9 +61594,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -67020,9 +61623,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -67052,9 +61652,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -67705,6 +62302,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -67724,8 +62323,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -67741,6 +62338,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -67760,8 +62359,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -67779,6 +62376,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -67800,8 +62402,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -67819,6 +62419,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -67840,8 +62445,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -67857,6 +62460,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -67880,6 +62485,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -67903,6 +62513,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -68516,310 +63131,6 @@ export namespace Prisma {
     accessReceived?: BoolFieldUpdateOperationsInput | boolean
     firstMeetingDone?: BoolFieldUpdateOperationsInput | boolean
     items?: NullableJsonNullValueInput | InputJsonValue
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ThreadCreateInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project?: ProjectCreateNestedOneWithoutThreadsInput
-    messages?: MessageCreateNestedManyWithoutThreadInput
-    decisions?: DecisionCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadUncheckedCreateInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    projectId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutThreadInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneWithoutThreadsNestedInput
-    messages?: MessageUpdateManyWithoutThreadNestedInput
-    decisions?: DecisionUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutThreadNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadCreateManyInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    projectId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ThreadUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type ThreadUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageCreateInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    author?: UserCreateNestedOneWithoutMessagesInput
-    thread: ThreadCreateNestedOneWithoutMessagesInput
-    resolvedBy?: UserCreateNestedOneWithoutResolvedMessagesInput
-  }
-
-  export type MessageUncheckedCreateInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneWithoutMessagesNestedInput
-    thread?: ThreadUpdateOneRequiredWithoutMessagesNestedInput
-    resolvedBy?: UserUpdateOneWithoutResolvedMessagesNestedInput
-  }
-
-  export type MessageUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageCreateManyInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    thread?: ThreadCreateNestedOneWithoutDecisionsInput
-    project: ProjectCreateNestedOneWithoutDecisionsInput
-    decidedBy?: UserCreateNestedOneWithoutDecisionsInput
-  }
-
-  export type DecisionUncheckedCreateInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    projectId: string
-    decidedById?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    thread?: ThreadUpdateOneWithoutDecisionsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutDecisionsNestedInput
-    decidedBy?: UserUpdateOneWithoutDecisionsNestedInput
-  }
-
-  export type DecisionUncheckedUpdateInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionCreateManyInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    projectId: string
-    decidedById?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionUpdateManyMutationInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUncheckedUpdateManyInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -71220,18 +65531,6 @@ export namespace Prisma {
     none?: LeadActivityWhereInput
   }
 
-  export type MessageListRelationFilter = {
-    every?: MessageWhereInput
-    some?: MessageWhereInput
-    none?: MessageWhereInput
-  }
-
-  export type DecisionListRelationFilter = {
-    every?: DecisionWhereInput
-    some?: DecisionWhereInput
-    none?: DecisionWhereInput
-  }
-
   export type DocumentListRelationFilter = {
     every?: DocumentWhereInput
     some?: DocumentWhereInput
@@ -71288,14 +65587,6 @@ export namespace Prisma {
   }
 
   export type LeadActivityOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type MessageOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
-  export type DecisionOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -71854,12 +66145,6 @@ export namespace Prisma {
     none?: VersionWhereInput
   }
 
-  export type ThreadListRelationFilter = {
-    every?: ThreadWhereInput
-    some?: ThreadWhereInput
-    none?: ThreadWhereInput
-  }
-
   export type ProjectHandoffNullableScalarRelationFilter = {
     is?: ProjectHandoffWhereInput | null
     isNot?: ProjectHandoffWhereInput | null
@@ -71896,10 +66181,6 @@ export namespace Prisma {
     _count?: SortOrder
   }
 
-  export type ThreadOrderByRelationAggregateInput = {
-    _count?: SortOrder
-  }
-
   export type InvoiceOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -71913,6 +66194,8 @@ export namespace Prisma {
     progress?: SortOrder
     budget?: SortOrder
     customValue?: SortOrder
+    hasInternationalization?: SortOrder
+    internationalizationFee?: SortOrder
     paymentMethod?: SortOrder
     serviceCategoryId?: SortOrder
     briefing?: SortOrder
@@ -71928,6 +66211,7 @@ export namespace Prisma {
   export type ProjectAvgOrderByAggregateInput = {
     progress?: SortOrder
     budget?: SortOrder
+    internationalizationFee?: SortOrder
   }
 
   export type ProjectMaxOrderByAggregateInput = {
@@ -71939,6 +66223,8 @@ export namespace Prisma {
     progress?: SortOrder
     budget?: SortOrder
     customValue?: SortOrder
+    hasInternationalization?: SortOrder
+    internationalizationFee?: SortOrder
     paymentMethod?: SortOrder
     serviceCategoryId?: SortOrder
     startDate?: SortOrder
@@ -71959,6 +66245,8 @@ export namespace Prisma {
     progress?: SortOrder
     budget?: SortOrder
     customValue?: SortOrder
+    hasInternationalization?: SortOrder
+    internationalizationFee?: SortOrder
     paymentMethod?: SortOrder
     serviceCategoryId?: SortOrder
     startDate?: SortOrder
@@ -71973,6 +66261,7 @@ export namespace Prisma {
   export type ProjectSumOrderByAggregateInput = {
     progress?: SortOrder
     budget?: SortOrder
+    internationalizationFee?: SortOrder
   }
 
   export type EnumProjectStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -72456,183 +66745,6 @@ export namespace Prisma {
     brandAssetsSent?: SortOrder
     accessReceived?: SortOrder
     firstMeetingDone?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type EnumThreadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ThreadStatus | EnumThreadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ThreadStatus[] | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.ThreadStatus[]
-      | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumThreadStatusFilter<$PrismaModel> | $Enums.ThreadStatus
-  }
-
-  export type ThreadCountOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    title?: SortOrder
-    status?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ThreadMaxOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    title?: SortOrder
-    status?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type ThreadMinOrderByAggregateInput = {
-    id?: SortOrder
-    entityType?: SortOrder
-    entityId?: SortOrder
-    title?: SortOrder
-    status?: SortOrder
-    projectId?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type EnumThreadStatusWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.ThreadStatus | EnumThreadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ThreadStatus[] | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.ThreadStatus[]
-      | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    not?:
-      | NestedEnumThreadStatusWithAggregatesFilter<$PrismaModel>
-      | $Enums.ThreadStatus
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumThreadStatusFilter<$PrismaModel>
-    _max?: NestedEnumThreadStatusFilter<$PrismaModel>
-  }
-
-  export type EnumMessageTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.MessageType[]
-      | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
-  }
-
-  export type ThreadScalarRelationFilter = {
-    is?: ThreadWhereInput
-    isNot?: ThreadWhereInput
-  }
-
-  export type MessageCountOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    type?: SortOrder
-    authorId?: SortOrder
-    threadId?: SortOrder
-    attachments?: SortOrder
-    requiresResponse?: SortOrder
-    resolvedAt?: SortOrder
-    resolvedById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type MessageMaxOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    type?: SortOrder
-    authorId?: SortOrder
-    threadId?: SortOrder
-    requiresResponse?: SortOrder
-    resolvedAt?: SortOrder
-    resolvedById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type MessageMinOrderByAggregateInput = {
-    id?: SortOrder
-    content?: SortOrder
-    type?: SortOrder
-    authorId?: SortOrder
-    threadId?: SortOrder
-    requiresResponse?: SortOrder
-    resolvedAt?: SortOrder
-    resolvedById?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type EnumMessageTypeWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.MessageType[]
-      | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    not?:
-      | NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel>
-      | $Enums.MessageType
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedEnumMessageTypeFilter<$PrismaModel>
-    _max?: NestedEnumMessageTypeFilter<$PrismaModel>
-  }
-
-  export type ThreadNullableScalarRelationFilter = {
-    is?: ThreadWhereInput | null
-    isNot?: ThreadWhereInput | null
-  }
-
-  export type DecisionCountOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    decision?: SortOrder
-    impactScope?: SortOrder
-    impactDeadline?: SortOrder
-    impactFinancial?: SortOrder
-    threadId?: SortOrder
-    projectId?: SortOrder
-    decidedById?: SortOrder
-    decidedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type DecisionMaxOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    decision?: SortOrder
-    impactScope?: SortOrder
-    impactDeadline?: SortOrder
-    impactFinancial?: SortOrder
-    threadId?: SortOrder
-    projectId?: SortOrder
-    decidedById?: SortOrder
-    decidedAt?: SortOrder
-    createdAt?: SortOrder
-    updatedAt?: SortOrder
-  }
-
-  export type DecisionMinOrderByAggregateInput = {
-    id?: SortOrder
-    title?: SortOrder
-    description?: SortOrder
-    decision?: SortOrder
-    impactScope?: SortOrder
-    impactDeadline?: SortOrder
-    impactFinancial?: SortOrder
-    threadId?: SortOrder
-    projectId?: SortOrder
-    decidedById?: SortOrder
-    decidedAt?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -74152,51 +68264,6 @@ export namespace Prisma {
     connect?: LeadActivityWhereUniqueInput | LeadActivityWhereUniqueInput[]
   }
 
-  export type MessageCreateNestedManyWithoutAuthorInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutAuthorInput,
-          MessageUncheckedCreateWithoutAuthorInput
-        >
-      | MessageCreateWithoutAuthorInput[]
-      | MessageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutAuthorInput
-      | MessageCreateOrConnectWithoutAuthorInput[]
-    createMany?: MessageCreateManyAuthorInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type MessageCreateNestedManyWithoutResolvedByInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutResolvedByInput,
-          MessageUncheckedCreateWithoutResolvedByInput
-        >
-      | MessageCreateWithoutResolvedByInput[]
-      | MessageUncheckedCreateWithoutResolvedByInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutResolvedByInput
-      | MessageCreateOrConnectWithoutResolvedByInput[]
-    createMany?: MessageCreateManyResolvedByInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type DecisionCreateNestedManyWithoutDecidedByInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutDecidedByInput,
-          DecisionUncheckedCreateWithoutDecidedByInput
-        >
-      | DecisionCreateWithoutDecidedByInput[]
-      | DecisionUncheckedCreateWithoutDecidedByInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutDecidedByInput
-      | DecisionCreateOrConnectWithoutDecidedByInput[]
-    createMany?: DecisionCreateManyDecidedByInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-  }
-
   export type DocumentCreateNestedManyWithoutClientInput = {
     create?:
       | XOR<
@@ -74389,51 +68456,6 @@ export namespace Prisma {
       | LeadActivityCreateOrConnectWithoutAuthorInput[]
     createMany?: LeadActivityCreateManyAuthorInputEnvelope
     connect?: LeadActivityWhereUniqueInput | LeadActivityWhereUniqueInput[]
-  }
-
-  export type MessageUncheckedCreateNestedManyWithoutAuthorInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutAuthorInput,
-          MessageUncheckedCreateWithoutAuthorInput
-        >
-      | MessageCreateWithoutAuthorInput[]
-      | MessageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutAuthorInput
-      | MessageCreateOrConnectWithoutAuthorInput[]
-    createMany?: MessageCreateManyAuthorInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type MessageUncheckedCreateNestedManyWithoutResolvedByInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutResolvedByInput,
-          MessageUncheckedCreateWithoutResolvedByInput
-        >
-      | MessageCreateWithoutResolvedByInput[]
-      | MessageUncheckedCreateWithoutResolvedByInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutResolvedByInput
-      | MessageCreateOrConnectWithoutResolvedByInput[]
-    createMany?: MessageCreateManyResolvedByInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type DecisionUncheckedCreateNestedManyWithoutDecidedByInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutDecidedByInput,
-          DecisionUncheckedCreateWithoutDecidedByInput
-        >
-      | DecisionCreateWithoutDecidedByInput[]
-      | DecisionUncheckedCreateWithoutDecidedByInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutDecidedByInput
-      | DecisionCreateOrConnectWithoutDecidedByInput[]
-    createMany?: DecisionCreateManyDecidedByInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
   }
 
   export type DocumentUncheckedCreateNestedManyWithoutClientInput = {
@@ -74756,90 +68778,6 @@ export namespace Prisma {
       | LeadActivityUpdateManyWithWhereWithoutAuthorInput
       | LeadActivityUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: LeadActivityScalarWhereInput | LeadActivityScalarWhereInput[]
-  }
-
-  export type MessageUpdateManyWithoutAuthorNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutAuthorInput,
-          MessageUncheckedCreateWithoutAuthorInput
-        >
-      | MessageCreateWithoutAuthorInput[]
-      | MessageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutAuthorInput
-      | MessageCreateOrConnectWithoutAuthorInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutAuthorInput
-      | MessageUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: MessageCreateManyAuthorInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutAuthorInput
-      | MessageUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutAuthorInput
-      | MessageUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type MessageUpdateManyWithoutResolvedByNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutResolvedByInput,
-          MessageUncheckedCreateWithoutResolvedByInput
-        >
-      | MessageCreateWithoutResolvedByInput[]
-      | MessageUncheckedCreateWithoutResolvedByInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutResolvedByInput
-      | MessageCreateOrConnectWithoutResolvedByInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutResolvedByInput
-      | MessageUpsertWithWhereUniqueWithoutResolvedByInput[]
-    createMany?: MessageCreateManyResolvedByInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutResolvedByInput
-      | MessageUpdateWithWhereUniqueWithoutResolvedByInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutResolvedByInput
-      | MessageUpdateManyWithWhereWithoutResolvedByInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type DecisionUpdateManyWithoutDecidedByNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutDecidedByInput,
-          DecisionUncheckedCreateWithoutDecidedByInput
-        >
-      | DecisionCreateWithoutDecidedByInput[]
-      | DecisionUncheckedCreateWithoutDecidedByInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutDecidedByInput
-      | DecisionCreateOrConnectWithoutDecidedByInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutDecidedByInput
-      | DecisionUpsertWithWhereUniqueWithoutDecidedByInput[]
-    createMany?: DecisionCreateManyDecidedByInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutDecidedByInput
-      | DecisionUpdateWithWhereUniqueWithoutDecidedByInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutDecidedByInput
-      | DecisionUpdateManyWithWhereWithoutDecidedByInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
   }
 
   export type DocumentUpdateManyWithoutClientNestedInput = {
@@ -75212,90 +69150,6 @@ export namespace Prisma {
       | LeadActivityUpdateManyWithWhereWithoutAuthorInput
       | LeadActivityUpdateManyWithWhereWithoutAuthorInput[]
     deleteMany?: LeadActivityScalarWhereInput | LeadActivityScalarWhereInput[]
-  }
-
-  export type MessageUncheckedUpdateManyWithoutAuthorNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutAuthorInput,
-          MessageUncheckedCreateWithoutAuthorInput
-        >
-      | MessageCreateWithoutAuthorInput[]
-      | MessageUncheckedCreateWithoutAuthorInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutAuthorInput
-      | MessageCreateOrConnectWithoutAuthorInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutAuthorInput
-      | MessageUpsertWithWhereUniqueWithoutAuthorInput[]
-    createMany?: MessageCreateManyAuthorInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutAuthorInput
-      | MessageUpdateWithWhereUniqueWithoutAuthorInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutAuthorInput
-      | MessageUpdateManyWithWhereWithoutAuthorInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type MessageUncheckedUpdateManyWithoutResolvedByNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutResolvedByInput,
-          MessageUncheckedCreateWithoutResolvedByInput
-        >
-      | MessageCreateWithoutResolvedByInput[]
-      | MessageUncheckedCreateWithoutResolvedByInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutResolvedByInput
-      | MessageCreateOrConnectWithoutResolvedByInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutResolvedByInput
-      | MessageUpsertWithWhereUniqueWithoutResolvedByInput[]
-    createMany?: MessageCreateManyResolvedByInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutResolvedByInput
-      | MessageUpdateWithWhereUniqueWithoutResolvedByInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutResolvedByInput
-      | MessageUpdateManyWithWhereWithoutResolvedByInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutDecidedByNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutDecidedByInput,
-          DecisionUncheckedCreateWithoutDecidedByInput
-        >
-      | DecisionCreateWithoutDecidedByInput[]
-      | DecisionUncheckedCreateWithoutDecidedByInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutDecidedByInput
-      | DecisionCreateOrConnectWithoutDecidedByInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutDecidedByInput
-      | DecisionUpsertWithWhereUniqueWithoutDecidedByInput[]
-    createMany?: DecisionCreateManyDecidedByInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutDecidedByInput
-      | DecisionUpdateWithWhereUniqueWithoutDecidedByInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutDecidedByInput
-      | DecisionUpdateManyWithWhereWithoutDecidedByInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
   }
 
   export type DocumentUncheckedUpdateManyWithoutClientNestedInput = {
@@ -76142,36 +69996,6 @@ export namespace Prisma {
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
   }
 
-  export type ThreadCreateNestedManyWithoutProjectInput = {
-    create?:
-      | XOR<
-          ThreadCreateWithoutProjectInput,
-          ThreadUncheckedCreateWithoutProjectInput
-        >
-      | ThreadCreateWithoutProjectInput[]
-      | ThreadUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | ThreadCreateOrConnectWithoutProjectInput
-      | ThreadCreateOrConnectWithoutProjectInput[]
-    createMany?: ThreadCreateManyProjectInputEnvelope
-    connect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-  }
-
-  export type DecisionCreateNestedManyWithoutProjectInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutProjectInput,
-          DecisionUncheckedCreateWithoutProjectInput
-        >
-      | DecisionCreateWithoutProjectInput[]
-      | DecisionUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutProjectInput
-      | DecisionCreateOrConnectWithoutProjectInput[]
-    createMany?: DecisionCreateManyProjectInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-  }
-
   export type ProjectHandoffCreateNestedOneWithoutProjectInput = {
     create?: XOR<
       ProjectHandoffCreateWithoutProjectInput,
@@ -76353,36 +70177,6 @@ export namespace Prisma {
       | ProposalCreateOrConnectWithoutProjectInput[]
     createMany?: ProposalCreateManyProjectInputEnvelope
     connect?: ProposalWhereUniqueInput | ProposalWhereUniqueInput[]
-  }
-
-  export type ThreadUncheckedCreateNestedManyWithoutProjectInput = {
-    create?:
-      | XOR<
-          ThreadCreateWithoutProjectInput,
-          ThreadUncheckedCreateWithoutProjectInput
-        >
-      | ThreadCreateWithoutProjectInput[]
-      | ThreadUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | ThreadCreateOrConnectWithoutProjectInput
-      | ThreadCreateOrConnectWithoutProjectInput[]
-    createMany?: ThreadCreateManyProjectInputEnvelope
-    connect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-  }
-
-  export type DecisionUncheckedCreateNestedManyWithoutProjectInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutProjectInput,
-          DecisionUncheckedCreateWithoutProjectInput
-        >
-      | DecisionCreateWithoutProjectInput[]
-      | DecisionUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutProjectInput
-      | DecisionCreateOrConnectWithoutProjectInput[]
-    createMany?: DecisionCreateManyProjectInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
   }
 
   export type ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput = {
@@ -76742,62 +70536,6 @@ export namespace Prisma {
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
   }
 
-  export type ThreadUpdateManyWithoutProjectNestedInput = {
-    create?:
-      | XOR<
-          ThreadCreateWithoutProjectInput,
-          ThreadUncheckedCreateWithoutProjectInput
-        >
-      | ThreadCreateWithoutProjectInput[]
-      | ThreadUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | ThreadCreateOrConnectWithoutProjectInput
-      | ThreadCreateOrConnectWithoutProjectInput[]
-    upsert?:
-      | ThreadUpsertWithWhereUniqueWithoutProjectInput
-      | ThreadUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ThreadCreateManyProjectInputEnvelope
-    set?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    disconnect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    delete?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    connect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    update?:
-      | ThreadUpdateWithWhereUniqueWithoutProjectInput
-      | ThreadUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?:
-      | ThreadUpdateManyWithWhereWithoutProjectInput
-      | ThreadUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ThreadScalarWhereInput | ThreadScalarWhereInput[]
-  }
-
-  export type DecisionUpdateManyWithoutProjectNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutProjectInput,
-          DecisionUncheckedCreateWithoutProjectInput
-        >
-      | DecisionCreateWithoutProjectInput[]
-      | DecisionUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutProjectInput
-      | DecisionCreateOrConnectWithoutProjectInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutProjectInput
-      | DecisionUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: DecisionCreateManyProjectInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutProjectInput
-      | DecisionUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutProjectInput
-      | DecisionUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
-  }
-
   export type ProjectHandoffUpdateOneWithoutProjectNestedInput = {
     create?: XOR<
       ProjectHandoffCreateWithoutProjectInput,
@@ -77142,62 +70880,6 @@ export namespace Prisma {
       | ProposalUpdateManyWithWhereWithoutProjectInput
       | ProposalUpdateManyWithWhereWithoutProjectInput[]
     deleteMany?: ProposalScalarWhereInput | ProposalScalarWhereInput[]
-  }
-
-  export type ThreadUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?:
-      | XOR<
-          ThreadCreateWithoutProjectInput,
-          ThreadUncheckedCreateWithoutProjectInput
-        >
-      | ThreadCreateWithoutProjectInput[]
-      | ThreadUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | ThreadCreateOrConnectWithoutProjectInput
-      | ThreadCreateOrConnectWithoutProjectInput[]
-    upsert?:
-      | ThreadUpsertWithWhereUniqueWithoutProjectInput
-      | ThreadUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: ThreadCreateManyProjectInputEnvelope
-    set?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    disconnect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    delete?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    connect?: ThreadWhereUniqueInput | ThreadWhereUniqueInput[]
-    update?:
-      | ThreadUpdateWithWhereUniqueWithoutProjectInput
-      | ThreadUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?:
-      | ThreadUpdateManyWithWhereWithoutProjectInput
-      | ThreadUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: ThreadScalarWhereInput | ThreadScalarWhereInput[]
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutProjectNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutProjectInput,
-          DecisionUncheckedCreateWithoutProjectInput
-        >
-      | DecisionCreateWithoutProjectInput[]
-      | DecisionUncheckedCreateWithoutProjectInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutProjectInput
-      | DecisionCreateOrConnectWithoutProjectInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutProjectInput
-      | DecisionUpsertWithWhereUniqueWithoutProjectInput[]
-    createMany?: DecisionCreateManyProjectInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutProjectInput
-      | DecisionUpdateWithWhereUniqueWithoutProjectInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutProjectInput
-      | DecisionUpdateManyWithWhereWithoutProjectInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
   }
 
   export type ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput = {
@@ -77958,378 +71640,6 @@ export namespace Prisma {
         ProjectUpdateWithoutKickoffInput
       >,
       ProjectUncheckedUpdateWithoutKickoffInput
-    >
-  }
-
-  export type ProjectCreateNestedOneWithoutThreadsInput = {
-    create?: XOR<
-      ProjectCreateWithoutThreadsInput,
-      ProjectUncheckedCreateWithoutThreadsInput
-    >
-    connectOrCreate?: ProjectCreateOrConnectWithoutThreadsInput
-    connect?: ProjectWhereUniqueInput
-  }
-
-  export type MessageCreateNestedManyWithoutThreadInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutThreadInput,
-          MessageUncheckedCreateWithoutThreadInput
-        >
-      | MessageCreateWithoutThreadInput[]
-      | MessageUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutThreadInput
-      | MessageCreateOrConnectWithoutThreadInput[]
-    createMany?: MessageCreateManyThreadInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type DecisionCreateNestedManyWithoutThreadInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutThreadInput,
-          DecisionUncheckedCreateWithoutThreadInput
-        >
-      | DecisionCreateWithoutThreadInput[]
-      | DecisionUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutThreadInput
-      | DecisionCreateOrConnectWithoutThreadInput[]
-    createMany?: DecisionCreateManyThreadInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-  }
-
-  export type MessageUncheckedCreateNestedManyWithoutThreadInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutThreadInput,
-          MessageUncheckedCreateWithoutThreadInput
-        >
-      | MessageCreateWithoutThreadInput[]
-      | MessageUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutThreadInput
-      | MessageCreateOrConnectWithoutThreadInput[]
-    createMany?: MessageCreateManyThreadInputEnvelope
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-  }
-
-  export type DecisionUncheckedCreateNestedManyWithoutThreadInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutThreadInput,
-          DecisionUncheckedCreateWithoutThreadInput
-        >
-      | DecisionCreateWithoutThreadInput[]
-      | DecisionUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutThreadInput
-      | DecisionCreateOrConnectWithoutThreadInput[]
-    createMany?: DecisionCreateManyThreadInputEnvelope
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-  }
-
-  export type EnumThreadStatusFieldUpdateOperationsInput = {
-    set?: $Enums.ThreadStatus
-  }
-
-  export type ProjectUpdateOneWithoutThreadsNestedInput = {
-    create?: XOR<
-      ProjectCreateWithoutThreadsInput,
-      ProjectUncheckedCreateWithoutThreadsInput
-    >
-    connectOrCreate?: ProjectCreateOrConnectWithoutThreadsInput
-    upsert?: ProjectUpsertWithoutThreadsInput
-    disconnect?: ProjectWhereInput | boolean
-    delete?: ProjectWhereInput | boolean
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<
-      XOR<
-        ProjectUpdateToOneWithWhereWithoutThreadsInput,
-        ProjectUpdateWithoutThreadsInput
-      >,
-      ProjectUncheckedUpdateWithoutThreadsInput
-    >
-  }
-
-  export type MessageUpdateManyWithoutThreadNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutThreadInput,
-          MessageUncheckedCreateWithoutThreadInput
-        >
-      | MessageCreateWithoutThreadInput[]
-      | MessageUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutThreadInput
-      | MessageCreateOrConnectWithoutThreadInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutThreadInput
-      | MessageUpsertWithWhereUniqueWithoutThreadInput[]
-    createMany?: MessageCreateManyThreadInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutThreadInput
-      | MessageUpdateWithWhereUniqueWithoutThreadInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutThreadInput
-      | MessageUpdateManyWithWhereWithoutThreadInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type DecisionUpdateManyWithoutThreadNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutThreadInput,
-          DecisionUncheckedCreateWithoutThreadInput
-        >
-      | DecisionCreateWithoutThreadInput[]
-      | DecisionUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutThreadInput
-      | DecisionCreateOrConnectWithoutThreadInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutThreadInput
-      | DecisionUpsertWithWhereUniqueWithoutThreadInput[]
-    createMany?: DecisionCreateManyThreadInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutThreadInput
-      | DecisionUpdateWithWhereUniqueWithoutThreadInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutThreadInput
-      | DecisionUpdateManyWithWhereWithoutThreadInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
-  }
-
-  export type MessageUncheckedUpdateManyWithoutThreadNestedInput = {
-    create?:
-      | XOR<
-          MessageCreateWithoutThreadInput,
-          MessageUncheckedCreateWithoutThreadInput
-        >
-      | MessageCreateWithoutThreadInput[]
-      | MessageUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | MessageCreateOrConnectWithoutThreadInput
-      | MessageCreateOrConnectWithoutThreadInput[]
-    upsert?:
-      | MessageUpsertWithWhereUniqueWithoutThreadInput
-      | MessageUpsertWithWhereUniqueWithoutThreadInput[]
-    createMany?: MessageCreateManyThreadInputEnvelope
-    set?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    disconnect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    delete?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    connect?: MessageWhereUniqueInput | MessageWhereUniqueInput[]
-    update?:
-      | MessageUpdateWithWhereUniqueWithoutThreadInput
-      | MessageUpdateWithWhereUniqueWithoutThreadInput[]
-    updateMany?:
-      | MessageUpdateManyWithWhereWithoutThreadInput
-      | MessageUpdateManyWithWhereWithoutThreadInput[]
-    deleteMany?: MessageScalarWhereInput | MessageScalarWhereInput[]
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutThreadNestedInput = {
-    create?:
-      | XOR<
-          DecisionCreateWithoutThreadInput,
-          DecisionUncheckedCreateWithoutThreadInput
-        >
-      | DecisionCreateWithoutThreadInput[]
-      | DecisionUncheckedCreateWithoutThreadInput[]
-    connectOrCreate?:
-      | DecisionCreateOrConnectWithoutThreadInput
-      | DecisionCreateOrConnectWithoutThreadInput[]
-    upsert?:
-      | DecisionUpsertWithWhereUniqueWithoutThreadInput
-      | DecisionUpsertWithWhereUniqueWithoutThreadInput[]
-    createMany?: DecisionCreateManyThreadInputEnvelope
-    set?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    disconnect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    delete?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    connect?: DecisionWhereUniqueInput | DecisionWhereUniqueInput[]
-    update?:
-      | DecisionUpdateWithWhereUniqueWithoutThreadInput
-      | DecisionUpdateWithWhereUniqueWithoutThreadInput[]
-    updateMany?:
-      | DecisionUpdateManyWithWhereWithoutThreadInput
-      | DecisionUpdateManyWithWhereWithoutThreadInput[]
-    deleteMany?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
-  }
-
-  export type UserCreateNestedOneWithoutMessagesInput = {
-    create?: XOR<
-      UserCreateWithoutMessagesInput,
-      UserUncheckedCreateWithoutMessagesInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutMessagesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type ThreadCreateNestedOneWithoutMessagesInput = {
-    create?: XOR<
-      ThreadCreateWithoutMessagesInput,
-      ThreadUncheckedCreateWithoutMessagesInput
-    >
-    connectOrCreate?: ThreadCreateOrConnectWithoutMessagesInput
-    connect?: ThreadWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutResolvedMessagesInput = {
-    create?: XOR<
-      UserCreateWithoutResolvedMessagesInput,
-      UserUncheckedCreateWithoutResolvedMessagesInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutResolvedMessagesInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type EnumMessageTypeFieldUpdateOperationsInput = {
-    set?: $Enums.MessageType
-  }
-
-  export type UserUpdateOneWithoutMessagesNestedInput = {
-    create?: XOR<
-      UserCreateWithoutMessagesInput,
-      UserUncheckedCreateWithoutMessagesInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutMessagesInput
-    upsert?: UserUpsertWithoutMessagesInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<
-      XOR<
-        UserUpdateToOneWithWhereWithoutMessagesInput,
-        UserUpdateWithoutMessagesInput
-      >,
-      UserUncheckedUpdateWithoutMessagesInput
-    >
-  }
-
-  export type ThreadUpdateOneRequiredWithoutMessagesNestedInput = {
-    create?: XOR<
-      ThreadCreateWithoutMessagesInput,
-      ThreadUncheckedCreateWithoutMessagesInput
-    >
-    connectOrCreate?: ThreadCreateOrConnectWithoutMessagesInput
-    upsert?: ThreadUpsertWithoutMessagesInput
-    connect?: ThreadWhereUniqueInput
-    update?: XOR<
-      XOR<
-        ThreadUpdateToOneWithWhereWithoutMessagesInput,
-        ThreadUpdateWithoutMessagesInput
-      >,
-      ThreadUncheckedUpdateWithoutMessagesInput
-    >
-  }
-
-  export type UserUpdateOneWithoutResolvedMessagesNestedInput = {
-    create?: XOR<
-      UserCreateWithoutResolvedMessagesInput,
-      UserUncheckedCreateWithoutResolvedMessagesInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutResolvedMessagesInput
-    upsert?: UserUpsertWithoutResolvedMessagesInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<
-      XOR<
-        UserUpdateToOneWithWhereWithoutResolvedMessagesInput,
-        UserUpdateWithoutResolvedMessagesInput
-      >,
-      UserUncheckedUpdateWithoutResolvedMessagesInput
-    >
-  }
-
-  export type ThreadCreateNestedOneWithoutDecisionsInput = {
-    create?: XOR<
-      ThreadCreateWithoutDecisionsInput,
-      ThreadUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: ThreadCreateOrConnectWithoutDecisionsInput
-    connect?: ThreadWhereUniqueInput
-  }
-
-  export type ProjectCreateNestedOneWithoutDecisionsInput = {
-    create?: XOR<
-      ProjectCreateWithoutDecisionsInput,
-      ProjectUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: ProjectCreateOrConnectWithoutDecisionsInput
-    connect?: ProjectWhereUniqueInput
-  }
-
-  export type UserCreateNestedOneWithoutDecisionsInput = {
-    create?: XOR<
-      UserCreateWithoutDecisionsInput,
-      UserUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutDecisionsInput
-    connect?: UserWhereUniqueInput
-  }
-
-  export type ThreadUpdateOneWithoutDecisionsNestedInput = {
-    create?: XOR<
-      ThreadCreateWithoutDecisionsInput,
-      ThreadUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: ThreadCreateOrConnectWithoutDecisionsInput
-    upsert?: ThreadUpsertWithoutDecisionsInput
-    disconnect?: ThreadWhereInput | boolean
-    delete?: ThreadWhereInput | boolean
-    connect?: ThreadWhereUniqueInput
-    update?: XOR<
-      XOR<
-        ThreadUpdateToOneWithWhereWithoutDecisionsInput,
-        ThreadUpdateWithoutDecisionsInput
-      >,
-      ThreadUncheckedUpdateWithoutDecisionsInput
-    >
-  }
-
-  export type ProjectUpdateOneRequiredWithoutDecisionsNestedInput = {
-    create?: XOR<
-      ProjectCreateWithoutDecisionsInput,
-      ProjectUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: ProjectCreateOrConnectWithoutDecisionsInput
-    upsert?: ProjectUpsertWithoutDecisionsInput
-    connect?: ProjectWhereUniqueInput
-    update?: XOR<
-      XOR<
-        ProjectUpdateToOneWithWhereWithoutDecisionsInput,
-        ProjectUpdateWithoutDecisionsInput
-      >,
-      ProjectUncheckedUpdateWithoutDecisionsInput
-    >
-  }
-
-  export type UserUpdateOneWithoutDecisionsNestedInput = {
-    create?: XOR<
-      UserCreateWithoutDecisionsInput,
-      UserUncheckedCreateWithoutDecisionsInput
-    >
-    connectOrCreate?: UserCreateOrConnectWithoutDecisionsInput
-    upsert?: UserUpsertWithoutDecisionsInput
-    disconnect?: UserWhereInput | boolean
-    delete?: UserWhereInput | boolean
-    connect?: UserWhereUniqueInput
-    update?: XOR<
-      XOR<
-        UserUpdateToOneWithWhereWithoutDecisionsInput,
-        UserUpdateWithoutDecisionsInput
-      >,
-      UserUncheckedUpdateWithoutDecisionsInput
     >
   }
 
@@ -80225,56 +73535,6 @@ export namespace Prisma {
     _max?: NestedFloatNullableFilter<$PrismaModel>
   }
 
-  export type NestedEnumThreadStatusFilter<$PrismaModel = never> = {
-    equals?: $Enums.ThreadStatus | EnumThreadStatusFieldRefInput<$PrismaModel>
-    in?: $Enums.ThreadStatus[] | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.ThreadStatus[]
-      | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-    not?: NestedEnumThreadStatusFilter<$PrismaModel> | $Enums.ThreadStatus
-  }
-
-  export type NestedEnumThreadStatusWithAggregatesFilter<$PrismaModel = never> =
-    {
-      equals?: $Enums.ThreadStatus | EnumThreadStatusFieldRefInput<$PrismaModel>
-      in?:
-        | $Enums.ThreadStatus[]
-        | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-      notIn?:
-        | $Enums.ThreadStatus[]
-        | ListEnumThreadStatusFieldRefInput<$PrismaModel>
-      not?:
-        | NestedEnumThreadStatusWithAggregatesFilter<$PrismaModel>
-        | $Enums.ThreadStatus
-      _count?: NestedIntFilter<$PrismaModel>
-      _min?: NestedEnumThreadStatusFilter<$PrismaModel>
-      _max?: NestedEnumThreadStatusFilter<$PrismaModel>
-    }
-
-  export type NestedEnumMessageTypeFilter<$PrismaModel = never> = {
-    equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
-    in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    notIn?:
-      | $Enums.MessageType[]
-      | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-    not?: NestedEnumMessageTypeFilter<$PrismaModel> | $Enums.MessageType
-  }
-
-  export type NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel = never> =
-    {
-      equals?: $Enums.MessageType | EnumMessageTypeFieldRefInput<$PrismaModel>
-      in?: $Enums.MessageType[] | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-      notIn?:
-        | $Enums.MessageType[]
-        | ListEnumMessageTypeFieldRefInput<$PrismaModel>
-      not?:
-        | NestedEnumMessageTypeWithAggregatesFilter<$PrismaModel>
-        | $Enums.MessageType
-      _count?: NestedIntFilter<$PrismaModel>
-      _min?: NestedEnumMessageTypeFilter<$PrismaModel>
-      _max?: NestedEnumMessageTypeFilter<$PrismaModel>
-    }
-
   export type NestedEnumProjectMemberRoleFilter<$PrismaModel = never> = {
     equals?:
       | $Enums.ProjectMemberRole
@@ -80724,6 +73984,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -80742,8 +74004,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -80759,6 +74019,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -80777,8 +74039,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -81104,127 +74364,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type MessageCreateWithoutAuthorInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    thread: ThreadCreateNestedOneWithoutMessagesInput
-    resolvedBy?: UserCreateNestedOneWithoutResolvedMessagesInput
-  }
-
-  export type MessageUncheckedCreateWithoutAuthorInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageCreateOrConnectWithoutAuthorInput = {
-    where: MessageWhereUniqueInput
-    create: XOR<
-      MessageCreateWithoutAuthorInput,
-      MessageUncheckedCreateWithoutAuthorInput
-    >
-  }
-
-  export type MessageCreateManyAuthorInputEnvelope = {
-    data: MessageCreateManyAuthorInput | MessageCreateManyAuthorInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type MessageCreateWithoutResolvedByInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    author?: UserCreateNestedOneWithoutMessagesInput
-    thread: ThreadCreateNestedOneWithoutMessagesInput
-  }
-
-  export type MessageUncheckedCreateWithoutResolvedByInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageCreateOrConnectWithoutResolvedByInput = {
-    where: MessageWhereUniqueInput
-    create: XOR<
-      MessageCreateWithoutResolvedByInput,
-      MessageUncheckedCreateWithoutResolvedByInput
-    >
-  }
-
-  export type MessageCreateManyResolvedByInputEnvelope = {
-    data: MessageCreateManyResolvedByInput | MessageCreateManyResolvedByInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DecisionCreateWithoutDecidedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    thread?: ThreadCreateNestedOneWithoutDecisionsInput
-    project: ProjectCreateNestedOneWithoutDecisionsInput
-  }
-
-  export type DecisionUncheckedCreateWithoutDecidedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    projectId: string
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateOrConnectWithoutDecidedByInput = {
-    where: DecisionWhereUniqueInput
-    create: XOR<
-      DecisionCreateWithoutDecidedByInput,
-      DecisionUncheckedCreateWithoutDecidedByInput
-    >
-  }
-
-  export type DecisionCreateManyDecidedByInputEnvelope = {
-    data: DecisionCreateManyDecidedByInput | DecisionCreateManyDecidedByInput[]
-    skipDuplicates?: boolean
-  }
-
   export type DocumentCreateWithoutClientInput = {
     id?: string
     type?: $Enums.DocumentType
@@ -81442,6 +74581,8 @@ export namespace Prisma {
     progress?: IntFilter<"Project"> | number
     budget?: IntNullableFilter<"Project"> | number | null
     customValue?: BoolFilter<"Project"> | boolean
+    hasInternationalization?: BoolFilter<"Project"> | boolean
+    internationalizationFee?: IntNullableFilter<"Project"> | number | null
     paymentMethod?: EnumPaymentMethodFilter<"Project"> | $Enums.PaymentMethod
     serviceCategoryId?: StringNullableFilter<"Project"> | string | null
     briefing?: JsonNullableFilter<"Project">
@@ -81820,126 +74961,6 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"LeadActivity"> | Date | string
   }
 
-  export type MessageUpsertWithWhereUniqueWithoutAuthorInput = {
-    where: MessageWhereUniqueInput
-    update: XOR<
-      MessageUpdateWithoutAuthorInput,
-      MessageUncheckedUpdateWithoutAuthorInput
-    >
-    create: XOR<
-      MessageCreateWithoutAuthorInput,
-      MessageUncheckedCreateWithoutAuthorInput
-    >
-  }
-
-  export type MessageUpdateWithWhereUniqueWithoutAuthorInput = {
-    where: MessageWhereUniqueInput
-    data: XOR<
-      MessageUpdateWithoutAuthorInput,
-      MessageUncheckedUpdateWithoutAuthorInput
-    >
-  }
-
-  export type MessageUpdateManyWithWhereWithoutAuthorInput = {
-    where: MessageScalarWhereInput
-    data: XOR<
-      MessageUpdateManyMutationInput,
-      MessageUncheckedUpdateManyWithoutAuthorInput
-    >
-  }
-
-  export type MessageScalarWhereInput = {
-    AND?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    OR?: MessageScalarWhereInput[]
-    NOT?: MessageScalarWhereInput | MessageScalarWhereInput[]
-    id?: StringFilter<"Message"> | string
-    content?: StringFilter<"Message"> | string
-    type?: EnumMessageTypeFilter<"Message"> | $Enums.MessageType
-    authorId?: StringNullableFilter<"Message"> | string | null
-    threadId?: StringFilter<"Message"> | string
-    attachments?: JsonNullableFilter<"Message">
-    requiresResponse?: BoolFilter<"Message"> | boolean
-    resolvedAt?: DateTimeNullableFilter<"Message"> | Date | string | null
-    resolvedById?: StringNullableFilter<"Message"> | string | null
-    createdAt?: DateTimeFilter<"Message"> | Date | string
-    updatedAt?: DateTimeFilter<"Message"> | Date | string
-  }
-
-  export type MessageUpsertWithWhereUniqueWithoutResolvedByInput = {
-    where: MessageWhereUniqueInput
-    update: XOR<
-      MessageUpdateWithoutResolvedByInput,
-      MessageUncheckedUpdateWithoutResolvedByInput
-    >
-    create: XOR<
-      MessageCreateWithoutResolvedByInput,
-      MessageUncheckedCreateWithoutResolvedByInput
-    >
-  }
-
-  export type MessageUpdateWithWhereUniqueWithoutResolvedByInput = {
-    where: MessageWhereUniqueInput
-    data: XOR<
-      MessageUpdateWithoutResolvedByInput,
-      MessageUncheckedUpdateWithoutResolvedByInput
-    >
-  }
-
-  export type MessageUpdateManyWithWhereWithoutResolvedByInput = {
-    where: MessageScalarWhereInput
-    data: XOR<
-      MessageUpdateManyMutationInput,
-      MessageUncheckedUpdateManyWithoutResolvedByInput
-    >
-  }
-
-  export type DecisionUpsertWithWhereUniqueWithoutDecidedByInput = {
-    where: DecisionWhereUniqueInput
-    update: XOR<
-      DecisionUpdateWithoutDecidedByInput,
-      DecisionUncheckedUpdateWithoutDecidedByInput
-    >
-    create: XOR<
-      DecisionCreateWithoutDecidedByInput,
-      DecisionUncheckedCreateWithoutDecidedByInput
-    >
-  }
-
-  export type DecisionUpdateWithWhereUniqueWithoutDecidedByInput = {
-    where: DecisionWhereUniqueInput
-    data: XOR<
-      DecisionUpdateWithoutDecidedByInput,
-      DecisionUncheckedUpdateWithoutDecidedByInput
-    >
-  }
-
-  export type DecisionUpdateManyWithWhereWithoutDecidedByInput = {
-    where: DecisionScalarWhereInput
-    data: XOR<
-      DecisionUpdateManyMutationInput,
-      DecisionUncheckedUpdateManyWithoutDecidedByInput
-    >
-  }
-
-  export type DecisionScalarWhereInput = {
-    AND?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
-    OR?: DecisionScalarWhereInput[]
-    NOT?: DecisionScalarWhereInput | DecisionScalarWhereInput[]
-    id?: StringFilter<"Decision"> | string
-    title?: StringFilter<"Decision"> | string
-    description?: StringNullableFilter<"Decision"> | string | null
-    decision?: StringFilter<"Decision"> | string
-    impactScope?: StringNullableFilter<"Decision"> | string | null
-    impactDeadline?: StringNullableFilter<"Decision"> | string | null
-    impactFinancial?: StringNullableFilter<"Decision"> | string | null
-    threadId?: StringNullableFilter<"Decision"> | string | null
-    projectId?: StringFilter<"Decision"> | string
-    decidedById?: StringNullableFilter<"Decision"> | string | null
-    decidedAt?: DateTimeFilter<"Decision"> | Date | string
-    createdAt?: DateTimeFilter<"Decision"> | Date | string
-    updatedAt?: DateTimeFilter<"Decision"> | Date | string
-  }
-
   export type DocumentUpsertWithWhereUniqueWithoutClientInput = {
     where: DocumentWhereUniqueInput
     update: XOR<
@@ -82158,9 +75179,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -82189,9 +75207,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -82416,9 +75431,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -82447,9 +75459,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -82666,9 +75675,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -82697,9 +75703,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -82854,9 +75857,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -82885,9 +75885,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -82972,9 +75969,6 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -83003,9 +75997,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -83160,9 +76151,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -83191,9 +76179,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -83209,6 +76194,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -83227,8 +76214,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -83244,6 +76229,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -83262,8 +76249,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -83400,9 +76385,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -83431,9 +76413,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -83764,86 +76743,6 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
-  export type ThreadCreateWithoutProjectInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    messages?: MessageCreateNestedManyWithoutThreadInput
-    decisions?: DecisionCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadUncheckedCreateWithoutProjectInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutThreadInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadCreateOrConnectWithoutProjectInput = {
-    where: ThreadWhereUniqueInput
-    create: XOR<
-      ThreadCreateWithoutProjectInput,
-      ThreadUncheckedCreateWithoutProjectInput
-    >
-  }
-
-  export type ThreadCreateManyProjectInputEnvelope = {
-    data: ThreadCreateManyProjectInput | ThreadCreateManyProjectInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DecisionCreateWithoutProjectInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    thread?: ThreadCreateNestedOneWithoutDecisionsInput
-    decidedBy?: UserCreateNestedOneWithoutDecisionsInput
-  }
-
-  export type DecisionUncheckedCreateWithoutProjectInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    decidedById?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateOrConnectWithoutProjectInput = {
-    where: DecisionWhereUniqueInput
-    create: XOR<
-      DecisionCreateWithoutProjectInput,
-      DecisionUncheckedCreateWithoutProjectInput
-    >
-  }
-
-  export type DecisionCreateManyProjectInputEnvelope = {
-    data: DecisionCreateManyProjectInput | DecisionCreateManyProjectInput[]
-    skipDuplicates?: boolean
-  }
-
   export type ProjectHandoffCreateWithoutProjectInput = {
     id?: string
     proposalTitle?: string | null
@@ -84143,9 +77042,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -84174,9 +77070,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -84476,76 +77369,6 @@ export namespace Prisma {
     >
   }
 
-  export type ThreadUpsertWithWhereUniqueWithoutProjectInput = {
-    where: ThreadWhereUniqueInput
-    update: XOR<
-      ThreadUpdateWithoutProjectInput,
-      ThreadUncheckedUpdateWithoutProjectInput
-    >
-    create: XOR<
-      ThreadCreateWithoutProjectInput,
-      ThreadUncheckedCreateWithoutProjectInput
-    >
-  }
-
-  export type ThreadUpdateWithWhereUniqueWithoutProjectInput = {
-    where: ThreadWhereUniqueInput
-    data: XOR<
-      ThreadUpdateWithoutProjectInput,
-      ThreadUncheckedUpdateWithoutProjectInput
-    >
-  }
-
-  export type ThreadUpdateManyWithWhereWithoutProjectInput = {
-    where: ThreadScalarWhereInput
-    data: XOR<
-      ThreadUpdateManyMutationInput,
-      ThreadUncheckedUpdateManyWithoutProjectInput
-    >
-  }
-
-  export type ThreadScalarWhereInput = {
-    AND?: ThreadScalarWhereInput | ThreadScalarWhereInput[]
-    OR?: ThreadScalarWhereInput[]
-    NOT?: ThreadScalarWhereInput | ThreadScalarWhereInput[]
-    id?: StringFilter<"Thread"> | string
-    entityType?: StringFilter<"Thread"> | string
-    entityId?: StringFilter<"Thread"> | string
-    title?: StringNullableFilter<"Thread"> | string | null
-    status?: EnumThreadStatusFilter<"Thread"> | $Enums.ThreadStatus
-    projectId?: StringNullableFilter<"Thread"> | string | null
-    createdAt?: DateTimeFilter<"Thread"> | Date | string
-    updatedAt?: DateTimeFilter<"Thread"> | Date | string
-  }
-
-  export type DecisionUpsertWithWhereUniqueWithoutProjectInput = {
-    where: DecisionWhereUniqueInput
-    update: XOR<
-      DecisionUpdateWithoutProjectInput,
-      DecisionUncheckedUpdateWithoutProjectInput
-    >
-    create: XOR<
-      DecisionCreateWithoutProjectInput,
-      DecisionUncheckedCreateWithoutProjectInput
-    >
-  }
-
-  export type DecisionUpdateWithWhereUniqueWithoutProjectInput = {
-    where: DecisionWhereUniqueInput
-    data: XOR<
-      DecisionUpdateWithoutProjectInput,
-      DecisionUncheckedUpdateWithoutProjectInput
-    >
-  }
-
-  export type DecisionUpdateManyWithWhereWithoutProjectInput = {
-    where: DecisionScalarWhereInput
-    data: XOR<
-      DecisionUpdateManyMutationInput,
-      DecisionUncheckedUpdateManyWithoutProjectInput
-    >
-  }
-
   export type ProjectHandoffUpsertWithoutProjectInput = {
     update: XOR<
       ProjectHandoffUpdateWithoutProjectInput,
@@ -84794,9 +77617,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
@@ -84825,9 +77645,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
@@ -84850,6 +77667,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -84869,8 +77688,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     invoices?: InvoiceCreateNestedManyWithoutProjectInput
@@ -84885,6 +77702,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -84904,8 +77723,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
@@ -85214,9 +78031,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
@@ -85245,9 +78059,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
@@ -85284,6 +78095,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -85305,8 +78121,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     invoices?: InvoiceUpdateManyWithoutProjectNestedInput
@@ -85323,6 +78137,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -85344,8 +78163,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
@@ -85569,9 +78386,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
@@ -85600,9 +78414,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
@@ -85731,9 +78542,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
@@ -85762,9 +78570,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
@@ -86027,6 +78832,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -86046,8 +78853,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
     invoices?: InvoiceCreateNestedManyWithoutProjectInput
@@ -86062,6 +78867,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -86081,8 +78888,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
@@ -86173,6 +78978,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -86194,8 +79004,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
     invoices?: InvoiceUpdateManyWithoutProjectNestedInput
@@ -86212,6 +79020,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -86233,8 +79046,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
@@ -86327,6 +79138,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -86346,8 +79159,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
     invoices?: InvoiceCreateNestedManyWithoutProjectInput
@@ -86362,6 +79173,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -86381,8 +79194,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
     invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
@@ -86427,6 +79238,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -86448,8 +79264,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
     invoices?: InvoiceUpdateManyWithoutProjectNestedInput
@@ -86466,6 +79280,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -86487,1109 +79306,9 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
     invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectCreateWithoutThreadsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    status?: $Enums.ProjectStatus
-    category?: $Enums.ProjectCategory
-    progress?: number
-    budget?: number | null
-    customValue?: boolean
-    paymentMethod?: $Enums.PaymentMethod
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: Date | string
-    deadline?: Date | string | null
-    liveUrl?: string | null
-    repositoryUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
-    briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
-    client: UserCreateNestedOneWithoutProjectsInput
-    members?: ProjectMemberCreateNestedManyWithoutProjectInput
-    updates?: UpdateCreateNestedManyWithoutProjectInput
-    assets?: AssetCreateNestedManyWithoutProjectInput
-    actionItems?: ActionItemCreateNestedManyWithoutProjectInput
-    versions?: VersionCreateNestedManyWithoutProjectInput
-    notifications?: NotificationCreateNestedManyWithoutProjectInput
-    auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
-    proposals?: ProposalCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
-    handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
-    kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
-    documents?: DocumentCreateNestedManyWithoutProjectInput
-    invoices?: InvoiceCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectUncheckedCreateWithoutThreadsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    status?: $Enums.ProjectStatus
-    category?: $Enums.ProjectCategory
-    progress?: number
-    budget?: number | null
-    customValue?: boolean
-    paymentMethod?: $Enums.PaymentMethod
-    serviceCategoryId?: string | null
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: Date | string
-    deadline?: Date | string | null
-    liveUrl?: string | null
-    repositoryUrl?: string | null
-    clientId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    briefingNotes?: BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
-    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
-    updates?: UpdateUncheckedCreateNestedManyWithoutProjectInput
-    assets?: AssetUncheckedCreateNestedManyWithoutProjectInput
-    actionItems?: ActionItemUncheckedCreateNestedManyWithoutProjectInput
-    versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
-    proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
-    handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
-    kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
-    documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectCreateOrConnectWithoutThreadsInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<
-      ProjectCreateWithoutThreadsInput,
-      ProjectUncheckedCreateWithoutThreadsInput
-    >
-  }
-
-  export type MessageCreateWithoutThreadInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    author?: UserCreateNestedOneWithoutMessagesInput
-    resolvedBy?: UserCreateNestedOneWithoutResolvedMessagesInput
-  }
-
-  export type MessageUncheckedCreateWithoutThreadInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageCreateOrConnectWithoutThreadInput = {
-    where: MessageWhereUniqueInput
-    create: XOR<
-      MessageCreateWithoutThreadInput,
-      MessageUncheckedCreateWithoutThreadInput
-    >
-  }
-
-  export type MessageCreateManyThreadInputEnvelope = {
-    data: MessageCreateManyThreadInput | MessageCreateManyThreadInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type DecisionCreateWithoutThreadInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project: ProjectCreateNestedOneWithoutDecisionsInput
-    decidedBy?: UserCreateNestedOneWithoutDecisionsInput
-  }
-
-  export type DecisionUncheckedCreateWithoutThreadInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    projectId: string
-    decidedById?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateOrConnectWithoutThreadInput = {
-    where: DecisionWhereUniqueInput
-    create: XOR<
-      DecisionCreateWithoutThreadInput,
-      DecisionUncheckedCreateWithoutThreadInput
-    >
-  }
-
-  export type DecisionCreateManyThreadInputEnvelope = {
-    data: DecisionCreateManyThreadInput | DecisionCreateManyThreadInput[]
-    skipDuplicates?: boolean
-  }
-
-  export type ProjectUpsertWithoutThreadsInput = {
-    update: XOR<
-      ProjectUpdateWithoutThreadsInput,
-      ProjectUncheckedUpdateWithoutThreadsInput
-    >
-    create: XOR<
-      ProjectCreateWithoutThreadsInput,
-      ProjectUncheckedCreateWithoutThreadsInput
-    >
-    where?: ProjectWhereInput
-  }
-
-  export type ProjectUpdateToOneWithWhereWithoutThreadsInput = {
-    where?: ProjectWhereInput
-    data: XOR<
-      ProjectUpdateWithoutThreadsInput,
-      ProjectUncheckedUpdateWithoutThreadsInput
-    >
-  }
-
-  export type ProjectUpdateWithoutThreadsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    category?:
-      | EnumProjectCategoryFieldUpdateOperationsInput
-      | $Enums.ProjectCategory
-    progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableIntFieldUpdateOperationsInput | number | null
-    customValue?: BoolFieldUpdateOperationsInput | boolean
-    paymentMethod?:
-      | EnumPaymentMethodFieldUpdateOperationsInput
-      | $Enums.PaymentMethod
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
-    briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
-    client?: UserUpdateOneRequiredWithoutProjectsNestedInput
-    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    updates?: UpdateUpdateManyWithoutProjectNestedInput
-    assets?: AssetUpdateManyWithoutProjectNestedInput
-    actionItems?: ActionItemUpdateManyWithoutProjectNestedInput
-    versions?: VersionUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUpdateManyWithoutProjectNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
-    proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
-    handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
-    kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
-    documents?: DocumentUpdateManyWithoutProjectNestedInput
-    invoices?: InvoiceUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateWithoutThreadsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    category?:
-      | EnumProjectCategoryFieldUpdateOperationsInput
-      | $Enums.ProjectCategory
-    progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableIntFieldUpdateOperationsInput | number | null
-    customValue?: BoolFieldUpdateOperationsInput | boolean
-    paymentMethod?:
-      | EnumPaymentMethodFieldUpdateOperationsInput
-      | $Enums.PaymentMethod
-    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    briefingNotes?: BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
-    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
-    updates?: UpdateUncheckedUpdateManyWithoutProjectNestedInput
-    assets?: AssetUncheckedUpdateManyWithoutProjectNestedInput
-    actionItems?: ActionItemUncheckedUpdateManyWithoutProjectNestedInput
-    versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
-    proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
-    handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
-    kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type MessageUpsertWithWhereUniqueWithoutThreadInput = {
-    where: MessageWhereUniqueInput
-    update: XOR<
-      MessageUpdateWithoutThreadInput,
-      MessageUncheckedUpdateWithoutThreadInput
-    >
-    create: XOR<
-      MessageCreateWithoutThreadInput,
-      MessageUncheckedCreateWithoutThreadInput
-    >
-  }
-
-  export type MessageUpdateWithWhereUniqueWithoutThreadInput = {
-    where: MessageWhereUniqueInput
-    data: XOR<
-      MessageUpdateWithoutThreadInput,
-      MessageUncheckedUpdateWithoutThreadInput
-    >
-  }
-
-  export type MessageUpdateManyWithWhereWithoutThreadInput = {
-    where: MessageScalarWhereInput
-    data: XOR<
-      MessageUpdateManyMutationInput,
-      MessageUncheckedUpdateManyWithoutThreadInput
-    >
-  }
-
-  export type DecisionUpsertWithWhereUniqueWithoutThreadInput = {
-    where: DecisionWhereUniqueInput
-    update: XOR<
-      DecisionUpdateWithoutThreadInput,
-      DecisionUncheckedUpdateWithoutThreadInput
-    >
-    create: XOR<
-      DecisionCreateWithoutThreadInput,
-      DecisionUncheckedCreateWithoutThreadInput
-    >
-  }
-
-  export type DecisionUpdateWithWhereUniqueWithoutThreadInput = {
-    where: DecisionWhereUniqueInput
-    data: XOR<
-      DecisionUpdateWithoutThreadInput,
-      DecisionUncheckedUpdateWithoutThreadInput
-    >
-  }
-
-  export type DecisionUpdateManyWithWhereWithoutThreadInput = {
-    where: DecisionScalarWhereInput
-    data: XOR<
-      DecisionUpdateManyMutationInput,
-      DecisionUncheckedUpdateManyWithoutThreadInput
-    >
-  }
-
-  export type UserCreateWithoutMessagesInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
-    documents?: DocumentCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutMessagesInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadUncheckedCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteUncheckedCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
-    documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutMessagesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<
-      UserCreateWithoutMessagesInput,
-      UserUncheckedCreateWithoutMessagesInput
-    >
-  }
-
-  export type ThreadCreateWithoutMessagesInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project?: ProjectCreateNestedOneWithoutThreadsInput
-    decisions?: DecisionCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadUncheckedCreateWithoutMessagesInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    projectId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    decisions?: DecisionUncheckedCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadCreateOrConnectWithoutMessagesInput = {
-    where: ThreadWhereUniqueInput
-    create: XOR<
-      ThreadCreateWithoutMessagesInput,
-      ThreadUncheckedCreateWithoutMessagesInput
-    >
-  }
-
-  export type UserCreateWithoutResolvedMessagesInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
-    documents?: DocumentCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutResolvedMessagesInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadUncheckedCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteUncheckedCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
-    documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutResolvedMessagesInput = {
-    where: UserWhereUniqueInput
-    create: XOR<
-      UserCreateWithoutResolvedMessagesInput,
-      UserUncheckedCreateWithoutResolvedMessagesInput
-    >
-  }
-
-  export type UserUpsertWithoutMessagesInput = {
-    update: XOR<
-      UserUpdateWithoutMessagesInput,
-      UserUncheckedUpdateWithoutMessagesInput
-    >
-    create: XOR<
-      UserCreateWithoutMessagesInput,
-      UserUncheckedCreateWithoutMessagesInput
-    >
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutMessagesInput = {
-    where?: UserWhereInput
-    data: XOR<
-      UserUpdateWithoutMessagesInput,
-      UserUncheckedUpdateWithoutMessagesInput
-    >
-  }
-
-  export type UserUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
-    documents?: DocumentUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUncheckedUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUncheckedUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type ThreadUpsertWithoutMessagesInput = {
-    update: XOR<
-      ThreadUpdateWithoutMessagesInput,
-      ThreadUncheckedUpdateWithoutMessagesInput
-    >
-    create: XOR<
-      ThreadCreateWithoutMessagesInput,
-      ThreadUncheckedCreateWithoutMessagesInput
-    >
-    where?: ThreadWhereInput
-  }
-
-  export type ThreadUpdateToOneWithWhereWithoutMessagesInput = {
-    where?: ThreadWhereInput
-    data: XOR<
-      ThreadUpdateWithoutMessagesInput,
-      ThreadUncheckedUpdateWithoutMessagesInput
-    >
-  }
-
-  export type ThreadUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneWithoutThreadsNestedInput
-    decisions?: DecisionUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadUncheckedUpdateWithoutMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    decisions?: DecisionUncheckedUpdateManyWithoutThreadNestedInput
-  }
-
-  export type UserUpsertWithoutResolvedMessagesInput = {
-    update: XOR<
-      UserUpdateWithoutResolvedMessagesInput,
-      UserUncheckedUpdateWithoutResolvedMessagesInput
-    >
-    create: XOR<
-      UserCreateWithoutResolvedMessagesInput,
-      UserUncheckedCreateWithoutResolvedMessagesInput
-    >
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutResolvedMessagesInput = {
-    where?: UserWhereInput
-    data: XOR<
-      UserUpdateWithoutResolvedMessagesInput,
-      UserUncheckedUpdateWithoutResolvedMessagesInput
-    >
-  }
-
-  export type UserUpdateWithoutResolvedMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
-    documents?: DocumentUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutResolvedMessagesInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUncheckedUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUncheckedUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
-  }
-
-  export type ThreadCreateWithoutDecisionsInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    project?: ProjectCreateNestedOneWithoutThreadsInput
-    messages?: MessageCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadUncheckedCreateWithoutDecisionsInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    projectId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    messages?: MessageUncheckedCreateNestedManyWithoutThreadInput
-  }
-
-  export type ThreadCreateOrConnectWithoutDecisionsInput = {
-    where: ThreadWhereUniqueInput
-    create: XOR<
-      ThreadCreateWithoutDecisionsInput,
-      ThreadUncheckedCreateWithoutDecisionsInput
-    >
-  }
-
-  export type ProjectCreateWithoutDecisionsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    status?: $Enums.ProjectStatus
-    category?: $Enums.ProjectCategory
-    progress?: number
-    budget?: number | null
-    customValue?: boolean
-    paymentMethod?: $Enums.PaymentMethod
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: Date | string
-    deadline?: Date | string | null
-    liveUrl?: string | null
-    repositoryUrl?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    serviceCategory?: ServiceCategoryCreateNestedOneWithoutProjectsInput
-    briefingNotes?: BriefingEntryCreateNestedManyWithoutProjectInput
-    client: UserCreateNestedOneWithoutProjectsInput
-    members?: ProjectMemberCreateNestedManyWithoutProjectInput
-    updates?: UpdateCreateNestedManyWithoutProjectInput
-    assets?: AssetCreateNestedManyWithoutProjectInput
-    actionItems?: ActionItemCreateNestedManyWithoutProjectInput
-    versions?: VersionCreateNestedManyWithoutProjectInput
-    notifications?: NotificationCreateNestedManyWithoutProjectInput
-    auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
-    proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
-    kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
-    documents?: DocumentCreateNestedManyWithoutProjectInput
-    invoices?: InvoiceCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectUncheckedCreateWithoutDecisionsInput = {
-    id?: string
-    name: string
-    description?: string | null
-    status?: $Enums.ProjectStatus
-    category?: $Enums.ProjectCategory
-    progress?: number
-    budget?: number | null
-    customValue?: boolean
-    paymentMethod?: $Enums.PaymentMethod
-    serviceCategoryId?: string | null
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: Date | string
-    deadline?: Date | string | null
-    liveUrl?: string | null
-    repositoryUrl?: string | null
-    clientId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    briefingNotes?: BriefingEntryUncheckedCreateNestedManyWithoutProjectInput
-    members?: ProjectMemberUncheckedCreateNestedManyWithoutProjectInput
-    updates?: UpdateUncheckedCreateNestedManyWithoutProjectInput
-    assets?: AssetUncheckedCreateNestedManyWithoutProjectInput
-    actionItems?: ActionItemUncheckedCreateNestedManyWithoutProjectInput
-    versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
-    proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
-    kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
-    documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
-    invoices?: InvoiceUncheckedCreateNestedManyWithoutProjectInput
-  }
-
-  export type ProjectCreateOrConnectWithoutDecisionsInput = {
-    where: ProjectWhereUniqueInput
-    create: XOR<
-      ProjectCreateWithoutDecisionsInput,
-      ProjectUncheckedCreateWithoutDecisionsInput
-    >
-  }
-
-  export type UserCreateWithoutDecisionsInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    documents?: DocumentCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogCreateNestedManyWithoutUserInput
-  }
-
-  export type UserUncheckedCreateWithoutDecisionsInput = {
-    id?: string
-    clerkId: string
-    email: string
-    name?: string | null
-    role?: $Enums.UserRole
-    companyName?: string | null
-    phone?: string | null
-    position?: string | null
-    avatarUrl?: string | null
-    taxId?: string | null
-    stripeCustomerId?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-    projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
-    projectMemberships?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
-    ownedLeads?: LeadUncheckedCreateNestedManyWithoutAssignedToInput
-    leadNotes?: LeadNoteUncheckedCreateNestedManyWithoutAuthorInput
-    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
-    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
-    scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
-    approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
-    leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
-    createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
-    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
-    emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
-  }
-
-  export type UserCreateOrConnectWithoutDecisionsInput = {
-    where: UserWhereUniqueInput
-    create: XOR<
-      UserCreateWithoutDecisionsInput,
-      UserUncheckedCreateWithoutDecisionsInput
-    >
-  }
-
-  export type ThreadUpsertWithoutDecisionsInput = {
-    update: XOR<
-      ThreadUpdateWithoutDecisionsInput,
-      ThreadUncheckedUpdateWithoutDecisionsInput
-    >
-    create: XOR<
-      ThreadCreateWithoutDecisionsInput,
-      ThreadUncheckedCreateWithoutDecisionsInput
-    >
-    where?: ThreadWhereInput
-  }
-
-  export type ThreadUpdateToOneWithWhereWithoutDecisionsInput = {
-    where?: ThreadWhereInput
-    data: XOR<
-      ThreadUpdateWithoutDecisionsInput,
-      ThreadUncheckedUpdateWithoutDecisionsInput
-    >
-  }
-
-  export type ThreadUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneWithoutThreadsNestedInput
-    messages?: MessageUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadUncheckedUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    projectId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ProjectUpsertWithoutDecisionsInput = {
-    update: XOR<
-      ProjectUpdateWithoutDecisionsInput,
-      ProjectUncheckedUpdateWithoutDecisionsInput
-    >
-    create: XOR<
-      ProjectCreateWithoutDecisionsInput,
-      ProjectUncheckedCreateWithoutDecisionsInput
-    >
-    where?: ProjectWhereInput
-  }
-
-  export type ProjectUpdateToOneWithWhereWithoutDecisionsInput = {
-    where?: ProjectWhereInput
-    data: XOR<
-      ProjectUpdateWithoutDecisionsInput,
-      ProjectUncheckedUpdateWithoutDecisionsInput
-    >
-  }
-
-  export type ProjectUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    category?:
-      | EnumProjectCategoryFieldUpdateOperationsInput
-      | $Enums.ProjectCategory
-    progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableIntFieldUpdateOperationsInput | number | null
-    customValue?: BoolFieldUpdateOperationsInput | boolean
-    paymentMethod?:
-      | EnumPaymentMethodFieldUpdateOperationsInput
-      | $Enums.PaymentMethod
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    serviceCategory?: ServiceCategoryUpdateOneWithoutProjectsNestedInput
-    briefingNotes?: BriefingEntryUpdateManyWithoutProjectNestedInput
-    client?: UserUpdateOneRequiredWithoutProjectsNestedInput
-    members?: ProjectMemberUpdateManyWithoutProjectNestedInput
-    updates?: UpdateUpdateManyWithoutProjectNestedInput
-    assets?: AssetUpdateManyWithoutProjectNestedInput
-    actionItems?: ActionItemUpdateManyWithoutProjectNestedInput
-    versions?: VersionUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUpdateManyWithoutProjectNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
-    proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
-    kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
-    documents?: DocumentUpdateManyWithoutProjectNestedInput
-    invoices?: InvoiceUpdateManyWithoutProjectNestedInput
-  }
-
-  export type ProjectUncheckedUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    name?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumProjectStatusFieldUpdateOperationsInput | $Enums.ProjectStatus
-    category?:
-      | EnumProjectCategoryFieldUpdateOperationsInput
-      | $Enums.ProjectCategory
-    progress?: IntFieldUpdateOperationsInput | number
-    budget?: NullableIntFieldUpdateOperationsInput | number | null
-    customValue?: BoolFieldUpdateOperationsInput | boolean
-    paymentMethod?:
-      | EnumPaymentMethodFieldUpdateOperationsInput
-      | $Enums.PaymentMethod
-    serviceCategoryId?: NullableStringFieldUpdateOperationsInput | string | null
-    briefing?: NullableJsonNullValueInput | InputJsonValue
-    startDate?: DateTimeFieldUpdateOperationsInput | Date | string
-    deadline?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    liveUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    repositoryUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    clientId?: StringFieldUpdateOperationsInput | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    briefingNotes?: BriefingEntryUncheckedUpdateManyWithoutProjectNestedInput
-    members?: ProjectMemberUncheckedUpdateManyWithoutProjectNestedInput
-    updates?: UpdateUncheckedUpdateManyWithoutProjectNestedInput
-    assets?: AssetUncheckedUpdateManyWithoutProjectNestedInput
-    actionItems?: ActionItemUncheckedUpdateManyWithoutProjectNestedInput
-    versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
-    proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
-    kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
-    invoices?: InvoiceUncheckedUpdateManyWithoutProjectNestedInput
-  }
-
-  export type UserUpsertWithoutDecisionsInput = {
-    update: XOR<
-      UserUpdateWithoutDecisionsInput,
-      UserUncheckedUpdateWithoutDecisionsInput
-    >
-    create: XOR<
-      UserCreateWithoutDecisionsInput,
-      UserUncheckedCreateWithoutDecisionsInput
-    >
-    where?: UserWhereInput
-  }
-
-  export type UserUpdateToOneWithWhereWithoutDecisionsInput = {
-    where?: UserWhereInput
-    data: XOR<
-      UserUpdateWithoutDecisionsInput,
-      UserUncheckedUpdateWithoutDecisionsInput
-    >
-  }
-
-  export type UserUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    documents?: DocumentUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
-  }
-
-  export type UserUncheckedUpdateWithoutDecisionsInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    clerkId?: StringFieldUpdateOperationsInput | string
-    email?: StringFieldUpdateOperationsInput | string
-    name?: NullableStringFieldUpdateOperationsInput | string | null
-    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
-    companyName?: NullableStringFieldUpdateOperationsInput | string | null
-    phone?: NullableStringFieldUpdateOperationsInput | string | null
-    position?: NullableStringFieldUpdateOperationsInput | string | null
-    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
-    taxId?: NullableStringFieldUpdateOperationsInput | string | null
-    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
-    projectMemberships?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
-    ownedLeads?: LeadUncheckedUpdateManyWithoutAssignedToNestedInput
-    leadNotes?: LeadNoteUncheckedUpdateManyWithoutAuthorNestedInput
-    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
-    auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
-    scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
-    approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
-    leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
-    createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
-    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
-    emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutBriefingNotesInput = {
@@ -87601,6 +79320,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -87619,8 +79340,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -87636,6 +79355,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -87654,8 +79375,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -87701,6 +79420,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -87721,8 +79445,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -87740,6 +79462,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -87760,8 +79487,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -87777,6 +79502,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -87795,8 +79522,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -87812,6 +79537,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -87830,8 +79557,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -87868,9 +79593,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -87899,9 +79621,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -87947,6 +79666,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -87967,8 +79691,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -87986,6 +79708,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -88006,8 +79733,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -88056,9 +79781,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -88087,9 +79809,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -88105,6 +79824,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -88123,8 +79844,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -88140,6 +79859,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -88158,8 +79879,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -88275,6 +79994,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -88295,8 +80019,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -88314,6 +80036,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -88334,8 +80061,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -88580,9 +80305,6 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -88611,9 +80333,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -88734,9 +80453,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -88765,9 +80481,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -88783,6 +80496,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -88801,8 +80516,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -88818,6 +80531,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -88836,8 +80551,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -88883,6 +80596,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -88903,8 +80621,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -88922,6 +80638,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -88942,8 +80663,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -88959,6 +80678,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -88977,8 +80698,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -88994,6 +80713,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -89012,8 +80733,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -89059,6 +80778,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89079,8 +80803,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -89098,6 +80820,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89118,8 +80845,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -89135,6 +80860,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -89153,8 +80880,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -89170,6 +80895,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -89188,8 +80915,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -89235,6 +80960,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89255,8 +80985,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -89274,6 +81002,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89294,8 +81027,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -89324,9 +81055,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -89355,9 +81083,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -89381,6 +81106,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -89399,8 +81126,6 @@ export namespace Prisma {
     versions?: VersionCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -89416,6 +81141,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -89434,8 +81161,6 @@ export namespace Prisma {
     versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -89492,9 +81217,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -89523,9 +81245,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -89563,6 +81282,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89583,8 +81307,6 @@ export namespace Prisma {
     versions?: VersionUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -89602,6 +81324,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -89622,8 +81349,6 @@ export namespace Prisma {
     versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -89652,9 +81377,6 @@ export namespace Prisma {
     auditLogs?: AuditLogCreateNestedManyWithoutActorInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -89683,9 +81405,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -89742,9 +81461,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -89773,9 +81489,6 @@ export namespace Prisma {
     auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -89804,9 +81517,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -89835,9 +81545,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -89861,6 +81568,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -89879,8 +81588,6 @@ export namespace Prisma {
     versions?: VersionCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -89896,6 +81603,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -89914,8 +81623,6 @@ export namespace Prisma {
     versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -89972,9 +81679,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -90003,9 +81707,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -90043,6 +81744,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -90063,8 +81769,6 @@ export namespace Prisma {
     versions?: VersionUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -90082,6 +81786,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -90102,8 +81811,6 @@ export namespace Prisma {
     versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -90175,6 +81882,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -90193,8 +81902,6 @@ export namespace Prisma {
     versions?: VersionCreateNestedManyWithoutProjectInput
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -90210,6 +81917,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -90228,8 +81937,6 @@ export namespace Prisma {
     versions?: VersionUncheckedCreateNestedManyWithoutProjectInput
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -90493,6 +82200,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -90513,8 +82225,6 @@ export namespace Prisma {
     versions?: VersionUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -90532,6 +82242,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -90552,8 +82267,6 @@ export namespace Prisma {
     versions?: VersionUncheckedUpdateManyWithoutProjectNestedInput
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -90828,9 +82541,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
@@ -90859,9 +82569,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
@@ -90918,9 +82625,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
@@ -90949,9 +82653,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
@@ -90966,6 +82667,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -90985,8 +82688,6 @@ export namespace Prisma {
     notifications?: NotificationCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogCreateNestedManyWithoutProjectInput
     proposals?: ProposalCreateNestedManyWithoutProjectInput
-    threads?: ThreadCreateNestedManyWithoutProjectInput
-    decisions?: DecisionCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistCreateNestedOneWithoutProjectInput
     documents?: DocumentCreateNestedManyWithoutProjectInput
@@ -91001,6 +82702,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -91020,8 +82723,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedCreateNestedManyWithoutProjectInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutProjectInput
     proposals?: ProposalUncheckedCreateNestedManyWithoutProjectInput
-    threads?: ThreadUncheckedCreateNestedManyWithoutProjectInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutProjectInput
     handoff?: ProjectHandoffUncheckedCreateNestedOneWithoutProjectInput
     kickoff?: ProjectKickoffChecklistUncheckedCreateNestedOneWithoutProjectInput
     documents?: DocumentUncheckedCreateNestedManyWithoutProjectInput
@@ -91213,6 +82914,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -91234,8 +82940,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -91252,6 +82956,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -91273,8 +82982,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -91793,9 +83500,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
-    messages?: MessageCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionCreateNestedManyWithoutDecidedByInput
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
@@ -91824,9 +83528,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
     approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
     leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
-    messages?: MessageUncheckedCreateNestedManyWithoutAuthorInput
-    resolvedMessages?: MessageUncheckedCreateNestedManyWithoutResolvedByInput
-    decisions?: DecisionUncheckedCreateNestedManyWithoutDecidedByInput
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
@@ -91883,9 +83584,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
@@ -91914,9 +83612,6 @@ export namespace Prisma {
     scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
     approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
     leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
-    messages?: MessageUncheckedUpdateManyWithoutAuthorNestedInput
-    resolvedMessages?: MessageUncheckedUpdateManyWithoutResolvedByNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutDecidedByNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -91931,6 +83626,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     serviceCategoryId?: string | null
     briefing?: NullableJsonNullValueInput | InputJsonValue
@@ -92036,47 +83733,6 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
-  export type MessageCreateManyAuthorInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageCreateManyResolvedByInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    threadId: string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateManyDecidedByInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    projectId: string
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
   export type DocumentCreateManyClientInput = {
     id?: string
     type?: $Enums.DocumentType
@@ -92130,6 +83786,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -92150,8 +83811,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -92169,6 +83828,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -92189,8 +83853,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -92208,6 +83870,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -92608,153 +84275,6 @@ export namespace Prisma {
     metadata?: NullableJsonNullValueInput | InputJsonValue
     leadId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUpdateWithoutAuthorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    thread?: ThreadUpdateOneRequiredWithoutMessagesNestedInput
-    resolvedBy?: UserUpdateOneWithoutResolvedMessagesNestedInput
-  }
-
-  export type MessageUncheckedUpdateWithoutAuthorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUncheckedUpdateManyWithoutAuthorInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUpdateWithoutResolvedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneWithoutMessagesNestedInput
-    thread?: ThreadUpdateOneRequiredWithoutMessagesNestedInput
-  }
-
-  export type MessageUncheckedUpdateWithoutResolvedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUncheckedUpdateManyWithoutResolvedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: StringFieldUpdateOperationsInput | string
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUpdateWithoutDecidedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    thread?: ThreadUpdateOneWithoutDecisionsNestedInput
-    project?: ProjectUpdateOneRequiredWithoutDecisionsNestedInput
-  }
-
-  export type DecisionUncheckedUpdateWithoutDecidedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutDecidedByInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type DocumentUpdateWithoutClientInput = {
@@ -93178,6 +84698,8 @@ export namespace Prisma {
     progress?: number
     budget?: number | null
     customValue?: boolean
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     paymentMethod?: $Enums.PaymentMethod
     briefing?: NullableJsonNullValueInput | InputJsonValue
     startDate?: Date | string
@@ -93200,6 +84722,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -93220,8 +84747,6 @@ export namespace Prisma {
     notifications?: NotificationUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUpdateOneWithoutProjectNestedInput
     documents?: DocumentUpdateManyWithoutProjectNestedInput
@@ -93239,6 +84764,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -93259,8 +84789,6 @@ export namespace Prisma {
     notifications?: NotificationUncheckedUpdateManyWithoutProjectNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutProjectNestedInput
     proposals?: ProposalUncheckedUpdateManyWithoutProjectNestedInput
-    threads?: ThreadUncheckedUpdateManyWithoutProjectNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutProjectNestedInput
     handoff?: ProjectHandoffUncheckedUpdateOneWithoutProjectNestedInput
     kickoff?: ProjectKickoffChecklistUncheckedUpdateOneWithoutProjectNestedInput
     documents?: DocumentUncheckedUpdateManyWithoutProjectNestedInput
@@ -93278,6 +84806,11 @@ export namespace Prisma {
     progress?: IntFieldUpdateOperationsInput | number
     budget?: NullableIntFieldUpdateOperationsInput | number | null
     customValue?: BoolFieldUpdateOperationsInput | boolean
+    hasInternationalization?: BoolFieldUpdateOperationsInput | boolean
+    internationalizationFee?:
+      | NullableIntFieldUpdateOperationsInput
+      | number
+      | null
     paymentMethod?:
       | EnumPaymentMethodFieldUpdateOperationsInput
       | $Enums.PaymentMethod
@@ -93395,31 +84928,6 @@ export namespace Prisma {
     acceptedAt?: Date | string | null
     acceptedIp?: string | null
     leadId: string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type ThreadCreateManyProjectInput = {
-    id?: string
-    entityType: string
-    entityId: string
-    title?: string | null
-    status?: $Enums.ThreadStatus
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateManyProjectInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    threadId?: string | null
-    decidedById?: string | null
-    decidedAt?: Date | string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -93869,85 +85377,6 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
-  export type ThreadUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUpdateManyWithoutThreadNestedInput
-    decisions?: DecisionUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadUncheckedUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    messages?: MessageUncheckedUpdateManyWithoutThreadNestedInput
-    decisions?: DecisionUncheckedUpdateManyWithoutThreadNestedInput
-  }
-
-  export type ThreadUncheckedUpdateManyWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    entityType?: StringFieldUpdateOperationsInput | string
-    entityId?: StringFieldUpdateOperationsInput | string
-    title?: NullableStringFieldUpdateOperationsInput | string | null
-    status?: EnumThreadStatusFieldUpdateOperationsInput | $Enums.ThreadStatus
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    thread?: ThreadUpdateOneWithoutDecisionsNestedInput
-    decidedBy?: UserUpdateOneWithoutDecisionsNestedInput
-  }
-
-  export type DecisionUncheckedUpdateWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutProjectInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    threadId?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
   export type DocumentUpdateWithoutProjectInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: EnumDocumentTypeFieldUpdateOperationsInput | $Enums.DocumentType
@@ -94255,130 +85684,6 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     issuedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     dueDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageCreateManyThreadInput = {
-    id?: string
-    content: string
-    type?: $Enums.MessageType
-    authorId?: string | null
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: boolean
-    resolvedAt?: Date | string | null
-    resolvedById?: string | null
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type DecisionCreateManyThreadInput = {
-    id?: string
-    title: string
-    description?: string | null
-    decision: string
-    impactScope?: string | null
-    impactDeadline?: string | null
-    impactFinancial?: string | null
-    projectId: string
-    decidedById?: string | null
-    decidedAt?: Date | string
-    createdAt?: Date | string
-    updatedAt?: Date | string
-  }
-
-  export type MessageUpdateWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    author?: UserUpdateOneWithoutMessagesNestedInput
-    resolvedBy?: UserUpdateOneWithoutResolvedMessagesNestedInput
-  }
-
-  export type MessageUncheckedUpdateWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type MessageUncheckedUpdateManyWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    content?: StringFieldUpdateOperationsInput | string
-    type?: EnumMessageTypeFieldUpdateOperationsInput | $Enums.MessageType
-    authorId?: NullableStringFieldUpdateOperationsInput | string | null
-    attachments?: NullableJsonNullValueInput | InputJsonValue
-    requiresResponse?: BoolFieldUpdateOperationsInput | boolean
-    resolvedAt?:
-      | NullableDateTimeFieldUpdateOperationsInput
-      | Date
-      | string
-      | null
-    resolvedById?: NullableStringFieldUpdateOperationsInput | string | null
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUpdateWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    project?: ProjectUpdateOneRequiredWithoutDecisionsNestedInput
-    decidedBy?: UserUpdateOneWithoutDecisionsNestedInput
-  }
-
-  export type DecisionUncheckedUpdateWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
-    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
-  }
-
-  export type DecisionUncheckedUpdateManyWithoutThreadInput = {
-    id?: StringFieldUpdateOperationsInput | string
-    title?: StringFieldUpdateOperationsInput | string
-    description?: NullableStringFieldUpdateOperationsInput | string | null
-    decision?: StringFieldUpdateOperationsInput | string
-    impactScope?: NullableStringFieldUpdateOperationsInput | string | null
-    impactDeadline?: NullableStringFieldUpdateOperationsInput | string | null
-    impactFinancial?: NullableStringFieldUpdateOperationsInput | string | null
-    projectId?: StringFieldUpdateOperationsInput | string
-    decidedById?: NullableStringFieldUpdateOperationsInput | string | null
-    decidedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

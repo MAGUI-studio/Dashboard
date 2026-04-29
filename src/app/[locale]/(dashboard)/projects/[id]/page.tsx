@@ -5,7 +5,6 @@ import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
 import {
-  ChatCircleDots as ChatCircleDotsIcon,
   CheckCircle as CheckCircleIcon,
   ClockCountdown as ClockCountdownIcon,
   CurrencyCircleDollar as CurrencyCircleDollarIcon,
@@ -176,13 +175,6 @@ export default async function ProjectDetailPage({
             href={toHref(`/projects/${project.id}/briefing`)}
             icon={NotePencilIcon}
             meta="briefing"
-          />
-          <ClientFeatureLink
-            title="Comunicação"
-            description="Threads estruturadas e histórico de decisões do projeto."
-            href={toHref(`/projects/${project.id}/communication`)}
-            icon={ChatCircleDotsIcon}
-            meta="inbox"
           />
           <ClientFeatureLink
             title="Financeiro"

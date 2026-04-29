@@ -4,10 +4,8 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { Prisma } from "@/src/generated/client"
 import { DashboardProject } from "@/src/types/dashboard"
 import {
-  ChatCircleDots,
   Clock,
   CurrencyCircleDollar,
   Files,
@@ -32,7 +30,6 @@ import { ProjectOverviewTab } from "@/src/components/admin/ProjectOverviewTab"
 import { ProjectSettingsTab } from "@/src/components/admin/ProjectSettingsTab"
 import { ProjectTimelineTab } from "@/src/components/admin/ProjectTimelineTab"
 import { ProjectFinancialTab } from "@/src/components/admin/financial/ProjectFinancialTab"
-import { ProjectCommunication } from "@/src/components/common/communication/ProjectCommunication"
 
 interface ProjectTabsProps {
   project: DashboardProject
@@ -43,41 +40,13 @@ interface ProjectTabsProps {
     email: string
     companyName: string | null
   }>
-  threads: Array<
-    Prisma.ThreadGetPayload<{
-      include: {
-        messages: {
-          include: {
-            author: true
-            resolvedBy: true
-          }
-        }
-      }
-    }> &
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any
-  >
-  decisions: Array<
-    Prisma.DecisionGetPayload<{
-      include: {
-        decidedBy: true
-      }
-    }> &
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      any
-  >
-  currentUserId: string
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  invoices: any[]
+  invoices: unknown[]
 }
 
 export function ProjectTabs({
   project,
   projectId,
   clients,
-  threads,
-  decisions,
-  currentUserId,
   invoices,
 }: ProjectTabsProps) {
   const t = useTranslations("Admin.projects.details")
@@ -85,63 +54,62 @@ export function ProjectTabs({
     "tab",
     parseAsString.withDefault("overview")
   )
+  const normalizedActiveTab =
+    activeTab === "communication" ? "overview" : activeTab
 
   return (
-    <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-      <div className="mb-10 flex items-center justify-between border-b border-border/40 pb-4 overflow-x-auto scrollbar-hide">
-        <TabsList variant="line" className="bg-transparent p-0 flex-nowrap">
+    <Tabs
+      value={normalizedActiveTab}
+      onValueChange={setActiveTab}
+      className="w-full"
+    >
+      <div className="mb-10 flex items-center justify-between overflow-x-auto border-b border-border/40 pb-4 scrollbar-hide">
+        <TabsList variant="line" className="flex-nowrap bg-transparent p-0">
           <TabsTrigger
             value="overview"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <Info weight="duotone" className="mr-2 size-4" />
             {t("tabs.overview")}
           </TabsTrigger>
           <TabsTrigger
             value="engineering"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <Terminal weight="duotone" className="mr-2 size-4" />
             {t("tabs.engineering")}
           </TabsTrigger>
           <TabsTrigger
             value="timeline"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <Clock weight="duotone" className="mr-2 size-4" />
             {t("tabs.timeline")}
           </TabsTrigger>
           <TabsTrigger
-            value="communication"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
-          >
-            <ChatCircleDots weight="duotone" className="mr-2 size-4" />
-            {t("tabs.communication", { fallback: "Comunicação" })}
-          </TabsTrigger>
-          <TabsTrigger
             value="financial"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <CurrencyCircleDollar weight="duotone" className="mr-2 size-4" />
             {t("tabs.financial", { fallback: "Financeiro" })}
           </TabsTrigger>
           <TabsTrigger
             value="briefing"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <NoteBlank weight="duotone" className="mr-2 size-4" />
             {t("tabs.briefing", { fallback: "Briefing" })}
           </TabsTrigger>
           <TabsTrigger
             value="assets"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <Files weight="duotone" className="mr-2 size-4" />
             {t("tabs.assets")}
           </TabsTrigger>
           <TabsTrigger
             value="settings"
-            className="px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent whitespace-nowrap"
+            className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <Sliders weight="duotone" className="mr-2 size-4" />
             {t("tabs.settings")}
@@ -162,19 +130,6 @@ export function ProjectTabs({
 
       <TabsContent value="timeline" className="mt-0 focus-visible:outline-none">
         <ProjectTimelineTab projectId={projectId} updates={project.updates} />
-      </TabsContent>
-
-      <TabsContent
-        value="communication"
-        className="mt-0 focus-visible:outline-none"
-      >
-        <ProjectCommunication
-          projectId={projectId}
-          initialThreads={threads}
-          initialDecisions={decisions}
-          currentUserId={currentUserId}
-          userRole="ADMIN"
-        />
       </TabsContent>
 
       <TabsContent

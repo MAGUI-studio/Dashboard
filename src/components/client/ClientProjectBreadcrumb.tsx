@@ -15,7 +15,6 @@ const sectionByPath = {
   files: "files",
   briefing: "briefing",
   tasks: "tasks",
-  communication: "communication",
   financial: "financial",
 } as const
 

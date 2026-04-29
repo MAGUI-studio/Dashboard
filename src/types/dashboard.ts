@@ -20,6 +20,8 @@ export interface DashboardProject {
   progress: number
   budget: number | null
   customValue: boolean
+  hasInternationalization: boolean
+  internationalizationFee: number | null
   paymentMethod: PaymentMethod
   serviceCategoryId: string | null
   deadline: Date | null

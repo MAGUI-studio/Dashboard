@@ -25,6 +25,8 @@ interface ProjectDetailsHeaderProps {
     id: string
     name: string
     budget: number | null
+    hasInternationalization?: boolean
+    internationalizationFee?: number | null
     deadline: Date | null
     client: {
       id: string
@@ -120,6 +122,14 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
                 <span className="text-sm font-bold text-foreground">
                   {budgetDisplay}
                 </span>
+                {project.hasInternationalization && (
+                  <span className="text-[9px] font-black uppercase tracking-widest text-brand-primary/70">
+                    i18n{" "}
+                    {project.internationalizationFee
+                      ? `+ ${formatCurrencyBRL(project.internationalizationFee.toString())}`
+                      : "inclusa"}
+                  </span>
+                )}
               </div>
             </div>
 

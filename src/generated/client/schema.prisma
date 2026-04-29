@@ -138,26 +138,6 @@ enum NotificationType {
   PROJECT_STATUS_CHANGED
   LEAD_ASSIGNED
   OPERATIONAL_REMINDER
-  NEW_THREAD
-  NEW_MESSAGE
-  DECISION_REGISTERED
-  THREAD_RESOLVED
-}
-
-enum ThreadStatus {
-  OPEN
-  RESOLVED
-  ARCHIVED
-}
-
-enum MessageType {
-  INFORMATIVE
-  REQUIRES_RESPONSE
-  REQUIRES_APPROVAL
-  REQUIRES_ASSET
-  FINANCIAL
-  LEGAL
-  CALL_SUMMARY
 }
 
 enum ScheduledReminderType {
@@ -177,6 +157,33 @@ enum ScheduledReminderStatus {
 enum AuditActorType {
   SYSTEM
   USER
+}
+
+enum DocumentType {
+  CONTRACT
+  AMENDMENT
+  NDA
+  PROPOSAL_ACCEPTANCE
+  ADDENDUM
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  VIEWED
+  SIGNED
+  COMPLETED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum SignatureProvider {
+  AUTENTIQUE
+  DOCUSIGN
+  ADOBE_SIGN
+  OTHER
 }
 
 model DashboardMetricSnapshot {
@@ -238,10 +245,6 @@ model User {
 
   approvalEvents ApprovalEvent[]
   leadActivities LeadActivity[]
-
-  messages         Message[]  @relation("MessageAuthor")
-  resolvedMessages Message[]  @relation("MessageResolver")
-  decisions        Decision[]
 
   documents               Document[]
   createdDocumentVersions DocumentVersion[]
@@ -352,33 +355,6 @@ model SavedView {
   @@unique([userId, module, name])
 }
 
-enum DocumentType {
-  CONTRACT
-  AMENDMENT
-  NDA
-  PROPOSAL_ACCEPTANCE
-  ADDENDUM
-  OTHER
-}
-
-enum DocumentStatus {
-  DRAFT
-  SENT
-  VIEWED
-  SIGNED
-  COMPLETED
-  REJECTED
-  EXPIRED
-  CANCELLED
-}
-
-enum SignatureProvider {
-  AUTENTIQUE
-  DOCUSIGN
-  ADOBE_SIGN
-  OTHER
-}
-
 model ServiceCategory {
   id             String  @id @default(cuid())
   name           String
@@ -395,15 +371,17 @@ model ServiceCategory {
 }
 
 model Project {
-  id            String          @id @default(cuid())
-  name          String
-  description   String?         @db.Text
-  status        ProjectStatus   @default(STRATEGY)
-  category      ProjectCategory @default(LANDING_PAGE)
-  progress      Int             @default(0)
-  budget        Int? // cents
-  customValue   Boolean         @default(false)
-  paymentMethod PaymentMethod   @default(FIFTY_FIFTY)
+  id                      String          @id @default(cuid())
+  name                    String
+  description             String?         @db.Text
+  status                  ProjectStatus   @default(STRATEGY)
+  category                ProjectCategory @default(LANDING_PAGE)
+  progress                Int             @default(0)
+  budget                  Int? // cents
+  customValue             Boolean         @default(false)
+  hasInternationalization Boolean         @default(false)
+  internationalizationFee Int? // cents
+  paymentMethod           PaymentMethod   @default(FIFTY_FIFTY)
 
   serviceCategoryId String?
   serviceCategory   ServiceCategory? @relation(fields: [serviceCategoryId], references: [id], onDelete: SetNull)
@@ -427,8 +405,6 @@ model Project {
   notifications Notification[]
   auditLogs     AuditLog[]
   proposals     Proposal[]
-  threads       Thread[]
-  decisions     Decision[]
   handoff       ProjectHandoff?
   kickoff       ProjectKickoffChecklist?
   documents     Document[]
@@ -577,79 +553,6 @@ model ProjectKickoffChecklist {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Thread {
-  id         String       @id @default(cuid())
-  entityType String // Project, Update, Asset, Proposal, Lead, ActionItem, etc.
-  entityId   String
-  title      String?
-  status     ThreadStatus @default(OPEN)
-
-  projectId String?
-  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  messages  Message[]
-  decisions Decision[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([entityType, entityId])
-  @@index([projectId, status])
-}
-
-model Message {
-  id      String      @id @default(cuid())
-  content String      @db.Text
-  type    MessageType @default(INFORMATIVE)
-
-  authorId String?
-  author   User?   @relation("MessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-
-  attachments Json? @default("[]") // [{name: string, url: string, key: string}]
-
-  requiresResponse Boolean   @default(false)
-  resolvedAt       DateTime?
-  resolvedById     String?
-  resolvedBy       User?     @relation("MessageResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([threadId, createdAt])
-  @@index([authorId])
-  @@index([requiresResponse, resolvedAt])
-}
-
-model Decision {
-  id          String  @id @default(cuid())
-  title       String
-  description String? @db.Text
-  decision    String  @db.Text
-
-  impactScope     String?
-  impactDeadline  String?
-  impactFinancial String?
-
-  threadId String?
-  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: SetNull)
-
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  decidedById String?
-  decidedBy   User?   @relation(fields: [decidedById], references: [id], onDelete: SetNull)
-
-  decidedAt DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([projectId, decidedAt])
-  @@index([threadId])
 }
 
 model BriefingEntry {

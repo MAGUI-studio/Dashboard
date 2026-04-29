@@ -241,6 +241,8 @@ exports.Prisma.ProjectScalarFieldEnum = {
   progress: 'progress',
   budget: 'budget',
   customValue: 'customValue',
+  hasInternationalization: 'hasInternationalization',
+  internationalizationFee: 'internationalizationFee',
   paymentMethod: 'paymentMethod',
   serviceCategoryId: 'serviceCategoryId',
   briefing: 'briefing',
@@ -332,47 +334,6 @@ exports.Prisma.ProjectKickoffChecklistScalarFieldEnum = {
   accessReceived: 'accessReceived',
   firstMeetingDone: 'firstMeetingDone',
   items: 'items',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.ThreadScalarFieldEnum = {
-  id: 'id',
-  entityType: 'entityType',
-  entityId: 'entityId',
-  title: 'title',
-  status: 'status',
-  projectId: 'projectId',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.MessageScalarFieldEnum = {
-  id: 'id',
-  content: 'content',
-  type: 'type',
-  authorId: 'authorId',
-  threadId: 'threadId',
-  attachments: 'attachments',
-  requiresResponse: 'requiresResponse',
-  resolvedAt: 'resolvedAt',
-  resolvedById: 'resolvedById',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
-};
-
-exports.Prisma.DecisionScalarFieldEnum = {
-  id: 'id',
-  title: 'title',
-  description: 'description',
-  decision: 'decision',
-  impactScope: 'impactScope',
-  impactDeadline: 'impactDeadline',
-  impactFinancial: 'impactFinancial',
-  threadId: 'threadId',
-  projectId: 'projectId',
-  decidedById: 'decidedById',
-  decidedAt: 'decidedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -749,22 +710,6 @@ exports.SignatureProvider = exports.$Enums.SignatureProvider = {
   OTHER: 'OTHER'
 };
 
-exports.ThreadStatus = exports.$Enums.ThreadStatus = {
-  OPEN: 'OPEN',
-  RESOLVED: 'RESOLVED',
-  ARCHIVED: 'ARCHIVED'
-};
-
-exports.MessageType = exports.$Enums.MessageType = {
-  INFORMATIVE: 'INFORMATIVE',
-  REQUIRES_RESPONSE: 'REQUIRES_RESPONSE',
-  REQUIRES_APPROVAL: 'REQUIRES_APPROVAL',
-  REQUIRES_ASSET: 'REQUIRES_ASSET',
-  FINANCIAL: 'FINANCIAL',
-  LEGAL: 'LEGAL',
-  CALL_SUMMARY: 'CALL_SUMMARY'
-};
-
 exports.ProjectMemberRole = exports.$Enums.ProjectMemberRole = {
   OWNER: 'OWNER',
   COLLABORATOR: 'COLLABORATOR'
@@ -813,11 +758,7 @@ exports.NotificationType = exports.$Enums.NotificationType = {
   ASSET_UPLOADED: 'ASSET_UPLOADED',
   PROJECT_STATUS_CHANGED: 'PROJECT_STATUS_CHANGED',
   LEAD_ASSIGNED: 'LEAD_ASSIGNED',
-  OPERATIONAL_REMINDER: 'OPERATIONAL_REMINDER',
-  NEW_THREAD: 'NEW_THREAD',
-  NEW_MESSAGE: 'NEW_MESSAGE',
-  DECISION_REGISTERED: 'DECISION_REGISTERED',
-  THREAD_RESOLVED: 'THREAD_RESOLVED'
+  OPERATIONAL_REMINDER: 'OPERATIONAL_REMINDER'
 };
 
 exports.ScheduledReminderType = exports.$Enums.ScheduledReminderType = {
@@ -881,9 +822,6 @@ exports.Prisma.ModelName = {
   DocumentSigner: 'DocumentSigner',
   ProjectHandoff: 'ProjectHandoff',
   ProjectKickoffChecklist: 'ProjectKickoffChecklist',
-  Thread: 'Thread',
-  Message: 'Message',
-  Decision: 'Decision',
   BriefingEntry: 'BriefingEntry',
   ProjectMember: 'ProjectMember',
   Update: 'Update',

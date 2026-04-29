@@ -8,16 +8,26 @@ import { z } from "zod"
 
 import { briefingSchema } from "@/src/lib/validations/briefing"
 
+const optionalFormString = z.preprocess((value) => {
+  if (value === null || value === undefined || value === "") {
+    return undefined
+  }
+
+  return value
+}, z.string().optional())
+
 export const createProjectSchema = z.object({
   clientId: z.string().min(1, "Selecione um cliente"),
-  projectName: z.string().min(2, "Nome do projeto é obrigatório"),
-  projectDescription: z.string().optional(),
-  budget: z.string().optional(),
-  deadline: z.string().optional(),
-  startDate: z.string().optional(),
+  projectName: z.string().min(2, "Nome do projeto ? obrigat?rio"),
+  projectDescription: optionalFormString,
+  budget: optionalFormString,
+  deadline: optionalFormString,
+  startDate: optionalFormString,
   category: z.nativeEnum(ProjectCategory),
-  serviceCategoryId: z.string().optional(),
+  serviceCategoryId: optionalFormString,
   customValue: z.string().transform((v) => v === "true"),
+  hasInternationalization: z.string().transform((v) => v === "true"),
+  internationalizationFee: optionalFormString,
   paymentMethod: z.nativeEnum(PaymentMethod),
   installments: z
     .array(
@@ -38,12 +48,12 @@ export const updateProjectStatusSchema = z.object({
   progress: z.number().min(0).max(100),
   liveUrl: z
     .string()
-    .url("URL de produção inválida")
+    .url("URL de produ??o inv?lida")
     .optional()
     .or(z.literal("")),
   repositoryUrl: z
     .string()
-    .url("URL do repositório inválida")
+    .url("URL do reposit?rio inv?lida")
     .optional()
     .or(z.literal("")),
 })
@@ -60,8 +70,8 @@ const updateAttachmentSchema = z.object({
 
 export const addProjectTimelineSchema = z.object({
   projectId: z.string(),
-  title: z.string().min(2, "Título é obrigatório"),
-  description: z.string().optional(),
+  title: z.string().min(2, "T?tulo ? obrigat?rio"),
+  description: optionalFormString,
   isMilestone: z.boolean().default(false),
   requiresApproval: z.boolean().default(false),
   imageUrl: z.string().url().optional().or(z.literal("")),
@@ -72,7 +82,7 @@ export const addProjectTimelineSchema = z.object({
 export const rejectProjectUpdateSchema = z.object({
   updateId: z.string().min(1),
   projectId: z.string().min(1),
-  feedback: z.string().trim().min(10, "Explique o ajuste necessário"),
+  feedback: z.string().trim().min(10, "Explique o ajuste necess?rio"),
 })
 
 export { briefingSchema }

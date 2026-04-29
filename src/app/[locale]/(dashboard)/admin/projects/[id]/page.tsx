@@ -8,10 +8,6 @@ import { ProjectDetailsHeader } from "@/src/components/admin/ProjectDetailsHeade
 import { ProjectTabs } from "@/src/components/admin/ProjectTabs"
 
 import { getAdminClientOptions } from "@/src/lib/client-data"
-import {
-  getProjectDecisionsCached,
-  getProjectThreadsCached,
-} from "@/src/lib/communication-data"
 import { getProjectInvoices } from "@/src/lib/financial-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -20,19 +16,22 @@ import {
   getAdminProjectOverview,
   getAdminProjectTimeline,
 } from "@/src/lib/project-data"
-import { getCurrentAppUser } from "@/src/lib/project-governance"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 interface ProjectPageProps {
   params: Promise<{ id: string; locale: string }>
 }
 
+type AdminProjectOverview = NonNullable<
+  Awaited<ReturnType<typeof getAdminProjectOverview>>
+>
+type AdminProjectTimeline = Awaited<ReturnType<typeof getAdminProjectTimeline>>
+type AdminProjectAssets = Awaited<ReturnType<typeof getAdminProjectAssets>>
+
 function toDashboardProject(input: {
-  /* eslint-disable @typescript-eslint/no-explicit-any */
-  project: any
-  timeline: any
-  assets: any
-  /* eslint-enable @typescript-eslint/no-explicit-any */
+  project: AdminProjectOverview
+  timeline: AdminProjectTimeline
+  assets: AdminProjectAssets
 }): DashboardProject {
   const { project, timeline, assets } = input
 
@@ -48,8 +47,7 @@ function toDashboardProject(input: {
     briefing:
       (project.briefing as DashboardProject["briefing"] | null | undefined) ??
       null,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    updates: (timeline?.updates || []).map((update: any) => ({
+    updates: (timeline?.updates || []).map((update) => ({
       ...update,
       project: { name: project.name },
     })),
@@ -82,29 +80,18 @@ export default async function AdminProjectDetailPage({
 
   const { id } = await params
 
-  const [
-    project,
-    timeline,
-    assets,
-    clients,
-    threads,
-    decisions,
-    currentUser,
-    invoices,
-  ] = await Promise.all([
-    getAdminProjectOverview(id),
-    getAdminProjectTimeline(id),
-    getAdminProjectAssets(id),
-    getAdminClientOptions(),
-    getProjectThreadsCached(id),
-    getProjectDecisionsCached(id),
-    getCurrentAppUser(),
-    getProjectInvoices(id),
-  ])
+  const project = await getAdminProjectOverview(id)
 
   if (!project) {
     notFound()
   }
+
+  const [timeline, assets, clients, invoices] = await Promise.all([
+    getAdminProjectTimeline(id),
+    getAdminProjectAssets(id),
+    getAdminClientOptions(),
+    getProjectInvoices(id),
+  ])
 
   const dashboardProject = toDashboardProject({
     project,
@@ -116,6 +103,8 @@ export default async function AdminProjectDetailPage({
     id: project.id,
     name: project.name,
     budget: project.budget,
+    hasInternationalization: project.hasInternationalization,
+    internationalizationFee: project.internationalizationFee,
     deadline: project.deadline,
     client: {
       id: project.client.id,
@@ -126,7 +115,7 @@ export default async function AdminProjectDetailPage({
 
   return (
     <main className="relative flex flex-col gap-12 overflow-hidden bg-background/50 p-6 lg:p-12">
-      <div className="absolute top-0 right-0 -z-10 size-[500px] translate-x-1/4 -translate-y-1/4 rounded-full bg-brand-primary/5 blur-3xl opacity-50" />
+      <div className="absolute right-0 top-0 -z-10 size-[500px] translate-x-1/4 -translate-y-1/4 rounded-full bg-brand-primary/5 opacity-50 blur-3xl" />
 
       <ProjectDetailsHeader project={projectHeader} />
 
@@ -134,9 +123,6 @@ export default async function AdminProjectDetailPage({
         project={dashboardProject}
         projectId={id}
         clients={clients}
-        threads={threads}
-        decisions={decisions}
-        currentUserId={currentUser?.id || ""}
         invoices={invoices}
       />
     </main>

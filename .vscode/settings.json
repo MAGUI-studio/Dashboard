@@ -8,5 +8,8 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
-  "prisma.fileWatcher": false
+  "prisma.fileWatcher": false,
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }

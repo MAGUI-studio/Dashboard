@@ -18,12 +18,10 @@ import {
   FolderPlus,
   House,
   Lightning,
-  Monitor,
   Percent,
   Plus,
   Shield,
   ShieldCheck,
-  Tag,
   Trash,
   User,
 } from "@phosphor-icons/react"
@@ -60,16 +58,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/src/components/ui/popover"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/src/components/ui/select"
 import { Textarea } from "@/src/components/ui/textarea"
 
 import { createProjectAction } from "@/src/lib/actions/project.actions"
+import { getInternationalizationFeeCents } from "@/src/lib/utils/project-pricing"
 import {
   cn,
   formatCurrencyBRL,
@@ -100,13 +92,15 @@ export function CreateProjectForm({
 
   const [selectedCategoryId, setSelectedCategoryId] = React.useState<string>("")
   const [customValue, setCustomValue] = React.useState(false)
+  const [hasInternationalization, setHasInternationalization] =
+    React.useState(false)
   const [paymentMethod, setPaymentMethod] = React.useState<PaymentMethod>(
     PaymentMethod.FIFTY_FIFTY
   )
 
   const [deadline, setDeadline] = React.useState<Date | undefined>(undefined)
   const [startDate, setStartDate] = React.useState<Date | undefined>(new Date())
-  const [budgetValue, setBudgetValue] = React.useState("")
+  const [budgetBaseValue, setBudgetBaseValue] = React.useState("")
 
   const [installments, setInstallments] = React.useState<
     Array<{ id: string; amount: string; dueDate: Date }>
@@ -115,45 +109,71 @@ export function CreateProjectForm({
   const selectedService = serviceCategories.find(
     (s) => s.id === selectedCategoryId
   )
-  const projectCategoryValue =
-    selectedService?.name === "Landing Page de Alta Conversão"
-      ? "LANDING_PAGE"
-      : selectedService?.name === "Site Institucional"
-        ? "INSTITUTIONAL_SITE"
-        : selectedService?.name === "Plataforma com Agendamento"
-          ? "BOOKING_PLATFORM"
-          : selectedService?.name === "Plano de Estabilidade e Suporte"
-            ? "STABILITY_PLAN"
-            : ""
+  const normalizedServiceName = selectedService?.name ?? ""
+  const projectCategoryValue = normalizedServiceName.includes("Landing")
+    ? "LANDING_PAGE"
+    : normalizedServiceName.includes("Institucional")
+      ? "INSTITUTIONAL_SITE"
+      : normalizedServiceName.includes("Agendamento") ||
+          normalizedServiceName.includes("Sistema")
+        ? "BOOKING_PLATFORM"
+        : normalizedServiceName.includes("Manutenção") ||
+            normalizedServiceName.includes("Estabilidade")
+          ? "STABILITY_PLAN"
+          : ""
 
   React.useEffect(() => {
     if (selectedService && !customValue) {
-      setBudgetValue(formatCurrencyBRLFromCents(selectedService.suggestedValue))
+      setBudgetBaseValue(
+        formatCurrencyBRLFromCents(selectedService.suggestedValue)
+      )
     }
   }, [selectedService, customValue])
 
+  const baseBudgetCents = React.useMemo(
+    () => parseCurrencyBRLToCents(budgetBaseValue),
+    [budgetBaseValue]
+  )
+
+  const internationalizationFeeCents = React.useMemo(() => {
+    if (!hasInternationalization) return 0
+
+    return getInternationalizationFeeCents(
+      selectedService?.name,
+      baseBudgetCents
+    )
+  }, [baseBudgetCents, hasInternationalization, selectedService?.name])
+
+  const totalBudgetCents = React.useMemo(
+    () => baseBudgetCents + internationalizationFeeCents,
+    [baseBudgetCents, internationalizationFeeCents]
+  )
+
+  const totalBudgetValue = React.useMemo(
+    () =>
+      totalBudgetCents > 0 ? formatCurrencyBRLFromCents(totalBudgetCents) : "",
+    [totalBudgetCents]
+  )
+
   // Auto-generate 50/50 installments
   React.useEffect(() => {
-    if (paymentMethod === PaymentMethod.FIFTY_FIFTY && budgetValue) {
-      const totalCents = parseCurrencyBRLToCents(budgetValue)
-      if (totalCents > 0) {
-        const half = Math.floor(totalCents / 2)
-        const remainder = totalCents - half
-        setInstallments([
-          {
-            id: "inst-1",
-            amount: formatCurrencyBRLFromCents(half),
-            dueDate: new Date(),
-          },
-          {
-            id: "inst-2",
-            amount: formatCurrencyBRLFromCents(remainder),
-            dueDate: addDays(new Date(), 30),
-          },
-        ])
-      }
+    if (paymentMethod === PaymentMethod.FIFTY_FIFTY && totalBudgetCents > 0) {
+      const half = Math.floor(totalBudgetCents / 2)
+      const remainder = totalBudgetCents - half
+      setInstallments([
+        {
+          id: "inst-1",
+          amount: formatCurrencyBRLFromCents(half),
+          dueDate: new Date(),
+        },
+        {
+          id: "inst-2",
+          amount: formatCurrencyBRLFromCents(remainder),
+          dueDate: addDays(new Date(), 30),
+        },
+      ])
     }
-  }, [paymentMethod, budgetValue])
+  }, [paymentMethod, totalBudgetCents])
 
   const addInstallment = () => {
     setInstallments([
@@ -193,7 +213,16 @@ export function CreateProjectForm({
       formData.set("clientId", selectedClientId)
       formData.set("serviceCategoryId", selectedCategoryId)
       formData.set("customValue", customValue.toString())
+      formData.set(
+        "hasInternationalization",
+        hasInternationalization.toString()
+      )
+      formData.set(
+        "internationalizationFee",
+        formatCurrencyBRLFromCents(internationalizationFeeCents)
+      )
       formData.set("paymentMethod", paymentMethod)
+      formData.set("budget", totalBudgetValue)
       formData.set("timezone", Intl.DateTimeFormat().resolvedOptions().timeZone)
 
       if (deadline) formData.set("deadline", deadline.toISOString())
@@ -221,7 +250,7 @@ export function CreateProjectForm({
 
   const handleBudgetChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
-    setBudgetValue(formatCurrencyBRL(value))
+    setBudgetBaseValue(formatCurrencyBRL(value))
   }
 
   const getCategoryIcon = (name: string) => {
@@ -238,8 +267,8 @@ export function CreateProjectForm({
     <form action={formAction} className="mx-auto w-full">
       <FieldGroup className="gap-12">
         <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40 italic">
-          Os campos marcados com <span className="text-red-500">*</span> são
-          obrigatórios.
+          Os campos marcados com <span className="text-red-500">*</span> sÃ£o
+          obrigatÃ³rios.
         </p>
 
         <FieldSet>
@@ -254,7 +283,7 @@ export function CreateProjectForm({
 
           <Field data-invalid={state.error && !selectedClientId}>
             <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              Cliente Responsável <span className="text-red-500">*</span>
+              Cliente ResponsÃ¡vel <span className="text-red-500">*</span>
             </FieldLabel>
 
             <input type="hidden" name="clientId" value={selectedClientId} />
@@ -348,7 +377,7 @@ export function CreateProjectForm({
               {t("project_info")}
             </FieldLegend>
             <FieldDescription className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/50">
-              Estratégia comercial e parâmetros de execução
+              EstratÃ©gia comercial e parÃ¢metros de execuÃ§Ã£o
             </FieldDescription>
           </div>
 
@@ -376,7 +405,7 @@ export function CreateProjectForm({
 
             <Field className="md:col-span-2">
               <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                Categoria de Serviço <span className="text-red-500">*</span>
+                Categoria de ServiÃ§o <span className="text-red-500">*</span>
               </FieldLabel>
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {serviceCategories.map((cat) => (
@@ -406,7 +435,7 @@ export function CreateProjectForm({
                       </h5>
                       <p className="text-[11px] font-bold text-brand-primary">
                         {formatCurrencyBRLFromCents(cat.suggestedValue)}
-                        {cat.isSubscription ? "/mês" : ""}
+                        {cat.isSubscription ? "/Mês" : ""}
                       </p>
                     </div>
                     {selectedCategoryId === cat.id && (
@@ -434,7 +463,7 @@ export function CreateProjectForm({
                     <div className="space-y-4">
                       <h4 className="flex items-center gap-2 text-[11px] font-black uppercase tracking-[0.3em] text-brand-primary">
                         <Lightning weight="bold" className="size-4" />
-                        Serviço Selecionado
+                        ServiÃ§o Selecionado
                       </h4>
                       {selectedService.imageUrl ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -469,7 +498,7 @@ export function CreateProjectForm({
                           )}
                           {selectedService.isSubscription ? (
                             <span className="text-sm font-bold text-muted-foreground/40 ml-2">
-                              /mês
+                              /Mês
                             </span>
                           ) : (
                             ""
@@ -525,8 +554,7 @@ export function CreateProjectForm({
                   />
                 </InputGroupAddon>
                 <InputGroupInput
-                  name="budget"
-                  value={budgetValue}
+                  value={budgetBaseValue}
                   onChange={handleBudgetChange}
                   readOnly={!customValue}
                   placeholder="R$ 0,00"
@@ -537,8 +565,44 @@ export function CreateProjectForm({
             </Field>
 
             <Field>
+              <div className="mb-2 flex items-center justify-between">
+                <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
+                  InternacionalizaÃ§Ã£o
+                </FieldLabel>
+                <div className="flex items-center gap-3">
+                  <Checkbox
+                    id="has-internationalization"
+                    checked={hasInternationalization}
+                    onCheckedChange={(checked) =>
+                      setHasInternationalization(Boolean(checked))
+                    }
+                    className="size-5 rounded-lg border-brand-primary/20 data-[state=checked]:bg-brand-primary data-[state=checked]:border-brand-primary"
+                  />
+                  <label
+                    htmlFor="has-internationalization"
+                    className="cursor-pointer text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60"
+                  >
+                    Adicionar i18n
+                  </label>
+                </div>
+              </div>
+              <div className="flex h-16 flex-col justify-center rounded-3xl border border-border/40 bg-muted/10 px-6">
+                <span className="text-[9px] font-black uppercase tracking-widest text-muted-foreground/40">
+                  AcrÃ©scimo
+                </span>
+                <span className="font-mono text-lg font-black text-foreground">
+                  {internationalizationFeeCents > 0
+                    ? formatCurrencyBRLFromCents(internationalizationFeeCents)
+                    : hasInternationalization
+                      ? "Inclusa"
+                      : "Não aplicado"}
+                </span>
+              </div>
+            </Field>
+
+            <Field>
               <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                Condição de Pagamento
+                CondiÃ§Ã£o de Pagamento
               </FieldLabel>
               <div className="flex gap-3 h-16">
                 <Button
@@ -573,6 +637,32 @@ export function CreateProjectForm({
             </Field>
           </div>
 
+          <div className="mt-8 rounded-3xl border border-brand-primary/20 bg-brand-primary/5 p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-brand-primary/70">
+                  Resumo comercial
+                </p>
+                <p className="mt-2 text-sm font-medium text-muted-foreground/70">
+                  Valor base {budgetBaseValue || "R$ 0,00"} + i18n{" "}
+                  {internationalizationFeeCents > 0
+                    ? formatCurrencyBRLFromCents(internationalizationFeeCents)
+                    : hasInternationalization
+                      ? "Inclusa"
+                      : "Não aplicado"}
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground/50">
+                  Total do projeto
+                </p>
+                <p className="font-heading text-3xl font-black text-foreground">
+                  {totalBudgetValue || "R$ 0,00"}
+                </p>
+              </div>
+            </div>
+          </div>
+
           <div className="mt-12 space-y-8">
             <div className="flex items-center justify-between">
               <div className="space-y-1">
@@ -581,7 +671,7 @@ export function CreateProjectForm({
                 </h4>
                 <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
                   {paymentMethod === PaymentMethod.FIFTY_FIFTY
-                    ? "As faturas serão geradas automaticamente baseadas no valor total."
+                    ? "As faturas serÃ£o geradas automaticamente baseadas no valor total."
                     : "Defina manualmente as parcelas mensais acordadas com o cliente."}
                 </p>
               </div>
@@ -704,7 +794,7 @@ export function CreateProjectForm({
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 mt-12">
             <Field>
               <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                Data de Início da Operação
+                Data de InÃ­cio da OperaÃ§Ã£o
               </FieldLabel>
               <Popover>
                 <PopoverTrigger asChild>
@@ -720,7 +810,7 @@ export function CreateProjectForm({
                       format(startDate, "PPP", { locale: ptBR })
                     ) : (
                       <span className="font-medium opacity-30">
-                        Definir início
+                        Definir inÃ­cio
                       </span>
                     )}
                   </Button>

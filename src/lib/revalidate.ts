@@ -61,14 +61,6 @@ export function revalidateProjectBriefing(projectId: string) {
   revalidateTag(cacheTags.projectBriefing(projectId), "default")
 }
 
-export function revalidateProjectThreads(projectId: string) {
-  revalidateTag(cacheTags.projectThreads(projectId), "default")
-}
-
-export function revalidateProjectDecisions(projectId: string) {
-  revalidateTag(cacheTags.projectDecisions(projectId), "default")
-}
-
 export function revalidateClientNotifications() {
   revalidateTag(cacheTags.clientNotifications, "default")
   revalidateTag(cacheTags.clientPendingApprovals, "default")

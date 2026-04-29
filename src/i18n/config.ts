@@ -111,10 +111,6 @@ export const pathnames = {
     pt: "/projetos/[id]/tarefas",
     en: "/projects/[id]/tasks",
   },
-  "/projects/[id]/communication": {
-    pt: "/projetos/[id]/comunicacao",
-    en: "/projects/[id]/communication",
-  },
   "/projects/[id]/financial": {
     pt: "/projetos/[id]/investimento",
     en: "/projects/[id]/financial",

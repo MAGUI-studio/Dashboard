@@ -23,6 +23,7 @@ import {
   revalidateProjectStatus,
 } from "@/src/lib/revalidate"
 import { getOrCreateStripeCustomer } from "@/src/lib/stripe-actions"
+import { getInternationalizationFeeCents } from "@/src/lib/utils/project-pricing"
 import { parseCurrencyBRLToCents } from "@/src/lib/utils/utils"
 import {
   createProjectSchema,
@@ -53,6 +54,8 @@ export async function createProjectAction(
     category: formData.get("category"),
     serviceCategoryId: formData.get("serviceCategoryId"),
     customValue: formData.get("customValue"),
+    hasInternationalization: formData.get("hasInternationalization"),
+    internationalizationFee: formData.get("internationalizationFee"),
     paymentMethod: formData.get("paymentMethod"),
     installments: formData.get("installments")
       ? JSON.parse(formData.get("installments") as string)
@@ -69,13 +72,34 @@ export async function createProjectAction(
   const actor = await getCurrentAppUser()
 
   try {
+    const budgetCents = data.budget
+      ? parseCurrencyBRLToCents(data.budget)
+      : null
+    const requestedI18nFee = data.internationalizationFee
+      ? parseCurrencyBRLToCents(data.internationalizationFee)
+      : 0
+    const serviceCategory = data.serviceCategoryId
+      ? await prisma.serviceCategory.findUnique({
+          where: { id: data.serviceCategoryId },
+          select: { name: true },
+        })
+      : null
+    const normalizedI18nFee = data.hasInternationalization
+      ? getInternationalizationFeeCents(
+          serviceCategory?.name,
+          Math.max((budgetCents ?? 0) - requestedI18nFee, 0)
+        )
+      : 0
+
     const project = await prisma.$transaction(async (tx) => {
       const p = await tx.project.create({
         data: {
           name: data.projectName,
           description: data.projectDescription ?? null,
-          budget: data.budget ? parseCurrencyBRLToCents(data.budget) : null,
+          budget: budgetCents,
           customValue: data.customValue,
+          hasInternationalization: data.hasInternationalization,
+          internationalizationFee: normalizedI18nFee || null,
           paymentMethod: data.paymentMethod,
           serviceCategoryId: data.serviceCategoryId || null,
           deadline: data.deadline ? new Date(data.deadline) : null,
@@ -134,6 +158,8 @@ export async function createProjectAction(
               progress: p.progress,
               category: p.category,
               budget: p.budget,
+              hasInternationalization: p.hasInternationalization,
+              internationalizationFee: p.internationalizationFee,
               deadline: p.deadline?.toISOString() ?? null,
             },
             relatedEntities: [

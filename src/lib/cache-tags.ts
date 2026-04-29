@@ -14,8 +14,6 @@ export const cacheTags = {
   projectAssets: (id: string) => `project:assets:${id}`,
   projectMembers: (id: string) => `project:members:${id}`,
   projectBriefing: (id: string) => `project:briefing:${id}`,
-  projectThreads: (id: string) => `project:threads:${id}`,
-  projectDecisions: (id: string) => `project:decisions:${id}`,
   clientProjects: "client:projects",
   clientProject: "client:project",
   clientPendingApprovals: "client:pending-approvals",

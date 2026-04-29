@@ -138,26 +138,6 @@ enum NotificationType {
   PROJECT_STATUS_CHANGED
   LEAD_ASSIGNED
   OPERATIONAL_REMINDER
-  NEW_THREAD
-  NEW_MESSAGE
-  DECISION_REGISTERED
-  THREAD_RESOLVED
-}
-
-enum ThreadStatus {
-  OPEN
-  RESOLVED
-  ARCHIVED
-}
-
-enum MessageType {
-  INFORMATIVE
-  REQUIRES_RESPONSE
-  REQUIRES_APPROVAL
-  REQUIRES_ASSET
-  FINANCIAL
-  LEGAL
-  CALL_SUMMARY
 }
 
 enum ScheduledReminderType {
@@ -177,6 +157,33 @@ enum ScheduledReminderStatus {
 enum AuditActorType {
   SYSTEM
   USER
+}
+
+enum DocumentType {
+  CONTRACT
+  AMENDMENT
+  NDA
+  PROPOSAL_ACCEPTANCE
+  ADDENDUM
+  OTHER
+}
+
+enum DocumentStatus {
+  DRAFT
+  SENT
+  VIEWED
+  SIGNED
+  COMPLETED
+  REJECTED
+  EXPIRED
+  CANCELLED
+}
+
+enum SignatureProvider {
+  AUTENTIQUE
+  DOCUSIGN
+  ADOBE_SIGN
+  OTHER
 }
 
 model DashboardMetricSnapshot {
@@ -239,16 +246,12 @@ model User {
   approvalEvents ApprovalEvent[]
   leadActivities LeadActivity[]
 
-  messages         Message[]  @relation("MessageAuthor")
-  resolvedMessages Message[]  @relation("MessageResolver")
-  decisions        Decision[]
-
   documents               Document[]
   createdDocumentVersions DocumentVersion[]
 
-  billingProfile BillingProfile?
-  emailLogs      EmailLog[]
-  stripeCustomerId String? @unique
+  billingProfile   BillingProfile?
+  emailLogs        EmailLog[]
+  stripeCustomerId String?         @unique
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -352,41 +355,14 @@ model SavedView {
   @@unique([userId, module, name])
 }
 
-enum DocumentType {
-  CONTRACT
-  AMENDMENT
-  NDA
-  PROPOSAL_ACCEPTANCE
-  ADDENDUM
-  OTHER
-}
-
-enum DocumentStatus {
-  DRAFT
-  SENT
-  VIEWED
-  SIGNED
-  COMPLETED
-  REJECTED
-  EXPIRED
-  CANCELLED
-}
-
-enum SignatureProvider {
-  AUTENTIQUE
-  DOCUSIGN
-  ADOBE_SIGN
-  OTHER
-}
-
 model ServiceCategory {
-  id              String  @id @default(cuid())
-  name            String
-  description     String? @db.Text
-  approach        String  @db.Text
-  suggestedValue  Int // cents
-  imageUrl        String?
-  isSubscription  Boolean @default(false)
+  id             String  @id @default(cuid())
+  name           String
+  description    String? @db.Text
+  approach       String  @db.Text
+  suggestedValue Int // cents
+  imageUrl       String?
+  isSubscription Boolean @default(false)
 
   projects Project[]
 
@@ -395,15 +371,17 @@ model ServiceCategory {
 }
 
 model Project {
-  id          String          @id @default(cuid())
-  name        String
-  description String?         @db.Text
-  status      ProjectStatus   @default(STRATEGY)
-  category    ProjectCategory @default(LANDING_PAGE)
-  progress    Int             @default(0)
-  budget      Int? // cents
-  customValue Boolean         @default(false)
-  paymentMethod PaymentMethod @default(FIFTY_FIFTY)
+  id                      String          @id @default(cuid())
+  name                    String
+  description             String?         @db.Text
+  status                  ProjectStatus   @default(STRATEGY)
+  category                ProjectCategory @default(LANDING_PAGE)
+  progress                Int             @default(0)
+  budget                  Int? // cents
+  customValue             Boolean         @default(false)
+  hasInternationalization Boolean         @default(false)
+  internationalizationFee Int? // cents
+  paymentMethod           PaymentMethod   @default(FIFTY_FIFTY)
 
   serviceCategoryId String?
   serviceCategory   ServiceCategory? @relation(fields: [serviceCategoryId], references: [id], onDelete: SetNull)
@@ -427,8 +405,6 @@ model Project {
   notifications Notification[]
   auditLogs     AuditLog[]
   proposals     Proposal[]
-  threads       Thread[]
-  decisions     Decision[]
   handoff       ProjectHandoff?
   kickoff       ProjectKickoffChecklist?
   documents     Document[]
@@ -577,79 +553,6 @@ model ProjectKickoffChecklist {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Thread {
-  id         String       @id @default(cuid())
-  entityType String // Project, Update, Asset, Proposal, Lead, ActionItem, etc.
-  entityId   String
-  title      String?
-  status     ThreadStatus @default(OPEN)
-
-  projectId String?
-  project   Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  messages  Message[]
-  decisions Decision[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([entityType, entityId])
-  @@index([projectId, status])
-}
-
-model Message {
-  id      String      @id @default(cuid())
-  content String      @db.Text
-  type    MessageType @default(INFORMATIVE)
-
-  authorId String?
-  author   User?   @relation("MessageAuthor", fields: [authorId], references: [id], onDelete: SetNull)
-
-  threadId String
-  thread   Thread @relation(fields: [threadId], references: [id], onDelete: Cascade)
-
-  attachments Json? @default("[]") // [{name: string, url: string, key: string}]
-
-  requiresResponse Boolean   @default(false)
-  resolvedAt       DateTime?
-  resolvedById     String?
-  resolvedBy       User?     @relation("MessageResolver", fields: [resolvedById], references: [id], onDelete: SetNull)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([threadId, createdAt])
-  @@index([authorId])
-  @@index([requiresResponse, resolvedAt])
-}
-
-model Decision {
-  id          String  @id @default(cuid())
-  title       String
-  description String? @db.Text
-  decision    String  @db.Text
-
-  impactScope     String?
-  impactDeadline  String?
-  impactFinancial String?
-
-  threadId String?
-  thread   Thread? @relation(fields: [threadId], references: [id], onDelete: SetNull)
-
-  projectId String
-  project   Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-
-  decidedById String?
-  decidedBy   User?   @relation(fields: [decidedById], references: [id], onDelete: SetNull)
-
-  decidedAt DateTime @default(now())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([projectId, decidedAt])
-  @@index([threadId])
 }
 
 model BriefingEntry {
@@ -907,7 +810,7 @@ model ProposalItem {
   id              String  @id @default(cuid())
   description     String
   longDescription String? @db.Text
-  unitValue       Int    @default(0) // cents
+  unitValue       Int     @default(0) // cents
   quantity        Int     @default(1)
   order           Int     @default(0)
 
@@ -1001,7 +904,7 @@ model Installment {
 
   stripeCheckoutSessionId String? @unique
   stripeCheckoutUrl       String? @db.Text
-  stripePaymentIntentId    String? @unique
+  stripePaymentIntentId   String? @unique
 
   paymentEvents PaymentEvent[]
 
@@ -1013,46 +916,45 @@ model Installment {
 }
 
 model PaymentEvent {
-  id             String   @id @default(cuid())
-  installmentId  String
-  installment    Installment @relation(fields: [installmentId], references: [id], onDelete: Cascade)
+  id            String      @id @default(cuid())
+  installmentId String
+  installment   Installment @relation(fields: [installmentId], references: [id], onDelete: Cascade)
 
-  type           String   // PIX, TRANSFER, CREDIT_CARD, etc.
-  amount         Int // cents
-  date           DateTime @default(now())
-  note           String?  @db.Text
-  attachmentUrl  String?
-  attachmentKey  String?
+  type          String // PIX, TRANSFER, CREDIT_CARD, etc.
+  amount        Int // cents
+  date          DateTime @default(now())
+  note          String?  @db.Text
+  attachmentUrl String?
+  attachmentKey String?
 
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@index([installmentId])
 }
 
 model EmailLog {
-  id                String   @id @default(cuid())
-  userId            String?
-  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
 
-  to                String
-  subject           String
-  templateKey       String   // e.g., "PROPOSAL_SENT", "INVOICE_OVERDUE"
+  to          String
+  subject     String
+  templateKey String // e.g., "PROPOSAL_SENT", "INVOICE_OVERDUE"
 
-  entityType        String?  // Project, Proposal, Invoice, etc.
-  entityId          String?
+  entityType String? // Project, Proposal, Invoice, etc.
+  entityId   String?
 
-  status            String   @default("SENT") // SENT, DELIVERED, FAILED
-  provider          String   @default("RESEND")
-  providerMessageId String?  @unique
+  status            String  @default("SENT") // SENT, DELIVERED, FAILED
+  provider          String  @default("RESEND")
+  providerMessageId String? @unique
 
-  errorMessage      String?  @db.Text
+  errorMessage String? @db.Text
 
-  sentAt            DateTime @default(now())
-  createdAt         DateTime @default(now())
+  sentAt    DateTime @default(now())
+  createdAt DateTime @default(now())
 
   @@index([userId])
   @@index([templateKey])
   @@index([entityType, entityId])
 }
-
