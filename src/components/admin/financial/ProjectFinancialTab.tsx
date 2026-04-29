@@ -28,6 +28,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/src/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select"
 
 import { registerPaymentAction } from "@/src/lib/actions/financial.actions"
 import { cn, formatCurrencyBRLFromCents } from "@/src/lib/utils/utils"
@@ -69,6 +76,7 @@ export function ProjectFinancialTab({
     InvoiceWithInstallments["installments"][number] | null
   >(null)
   const [isPaymentDialogOpen, setIsPaymentDialogOpen] = React.useState(false)
+  const [paymentType, setPaymentType] = React.useState("PIX")
   const [isStripeLoading, setIsStripeLoading] = React.useState<string | null>(
     null
   )
@@ -133,7 +141,7 @@ export function ProjectFinancialTab({
     const formData = new FormData(e.currentTarget)
     const result = await registerPaymentAction({
       installmentId: selectedInstallment.id,
-      type: formData.get("type") as string,
+      type: paymentType,
       amount: selectedInstallment.amount,
       date: new Date(),
       note: formData.get("note") as string,
@@ -484,7 +492,7 @@ export function ProjectFinancialTab({
           </DialogHeader>
           <form onSubmit={handleRegisterPayment} className="space-y-8">
             <div className="space-y-6">
-              <div className="p-8 rounded-[2rem] bg-emerald-500/5 border border-emerald-500/10">
+              <div className="p-8 rounded-[2.5rem] bg-emerald-500/5 border border-emerald-500/10">
                 <p className="text-[10px] font-black uppercase tracking-widest text-emerald-600/60 mb-2">
                   Valor a ser liquidado
                 </p>
@@ -499,15 +507,17 @@ export function ProjectFinancialTab({
                 <label className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/40 ml-4">
                   Origem do Recurso
                 </label>
-                <select
-                  name="type"
-                  className="w-full h-14 rounded-2xl border border-border/40 bg-muted/5 px-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground"
-                >
-                  <option value="PIX">PIX Direto</option>
-                  <option value="TED">Transferência Bancária</option>
-                  <option value="CASH">Dinheiro / Espécie</option>
-                  <option value="OTHER">Outros</option>
-                </select>
+                <Select value={paymentType} onValueChange={setPaymentType}>
+                  <SelectTrigger className="h-14 rounded-2xl border-border/40 bg-muted/5 px-6 font-bold text-sm">
+                    <SelectValue placeholder="Selecione a origem" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl border-border/10 bg-background/95 backdrop-blur-xl">
+                    <SelectItem value="PIX">PIX Direto</SelectItem>
+                    <SelectItem value="TED">Transferência Bancária</SelectItem>
+                    <SelectItem value="CASH">Dinheiro / Espécie</SelectItem>
+                    <SelectItem value="OTHER">Outros</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-3">
@@ -517,14 +527,14 @@ export function ProjectFinancialTab({
                 <textarea
                   name="note"
                   placeholder="Descreva detalhes do recebimento..."
-                  className="w-full min-h-[120px] rounded-3xl border border-border/40 bg-muted/5 p-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground resize-none"
+                  className="w-full min-h-[120px] rounded-[2rem] border border-border/40 bg-muted/5 p-6 font-bold text-sm outline-none focus:border-brand-primary text-foreground resize-none transition-all focus:bg-background"
                 />
               </div>
             </div>
 
             <Button
               type="submit"
-              className="h-16 w-full rounded-2xl bg-emerald-600 text-[12px] font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 hover:scale-[1.01]"
+              className="h-16 w-full rounded-2xl bg-emerald-600 text-[11px] font-black uppercase tracking-[0.2em] text-white shadow-2xl shadow-emerald-500/20 transition-all hover:bg-emerald-700 hover:scale-[1.01] active:scale-95"
             >
               Confirmar Recebimento
             </Button>
