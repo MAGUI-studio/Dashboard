@@ -31,63 +31,83 @@ export async function POST(req: NextRequest) {
     return new NextResponse(`Webhook Error: ${message}`, { status: 400 })
   }
 
-  const session = event.data.object as Stripe.Checkout.Session
+  logger.info({ type: event.type }, "Webhook event received")
 
-  if (event.type === "checkout.session.completed") {
+  // Handle successful payments
+  if (
+    event.type === "checkout.session.completed" ||
+    event.type === "checkout.session.async_payment_succeeded"
+  ) {
+    const session = event.data.object as Stripe.Checkout.Session
     const installmentId = session.metadata?.installmentId
 
-    if (installmentId) {
-      const installment = await prisma.installment.update({
+    if (!installmentId) {
+      logger.error({ sessionId: session.id }, "No installmentId in metadata")
+      return NextResponse.json({ received: true })
+    }
+
+    try {
+      await prisma.$transaction(async (tx) => {
+        // 1. Update Installment
+        const installment = await tx.installment.update({
+          where: { id: installmentId },
+          data: {
+            status: "PAID",
+            paidAt: new Date(),
+            stripePaymentIntentId: session.payment_intent as string,
+          },
+          include: {
+            invoice: {
+              include: {
+                installments: true,
+              },
+            },
+          },
+        })
+
+        // 2. Add a payment event (keeping amount in cents for consistency)
+        await tx.paymentEvent.create({
+          data: {
+            installmentId,
+            type: "STRIPE",
+            amount: session.amount_total ?? 0,
+            date: new Date(),
+            note: `Pagamento via Stripe (${event.type}): ${session.id}`,
+          },
+        })
+
+        // 3. Update invoice status
+        const allInstallments = installment.invoice.installments
+        const allPaid = allInstallments.every((i) =>
+          i.id === installmentId ? true : i.status === "PAID"
+        )
+
+        await tx.invoice.update({
+          where: { id: installment.invoiceId },
+          data: {
+            status: allPaid ? "PAID" : "PARTIALLY_PAID",
+          },
+        })
+
+        logger.info(
+          { installmentId, eventType: event.type },
+          "Installment marked as PAID via transaction"
+        )
+      })
+
+      // Revalidation outside transaction
+      const updatedInst = await prisma.installment.findUnique({
         where: { id: installmentId },
-        data: {
-          status: "PAID",
-          paidAt: new Date(),
-          stripePaymentIntentId: session.payment_intent as string,
-        },
-        include: {
-          invoice: true,
-        },
+        include: { invoice: true },
       })
 
-      // Add a payment event
-      await prisma.paymentEvent.create({
-        data: {
-          installmentId,
-          type: "STRIPE",
-          amount: (session.amount_total ?? 0) / 100,
-          date: new Date(),
-          note: `Pagamento via Stripe (Checkout Session: ${session.id})`,
-        },
-      })
-
-      // Update invoice status if all installments paid
-      const invoice = await prisma.invoice.findUnique({
-        where: { id: installment.invoiceId },
-        include: { installments: true },
-      })
-
-      if (invoice && invoice.installments.every((i) => i.status === "PAID")) {
-        await prisma.invoice.update({
-          where: { id: invoice.id },
-          data: { status: "PAID" },
-        })
-      } else if (invoice) {
-        await prisma.invoice.update({
-          where: { id: invoice.id },
-          data: { status: "PARTIALLY_PAID" },
-        })
-      }
-
-      logger.info(
-        { installmentId },
-        "Installment marked as PAID via Stripe webhook"
-      )
-
-      // Revalidate paths using project helper
-      if (installment.invoice.projectId) {
-        revalidateProjectData(installment.invoice.projectId)
+      if (updatedInst?.invoice.projectId) {
+        revalidateProjectData(updatedInst.invoice.projectId)
       }
       revalidatePath("/admin/financial")
+    } catch (dbError) {
+      logger.error({ dbError, installmentId }, "Database transaction failed")
+      return new NextResponse("Database Error", { status: 500 })
     }
   }
 
