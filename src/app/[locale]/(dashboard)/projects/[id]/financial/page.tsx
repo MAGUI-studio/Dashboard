@@ -9,16 +9,22 @@ import { ClientSectionHeader } from "@/src/components/client/ClientSectionHeader
 
 import { getProjectInvoices } from "@/src/lib/financial-data"
 import prisma from "@/src/lib/prisma"
+import { verifyAndSyncStripePayment } from "@/src/lib/stripe-actions"
 
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
 interface PageProps {
   params: Promise<{ id: string }>
+  searchParams: Promise<{ session_id?: string }>
 }
 
-export default async function ProjectFinancialPage({ params }: PageProps) {
+export default async function ProjectFinancialPage({
+  params,
+  searchParams,
+}: PageProps) {
   const { id } = await params
+  const { session_id } = await searchParams
   const { userId } = await auth()
 
   if (!userId) return null
@@ -35,6 +41,11 @@ export default async function ProjectFinancialPage({ params }: PageProps) {
   })
 
   if (!project) return notFound()
+
+  // Fallback: If returned from Stripe with session_id, verify manually
+  if (session_id) {
+    await verifyAndSyncStripePayment(session_id)
+  }
 
   const invoices = await getProjectInvoices(id)
 

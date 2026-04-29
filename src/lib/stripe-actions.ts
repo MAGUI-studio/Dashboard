@@ -162,3 +162,76 @@ export async function createCheckoutSession(installmentId: string) {
 
   return session
 }
+
+export async function verifyAndSyncStripePayment(sessionId: string) {
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId)
+
+    if (session.payment_status !== "paid") {
+      return { success: false, message: "Payment not completed in Stripe" }
+    }
+
+    const installmentId = session.metadata?.installmentId
+    if (!installmentId) {
+      return { success: false, message: "No installmentId in session metadata" }
+    }
+
+    // Check if already paid to avoid redundant transactions
+    const existing = await prisma.installment.findUnique({
+      where: { id: installmentId },
+      select: { status: true, invoiceId: true },
+    })
+
+    if (existing?.status === "PAID") {
+      return { success: true, message: "Already marked as paid" }
+    }
+
+    await prisma.$transaction(async (tx) => {
+      // 1. Update Installment
+      const installment = await tx.installment.update({
+        where: { id: installmentId },
+        data: {
+          status: "PAID",
+          paidAt: new Date(),
+          stripePaymentIntentId: session.payment_intent as string,
+        },
+        include: {
+          invoice: {
+            include: {
+              installments: true,
+            },
+          },
+        },
+      })
+
+      // 2. Add a payment event
+      await tx.paymentEvent.create({
+        data: {
+          installmentId,
+          type: "STRIPE",
+          amount: session.amount_total ?? 0,
+          date: new Date(),
+          note: `Pagamento via Sincronizacao Direta (Checkout Session: ${session.id})`,
+        },
+      })
+
+      // 3. Update invoice status
+      const allInstallments = installment.invoice.installments
+      const allPaid = allInstallments.every((i) =>
+        i.id === installmentId ? true : i.status === "PAID"
+      )
+
+      await tx.invoice.update({
+        where: { id: installment.invoiceId },
+        data: {
+          status: allPaid ? "PAID" : "PARTIALLY_PAID",
+        },
+      })
+    })
+
+    return { success: true, message: "Payment synchronized successfully" }
+  } catch (error) {
+    console.error("Error verifying Stripe payment:", error)
+    return { success: false, message: "Verification failed" }
+  }
+}
