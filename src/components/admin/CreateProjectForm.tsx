@@ -283,7 +283,7 @@ export function CreateProjectForm({
 
           <Field data-invalid={state.error && !selectedClientId}>
             <FieldLabel className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-              Cliente ResponsÃ¡vel <span className="text-red-500">*</span>
+              Cliente Responsável <span className="text-red-500">*</span>
             </FieldLabel>
 
             <input type="hidden" name="clientId" value={selectedClientId} />
