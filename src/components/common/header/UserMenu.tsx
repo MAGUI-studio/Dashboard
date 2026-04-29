@@ -5,7 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { SignOutButton } from "@clerk/nextjs"
-import { SignOut } from "@phosphor-icons/react"
+import { ArrowUpRight, SignOut } from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
@@ -18,6 +18,8 @@ import {
 
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
+
+import { usePwaInstall } from "@/src/hooks/use-pwa-install"
 
 interface UserMenuProps {
   viewer: {
@@ -32,6 +34,11 @@ interface UserMenuProps {
 export function UserMenu({ viewer }: UserMenuProps) {
   const t = useTranslations("Sidebar")
   const [isOpen, setIsOpen] = React.useState(false)
+  const { isStandalone, promptInstall } = usePwaInstall()
+
+  const handlePwaAction = React.useCallback(() => {
+    void promptInstall()
+  }, [promptInstall])
 
   return (
     <div
@@ -108,6 +115,41 @@ export function UserMenu({ viewer }: UserMenuProps) {
               </div>
             </DropdownMenuItem>
           </SignOutButton>
+
+          {!isStandalone && (
+            <>
+              <DropdownMenuSeparator className="my-3 bg-muted/50" />
+              <button
+                type="button"
+                onClick={handlePwaAction}
+                className="group block w-full rounded-[1.75rem] px-2 py-2 text-left text-foreground/88 transition-opacity hover:opacity-85"
+              >
+                <div className="flex flex-col gap-3 rounded-[1.65rem] px-3 py-3">
+                  <span className="font-sans text-[9px] font-black uppercase tracking-[0.28em] text-muted-foreground/65">
+                    App MAGUI
+                  </span>
+
+                  <div className="space-y-1">
+                    <h3 className="font-heading text-[1.2rem] font-black uppercase leading-none tracking-tight text-foreground">
+                      Instale no seu celular
+                    </h3>
+                    <p className="max-w-[16rem] text-[11px] leading-relaxed text-muted-foreground">
+                      Abra a dashboard em segundos, direto da tela inicial, com
+                      uma experiencia mais fluida no dia a dia.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-[0.18em] text-foreground">
+                    Instalar agora
+                    <ArrowUpRight
+                      weight="bold"
+                      className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </div>
+                </div>
+              </button>
+            </>
+          )}
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

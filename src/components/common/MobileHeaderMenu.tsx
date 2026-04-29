@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { SignOutButton } from "@clerk/nextjs"
 import {
+  ArrowUpRight,
   CaretDown,
   ChartLineUp,
   ChartPie,
@@ -43,6 +44,8 @@ import {
   getClientHeaderNav,
   isNavItemActive,
 } from "@/src/components/common/header/navigation"
+
+import { usePwaInstall } from "@/src/hooks/use-pwa-install"
 
 interface MobileHeaderMenuProps {
   viewer: {
@@ -86,6 +89,11 @@ export function MobileHeaderMenu({
 }: MobileHeaderMenuProps): React.JSX.Element {
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
+  const { isStandalone, promptInstall } = usePwaInstall()
+
+  const handlePwaAction = React.useCallback(() => {
+    void promptInstall()
+  }, [promptInstall])
 
   if (!viewer) {
     return (
@@ -248,6 +256,38 @@ export function MobileHeaderMenu({
                 ))
               )}
             </nav>
+
+            {!isStandalone && (
+              <button
+                type="button"
+                onClick={handlePwaAction}
+                className="group mt-4 block w-full rounded-[1.75rem] px-2 py-2 text-left text-foreground transition-opacity hover:opacity-85"
+              >
+                <div className="flex flex-col gap-3 rounded-[1.65rem] px-3 py-3">
+                  <span className="font-sans text-[9px] font-black uppercase tracking-[0.28em] text-muted-foreground/65">
+                    App MAGUI
+                  </span>
+
+                  <div className="space-y-1">
+                    <h3 className="font-heading text-[1.2rem] font-black uppercase leading-none tracking-tight text-foreground">
+                      Instale no seu celular
+                    </h3>
+                    <p className="max-w-[16rem] text-[11px] leading-relaxed text-muted-foreground">
+                      Abra a dashboard em segundos, direto da tela inicial, com
+                      uma experiencia mais fluida no dia a dia.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-[0.18em] text-foreground">
+                    Instalar agora
+                    <ArrowUpRight
+                      weight="bold"
+                      className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    />
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
 
           <div className="mt-auto border-t border-white/10 p-4">

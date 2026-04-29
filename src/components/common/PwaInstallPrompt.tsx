@@ -8,58 +8,29 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Button } from "@/src/components/ui/button"
 
 import { useIsMobile } from "@/src/hooks/use-mobile"
-
-interface BeforeInstallPromptEvent extends Event {
-  readonly platforms: string[]
-  readonly userChoice: Promise<{
-    outcome: "accepted" | "dismissed"
-    platform: string
-  }>
-  prompt(): Promise<void>
-}
+import { usePwaInstall } from "@/src/hooks/use-pwa-install"
 
 export function PwaInstallPrompt() {
   const isMobile = useIsMobile()
   const [showPrompt, setShowPrompt] = React.useState(false)
-  const [deferredPrompt, setDeferredPrompt] =
-    React.useState<BeforeInstallPromptEvent | null>(null)
+  const { canInstall, promptInstall } = usePwaInstall()
 
   React.useEffect(() => {
-    // Only proceed on mobile
     if (!isMobile) return
+    if (!canInstall) return
 
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      setDeferredPrompt(e as BeforeInstallPromptEvent)
-
-      // Show prompt after 5 seconds if not installed
-      const timer = setTimeout(() => {
-        if (!window.matchMedia("(display-mode: standalone)").matches) {
-          setShowPrompt(true)
-        }
-      }, 5000)
-
-      return () => clearTimeout(timer)
-    }
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
+    const timer = window.setTimeout(() => {
+      setShowPrompt(true)
+    }, 5000)
 
     return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt
-      )
+      window.clearTimeout(timer)
     }
-  }, [isMobile])
+  }, [canInstall, isMobile])
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return
-
-    deferredPrompt.prompt()
-    const { outcome } = await deferredPrompt.userChoice
-
-    if (outcome === "accepted") {
-      setDeferredPrompt(null)
+    const installed = await promptInstall()
+    if (installed) {
       setShowPrompt(false)
     }
   }
