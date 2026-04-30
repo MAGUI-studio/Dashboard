@@ -31,22 +31,22 @@ export default function SignInPage(): React.JSX.Element {
       <motion.nav
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative z-50 flex w-full items-center justify-between p-10 lg:px-16 lg:py-12"
+        className="relative z-50 flex w-full items-center justify-between p-6 md:p-10 lg:px-16 lg:py-12"
       >
         <Link
           href="/"
           className="transition-transform hover:scale-105 active:scale-95"
         >
-          <Logo width={180} />
+          <Logo width={180} className="w-[140px] md:w-[180px]" />
         </Link>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-4 md:gap-10">
           <LanguageSwitcher />
           <ThemeToggle />
         </div>
       </motion.nav>
 
-      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-10 pb-20 lg:px-16">
-        <div className="grid w-full grid-cols-1 gap-20 lg:grid-cols-12 lg:gap-0">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-20 md:px-10 lg:px-16">
+        <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-0">
           {/* Lado Esquerdo - Tipografia Balanceada */}
           <motion.section
             initial={{ opacity: 0, x: -20 }}
@@ -58,7 +58,7 @@ export default function SignInPage(): React.JSX.Element {
               <span className="text-[10px] font-black uppercase tracking-[0.6em] text-brand-primary">
                 {t("eyebrow")}
               </span>
-              <h1 className="font-heading text-6xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl lg:text-[7vw]">
+              <h1 className="font-heading text-4xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl lg:text-[7vw]">
                 {t("portal_title")} <br />
                 <span className="text-brand-primary">
                   {t("portal_subtitle")}
@@ -66,9 +66,9 @@ export default function SignInPage(): React.JSX.Element {
               </h1>
             </div>
 
-            <div className="mt-12 space-y-8">
+            <div className="mt-8 space-y-8 lg:mt-12">
               <div className="h-1.5 w-24 bg-foreground" />
-              <p className="max-w-4xl text-base font-bold uppercase leading-relaxed tracking-[0.2em] text-muted-foreground/80 lg:text-lg">
+              <p className="max-w-4xl text-sm font-bold uppercase leading-relaxed tracking-[0.2em] text-muted-foreground/80 md:text-base lg:text-lg">
                 {t("marketing_description")}
               </p>
 
@@ -95,11 +95,11 @@ export default function SignInPage(): React.JSX.Element {
             className="flex flex-col items-center justify-center lg:col-span-5 lg:items-end"
           >
             <div className="w-full max-w-[440px]">
-              <div className="mb-10 space-y-1.5 lg:text-right">
+              <div className="mb-10 space-y-1.5 text-center lg:text-right">
                 <h2 className="font-heading text-3xl font-black uppercase tracking-tighter text-foreground lg:text-5xl">
                   {t("ident_title")}
                 </h2>
-                <div className="h-1 w-16 bg-brand-primary lg:ml-auto" />
+                <div className="mx-auto h-1 w-16 bg-brand-primary lg:mr-0 lg:ml-auto" />
               </div>
 
               <SignIn
@@ -142,7 +142,7 @@ export default function SignInPage(): React.JSX.Element {
       </div>
 
       {/* Footer Equilibrado */}
-      <footer className="relative z-20 flex w-full items-center justify-between p-10 lg:px-16 lg:py-12">
+      <footer className="relative z-20 flex w-full items-center justify-between p-6 md:p-10 lg:px-16 lg:py-12">
         <span className="text-[10px] font-black uppercase tracking-[0.6em] text-muted-foreground/30">
           © {new Date().getFullYear()} MAGUI.studio
         </span>
