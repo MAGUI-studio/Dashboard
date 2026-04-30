@@ -33,6 +33,9 @@ export async function ClientRecentActivityStrip({
   activities,
 }: ClientRecentActivityStripProps): Promise<React.JSX.Element> {
   const t = await getTranslations("Dashboard.client_home.activity")
+  const tEmpty = await getTranslations(
+    "Dashboard.project_detail.empty_states.recent_activity"
+  )
 
   const iconMap = {
     update: NewspaperClipping,
@@ -44,14 +47,14 @@ export async function ClientRecentActivityStrip({
   return (
     <section className="flex flex-col gap-6">
       <ClientSectionHeader
-        eyebrow="Movimento recente"
+        eyebrow={tEmpty("eyebrow")}
         title={t("title")}
         description={t("subtitle")}
       />
       <div className="overflow-hidden rounded-[2rem] border border-border/25 bg-muted/5">
         {activities.length === 0 ? (
           <ClientEmptyState
-            title="Nada novo por enquanto"
+            title={tEmpty("title")}
             description={t("empty")}
             icon={NewspaperClipping}
           />

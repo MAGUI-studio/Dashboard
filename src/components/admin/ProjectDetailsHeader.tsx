@@ -100,7 +100,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
                     }}
                   >
                     <ArrowSquareOut className="mr-2 size-3.5" />
-                    {t("open_client", { fallback: "Abrir cliente" })}
+                    {t("open_client")}
                   </Link>
                 </Button>
               </div>
@@ -117,7 +117,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
               </div>
               <div className="flex flex-col">
                 <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  {t("budget_label", { fallback: "Investimento" })}
+                  {t("budget_label")}
                 </span>
                 <span className="text-sm font-bold text-foreground">
                   {budgetDisplay}
@@ -142,7 +142,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
               </div>
               <div className="flex flex-col">
                 <span className="text-[8px] font-bold uppercase tracking-widest text-muted-foreground/40">
-                  {t("deadline_label", { fallback: "Prazo Final" })}
+                  {t("deadline_label")}
                 </span>
                 <div className="flex items-center gap-2">
                   <span className="text-sm font-bold text-foreground">

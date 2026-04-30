@@ -106,14 +106,14 @@ export function ProjectTabs({
             className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <CurrencyCircleDollar weight="duotone" className="mr-2 size-4" />
-            {t("tabs.financial", { fallback: "Financeiro" })}
+            {t("tabs.financial")}
           </TabsTrigger>
           <TabsTrigger
             value="briefing"
             className="whitespace-nowrap px-6 py-3 text-[10px] font-black uppercase tracking-[0.2em] transition-all hover:bg-muted/5 data-[state=active]:bg-transparent"
           >
             <NoteBlank weight="duotone" className="mr-2 size-4" />
-            {t("tabs.briefing", { fallback: "Briefing" })}
+            {t("tabs.briefing")}
           </TabsTrigger>
           <TabsTrigger
             value="assets"

@@ -115,18 +115,6 @@ export const pathnames = {
     pt: "/projetos/[id]/investimento",
     en: "/projects/[id]/financial",
   },
-  "/docs": {
-    pt: "/docs",
-    en: "/docs",
-  },
-  "/docs/[...slug]": {
-    pt: "/docs/[...slug]",
-    en: "/docs/[...slug]",
-  },
-  "/docs/changelog": {
-    pt: "/docs/changelog",
-    en: "/docs/changelog",
-  },
 }
 
 export type AppPathnames = keyof typeof pathnames

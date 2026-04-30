@@ -30,7 +30,7 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
       <div className="flex flex-col gap-8 lg:col-span-2">
         <section className="rounded-3xl border border-border/40 bg-muted/5 p-8 backdrop-blur-sm lg:p-12">
           <h3 className="mb-10 text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            {t("project_info_title", { fallback: "Informações Estratégicas" })}
+            {t("project_info_title")}
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
@@ -109,15 +109,10 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
 
           <div className="mt-12 flex flex-col gap-3">
             <span className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground/40">
-              {t("project_description_label", {
-                fallback: "Visão Geral do Escopo",
-              })}
+              {t("project_description_label")}
             </span>
             <p className="font-sans text-base font-medium leading-relaxed text-foreground/80 whitespace-pre-wrap">
-              {project.description ||
-                t("no_description", {
-                  fallback: "Sem descrição detalhada disponível.",
-                })}
+              {project.description || t("no_description")}
             </p>
           </div>
         </section>
@@ -189,7 +184,7 @@ export function ProjectOverviewTab({ project }: ProjectOverviewTabProps) {
                 }}
               >
                 <ArrowSquareOut className="mr-2 size-4" />
-                {t("open_client", { fallback: "Abrir cliente" })}
+                {t("open_client")}
               </Link>
             </Button>
           </div>

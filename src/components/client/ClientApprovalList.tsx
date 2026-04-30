@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { getTranslations } from "next-intl/server"
+
 import { ApprovalStatus } from "@/src/generated/client/enums"
 import { ClientPortalUpdate } from "@/src/types/client-portal"
 import { CheckCircle } from "@phosphor-icons/react/dist/ssr"
@@ -20,11 +22,15 @@ export async function ClientApprovalList({
     (u) => u.requiresApproval && u.approvalStatus === ApprovalStatus.PENDING
   )
 
+  const t = await getTranslations(
+    "Dashboard.project_detail.empty_states.approvals"
+  )
+
   if (pendingUpdates.length === 0) {
     return (
       <ClientEmptyState
-        title="Tudo validado por enquanto"
-        description="Quando uma entrega precisar da sua decisao, ela aparece aqui com botoes para aprovar ou pedir ajuste."
+        title={t("title")}
+        description={t("description")}
         icon={CheckCircle}
       />
     )

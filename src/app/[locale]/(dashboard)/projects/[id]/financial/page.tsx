@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
@@ -54,12 +55,14 @@ export default async function ProjectFinancialPage({
 
   const invoices = await getProjectInvoices(id)
 
+  const t = await getTranslations("Dashboard.project_detail.pages.financial")
+
   return (
     <div className="flex flex-col gap-10">
       <ClientSectionHeader
-        eyebrow="Gestao de investimento"
-        title="Financeiro e pagamentos"
-        description="Veja parcelas em aberto, vencimentos e pagamentos ja compensados em um painel simples e seguro."
+        eyebrow={`${project.name} / ${t("title")}`}
+        title={t("title")}
+        description={t("description")}
       />
 
       <ClientFinancialView

@@ -1,4 +1,8 @@
+"use client"
+
 import * as React from "react"
+
+import { useTranslations } from "next-intl"
 
 import { Link } from "@/src/i18n/navigation"
 import {
@@ -45,6 +49,7 @@ export function ClientLandingHero({
   variant = "home",
 }: ClientLandingHeroProps): React.JSX.Element {
   const isProject = variant === "project"
+  const t = useTranslations("Dashboard.project_detail.hero")
 
   return (
     <section className="relative overflow-hidden border-b border-border/20">
@@ -107,10 +112,12 @@ export function ClientLandingHero({
           <div className="flex items-center justify-between gap-4 rounded-2xl  p-5">
             <div className="flex flex-col gap-1">
               <span className="text-[9px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-                {isProject ? "Status do projeto" : "Hoje no portal"}
+                {isProject
+                  ? t("status_label_project")
+                  : t("status_label_portal")}
               </span>
               <strong className="font-heading text-2xl font-black uppercase tracking-tight text-foreground">
-                {statusLabel ?? "Em andamento"}
+                {statusLabel ?? t("status_default")}
               </strong>
             </div>
             <div className="flex size-12 items-center justify-center rounded-full bg-brand-primary text-white">

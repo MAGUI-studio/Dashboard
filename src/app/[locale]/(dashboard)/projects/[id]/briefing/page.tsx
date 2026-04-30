@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import { Link } from "@/src/i18n/navigation"
@@ -21,11 +23,15 @@ import { toHref } from "@/src/lib/utils/navigation"
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-export const metadata = dashboardMetadata({
-  title: "Briefing do projeto",
-  description: "Briefing autenticado, respostas e complementos do projeto.",
-  path: "/projects",
-})
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Dashboard.project_detail.pages.briefing")
+
+  return dashboardMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/projects",
+  })
+}
 
 export default async function BriefingPage({
   params,
@@ -54,12 +60,15 @@ export default async function BriefingPage({
   const isBriefingEmpty = !briefingData || Object.keys(briefingData).length < 6
   const isEditing = mode === "edit" || isBriefingEmpty
 
+  const t = await getTranslations("Dashboard.project_detail.pages.briefing")
+  const tDetail = await getTranslations("Dashboard.project_detail")
+
   return (
     <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
-        eyebrow={`${project.name} / Alinhamento`}
-        title="Briefing estrategico"
-        description="As respostas que orientam tom, objetivos, referencias e decisoes importantes do projeto."
+        eyebrow={`${project.name} / ${t("title")}`}
+        title={t("title")}
+        description={t("description")}
         action={
           !isEditing ? (
             <Button
@@ -69,7 +78,7 @@ export default async function BriefingPage({
             >
               <Link href={toHref(`/projects/${id}/briefing?mode=edit`)}>
                 <NotePencil className="mr-2 size-4" weight="duotone" />
-                Editar briefing
+                {tDetail("briefing_complement.edit")}
               </Link>
             </Button>
           ) : null
@@ -84,7 +93,7 @@ export default async function BriefingPage({
         <div className="grid gap-8 xl:grid-cols-[minmax(0,1.15fr)_minmax(340px,0.85fr)]">
           <div className="flex flex-col gap-5">
             <h2 className="px-1 text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/60">
-              Estrutura de negocio
+              {tDetail("briefing_complement.structure_title")}
             </h2>
             <ClientBriefingView briefing={briefingData} />
           </div>

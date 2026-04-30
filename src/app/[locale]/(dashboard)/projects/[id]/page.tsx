@@ -48,6 +48,7 @@ export default async function ProjectDetailPage({
   }
 
   const tStatus = await getTranslations("Dashboard.status")
+  const tDetail = await getTranslations("Dashboard.project_detail")
   const statusLabel = tStatus(project.status)
   const pendingApprovals = project.updates
   const clientTasks = project.actionItems ?? []
@@ -64,45 +65,42 @@ export default async function ProjectDetailPage({
   return (
     <div className="flex flex-col gap-10 lg:gap-12">
       <ClientLandingHero
-        eyebrow="Projeto em andamento"
+        eyebrow={tDetail("eyebrow")}
         title={project.name}
-        description={
-          project.description ??
-          "Veja o momento atual do projeto, acompanhe entregas e resolva o que precisar da sua atencao."
-        }
+        description={project.description ?? tDetail("description_fallback")}
         statusLabel={statusLabel}
         variant="project"
         primaryAction={{
           label: hasPendingPayment
-            ? "Ver pendência financeira"
+            ? tDetail("primary_action.payment")
             : pendingApprovals.length > 0
-              ? "Revisar entrega"
+              ? tDetail("primary_action.approval")
               : clientTasks.length > 0
-                ? "Responder solicitacao"
-                : "Ver historico",
+                ? tDetail("primary_action.task")
+                : tDetail("primary_action.history"),
           href: primaryHref,
         }}
         secondaryAction={{
-          label: "Abrir arquivos",
+          label: tDetail("secondary_action.files"),
           href: toHref(`/projects/${project.id}/files`),
         }}
         metrics={[
           {
-            label: "Progresso",
+            label: tDetail("metrics.progress"),
             value: `${project.progress}%`,
-            detail: "concluido",
+            detail: tDetail("metrics.progress_detail"),
           },
           {
-            label: "Validar",
+            label: tDetail("metrics.validate"),
             value: String(pendingApprovals.length),
-            detail: "entregas pendentes",
+            detail: tDetail("metrics.validate_detail"),
           },
           {
-            label: "Prazo",
+            label: tDetail("metrics.deadline"),
             value: project.deadline
-              ? new Date(project.deadline).toLocaleDateString("pt-BR")
-              : "Aberto",
-            detail: "data combinada",
+              ? new Date(project.deadline).toLocaleDateString()
+              : tDetail("no_deadline"),
+            detail: tDetail("metrics.deadline_detail"),
           },
         ]}
       />
@@ -110,11 +108,11 @@ export default async function ProjectDetailPage({
       {hasPendingPayment && (
         <ClientActionBanner
           type="task"
-          eyebrow="Pagamento pendente"
-          title="Fatura aguardando pagamento"
-          description="Identificamos uma fatura em aberto para este projeto. Utilize o link do Stripe para regularizar seu investimento."
+          eyebrow={tDetail("banner.payment.eyebrow")}
+          title={tDetail("banner.payment.title")}
+          description={tDetail("banner.payment.description")}
           href={toHref(`/projects/${project.id}/financial`)}
-          label="Ir para o financeiro"
+          label={tDetail("banner.payment.label")}
           projectName={project.name}
         />
       )}
@@ -123,18 +121,18 @@ export default async function ProjectDetailPage({
         (pendingApprovals.length > 0 || clientTasks.length > 0) && (
           <ClientActionBanner
             type={pendingApprovals.length > 0 ? "approval" : "task"}
-            eyebrow="Precisa da sua atencao"
+            eyebrow={tDetail("banner.attention.eyebrow")}
             title={pendingApprovals[0]?.title ?? clientTasks[0]?.title ?? ""}
             description={
               pendingApprovals.length > 0
-                ? "Tem uma entrega pronta para sua validacao. Aprove ou peca ajuste para o time seguir."
-                : "Tem uma solicitacao aberta para destravar a proxima etapa do projeto."
+                ? tDetail("banner.attention.description_approval")
+                : tDetail("banner.attention.description_task")
             }
             href={primaryHref}
             label={
               pendingApprovals.length > 0
-                ? "Revisar agora"
-                : "Responder solicitacao"
+                ? tDetail("banner.attention.label_approval")
+                : tDetail("banner.attention.label_task")
             }
             projectName={project.name}
           />
@@ -142,53 +140,61 @@ export default async function ProjectDetailPage({
 
       <section className="grid gap-6">
         <ClientSectionHeader
-          eyebrow="Explore"
-          title="Tudo do projeto em secoes simples"
-          description="Cada area abre uma parte da jornada: entregas, materiais, briefing, historico e pendencias."
+          eyebrow={tDetail("explore.eyebrow")}
+          title={tDetail("explore.title")}
+          description={tDetail("explore.description")}
         />
 
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           <ClientFeatureLink
-            title="Entregas para validar"
-            description="Aprove ou peca ajustes nas entregas que precisam da sua decisao."
+            title={tDetail("explore.approvals.title")}
+            description={tDetail("explore.approvals.description")}
             href={toHref(`/projects/${project.id}/approvals`)}
             icon={CheckCircleIcon}
-            meta={`${pendingApprovals.length} pendente(s)`}
+            meta={tDetail("explore.approvals.meta", {
+              count: pendingApprovals.length,
+            })}
           />
           <ClientFeatureLink
-            title="Materiais e arquivos"
-            description="Acesse documentos, imagens e arquivos finais enviados pela equipe."
+            title={tDetail("explore.files.title")}
+            description={tDetail("explore.files.description")}
             href={toHref(`/projects/${project.id}/files`)}
             icon={FilesIcon}
-            meta={`${project._count.assets} item(ns)`}
+            meta={tDetail("explore.files.meta", {
+              count: project._count.assets,
+            })}
           />
           <ClientFeatureLink
-            title="Historico do projeto"
-            description="Veja as atualizacoes como uma historia de progresso."
+            title={tDetail("explore.timeline.title")}
+            description={tDetail("explore.timeline.description")}
             href={toHref(`/projects/${project.id}/timeline`)}
             icon={ClockCountdownIcon}
-            meta={`${project._count.updates} update(s)`}
+            meta={tDetail("explore.timeline.meta", {
+              count: project._count.updates,
+            })}
           />
           <ClientFeatureLink
-            title="Alinhamento"
-            description="Revise briefing, referencias e respostas importantes."
+            title={tDetail("explore.briefing.title")}
+            description={tDetail("explore.briefing.description")}
             href={toHref(`/projects/${project.id}/briefing`)}
             icon={NotePencilIcon}
-            meta="briefing"
+            meta={tDetail("explore.briefing.meta")}
           />
           <ClientFeatureLink
-            title="Financeiro"
-            description="Gerencie seu investimento, parcelas e comprovantes."
+            title={tDetail("explore.financial.title")}
+            description={tDetail("explore.financial.description")}
             href={toHref(`/projects/${project.id}/financial`)}
             icon={CurrencyCircleDollarIcon}
-            meta="financial"
+            meta={tDetail("explore.financial.meta")}
           />
           <ClientFeatureLink
-            title="Solicitacoes"
-            description="Resolva pendencias que dependem da sua resposta."
+            title={tDetail("explore.tasks.title")}
+            description={tDetail("explore.tasks.description")}
             href={toHref(`/projects/${project.id}/tasks`)}
             icon={ShieldCheckIcon}
-            meta={`${project._count.actionItems} aberta(s)`}
+            meta={tDetail("explore.tasks.meta", {
+              count: project._count.actionItems,
+            })}
           />
         </div>
       </section>

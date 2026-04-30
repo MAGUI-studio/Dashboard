@@ -631,13 +631,34 @@
     "user": {
       "profile": "Meu Perfil",
       "settings": "Configurações",
-      "signOut": "Sair"
+      "signOut": "Sair",
+      "signOut_description": "Encerrar sess?o",
+      "admin_role": "Administrador",
+      "client_role": "Cliente"
     },
     "client": {
       "home": "Início",
       "projects": "Meus Projetos",
       "files": "Arquivos",
       "notifications": "Notificações"
+    },
+    "descriptions": {
+      "dashboard": "Vis?o consolidada da opera??o",
+      "commercial_list": "Gest?o ativa de leads e funil",
+      "commercial_create": "Catalogar nova oportunidade",
+      "proposals": "Controle de propostas enviadas",
+      "proposal_create": "Gerar novo documento comercial",
+      "projects_list": "Monitoramento de execu??o",
+      "projects_create": "Inicializar novo projeto",
+      "service_categories": "Configura??es de servi?os",
+      "clients_list": "Portal de acessos e usu?rios",
+      "clients_create": "Registrar novo acesso"
+    },
+    "pwa": {
+      "eyebrow": "App MAGUI",
+      "title": "Instale no seu celular",
+      "description": "Abra a dashboard em segundos, direto da tela inicial, com uma experi?ncia mais fluida no dia a dia.",
+      "install_now": "Instalar agora"
     }
   },
   "Dashboard": {
@@ -800,7 +821,151 @@
       "no_description": "Sem descrição detalhada.",
       "quick_view": "Visão rápida",
       "open_project": "Abrir projeto",
-      "back": "Voltar"
+      "back": "Voltar",
+      "contact_team": "Falar com o time",
+      "my_projects": "Meus Projetos"
+    },
+    "project_detail": {
+      "eyebrow": "Projeto em andamento",
+      "description_fallback": "Veja o momento atual do projeto, acompanhe entregas e resolva o que precisar da sua atenção.",
+      "primary_action": {
+        "payment": "Ver pendência financeira",
+        "approval": "Revisar entrega",
+        "task": "Responder solicitação",
+        "history": "Ver histórico"
+      },
+      "secondary_action": {
+        "files": "Abrir arquivos"
+      },
+      "metrics": {
+        "progress": "Progresso",
+        "progress_detail": "concluído",
+        "validate": "Validar",
+        "validate_detail": "entregas pendentes",
+        "deadline": "Prazo",
+        "deadline_detail": "data combinada",
+        "no_deadline": "Aberto"
+      },
+      "banner": {
+        "payment": {
+          "eyebrow": "Pagamento pendente",
+          "title": "Fatura aguardando pagamento",
+          "description": "Identificamos uma fatura em aberto para este projeto. Utilize o link do Stripe para regularizar seu investimento.",
+          "label": "Ir para o financeiro"
+        },
+        "attention": {
+          "eyebrow": "Precisa da sua atenção",
+          "description_approval": "Tem uma entrega pronta para sua validação. Aprove ou peça ajuste para o time seguir.",
+          "description_task": "Tem uma solicitação aberta para destravar a próxima etapa do projeto.",
+          "label_approval": "Revisar agora",
+          "label_task": "Responder solicitação"
+        }
+      },
+      "explore": {
+        "eyebrow": "Explore",
+        "title": "Tudo do projeto em seções simples",
+        "description": "Cada área abre uma parte da jornada: entregas, materiais, briefing, histórico e pendências.",
+        "approvals": {
+          "title": "Entregas para validar",
+          "description": "Aprove ou peça ajustes nas entregas que precisam da sua decisão.",
+          "meta": "{count} pendente(s)"
+        },
+        "files": {
+          "title": "Materiais e arquivos",
+          "description": "Acesse documentos, imagens e arquivos finais enviados pela equipe.",
+          "meta": "{count} item(ns)"
+        },
+        "timeline": {
+          "title": "Histórico do projeto",
+          "description": "Veja as atualizações como uma história de progresso.",
+          "meta": "{count} update(s)"
+        },
+        "briefing": {
+          "title": "Alinhamento",
+          "description": "Revise briefing, referências e respostas importantes.",
+          "meta": "briefing"
+        },
+        "financial": {
+          "title": "Financeiro",
+          "description": "Gerencie seu investimento, parcelas e comprovantes.",
+          "meta": "financial"
+        },
+        "tasks": {
+          "title": "Solicitações",
+          "description": "Resolva pendências que dependem da sua resposta.",
+          "meta": "{count} aberta(s)"
+        }
+      },
+      "pages": {
+        "approvals": {
+          "title": "Entregas para validar",
+          "description": "Aprove o que estiver certo ou peça ajustes com clareza. Sua resposta move a próxima etapa."
+        },
+        "briefing": {
+          "title": "Briefing estratégico",
+          "description": "As respostas que orientam a engenharia e o design do seu ecossistema."
+        },
+        "files": {
+          "title": "Materiais e entregas",
+          "description": "Tudo que foi enviado ou gerado pelo time está centralizado aqui."
+        },
+        "financial": {
+          "title": "Financeiro e pagamentos",
+          "description": "Veja parcelas em aberto, histórico de pagamentos e comprovantes fiscais."
+        },
+        "tasks": {
+          "title": "O que precisamos de você",
+          "description": "Pendências, respostas e materiais que o time precisa para avançar.",
+          "badge": "Solicita??o",
+          "overdue": "Atrasado",
+          "due_date": "Prazo"
+        },
+        "timeline": {
+          "title": "Histórico do projeto",
+          "description": "Acompanhe a evolução do sistema através de marcos e atualizações."
+        }
+      },
+      "empty_states": {
+        "approvals": {
+          "title": "Tudo validado por enquanto",
+          "description": "Quando uma entrega precisar da sua decisão, ela aparecerá aqui com botões para aprovar ou pedir ajuste."
+        },
+        "tasks": {
+          "title": "Nada pendente com você",
+          "description": "Quando o time precisar de alguma resposta ou envio, a solicitação aparece aqui com prazo e contexto."
+        },
+        "recent_activity": {
+          "title": "Nada novo por enquanto",
+          "eyebrow": "Movimento recente"
+        },
+        "assets": {
+          "title": "Nenhum arquivo catalogado",
+          "description": "Acesse documentos, imagens e arquivos finais enviados pela equipe.",
+          "search_placeholder": "Buscar arquivos pelo nome...",
+          "type_placeholder": "Tipo de arquivo",
+          "all_types": "Todos os tipos",
+          "filter_all": "Todos"
+        }
+      },
+      "briefing_complement": {
+        "title": "Complementar Briefing",
+        "description": "Algo mudou ou esqueceu de mencionar? Adicione uma nota estratégica.",
+        "form": {
+          "title_label": "Título do Complemento",
+          "title_placeholder": "Ex: Novos objetivos de conversão",
+          "description_label": "Descrição Detalhada",
+          "description_placeholder": "Descreva aqui o que mudou ou o que precisa ser considerado...",
+          "submit": "Enviar Complemento",
+          "submitting": "Processando..."
+        },
+        "edit": "Editar briefing",
+        "structure_title": "Estrutura de neg?cio"
+      },
+      "hero": {
+        "status_label_project": "Status do projeto",
+        "status_label_portal": "Hoje no portal",
+        "status_default": "Em andamento"
+      }
     },
     "inbox": {
       "title": "Sua Inbox",
@@ -884,6 +1049,28 @@
     "category_label": "Categoria",
     "priority_label": "Prioridade"
   },
+  "Docs": {
+    "nav": {
+      "knowledge_base": "Knowledge Base",
+      "admin": {
+        "general": "Geral",
+        "overview": "Visão Geral",
+        "architecture": "Arquitetura",
+        "operation": "Operação",
+        "commercial_handoff": "Handoff Comercial",
+        "project_management": "Gestão de Projetos",
+        "financial": "Financeiro"
+      },
+      "client": {
+        "start": "Início",
+        "first_steps": "Primeiros Passos",
+        "your_project": "Seu Projeto",
+        "how_to_track": "Como Acompanhar",
+        "briefing_and_materials": "Briefing e Materiais",
+        "approvals": "Aprovações"
+      }
+    }
+  },
   "Notifications": {
     "eyebrow": "Central de sinais",
     "title": "Notificações",
@@ -920,6 +1107,11 @@
       "informational": "Informativo",
       "operations": "Operações",
       "automatic_reminder": "Lembrete automático"
+    },
+    "pagination": {
+      "previous": "Anterior",
+      "next": "Pr?xima",
+      "page": "P?gina {current} de {total}"
     }
   }
 }

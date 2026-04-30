@@ -80,7 +80,7 @@ export function BriefingStepEditor({
         <div className="flex size-8 items-center justify-center rounded-full bg-brand-primary/10">
           <PlusIcon size={14} weight="bold" />
         </div>
-        {t("add_item", { fallback: "Adicionar Item" })}
+        {t("add_item")}
       </button>
     </div>
   )

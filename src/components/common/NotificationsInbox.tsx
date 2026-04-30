@@ -37,6 +37,7 @@ export function NotificationsInbox({
   currentPage = 1,
 }: NotificationsInboxProps): React.JSX.Element {
   const t = useTranslations("Notifications")
+  const tPagination = useTranslations("Notifications.pagination")
   const [isSubmitting, startTransition] = React.useTransition()
 
   const unreadNotifications = notifications.filter(
@@ -177,14 +178,14 @@ export function NotificationsInbox({
             className="rounded-full border-border/40 px-6 text-[10px] font-black uppercase tracking-[0.2em]"
           >
             {currentPage <= 1 ? (
-              <span>Anterior</span>
+              <span>{tPagination("previous")}</span>
             ) : (
-              <a href={`?page=${currentPage - 1}`}>Anterior</a>
+              <a href={`?page=${currentPage - 1}`}>{tPagination("previous")}</a>
             )}
           </Button>
 
           <span className="font-mono text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/50">
-            Pagina {currentPage} de {totalPages}
+            {tPagination("page", { current: currentPage, total: totalPages })}
           </span>
 
           <Button
@@ -194,9 +195,9 @@ export function NotificationsInbox({
             className="rounded-full border-border/40 px-6 text-[10px] font-black uppercase tracking-[0.2em]"
           >
             {currentPage >= totalPages ? (
-              <span>Proxima</span>
+              <span>{tPagination("next")}</span>
             ) : (
-              <a href={`?page=${currentPage + 1}`}>Proxima</a>
+              <a href={`?page=${currentPage + 1}`}>{tPagination("next")}</a>
             )}
           </Button>
         </div>

@@ -20,9 +20,8 @@ import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
 export const metadata = dashboardMetadata({
-  title: "Resumo operacional",
-  description:
-    "Resumo autenticado de projetos, clientes, aprovacoes e atividades da operacao MAGUI.studio.",
+  title: "Dashboard",
+  description: "MAGUI.studio",
   path: "/",
 })
 
@@ -126,7 +125,7 @@ export default async function DashboardPage({
           </div>
 
           <p className="text-[10px] font-black uppercase tracking-[0.4em] text-brand-primary/60">
-            {t("no_project_eyebrow") || "Portal do Cliente"}
+            {t("no_project_eyebrow")}
           </p>
 
           <h2 className="mt-4 font-heading text-3xl font-black uppercase tracking-tight text-foreground sm:text-4xl">
@@ -134,8 +133,7 @@ export default async function DashboardPage({
           </h2>
 
           <p className="mt-4 text-sm font-medium leading-relaxed text-muted-foreground/60">
-            {t("no_project_description") ||
-              "Ainda não temos um projeto ativo registrado para sua conta. Se você acredita que isso é um erro ou quer iniciar algo novo, entre em contato."}
+            {t("no_project_description")}
           </p>
 
           <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -143,14 +141,16 @@ export default async function DashboardPage({
               asChild
               className="rounded-full px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]"
             >
-              <a href="mailto:contato@magui.studio">Falar com o time</a>
+              <a href="mailto:contato@magui.studio">
+                {t("common.contact_team")}
+              </a>
             </Button>
             <Button
               asChild
               variant="outline"
               className="rounded-full border-border/40 bg-background/50 px-8 py-6 text-[10px] font-black uppercase tracking-[0.2em]"
             >
-              <Link href="/projects">Meus Projetos</Link>
+              <Link href="/projects">{t("common.my_projects")}</Link>
             </Button>
           </div>
         </div>

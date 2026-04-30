@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { Metadata } from "next"
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import { ClientPortalActionItem } from "@/src/types/client-portal"
@@ -15,11 +17,15 @@ import { dashboardMetadata } from "@/src/lib/seo"
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-export const metadata = dashboardMetadata({
-  title: "Tarefas do projeto",
-  description: "Solicitacoes e proximas acoes autenticadas do projeto.",
-  path: "/projects",
-})
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Dashboard.project_detail.pages.tasks")
+
+  return dashboardMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/projects",
+  })
+}
 
 export default async function TasksPage({
   params,
@@ -43,12 +49,14 @@ export default async function TasksPage({
 
   const clientTasks = project.actionItems ?? []
 
+  const t = await getTranslations("Dashboard.project_detail.pages.tasks")
+
   return (
     <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
-        eyebrow={`${project.name} / Solicitacoes`}
-        title="O que precisamos de voce"
-        description="Pendencias, respostas e envios que ajudam o time a seguir sem travar o projeto."
+        eyebrow={`${project.name} / ${t("title")}`}
+        title={t("title")}
+        description={t("description")}
       />
 
       <ClientTaskList

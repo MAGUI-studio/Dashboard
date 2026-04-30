@@ -1,5 +1,7 @@
 import * as React from "react"
 
+import { useTranslations } from "next-intl"
+
 import { Link } from "@/src/i18n/navigation"
 import { ClientPortalActionItem } from "@/src/types/client-portal"
 import {
@@ -16,13 +18,16 @@ import { ClientEmptyState } from "./ClientEmptyState"
 interface ClientTaskListProps {
   tasks: ClientPortalActionItem[]
 }
-
 export function ClientTaskList({ tasks }: ClientTaskListProps) {
+  const t = useTranslations("Dashboard.project_detail.empty_states.tasks")
+  const tCommon = useTranslations("Dashboard.common")
+  const tPage = useTranslations("Dashboard.project_detail.pages.tasks")
+
   if (tasks.length === 0) {
     return (
       <ClientEmptyState
-        title="Nada pendente com voce"
-        description="Quando o time precisar de alguma resposta ou envio, a solicitacao aparece aqui com prazo e contexto."
+        title={t("title")}
+        description={t("description")}
         icon={ChatTeardropDots}
       />
     )
@@ -52,14 +57,14 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
               <div className="flex min-w-0 flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-3">
                   <p className="text-[10px] font-black uppercase tracking-[0.24em] text-muted-foreground/45">
-                    Solicitacao
+                    {tPage("badge")}
                   </p>
                   {isOverdue && (
                     <Badge
                       variant="outline"
                       className="h-6 rounded-full border-amber-500/30 bg-amber-500/5 px-3 text-[8px] font-black uppercase tracking-widest text-amber-600"
                     >
-                      Atrasado
+                      {tPage("overdue")}
                     </Badge>
                   )}
                 </div>
@@ -67,7 +72,7 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
                   {task.title}
                 </h2>
                 <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/75">
-                  {task.description || "Sem descricao detalhada."}
+                  {task.description || tCommon("no_description")}
                 </p>
 
                 {task.dueDate && (
@@ -79,7 +84,7 @@ export function ClientTaskList({ tasks }: ClientTaskListProps) {
                     <span
                       className={`text-[10px] font-bold uppercase tracking-widest ${isOverdue ? "text-amber-600/80" : "text-brand-primary/80"}`}
                     >
-                      Prazo:{" "}
+                      {tPage("due_date")}:{" "}
                       {new Date(task.dueDate).toLocaleDateString("pt-BR")}
                     </span>
                   </div>

@@ -36,7 +36,7 @@ export function ProjectSettingsTab({
       <section className="flex flex-col gap-8">
         <div className="flex flex-col gap-1">
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-            {t("settings_title", { fallback: "Configurações do Protocolo" })}
+            {t("settings_title")}
           </h3>
           <p className="max-w-2xl text-sm font-medium leading-relaxed text-muted-foreground/40">
             Gerencie as configurações críticas deste projeto. Tenha cuidado ao

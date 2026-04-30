@@ -1,5 +1,6 @@
 import * as React from "react"
 
+import { getTranslations } from "next-intl/server"
 import { notFound } from "next/navigation"
 
 import { auth } from "@clerk/nextjs/server"
@@ -12,11 +13,15 @@ import { getClientProjectApprovals } from "@/src/lib/client-projects"
 import prisma from "@/src/lib/prisma"
 import { dashboardMetadata } from "@/src/lib/seo"
 
-export const metadata = dashboardMetadata({
-  title: "Aprovacoes do projeto",
-  description: "Aprovacoes autenticadas, historico e pendencias do projeto.",
-  path: "/projects",
-})
+export async function generateMetadata() {
+  const t = await getTranslations("Dashboard.project_detail.pages.approvals")
+
+  return dashboardMetadata({
+    title: t("title"),
+    description: t("description"),
+    path: "/projects",
+  })
+}
 
 export default async function ApprovalsPage({
   params,
@@ -38,12 +43,14 @@ export default async function ApprovalsPage({
 
   if (!project) return notFound()
 
+  const t = await getTranslations("Dashboard.project_detail.pages.approvals")
+
   return (
     <div className="flex w-full flex-col gap-8">
       <ClientSectionHeader
-        eyebrow={`${project.name} / Entregas`}
-        title="Entregas para validar"
-        description="Aprove o que estiver certo ou peca ajustes com clareza. Sua resposta move a proxima etapa."
+        eyebrow={`${project.name} / ${t("title")}`}
+        title={t("title")}
+        description={t("description")}
       />
 
       <div className="grid gap-10">

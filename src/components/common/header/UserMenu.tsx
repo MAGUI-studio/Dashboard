@@ -38,6 +38,7 @@ interface UserMenuProps {
 
 export function UserMenu({ viewer }: UserMenuProps) {
   const t = useTranslations("Sidebar")
+  const tPwa = useTranslations("Sidebar.pwa")
   const [isOpen, setIsOpen] = React.useState(false)
   const [showInstructions, setShowInstructions] = React.useState(false)
   const { isSafari, isStandalone, installStatus, promptInstall } =
@@ -77,7 +78,7 @@ export function UserMenu({ viewer }: UserMenuProps) {
                 {viewer.firstName || viewer.fullName?.split(" ")[0]}
               </span>
               <span className="max-w-32 truncate text-[8px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
-                {viewer.isAdmin ? "Administrador" : "Cliente"}
+                {viewer.isAdmin ? t("user.admin_role") : t("user.client_role")}
               </span>
             </div>
           </button>
@@ -124,7 +125,7 @@ export function UserMenu({ viewer }: UserMenuProps) {
                   {t("user.signOut")}
                 </span>
                 <span className="text-[11px] text-muted-foreground transition-colors group-hover/item:text-red-500/70">
-                  Encerrar sessao
+                  {t("user.signOut_description")}
                 </span>
               </div>
             </DropdownMenuItem>
@@ -136,16 +137,15 @@ export function UserMenu({ viewer }: UserMenuProps) {
               <div className="rounded-[1.75rem] px-2 py-2 text-left text-foreground/88">
                 <div className="flex flex-col gap-3 rounded-[1.65rem] px-3 py-3">
                   <span className="font-sans text-[9px] font-black uppercase tracking-[0.28em] text-muted-foreground/65">
-                    App MAGUI
+                    {tPwa("eyebrow")}
                   </span>
 
                   <div className="space-y-1">
                     <h3 className="font-heading text-[1.2rem] font-black uppercase leading-none tracking-tight text-foreground">
-                      Instale no seu celular
+                      {tPwa("title")}
                     </h3>
                     <p className="max-w-[16rem] text-[11px] leading-relaxed text-muted-foreground">
-                      Abra a dashboard em segundos, direto da tela inicial, com
-                      uma experiencia mais fluida no dia a dia.
+                      {tPwa("description")}
                     </p>
                   </div>
 
@@ -159,7 +159,7 @@ export function UserMenu({ viewer }: UserMenuProps) {
                         <DownloadSimple weight="bold" className="size-4.5" />
                       </div>
                       <span className="font-sans text-[11px] font-black uppercase tracking-[0.18em]">
-                        Instalar agora
+                        {tPwa("install_now")}
                       </span>
                     </div>
                     <ArrowUpRightIcon weight="bold" className="size-4" />

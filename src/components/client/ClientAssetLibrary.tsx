@@ -4,10 +4,10 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { AssetType } from "@/src/generated/client/enums"
-import { DashboardAsset } from "@/src/types/dashboard"
-import { MagnifyingGlass } from "@phosphor-icons/react"
+import { FileIcon, Files, MagnifyingGlass, Plus } from "@phosphor-icons/react"
 
+import { Badge } from "@/src/components/ui/badge"
+import { Button } from "@/src/components/ui/button"
 import { Input } from "@/src/components/ui/input"
 import {
   Select,
@@ -18,34 +18,40 @@ import {
   SelectValue,
 } from "@/src/components/ui/select"
 
-import { ClientAssetCard } from "./ClientAssetCard"
+import { ClientEmptyState } from "./ClientEmptyState"
+
+interface Asset {
+  id: string
+  name: string
+  url: string
+  type: string
+  createdAt: Date
+}
 
 interface ClientAssetLibraryProps {
-  assets: DashboardAsset[]
+  assets: Asset[]
 }
 
 export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
-  const t = useTranslations("Admin.projects.details.asset_types")
+  const t = useTranslations("Dashboard.project_detail.empty_states.assets")
   const [search, setSearch] = React.useState("")
-  const [activeTab, setActiveTab] = React.useState<string>("all")
+  const [activeTab, setActiveTab] = React.useState("all")
 
-  const filteredAssets = React.useMemo(() => {
-    return assets.filter((asset) => {
-      const matchesSearch = asset.name
-        .toLowerCase()
-        .includes(search.toLowerCase())
-      const matchesTab = activeTab === "all" || asset.type === activeTab
-      return matchesSearch && matchesTab
-    })
-  }, [assets, search, activeTab])
+  const filteredAssets = assets.filter((asset) => {
+    const matchesSearch = asset.name
+      .toLowerCase()
+      .includes(search.toLowerCase())
+    const matchesTab = activeTab === "all" || asset.type === activeTab
+    return matchesSearch && matchesTab
+  })
 
   if (assets.length === 0) {
     return (
-      <div className="rounded-[1.75rem] border border-dashed border-border/25 px-6 py-16 text-center">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-          Nenhum arquivo disponível no momento.
-        </p>
-      </div>
+      <ClientEmptyState
+        title={t("title")}
+        description={t("description")}
+        icon={Files}
+      />
     )
   }
 
@@ -57,7 +63,7 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
         <div className="relative w-full max-w-md">
           <MagnifyingGlass className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-muted-foreground/40" />
           <Input
-            placeholder="Buscar arquivos pelo nome..."
+            placeholder={t("search_placeholder")}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="h-12 rounded-full border-border/40 bg-muted/20 pl-11 pr-4 text-sm transition-all focus:border-brand-primary/40 focus:ring-0"
@@ -69,7 +75,7 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
             size="lg"
             className="h-12 w-full rounded-full border-border/40 bg-muted/10 px-5 text-[10px] font-black uppercase tracking-widest md:w-56"
           >
-            <SelectValue placeholder="Tipo de arquivo" />
+            <SelectValue placeholder={t("type_placeholder")} />
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
@@ -77,7 +83,7 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
                 value="all"
                 className="text-[10px] font-bold uppercase tracking-widest"
               >
-                Todos
+                {t("filter_all")}
               </SelectItem>
               {assetTypes.map((type) => (
                 <SelectItem
@@ -85,7 +91,7 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
                   value={type}
                   className="text-[10px] font-bold uppercase tracking-widest"
                 >
-                  {t(type as AssetType)}
+                  {type}
                 </SelectItem>
               ))}
             </SelectGroup>
@@ -93,19 +99,37 @@ export function ClientAssetLibrary({ assets }: ClientAssetLibraryProps) {
         </Select>
       </div>
 
-      {filteredAssets.length === 0 ? (
-        <div className="rounded-[1.75rem] border border-dashed border-border/25 px-6 py-16 text-center">
-          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/30">
-            Nenhum arquivo encontrado para esta busca.
-          </p>
-        </div>
-      ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {filteredAssets.map((asset) => (
-            <ClientAssetCard key={asset.id} asset={asset} />
-          ))}
-        </div>
-      )}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {filteredAssets.map((asset) => (
+          <a
+            key={asset.id}
+            href={asset.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex flex-col gap-4 rounded-[2rem] border border-border/20 bg-muted/5 p-6 transition-all hover:-translate-y-1 hover:border-brand-primary/20 hover:bg-background"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex size-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary transition-colors group-hover:bg-brand-primary group-hover:text-white">
+                <FileIcon weight="duotone" className="size-6" />
+              </div>
+              <Badge
+                variant="outline"
+                className="rounded-full bg-muted/10 px-2.5 py-0.5 text-[8px] font-black uppercase tracking-widest text-muted-foreground/60 border-none"
+              >
+                {asset.type}
+              </Badge>
+            </div>
+            <div className="flex flex-col gap-1 overflow-hidden">
+              <span className="truncate font-heading text-lg font-black uppercase tracking-tight text-foreground">
+                {asset.name}
+              </span>
+              <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40">
+                {new Date(asset.createdAt).toLocaleDateString("pt-BR")}
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
     </div>
   )
 }
