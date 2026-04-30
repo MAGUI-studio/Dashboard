@@ -9,7 +9,6 @@ import { SignIn } from "@clerk/nextjs"
 import { ArrowUpRightIcon } from "@phosphor-icons/react"
 import { motion } from "framer-motion"
 
-import BackgroundImages from "@/src/components/common/backgroundImages"
 import { LanguageSwitcher } from "@/src/components/common/languageSwitcher"
 import { Logo } from "@/src/components/common/logo"
 import { ThemeToggle } from "@/src/components/common/themeToggle"
@@ -18,11 +17,9 @@ export default function SignInPage(): React.JSX.Element {
   const t = useTranslations("Auth.signIn")
 
   return (
-    <main className="relative mx-auto flex w-full max-w-440 flex-col overflow-hidden bg-transparent">
-      <BackgroundImages className="z-0" />
-
+    <main className="relative mx-auto flex min-h-screen w-full max-w-440 flex-col overflow-hidden bg-background">
       <div className="absolute top-0 right-0 z-0 select-none opacity-[0.03] dark:opacity-[0.05]">
-        <span className="font-heading text-6xl font-black uppercase leading-none tracking-tighter sm:text-8xl md:text-[9rem] xl:text-[12rem]">
+        <span className="font-heading text-9xl font-black uppercase leading-none tracking-tighter md:text-[12rem] lg:text-[15rem]">
           PORTAL
         </span>
       </div>
@@ -44,19 +41,19 @@ export default function SignInPage(): React.JSX.Element {
         </div>
       </motion.nav>
 
-      <div className="relative z-10 flex flex-1 flex-col justify-center px-6 py-12 md:min-h-[calc(100svh-14rem)] md:px-10 md:py-16 lg:min-h-[calc(100svh-16rem)] lg:px-16">
-        <div className="grid w-full items-center grid-cols-1 gap-14 xl:grid-cols-12 xl:gap-10">
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pb-20 md:px-10 lg:px-16">
+        <div className="grid w-full grid-cols-1 gap-16 lg:grid-cols-12 lg:gap-0">
           <motion.section
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col justify-center xl:col-span-7"
+            className="flex flex-col justify-center lg:col-span-7"
           >
             <div className="space-y-3">
               <span className="text-[10px] font-black uppercase tracking-[0.6em] text-brand-primary">
                 {t("eyebrow")}
               </span>
-              <h1 className="font-heading text-4xl font-black uppercase leading-[0.88] tracking-tighter text-foreground sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl">
+              <h1 className="font-heading text-5xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl md:text-8xl lg:text-9xl">
                 {t("portal_title")} <br />
                 <span className="text-brand-primary">
                   {t("portal_subtitle")}
@@ -89,14 +86,14 @@ export default function SignInPage(): React.JSX.Element {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="flex flex-col items-center justify-start xl:col-span-5 xl:items-end"
+            className="flex flex-col items-center justify-center lg:col-span-5 lg:items-end"
           >
-            <div className="w-full max-w-110 xl:pt-28">
-              <div className="mb-8 space-y-1.5 text-center xl:text-right">
-                <h2 className="font-heading text-2xl font-black uppercase tracking-tighter text-foreground md:text-3xl xl:text-5xl">
+            <div className="w-full max-w-110">
+              <div className="mb-10 space-y-1.5 text-center lg:text-right">
+                <h2 className="font-heading text-3xl font-black uppercase tracking-tighter text-foreground lg:text-5xl">
                   {t("ident_title")}
                 </h2>
-                <div className="mx-auto h-1 w-16 bg-brand-primary xl:mr-0 xl:ml-auto" />
+                <div className="mx-auto h-1 w-16 bg-brand-primary lg:mr-0 lg:ml-auto" />
               </div>
 
               <SignIn
@@ -116,7 +113,6 @@ export default function SignInPage(): React.JSX.Element {
         </div>
       </div>
 
-      {/* Footer Equilibrado */}
       <footer className="relative z-20 flex w-full items-center justify-between p-6 md:p-10 lg:px-16 lg:py-12">
         <span className="text-[10px] font-black uppercase tracking-[0.6em] text-muted-foreground/30">
           © {new Date().getFullYear()} MAGUI.studio
