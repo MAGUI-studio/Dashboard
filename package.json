@@ -8,7 +8,7 @@
     "check-i18n": "node scripts/check-i18n.mjs",
     "build": "pnpm check-i18n && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint --dir .",
     "lint:db": "node scripts/db-audit.mjs",
     "lint:secrets": "secretlint \"**/*\"",
     "format": "prettier --write \"**/*.{ts,tsx}\"",

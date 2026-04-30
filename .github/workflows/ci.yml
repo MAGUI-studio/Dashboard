@@ -31,7 +31,7 @@ jobs:
         run: pnpm check-i18n
 
       - name: Lint
-        run: pnpm lint
+        run: pnpm run lint
 
       - name: Typecheck
         run: pnpm typecheck
