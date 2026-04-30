@@ -4,7 +4,7 @@ import * as React from "react"
 
 import { useTranslations } from "next-intl"
 
-import { ArrowUpRight, BellRinging, Check } from "@phosphor-icons/react"
+import { ArrowUpRightIcon, BellRinging, Check } from "@phosphor-icons/react"
 import { toast } from "sonner"
 
 import { markNotificationsAsReadAction } from "@/src/lib/actions/notification.actions"
@@ -160,7 +160,7 @@ export function NotificationsInbox({
                   className="inline-flex items-center gap-2 rounded-full border border-brand-primary/20 bg-background/40 px-4 py-2 text-[9px] font-black uppercase tracking-[0.2em] text-brand-primary transition-all hover:bg-brand-primary hover:text-white"
                 >
                   {t("open")}
-                  <ArrowUpRight weight="bold" className="size-3.5" />
+                  <ArrowUpRightIcon weight="bold" className="size-3.5" />
                 </a>
               </div>
             )}

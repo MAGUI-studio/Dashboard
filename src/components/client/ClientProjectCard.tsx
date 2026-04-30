@@ -5,7 +5,7 @@ import { getLocale, getTranslations } from "next-intl/server"
 import { Link } from "@/src/i18n/navigation"
 import { ClientProjectSummary } from "@/src/types/client-portal"
 import {
-  ArrowUpRight,
+  ArrowUpRightIcon,
   Calendar,
   CheckCircle,
   FolderOpen,
@@ -34,7 +34,7 @@ export async function ClientProjectCard({
     >
       <article className="group relative overflow-hidden rounded-[2rem] border border-border/25 bg-background p-5 shadow-2xl shadow-foreground/5 transition-all hover:-translate-y-1 lg:p-8">
         <div className="absolute right-6 top-6 flex size-11 items-center justify-center rounded-full bg-muted/20 text-foreground/45 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:bg-brand-primary group-hover:text-white">
-          <ArrowUpRight weight="bold" className="size-5" />
+          <ArrowUpRightIcon weight="bold" className="size-5" />
         </div>
 
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_360px] lg:items-end">

@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl"
 import { Link, usePathname } from "@/src/i18n/navigation"
 import { SignOutButton } from "@clerk/nextjs"
 import {
-  ArrowUpRight,
+  ArrowUpRightIcon,
   CaretDown,
   ChartLineUp,
   ChartPie,
@@ -297,7 +297,7 @@ export function MobileHeaderMenu({
                         Instalar agora
                       </span>
                     </div>
-                    <ArrowUpRight weight="bold" className="size-4.5" />
+                    <ArrowUpRightIcon weight="bold" className="size-4.5" />
                   </button>
                 </div>
               </div>

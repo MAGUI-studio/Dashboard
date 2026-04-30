@@ -5,7 +5,11 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { SignOutButton } from "@clerk/nextjs"
-import { ArrowUpRight, DownloadSimple, SignOut } from "@phosphor-icons/react"
+import {
+  ArrowUpRightIcon,
+  DownloadSimple,
+  SignOut,
+} from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
@@ -158,7 +162,7 @@ export function UserMenu({ viewer }: UserMenuProps) {
                         Instalar agora
                       </span>
                     </div>
-                    <ArrowUpRight weight="bold" className="size-4" />
+                    <ArrowUpRightIcon weight="bold" className="size-4" />
                   </button>
                 </div>
               </div>
