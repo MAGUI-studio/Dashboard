@@ -33,7 +33,7 @@ export async function DashboardStatsWidget({
     {
       label: t("clients.stats.active_projects"),
       value: stats.activeProjectsCount,
-      hint: "vários concluídos", // simplify hint or fetch more data
+      hint: "vários concluídos",
       icon: FolderOpen,
     },
     {

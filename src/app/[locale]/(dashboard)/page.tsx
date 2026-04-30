@@ -12,12 +12,8 @@ import { FolderOpen } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "@/src/components/ui/button"
 
 import { DashboardActivityWidget } from "@/src/components/admin/dashboard/DashboardActivityWidget"
-import { DashboardAttentionWidget } from "@/src/components/admin/dashboard/DashboardAttentionWidget"
-import { DashboardPerformanceWidget } from "@/src/components/admin/dashboard/DashboardPerformanceWidget"
 import { DashboardRecentUpdatesWidget } from "@/src/components/admin/dashboard/DashboardRecentUpdatesWidget"
-import { DashboardRemindersWidget } from "@/src/components/admin/dashboard/DashboardRemindersWidget"
 import { DashboardStatsWidget } from "@/src/components/admin/dashboard/DashboardStatsWidget"
-import { DashboardTemplatesWidget } from "@/src/components/admin/dashboard/DashboardTemplatesWidget"
 import { ClientHome } from "@/src/components/client/ClientHome"
 
 import { getClientHomeData } from "@/src/lib/client-projects"
@@ -108,12 +104,10 @@ export default async function DashboardPage({
 
           <Suspense fallback={<DashboardSkeleton />}>
             <DashboardStatsWidget userId={user.id} />
-            <DashboardAttentionWidget />
-            <DashboardRemindersWidget userId={user.id} />
-            <DashboardActivityWidget />
-            <DashboardPerformanceWidget />
-            <DashboardRecentUpdatesWidget />
-            <DashboardTemplatesWidget />
+            <div className="grid gap-6 xl:grid-cols-2">
+              <DashboardActivityWidget />
+              <DashboardRecentUpdatesWidget />
+            </div>
           </Suspense>
         </div>
       </main>

@@ -84,7 +84,7 @@
         "base_registered": "base cadastrada",
         "finalized": "finalizados",
         "review_today": "pedem revisão hoje",
-        "unread_notifications": "{count} notificações não lidas"
+        "unread_notifications": "0 notificações não lidas"
       },
       "form": {
         "identity_title": "Perfil de Identidade",
@@ -753,7 +753,7 @@
         "base_registered": "base cadastrada",
         "finalized": "finalizados",
         "review_today": "pedem revisão hoje",
-        "unread_notifications": "{count} notificações não lidas"
+        "unread_notifications": "0 notificações não lidas"
       }
     },
     "approvals": {
