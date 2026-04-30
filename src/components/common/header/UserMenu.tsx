@@ -5,7 +5,7 @@ import * as React from "react"
 import { useTranslations } from "next-intl"
 
 import { SignOutButton } from "@clerk/nextjs"
-import { ArrowUpRight, SignOut } from "@phosphor-icons/react"
+import { ArrowUpRight, DownloadSimple, SignOut } from "@phosphor-icons/react"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import {
@@ -18,6 +18,7 @@ import {
 
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
+import { PwaInstallInstructionsDialog } from "@/src/components/common/PwaInstallInstructionsDialog"
 
 import { usePwaInstall } from "@/src/hooks/use-pwa-install"
 
@@ -34,11 +35,20 @@ interface UserMenuProps {
 export function UserMenu({ viewer }: UserMenuProps) {
   const t = useTranslations("Sidebar")
   const [isOpen, setIsOpen] = React.useState(false)
-  const { isStandalone, promptInstall } = usePwaInstall()
+  const [showInstructions, setShowInstructions] = React.useState(false)
+  const { isSafari, isStandalone, installStatus, promptInstall } =
+    usePwaInstall()
+  const shouldShowInstallAction =
+    !isStandalone && installStatus !== "unavailable"
 
   const handlePwaAction = React.useCallback(() => {
+    if (installStatus === "manual") {
+      setShowInstructions(true)
+      return
+    }
+
     void promptInstall()
-  }, [promptInstall])
+  }, [installStatus, promptInstall])
 
   return (
     <div
@@ -116,14 +126,10 @@ export function UserMenu({ viewer }: UserMenuProps) {
             </DropdownMenuItem>
           </SignOutButton>
 
-          {!isStandalone && (
+          {shouldShowInstallAction && (
             <>
               <DropdownMenuSeparator className="my-3 bg-muted/50" />
-              <button
-                type="button"
-                onClick={handlePwaAction}
-                className="group block w-full rounded-[1.75rem] px-2 py-2 text-left text-foreground/88 transition-opacity hover:opacity-85"
-              >
+              <div className="rounded-[1.75rem] px-2 py-2 text-left text-foreground/88">
                 <div className="flex flex-col gap-3 rounded-[1.65rem] px-3 py-3">
                   <span className="font-sans text-[9px] font-black uppercase tracking-[0.28em] text-muted-foreground/65">
                     App MAGUI
@@ -139,19 +145,33 @@ export function UserMenu({ viewer }: UserMenuProps) {
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-[0.18em] text-foreground">
-                    Instalar agora
-                    <ArrowUpRight
-                      weight="bold"
-                      className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePwaAction}
+                    className="flex min-h-14 w-full items-center justify-between rounded-[1.25rem] bg-brand-primary px-4 py-3 text-white shadow-[0_20px_45px_-24px_rgba(0,147,200,0.9)] transition-all hover:scale-[1.01] hover:bg-brand-primary/92"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-10 items-center justify-center rounded-xl bg-white/14">
+                        <DownloadSimple weight="bold" className="size-4.5" />
+                      </div>
+                      <span className="font-sans text-[11px] font-black uppercase tracking-[0.18em]">
+                        Instalar agora
+                      </span>
+                    </div>
+                    <ArrowUpRight weight="bold" className="size-4" />
+                  </button>
                 </div>
-              </button>
+              </div>
             </>
           )}
         </DropdownMenuContent>
       </DropdownMenu>
+
+      <PwaInstallInstructionsDialog
+        isSafari={isSafari}
+        open={showInstructions}
+        onOpenChange={setShowInstructions}
+      />
     </div>
   )
 }

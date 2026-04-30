@@ -11,7 +11,7 @@ import {
   CaretDown,
   ChartLineUp,
   ChartPie,
-  Files,
+  DownloadSimple,
   House,
   List,
   ProjectorScreen,
@@ -38,6 +38,7 @@ import {
 
 import { HeaderLanguageSwitcher } from "@/src/components/common/HeaderLanguageSwitcher"
 import { HeaderThemeToggle } from "@/src/components/common/HeaderThemeToggle"
+import { PwaInstallInstructionsDialog } from "@/src/components/common/PwaInstallInstructionsDialog"
 import {
   type HeaderNavLeaf,
   getAdminHeaderNav,
@@ -89,11 +90,20 @@ export function MobileHeaderMenu({
 }: MobileHeaderMenuProps): React.JSX.Element {
   const t = useTranslations("Sidebar")
   const pathname = usePathname()
-  const { isStandalone, promptInstall } = usePwaInstall()
+  const [showInstructions, setShowInstructions] = React.useState(false)
+  const { isSafari, isStandalone, installStatus, promptInstall } =
+    usePwaInstall()
+  const shouldShowInstallAction =
+    !isStandalone && installStatus !== "unavailable"
 
   const handlePwaAction = React.useCallback(() => {
+    if (installStatus === "manual") {
+      setShowInstructions(true)
+      return
+    }
+
     void promptInstall()
-  }, [promptInstall])
+  }, [installStatus, promptInstall])
 
   if (!viewer) {
     return (
@@ -257,12 +267,8 @@ export function MobileHeaderMenu({
               )}
             </nav>
 
-            {!isStandalone && (
-              <button
-                type="button"
-                onClick={handlePwaAction}
-                className="group mt-4 block w-full rounded-[1.75rem] px-2 py-2 text-left text-foreground transition-opacity hover:opacity-85"
-              >
+            {shouldShowInstallAction && (
+              <div className="mt-4 rounded-[1.75rem] px-2 py-2 text-left text-foreground">
                 <div className="flex flex-col gap-3 rounded-[1.65rem] px-3 py-3">
                   <span className="font-sans text-[9px] font-black uppercase tracking-[0.28em] text-muted-foreground/65">
                     App MAGUI
@@ -278,15 +284,23 @@ export function MobileHeaderMenu({
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-2 font-sans text-[10px] font-black uppercase tracking-[0.18em] text-foreground">
-                    Instalar agora
-                    <ArrowUpRight
-                      weight="bold"
-                      className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                    />
-                  </div>
+                  <button
+                    type="button"
+                    onClick={handlePwaAction}
+                    className="flex min-h-16 w-full items-center justify-between rounded-[1.35rem] bg-brand-primary px-4 py-3 text-white shadow-[0_22px_50px_-26px_rgba(0,147,200,0.92)] transition-all active:scale-[0.99] hover:bg-brand-primary/92"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex size-11 items-center justify-center rounded-xl bg-white/14">
+                        <DownloadSimple weight="bold" className="size-5" />
+                      </div>
+                      <span className="font-sans text-[12px] font-black uppercase tracking-[0.18em]">
+                        Instalar agora
+                      </span>
+                    </div>
+                    <ArrowUpRight weight="bold" className="size-4.5" />
+                  </button>
                 </div>
-              </button>
+              </div>
             )}
           </div>
 
@@ -311,6 +325,12 @@ export function MobileHeaderMenu({
           </div>
         </div>
       </SheetContent>
+
+      <PwaInstallInstructionsDialog
+        isSafari={isSafari}
+        open={showInstructions}
+        onOpenChange={setShowInstructions}
+      />
     </Sheet>
   )
 }
