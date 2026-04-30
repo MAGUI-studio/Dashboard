@@ -92,17 +92,17 @@ export function LanguageSwitcher(): React.JSX.Element {
             <ReactCountryFlag
               countryCode={flagCodes[currentLocale]}
               svg
-              className="rounded-[2px] opacity-70 grayscale-[0.5] transition-all group-hover:opacity-100 group-hover:grayscale-0"
+              className="rounded-xs transition-all"
               style={{ width: "1.1em", height: "0.8em" }}
             />
-            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground/40 transition-colors group-hover:text-foreground/80">
+            <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground transition-colors">
               {currentLocale}
             </span>
           </div>
           <CaretDownIcon
             weight="bold"
             size={10}
-            className="text-muted-foreground/30 transition-colors group-hover:text-foreground/60"
+            className="text-muted-foreground transition-colors"
           />
         </div>
       </DropdownMenuTrigger>
