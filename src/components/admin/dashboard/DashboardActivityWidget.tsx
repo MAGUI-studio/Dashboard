@@ -28,10 +28,12 @@ export async function DashboardActivityWidget() {
                 ? "project"
                 : "system"
 
+    const normalizedSummary = log.summary.replace(/\bBRL\s*/g, "R$ ")
+
     return {
       id: log.id,
       action: log.action,
-      summary: log.summary,
+      summary: normalizedSummary,
       createdAt: log.createdAt,
       actorName: log.actor?.name ?? null,
       actorRole: log.actor?.role ?? null,
