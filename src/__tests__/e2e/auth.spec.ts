@@ -9,7 +9,7 @@ test.describe("Authentication Flow", () => {
 
     await expect(page).toHaveURL(/\/sign-in/)
     await expect(
-      page.getByRole("heading", { name: /sign in to magui\.studio/i })
+      page.getByRole("heading", { name: /(portal do cliente|client portal)/i })
     ).toBeVisible()
     await expect(page.getByRole("link", { name: /sign up/i })).toHaveCount(0)
   })

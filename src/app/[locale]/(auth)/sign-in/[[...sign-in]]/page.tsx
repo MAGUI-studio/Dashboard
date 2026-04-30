@@ -2,138 +2,151 @@
 
 import * as React from "react"
 
-import Image from "next/image"
+import { useTranslations } from "next-intl"
 import Link from "next/link"
 
 import { SignIn } from "@clerk/nextjs"
-import { type Variants, motion } from "framer-motion"
+import { ArrowUpRight } from "@phosphor-icons/react"
+import { motion } from "framer-motion"
 
 import { LanguageSwitcher } from "@/src/components/common/languageSwitcher"
 import { Logo } from "@/src/components/common/logo"
 import { ThemeToggle } from "@/src/components/common/themeToggle"
 
-const VARIANTS_FADE_IN_LEFT: Variants = {
-  hidden: { opacity: 0, x: -10 },
-  visible: {
-    opacity: 1,
-    x: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-}
-
-const VARIANTS_FADE_IN_UP: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] },
-  },
-}
+import { cn } from "@/src/lib/utils/utils"
 
 export default function SignInPage(): React.JSX.Element {
+  const t = useTranslations("Auth.signIn")
+
   return (
-    <main className="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-background">
-      <style jsx global>{`
-        .cl-footerAction {
-          display: none !important;
-        }
-      `}</style>
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={VARIANTS_FADE_IN_LEFT}
-        className="absolute top-8 left-8 z-50 flex items-center gap-3 lg:left-12"
+    <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
+      {/* Background Decorativo - Branding Imersivo */}
+      <div className="absolute top-0 right-0 z-0 select-none opacity-[0.03] dark:opacity-[0.05]">
+        <span className="font-heading text-[18vw] font-black uppercase leading-none tracking-tighter">
+          PORTAL
+        </span>
+      </div>
+
+      {/* Header - Alinhamento Perfeito */}
+      <motion.nav
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="relative z-50 flex w-full items-center justify-between p-10 lg:px-16 lg:py-12"
       >
-        <div className="flex items-center gap-2 rounded-full border border-border/40 bg-background/60 p-1.5 backdrop-blur-md shadow-sm">
+        <Link
+          href="/"
+          className="transition-transform hover:scale-105 active:scale-95"
+        >
+          <Logo width={180} />
+        </Link>
+        <div className="flex items-center gap-10">
           <LanguageSwitcher />
-          <div className="h-4 w-px bg-border/40" />
           <ThemeToggle />
         </div>
-      </motion.div>
+      </motion.nav>
 
-      <section className="absolute inset-0 z-0 h-full w-full overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, scale: 1.1 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-          className="relative h-full w-full overflow-hidden lg:w-3/5 lg:[clip-path:polygon(0_0,100%_0,85%_100%,0%_100%)]"
-        >
-          <Image
-            src="/images/auth01.webp"
-            alt="MAGUI.studio Authentication"
-            fill
-            priority
-            className="object-cover grayscale-[0.3] brightness-[0.4] transition-all duration-700 hover:scale-105 lg:brightness-105 lg:grayscale-[0.1]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-tr from-brand-primary/30 via-transparent to-transparent brightness-90 lg:from-brand-primary/10" />
-        </motion.div>
-
-        <div className="absolute inset-0 z-10 bg-black/70 lg:hidden" />
-      </section>
-
-      <div className="relative z-30 flex min-h-screen w-full flex-col items-center justify-center lg:flex-row">
-        <div className="hidden lg:flex lg:w-3/5" />
-
-        <motion.section
-          initial="hidden"
-          animate="visible"
-          variants={VARIANTS_FADE_IN_UP}
-          className="flex min-h-screen w-full flex-col items-center justify-center bg-background px-6 py-12 lg:w-2/5"
-        >
-          <div className="flex w-full max-w-[420px] flex-col items-center lg:items-start">
-            <Link
-              href="/"
-              className="mb-14 transition-transform hover:scale-105 active:scale-95"
-            >
-              <Logo width={180} />
-            </Link>
-
-            <SignIn
-              appearance={{
-                elements: {
-                  rootBox: "w-full",
-                  card: "w-full border-none bg-transparent shadow-none p-0",
-                  headerTitle:
-                    "font-heading text-4xl font-black uppercase leading-[0.86] tracking-[-0.05em] text-foreground mb-3",
-                  headerSubtitle:
-                    "text-base font-medium leading-relaxed text-muted-foreground/80",
-                  socialButtonsBlockButton:
-                    "rounded-2xl border border-border/80 bg-background hover:bg-muted transition-all duration-300 h-14 shadow-sm group",
-                  socialButtonsBlockButtonText:
-                    "font-sans font-bold uppercase text-[10px] tracking-widest text-foreground/80 group-hover:text-foreground",
-                  formButtonPrimary:
-                    "rounded-full h-14 bg-brand-primary hover:bg-brand-primary/90 transition-all font-sans font-black uppercase text-[11px] tracking-[0.25em] shadow-2xl shadow-brand-primary/40 mt-6 active:scale-95",
-                  footerActionLink:
-                    "text-brand-primary hover:text-brand-primary/80 transition-colors font-sans font-black uppercase text-[10px] tracking-widest",
-                  footerAction: "hidden",
-                  formFieldInput:
-                    "h-14 rounded-2xl border border-border/80 bg-background focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/10 transition-all shadow-sm",
-                  dividerLine: "bg-border/40",
-                  dividerText:
-                    "text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/50",
-                  formFieldLabel:
-                    "text-[10px] font-black uppercase tracking-[0.25em] text-muted-foreground/70 mb-2.5 ml-1",
-                  identityPreviewText: "font-sans font-bold text-foreground",
-                  footerActionText:
-                    "text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60",
-                  navbar: "bg-background",
-                  scrollBox: "bg-background shadow-none",
-                  alert:
-                    "bg-background border border-border/60 shadow-none rounded-2xl",
-                  formFieldInputShowPasswordButton:
-                    "text-muted-foreground hover:text-foreground",
-                },
-              }}
-            />
-
-            <div className="mt-16 border-t border-border/40 pt-8 w-full">
-              <p className="text-[9px] font-bold uppercase tracking-[0.45em] text-muted-foreground/40 text-center lg:text-left">
-                © MAGUI.studio • Digital Authority System
-              </p>
+      <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-10 pb-20 lg:px-16">
+        <div className="grid w-full grid-cols-1 gap-20 lg:grid-cols-12 lg:gap-0">
+          {/* Lado Esquerdo - Tipografia Balanceada */}
+          <motion.section
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col justify-center lg:col-span-7"
+          >
+            <div className="space-y-3">
+              <span className="text-[10px] font-black uppercase tracking-[0.6em] text-brand-primary">
+                {t("eyebrow")}
+              </span>
+              <h1 className="font-heading text-6xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl lg:text-[7vw]">
+                {t("portal_title")} <br />
+                <span className="text-brand-primary">
+                  {t("portal_subtitle")}
+                </span>
+              </h1>
             </div>
-          </div>
-        </motion.section>
+
+            <div className="mt-12 space-y-8">
+              <div className="h-1.5 w-24 bg-foreground" />
+              <p className="max-w-4xl text-base font-bold uppercase leading-relaxed tracking-[0.2em] text-muted-foreground/80 lg:text-lg">
+                {t("marketing_description")}
+              </p>
+
+              <Link
+                href="https://magui.studio"
+                target="_blank"
+                className="group flex w-fit items-center gap-4 rounded-full bg-foreground px-8 py-4 text-[10px] font-black uppercase tracking-[0.3em] text-background transition-all hover:bg-brand-primary hover:text-white"
+              >
+                {t("marketing_cta")}
+                <ArrowUpRight
+                  size={16}
+                  weight="bold"
+                  className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                />
+              </Link>
+            </div>
+          </motion.section>
+
+          {/* Lado Direito - Login Refinado */}
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col items-center justify-center lg:col-span-5 lg:items-end"
+          >
+            <div className="w-full max-w-[440px]">
+              <div className="mb-10 space-y-1.5 lg:text-right">
+                <h2 className="font-heading text-3xl font-black uppercase tracking-tighter text-foreground lg:text-5xl">
+                  {t("ident_title")}
+                </h2>
+                <div className="h-1 w-16 bg-brand-primary lg:ml-auto" />
+              </div>
+
+              <SignIn
+                appearance={{
+                  elements: {
+                    rootBox: "w-full",
+                    card: "w-full border-none bg-transparent shadow-none p-0",
+                    header: "hidden",
+                    main: "gap-10",
+                    socialButtonsBlockButton:
+                      "rounded-none border-none bg-muted/30 hover:bg-brand-primary hover:text-white transition-all h-16 group",
+                    socialButtonsBlockButtonText:
+                      "font-sans font-black uppercase text-[10px] tracking-[0.3em] text-foreground",
+                    formButtonPrimary:
+                      "rounded-none h-20 bg-foreground hover:bg-brand-primary transition-all font-sans font-black uppercase text-xs tracking-[0.4em] mt-2 text-background shadow-none",
+                    formFieldInput:
+                      "h-16 rounded-none border-none bg-muted/20 focus:bg-muted/40 transition-all font-bold text-foreground px-4 text-lg placeholder:text-muted-foreground/30",
+                    formFieldLabel:
+                      "text-[10px] font-black uppercase tracking-[0.3em] text-foreground mb-2 ml-0",
+                    dividerLine: "bg-border h-px",
+                    dividerText:
+                      "text-[10px] font-black uppercase tracking-[0.4em] text-muted-foreground/30 px-6 bg-background",
+                    identityPreviewText: "font-sans font-black text-foreground",
+                    footerActionLink:
+                      "text-brand-primary hover:text-foreground transition-colors font-black uppercase text-[10px] tracking-widest underline decoration-2 underline-offset-4",
+                    footerActionText:
+                      "text-[10px] font-bold uppercase tracking-widest text-muted-foreground/40",
+                    formFieldInputShowPasswordButton:
+                      "text-foreground/40 hover:text-brand-primary mr-4",
+                    alert:
+                      "rounded-none border-none bg-brand-primary/10 shadow-none p-6",
+                    alertText:
+                      "text-brand-primary font-black uppercase text-[9px] tracking-widest",
+                  },
+                }}
+              />
+            </div>
+          </motion.section>
+        </div>
       </div>
+
+      {/* Footer Equilibrado */}
+      <footer className="relative z-20 flex w-full items-center justify-between p-10 lg:px-16 lg:py-12">
+        <span className="text-[10px] font-black uppercase tracking-[0.6em] text-muted-foreground/30">
+          © {new Date().getFullYear()} MAGUI.studio
+        </span>
+      </footer>
     </main>
   )
 }

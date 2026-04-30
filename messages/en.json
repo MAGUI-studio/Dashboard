@@ -38,7 +38,12 @@
   },
   "Auth": {
     "signIn": {
-      "eyebrow": "Dashboard v1.0",
+      "eyebrow": "MAGUI Ecosystem",
+      "portal_title": "Client",
+      "portal_subtitle": "Portal",
+      "marketing_description": "Strategic management and digital authority in a high-performance ecosystem.",
+      "marketing_cta": "Explore MAGUI.studio",
+      "ident_title": "Identification",
       "title": "System",
       "subtitle": "Access"
     },
