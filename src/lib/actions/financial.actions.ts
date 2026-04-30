@@ -15,6 +15,7 @@ import { protect } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
 import { createAuditLog, getCurrentAppUser } from "@/src/lib/project-governance"
 import { createCheckoutSession } from "@/src/lib/stripe-actions"
+import { formatCurrencyBRLFromCents } from "@/src/lib/utils/utils"
 import {
   BillingProfileSchema,
   CreateInvoiceSchema,
@@ -59,7 +60,7 @@ export async function createInvoiceAction(
           action: "invoice.created",
           entityType: "Invoice",
           entityId: inv.id,
-          summary: `Fatura "${inv.title}" de ${inv.currency} ${inv.totalAmount} criada.`,
+          summary: `Fatura "${inv.title}" de ${formatCurrencyBRLFromCents(inv.totalAmount)} criada.`,
           actorId: user.id,
           projectId: inv.projectId,
           metadata: { installments: validated.installments.length },
@@ -164,7 +165,7 @@ export async function registerPaymentAction(
           action: "payment.registered",
           entityType: "PaymentEvent",
           entityId: payment.id,
-          summary: `Pagamento de ${payment.installment.invoice.currency} ${payment.amount} registrado para parcela #${payment.installment.number}.`,
+          summary: `Pagamento de ${formatCurrencyBRLFromCents(payment.amount)} registrado para parcela #${payment.installment.number}.`,
           actorId: user.id,
           projectId: payment.installment.invoice.projectId,
         },
