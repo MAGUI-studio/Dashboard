@@ -18,7 +18,7 @@ import dayjs from "dayjs"
 
 import { Button } from "@/src/components/ui/button"
 
-import { formatCurrencyBRL } from "@/src/lib/utils/utils"
+import { formatCurrencyBRLFromCents } from "@/src/lib/utils/utils"
 
 interface ProjectDetailsHeaderProps {
   project: {
@@ -57,7 +57,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
   }
 
   const budgetDisplay = project.budget
-    ? formatCurrencyBRL(project.budget.toString())
+    ? formatCurrencyBRLFromCents(project.budget)
     : t("no_budget")
 
   return (
@@ -126,7 +126,7 @@ export function ProjectDetailsHeader({ project }: ProjectDetailsHeaderProps) {
                   <span className="text-[9px] font-black uppercase tracking-widest text-brand-primary/70">
                     i18n{" "}
                     {project.internationalizationFee
-                      ? `+ ${formatCurrencyBRL(project.internationalizationFee.toString())}`
+                      ? `+ ${formatCurrencyBRLFromCents(project.internationalizationFee)}`
                       : "inclusa"}
                   </span>
                 )}
