@@ -12,7 +12,6 @@ import { FolderOpen } from "@phosphor-icons/react/dist/ssr"
 import { Button } from "@/src/components/ui/button"
 
 import { DashboardActivityWidget } from "@/src/components/admin/dashboard/DashboardActivityWidget"
-import { DashboardRecentUpdatesWidget } from "@/src/components/admin/dashboard/DashboardRecentUpdatesWidget"
 import { DashboardStatsWidget } from "@/src/components/admin/dashboard/DashboardStatsWidget"
 import { ClientHome } from "@/src/components/client/ClientHome"
 
@@ -67,9 +66,9 @@ export default async function DashboardPage({
 
   if (user.role === UserRole.ADMIN) {
     return (
-      <main className="relative flex flex-col overflow-hidden bg-background/50 px-5 py-10 sm:px-6 lg:px-12">
-        <div className="flex w-full flex-col gap-10">
-          <header className="flex flex-col justify-between gap-6 border-b border-border/20 pb-8 md:flex-row md:items-center">
+      <main className="relative flex flex-col overflow-hidden bg-background px-5 py-10 sm:px-6 lg:px-12">
+        <div className="flex w-full flex-col gap-12">
+          <header className="flex flex-col justify-between gap-6 pb-2 md:flex-row md:items-center">
             <div className="flex flex-col gap-2">
               <div className="flex items-center gap-2.5">
                 <div className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
@@ -84,29 +83,17 @@ export default async function DashboardPage({
                 {t("admin_description")}
               </p>
             </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button
-                asChild
-                variant="outline"
-                className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
-              >
-                <Link href="/admin/projects">{t("projects.title")}</Link>
-              </Button>
-              <Button
-                asChild
-                className="rounded-full px-5 text-[10px] font-black uppercase tracking-[0.18em]"
-              >
-                <Link href="/admin/crm">{t("crm.title")}</Link>
-              </Button>
-            </div>
           </header>
 
           <Suspense fallback={<DashboardSkeleton />}>
-            <DashboardStatsWidget userId={user.id} />
-            <div className="grid gap-6 xl:grid-cols-2">
-              <DashboardActivityWidget />
-              <DashboardRecentUpdatesWidget />
+            <div className="flex flex-col gap-8">
+              <DashboardStatsWidget userId={user.id} />
+
+              <div aria-hidden="true" className="h-px w-full bg-border/20" />
+
+              <div className="w-full">
+                <DashboardActivityWidget />
+              </div>
             </div>
           </Suspense>
         </div>
