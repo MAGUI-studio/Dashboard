@@ -19,10 +19,10 @@ export default function SignInPage(): React.JSX.Element {
   const t = useTranslations("Auth.signIn")
 
   return (
-    <main className="relative flex min-h-screen w-full flex-col overflow-hidden bg-background">
+    <main className="relative mx-auto flex min-h-screen w-full max-w-440 flex-col overflow-hidden bg-background">
       {/* Background Decorativo - Branding Imersivo */}
       <div className="absolute top-0 right-0 z-0 select-none opacity-[0.03] dark:opacity-[0.05]">
-        <span className="font-heading text-[18vw] font-black uppercase leading-none tracking-tighter">
+        <span className="font-heading text-9xl font-black uppercase leading-none tracking-tighter md:text-[12rem] lg:text-[15rem]">
           PORTAL
         </span>
       </div>
@@ -58,7 +58,7 @@ export default function SignInPage(): React.JSX.Element {
               <span className="text-[10px] font-black uppercase tracking-[0.6em] text-brand-primary">
                 {t("eyebrow")}
               </span>
-              <h1 className="font-heading text-4xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl lg:text-[7vw]">
+              <h1 className="font-heading text-5xl font-black uppercase leading-[0.85] tracking-tighter text-foreground sm:text-7xl md:text-8xl lg:text-9xl">
                 {t("portal_title")} <br />
                 <span className="text-brand-primary">
                   {t("portal_subtitle")}
