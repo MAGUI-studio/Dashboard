@@ -115,6 +115,10 @@ export const pathnames = {
     pt: "/projetos/[id]/investimento",
     en: "/projects/[id]/financial",
   },
+  "/magui-connect": {
+    pt: "/magui-connect",
+    en: "/magui-connect",
+  },
 }
 
 export type AppPathnames = keyof typeof pathnames

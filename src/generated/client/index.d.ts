@@ -28,6 +28,24 @@ export type EventOutbox = $Result.DefaultSelection<Prisma.$EventOutboxPayload>
  */
 export type User = $Result.DefaultSelection<Prisma.$UserPayload>
 /**
+ * Model MaguiConnectProfile
+ *
+ */
+export type MaguiConnectProfile =
+  $Result.DefaultSelection<Prisma.$MaguiConnectProfilePayload>
+/**
+ * Model MaguiConnectLink
+ *
+ */
+export type MaguiConnectLink =
+  $Result.DefaultSelection<Prisma.$MaguiConnectLinkPayload>
+/**
+ * Model MaguiConnectPublishLog
+ *
+ */
+export type MaguiConnectPublishLog =
+  $Result.DefaultSelection<Prisma.$MaguiConnectPublishLogPayload>
+/**
  * Model Lead
  *
  */
@@ -446,6 +464,15 @@ export namespace $Enums {
 
   export type SignatureProvider =
     (typeof SignatureProvider)[keyof typeof SignatureProvider]
+
+  export const MaguiConnectStatus: {
+    DRAFT: "DRAFT"
+    PUBLISHED: "PUBLISHED"
+    PAUSED: "PAUSED"
+  }
+
+  export type MaguiConnectStatus =
+    (typeof MaguiConnectStatus)[keyof typeof MaguiConnectStatus]
 }
 
 export type ProposalStatus = $Enums.ProposalStatus
@@ -543,6 +570,10 @@ export const DocumentStatus: typeof $Enums.DocumentStatus
 export type SignatureProvider = $Enums.SignatureProvider
 
 export const SignatureProvider: typeof $Enums.SignatureProvider
+
+export type MaguiConnectStatus = $Enums.MaguiConnectStatus
+
+export const MaguiConnectStatus: typeof $Enums.MaguiConnectStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -739,6 +770,45 @@ export class PrismaClient<
    * ```
    */
   get user(): Prisma.UserDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.maguiConnectProfile`: Exposes CRUD operations for the **MaguiConnectProfile** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MaguiConnectProfiles
+   * const maguiConnectProfiles = await prisma.maguiConnectProfile.findMany()
+   * ```
+   */
+  get maguiConnectProfile(): Prisma.MaguiConnectProfileDelegate<
+    ExtArgs,
+    ClientOptions
+  >
+
+  /**
+   * `prisma.maguiConnectLink`: Exposes CRUD operations for the **MaguiConnectLink** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MaguiConnectLinks
+   * const maguiConnectLinks = await prisma.maguiConnectLink.findMany()
+   * ```
+   */
+  get maguiConnectLink(): Prisma.MaguiConnectLinkDelegate<
+    ExtArgs,
+    ClientOptions
+  >
+
+  /**
+   * `prisma.maguiConnectPublishLog`: Exposes CRUD operations for the **MaguiConnectPublishLog** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MaguiConnectPublishLogs
+   * const maguiConnectPublishLogs = await prisma.maguiConnectPublishLog.findMany()
+   * ```
+   */
+  get maguiConnectPublishLog(): Prisma.MaguiConnectPublishLogDelegate<
+    ExtArgs,
+    ClientOptions
+  >
 
   /**
    * `prisma.lead`: Exposes CRUD operations for the **Lead** model.
@@ -1521,6 +1591,9 @@ export namespace Prisma {
     DashboardMetricSnapshot: "DashboardMetricSnapshot"
     EventOutbox: "EventOutbox"
     User: "User"
+    MaguiConnectProfile: "MaguiConnectProfile"
+    MaguiConnectLink: "MaguiConnectLink"
+    MaguiConnectPublishLog: "MaguiConnectPublishLog"
     Lead: "Lead"
     LeadNote: "LeadNote"
     LeadActivity: "LeadActivity"
@@ -1579,6 +1652,9 @@ export namespace Prisma {
         | "dashboardMetricSnapshot"
         | "eventOutbox"
         | "user"
+        | "maguiConnectProfile"
+        | "maguiConnectLink"
+        | "maguiConnectPublishLog"
         | "lead"
         | "leadNote"
         | "leadActivity"
@@ -1837,6 +1913,234 @@ export namespace Prisma {
           count: {
             args: Prisma.UserCountArgs<ExtArgs>
             result: $Utils.Optional<UserCountAggregateOutputType> | number
+          }
+        }
+      }
+      MaguiConnectProfile: {
+        payload: Prisma.$MaguiConnectProfilePayload<ExtArgs>
+        fields: Prisma.MaguiConnectProfileFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaguiConnectProfileFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaguiConnectProfileFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          findFirst: {
+            args: Prisma.MaguiConnectProfileFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaguiConnectProfileFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          findMany: {
+            args: Prisma.MaguiConnectProfileFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>[]
+          }
+          create: {
+            args: Prisma.MaguiConnectProfileCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          createMany: {
+            args: Prisma.MaguiConnectProfileCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaguiConnectProfileCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>[]
+          }
+          delete: {
+            args: Prisma.MaguiConnectProfileDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          update: {
+            args: Prisma.MaguiConnectProfileUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          deleteMany: {
+            args: Prisma.MaguiConnectProfileDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaguiConnectProfileUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaguiConnectProfileUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>[]
+          }
+          upsert: {
+            args: Prisma.MaguiConnectProfileUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectProfilePayload>
+          }
+          aggregate: {
+            args: Prisma.MaguiConnectProfileAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaguiConnectProfile>
+          }
+          groupBy: {
+            args: Prisma.MaguiConnectProfileGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaguiConnectProfileGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaguiConnectProfileCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<MaguiConnectProfileCountAggregateOutputType>
+              | number
+          }
+        }
+      }
+      MaguiConnectLink: {
+        payload: Prisma.$MaguiConnectLinkPayload<ExtArgs>
+        fields: Prisma.MaguiConnectLinkFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaguiConnectLinkFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaguiConnectLinkFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          findFirst: {
+            args: Prisma.MaguiConnectLinkFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaguiConnectLinkFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          findMany: {
+            args: Prisma.MaguiConnectLinkFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>[]
+          }
+          create: {
+            args: Prisma.MaguiConnectLinkCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          createMany: {
+            args: Prisma.MaguiConnectLinkCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaguiConnectLinkCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>[]
+          }
+          delete: {
+            args: Prisma.MaguiConnectLinkDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          update: {
+            args: Prisma.MaguiConnectLinkUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaguiConnectLinkDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaguiConnectLinkUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaguiConnectLinkUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>[]
+          }
+          upsert: {
+            args: Prisma.MaguiConnectLinkUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectLinkPayload>
+          }
+          aggregate: {
+            args: Prisma.MaguiConnectLinkAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaguiConnectLink>
+          }
+          groupBy: {
+            args: Prisma.MaguiConnectLinkGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaguiConnectLinkGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaguiConnectLinkCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<MaguiConnectLinkCountAggregateOutputType>
+              | number
+          }
+        }
+      }
+      MaguiConnectPublishLog: {
+        payload: Prisma.$MaguiConnectPublishLogPayload<ExtArgs>
+        fields: Prisma.MaguiConnectPublishLogFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaguiConnectPublishLogFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaguiConnectPublishLogFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          findFirst: {
+            args: Prisma.MaguiConnectPublishLogFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaguiConnectPublishLogFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          findMany: {
+            args: Prisma.MaguiConnectPublishLogFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>[]
+          }
+          create: {
+            args: Prisma.MaguiConnectPublishLogCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          createMany: {
+            args: Prisma.MaguiConnectPublishLogCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaguiConnectPublishLogCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>[]
+          }
+          delete: {
+            args: Prisma.MaguiConnectPublishLogDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          update: {
+            args: Prisma.MaguiConnectPublishLogUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaguiConnectPublishLogDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaguiConnectPublishLogUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaguiConnectPublishLogUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>[]
+          }
+          upsert: {
+            args: Prisma.MaguiConnectPublishLogUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectPublishLogPayload>
+          }
+          aggregate: {
+            args: Prisma.MaguiConnectPublishLogAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaguiConnectPublishLog>
+          }
+          groupBy: {
+            args: Prisma.MaguiConnectPublishLogGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaguiConnectPublishLogGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaguiConnectPublishLogCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<MaguiConnectPublishLogCountAggregateOutputType>
+              | number
           }
         }
       }
@@ -4361,6 +4665,9 @@ export namespace Prisma {
     dashboardMetricSnapshot?: DashboardMetricSnapshotOmit
     eventOutbox?: EventOutboxOmit
     user?: UserOmit
+    maguiConnectProfile?: MaguiConnectProfileOmit
+    maguiConnectLink?: MaguiConnectLinkOmit
+    maguiConnectPublishLog?: MaguiConnectPublishLogOmit
     lead?: LeadOmit
     leadNote?: LeadNoteOmit
     leadActivity?: LeadActivityOmit
@@ -4631,6 +4938,55 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: EmailLogWhereInput
+  }
+
+  /**
+   * Count Type MaguiConnectProfileCountOutputType
+   */
+
+  export type MaguiConnectProfileCountOutputType = {
+    links: number
+    publishLogs: number
+  }
+
+  export type MaguiConnectProfileCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    links?: boolean | MaguiConnectProfileCountOutputTypeCountLinksArgs
+    publishLogs?:
+      | boolean
+      | MaguiConnectProfileCountOutputTypeCountPublishLogsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectProfileCountOutputType without action
+   */
+  export type MaguiConnectProfileCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfileCountOutputType
+     */
+    select?: MaguiConnectProfileCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectProfileCountOutputType without action
+   */
+  export type MaguiConnectProfileCountOutputTypeCountLinksArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectLinkWhereInput
+  }
+
+  /**
+   * MaguiConnectProfileCountOutputType without action
+   */
+  export type MaguiConnectProfileCountOutputTypeCountPublishLogsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectPublishLogWhereInput
   }
 
   /**
@@ -8098,6 +8454,7 @@ export namespace Prisma {
         | User$createdDocumentVersionsArgs<ExtArgs>
       billingProfile?: boolean | User$billingProfileArgs<ExtArgs>
       emailLogs?: boolean | User$emailLogsArgs<ExtArgs>
+      maguiConnectProfile?: boolean | User$maguiConnectProfileArgs<ExtArgs>
       _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
     },
     ExtArgs["result"]["user"]
@@ -8197,6 +8554,7 @@ export namespace Prisma {
       | User$createdDocumentVersionsArgs<ExtArgs>
     billingProfile?: boolean | User$billingProfileArgs<ExtArgs>
     emailLogs?: boolean | User$emailLogsArgs<ExtArgs>
+    maguiConnectProfile?: boolean | User$maguiConnectProfileArgs<ExtArgs>
     _count?: boolean | UserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type UserIncludeCreateManyAndReturn<
@@ -8224,6 +8582,7 @@ export namespace Prisma {
       createdDocumentVersions: Prisma.$DocumentVersionPayload<ExtArgs>[]
       billingProfile: Prisma.$BillingProfilePayload<ExtArgs> | null
       emailLogs: Prisma.$EmailLogPayload<ExtArgs>[]
+      maguiConnectProfile: Prisma.$MaguiConnectProfilePayload<ExtArgs> | null
     }
     scalars: $Extensions.GetPayloadResult<
       {
@@ -8931,6 +9290,19 @@ export namespace Prisma {
           GlobalOmitOptions
         >
       | Null
+    >
+    maguiConnectProfile<T extends User$maguiConnectProfileArgs<ExtArgs> = {}>(
+      args?: Subset<T, User$maguiConnectProfileArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
     >
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -9762,6 +10134,27 @@ export namespace Prisma {
   }
 
   /**
+   * User.maguiConnectProfile
+   */
+  export type User$maguiConnectProfileArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    where?: MaguiConnectProfileWhereInput
+  }
+
+  /**
    * User without action
    */
   export type UserDefaultArgs<
@@ -9779,6 +10172,4460 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: UserInclude<ExtArgs> | null
+  }
+
+  /**
+   * Model MaguiConnectProfile
+   */
+
+  export type AggregateMaguiConnectProfile = {
+    _count: MaguiConnectProfileCountAggregateOutputType | null
+    _min: MaguiConnectProfileMinAggregateOutputType | null
+    _max: MaguiConnectProfileMaxAggregateOutputType | null
+  }
+
+  export type MaguiConnectProfileMinAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.MaguiConnectStatus | null
+    slug: string | null
+    displayName: string | null
+    headline: string | null
+    avatarUrl: string | null
+    domain: string | null
+    themeAccent: string | null
+    themeBackground: string | null
+    themeForeground: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    publishedAt: Date | null
+    lastSyncedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaguiConnectProfileMaxAggregateOutputType = {
+    id: string | null
+    userId: string | null
+    status: $Enums.MaguiConnectStatus | null
+    slug: string | null
+    displayName: string | null
+    headline: string | null
+    avatarUrl: string | null
+    domain: string | null
+    themeAccent: string | null
+    themeBackground: string | null
+    themeForeground: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    publishedAt: Date | null
+    lastSyncedAt: Date | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaguiConnectProfileCountAggregateOutputType = {
+    id: number
+    userId: number
+    status: number
+    slug: number
+    displayName: number
+    headline: number
+    avatarUrl: number
+    domain: number
+    themeAccent: number
+    themeBackground: number
+    themeForeground: number
+    seoTitle: number
+    seoDescription: number
+    publishedAt: number
+    lastSyncedAt: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type MaguiConnectProfileMinAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    slug?: true
+    displayName?: true
+    headline?: true
+    avatarUrl?: true
+    domain?: true
+    themeAccent?: true
+    themeBackground?: true
+    themeForeground?: true
+    seoTitle?: true
+    seoDescription?: true
+    publishedAt?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaguiConnectProfileMaxAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    slug?: true
+    displayName?: true
+    headline?: true
+    avatarUrl?: true
+    domain?: true
+    themeAccent?: true
+    themeBackground?: true
+    themeForeground?: true
+    seoTitle?: true
+    seoDescription?: true
+    publishedAt?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaguiConnectProfileCountAggregateInputType = {
+    id?: true
+    userId?: true
+    status?: true
+    slug?: true
+    displayName?: true
+    headline?: true
+    avatarUrl?: true
+    domain?: true
+    themeAccent?: true
+    themeBackground?: true
+    themeForeground?: true
+    seoTitle?: true
+    seoDescription?: true
+    publishedAt?: true
+    lastSyncedAt?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MaguiConnectProfileAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectProfile to aggregate.
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectProfiles to fetch.
+     */
+    orderBy?:
+      | MaguiConnectProfileOrderByWithRelationInput
+      | MaguiConnectProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MaguiConnectProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MaguiConnectProfiles
+     **/
+    _count?: true | MaguiConnectProfileCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MaguiConnectProfileMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MaguiConnectProfileMaxAggregateInputType
+  }
+
+  export type GetMaguiConnectProfileAggregateType<
+    T extends MaguiConnectProfileAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateMaguiConnectProfile]: P extends
+      | "_count"
+      | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaguiConnectProfile[P]>
+      : GetScalarType<T[P], AggregateMaguiConnectProfile[P]>
+  }
+
+  export type MaguiConnectProfileGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectProfileWhereInput
+    orderBy?:
+      | MaguiConnectProfileOrderByWithAggregationInput
+      | MaguiConnectProfileOrderByWithAggregationInput[]
+    by:
+      | MaguiConnectProfileScalarFieldEnum[]
+      | MaguiConnectProfileScalarFieldEnum
+    having?: MaguiConnectProfileScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaguiConnectProfileCountAggregateInputType | true
+    _min?: MaguiConnectProfileMinAggregateInputType
+    _max?: MaguiConnectProfileMaxAggregateInputType
+  }
+
+  export type MaguiConnectProfileGroupByOutputType = {
+    id: string
+    userId: string
+    status: $Enums.MaguiConnectStatus
+    slug: string | null
+    displayName: string
+    headline: string | null
+    avatarUrl: string | null
+    domain: string | null
+    themeAccent: string | null
+    themeBackground: string | null
+    themeForeground: string | null
+    seoTitle: string | null
+    seoDescription: string | null
+    publishedAt: Date | null
+    lastSyncedAt: Date | null
+    createdAt: Date
+    updatedAt: Date
+    _count: MaguiConnectProfileCountAggregateOutputType | null
+    _min: MaguiConnectProfileMinAggregateOutputType | null
+    _max: MaguiConnectProfileMaxAggregateOutputType | null
+  }
+
+  type GetMaguiConnectProfileGroupByPayload<
+    T extends MaguiConnectProfileGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaguiConnectProfileGroupByOutputType, T["by"]> & {
+        [P in keyof T &
+          keyof MaguiConnectProfileGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], MaguiConnectProfileGroupByOutputType[P]>
+          : GetScalarType<T[P], MaguiConnectProfileGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type MaguiConnectProfileSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      userId?: boolean
+      status?: boolean
+      slug?: boolean
+      displayName?: boolean
+      headline?: boolean
+      avatarUrl?: boolean
+      domain?: boolean
+      themeAccent?: boolean
+      themeBackground?: boolean
+      themeForeground?: boolean
+      seoTitle?: boolean
+      seoDescription?: boolean
+      publishedAt?: boolean
+      lastSyncedAt?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      user?: boolean | UserDefaultArgs<ExtArgs>
+      links?: boolean | MaguiConnectProfile$linksArgs<ExtArgs>
+      publishLogs?: boolean | MaguiConnectProfile$publishLogsArgs<ExtArgs>
+      _count?: boolean | MaguiConnectProfileCountOutputTypeDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectProfile"]
+  >
+
+  export type MaguiConnectProfileSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      userId?: boolean
+      status?: boolean
+      slug?: boolean
+      displayName?: boolean
+      headline?: boolean
+      avatarUrl?: boolean
+      domain?: boolean
+      themeAccent?: boolean
+      themeBackground?: boolean
+      themeForeground?: boolean
+      seoTitle?: boolean
+      seoDescription?: boolean
+      publishedAt?: boolean
+      lastSyncedAt?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      user?: boolean | UserDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectProfile"]
+  >
+
+  export type MaguiConnectProfileSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      userId?: boolean
+      status?: boolean
+      slug?: boolean
+      displayName?: boolean
+      headline?: boolean
+      avatarUrl?: boolean
+      domain?: boolean
+      themeAccent?: boolean
+      themeBackground?: boolean
+      themeForeground?: boolean
+      seoTitle?: boolean
+      seoDescription?: boolean
+      publishedAt?: boolean
+      lastSyncedAt?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      user?: boolean | UserDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectProfile"]
+  >
+
+  export type MaguiConnectProfileSelectScalar = {
+    id?: boolean
+    userId?: boolean
+    status?: boolean
+    slug?: boolean
+    displayName?: boolean
+    headline?: boolean
+    avatarUrl?: boolean
+    domain?: boolean
+    themeAccent?: boolean
+    themeBackground?: boolean
+    themeForeground?: boolean
+    seoTitle?: boolean
+    seoDescription?: boolean
+    publishedAt?: boolean
+    lastSyncedAt?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MaguiConnectProfileOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "userId"
+    | "status"
+    | "slug"
+    | "displayName"
+    | "headline"
+    | "avatarUrl"
+    | "domain"
+    | "themeAccent"
+    | "themeBackground"
+    | "themeForeground"
+    | "seoTitle"
+    | "seoDescription"
+    | "publishedAt"
+    | "lastSyncedAt"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["maguiConnectProfile"]
+  >
+  export type MaguiConnectProfileInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+    links?: boolean | MaguiConnectProfile$linksArgs<ExtArgs>
+    publishLogs?: boolean | MaguiConnectProfile$publishLogsArgs<ExtArgs>
+    _count?: boolean | MaguiConnectProfileCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectProfileIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectProfileIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    user?: boolean | UserDefaultArgs<ExtArgs>
+  }
+
+  export type $MaguiConnectProfilePayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "MaguiConnectProfile"
+    objects: {
+      user: Prisma.$UserPayload<ExtArgs>
+      links: Prisma.$MaguiConnectLinkPayload<ExtArgs>[]
+      publishLogs: Prisma.$MaguiConnectPublishLogPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        userId: string
+        status: $Enums.MaguiConnectStatus
+        slug: string | null
+        displayName: string
+        headline: string | null
+        avatarUrl: string | null
+        domain: string | null
+        themeAccent: string | null
+        themeBackground: string | null
+        themeForeground: string | null
+        seoTitle: string | null
+        seoDescription: string | null
+        publishedAt: Date | null
+        lastSyncedAt: Date | null
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs["result"]["maguiConnectProfile"]
+    >
+    composites: {}
+  }
+
+  type MaguiConnectProfileGetPayload<
+    S extends boolean | null | undefined | MaguiConnectProfileDefaultArgs,
+  > = $Result.GetResult<Prisma.$MaguiConnectProfilePayload, S>
+
+  type MaguiConnectProfileCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    MaguiConnectProfileFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: MaguiConnectProfileCountAggregateInputType | true
+  }
+
+  export interface MaguiConnectProfileDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["MaguiConnectProfile"]
+      meta: { name: "MaguiConnectProfile" }
+    }
+    /**
+     * Find zero or one MaguiConnectProfile that matches the filter.
+     * @param {MaguiConnectProfileFindUniqueArgs} args - Arguments to find a MaguiConnectProfile
+     * @example
+     * // Get one MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaguiConnectProfileFindUniqueArgs>(
+      args: SelectSubset<T, MaguiConnectProfileFindUniqueArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one MaguiConnectProfile that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaguiConnectProfileFindUniqueOrThrowArgs} args - Arguments to find a MaguiConnectProfile
+     * @example
+     * // Get one MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaguiConnectProfileFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, MaguiConnectProfileFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectProfile that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileFindFirstArgs} args - Arguments to find a MaguiConnectProfile
+     * @example
+     * // Get one MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaguiConnectProfileFindFirstArgs>(
+      args?: SelectSubset<T, MaguiConnectProfileFindFirstArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectProfile that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileFindFirstOrThrowArgs} args - Arguments to find a MaguiConnectProfile
+     * @example
+     * // Get one MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaguiConnectProfileFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MaguiConnectProfileFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more MaguiConnectProfiles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaguiConnectProfiles
+     * const maguiConnectProfiles = await prisma.maguiConnectProfile.findMany()
+     *
+     * // Get first 10 MaguiConnectProfiles
+     * const maguiConnectProfiles = await prisma.maguiConnectProfile.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const maguiConnectProfileWithIdOnly = await prisma.maguiConnectProfile.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MaguiConnectProfileFindManyArgs>(
+      args?: SelectSubset<T, MaguiConnectProfileFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a MaguiConnectProfile.
+     * @param {MaguiConnectProfileCreateArgs} args - Arguments to create a MaguiConnectProfile.
+     * @example
+     * // Create one MaguiConnectProfile
+     * const MaguiConnectProfile = await prisma.maguiConnectProfile.create({
+     *   data: {
+     *     // ... data to create a MaguiConnectProfile
+     *   }
+     * })
+     *
+     */
+    create<T extends MaguiConnectProfileCreateArgs>(
+      args: SelectSubset<T, MaguiConnectProfileCreateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many MaguiConnectProfiles.
+     * @param {MaguiConnectProfileCreateManyArgs} args - Arguments to create many MaguiConnectProfiles.
+     * @example
+     * // Create many MaguiConnectProfiles
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MaguiConnectProfileCreateManyArgs>(
+      args?: SelectSubset<T, MaguiConnectProfileCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaguiConnectProfiles and returns the data saved in the database.
+     * @param {MaguiConnectProfileCreateManyAndReturnArgs} args - Arguments to create many MaguiConnectProfiles.
+     * @example
+     * // Create many MaguiConnectProfiles
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MaguiConnectProfiles and only return the `id`
+     * const maguiConnectProfileWithIdOnly = await prisma.maguiConnectProfile.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends MaguiConnectProfileCreateManyAndReturnArgs>(
+      args?: SelectSubset<
+        T,
+        MaguiConnectProfileCreateManyAndReturnArgs<ExtArgs>
+      >
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a MaguiConnectProfile.
+     * @param {MaguiConnectProfileDeleteArgs} args - Arguments to delete one MaguiConnectProfile.
+     * @example
+     * // Delete one MaguiConnectProfile
+     * const MaguiConnectProfile = await prisma.maguiConnectProfile.delete({
+     *   where: {
+     *     // ... filter to delete one MaguiConnectProfile
+     *   }
+     * })
+     *
+     */
+    delete<T extends MaguiConnectProfileDeleteArgs>(
+      args: SelectSubset<T, MaguiConnectProfileDeleteArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one MaguiConnectProfile.
+     * @param {MaguiConnectProfileUpdateArgs} args - Arguments to update one MaguiConnectProfile.
+     * @example
+     * // Update one MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MaguiConnectProfileUpdateArgs>(
+      args: SelectSubset<T, MaguiConnectProfileUpdateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more MaguiConnectProfiles.
+     * @param {MaguiConnectProfileDeleteManyArgs} args - Arguments to filter MaguiConnectProfiles to delete.
+     * @example
+     * // Delete a few MaguiConnectProfiles
+     * const { count } = await prisma.maguiConnectProfile.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MaguiConnectProfileDeleteManyArgs>(
+      args?: SelectSubset<T, MaguiConnectProfileDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaguiConnectProfiles
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MaguiConnectProfileUpdateManyArgs>(
+      args: SelectSubset<T, MaguiConnectProfileUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectProfiles and returns the data updated in the database.
+     * @param {MaguiConnectProfileUpdateManyAndReturnArgs} args - Arguments to update many MaguiConnectProfiles.
+     * @example
+     * // Update many MaguiConnectProfiles
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more MaguiConnectProfiles and only return the `id`
+     * const maguiConnectProfileWithIdOnly = await prisma.maguiConnectProfile.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends MaguiConnectProfileUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, MaguiConnectProfileUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one MaguiConnectProfile.
+     * @param {MaguiConnectProfileUpsertArgs} args - Arguments to update or create a MaguiConnectProfile.
+     * @example
+     * // Update or create a MaguiConnectProfile
+     * const maguiConnectProfile = await prisma.maguiConnectProfile.upsert({
+     *   create: {
+     *     // ... data to create a MaguiConnectProfile
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaguiConnectProfile we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaguiConnectProfileUpsertArgs>(
+      args: SelectSubset<T, MaguiConnectProfileUpsertArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of MaguiConnectProfiles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileCountArgs} args - Arguments to filter MaguiConnectProfiles to count.
+     * @example
+     * // Count the number of MaguiConnectProfiles
+     * const count = await prisma.maguiConnectProfile.count({
+     *   where: {
+     *     // ... the filter for the MaguiConnectProfiles we want to count
+     *   }
+     * })
+     **/
+    count<T extends MaguiConnectProfileCountArgs>(
+      args?: Subset<T, MaguiConnectProfileCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<
+              T["select"],
+              MaguiConnectProfileCountAggregateOutputType
+            >
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaguiConnectProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MaguiConnectProfileAggregateArgs>(
+      args: Subset<T, MaguiConnectProfileAggregateArgs>
+    ): Prisma.PrismaPromise<GetMaguiConnectProfileAggregateType<T>>
+
+    /**
+     * Group by MaguiConnectProfile.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectProfileGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MaguiConnectProfileGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaguiConnectProfileGroupByArgs["orderBy"] }
+        : { orderBy?: MaguiConnectProfileGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, MaguiConnectProfileGroupByArgs, OrderByArg> &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetMaguiConnectProfileGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the MaguiConnectProfile model
+     */
+    readonly fields: MaguiConnectProfileFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaguiConnectProfile.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaguiConnectProfileClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    user<T extends UserDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, UserDefaultArgs<ExtArgs>>
+    ): Prisma__UserClient<
+      | $Result.GetResult<
+          Prisma.$UserPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    links<T extends MaguiConnectProfile$linksArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfile$linksArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >
+    publishLogs<T extends MaguiConnectProfile$publishLogsArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfile$publishLogsArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the MaguiConnectProfile model
+   */
+  interface MaguiConnectProfileFieldRefs {
+    readonly id: FieldRef<"MaguiConnectProfile", "String">
+    readonly userId: FieldRef<"MaguiConnectProfile", "String">
+    readonly status: FieldRef<"MaguiConnectProfile", "MaguiConnectStatus">
+    readonly slug: FieldRef<"MaguiConnectProfile", "String">
+    readonly displayName: FieldRef<"MaguiConnectProfile", "String">
+    readonly headline: FieldRef<"MaguiConnectProfile", "String">
+    readonly avatarUrl: FieldRef<"MaguiConnectProfile", "String">
+    readonly domain: FieldRef<"MaguiConnectProfile", "String">
+    readonly themeAccent: FieldRef<"MaguiConnectProfile", "String">
+    readonly themeBackground: FieldRef<"MaguiConnectProfile", "String">
+    readonly themeForeground: FieldRef<"MaguiConnectProfile", "String">
+    readonly seoTitle: FieldRef<"MaguiConnectProfile", "String">
+    readonly seoDescription: FieldRef<"MaguiConnectProfile", "String">
+    readonly publishedAt: FieldRef<"MaguiConnectProfile", "DateTime">
+    readonly lastSyncedAt: FieldRef<"MaguiConnectProfile", "DateTime">
+    readonly createdAt: FieldRef<"MaguiConnectProfile", "DateTime">
+    readonly updatedAt: FieldRef<"MaguiConnectProfile", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectProfile findUnique
+   */
+  export type MaguiConnectProfileFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectProfile to fetch.
+     */
+    where: MaguiConnectProfileWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectProfile findUniqueOrThrow
+   */
+  export type MaguiConnectProfileFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectProfile to fetch.
+     */
+    where: MaguiConnectProfileWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectProfile findFirst
+   */
+  export type MaguiConnectProfileFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectProfile to fetch.
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectProfiles to fetch.
+     */
+    orderBy?:
+      | MaguiConnectProfileOrderByWithRelationInput
+      | MaguiConnectProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectProfiles.
+     */
+    cursor?: MaguiConnectProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectProfiles.
+     */
+    distinct?:
+      | MaguiConnectProfileScalarFieldEnum
+      | MaguiConnectProfileScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectProfile findFirstOrThrow
+   */
+  export type MaguiConnectProfileFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectProfile to fetch.
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectProfiles to fetch.
+     */
+    orderBy?:
+      | MaguiConnectProfileOrderByWithRelationInput
+      | MaguiConnectProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectProfiles.
+     */
+    cursor?: MaguiConnectProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectProfiles.
+     */
+    distinct?:
+      | MaguiConnectProfileScalarFieldEnum
+      | MaguiConnectProfileScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectProfile findMany
+   */
+  export type MaguiConnectProfileFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectProfiles to fetch.
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectProfiles to fetch.
+     */
+    orderBy?:
+      | MaguiConnectProfileOrderByWithRelationInput
+      | MaguiConnectProfileOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MaguiConnectProfiles.
+     */
+    cursor?: MaguiConnectProfileWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectProfiles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectProfiles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectProfiles.
+     */
+    distinct?:
+      | MaguiConnectProfileScalarFieldEnum
+      | MaguiConnectProfileScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectProfile create
+   */
+  export type MaguiConnectProfileCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaguiConnectProfile.
+     */
+    data: XOR<
+      MaguiConnectProfileCreateInput,
+      MaguiConnectProfileUncheckedCreateInput
+    >
+  }
+
+  /**
+   * MaguiConnectProfile createMany
+   */
+  export type MaguiConnectProfileCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MaguiConnectProfiles.
+     */
+    data:
+      | MaguiConnectProfileCreateManyInput
+      | MaguiConnectProfileCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaguiConnectProfile createManyAndReturn
+   */
+  export type MaguiConnectProfileCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaguiConnectProfiles.
+     */
+    data:
+      | MaguiConnectProfileCreateManyInput
+      | MaguiConnectProfileCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectProfile update
+   */
+  export type MaguiConnectProfileUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaguiConnectProfile.
+     */
+    data: XOR<
+      MaguiConnectProfileUpdateInput,
+      MaguiConnectProfileUncheckedUpdateInput
+    >
+    /**
+     * Choose, which MaguiConnectProfile to update.
+     */
+    where: MaguiConnectProfileWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectProfile updateMany
+   */
+  export type MaguiConnectProfileUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MaguiConnectProfiles.
+     */
+    data: XOR<
+      MaguiConnectProfileUpdateManyMutationInput,
+      MaguiConnectProfileUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectProfiles to update
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * Limit how many MaguiConnectProfiles to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectProfile updateManyAndReturn
+   */
+  export type MaguiConnectProfileUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * The data used to update MaguiConnectProfiles.
+     */
+    data: XOR<
+      MaguiConnectProfileUpdateManyMutationInput,
+      MaguiConnectProfileUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectProfiles to update
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * Limit how many MaguiConnectProfiles to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectProfile upsert
+   */
+  export type MaguiConnectProfileUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaguiConnectProfile to update in case it exists.
+     */
+    where: MaguiConnectProfileWhereUniqueInput
+    /**
+     * In case the MaguiConnectProfile found by the `where` argument doesn't exist, create a new MaguiConnectProfile with this data.
+     */
+    create: XOR<
+      MaguiConnectProfileCreateInput,
+      MaguiConnectProfileUncheckedCreateInput
+    >
+    /**
+     * In case the MaguiConnectProfile was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      MaguiConnectProfileUpdateInput,
+      MaguiConnectProfileUncheckedUpdateInput
+    >
+  }
+
+  /**
+   * MaguiConnectProfile delete
+   */
+  export type MaguiConnectProfileDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+    /**
+     * Filter which MaguiConnectProfile to delete.
+     */
+    where: MaguiConnectProfileWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectProfile deleteMany
+   */
+  export type MaguiConnectProfileDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectProfiles to delete
+     */
+    where?: MaguiConnectProfileWhereInput
+    /**
+     * Limit how many MaguiConnectProfiles to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectProfile.links
+   */
+  export type MaguiConnectProfile$linksArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    where?: MaguiConnectLinkWhereInput
+    orderBy?:
+      | MaguiConnectLinkOrderByWithRelationInput
+      | MaguiConnectLinkOrderByWithRelationInput[]
+    cursor?: MaguiConnectLinkWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?:
+      | MaguiConnectLinkScalarFieldEnum
+      | MaguiConnectLinkScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectProfile.publishLogs
+   */
+  export type MaguiConnectProfile$publishLogsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    where?: MaguiConnectPublishLogWhereInput
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithRelationInput
+      | MaguiConnectPublishLogOrderByWithRelationInput[]
+    cursor?: MaguiConnectPublishLogWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?:
+      | MaguiConnectPublishLogScalarFieldEnum
+      | MaguiConnectPublishLogScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectProfile without action
+   */
+  export type MaguiConnectProfileDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectProfile
+     */
+    select?: MaguiConnectProfileSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectProfile
+     */
+    omit?: MaguiConnectProfileOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectProfileInclude<ExtArgs> | null
+  }
+
+  /**
+   * Model MaguiConnectLink
+   */
+
+  export type AggregateMaguiConnectLink = {
+    _count: MaguiConnectLinkCountAggregateOutputType | null
+    _avg: MaguiConnectLinkAvgAggregateOutputType | null
+    _sum: MaguiConnectLinkSumAggregateOutputType | null
+    _min: MaguiConnectLinkMinAggregateOutputType | null
+    _max: MaguiConnectLinkMaxAggregateOutputType | null
+  }
+
+  export type MaguiConnectLinkAvgAggregateOutputType = {
+    sortOrder: number | null
+    clickCount: number | null
+  }
+
+  export type MaguiConnectLinkSumAggregateOutputType = {
+    sortOrder: number | null
+    clickCount: number | null
+  }
+
+  export type MaguiConnectLinkMinAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    label: string | null
+    url: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    clickCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaguiConnectLinkMaxAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    label: string | null
+    url: string | null
+    icon: string | null
+    sortOrder: number | null
+    isActive: boolean | null
+    clickCount: number | null
+    createdAt: Date | null
+    updatedAt: Date | null
+  }
+
+  export type MaguiConnectLinkCountAggregateOutputType = {
+    id: number
+    profileId: number
+    label: number
+    url: number
+    icon: number
+    sortOrder: number
+    isActive: number
+    clickCount: number
+    createdAt: number
+    updatedAt: number
+    _all: number
+  }
+
+  export type MaguiConnectLinkAvgAggregateInputType = {
+    sortOrder?: true
+    clickCount?: true
+  }
+
+  export type MaguiConnectLinkSumAggregateInputType = {
+    sortOrder?: true
+    clickCount?: true
+  }
+
+  export type MaguiConnectLinkMinAggregateInputType = {
+    id?: true
+    profileId?: true
+    label?: true
+    url?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    clickCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaguiConnectLinkMaxAggregateInputType = {
+    id?: true
+    profileId?: true
+    label?: true
+    url?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    clickCount?: true
+    createdAt?: true
+    updatedAt?: true
+  }
+
+  export type MaguiConnectLinkCountAggregateInputType = {
+    id?: true
+    profileId?: true
+    label?: true
+    url?: true
+    icon?: true
+    sortOrder?: true
+    isActive?: true
+    clickCount?: true
+    createdAt?: true
+    updatedAt?: true
+    _all?: true
+  }
+
+  export type MaguiConnectLinkAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectLink to aggregate.
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectLinks to fetch.
+     */
+    orderBy?:
+      | MaguiConnectLinkOrderByWithRelationInput
+      | MaguiConnectLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MaguiConnectLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MaguiConnectLinks
+     **/
+    _count?: true | MaguiConnectLinkCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to average
+     **/
+    _avg?: MaguiConnectLinkAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to sum
+     **/
+    _sum?: MaguiConnectLinkSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MaguiConnectLinkMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MaguiConnectLinkMaxAggregateInputType
+  }
+
+  export type GetMaguiConnectLinkAggregateType<
+    T extends MaguiConnectLinkAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateMaguiConnectLink]: P extends
+      | "_count"
+      | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaguiConnectLink[P]>
+      : GetScalarType<T[P], AggregateMaguiConnectLink[P]>
+  }
+
+  export type MaguiConnectLinkGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectLinkWhereInput
+    orderBy?:
+      | MaguiConnectLinkOrderByWithAggregationInput
+      | MaguiConnectLinkOrderByWithAggregationInput[]
+    by: MaguiConnectLinkScalarFieldEnum[] | MaguiConnectLinkScalarFieldEnum
+    having?: MaguiConnectLinkScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaguiConnectLinkCountAggregateInputType | true
+    _avg?: MaguiConnectLinkAvgAggregateInputType
+    _sum?: MaguiConnectLinkSumAggregateInputType
+    _min?: MaguiConnectLinkMinAggregateInputType
+    _max?: MaguiConnectLinkMaxAggregateInputType
+  }
+
+  export type MaguiConnectLinkGroupByOutputType = {
+    id: string
+    profileId: string
+    label: string
+    url: string
+    icon: string | null
+    sortOrder: number
+    isActive: boolean
+    clickCount: number
+    createdAt: Date
+    updatedAt: Date
+    _count: MaguiConnectLinkCountAggregateOutputType | null
+    _avg: MaguiConnectLinkAvgAggregateOutputType | null
+    _sum: MaguiConnectLinkSumAggregateOutputType | null
+    _min: MaguiConnectLinkMinAggregateOutputType | null
+    _max: MaguiConnectLinkMaxAggregateOutputType | null
+  }
+
+  type GetMaguiConnectLinkGroupByPayload<
+    T extends MaguiConnectLinkGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaguiConnectLinkGroupByOutputType, T["by"]> & {
+        [P in keyof T &
+          keyof MaguiConnectLinkGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], MaguiConnectLinkGroupByOutputType[P]>
+          : GetScalarType<T[P], MaguiConnectLinkGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type MaguiConnectLinkSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      label?: boolean
+      url?: boolean
+      icon?: boolean
+      sortOrder?: boolean
+      isActive?: boolean
+      clickCount?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectLink"]
+  >
+
+  export type MaguiConnectLinkSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      label?: boolean
+      url?: boolean
+      icon?: boolean
+      sortOrder?: boolean
+      isActive?: boolean
+      clickCount?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectLink"]
+  >
+
+  export type MaguiConnectLinkSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      label?: boolean
+      url?: boolean
+      icon?: boolean
+      sortOrder?: boolean
+      isActive?: boolean
+      clickCount?: boolean
+      createdAt?: boolean
+      updatedAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectLink"]
+  >
+
+  export type MaguiConnectLinkSelectScalar = {
+    id?: boolean
+    profileId?: boolean
+    label?: boolean
+    url?: boolean
+    icon?: boolean
+    sortOrder?: boolean
+    isActive?: boolean
+    clickCount?: boolean
+    createdAt?: boolean
+    updatedAt?: boolean
+  }
+
+  export type MaguiConnectLinkOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "profileId"
+    | "label"
+    | "url"
+    | "icon"
+    | "sortOrder"
+    | "isActive"
+    | "clickCount"
+    | "createdAt"
+    | "updatedAt",
+    ExtArgs["result"]["maguiConnectLink"]
+  >
+  export type MaguiConnectLinkInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectLinkIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectLinkIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $MaguiConnectLinkPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "MaguiConnectLink"
+    objects: {
+      profile: Prisma.$MaguiConnectProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        profileId: string
+        label: string
+        url: string
+        icon: string | null
+        sortOrder: number
+        isActive: boolean
+        clickCount: number
+        createdAt: Date
+        updatedAt: Date
+      },
+      ExtArgs["result"]["maguiConnectLink"]
+    >
+    composites: {}
+  }
+
+  type MaguiConnectLinkGetPayload<
+    S extends boolean | null | undefined | MaguiConnectLinkDefaultArgs,
+  > = $Result.GetResult<Prisma.$MaguiConnectLinkPayload, S>
+
+  type MaguiConnectLinkCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    MaguiConnectLinkFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: MaguiConnectLinkCountAggregateInputType | true
+  }
+
+  export interface MaguiConnectLinkDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["MaguiConnectLink"]
+      meta: { name: "MaguiConnectLink" }
+    }
+    /**
+     * Find zero or one MaguiConnectLink that matches the filter.
+     * @param {MaguiConnectLinkFindUniqueArgs} args - Arguments to find a MaguiConnectLink
+     * @example
+     * // Get one MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaguiConnectLinkFindUniqueArgs>(
+      args: SelectSubset<T, MaguiConnectLinkFindUniqueArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one MaguiConnectLink that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaguiConnectLinkFindUniqueOrThrowArgs} args - Arguments to find a MaguiConnectLink
+     * @example
+     * // Get one MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaguiConnectLinkFindUniqueOrThrowArgs>(
+      args: SelectSubset<T, MaguiConnectLinkFindUniqueOrThrowArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectLink that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkFindFirstArgs} args - Arguments to find a MaguiConnectLink
+     * @example
+     * // Get one MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaguiConnectLinkFindFirstArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkFindFirstArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectLink that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkFindFirstOrThrowArgs} args - Arguments to find a MaguiConnectLink
+     * @example
+     * // Get one MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaguiConnectLinkFindFirstOrThrowArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkFindFirstOrThrowArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more MaguiConnectLinks that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaguiConnectLinks
+     * const maguiConnectLinks = await prisma.maguiConnectLink.findMany()
+     *
+     * // Get first 10 MaguiConnectLinks
+     * const maguiConnectLinks = await prisma.maguiConnectLink.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const maguiConnectLinkWithIdOnly = await prisma.maguiConnectLink.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MaguiConnectLinkFindManyArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a MaguiConnectLink.
+     * @param {MaguiConnectLinkCreateArgs} args - Arguments to create a MaguiConnectLink.
+     * @example
+     * // Create one MaguiConnectLink
+     * const MaguiConnectLink = await prisma.maguiConnectLink.create({
+     *   data: {
+     *     // ... data to create a MaguiConnectLink
+     *   }
+     * })
+     *
+     */
+    create<T extends MaguiConnectLinkCreateArgs>(
+      args: SelectSubset<T, MaguiConnectLinkCreateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many MaguiConnectLinks.
+     * @param {MaguiConnectLinkCreateManyArgs} args - Arguments to create many MaguiConnectLinks.
+     * @example
+     * // Create many MaguiConnectLinks
+     * const maguiConnectLink = await prisma.maguiConnectLink.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MaguiConnectLinkCreateManyArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaguiConnectLinks and returns the data saved in the database.
+     * @param {MaguiConnectLinkCreateManyAndReturnArgs} args - Arguments to create many MaguiConnectLinks.
+     * @example
+     * // Create many MaguiConnectLinks
+     * const maguiConnectLink = await prisma.maguiConnectLink.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MaguiConnectLinks and only return the `id`
+     * const maguiConnectLinkWithIdOnly = await prisma.maguiConnectLink.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<T extends MaguiConnectLinkCreateManyAndReturnArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkCreateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a MaguiConnectLink.
+     * @param {MaguiConnectLinkDeleteArgs} args - Arguments to delete one MaguiConnectLink.
+     * @example
+     * // Delete one MaguiConnectLink
+     * const MaguiConnectLink = await prisma.maguiConnectLink.delete({
+     *   where: {
+     *     // ... filter to delete one MaguiConnectLink
+     *   }
+     * })
+     *
+     */
+    delete<T extends MaguiConnectLinkDeleteArgs>(
+      args: SelectSubset<T, MaguiConnectLinkDeleteArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one MaguiConnectLink.
+     * @param {MaguiConnectLinkUpdateArgs} args - Arguments to update one MaguiConnectLink.
+     * @example
+     * // Update one MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MaguiConnectLinkUpdateArgs>(
+      args: SelectSubset<T, MaguiConnectLinkUpdateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more MaguiConnectLinks.
+     * @param {MaguiConnectLinkDeleteManyArgs} args - Arguments to filter MaguiConnectLinks to delete.
+     * @example
+     * // Delete a few MaguiConnectLinks
+     * const { count } = await prisma.maguiConnectLink.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MaguiConnectLinkDeleteManyArgs>(
+      args?: SelectSubset<T, MaguiConnectLinkDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaguiConnectLinks
+     * const maguiConnectLink = await prisma.maguiConnectLink.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MaguiConnectLinkUpdateManyArgs>(
+      args: SelectSubset<T, MaguiConnectLinkUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectLinks and returns the data updated in the database.
+     * @param {MaguiConnectLinkUpdateManyAndReturnArgs} args - Arguments to update many MaguiConnectLinks.
+     * @example
+     * // Update many MaguiConnectLinks
+     * const maguiConnectLink = await prisma.maguiConnectLink.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more MaguiConnectLinks and only return the `id`
+     * const maguiConnectLinkWithIdOnly = await prisma.maguiConnectLink.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<T extends MaguiConnectLinkUpdateManyAndReturnArgs>(
+      args: SelectSubset<T, MaguiConnectLinkUpdateManyAndReturnArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one MaguiConnectLink.
+     * @param {MaguiConnectLinkUpsertArgs} args - Arguments to update or create a MaguiConnectLink.
+     * @example
+     * // Update or create a MaguiConnectLink
+     * const maguiConnectLink = await prisma.maguiConnectLink.upsert({
+     *   create: {
+     *     // ... data to create a MaguiConnectLink
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaguiConnectLink we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaguiConnectLinkUpsertArgs>(
+      args: SelectSubset<T, MaguiConnectLinkUpsertArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of MaguiConnectLinks.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkCountArgs} args - Arguments to filter MaguiConnectLinks to count.
+     * @example
+     * // Count the number of MaguiConnectLinks
+     * const count = await prisma.maguiConnectLink.count({
+     *   where: {
+     *     // ... the filter for the MaguiConnectLinks we want to count
+     *   }
+     * })
+     **/
+    count<T extends MaguiConnectLinkCountArgs>(
+      args?: Subset<T, MaguiConnectLinkCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<T["select"], MaguiConnectLinkCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaguiConnectLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MaguiConnectLinkAggregateArgs>(
+      args: Subset<T, MaguiConnectLinkAggregateArgs>
+    ): Prisma.PrismaPromise<GetMaguiConnectLinkAggregateType<T>>
+
+    /**
+     * Group by MaguiConnectLink.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectLinkGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MaguiConnectLinkGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaguiConnectLinkGroupByArgs["orderBy"] }
+        : { orderBy?: MaguiConnectLinkGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<T, MaguiConnectLinkGroupByArgs, OrderByArg> &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetMaguiConnectLinkGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the MaguiConnectLink model
+     */
+    readonly fields: MaguiConnectLinkFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaguiConnectLink.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaguiConnectLinkClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    profile<T extends MaguiConnectProfileDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfileDefaultArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the MaguiConnectLink model
+   */
+  interface MaguiConnectLinkFieldRefs {
+    readonly id: FieldRef<"MaguiConnectLink", "String">
+    readonly profileId: FieldRef<"MaguiConnectLink", "String">
+    readonly label: FieldRef<"MaguiConnectLink", "String">
+    readonly url: FieldRef<"MaguiConnectLink", "String">
+    readonly icon: FieldRef<"MaguiConnectLink", "String">
+    readonly sortOrder: FieldRef<"MaguiConnectLink", "Int">
+    readonly isActive: FieldRef<"MaguiConnectLink", "Boolean">
+    readonly clickCount: FieldRef<"MaguiConnectLink", "Int">
+    readonly createdAt: FieldRef<"MaguiConnectLink", "DateTime">
+    readonly updatedAt: FieldRef<"MaguiConnectLink", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectLink findUnique
+   */
+  export type MaguiConnectLinkFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectLink to fetch.
+     */
+    where: MaguiConnectLinkWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectLink findUniqueOrThrow
+   */
+  export type MaguiConnectLinkFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectLink to fetch.
+     */
+    where: MaguiConnectLinkWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectLink findFirst
+   */
+  export type MaguiConnectLinkFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectLink to fetch.
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectLinks to fetch.
+     */
+    orderBy?:
+      | MaguiConnectLinkOrderByWithRelationInput
+      | MaguiConnectLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectLinks.
+     */
+    cursor?: MaguiConnectLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectLinks.
+     */
+    distinct?:
+      | MaguiConnectLinkScalarFieldEnum
+      | MaguiConnectLinkScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectLink findFirstOrThrow
+   */
+  export type MaguiConnectLinkFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectLink to fetch.
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectLinks to fetch.
+     */
+    orderBy?:
+      | MaguiConnectLinkOrderByWithRelationInput
+      | MaguiConnectLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectLinks.
+     */
+    cursor?: MaguiConnectLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectLinks.
+     */
+    distinct?:
+      | MaguiConnectLinkScalarFieldEnum
+      | MaguiConnectLinkScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectLink findMany
+   */
+  export type MaguiConnectLinkFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectLinks to fetch.
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectLinks to fetch.
+     */
+    orderBy?:
+      | MaguiConnectLinkOrderByWithRelationInput
+      | MaguiConnectLinkOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MaguiConnectLinks.
+     */
+    cursor?: MaguiConnectLinkWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectLinks from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectLinks.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectLinks.
+     */
+    distinct?:
+      | MaguiConnectLinkScalarFieldEnum
+      | MaguiConnectLinkScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectLink create
+   */
+  export type MaguiConnectLinkCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaguiConnectLink.
+     */
+    data: XOR<MaguiConnectLinkCreateInput, MaguiConnectLinkUncheckedCreateInput>
+  }
+
+  /**
+   * MaguiConnectLink createMany
+   */
+  export type MaguiConnectLinkCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MaguiConnectLinks.
+     */
+    data: MaguiConnectLinkCreateManyInput | MaguiConnectLinkCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaguiConnectLink createManyAndReturn
+   */
+  export type MaguiConnectLinkCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaguiConnectLinks.
+     */
+    data: MaguiConnectLinkCreateManyInput | MaguiConnectLinkCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectLink update
+   */
+  export type MaguiConnectLinkUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaguiConnectLink.
+     */
+    data: XOR<MaguiConnectLinkUpdateInput, MaguiConnectLinkUncheckedUpdateInput>
+    /**
+     * Choose, which MaguiConnectLink to update.
+     */
+    where: MaguiConnectLinkWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectLink updateMany
+   */
+  export type MaguiConnectLinkUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MaguiConnectLinks.
+     */
+    data: XOR<
+      MaguiConnectLinkUpdateManyMutationInput,
+      MaguiConnectLinkUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectLinks to update
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * Limit how many MaguiConnectLinks to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectLink updateManyAndReturn
+   */
+  export type MaguiConnectLinkUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * The data used to update MaguiConnectLinks.
+     */
+    data: XOR<
+      MaguiConnectLinkUpdateManyMutationInput,
+      MaguiConnectLinkUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectLinks to update
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * Limit how many MaguiConnectLinks to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectLink upsert
+   */
+  export type MaguiConnectLinkUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaguiConnectLink to update in case it exists.
+     */
+    where: MaguiConnectLinkWhereUniqueInput
+    /**
+     * In case the MaguiConnectLink found by the `where` argument doesn't exist, create a new MaguiConnectLink with this data.
+     */
+    create: XOR<
+      MaguiConnectLinkCreateInput,
+      MaguiConnectLinkUncheckedCreateInput
+    >
+    /**
+     * In case the MaguiConnectLink was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      MaguiConnectLinkUpdateInput,
+      MaguiConnectLinkUncheckedUpdateInput
+    >
+  }
+
+  /**
+   * MaguiConnectLink delete
+   */
+  export type MaguiConnectLinkDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+    /**
+     * Filter which MaguiConnectLink to delete.
+     */
+    where: MaguiConnectLinkWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectLink deleteMany
+   */
+  export type MaguiConnectLinkDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectLinks to delete
+     */
+    where?: MaguiConnectLinkWhereInput
+    /**
+     * Limit how many MaguiConnectLinks to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectLink without action
+   */
+  export type MaguiConnectLinkDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLink
+     */
+    select?: MaguiConnectLinkSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectLink
+     */
+    omit?: MaguiConnectLinkOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectLinkInclude<ExtArgs> | null
+  }
+
+  /**
+   * Model MaguiConnectPublishLog
+   */
+
+  export type AggregateMaguiConnectPublishLog = {
+    _count: MaguiConnectPublishLogCountAggregateOutputType | null
+    _min: MaguiConnectPublishLogMinAggregateOutputType | null
+    _max: MaguiConnectPublishLogMaxAggregateOutputType | null
+  }
+
+  export type MaguiConnectPublishLogMinAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    event: string | null
+    status: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type MaguiConnectPublishLogMaxAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    event: string | null
+    status: string | null
+    message: string | null
+    createdAt: Date | null
+  }
+
+  export type MaguiConnectPublishLogCountAggregateOutputType = {
+    id: number
+    profileId: number
+    event: number
+    status: number
+    message: number
+    payload: number
+    createdAt: number
+    _all: number
+  }
+
+  export type MaguiConnectPublishLogMinAggregateInputType = {
+    id?: true
+    profileId?: true
+    event?: true
+    status?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type MaguiConnectPublishLogMaxAggregateInputType = {
+    id?: true
+    profileId?: true
+    event?: true
+    status?: true
+    message?: true
+    createdAt?: true
+  }
+
+  export type MaguiConnectPublishLogCountAggregateInputType = {
+    id?: true
+    profileId?: true
+    event?: true
+    status?: true
+    message?: true
+    payload?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MaguiConnectPublishLogAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectPublishLog to aggregate.
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectPublishLogs to fetch.
+     */
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithRelationInput
+      | MaguiConnectPublishLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MaguiConnectPublishLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectPublishLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectPublishLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MaguiConnectPublishLogs
+     **/
+    _count?: true | MaguiConnectPublishLogCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MaguiConnectPublishLogMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MaguiConnectPublishLogMaxAggregateInputType
+  }
+
+  export type GetMaguiConnectPublishLogAggregateType<
+    T extends MaguiConnectPublishLogAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateMaguiConnectPublishLog]: P extends
+      | "_count"
+      | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaguiConnectPublishLog[P]>
+      : GetScalarType<T[P], AggregateMaguiConnectPublishLog[P]>
+  }
+
+  export type MaguiConnectPublishLogGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectPublishLogWhereInput
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithAggregationInput
+      | MaguiConnectPublishLogOrderByWithAggregationInput[]
+    by:
+      | MaguiConnectPublishLogScalarFieldEnum[]
+      | MaguiConnectPublishLogScalarFieldEnum
+    having?: MaguiConnectPublishLogScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaguiConnectPublishLogCountAggregateInputType | true
+    _min?: MaguiConnectPublishLogMinAggregateInputType
+    _max?: MaguiConnectPublishLogMaxAggregateInputType
+  }
+
+  export type MaguiConnectPublishLogGroupByOutputType = {
+    id: string
+    profileId: string
+    event: string
+    status: string
+    message: string | null
+    payload: JsonValue | null
+    createdAt: Date
+    _count: MaguiConnectPublishLogCountAggregateOutputType | null
+    _min: MaguiConnectPublishLogMinAggregateOutputType | null
+    _max: MaguiConnectPublishLogMaxAggregateOutputType | null
+  }
+
+  type GetMaguiConnectPublishLogGroupByPayload<
+    T extends MaguiConnectPublishLogGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaguiConnectPublishLogGroupByOutputType, T["by"]> & {
+        [P in keyof T &
+          keyof MaguiConnectPublishLogGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], MaguiConnectPublishLogGroupByOutputType[P]>
+          : GetScalarType<T[P], MaguiConnectPublishLogGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type MaguiConnectPublishLogSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      event?: boolean
+      status?: boolean
+      message?: boolean
+      payload?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectPublishLog"]
+  >
+
+  export type MaguiConnectPublishLogSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      event?: boolean
+      status?: boolean
+      message?: boolean
+      payload?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectPublishLog"]
+  >
+
+  export type MaguiConnectPublishLogSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      event?: boolean
+      status?: boolean
+      message?: boolean
+      payload?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectPublishLog"]
+  >
+
+  export type MaguiConnectPublishLogSelectScalar = {
+    id?: boolean
+    profileId?: boolean
+    event?: boolean
+    status?: boolean
+    message?: boolean
+    payload?: boolean
+    createdAt?: boolean
+  }
+
+  export type MaguiConnectPublishLogOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    | "id"
+    | "profileId"
+    | "event"
+    | "status"
+    | "message"
+    | "payload"
+    | "createdAt",
+    ExtArgs["result"]["maguiConnectPublishLog"]
+  >
+  export type MaguiConnectPublishLogInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectPublishLogIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectPublishLogIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+  }
+
+  export type $MaguiConnectPublishLogPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "MaguiConnectPublishLog"
+    objects: {
+      profile: Prisma.$MaguiConnectProfilePayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        profileId: string
+        event: string
+        status: string
+        message: string | null
+        payload: Prisma.JsonValue | null
+        createdAt: Date
+      },
+      ExtArgs["result"]["maguiConnectPublishLog"]
+    >
+    composites: {}
+  }
+
+  type MaguiConnectPublishLogGetPayload<
+    S extends boolean | null | undefined | MaguiConnectPublishLogDefaultArgs,
+  > = $Result.GetResult<Prisma.$MaguiConnectPublishLogPayload, S>
+
+  type MaguiConnectPublishLogCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    MaguiConnectPublishLogFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: MaguiConnectPublishLogCountAggregateInputType | true
+  }
+
+  export interface MaguiConnectPublishLogDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["MaguiConnectPublishLog"]
+      meta: { name: "MaguiConnectPublishLog" }
+    }
+    /**
+     * Find zero or one MaguiConnectPublishLog that matches the filter.
+     * @param {MaguiConnectPublishLogFindUniqueArgs} args - Arguments to find a MaguiConnectPublishLog
+     * @example
+     * // Get one MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaguiConnectPublishLogFindUniqueArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogFindUniqueArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one MaguiConnectPublishLog that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaguiConnectPublishLogFindUniqueOrThrowArgs} args - Arguments to find a MaguiConnectPublishLog
+     * @example
+     * // Get one MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaguiConnectPublishLogFindUniqueOrThrowArgs>(
+      args: SelectSubset<
+        T,
+        MaguiConnectPublishLogFindUniqueOrThrowArgs<ExtArgs>
+      >
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectPublishLog that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogFindFirstArgs} args - Arguments to find a MaguiConnectPublishLog
+     * @example
+     * // Get one MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaguiConnectPublishLogFindFirstArgs>(
+      args?: SelectSubset<T, MaguiConnectPublishLogFindFirstArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectPublishLog that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogFindFirstOrThrowArgs} args - Arguments to find a MaguiConnectPublishLog
+     * @example
+     * // Get one MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaguiConnectPublishLogFindFirstOrThrowArgs>(
+      args?: SelectSubset<
+        T,
+        MaguiConnectPublishLogFindFirstOrThrowArgs<ExtArgs>
+      >
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more MaguiConnectPublishLogs that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaguiConnectPublishLogs
+     * const maguiConnectPublishLogs = await prisma.maguiConnectPublishLog.findMany()
+     *
+     * // Get first 10 MaguiConnectPublishLogs
+     * const maguiConnectPublishLogs = await prisma.maguiConnectPublishLog.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const maguiConnectPublishLogWithIdOnly = await prisma.maguiConnectPublishLog.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MaguiConnectPublishLogFindManyArgs>(
+      args?: SelectSubset<T, MaguiConnectPublishLogFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a MaguiConnectPublishLog.
+     * @param {MaguiConnectPublishLogCreateArgs} args - Arguments to create a MaguiConnectPublishLog.
+     * @example
+     * // Create one MaguiConnectPublishLog
+     * const MaguiConnectPublishLog = await prisma.maguiConnectPublishLog.create({
+     *   data: {
+     *     // ... data to create a MaguiConnectPublishLog
+     *   }
+     * })
+     *
+     */
+    create<T extends MaguiConnectPublishLogCreateArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogCreateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many MaguiConnectPublishLogs.
+     * @param {MaguiConnectPublishLogCreateManyArgs} args - Arguments to create many MaguiConnectPublishLogs.
+     * @example
+     * // Create many MaguiConnectPublishLogs
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MaguiConnectPublishLogCreateManyArgs>(
+      args?: SelectSubset<T, MaguiConnectPublishLogCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaguiConnectPublishLogs and returns the data saved in the database.
+     * @param {MaguiConnectPublishLogCreateManyAndReturnArgs} args - Arguments to create many MaguiConnectPublishLogs.
+     * @example
+     * // Create many MaguiConnectPublishLogs
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MaguiConnectPublishLogs and only return the `id`
+     * const maguiConnectPublishLogWithIdOnly = await prisma.maguiConnectPublishLog.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<
+      T extends MaguiConnectPublishLogCreateManyAndReturnArgs,
+    >(
+      args?: SelectSubset<
+        T,
+        MaguiConnectPublishLogCreateManyAndReturnArgs<ExtArgs>
+      >
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a MaguiConnectPublishLog.
+     * @param {MaguiConnectPublishLogDeleteArgs} args - Arguments to delete one MaguiConnectPublishLog.
+     * @example
+     * // Delete one MaguiConnectPublishLog
+     * const MaguiConnectPublishLog = await prisma.maguiConnectPublishLog.delete({
+     *   where: {
+     *     // ... filter to delete one MaguiConnectPublishLog
+     *   }
+     * })
+     *
+     */
+    delete<T extends MaguiConnectPublishLogDeleteArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogDeleteArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one MaguiConnectPublishLog.
+     * @param {MaguiConnectPublishLogUpdateArgs} args - Arguments to update one MaguiConnectPublishLog.
+     * @example
+     * // Update one MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MaguiConnectPublishLogUpdateArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogUpdateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more MaguiConnectPublishLogs.
+     * @param {MaguiConnectPublishLogDeleteManyArgs} args - Arguments to filter MaguiConnectPublishLogs to delete.
+     * @example
+     * // Delete a few MaguiConnectPublishLogs
+     * const { count } = await prisma.maguiConnectPublishLog.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MaguiConnectPublishLogDeleteManyArgs>(
+      args?: SelectSubset<T, MaguiConnectPublishLogDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectPublishLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaguiConnectPublishLogs
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MaguiConnectPublishLogUpdateManyArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectPublishLogs and returns the data updated in the database.
+     * @param {MaguiConnectPublishLogUpdateManyAndReturnArgs} args - Arguments to update many MaguiConnectPublishLogs.
+     * @example
+     * // Update many MaguiConnectPublishLogs
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more MaguiConnectPublishLogs and only return the `id`
+     * const maguiConnectPublishLogWithIdOnly = await prisma.maguiConnectPublishLog.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<
+      T extends MaguiConnectPublishLogUpdateManyAndReturnArgs,
+    >(
+      args: SelectSubset<
+        T,
+        MaguiConnectPublishLogUpdateManyAndReturnArgs<ExtArgs>
+      >
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one MaguiConnectPublishLog.
+     * @param {MaguiConnectPublishLogUpsertArgs} args - Arguments to update or create a MaguiConnectPublishLog.
+     * @example
+     * // Update or create a MaguiConnectPublishLog
+     * const maguiConnectPublishLog = await prisma.maguiConnectPublishLog.upsert({
+     *   create: {
+     *     // ... data to create a MaguiConnectPublishLog
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaguiConnectPublishLog we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaguiConnectPublishLogUpsertArgs>(
+      args: SelectSubset<T, MaguiConnectPublishLogUpsertArgs<ExtArgs>>
+    ): Prisma__MaguiConnectPublishLogClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectPublishLogPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of MaguiConnectPublishLogs.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogCountArgs} args - Arguments to filter MaguiConnectPublishLogs to count.
+     * @example
+     * // Count the number of MaguiConnectPublishLogs
+     * const count = await prisma.maguiConnectPublishLog.count({
+     *   where: {
+     *     // ... the filter for the MaguiConnectPublishLogs we want to count
+     *   }
+     * })
+     **/
+    count<T extends MaguiConnectPublishLogCountArgs>(
+      args?: Subset<T, MaguiConnectPublishLogCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<
+              T["select"],
+              MaguiConnectPublishLogCountAggregateOutputType
+            >
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaguiConnectPublishLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MaguiConnectPublishLogAggregateArgs>(
+      args: Subset<T, MaguiConnectPublishLogAggregateArgs>
+    ): Prisma.PrismaPromise<GetMaguiConnectPublishLogAggregateType<T>>
+
+    /**
+     * Group by MaguiConnectPublishLog.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectPublishLogGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MaguiConnectPublishLogGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaguiConnectPublishLogGroupByArgs["orderBy"] }
+        : { orderBy?: MaguiConnectPublishLogGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<
+        T,
+        MaguiConnectPublishLogGroupByArgs,
+        OrderByArg
+      > &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetMaguiConnectPublishLogGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the MaguiConnectPublishLog model
+     */
+    readonly fields: MaguiConnectPublishLogFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaguiConnectPublishLog.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaguiConnectPublishLogClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    profile<T extends MaguiConnectProfileDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfileDefaultArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the MaguiConnectPublishLog model
+   */
+  interface MaguiConnectPublishLogFieldRefs {
+    readonly id: FieldRef<"MaguiConnectPublishLog", "String">
+    readonly profileId: FieldRef<"MaguiConnectPublishLog", "String">
+    readonly event: FieldRef<"MaguiConnectPublishLog", "String">
+    readonly status: FieldRef<"MaguiConnectPublishLog", "String">
+    readonly message: FieldRef<"MaguiConnectPublishLog", "String">
+    readonly payload: FieldRef<"MaguiConnectPublishLog", "Json">
+    readonly createdAt: FieldRef<"MaguiConnectPublishLog", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectPublishLog findUnique
+   */
+  export type MaguiConnectPublishLogFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectPublishLog to fetch.
+     */
+    where: MaguiConnectPublishLogWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectPublishLog findUniqueOrThrow
+   */
+  export type MaguiConnectPublishLogFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectPublishLog to fetch.
+     */
+    where: MaguiConnectPublishLogWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectPublishLog findFirst
+   */
+  export type MaguiConnectPublishLogFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectPublishLog to fetch.
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectPublishLogs to fetch.
+     */
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithRelationInput
+      | MaguiConnectPublishLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectPublishLogs.
+     */
+    cursor?: MaguiConnectPublishLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectPublishLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectPublishLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectPublishLogs.
+     */
+    distinct?:
+      | MaguiConnectPublishLogScalarFieldEnum
+      | MaguiConnectPublishLogScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectPublishLog findFirstOrThrow
+   */
+  export type MaguiConnectPublishLogFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectPublishLog to fetch.
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectPublishLogs to fetch.
+     */
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithRelationInput
+      | MaguiConnectPublishLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectPublishLogs.
+     */
+    cursor?: MaguiConnectPublishLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectPublishLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectPublishLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectPublishLogs.
+     */
+    distinct?:
+      | MaguiConnectPublishLogScalarFieldEnum
+      | MaguiConnectPublishLogScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectPublishLog findMany
+   */
+  export type MaguiConnectPublishLogFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectPublishLogs to fetch.
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectPublishLogs to fetch.
+     */
+    orderBy?:
+      | MaguiConnectPublishLogOrderByWithRelationInput
+      | MaguiConnectPublishLogOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MaguiConnectPublishLogs.
+     */
+    cursor?: MaguiConnectPublishLogWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectPublishLogs from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectPublishLogs.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectPublishLogs.
+     */
+    distinct?:
+      | MaguiConnectPublishLogScalarFieldEnum
+      | MaguiConnectPublishLogScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectPublishLog create
+   */
+  export type MaguiConnectPublishLogCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaguiConnectPublishLog.
+     */
+    data: XOR<
+      MaguiConnectPublishLogCreateInput,
+      MaguiConnectPublishLogUncheckedCreateInput
+    >
+  }
+
+  /**
+   * MaguiConnectPublishLog createMany
+   */
+  export type MaguiConnectPublishLogCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MaguiConnectPublishLogs.
+     */
+    data:
+      | MaguiConnectPublishLogCreateManyInput
+      | MaguiConnectPublishLogCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaguiConnectPublishLog createManyAndReturn
+   */
+  export type MaguiConnectPublishLogCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaguiConnectPublishLogs.
+     */
+    data:
+      | MaguiConnectPublishLogCreateManyInput
+      | MaguiConnectPublishLogCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectPublishLog update
+   */
+  export type MaguiConnectPublishLogUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaguiConnectPublishLog.
+     */
+    data: XOR<
+      MaguiConnectPublishLogUpdateInput,
+      MaguiConnectPublishLogUncheckedUpdateInput
+    >
+    /**
+     * Choose, which MaguiConnectPublishLog to update.
+     */
+    where: MaguiConnectPublishLogWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectPublishLog updateMany
+   */
+  export type MaguiConnectPublishLogUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MaguiConnectPublishLogs.
+     */
+    data: XOR<
+      MaguiConnectPublishLogUpdateManyMutationInput,
+      MaguiConnectPublishLogUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectPublishLogs to update
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * Limit how many MaguiConnectPublishLogs to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectPublishLog updateManyAndReturn
+   */
+  export type MaguiConnectPublishLogUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * The data used to update MaguiConnectPublishLogs.
+     */
+    data: XOR<
+      MaguiConnectPublishLogUpdateManyMutationInput,
+      MaguiConnectPublishLogUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectPublishLogs to update
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * Limit how many MaguiConnectPublishLogs to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectPublishLog upsert
+   */
+  export type MaguiConnectPublishLogUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaguiConnectPublishLog to update in case it exists.
+     */
+    where: MaguiConnectPublishLogWhereUniqueInput
+    /**
+     * In case the MaguiConnectPublishLog found by the `where` argument doesn't exist, create a new MaguiConnectPublishLog with this data.
+     */
+    create: XOR<
+      MaguiConnectPublishLogCreateInput,
+      MaguiConnectPublishLogUncheckedCreateInput
+    >
+    /**
+     * In case the MaguiConnectPublishLog was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      MaguiConnectPublishLogUpdateInput,
+      MaguiConnectPublishLogUncheckedUpdateInput
+    >
+  }
+
+  /**
+   * MaguiConnectPublishLog delete
+   */
+  export type MaguiConnectPublishLogDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
+    /**
+     * Filter which MaguiConnectPublishLog to delete.
+     */
+    where: MaguiConnectPublishLogWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectPublishLog deleteMany
+   */
+  export type MaguiConnectPublishLogDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectPublishLogs to delete
+     */
+    where?: MaguiConnectPublishLogWhereInput
+    /**
+     * Limit how many MaguiConnectPublishLogs to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectPublishLog without action
+   */
+  export type MaguiConnectPublishLogDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectPublishLog
+     */
+    select?: MaguiConnectPublishLogSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectPublishLog
+     */
+    omit?: MaguiConnectPublishLogOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectPublishLogInclude<ExtArgs> | null
   }
 
   /**
@@ -56602,6 +61449,58 @@ export namespace Prisma {
   export type UserScalarFieldEnum =
     (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
+  export const MaguiConnectProfileScalarFieldEnum: {
+    id: "id"
+    userId: "userId"
+    status: "status"
+    slug: "slug"
+    displayName: "displayName"
+    headline: "headline"
+    avatarUrl: "avatarUrl"
+    domain: "domain"
+    themeAccent: "themeAccent"
+    themeBackground: "themeBackground"
+    themeForeground: "themeForeground"
+    seoTitle: "seoTitle"
+    seoDescription: "seoDescription"
+    publishedAt: "publishedAt"
+    lastSyncedAt: "lastSyncedAt"
+    createdAt: "createdAt"
+    updatedAt: "updatedAt"
+  }
+
+  export type MaguiConnectProfileScalarFieldEnum =
+    (typeof MaguiConnectProfileScalarFieldEnum)[keyof typeof MaguiConnectProfileScalarFieldEnum]
+
+  export const MaguiConnectLinkScalarFieldEnum: {
+    id: "id"
+    profileId: "profileId"
+    label: "label"
+    url: "url"
+    icon: "icon"
+    sortOrder: "sortOrder"
+    isActive: "isActive"
+    clickCount: "clickCount"
+    createdAt: "createdAt"
+    updatedAt: "updatedAt"
+  }
+
+  export type MaguiConnectLinkScalarFieldEnum =
+    (typeof MaguiConnectLinkScalarFieldEnum)[keyof typeof MaguiConnectLinkScalarFieldEnum]
+
+  export const MaguiConnectPublishLogScalarFieldEnum: {
+    id: "id"
+    profileId: "profileId"
+    event: "event"
+    status: "status"
+    message: "message"
+    payload: "payload"
+    createdAt: "createdAt"
+  }
+
+  export type MaguiConnectPublishLogScalarFieldEnum =
+    (typeof MaguiConnectPublishLogScalarFieldEnum)[keyof typeof MaguiConnectPublishLogScalarFieldEnum]
+
   export const LeadScalarFieldEnum: {
     id: "id"
     companyName: "companyName"
@@ -57281,6 +62180,26 @@ export namespace Prisma {
   >
 
   /**
+   * Reference to a field of type 'MaguiConnectStatus'
+   */
+  export type EnumMaguiConnectStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, "MaguiConnectStatus">
+
+  /**
+   * Reference to a field of type 'MaguiConnectStatus[]'
+   */
+  export type ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel> =
+    FieldRefInputType<$PrismaModel, "MaguiConnectStatus[]">
+
+  /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
+    $PrismaModel,
+    "Boolean"
+  >
+
+  /**
    * Reference to a field of type 'LeadStatus'
    */
   export type EnumLeadStatusFieldRefInput<$PrismaModel> = FieldRefInputType<
@@ -57323,14 +62242,6 @@ export namespace Prisma {
    */
   export type ListEnumLeadActivityTypeFieldRefInput<$PrismaModel> =
     FieldRefInputType<$PrismaModel, "LeadActivityType[]">
-
-  /**
-   * Reference to a field of type 'Boolean'
-   */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
-    $PrismaModel,
-    "Boolean"
-  >
 
   /**
    * Reference to a field of type 'ProjectStatus'
@@ -57821,6 +62732,10 @@ export namespace Prisma {
       BillingProfileWhereInput
     > | null
     emailLogs?: EmailLogListRelationFilter
+    maguiConnectProfile?: XOR<
+      MaguiConnectProfileNullableScalarRelationFilter,
+      MaguiConnectProfileWhereInput
+    > | null
   }
 
   export type UserOrderByWithRelationInput = {
@@ -57850,6 +62765,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionOrderByRelationAggregateInput
     billingProfile?: BillingProfileOrderByWithRelationInput
     emailLogs?: EmailLogOrderByRelationAggregateInput
+    maguiConnectProfile?: MaguiConnectProfileOrderByWithRelationInput
   }
 
   export type UserWhereUniqueInput = Prisma.AtLeast<
@@ -57886,6 +62802,10 @@ export namespace Prisma {
         BillingProfileWhereInput
       > | null
       emailLogs?: EmailLogListRelationFilter
+      maguiConnectProfile?: XOR<
+        MaguiConnectProfileNullableScalarRelationFilter,
+        MaguiConnectProfileWhereInput
+      > | null
     },
     "id" | "clerkId" | "email" | "stripeCustomerId"
   >
@@ -57933,6 +62853,398 @@ export namespace Prisma {
       | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+  }
+
+  export type MaguiConnectProfileWhereInput = {
+    AND?: MaguiConnectProfileWhereInput | MaguiConnectProfileWhereInput[]
+    OR?: MaguiConnectProfileWhereInput[]
+    NOT?: MaguiConnectProfileWhereInput | MaguiConnectProfileWhereInput[]
+    id?: StringFilter<"MaguiConnectProfile"> | string
+    userId?: StringFilter<"MaguiConnectProfile"> | string
+    status?:
+      | EnumMaguiConnectStatusFilter<"MaguiConnectProfile">
+      | $Enums.MaguiConnectStatus
+    slug?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    displayName?: StringFilter<"MaguiConnectProfile"> | string
+    headline?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    avatarUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    domain?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    themeAccent?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    themeBackground?:
+      | StringNullableFilter<"MaguiConnectProfile">
+      | string
+      | null
+    themeForeground?:
+      | StringNullableFilter<"MaguiConnectProfile">
+      | string
+      | null
+    seoTitle?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    seoDescription?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    publishedAt?:
+      | DateTimeNullableFilter<"MaguiConnectProfile">
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | DateTimeNullableFilter<"MaguiConnectProfile">
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFilter<"MaguiConnectProfile"> | Date | string
+    updatedAt?: DateTimeFilter<"MaguiConnectProfile"> | Date | string
+    user?: XOR<UserScalarRelationFilter, UserWhereInput>
+    links?: MaguiConnectLinkListRelationFilter
+    publishLogs?: MaguiConnectPublishLogListRelationFilter
+  }
+
+  export type MaguiConnectProfileOrderByWithRelationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    slug?: SortOrderInput | SortOrder
+    displayName?: SortOrder
+    headline?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    domain?: SortOrderInput | SortOrder
+    themeAccent?: SortOrderInput | SortOrder
+    themeBackground?: SortOrderInput | SortOrder
+    themeForeground?: SortOrderInput | SortOrder
+    seoTitle?: SortOrderInput | SortOrder
+    seoDescription?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    user?: UserOrderByWithRelationInput
+    links?: MaguiConnectLinkOrderByRelationAggregateInput
+    publishLogs?: MaguiConnectPublishLogOrderByRelationAggregateInput
+  }
+
+  export type MaguiConnectProfileWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      userId?: string
+      slug?: string
+      domain?: string
+      AND?: MaguiConnectProfileWhereInput | MaguiConnectProfileWhereInput[]
+      OR?: MaguiConnectProfileWhereInput[]
+      NOT?: MaguiConnectProfileWhereInput | MaguiConnectProfileWhereInput[]
+      status?:
+        | EnumMaguiConnectStatusFilter<"MaguiConnectProfile">
+        | $Enums.MaguiConnectStatus
+      displayName?: StringFilter<"MaguiConnectProfile"> | string
+      headline?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      avatarUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      themeAccent?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      themeBackground?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
+      themeForeground?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
+      seoTitle?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      seoDescription?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
+      publishedAt?:
+        | DateTimeNullableFilter<"MaguiConnectProfile">
+        | Date
+        | string
+        | null
+      lastSyncedAt?:
+        | DateTimeNullableFilter<"MaguiConnectProfile">
+        | Date
+        | string
+        | null
+      createdAt?: DateTimeFilter<"MaguiConnectProfile"> | Date | string
+      updatedAt?: DateTimeFilter<"MaguiConnectProfile"> | Date | string
+      user?: XOR<UserScalarRelationFilter, UserWhereInput>
+      links?: MaguiConnectLinkListRelationFilter
+      publishLogs?: MaguiConnectPublishLogListRelationFilter
+    },
+    "id" | "userId" | "slug" | "domain"
+  >
+
+  export type MaguiConnectProfileOrderByWithAggregationInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    slug?: SortOrderInput | SortOrder
+    displayName?: SortOrder
+    headline?: SortOrderInput | SortOrder
+    avatarUrl?: SortOrderInput | SortOrder
+    domain?: SortOrderInput | SortOrder
+    themeAccent?: SortOrderInput | SortOrder
+    themeBackground?: SortOrderInput | SortOrder
+    themeForeground?: SortOrderInput | SortOrder
+    seoTitle?: SortOrderInput | SortOrder
+    seoDescription?: SortOrderInput | SortOrder
+    publishedAt?: SortOrderInput | SortOrder
+    lastSyncedAt?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MaguiConnectProfileCountOrderByAggregateInput
+    _max?: MaguiConnectProfileMaxOrderByAggregateInput
+    _min?: MaguiConnectProfileMinOrderByAggregateInput
+  }
+
+  export type MaguiConnectProfileScalarWhereWithAggregatesInput = {
+    AND?:
+      | MaguiConnectProfileScalarWhereWithAggregatesInput
+      | MaguiConnectProfileScalarWhereWithAggregatesInput[]
+    OR?: MaguiConnectProfileScalarWhereWithAggregatesInput[]
+    NOT?:
+      | MaguiConnectProfileScalarWhereWithAggregatesInput
+      | MaguiConnectProfileScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaguiConnectProfile"> | string
+    userId?: StringWithAggregatesFilter<"MaguiConnectProfile"> | string
+    status?:
+      | EnumMaguiConnectStatusWithAggregatesFilter<"MaguiConnectProfile">
+      | $Enums.MaguiConnectStatus
+    slug?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    displayName?: StringWithAggregatesFilter<"MaguiConnectProfile"> | string
+    headline?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    avatarUrl?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    domain?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    themeAccent?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    themeBackground?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    themeForeground?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    seoTitle?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    seoDescription?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    publishedAt?:
+      | DateTimeNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | DateTimeNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | Date
+      | string
+      | null
+    createdAt?:
+      | DateTimeWithAggregatesFilter<"MaguiConnectProfile">
+      | Date
+      | string
+    updatedAt?:
+      | DateTimeWithAggregatesFilter<"MaguiConnectProfile">
+      | Date
+      | string
+  }
+
+  export type MaguiConnectLinkWhereInput = {
+    AND?: MaguiConnectLinkWhereInput | MaguiConnectLinkWhereInput[]
+    OR?: MaguiConnectLinkWhereInput[]
+    NOT?: MaguiConnectLinkWhereInput | MaguiConnectLinkWhereInput[]
+    id?: StringFilter<"MaguiConnectLink"> | string
+    profileId?: StringFilter<"MaguiConnectLink"> | string
+    label?: StringFilter<"MaguiConnectLink"> | string
+    url?: StringFilter<"MaguiConnectLink"> | string
+    icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+    sortOrder?: IntFilter<"MaguiConnectLink"> | number
+    isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+    clickCount?: IntFilter<"MaguiConnectLink"> | number
+    createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+    updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+    profile?: XOR<
+      MaguiConnectProfileScalarRelationFilter,
+      MaguiConnectProfileWhereInput
+    >
+  }
+
+  export type MaguiConnectLinkOrderByWithRelationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    label?: SortOrder
+    url?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    clickCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    profile?: MaguiConnectProfileOrderByWithRelationInput
+  }
+
+  export type MaguiConnectLinkWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      AND?: MaguiConnectLinkWhereInput | MaguiConnectLinkWhereInput[]
+      OR?: MaguiConnectLinkWhereInput[]
+      NOT?: MaguiConnectLinkWhereInput | MaguiConnectLinkWhereInput[]
+      profileId?: StringFilter<"MaguiConnectLink"> | string
+      label?: StringFilter<"MaguiConnectLink"> | string
+      url?: StringFilter<"MaguiConnectLink"> | string
+      icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+      sortOrder?: IntFilter<"MaguiConnectLink"> | number
+      isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+      clickCount?: IntFilter<"MaguiConnectLink"> | number
+      createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+      updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+      profile?: XOR<
+        MaguiConnectProfileScalarRelationFilter,
+        MaguiConnectProfileWhereInput
+      >
+    },
+    "id"
+  >
+
+  export type MaguiConnectLinkOrderByWithAggregationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    label?: SortOrder
+    url?: SortOrder
+    icon?: SortOrderInput | SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    clickCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+    _count?: MaguiConnectLinkCountOrderByAggregateInput
+    _avg?: MaguiConnectLinkAvgOrderByAggregateInput
+    _max?: MaguiConnectLinkMaxOrderByAggregateInput
+    _min?: MaguiConnectLinkMinOrderByAggregateInput
+    _sum?: MaguiConnectLinkSumOrderByAggregateInput
+  }
+
+  export type MaguiConnectLinkScalarWhereWithAggregatesInput = {
+    AND?:
+      | MaguiConnectLinkScalarWhereWithAggregatesInput
+      | MaguiConnectLinkScalarWhereWithAggregatesInput[]
+    OR?: MaguiConnectLinkScalarWhereWithAggregatesInput[]
+    NOT?:
+      | MaguiConnectLinkScalarWhereWithAggregatesInput
+      | MaguiConnectLinkScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaguiConnectLink"> | string
+    profileId?: StringWithAggregatesFilter<"MaguiConnectLink"> | string
+    label?: StringWithAggregatesFilter<"MaguiConnectLink"> | string
+    url?: StringWithAggregatesFilter<"MaguiConnectLink"> | string
+    icon?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectLink">
+      | string
+      | null
+    sortOrder?: IntWithAggregatesFilter<"MaguiConnectLink"> | number
+    isActive?: BoolWithAggregatesFilter<"MaguiConnectLink"> | boolean
+    clickCount?: IntWithAggregatesFilter<"MaguiConnectLink"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"MaguiConnectLink"> | Date | string
+    updatedAt?: DateTimeWithAggregatesFilter<"MaguiConnectLink"> | Date | string
+  }
+
+  export type MaguiConnectPublishLogWhereInput = {
+    AND?: MaguiConnectPublishLogWhereInput | MaguiConnectPublishLogWhereInput[]
+    OR?: MaguiConnectPublishLogWhereInput[]
+    NOT?: MaguiConnectPublishLogWhereInput | MaguiConnectPublishLogWhereInput[]
+    id?: StringFilter<"MaguiConnectPublishLog"> | string
+    profileId?: StringFilter<"MaguiConnectPublishLog"> | string
+    event?: StringFilter<"MaguiConnectPublishLog"> | string
+    status?: StringFilter<"MaguiConnectPublishLog"> | string
+    message?: StringNullableFilter<"MaguiConnectPublishLog"> | string | null
+    payload?: JsonNullableFilter<"MaguiConnectPublishLog">
+    createdAt?: DateTimeFilter<"MaguiConnectPublishLog"> | Date | string
+    profile?: XOR<
+      MaguiConnectProfileScalarRelationFilter,
+      MaguiConnectProfileWhereInput
+    >
+  }
+
+  export type MaguiConnectPublishLogOrderByWithRelationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    event?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    payload?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    profile?: MaguiConnectProfileOrderByWithRelationInput
+  }
+
+  export type MaguiConnectPublishLogWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      AND?:
+        | MaguiConnectPublishLogWhereInput
+        | MaguiConnectPublishLogWhereInput[]
+      OR?: MaguiConnectPublishLogWhereInput[]
+      NOT?:
+        | MaguiConnectPublishLogWhereInput
+        | MaguiConnectPublishLogWhereInput[]
+      profileId?: StringFilter<"MaguiConnectPublishLog"> | string
+      event?: StringFilter<"MaguiConnectPublishLog"> | string
+      status?: StringFilter<"MaguiConnectPublishLog"> | string
+      message?: StringNullableFilter<"MaguiConnectPublishLog"> | string | null
+      payload?: JsonNullableFilter<"MaguiConnectPublishLog">
+      createdAt?: DateTimeFilter<"MaguiConnectPublishLog"> | Date | string
+      profile?: XOR<
+        MaguiConnectProfileScalarRelationFilter,
+        MaguiConnectProfileWhereInput
+      >
+    },
+    "id"
+  >
+
+  export type MaguiConnectPublishLogOrderByWithAggregationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    event?: SortOrder
+    status?: SortOrder
+    message?: SortOrderInput | SortOrder
+    payload?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: MaguiConnectPublishLogCountOrderByAggregateInput
+    _max?: MaguiConnectPublishLogMaxOrderByAggregateInput
+    _min?: MaguiConnectPublishLogMinOrderByAggregateInput
+  }
+
+  export type MaguiConnectPublishLogScalarWhereWithAggregatesInput = {
+    AND?:
+      | MaguiConnectPublishLogScalarWhereWithAggregatesInput
+      | MaguiConnectPublishLogScalarWhereWithAggregatesInput[]
+    OR?: MaguiConnectPublishLogScalarWhereWithAggregatesInput[]
+    NOT?:
+      | MaguiConnectPublishLogScalarWhereWithAggregatesInput
+      | MaguiConnectPublishLogScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaguiConnectPublishLog"> | string
+    profileId?: StringWithAggregatesFilter<"MaguiConnectPublishLog"> | string
+    event?: StringWithAggregatesFilter<"MaguiConnectPublishLog"> | string
+    status?: StringWithAggregatesFilter<"MaguiConnectPublishLog"> | string
+    message?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectPublishLog">
+      | string
+      | null
+    payload?: JsonNullableWithAggregatesFilter<"MaguiConnectPublishLog">
+    createdAt?:
+      | DateTimeWithAggregatesFilter<"MaguiConnectPublishLog">
+      | Date
+      | string
   }
 
   export type LeadWhereInput = {
@@ -61569,6 +66881,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateInput = {
@@ -61598,6 +66911,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserUpdateInput = {
@@ -61627,6 +66941,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateInput = {
@@ -61656,6 +66971,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateManyInput = {
@@ -61704,6 +67020,352 @@ export namespace Prisma {
     stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectProfileCreateInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMaguiConnectProfileInput
+    links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUncheckedCreateInput = {
+    id?: string
+    userId: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
+    links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileCreateManyInput = {
+    id?: string
+    userId: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectProfileUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkCreateInput = {
+    id?: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile: MaguiConnectProfileCreateNestedOneWithoutLinksInput
+  }
+
+  export type MaguiConnectLinkUncheckedCreateInput = {
+    id?: string
+    profileId: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectLinkUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: MaguiConnectProfileUpdateOneRequiredWithoutLinksNestedInput
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkCreateManyInput = {
+    id?: string
+    profileId: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectLinkUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogCreateInput = {
+    id?: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+    profile: MaguiConnectProfileCreateNestedOneWithoutPublishLogsInput
+  }
+
+  export type MaguiConnectPublishLogUncheckedCreateInput = {
+    id?: string
+    profileId: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectPublishLogUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: MaguiConnectProfileUpdateOneRequiredWithoutPublishLogsNestedInput
+  }
+
+  export type MaguiConnectPublishLogUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogCreateManyInput = {
+    id?: string
+    profileId: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectPublishLogUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type LeadCreateInput = {
@@ -65554,6 +71216,11 @@ export namespace Prisma {
     none?: EmailLogWhereInput
   }
 
+  export type MaguiConnectProfileNullableScalarRelationFilter = {
+    is?: MaguiConnectProfileWhereInput | null
+    isNot?: MaguiConnectProfileWhereInput | null
+  }
+
   export type ProjectOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
@@ -65658,6 +71325,289 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumUserRoleFilter<$PrismaModel>
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
+  }
+
+  export type EnumMaguiConnectStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.MaguiConnectStatus
+      | EnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    not?:
+      | NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+      | $Enums.MaguiConnectStatus
+  }
+
+  export type UserScalarRelationFilter = {
+    is?: UserWhereInput
+    isNot?: UserWhereInput
+  }
+
+  export type MaguiConnectLinkListRelationFilter = {
+    every?: MaguiConnectLinkWhereInput
+    some?: MaguiConnectLinkWhereInput
+    none?: MaguiConnectLinkWhereInput
+  }
+
+  export type MaguiConnectPublishLogListRelationFilter = {
+    every?: MaguiConnectPublishLogWhereInput
+    some?: MaguiConnectPublishLogWhereInput
+    none?: MaguiConnectPublishLogWhereInput
+  }
+
+  export type MaguiConnectLinkOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaguiConnectPublishLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaguiConnectProfileCountOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    slug?: SortOrder
+    displayName?: SortOrder
+    headline?: SortOrder
+    avatarUrl?: SortOrder
+    domain?: SortOrder
+    themeAccent?: SortOrder
+    themeBackground?: SortOrder
+    themeForeground?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    publishedAt?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaguiConnectProfileMaxOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    slug?: SortOrder
+    displayName?: SortOrder
+    headline?: SortOrder
+    avatarUrl?: SortOrder
+    domain?: SortOrder
+    themeAccent?: SortOrder
+    themeBackground?: SortOrder
+    themeForeground?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    publishedAt?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaguiConnectProfileMinOrderByAggregateInput = {
+    id?: SortOrder
+    userId?: SortOrder
+    status?: SortOrder
+    slug?: SortOrder
+    displayName?: SortOrder
+    headline?: SortOrder
+    avatarUrl?: SortOrder
+    domain?: SortOrder
+    themeAccent?: SortOrder
+    themeBackground?: SortOrder
+    themeForeground?: SortOrder
+    seoTitle?: SortOrder
+    seoDescription?: SortOrder
+    publishedAt?: SortOrder
+    lastSyncedAt?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type EnumMaguiConnectStatusWithAggregatesFilter<$PrismaModel = never> =
+    {
+      equals?:
+        | $Enums.MaguiConnectStatus
+        | EnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+      in?:
+        | $Enums.MaguiConnectStatus[]
+        | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+      notIn?:
+        | $Enums.MaguiConnectStatus[]
+        | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+      not?:
+        | NestedEnumMaguiConnectStatusWithAggregatesFilter<$PrismaModel>
+        | $Enums.MaguiConnectStatus
+      _count?: NestedIntFilter<$PrismaModel>
+      _min?: NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+      _max?: NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+    }
+
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type MaguiConnectProfileScalarRelationFilter = {
+    is?: MaguiConnectProfileWhereInput
+    isNot?: MaguiConnectProfileWhereInput
+  }
+
+  export type MaguiConnectLinkCountOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    label?: SortOrder
+    url?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    clickCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaguiConnectLinkAvgOrderByAggregateInput = {
+    sortOrder?: SortOrder
+    clickCount?: SortOrder
+  }
+
+  export type MaguiConnectLinkMaxOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    label?: SortOrder
+    url?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    clickCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaguiConnectLinkMinOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    label?: SortOrder
+    url?: SortOrder
+    icon?: SortOrder
+    sortOrder?: SortOrder
+    isActive?: SortOrder
+    clickCount?: SortOrder
+    createdAt?: SortOrder
+    updatedAt?: SortOrder
+  }
+
+  export type MaguiConnectLinkSumOrderByAggregateInput = {
+    sortOrder?: SortOrder
+    clickCount?: SortOrder
+  }
+
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonNullableFilterBase<$PrismaModel>>,
+          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, "path">
+        >,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, "path">>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
+  export type MaguiConnectPublishLogCountOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    event?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    payload?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaguiConnectPublishLogMaxOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    event?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaguiConnectPublishLogMinOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    event?: SortOrder
+    status?: SortOrder
+    message?: SortOrder
+    createdAt?: SortOrder
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+          Exclude<
+            keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+            "path"
+          >
+        >,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<
+        Omit<
+          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
+          "path"
+        >
+      >
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumLeadStatusFilter<$PrismaModel = never> = {
@@ -65819,35 +71769,6 @@ export namespace Prisma {
       | NestedEnumLeadActivityTypeFilter<$PrismaModel>
       | $Enums.LeadActivityType
   }
-  export type JsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<JsonNullableFilterBase<$PrismaModel>>,
-          Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, "path">
-        >,
-        Required<JsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, "path">>
-
-  export type JsonNullableFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
 
   export type LeadActivityCountOrderByAggregateInput = {
     id?: SortOrder
@@ -65896,46 +71817,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
     _max?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
-  }
-  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-          Exclude<
-            keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-            "path"
-          >
-        >,
-        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<
-        Omit<
-          Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>,
-          "path"
-        >
-      >
-
-  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-    _count?: NestedIntNullableFilter<$PrismaModel>
-    _min?: NestedJsonNullableFilter<$PrismaModel>
-    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type MessageTemplateCountOrderByAggregateInput = {
@@ -66002,11 +71883,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type ServiceCategoryCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
@@ -66049,14 +71925,6 @@ export namespace Prisma {
 
   export type ServiceCategorySumOrderByAggregateInput = {
     suggestedValue?: SortOrder
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type EnumProjectStatusFilter<$PrismaModel = never> = {
@@ -66114,11 +71982,6 @@ export namespace Prisma {
     every?: BriefingEntryWhereInput
     some?: BriefingEntryWhereInput
     none?: BriefingEntryWhereInput
-  }
-
-  export type UserScalarRelationFilter = {
-    is?: UserWhereInput
-    isNot?: UserWhereInput
   }
 
   export type UpdateListRelationFilter = {
@@ -68320,6 +74183,15 @@ export namespace Prisma {
     connect?: EmailLogWhereUniqueInput | EmailLogWhereUniqueInput[]
   }
 
+  export type MaguiConnectProfileCreateNestedOneWithoutUserInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutUserInput
+    connect?: MaguiConnectProfileWhereUniqueInput
+  }
+
   export type ProjectUncheckedCreateNestedManyWithoutClientInput = {
     create?:
       | XOR<
@@ -68512,6 +74384,15 @@ export namespace Prisma {
       | EmailLogCreateOrConnectWithoutUserInput[]
     createMany?: EmailLogCreateManyUserInputEnvelope
     connect?: EmailLogWhereUniqueInput | EmailLogWhereUniqueInput[]
+  }
+
+  export type MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutUserInput
+    connect?: MaguiConnectProfileWhereUniqueInput
   }
 
   export type EnumUserRoleFieldUpdateOperationsInput = {
@@ -68889,6 +74770,25 @@ export namespace Prisma {
     deleteMany?: EmailLogScalarWhereInput | EmailLogScalarWhereInput[]
   }
 
+  export type MaguiConnectProfileUpdateOneWithoutUserNestedInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutUserInput
+    upsert?: MaguiConnectProfileUpsertWithoutUserInput
+    disconnect?: MaguiConnectProfileWhereInput | boolean
+    delete?: MaguiConnectProfileWhereInput | boolean
+    connect?: MaguiConnectProfileWhereUniqueInput
+    update?: XOR<
+      XOR<
+        MaguiConnectProfileUpdateToOneWithWhereWithoutUserInput,
+        MaguiConnectProfileUpdateWithoutUserInput
+      >,
+      MaguiConnectProfileUncheckedUpdateWithoutUserInput
+    >
+  }
+
   export type ProjectUncheckedUpdateManyWithoutClientNestedInput = {
     create?:
       | XOR<
@@ -69260,6 +75160,330 @@ export namespace Prisma {
       | EmailLogUpdateManyWithWhereWithoutUserInput[]
     deleteMany?: EmailLogScalarWhereInput | EmailLogScalarWhereInput[]
   }
+
+  export type MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutUserInput
+    upsert?: MaguiConnectProfileUpsertWithoutUserInput
+    disconnect?: MaguiConnectProfileWhereInput | boolean
+    delete?: MaguiConnectProfileWhereInput | boolean
+    connect?: MaguiConnectProfileWhereUniqueInput
+    update?: XOR<
+      XOR<
+        MaguiConnectProfileUpdateToOneWithWhereWithoutUserInput,
+        MaguiConnectProfileUpdateWithoutUserInput
+      >,
+      MaguiConnectProfileUncheckedUpdateWithoutUserInput
+    >
+  }
+
+  export type UserCreateNestedOneWithoutMaguiConnectProfileInput = {
+    create?: XOR<
+      UserCreateWithoutMaguiConnectProfileInput,
+      UserUncheckedCreateWithoutMaguiConnectProfileInput
+    >
+    connectOrCreate?: UserCreateOrConnectWithoutMaguiConnectProfileInput
+    connect?: UserWhereUniqueInput
+  }
+
+  export type MaguiConnectLinkCreateNestedManyWithoutProfileInput = {
+    create?:
+      | XOR<
+          MaguiConnectLinkCreateWithoutProfileInput,
+          MaguiConnectLinkUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectLinkCreateWithoutProfileInput[]
+      | MaguiConnectLinkUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput[]
+    createMany?: MaguiConnectLinkCreateManyProfileInputEnvelope
+    connect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+  }
+
+  export type MaguiConnectPublishLogCreateNestedManyWithoutProfileInput = {
+    create?:
+      | XOR<
+          MaguiConnectPublishLogCreateWithoutProfileInput,
+          MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectPublishLogCreateWithoutProfileInput[]
+      | MaguiConnectPublishLogUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput
+      | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput[]
+    createMany?: MaguiConnectPublishLogCreateManyProfileInputEnvelope
+    connect?:
+      | MaguiConnectPublishLogWhereUniqueInput
+      | MaguiConnectPublishLogWhereUniqueInput[]
+  }
+
+  export type MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput = {
+    create?:
+      | XOR<
+          MaguiConnectLinkCreateWithoutProfileInput,
+          MaguiConnectLinkUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectLinkCreateWithoutProfileInput[]
+      | MaguiConnectLinkUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput[]
+    createMany?: MaguiConnectLinkCreateManyProfileInputEnvelope
+    connect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+  }
+
+  export type MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectPublishLogCreateWithoutProfileInput,
+            MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+          >
+        | MaguiConnectPublishLogCreateWithoutProfileInput[]
+        | MaguiConnectPublishLogUncheckedCreateWithoutProfileInput[]
+      connectOrCreate?:
+        | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput
+        | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput[]
+      createMany?: MaguiConnectPublishLogCreateManyProfileInputEnvelope
+      connect?:
+        | MaguiConnectPublishLogWhereUniqueInput
+        | MaguiConnectPublishLogWhereUniqueInput[]
+    }
+
+  export type EnumMaguiConnectStatusFieldUpdateOperationsInput = {
+    set?: $Enums.MaguiConnectStatus
+  }
+
+  export type UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput = {
+    create?: XOR<
+      UserCreateWithoutMaguiConnectProfileInput,
+      UserUncheckedCreateWithoutMaguiConnectProfileInput
+    >
+    connectOrCreate?: UserCreateOrConnectWithoutMaguiConnectProfileInput
+    upsert?: UserUpsertWithoutMaguiConnectProfileInput
+    connect?: UserWhereUniqueInput
+    update?: XOR<
+      XOR<
+        UserUpdateToOneWithWhereWithoutMaguiConnectProfileInput,
+        UserUpdateWithoutMaguiConnectProfileInput
+      >,
+      UserUncheckedUpdateWithoutMaguiConnectProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkUpdateManyWithoutProfileNestedInput = {
+    create?:
+      | XOR<
+          MaguiConnectLinkCreateWithoutProfileInput,
+          MaguiConnectLinkUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectLinkCreateWithoutProfileInput[]
+      | MaguiConnectLinkUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput[]
+    upsert?:
+      | MaguiConnectLinkUpsertWithWhereUniqueWithoutProfileInput
+      | MaguiConnectLinkUpsertWithWhereUniqueWithoutProfileInput[]
+    createMany?: MaguiConnectLinkCreateManyProfileInputEnvelope
+    set?: MaguiConnectLinkWhereUniqueInput | MaguiConnectLinkWhereUniqueInput[]
+    disconnect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    delete?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    connect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    update?:
+      | MaguiConnectLinkUpdateWithWhereUniqueWithoutProfileInput
+      | MaguiConnectLinkUpdateWithWhereUniqueWithoutProfileInput[]
+    updateMany?:
+      | MaguiConnectLinkUpdateManyWithWhereWithoutProfileInput
+      | MaguiConnectLinkUpdateManyWithWhereWithoutProfileInput[]
+    deleteMany?:
+      | MaguiConnectLinkScalarWhereInput
+      | MaguiConnectLinkScalarWhereInput[]
+  }
+
+  export type MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput = {
+    create?:
+      | XOR<
+          MaguiConnectPublishLogCreateWithoutProfileInput,
+          MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectPublishLogCreateWithoutProfileInput[]
+      | MaguiConnectPublishLogUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput
+      | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput[]
+    upsert?:
+      | MaguiConnectPublishLogUpsertWithWhereUniqueWithoutProfileInput
+      | MaguiConnectPublishLogUpsertWithWhereUniqueWithoutProfileInput[]
+    createMany?: MaguiConnectPublishLogCreateManyProfileInputEnvelope
+    set?:
+      | MaguiConnectPublishLogWhereUniqueInput
+      | MaguiConnectPublishLogWhereUniqueInput[]
+    disconnect?:
+      | MaguiConnectPublishLogWhereUniqueInput
+      | MaguiConnectPublishLogWhereUniqueInput[]
+    delete?:
+      | MaguiConnectPublishLogWhereUniqueInput
+      | MaguiConnectPublishLogWhereUniqueInput[]
+    connect?:
+      | MaguiConnectPublishLogWhereUniqueInput
+      | MaguiConnectPublishLogWhereUniqueInput[]
+    update?:
+      | MaguiConnectPublishLogUpdateWithWhereUniqueWithoutProfileInput
+      | MaguiConnectPublishLogUpdateWithWhereUniqueWithoutProfileInput[]
+    updateMany?:
+      | MaguiConnectPublishLogUpdateManyWithWhereWithoutProfileInput
+      | MaguiConnectPublishLogUpdateManyWithWhereWithoutProfileInput[]
+    deleteMany?:
+      | MaguiConnectPublishLogScalarWhereInput
+      | MaguiConnectPublishLogScalarWhereInput[]
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput = {
+    create?:
+      | XOR<
+          MaguiConnectLinkCreateWithoutProfileInput,
+          MaguiConnectLinkUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectLinkCreateWithoutProfileInput[]
+      | MaguiConnectLinkUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput
+      | MaguiConnectLinkCreateOrConnectWithoutProfileInput[]
+    upsert?:
+      | MaguiConnectLinkUpsertWithWhereUniqueWithoutProfileInput
+      | MaguiConnectLinkUpsertWithWhereUniqueWithoutProfileInput[]
+    createMany?: MaguiConnectLinkCreateManyProfileInputEnvelope
+    set?: MaguiConnectLinkWhereUniqueInput | MaguiConnectLinkWhereUniqueInput[]
+    disconnect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    delete?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    connect?:
+      | MaguiConnectLinkWhereUniqueInput
+      | MaguiConnectLinkWhereUniqueInput[]
+    update?:
+      | MaguiConnectLinkUpdateWithWhereUniqueWithoutProfileInput
+      | MaguiConnectLinkUpdateWithWhereUniqueWithoutProfileInput[]
+    updateMany?:
+      | MaguiConnectLinkUpdateManyWithWhereWithoutProfileInput
+      | MaguiConnectLinkUpdateManyWithWhereWithoutProfileInput[]
+    deleteMany?:
+      | MaguiConnectLinkScalarWhereInput
+      | MaguiConnectLinkScalarWhereInput[]
+  }
+
+  export type MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectPublishLogCreateWithoutProfileInput,
+            MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+          >
+        | MaguiConnectPublishLogCreateWithoutProfileInput[]
+        | MaguiConnectPublishLogUncheckedCreateWithoutProfileInput[]
+      connectOrCreate?:
+        | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput
+        | MaguiConnectPublishLogCreateOrConnectWithoutProfileInput[]
+      upsert?:
+        | MaguiConnectPublishLogUpsertWithWhereUniqueWithoutProfileInput
+        | MaguiConnectPublishLogUpsertWithWhereUniqueWithoutProfileInput[]
+      createMany?: MaguiConnectPublishLogCreateManyProfileInputEnvelope
+      set?:
+        | MaguiConnectPublishLogWhereUniqueInput
+        | MaguiConnectPublishLogWhereUniqueInput[]
+      disconnect?:
+        | MaguiConnectPublishLogWhereUniqueInput
+        | MaguiConnectPublishLogWhereUniqueInput[]
+      delete?:
+        | MaguiConnectPublishLogWhereUniqueInput
+        | MaguiConnectPublishLogWhereUniqueInput[]
+      connect?:
+        | MaguiConnectPublishLogWhereUniqueInput
+        | MaguiConnectPublishLogWhereUniqueInput[]
+      update?:
+        | MaguiConnectPublishLogUpdateWithWhereUniqueWithoutProfileInput
+        | MaguiConnectPublishLogUpdateWithWhereUniqueWithoutProfileInput[]
+      updateMany?:
+        | MaguiConnectPublishLogUpdateManyWithWhereWithoutProfileInput
+        | MaguiConnectPublishLogUpdateManyWithWhereWithoutProfileInput[]
+      deleteMany?:
+        | MaguiConnectPublishLogScalarWhereInput
+        | MaguiConnectPublishLogScalarWhereInput[]
+    }
+
+  export type MaguiConnectProfileCreateNestedOneWithoutLinksInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutLinksInput,
+      MaguiConnectProfileUncheckedCreateWithoutLinksInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutLinksInput
+    connect?: MaguiConnectProfileWhereUniqueInput
+  }
+
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
+  export type MaguiConnectProfileUpdateOneRequiredWithoutLinksNestedInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutLinksInput,
+      MaguiConnectProfileUncheckedCreateWithoutLinksInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutLinksInput
+    upsert?: MaguiConnectProfileUpsertWithoutLinksInput
+    connect?: MaguiConnectProfileWhereUniqueInput
+    update?: XOR<
+      XOR<
+        MaguiConnectProfileUpdateToOneWithWhereWithoutLinksInput,
+        MaguiConnectProfileUpdateWithoutLinksInput
+      >,
+      MaguiConnectProfileUncheckedUpdateWithoutLinksInput
+    >
+  }
+
+  export type MaguiConnectProfileCreateNestedOneWithoutPublishLogsInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutPublishLogsInput,
+      MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutPublishLogsInput
+    connect?: MaguiConnectProfileWhereUniqueInput
+  }
+
+  export type MaguiConnectProfileUpdateOneRequiredWithoutPublishLogsNestedInput =
+    {
+      create?: XOR<
+        MaguiConnectProfileCreateWithoutPublishLogsInput,
+        MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput
+      >
+      connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutPublishLogsInput
+      upsert?: MaguiConnectProfileUpsertWithoutPublishLogsInput
+      connect?: MaguiConnectProfileWhereUniqueInput
+      update?: XOR<
+        XOR<
+          MaguiConnectProfileUpdateToOneWithWhereWithoutPublishLogsInput,
+          MaguiConnectProfileUpdateWithoutPublishLogsInput
+        >,
+        MaguiConnectProfileUncheckedUpdateWithoutPublishLogsInput
+      >
+    }
 
   export type UserCreateNestedOneWithoutOwnedLeadsInput = {
     create?: XOR<
@@ -69781,10 +76005,6 @@ export namespace Prisma {
       | ProjectCreateOrConnectWithoutServiceCategoryInput[]
     createMany?: ProjectCreateManyServiceCategoryInputEnvelope
     connect?: ProjectWhereUniqueInput | ProjectWhereUniqueInput[]
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
   }
 
   export type ProjectUpdateManyWithoutServiceCategoryNestedInput = {
@@ -73187,6 +79407,88 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type NestedEnumMaguiConnectStatusFilter<$PrismaModel = never> = {
+    equals?:
+      | $Enums.MaguiConnectStatus
+      | EnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    not?:
+      | NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+      | $Enums.MaguiConnectStatus
+  }
+
+  export type NestedEnumMaguiConnectStatusWithAggregatesFilter<
+    $PrismaModel = never,
+  > = {
+    equals?:
+      | $Enums.MaguiConnectStatus
+      | EnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    in?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    notIn?:
+      | $Enums.MaguiConnectStatus[]
+      | ListEnumMaguiConnectStatusFieldRefInput<$PrismaModel>
+    not?:
+      | NestedEnumMaguiConnectStatusWithAggregatesFilter<$PrismaModel>
+      | $Enums.MaguiConnectStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+    _max?: NestedEnumMaguiConnectStatusFilter<$PrismaModel>
+  }
+
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<
+          Required<NestedJsonNullableFilterBase<$PrismaModel>>,
+          Exclude<
+            keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>,
+            "path"
+          >
+        >,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<
+        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, "path">
+      >
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?:
+      | InputJsonValue
+      | JsonFieldRefInput<$PrismaModel>
+      | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+  }
+
   export type NestedEnumLeadStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.LeadStatus | EnumLeadStatusFieldRefInput<$PrismaModel>
     in?: $Enums.LeadStatus[] | ListEnumLeadStatusFieldRefInput<$PrismaModel>
@@ -73258,53 +79560,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
     _max?: NestedEnumLeadActivityTypeFilter<$PrismaModel>
-  }
-  export type NestedJsonNullableFilter<$PrismaModel = never> =
-    | PatchUndefined<
-        Either<
-          Required<NestedJsonNullableFilterBase<$PrismaModel>>,
-          Exclude<
-            keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>,
-            "path"
-          >
-        >,
-        Required<NestedJsonNullableFilterBase<$PrismaModel>>
-      >
-    | OptionalFlat<
-        Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, "path">
-      >
-
-  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
-    equals?:
-      | InputJsonValue
-      | JsonFieldRefInput<$PrismaModel>
-      | JsonNullValueFilter
-    path?: string[]
-    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
-    string_contains?: string | StringFieldRefInput<$PrismaModel>
-    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
-    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
-    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
-    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
-    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type NestedEnumProjectStatusFilter<$PrismaModel = never> = {
@@ -74541,6 +80796,56 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type MaguiConnectProfileCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUncheckedCreateWithoutUserInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileCreateOrConnectWithoutUserInput = {
+    where: MaguiConnectProfileWhereUniqueInput
+    create: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+  }
+
   export type ProjectUpsertWithWhereUniqueWithoutClientInput = {
     where: ProjectWhereUniqueInput
     update: XOR<
@@ -75157,6 +81462,657 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"EmailLog"> | Date | string
   }
 
+  export type MaguiConnectProfileUpsertWithoutUserInput = {
+    update: XOR<
+      MaguiConnectProfileUpdateWithoutUserInput,
+      MaguiConnectProfileUncheckedUpdateWithoutUserInput
+    >
+    create: XOR<
+      MaguiConnectProfileCreateWithoutUserInput,
+      MaguiConnectProfileUncheckedCreateWithoutUserInput
+    >
+    where?: MaguiConnectProfileWhereInput
+  }
+
+  export type MaguiConnectProfileUpdateToOneWithWhereWithoutUserInput = {
+    where?: MaguiConnectProfileWhereInput
+    data: XOR<
+      MaguiConnectProfileUpdateWithoutUserInput,
+      MaguiConnectProfileUncheckedUpdateWithoutUserInput
+    >
+  }
+
+  export type MaguiConnectProfileUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateWithoutUserInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type UserCreateWithoutMaguiConnectProfileInput = {
+    id?: string
+    clerkId: string
+    email: string
+    name?: string | null
+    role?: $Enums.UserRole
+    companyName?: string | null
+    phone?: string | null
+    position?: string | null
+    avatarUrl?: string | null
+    taxId?: string | null
+    stripeCustomerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectCreateNestedManyWithoutClientInput
+    projectMemberships?: ProjectMemberCreateNestedManyWithoutUserInput
+    ownedLeads?: LeadCreateNestedManyWithoutAssignedToInput
+    leadNotes?: LeadNoteCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogCreateNestedManyWithoutActorInput
+    scheduledReminders?: ScheduledReminderCreateNestedManyWithoutRecipientUserInput
+    approvalEvents?: ApprovalEventCreateNestedManyWithoutActorInput
+    leadActivities?: LeadActivityCreateNestedManyWithoutAuthorInput
+    documents?: DocumentCreateNestedManyWithoutClientInput
+    createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
+    billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
+    emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+  }
+
+  export type UserUncheckedCreateWithoutMaguiConnectProfileInput = {
+    id?: string
+    clerkId: string
+    email: string
+    name?: string | null
+    role?: $Enums.UserRole
+    companyName?: string | null
+    phone?: string | null
+    position?: string | null
+    avatarUrl?: string | null
+    taxId?: string | null
+    stripeCustomerId?: string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    projects?: ProjectUncheckedCreateNestedManyWithoutClientInput
+    projectMemberships?: ProjectMemberUncheckedCreateNestedManyWithoutUserInput
+    ownedLeads?: LeadUncheckedCreateNestedManyWithoutAssignedToInput
+    leadNotes?: LeadNoteUncheckedCreateNestedManyWithoutAuthorInput
+    notifications?: NotificationUncheckedCreateNestedManyWithoutUserInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutActorInput
+    scheduledReminders?: ScheduledReminderUncheckedCreateNestedManyWithoutRecipientUserInput
+    approvalEvents?: ApprovalEventUncheckedCreateNestedManyWithoutActorInput
+    leadActivities?: LeadActivityUncheckedCreateNestedManyWithoutAuthorInput
+    documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
+    createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
+    billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
+    emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+  }
+
+  export type UserCreateOrConnectWithoutMaguiConnectProfileInput = {
+    where: UserWhereUniqueInput
+    create: XOR<
+      UserCreateWithoutMaguiConnectProfileInput,
+      UserUncheckedCreateWithoutMaguiConnectProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkCreateWithoutProfileInput = {
+    id?: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectLinkUncheckedCreateWithoutProfileInput = {
+    id?: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectLinkCreateOrConnectWithoutProfileInput = {
+    where: MaguiConnectLinkWhereUniqueInput
+    create: XOR<
+      MaguiConnectLinkCreateWithoutProfileInput,
+      MaguiConnectLinkUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkCreateManyProfileInputEnvelope = {
+    data:
+      | MaguiConnectLinkCreateManyProfileInput
+      | MaguiConnectLinkCreateManyProfileInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaguiConnectPublishLogCreateWithoutProfileInput = {
+    id?: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectPublishLogUncheckedCreateWithoutProfileInput = {
+    id?: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectPublishLogCreateOrConnectWithoutProfileInput = {
+    where: MaguiConnectPublishLogWhereUniqueInput
+    create: XOR<
+      MaguiConnectPublishLogCreateWithoutProfileInput,
+      MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectPublishLogCreateManyProfileInputEnvelope = {
+    data:
+      | MaguiConnectPublishLogCreateManyProfileInput
+      | MaguiConnectPublishLogCreateManyProfileInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type UserUpsertWithoutMaguiConnectProfileInput = {
+    update: XOR<
+      UserUpdateWithoutMaguiConnectProfileInput,
+      UserUncheckedUpdateWithoutMaguiConnectProfileInput
+    >
+    create: XOR<
+      UserCreateWithoutMaguiConnectProfileInput,
+      UserUncheckedCreateWithoutMaguiConnectProfileInput
+    >
+    where?: UserWhereInput
+  }
+
+  export type UserUpdateToOneWithWhereWithoutMaguiConnectProfileInput = {
+    where?: UserWhereInput
+    data: XOR<
+      UserUpdateWithoutMaguiConnectProfileInput,
+      UserUncheckedUpdateWithoutMaguiConnectProfileInput
+    >
+  }
+
+  export type UserUpdateWithoutMaguiConnectProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUpdateManyWithoutClientNestedInput
+    projectMemberships?: ProjectMemberUpdateManyWithoutUserNestedInput
+    ownedLeads?: LeadUpdateManyWithoutAssignedToNestedInput
+    leadNotes?: LeadNoteUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutActorNestedInput
+    scheduledReminders?: ScheduledReminderUpdateManyWithoutRecipientUserNestedInput
+    approvalEvents?: ApprovalEventUpdateManyWithoutActorNestedInput
+    leadActivities?: LeadActivityUpdateManyWithoutAuthorNestedInput
+    documents?: DocumentUpdateManyWithoutClientNestedInput
+    createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
+    billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
+    emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+  }
+
+  export type UserUncheckedUpdateWithoutMaguiConnectProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    clerkId?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    name?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    position?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    taxId?: NullableStringFieldUpdateOperationsInput | string | null
+    stripeCustomerId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    projects?: ProjectUncheckedUpdateManyWithoutClientNestedInput
+    projectMemberships?: ProjectMemberUncheckedUpdateManyWithoutUserNestedInput
+    ownedLeads?: LeadUncheckedUpdateManyWithoutAssignedToNestedInput
+    leadNotes?: LeadNoteUncheckedUpdateManyWithoutAuthorNestedInput
+    notifications?: NotificationUncheckedUpdateManyWithoutUserNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutActorNestedInput
+    scheduledReminders?: ScheduledReminderUncheckedUpdateManyWithoutRecipientUserNestedInput
+    approvalEvents?: ApprovalEventUncheckedUpdateManyWithoutActorNestedInput
+    leadActivities?: LeadActivityUncheckedUpdateManyWithoutAuthorNestedInput
+    documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
+    createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
+    billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
+    emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+  }
+
+  export type MaguiConnectLinkUpsertWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectLinkWhereUniqueInput
+    update: XOR<
+      MaguiConnectLinkUpdateWithoutProfileInput,
+      MaguiConnectLinkUncheckedUpdateWithoutProfileInput
+    >
+    create: XOR<
+      MaguiConnectLinkCreateWithoutProfileInput,
+      MaguiConnectLinkUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkUpdateWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectLinkWhereUniqueInput
+    data: XOR<
+      MaguiConnectLinkUpdateWithoutProfileInput,
+      MaguiConnectLinkUncheckedUpdateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkUpdateManyWithWhereWithoutProfileInput = {
+    where: MaguiConnectLinkScalarWhereInput
+    data: XOR<
+      MaguiConnectLinkUpdateManyMutationInput,
+      MaguiConnectLinkUncheckedUpdateManyWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectLinkScalarWhereInput = {
+    AND?: MaguiConnectLinkScalarWhereInput | MaguiConnectLinkScalarWhereInput[]
+    OR?: MaguiConnectLinkScalarWhereInput[]
+    NOT?: MaguiConnectLinkScalarWhereInput | MaguiConnectLinkScalarWhereInput[]
+    id?: StringFilter<"MaguiConnectLink"> | string
+    profileId?: StringFilter<"MaguiConnectLink"> | string
+    label?: StringFilter<"MaguiConnectLink"> | string
+    url?: StringFilter<"MaguiConnectLink"> | string
+    icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+    sortOrder?: IntFilter<"MaguiConnectLink"> | number
+    isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+    clickCount?: IntFilter<"MaguiConnectLink"> | number
+    createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+    updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
+  }
+
+  export type MaguiConnectPublishLogUpsertWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectPublishLogWhereUniqueInput
+    update: XOR<
+      MaguiConnectPublishLogUpdateWithoutProfileInput,
+      MaguiConnectPublishLogUncheckedUpdateWithoutProfileInput
+    >
+    create: XOR<
+      MaguiConnectPublishLogCreateWithoutProfileInput,
+      MaguiConnectPublishLogUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectPublishLogUpdateWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectPublishLogWhereUniqueInput
+    data: XOR<
+      MaguiConnectPublishLogUpdateWithoutProfileInput,
+      MaguiConnectPublishLogUncheckedUpdateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectPublishLogUpdateManyWithWhereWithoutProfileInput = {
+    where: MaguiConnectPublishLogScalarWhereInput
+    data: XOR<
+      MaguiConnectPublishLogUpdateManyMutationInput,
+      MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectPublishLogScalarWhereInput = {
+    AND?:
+      | MaguiConnectPublishLogScalarWhereInput
+      | MaguiConnectPublishLogScalarWhereInput[]
+    OR?: MaguiConnectPublishLogScalarWhereInput[]
+    NOT?:
+      | MaguiConnectPublishLogScalarWhereInput
+      | MaguiConnectPublishLogScalarWhereInput[]
+    id?: StringFilter<"MaguiConnectPublishLog"> | string
+    profileId?: StringFilter<"MaguiConnectPublishLog"> | string
+    event?: StringFilter<"MaguiConnectPublishLog"> | string
+    status?: StringFilter<"MaguiConnectPublishLog"> | string
+    message?: StringNullableFilter<"MaguiConnectPublishLog"> | string | null
+    payload?: JsonNullableFilter<"MaguiConnectPublishLog">
+    createdAt?: DateTimeFilter<"MaguiConnectPublishLog"> | Date | string
+  }
+
+  export type MaguiConnectProfileCreateWithoutLinksInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMaguiConnectProfileInput
+    publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUncheckedCreateWithoutLinksInput = {
+    id?: string
+    userId: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileCreateOrConnectWithoutLinksInput = {
+    where: MaguiConnectProfileWhereUniqueInput
+    create: XOR<
+      MaguiConnectProfileCreateWithoutLinksInput,
+      MaguiConnectProfileUncheckedCreateWithoutLinksInput
+    >
+  }
+
+  export type MaguiConnectProfileUpsertWithoutLinksInput = {
+    update: XOR<
+      MaguiConnectProfileUpdateWithoutLinksInput,
+      MaguiConnectProfileUncheckedUpdateWithoutLinksInput
+    >
+    create: XOR<
+      MaguiConnectProfileCreateWithoutLinksInput,
+      MaguiConnectProfileUncheckedCreateWithoutLinksInput
+    >
+    where?: MaguiConnectProfileWhereInput
+  }
+
+  export type MaguiConnectProfileUpdateToOneWithWhereWithoutLinksInput = {
+    where?: MaguiConnectProfileWhereInput
+    data: XOR<
+      MaguiConnectProfileUpdateWithoutLinksInput,
+      MaguiConnectProfileUncheckedUpdateWithoutLinksInput
+    >
+  }
+
+  export type MaguiConnectProfileUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateWithoutLinksInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileCreateWithoutPublishLogsInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMaguiConnectProfileInput
+    links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput = {
+    id?: string
+    userId: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    avatarUrl?: string | null
+    domain?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileCreateOrConnectWithoutPublishLogsInput = {
+    where: MaguiConnectProfileWhereUniqueInput
+    create: XOR<
+      MaguiConnectProfileCreateWithoutPublishLogsInput,
+      MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput
+    >
+  }
+
+  export type MaguiConnectProfileUpsertWithoutPublishLogsInput = {
+    update: XOR<
+      MaguiConnectProfileUpdateWithoutPublishLogsInput,
+      MaguiConnectProfileUncheckedUpdateWithoutPublishLogsInput
+    >
+    create: XOR<
+      MaguiConnectProfileCreateWithoutPublishLogsInput,
+      MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput
+    >
+    where?: MaguiConnectProfileWhereInput
+  }
+
+  export type MaguiConnectProfileUpdateToOneWithWhereWithoutPublishLogsInput = {
+    where?: MaguiConnectProfileWhereInput
+    data: XOR<
+      MaguiConnectProfileUpdateWithoutPublishLogsInput,
+      MaguiConnectProfileUncheckedUpdateWithoutPublishLogsInput
+    >
+  }
+
+  export type MaguiConnectProfileUpdateWithoutPublishLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
+    links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateWithoutPublishLogsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
   export type UserCreateWithoutOwnedLeadsInput = {
     id?: string
     clerkId: string
@@ -75183,6 +82139,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutOwnedLeadsInput = {
@@ -75211,6 +82168,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutOwnedLeadsInput = {
@@ -75435,6 +82393,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutOwnedLeadsInput = {
@@ -75463,6 +82422,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type LeadNoteUpsertWithWhereUniqueWithoutLeadInput = {
@@ -75679,6 +82639,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeadNotesInput = {
@@ -75707,6 +82668,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeadNotesInput = {
@@ -75861,6 +82823,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadNotesInput = {
@@ -75889,6 +82852,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type LeadCreateWithoutActivitiesInput = {
@@ -75973,6 +82937,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutLeadActivitiesInput = {
@@ -76001,6 +82966,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutLeadActivitiesInput = {
@@ -76155,6 +83121,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutLeadActivitiesInput = {
@@ -76183,6 +83150,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutServiceCategoryInput = {
@@ -76389,6 +83357,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProjectsInput = {
@@ -76417,6 +83386,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProjectsInput = {
@@ -77046,6 +84016,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProjectsInput = {
@@ -77074,6 +84045,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectMemberUpsertWithWhereUniqueWithoutProjectInput = {
@@ -77620,6 +84592,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutDocumentsInput = {
@@ -77648,6 +84621,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutDocumentsInput = {
@@ -78034,6 +85008,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutDocumentsInput = {
@@ -78062,6 +85037,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectUpsertWithoutDocumentsInput = {
@@ -78389,6 +85365,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutClientInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutCreatedDocumentVersionsInput = {
@@ -78417,6 +85394,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutCreatedDocumentVersionsInput = {
@@ -78545,6 +85523,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutClientNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutCreatedDocumentVersionsInput = {
@@ -78573,6 +85552,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type DocumentCreateWithoutClausesInput = {
@@ -79597,6 +86577,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutProjectMembershipsInput = {
@@ -79625,6 +86606,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutProjectMembershipsInput = {
@@ -79785,6 +86767,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutProjectMembershipsInput = {
@@ -79813,6 +86796,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutUpdatesInput = {
@@ -80309,6 +87293,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutApprovalEventsInput = {
@@ -80337,6 +87322,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutApprovalEventsInput = {
@@ -80457,6 +87443,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutApprovalEventsInput = {
@@ -80485,6 +87472,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutActionItemsInput = {
@@ -81059,6 +88047,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -81087,6 +88076,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -81221,6 +88211,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -81249,6 +88240,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectUpsertWithoutNotificationsInput = {
@@ -81381,6 +88373,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutScheduledRemindersInput = {
@@ -81409,6 +88402,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutScheduledRemindersInput = {
@@ -81465,6 +88459,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutScheduledRemindersInput = {
@@ -81493,6 +88488,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type UserCreateWithoutAuditLogsInput = {
@@ -81521,6 +88517,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -81549,6 +88546,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -81683,6 +88681,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -81711,6 +88710,7 @@ export namespace Prisma {
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectUpsertWithoutAuditLogsInput = {
@@ -82544,6 +89544,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     emailLogs?: EmailLogCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutBillingProfileInput = {
@@ -82572,6 +89573,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     emailLogs?: EmailLogUncheckedCreateNestedManyWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutBillingProfileInput = {
@@ -82628,6 +89630,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     emailLogs?: EmailLogUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutBillingProfileInput = {
@@ -82656,6 +89659,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     emailLogs?: EmailLogUncheckedUpdateManyWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateWithoutInvoicesInput = {
@@ -83503,6 +90507,7 @@ export namespace Prisma {
     documents?: DocumentCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileCreateNestedOneWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileCreateNestedOneWithoutUserInput
   }
 
   export type UserUncheckedCreateWithoutEmailLogsInput = {
@@ -83531,6 +90536,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedCreateNestedManyWithoutClientInput
     createdDocumentVersions?: DocumentVersionUncheckedCreateNestedManyWithoutCreatedByInput
     billingProfile?: BillingProfileUncheckedCreateNestedOneWithoutUserInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedCreateNestedOneWithoutUserInput
   }
 
   export type UserCreateOrConnectWithoutEmailLogsInput = {
@@ -83587,6 +90593,7 @@ export namespace Prisma {
     documents?: DocumentUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUpdateOneWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUpdateOneWithoutUserNestedInput
   }
 
   export type UserUncheckedUpdateWithoutEmailLogsInput = {
@@ -83615,6 +90622,7 @@ export namespace Prisma {
     documents?: DocumentUncheckedUpdateManyWithoutClientNestedInput
     createdDocumentVersions?: DocumentVersionUncheckedUpdateManyWithoutCreatedByNestedInput
     billingProfile?: BillingProfileUncheckedUpdateOneWithoutUserNestedInput
+    maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
   export type ProjectCreateManyClientInput = {
@@ -84420,6 +91428,90 @@ export namespace Prisma {
     providerMessageId?: NullableStringFieldUpdateOperationsInput | string | null
     errorMessage?: NullableStringFieldUpdateOperationsInput | string | null
     sentAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkCreateManyProfileInput = {
+    id?: string
+    label: string
+    url: string
+    icon?: string | null
+    sortOrder?: number
+    isActive?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectPublishLogCreateManyProfileInput = {
+    id?: string
+    event: string
+    status: string
+    message?: string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectLinkUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateManyWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogUncheckedUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    event?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    message?: NullableStringFieldUpdateOperationsInput | string | null
+    payload?: NullableJsonNullValueInput | InputJsonValue
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

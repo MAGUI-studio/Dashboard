@@ -10,6 +10,7 @@ type HeaderStaticPath =
   | "/admin/projects/register"
   | "/admin/service-categories"
   | "/admin/service-categories/new"
+  | "/magui-connect"
   | "/projects"
 
 export type HeaderNavLeaf = {
@@ -23,6 +24,7 @@ export type HeaderNavLeaf = {
     | "clients"
     | "crm"
     | "tag"
+    | "link"
   label: string
   description?: string
   featured?: boolean
@@ -151,6 +153,12 @@ export function getClientHeaderNav(
       icon: "projects",
       label: t("client.projects"),
       matchPrefix: "/projects",
+    },
+    {
+      href: "/magui-connect",
+      icon: "link",
+      label: t("client.maguiConnect"),
+      matchPrefix: "/magui-connect",
     },
   ]
 }

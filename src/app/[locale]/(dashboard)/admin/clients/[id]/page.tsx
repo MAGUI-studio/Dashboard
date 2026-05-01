@@ -23,6 +23,8 @@ import {
   CardTitle,
 } from "@/src/components/ui/card"
 
+import { MaguiConnectAdminView } from "@/src/components/admin/MaguiConnectAdminView"
+
 import { getAdminClientDetails } from "@/src/lib/client-data"
 import { isAdmin } from "@/src/lib/permissions"
 import prisma from "@/src/lib/prisma"
@@ -70,6 +72,15 @@ export default async function ClientDetailsPage({
   }
 
   const localUser = await getAdminClientDetails(id)
+
+  const maguiConnectProfile = localUser
+    ? await prisma.maguiConnectProfile.findUnique({
+        where: { userId: localUser.id },
+        include: {
+          links: true,
+        },
+      })
+    : null
 
   const projects = localUser?.projects ?? []
   const activeProjects = projects.filter(
@@ -192,6 +203,14 @@ export default async function ClientDetailsPage({
           </CardContent>
         </Card>
       </div>
+
+      {localUser ? (
+        <MaguiConnectAdminView
+          clientName={fullName}
+          userId={localUser.id}
+          profile={maguiConnectProfile}
+        />
+      ) : null}
 
       <Card className="rounded-[2rem] border-border/40 bg-muted/10 backdrop-blur-md">
         <CardHeader className="border-b border-border/20">

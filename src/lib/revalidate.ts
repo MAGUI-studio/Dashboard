@@ -65,3 +65,8 @@ export function revalidateClientNotifications() {
   revalidateTag(cacheTags.clientNotifications, "default")
   revalidateTag(cacheTags.clientPendingApprovals, "default")
 }
+
+export function revalidateMaguiConnectProfile(userId: string) {
+  revalidateTag(cacheTags.maguiConnectProfile(userId), "default")
+  revalidateTag(cacheTags.maguiConnectAdmin, "default")
+}

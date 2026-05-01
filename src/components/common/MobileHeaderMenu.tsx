@@ -13,6 +13,7 @@ import {
   ChartPie,
   DownloadSimple,
   House,
+  Link as LinkIcon,
   List,
   ProjectorScreen,
   SignOut,
@@ -78,6 +79,8 @@ function NavIcon({
       return <ProjectorScreen weight="duotone" className={className} />
     case "tag":
       return <Tag weight="bold" className={className} />
+    case "link":
+      return <LinkIcon weight="bold" className={className} />
     case "list":
     case "plus":
     default:
@@ -260,10 +263,12 @@ export function MobileHeaderMenu({
                           : "border-white/10 bg-white/45 text-muted-foreground/80 hover:border-brand-primary/10 hover:bg-white/70 hover:text-foreground dark:bg-white/5 dark:hover:bg-white/8"
                       }`}
                     >
-                      <NavIcon icon={item.icon} className="size-4.5" />
-                      <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em]">
-                        {item.label}
-                      </span>
+                      <>
+                        <NavIcon icon={item.icon} className="size-4.5" />
+                        <span className="font-sans text-[10px] font-black uppercase tracking-[0.16em]">
+                          {item.label}
+                        </span>
+                      </>
                     </Link>
                   </SheetClose>
                 ))

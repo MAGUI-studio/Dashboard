@@ -56,6 +56,9 @@ const envSchema = z.object({
   STRIPE_PUBLISHABLE_KEY: z.string().optional(),
   STRIPE_SECRET_KEY: z.string().optional(),
   STRIPE_WEBHOOK_SECRET: z.string().optional(),
+  MAGUI_CONNECT_RENDERER_SHARED_SECRET: z.string().optional(),
+  MAGUI_CONNECT_RENDERER_URL: z.string().url().optional(),
+  MAGUI_CONNECT_RENDERER_REVALIDATE_SECRET: z.string().optional(),
   NODE_ENV: z
     .enum(["development", "test", "production"])
     .default("development"),
@@ -105,6 +108,11 @@ const parsedEnv = envSchema.safeParse({
   STRIPE_PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY,
   STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY,
   STRIPE_WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET,
+  MAGUI_CONNECT_RENDERER_SHARED_SECRET:
+    process.env.MAGUI_CONNECT_RENDERER_SHARED_SECRET,
+  MAGUI_CONNECT_RENDERER_URL: process.env.MAGUI_CONNECT_RENDERER_URL,
+  MAGUI_CONNECT_RENDERER_REVALIDATE_SECRET:
+    process.env.MAGUI_CONNECT_RENDERER_REVALIDATE_SECRET,
   NODE_ENV: process.env.NODE_ENV,
 })
 

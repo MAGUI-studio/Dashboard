@@ -10,6 +10,7 @@ import {
   ChartLineUp,
   ChartPie,
   House,
+  Link as LinkIcon,
   List,
   Plus,
   ProjectorScreen,
@@ -53,6 +54,8 @@ function NavIcon({
       return <Plus weight="bold" className={className} />
     case "tag":
       return <Tag weight="bold" className={className} />
+    case "link":
+      return <LinkIcon weight="bold" className={className} />
     case "list":
     default:
       return <List weight="bold" className={className} />
@@ -76,8 +79,8 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
             asChild
             className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
               isNavItemActive(pathname, adminNav.dashboard)
-                ? "bg-brand-primary/12 text-brand-primary"
-                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             }`}
           >
             <Link href={adminNav.dashboard.href}>
@@ -105,8 +108,8 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
                   variant="ghost"
                   className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
                     isActive
-                      ? "bg-brand-primary/12 text-brand-primary"
-                      : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                      ? "bg-muted text-foreground"
+                      : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
                   }`}
                 >
                   <NavIcon icon={group.icon} className="mr-2 size-3.5" />
@@ -133,13 +136,15 @@ export function AdminNav({ isAdmin }: AdminNavProps) {
             asChild
             className={`h-9 rounded-2xl px-4 text-[9px] font-black uppercase tracking-[0.2em] transition-all outline-none focus-visible:ring-0 focus-visible:ring-offset-0 ${
               isNavItemActive(pathname, item)
-                ? "bg-brand-primary/12 text-brand-primary"
-                : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                ? "bg-muted text-foreground"
+                : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
             }`}
           >
             <Link href={item.href}>
-              <NavIcon icon={item.icon} className="mr-2 size-3.5" />
-              {item.label}
+              <>
+                <NavIcon icon={item.icon} className="mr-2 size-3.5" />
+                {item.label}
+              </>
             </Link>
           </Button>
         ))

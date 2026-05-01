@@ -19,4 +19,10 @@ export const cacheTags = {
   clientPendingApprovals: "client:pending-approvals",
   clientHome: "client:home",
   clientNotifications: "client:notifications",
+  maguiConnectProfile: (userId: string) => `magui-connect:profile:${userId}`,
+  maguiConnectPublicByDomain: (domain: string) =>
+    `magui-connect:public:domain:${domain}`,
+  maguiConnectPublicBySlug: (slug: string) =>
+    `magui-connect:public:slug:${slug}`,
+  maguiConnectAdmin: "magui-connect:admin",
 } as const

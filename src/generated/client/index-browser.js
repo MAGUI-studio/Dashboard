@@ -160,6 +160,49 @@ exports.Prisma.UserScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.MaguiConnectProfileScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  status: 'status',
+  slug: 'slug',
+  displayName: 'displayName',
+  headline: 'headline',
+  avatarUrl: 'avatarUrl',
+  domain: 'domain',
+  themeAccent: 'themeAccent',
+  themeBackground: 'themeBackground',
+  themeForeground: 'themeForeground',
+  seoTitle: 'seoTitle',
+  seoDescription: 'seoDescription',
+  publishedAt: 'publishedAt',
+  lastSyncedAt: 'lastSyncedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaguiConnectLinkScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  label: 'label',
+  url: 'url',
+  icon: 'icon',
+  sortOrder: 'sortOrder',
+  isActive: 'isActive',
+  clickCount: 'clickCount',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.MaguiConnectPublishLogScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  event: 'event',
+  status: 'status',
+  message: 'message',
+  payload: 'payload',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.LeadScalarFieldEnum = {
   id: 'id',
   companyName: 'companyName',
@@ -632,6 +675,12 @@ exports.UserRole = exports.$Enums.UserRole = {
   CLIENT: 'CLIENT'
 };
 
+exports.MaguiConnectStatus = exports.$Enums.MaguiConnectStatus = {
+  DRAFT: 'DRAFT',
+  PUBLISHED: 'PUBLISHED',
+  PAUSED: 'PAUSED'
+};
+
 exports.LeadStatus = exports.$Enums.LeadStatus = {
   GARIMPAGEM: 'GARIMPAGEM',
   CONTATO_REALIZADO: 'CONTATO_REALIZADO',
@@ -809,6 +858,9 @@ exports.Prisma.ModelName = {
   DashboardMetricSnapshot: 'DashboardMetricSnapshot',
   EventOutbox: 'EventOutbox',
   User: 'User',
+  MaguiConnectProfile: 'MaguiConnectProfile',
+  MaguiConnectLink: 'MaguiConnectLink',
+  MaguiConnectPublishLog: 'MaguiConnectPublishLog',
   Lead: 'Lead',
   LeadNote: 'LeadNote',
   LeadActivity: 'LeadActivity',
