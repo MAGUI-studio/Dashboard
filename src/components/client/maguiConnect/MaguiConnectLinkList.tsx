@@ -94,7 +94,7 @@ export function MaguiConnectLinkList({ links }: MaguiConnectLinkListProps) {
       {!isAdding ? (
         <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
           <button
-            className="inline-flex h-12 items-center justify-center gap-2 rounded-full bg-foreground px-5 text-[11px] font-black uppercase tracking-[0.18em] text-background transition-all hover:opacity-90"
+            className="inline-flex h-12 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand-primary px-6 text-[11px] font-black uppercase tracking-[0.2em] text-white transition-all hover:bg-brand-primary/90 active:scale-[0.98]"
             type="button"
             onClick={() => setIsAdding(true)}
           >
@@ -128,14 +128,18 @@ export function MaguiConnectLinkList({ links }: MaguiConnectLinkListProps) {
           </div>
           <div className="flex justify-end gap-3">
             <Button
-              className="rounded-full px-5 text-[11px] font-black uppercase tracking-[0.18em]"
+              className="cursor-pointer rounded-full px-5 text-[11px] font-black uppercase tracking-[0.18em]"
               variant="ghost"
-              onClick={() => setIsAdding(false)}
+              onClick={() => {
+                setIsAdding(false)
+                setLabel("")
+                setUrl("")
+              }}
             >
               {t("cancel")}
             </Button>
             <Button
-              className="rounded-full bg-foreground px-5 text-[11px] font-black uppercase tracking-[0.18em] text-background hover:bg-foreground/90"
+              className="cursor-pointer rounded-full bg-brand-primary px-6 text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-brand-primary/90 transition-all active:scale-[0.98]"
               onClick={handleAdd}
             >
               {t("addLink")}

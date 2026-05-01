@@ -64,7 +64,7 @@ export function MaguiConnectLinkItem({ link }: MaguiConnectLinkItemProps) {
         </div>
 
         <Button
-          className="h-9 w-9 rounded-full text-muted-foreground/45 transition-colors hover:bg-muted hover:text-foreground"
+          className="h-9 w-9 cursor-pointer rounded-full text-muted-foreground/45 transition-colors hover:bg-destructive/10 hover:text-destructive"
           size="icon"
           variant="ghost"
           onClick={() => {

@@ -103,7 +103,7 @@ export function MaguiConnectEditor({
 
         <div className="flex justify-start pt-2">
           <Button
-            className="rounded-full bg-foreground px-6 text-[11px] font-black uppercase tracking-[0.18em] text-background hover:bg-foreground/90"
+            className="cursor-pointer rounded-full bg-brand-primary px-8 text-[11px] font-black uppercase tracking-[0.2em] text-white hover:bg-brand-primary/90 transition-all active:scale-[0.98]"
             disabled={isPending}
             onClick={handleSave}
           >
