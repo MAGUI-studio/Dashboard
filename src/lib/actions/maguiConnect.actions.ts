@@ -30,6 +30,50 @@ function toNullable(value?: string | null) {
   return value && value.trim().length > 0 ? value.trim() : null
 }
 
+async function ensureProfileUniqueFields(
+  targetUserId: string,
+  input: MaguiConnectProfileInput
+) {
+  const hasSlug = Object.prototype.hasOwnProperty.call(input, "slug")
+  const hasDomain = Object.prototype.hasOwnProperty.call(input, "domain")
+  const slug = hasSlug
+    ? (toNullable(input.slug)?.toLowerCase() ?? null)
+    : undefined
+  const domain = hasDomain
+    ? (toNullable(input.domain)?.toLowerCase() ?? null)
+    : undefined
+
+  if (slug) {
+    const slugOwner = await prisma.maguiConnectProfile.findFirst({
+      where: {
+        slug,
+        NOT: { userId: targetUserId },
+      },
+      select: { id: true },
+    })
+
+    if (slugOwner) {
+      throw new Error("Este slug nao esta disponivel")
+    }
+  }
+
+  if (domain) {
+    const domainOwner = await prisma.maguiConnectProfile.findFirst({
+      where: {
+        domain,
+        NOT: { userId: targetUserId },
+      },
+      select: { id: true },
+    })
+
+    if (domainOwner) {
+      throw new Error("Este dominio nao esta disponivel")
+    }
+  }
+
+  return { slug, domain }
+}
+
 async function ensureOwnProfile(userId: string, fallbackName?: string | null) {
   const profile = await prisma.maguiConnectProfile.findUnique({
     where: { userId },
@@ -90,22 +134,26 @@ async function saveMaguiConnectProfile(
   })
 
   const description = toNullable(input.description)
+  const { slug, domain } = await ensureProfileUniqueFields(targetUserId, input)
+
+  const profileFields = {
+    displayName: input.title,
+    headline: description,
+    ...(slug !== undefined ? { slug } : {}),
+    ...(domain !== undefined ? { domain } : {}),
+  }
 
   if (existingProfile) {
     return prisma.maguiConnectProfile.update({
       where: { userId: targetUserId },
-      data: {
-        displayName: input.title,
-        headline: description,
-      },
+      data: profileFields,
     })
   }
 
   return prisma.maguiConnectProfile.create({
     data: {
       userId: targetUserId,
-      displayName: input.title,
-      headline: description,
+      ...profileFields,
     },
   })
 }

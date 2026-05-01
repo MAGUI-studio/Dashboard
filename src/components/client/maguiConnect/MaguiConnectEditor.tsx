@@ -28,7 +28,12 @@ export function MaguiConnectEditor({
   const t = useTranslations("MaguiConnect")
   const [isPending, startTransition] = React.useTransition()
 
-  const [formData, setFormData] = React.useState<MaguiConnectProfileInput>({
+  const [formData, setFormData] = React.useState<
+    Pick<MaguiConnectProfileInput, "title" | "description"> & {
+      slug?: string | null
+      domain?: string | null
+    }
+  >({
     title: initialProfile?.displayName ?? "",
     description: initialProfile?.headline ?? "",
   })
@@ -41,7 +46,11 @@ export function MaguiConnectEditor({
         toast.success(t("profileUpdated"))
       } catch (error) {
         console.error(error)
-        toast.error(t("updateFailed"))
+        toast.error(
+          error instanceof Error && error.message
+            ? error.message
+            : t("updateFailed")
+        )
       }
     })
   }
