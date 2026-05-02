@@ -89,6 +89,32 @@ export const ourFileRouter = {
 
       return { uploadedBy: metadata.userId }
     }),
+
+  maguiConnectAvatar: f({
+    image: { maxFileSize: "4MB", maxFileCount: 1 },
+  })
+    .middleware(async () => {
+      const { userId } = await auth()
+      if (!userId) throw new UploadThingError("Unauthorized")
+      const appUser = await getCurrentAppUser()
+      if (!appUser) throw new UploadThingError("Unauthorized")
+
+      return {
+        userId,
+        appUserId: appUser.id,
+      }
+    })
+    .onUploadComplete(async ({ metadata, file }) => {
+      logger.info(
+        {
+          userId: metadata.userId,
+          appUserId: metadata.appUserId,
+          url: file.url,
+        },
+        "Magui Connect Avatar Upload Complete"
+      )
+      return { uploadedBy: metadata.userId, url: file.url }
+    }),
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter

@@ -56,18 +56,40 @@ export function MaguiConnectAdminView({
   const [formData, setFormData] = useState<MaguiConnectProfileInput>({
     title: profile?.displayName ?? clientName,
     description: profile?.headline ?? "",
+    bio: profile?.bio ?? "",
+    avatarUrl: profile?.avatarUrl ?? "",
+    ogImageUrl: profile?.ogImageUrl ?? "",
     slug: profile?.slug ?? "",
     domain: profile?.domain ?? "",
+    professionalCategory: profile?.professionalCategory ?? "",
+    location: profile?.location ?? "",
+    companyName: profile?.companyName ?? "",
+    publicEmail: profile?.publicEmail ?? "",
+    publicPhone: profile?.publicPhone ?? "",
+    whatsapp: profile?.whatsapp ?? "",
+    primaryCtaLabel: profile?.primaryCtaLabel ?? "",
+    primaryCtaUrl: profile?.primaryCtaUrl ?? "",
+    themeAccent: profile?.themeAccent ?? "",
+    themeBackground: profile?.themeBackground ?? "#0a0a0a",
+    themeForeground: profile?.themeForeground ?? "#f5f5f5",
+    seoTitle: profile?.seoTitle ?? "",
+    seoDescription: profile?.seoDescription ?? "",
   })
   const [newLink, setNewLink] = useState<MaguiConnectLinkInput>({
     label: "",
     url: "",
+    kind: "LINK",
+    isFeatured: false,
+    openInNewTab: true,
   })
   const [editingLinkId, setEditingLinkId] = useState<string | null>(null)
   const [editingLinkData, setEditingLinkData] = useState<MaguiConnectLinkInput>(
     {
       label: "",
       url: "",
+      kind: "LINK",
+      isFeatured: false,
+      openInNewTab: true,
     }
   )
 
@@ -367,7 +389,13 @@ export function MaguiConnectAdminView({
                             userId,
                             parsed
                           )
-                          setNewLink({ label: "", url: "" })
+                          setNewLink({
+                            label: "",
+                            url: "",
+                            kind: "LINK",
+                            isFeatured: false,
+                            openInNewTab: true,
+                          })
                           toast.success(t("adminLinkCreateSuccess"))
                           router.refresh()
                         } catch (error) {
@@ -415,6 +443,9 @@ export function MaguiConnectAdminView({
                                   setEditingLinkData({
                                     label: link.label,
                                     url: link.url,
+                                    kind: link.kind ?? "LINK",
+                                    isFeatured: link.isFeatured ?? false,
+                                    openInNewTab: link.openInNewTab ?? true,
                                   })
                                 }}
                               >

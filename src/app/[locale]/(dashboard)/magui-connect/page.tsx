@@ -23,10 +23,10 @@ export default async function MaguiConnectPage() {
   const links = profile?.links ?? []
 
   return (
-    <div className="min-h-full px-6 py-12 lg:px-12 lg:py-24 space-y-48">
+    <div className="min-h-full px-6 py-12 lg:px-12 lg:py-16 space-y-24">
       {/* --- HERO SECTION --- */}
-      <header className="grid gap-20 xl:grid-cols-[1fr_auto_400px]">
-        <div className="space-y-16">
+      <header className="grid gap-16 xl:grid-cols-[1fr_auto_400px]">
+        <div className="space-y-12">
           <div className="flex items-center gap-4">
             <div className="h-[1px] w-12 bg-brand-primary/60" />
             <span className="text-[10px] font-black uppercase tracking-[0.5em] text-muted-foreground/60">
@@ -34,7 +34,7 @@ export default async function MaguiConnectPage() {
             </span>
           </div>
 
-          <div className="relative h-24 w-full max-w-[420px] -ml-2">
+          <div className="relative h-20 w-full max-w-[360px] -ml-2">
             <Image
               src="/logos/connect/connect_DM.svg"
               alt="Magui Connect"
@@ -51,11 +51,11 @@ export default async function MaguiConnectPage() {
             />
           </div>
 
-          <div className="space-y-10">
-            <h1 className="text-5xl font-black leading-[0.8] tracking-[-0.06em] lg:text-7xl xl:text-8xl">
+          <div className="space-y-6">
+            <h1 className="text-4xl font-black leading-[0.85] tracking-[-0.04em] lg:text-6xl xl:text-7xl">
               {t("landingTitle")}
             </h1>
-            <p className="max-w-3xl text-2xl font-medium leading-tight tracking-tight text-muted-foreground lg:text-4xl">
+            <p className="max-w-2xl text-xl font-medium leading-tight tracking-tight text-muted-foreground lg:text-2xl">
               {t("crmDescription")}
             </p>
           </div>
@@ -65,24 +65,24 @@ export default async function MaguiConnectPage() {
         <div className="hidden w-[1px] bg-border/40 xl:block" />
 
         {/* How it Works Column */}
-        <div className="space-y-12 xl:pt-48">
+        <div className="space-y-8 xl:pt-24">
           <div className="space-y-2">
             <p className="text-[11px] font-black uppercase tracking-[0.3em] text-foreground">
               {t("landingEyebrow")}
             </p>
             <div className="h-1 w-8 bg-brand-primary" />
           </div>
-          <div className="space-y-10">
+          <div className="space-y-6">
             {[
               { id: "01", text: t("landingPointOne") },
               { id: "02", text: t("landingPointTwo") },
               { id: "03", text: t("landingPointThree") },
             ].map((step) => (
-              <div key={step.id} className="group space-y-3">
+              <div key={step.id} className="group space-y-2">
                 <span className="text-[10px] font-black text-brand-primary/40 group-hover:text-brand-primary transition-colors">
                   {step.id}
                 </span>
-                <p className="text-lg leading-snug text-muted-foreground/80 lg:text-xl">
+                <p className="text-base leading-snug text-muted-foreground/80 lg:text-lg">
                   {step.text}
                 </p>
               </div>
@@ -92,50 +92,23 @@ export default async function MaguiConnectPage() {
       </header>
 
       {/* --- MANAGEMENT SECTION --- */}
-      <div className="grid gap-32 border-t border-border/40 pt-24 xl:grid-cols-2 xl:gap-64">
+      <div className="grid gap-16 border-t border-border/40 pt-16 xl:grid-cols-[1.2fr_1fr] xl:gap-24">
         {/* Profile Editor Column */}
-        <section className="space-y-16">
-          <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-brand-primary">
-                /
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                {t("registerEyebrow")}
-              </span>
-            </div>
-            <h2 className="text-4xl font-black tracking-tighter lg:text-5xl">
+        <section className="space-y-10 w-full max-w-4xl">
+          <div className="space-y-2">
+            <h2 className="text-3xl font-black tracking-tighter lg:text-4xl">
               {t("registerTitle")}
             </h2>
+            <p className="text-sm text-muted-foreground">
+              {t("registerDescription")}
+            </p>
           </div>
-          <div className="max-w-2xl">
-            <MaguiConnectEditor initialProfile={profile} />
-          </div>
+          <MaguiConnectEditor initialProfile={profile} />
         </section>
 
         {/* Links List Column */}
-        <section className="space-y-16">
-          <div className="space-y-6">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-black text-brand-primary">
-                /
-              </span>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground/60">
-                {t("linksEyebrow")}
-              </span>
-            </div>
-            <div className="space-y-4">
-              <h2 className="text-4xl font-black tracking-tighter lg:text-5xl">
-                {t("linksTitle")}
-              </h2>
-              <p className="max-w-xl text-lg leading-relaxed text-muted-foreground/80">
-                {t("linksDescription")}
-              </p>
-            </div>
-          </div>
-          <div className="max-w-2xl">
-            <MaguiConnectLinkList links={links} />
-          </div>
+        <section className="space-y-10 w-full">
+          <MaguiConnectLinkList links={links} />
         </section>
       </div>
     </div>

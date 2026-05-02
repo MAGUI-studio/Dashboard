@@ -1,7 +1,3 @@
--- This migration was added manually because the Magui Connect schema
--- had already been introduced in `schema.prisma` but was missing from the
--- tracked migration history.
-
 -- CreateEnum
 CREATE TYPE "MaguiConnectStatus" AS ENUM ('DRAFT', 'PUBLISHED', 'PAUSED');
 
@@ -13,8 +9,18 @@ CREATE TABLE "MaguiConnectProfile" (
     "slug" TEXT,
     "displayName" TEXT NOT NULL,
     "headline" TEXT,
+    "bio" TEXT,
     "avatarUrl" TEXT,
+    "ogImageUrl" TEXT,
     "domain" TEXT,
+    "professionalCategory" TEXT,
+    "location" TEXT,
+    "companyName" TEXT,
+    "publicEmail" TEXT,
+    "publicPhone" TEXT,
+    "whatsapp" TEXT,
+    "primaryCtaLabel" TEXT,
+    "primaryCtaUrl" TEXT,
     "themeAccent" TEXT,
     "themeBackground" TEXT DEFAULT '#0a0a0a',
     "themeForeground" TEXT DEFAULT '#f5f5f5',
@@ -35,8 +41,11 @@ CREATE TABLE "MaguiConnectLink" (
     "label" TEXT NOT NULL,
     "url" TEXT NOT NULL,
     "icon" TEXT,
+    "kind" TEXT NOT NULL DEFAULT 'LINK',
     "sortOrder" INTEGER NOT NULL DEFAULT 0,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "isFeatured" BOOLEAN NOT NULL DEFAULT false,
+    "openInNewTab" BOOLEAN NOT NULL DEFAULT true,
     "clickCount" INTEGER NOT NULL DEFAULT 0,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,

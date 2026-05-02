@@ -133,12 +133,27 @@ async function saveMaguiConnectProfile(
     select: { id: true },
   })
 
-  const description = toNullable(input.description)
   const { slug, domain } = await ensureProfileUniqueFields(targetUserId, input)
 
   const profileFields = {
     displayName: input.title,
-    headline: description,
+    headline: toNullable(input.description),
+    bio: toNullable(input.bio),
+    avatarUrl: toNullable(input.avatarUrl),
+    ogImageUrl: toNullable(input.ogImageUrl),
+    professionalCategory: toNullable(input.professionalCategory),
+    location: toNullable(input.location),
+    companyName: toNullable(input.companyName),
+    publicEmail: toNullable(input.publicEmail),
+    publicPhone: toNullable(input.publicPhone),
+    whatsapp: toNullable(input.whatsapp),
+    primaryCtaLabel: toNullable(input.primaryCtaLabel),
+    primaryCtaUrl: toNullable(input.primaryCtaUrl),
+    themeAccent: toNullable(input.themeAccent),
+    themeBackground: toNullable(input.themeBackground),
+    themeForeground: toNullable(input.themeForeground),
+    seoTitle: toNullable(input.seoTitle),
+    seoDescription: toNullable(input.seoDescription),
     ...(slug !== undefined ? { slug } : {}),
     ...(domain !== undefined ? { domain } : {}),
   }
@@ -227,7 +242,10 @@ export async function createOwnMaguiConnectLinkAction(
       profileId: profile.id,
       label: input.label,
       url: input.url,
-      icon: null,
+      icon: toNullable(input.icon),
+      kind: input.kind || "LINK",
+      isFeatured: input.isFeatured ?? false,
+      openInNewTab: input.openInNewTab ?? true,
       isActive: true,
       sortOrder: (last._max.sortOrder ?? -1) + 1,
     },
@@ -263,7 +281,10 @@ export async function updateOwnMaguiConnectLinkAction(
     data: {
       label: input.label,
       url: input.url,
-      icon: null,
+      icon: toNullable(input.icon),
+      kind: input.kind || "LINK",
+      isFeatured: input.isFeatured ?? false,
+      openInNewTab: input.openInNewTab ?? true,
       isActive: true,
     },
   })
@@ -354,7 +375,10 @@ export async function createMaguiConnectLinkForUserAction(
       profileId: profile.id,
       label: input.label,
       url: input.url,
-      icon: null,
+      icon: toNullable(input.icon),
+      kind: input.kind || "LINK",
+      isFeatured: input.isFeatured ?? false,
+      openInNewTab: input.openInNewTab ?? true,
       isActive: true,
       sortOrder: (last._max.sortOrder ?? -1) + 1,
     },
@@ -397,7 +421,10 @@ export async function updateMaguiConnectLinkForUserAction(
     data: {
       label: input.label,
       url: input.url,
-      icon: null,
+      icon: toNullable(input.icon),
+      kind: input.kind || "LINK",
+      isFeatured: input.isFeatured ?? false,
+      openInNewTab: input.openInNewTab ?? true,
       isActive: true,
     },
   })

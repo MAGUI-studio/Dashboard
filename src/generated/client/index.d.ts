@@ -10191,8 +10191,18 @@ export namespace Prisma {
     slug: string | null
     displayName: string | null
     headline: string | null
+    bio: string | null
     avatarUrl: string | null
+    ogImageUrl: string | null
     domain: string | null
+    professionalCategory: string | null
+    location: string | null
+    companyName: string | null
+    publicEmail: string | null
+    publicPhone: string | null
+    whatsapp: string | null
+    primaryCtaLabel: string | null
+    primaryCtaUrl: string | null
     themeAccent: string | null
     themeBackground: string | null
     themeForeground: string | null
@@ -10211,8 +10221,18 @@ export namespace Prisma {
     slug: string | null
     displayName: string | null
     headline: string | null
+    bio: string | null
     avatarUrl: string | null
+    ogImageUrl: string | null
     domain: string | null
+    professionalCategory: string | null
+    location: string | null
+    companyName: string | null
+    publicEmail: string | null
+    publicPhone: string | null
+    whatsapp: string | null
+    primaryCtaLabel: string | null
+    primaryCtaUrl: string | null
     themeAccent: string | null
     themeBackground: string | null
     themeForeground: string | null
@@ -10231,8 +10251,18 @@ export namespace Prisma {
     slug: number
     displayName: number
     headline: number
+    bio: number
     avatarUrl: number
+    ogImageUrl: number
     domain: number
+    professionalCategory: number
+    location: number
+    companyName: number
+    publicEmail: number
+    publicPhone: number
+    whatsapp: number
+    primaryCtaLabel: number
+    primaryCtaUrl: number
     themeAccent: number
     themeBackground: number
     themeForeground: number
@@ -10252,8 +10282,18 @@ export namespace Prisma {
     slug?: true
     displayName?: true
     headline?: true
+    bio?: true
     avatarUrl?: true
+    ogImageUrl?: true
     domain?: true
+    professionalCategory?: true
+    location?: true
+    companyName?: true
+    publicEmail?: true
+    publicPhone?: true
+    whatsapp?: true
+    primaryCtaLabel?: true
+    primaryCtaUrl?: true
     themeAccent?: true
     themeBackground?: true
     themeForeground?: true
@@ -10272,8 +10312,18 @@ export namespace Prisma {
     slug?: true
     displayName?: true
     headline?: true
+    bio?: true
     avatarUrl?: true
+    ogImageUrl?: true
     domain?: true
+    professionalCategory?: true
+    location?: true
+    companyName?: true
+    publicEmail?: true
+    publicPhone?: true
+    whatsapp?: true
+    primaryCtaLabel?: true
+    primaryCtaUrl?: true
     themeAccent?: true
     themeBackground?: true
     themeForeground?: true
@@ -10292,8 +10342,18 @@ export namespace Prisma {
     slug?: true
     displayName?: true
     headline?: true
+    bio?: true
     avatarUrl?: true
+    ogImageUrl?: true
     domain?: true
+    professionalCategory?: true
+    location?: true
+    companyName?: true
+    publicEmail?: true
+    publicPhone?: true
+    whatsapp?: true
+    primaryCtaLabel?: true
+    primaryCtaUrl?: true
     themeAccent?: true
     themeBackground?: true
     themeForeground?: true
@@ -10396,8 +10456,18 @@ export namespace Prisma {
     slug: string | null
     displayName: string
     headline: string | null
+    bio: string | null
     avatarUrl: string | null
+    ogImageUrl: string | null
     domain: string | null
+    professionalCategory: string | null
+    location: string | null
+    companyName: string | null
+    publicEmail: string | null
+    publicPhone: string | null
+    whatsapp: string | null
+    primaryCtaLabel: string | null
+    primaryCtaUrl: string | null
     themeAccent: string | null
     themeBackground: string | null
     themeForeground: string | null
@@ -10437,8 +10507,18 @@ export namespace Prisma {
       slug?: boolean
       displayName?: boolean
       headline?: boolean
+      bio?: boolean
       avatarUrl?: boolean
+      ogImageUrl?: boolean
       domain?: boolean
+      professionalCategory?: boolean
+      location?: boolean
+      companyName?: boolean
+      publicEmail?: boolean
+      publicPhone?: boolean
+      whatsapp?: boolean
+      primaryCtaLabel?: boolean
+      primaryCtaUrl?: boolean
       themeAccent?: boolean
       themeBackground?: boolean
       themeForeground?: boolean
@@ -10466,8 +10546,18 @@ export namespace Prisma {
       slug?: boolean
       displayName?: boolean
       headline?: boolean
+      bio?: boolean
       avatarUrl?: boolean
+      ogImageUrl?: boolean
       domain?: boolean
+      professionalCategory?: boolean
+      location?: boolean
+      companyName?: boolean
+      publicEmail?: boolean
+      publicPhone?: boolean
+      whatsapp?: boolean
+      primaryCtaLabel?: boolean
+      primaryCtaUrl?: boolean
       themeAccent?: boolean
       themeBackground?: boolean
       themeForeground?: boolean
@@ -10492,8 +10582,18 @@ export namespace Prisma {
       slug?: boolean
       displayName?: boolean
       headline?: boolean
+      bio?: boolean
       avatarUrl?: boolean
+      ogImageUrl?: boolean
       domain?: boolean
+      professionalCategory?: boolean
+      location?: boolean
+      companyName?: boolean
+      publicEmail?: boolean
+      publicPhone?: boolean
+      whatsapp?: boolean
+      primaryCtaLabel?: boolean
+      primaryCtaUrl?: boolean
       themeAccent?: boolean
       themeBackground?: boolean
       themeForeground?: boolean
@@ -10515,8 +10615,18 @@ export namespace Prisma {
     slug?: boolean
     displayName?: boolean
     headline?: boolean
+    bio?: boolean
     avatarUrl?: boolean
+    ogImageUrl?: boolean
     domain?: boolean
+    professionalCategory?: boolean
+    location?: boolean
+    companyName?: boolean
+    publicEmail?: boolean
+    publicPhone?: boolean
+    whatsapp?: boolean
+    primaryCtaLabel?: boolean
+    primaryCtaUrl?: boolean
     themeAccent?: boolean
     themeBackground?: boolean
     themeForeground?: boolean
@@ -10537,8 +10647,18 @@ export namespace Prisma {
     | "slug"
     | "displayName"
     | "headline"
+    | "bio"
     | "avatarUrl"
+    | "ogImageUrl"
     | "domain"
+    | "professionalCategory"
+    | "location"
+    | "companyName"
+    | "publicEmail"
+    | "publicPhone"
+    | "whatsapp"
+    | "primaryCtaLabel"
+    | "primaryCtaUrl"
     | "themeAccent"
     | "themeBackground"
     | "themeForeground"
@@ -10586,8 +10706,18 @@ export namespace Prisma {
         slug: string | null
         displayName: string
         headline: string | null
+        bio: string | null
         avatarUrl: string | null
+        ogImageUrl: string | null
         domain: string | null
+        professionalCategory: string | null
+        location: string | null
+        companyName: string | null
+        publicEmail: string | null
+        publicPhone: string | null
+        whatsapp: string | null
+        primaryCtaLabel: string | null
+        primaryCtaUrl: string | null
         themeAccent: string | null
         themeBackground: string | null
         themeForeground: string | null
@@ -11235,8 +11365,18 @@ export namespace Prisma {
     readonly slug: FieldRef<"MaguiConnectProfile", "String">
     readonly displayName: FieldRef<"MaguiConnectProfile", "String">
     readonly headline: FieldRef<"MaguiConnectProfile", "String">
+    readonly bio: FieldRef<"MaguiConnectProfile", "String">
     readonly avatarUrl: FieldRef<"MaguiConnectProfile", "String">
+    readonly ogImageUrl: FieldRef<"MaguiConnectProfile", "String">
     readonly domain: FieldRef<"MaguiConnectProfile", "String">
+    readonly professionalCategory: FieldRef<"MaguiConnectProfile", "String">
+    readonly location: FieldRef<"MaguiConnectProfile", "String">
+    readonly companyName: FieldRef<"MaguiConnectProfile", "String">
+    readonly publicEmail: FieldRef<"MaguiConnectProfile", "String">
+    readonly publicPhone: FieldRef<"MaguiConnectProfile", "String">
+    readonly whatsapp: FieldRef<"MaguiConnectProfile", "String">
+    readonly primaryCtaLabel: FieldRef<"MaguiConnectProfile", "String">
+    readonly primaryCtaUrl: FieldRef<"MaguiConnectProfile", "String">
     readonly themeAccent: FieldRef<"MaguiConnectProfile", "String">
     readonly themeBackground: FieldRef<"MaguiConnectProfile", "String">
     readonly themeForeground: FieldRef<"MaguiConnectProfile", "String">
@@ -11815,8 +11955,11 @@ export namespace Prisma {
     label: string | null
     url: string | null
     icon: string | null
+    kind: string | null
     sortOrder: number | null
     isActive: boolean | null
+    isFeatured: boolean | null
+    openInNewTab: boolean | null
     clickCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -11828,8 +11971,11 @@ export namespace Prisma {
     label: string | null
     url: string | null
     icon: string | null
+    kind: string | null
     sortOrder: number | null
     isActive: boolean | null
+    isFeatured: boolean | null
+    openInNewTab: boolean | null
     clickCount: number | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -11841,8 +11987,11 @@ export namespace Prisma {
     label: number
     url: number
     icon: number
+    kind: number
     sortOrder: number
     isActive: number
+    isFeatured: number
+    openInNewTab: number
     clickCount: number
     createdAt: number
     updatedAt: number
@@ -11865,8 +12014,11 @@ export namespace Prisma {
     label?: true
     url?: true
     icon?: true
+    kind?: true
     sortOrder?: true
     isActive?: true
+    isFeatured?: true
+    openInNewTab?: true
     clickCount?: true
     createdAt?: true
     updatedAt?: true
@@ -11878,8 +12030,11 @@ export namespace Prisma {
     label?: true
     url?: true
     icon?: true
+    kind?: true
     sortOrder?: true
     isActive?: true
+    isFeatured?: true
+    openInNewTab?: true
     clickCount?: true
     createdAt?: true
     updatedAt?: true
@@ -11891,8 +12046,11 @@ export namespace Prisma {
     label?: true
     url?: true
     icon?: true
+    kind?: true
     sortOrder?: true
     isActive?: true
+    isFeatured?: true
+    openInNewTab?: true
     clickCount?: true
     createdAt?: true
     updatedAt?: true
@@ -12000,8 +12158,11 @@ export namespace Prisma {
     label: string
     url: string
     icon: string | null
+    kind: string
     sortOrder: number
     isActive: boolean
+    isFeatured: boolean
+    openInNewTab: boolean
     clickCount: number
     createdAt: Date
     updatedAt: Date
@@ -12036,8 +12197,11 @@ export namespace Prisma {
       label?: boolean
       url?: boolean
       icon?: boolean
+      kind?: boolean
       sortOrder?: boolean
       isActive?: boolean
+      isFeatured?: boolean
+      openInNewTab?: boolean
       clickCount?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -12055,8 +12219,11 @@ export namespace Prisma {
       label?: boolean
       url?: boolean
       icon?: boolean
+      kind?: boolean
       sortOrder?: boolean
       isActive?: boolean
+      isFeatured?: boolean
+      openInNewTab?: boolean
       clickCount?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -12074,8 +12241,11 @@ export namespace Prisma {
       label?: boolean
       url?: boolean
       icon?: boolean
+      kind?: boolean
       sortOrder?: boolean
       isActive?: boolean
+      isFeatured?: boolean
+      openInNewTab?: boolean
       clickCount?: boolean
       createdAt?: boolean
       updatedAt?: boolean
@@ -12090,8 +12260,11 @@ export namespace Prisma {
     label?: boolean
     url?: boolean
     icon?: boolean
+    kind?: boolean
     sortOrder?: boolean
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -12105,8 +12278,11 @@ export namespace Prisma {
     | "label"
     | "url"
     | "icon"
+    | "kind"
     | "sortOrder"
     | "isActive"
+    | "isFeatured"
+    | "openInNewTab"
     | "clickCount"
     | "createdAt"
     | "updatedAt",
@@ -12142,8 +12318,11 @@ export namespace Prisma {
         label: string
         url: string
         icon: string | null
+        kind: string
         sortOrder: number
         isActive: boolean
+        isFeatured: boolean
+        openInNewTab: boolean
         clickCount: number
         createdAt: Date
         updatedAt: Date
@@ -12756,8 +12935,11 @@ export namespace Prisma {
     readonly label: FieldRef<"MaguiConnectLink", "String">
     readonly url: FieldRef<"MaguiConnectLink", "String">
     readonly icon: FieldRef<"MaguiConnectLink", "String">
+    readonly kind: FieldRef<"MaguiConnectLink", "String">
     readonly sortOrder: FieldRef<"MaguiConnectLink", "Int">
     readonly isActive: FieldRef<"MaguiConnectLink", "Boolean">
+    readonly isFeatured: FieldRef<"MaguiConnectLink", "Boolean">
+    readonly openInNewTab: FieldRef<"MaguiConnectLink", "Boolean">
     readonly clickCount: FieldRef<"MaguiConnectLink", "Int">
     readonly createdAt: FieldRef<"MaguiConnectLink", "DateTime">
     readonly updatedAt: FieldRef<"MaguiConnectLink", "DateTime">
@@ -61456,8 +61638,18 @@ export namespace Prisma {
     slug: "slug"
     displayName: "displayName"
     headline: "headline"
+    bio: "bio"
     avatarUrl: "avatarUrl"
+    ogImageUrl: "ogImageUrl"
     domain: "domain"
+    professionalCategory: "professionalCategory"
+    location: "location"
+    companyName: "companyName"
+    publicEmail: "publicEmail"
+    publicPhone: "publicPhone"
+    whatsapp: "whatsapp"
+    primaryCtaLabel: "primaryCtaLabel"
+    primaryCtaUrl: "primaryCtaUrl"
     themeAccent: "themeAccent"
     themeBackground: "themeBackground"
     themeForeground: "themeForeground"
@@ -61478,8 +61670,11 @@ export namespace Prisma {
     label: "label"
     url: "url"
     icon: "icon"
+    kind: "kind"
     sortOrder: "sortOrder"
     isActive: "isActive"
+    isFeatured: "isFeatured"
+    openInNewTab: "openInNewTab"
     clickCount: "clickCount"
     createdAt: "createdAt"
     updatedAt: "updatedAt"
@@ -62867,8 +63062,24 @@ export namespace Prisma {
     slug?: StringNullableFilter<"MaguiConnectProfile"> | string | null
     displayName?: StringFilter<"MaguiConnectProfile"> | string
     headline?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    bio?: StringNullableFilter<"MaguiConnectProfile"> | string | null
     avatarUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    ogImageUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
     domain?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    professionalCategory?:
+      | StringNullableFilter<"MaguiConnectProfile">
+      | string
+      | null
+    location?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    companyName?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    publicEmail?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    publicPhone?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    whatsapp?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+    primaryCtaLabel?:
+      | StringNullableFilter<"MaguiConnectProfile">
+      | string
+      | null
+    primaryCtaUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
     themeAccent?: StringNullableFilter<"MaguiConnectProfile"> | string | null
     themeBackground?:
       | StringNullableFilter<"MaguiConnectProfile">
@@ -62904,8 +63115,18 @@ export namespace Prisma {
     slug?: SortOrderInput | SortOrder
     displayName?: SortOrder
     headline?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    ogImageUrl?: SortOrderInput | SortOrder
     domain?: SortOrderInput | SortOrder
+    professionalCategory?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    companyName?: SortOrderInput | SortOrder
+    publicEmail?: SortOrderInput | SortOrder
+    publicPhone?: SortOrderInput | SortOrder
+    whatsapp?: SortOrderInput | SortOrder
+    primaryCtaLabel?: SortOrderInput | SortOrder
+    primaryCtaUrl?: SortOrderInput | SortOrder
     themeAccent?: SortOrderInput | SortOrder
     themeBackground?: SortOrderInput | SortOrder
     themeForeground?: SortOrderInput | SortOrder
@@ -62934,7 +63155,26 @@ export namespace Prisma {
         | $Enums.MaguiConnectStatus
       displayName?: StringFilter<"MaguiConnectProfile"> | string
       headline?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      bio?: StringNullableFilter<"MaguiConnectProfile"> | string | null
       avatarUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      ogImageUrl?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      professionalCategory?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
+      location?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      companyName?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      publicEmail?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      publicPhone?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      whatsapp?: StringNullableFilter<"MaguiConnectProfile"> | string | null
+      primaryCtaLabel?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
+      primaryCtaUrl?:
+        | StringNullableFilter<"MaguiConnectProfile">
+        | string
+        | null
       themeAccent?: StringNullableFilter<"MaguiConnectProfile"> | string | null
       themeBackground?:
         | StringNullableFilter<"MaguiConnectProfile">
@@ -62975,8 +63215,18 @@ export namespace Prisma {
     slug?: SortOrderInput | SortOrder
     displayName?: SortOrder
     headline?: SortOrderInput | SortOrder
+    bio?: SortOrderInput | SortOrder
     avatarUrl?: SortOrderInput | SortOrder
+    ogImageUrl?: SortOrderInput | SortOrder
     domain?: SortOrderInput | SortOrder
+    professionalCategory?: SortOrderInput | SortOrder
+    location?: SortOrderInput | SortOrder
+    companyName?: SortOrderInput | SortOrder
+    publicEmail?: SortOrderInput | SortOrder
+    publicPhone?: SortOrderInput | SortOrder
+    whatsapp?: SortOrderInput | SortOrder
+    primaryCtaLabel?: SortOrderInput | SortOrder
+    primaryCtaUrl?: SortOrderInput | SortOrder
     themeAccent?: SortOrderInput | SortOrder
     themeBackground?: SortOrderInput | SortOrder
     themeForeground?: SortOrderInput | SortOrder
@@ -63013,11 +63263,51 @@ export namespace Prisma {
       | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
       | string
       | null
+    bio?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
     avatarUrl?:
       | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
       | string
       | null
+    ogImageUrl?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
     domain?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    professionalCategory?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    location?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    companyName?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    publicEmail?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    publicPhone?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    whatsapp?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    primaryCtaLabel?:
+      | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
+      | string
+      | null
+    primaryCtaUrl?:
       | StringNullableWithAggregatesFilter<"MaguiConnectProfile">
       | string
       | null
@@ -63070,8 +63360,11 @@ export namespace Prisma {
     label?: StringFilter<"MaguiConnectLink"> | string
     url?: StringFilter<"MaguiConnectLink"> | string
     icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+    kind?: StringFilter<"MaguiConnectLink"> | string
     sortOrder?: IntFilter<"MaguiConnectLink"> | number
     isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+    isFeatured?: BoolFilter<"MaguiConnectLink"> | boolean
+    openInNewTab?: BoolFilter<"MaguiConnectLink"> | boolean
     clickCount?: IntFilter<"MaguiConnectLink"> | number
     createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
     updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
@@ -63087,8 +63380,11 @@ export namespace Prisma {
     label?: SortOrder
     url?: SortOrder
     icon?: SortOrderInput | SortOrder
+    kind?: SortOrder
     sortOrder?: SortOrder
     isActive?: SortOrder
+    isFeatured?: SortOrder
+    openInNewTab?: SortOrder
     clickCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -63105,8 +63401,11 @@ export namespace Prisma {
       label?: StringFilter<"MaguiConnectLink"> | string
       url?: StringFilter<"MaguiConnectLink"> | string
       icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+      kind?: StringFilter<"MaguiConnectLink"> | string
       sortOrder?: IntFilter<"MaguiConnectLink"> | number
       isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+      isFeatured?: BoolFilter<"MaguiConnectLink"> | boolean
+      openInNewTab?: BoolFilter<"MaguiConnectLink"> | boolean
       clickCount?: IntFilter<"MaguiConnectLink"> | number
       createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
       updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
@@ -63124,8 +63423,11 @@ export namespace Prisma {
     label?: SortOrder
     url?: SortOrder
     icon?: SortOrderInput | SortOrder
+    kind?: SortOrder
     sortOrder?: SortOrder
     isActive?: SortOrder
+    isFeatured?: SortOrder
+    openInNewTab?: SortOrder
     clickCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -63152,8 +63454,11 @@ export namespace Prisma {
       | StringNullableWithAggregatesFilter<"MaguiConnectLink">
       | string
       | null
+    kind?: StringWithAggregatesFilter<"MaguiConnectLink"> | string
     sortOrder?: IntWithAggregatesFilter<"MaguiConnectLink"> | number
     isActive?: BoolWithAggregatesFilter<"MaguiConnectLink"> | boolean
+    isFeatured?: BoolWithAggregatesFilter<"MaguiConnectLink"> | boolean
+    openInNewTab?: BoolWithAggregatesFilter<"MaguiConnectLink"> | boolean
     clickCount?: IntWithAggregatesFilter<"MaguiConnectLink"> | number
     createdAt?: DateTimeWithAggregatesFilter<"MaguiConnectLink"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"MaguiConnectLink"> | Date | string
@@ -67028,8 +67333,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -67051,8 +67366,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -67074,8 +67399,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67107,8 +67445,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67137,8 +67488,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -67158,8 +67519,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67188,8 +67562,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -67214,8 +67601,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -67228,8 +67618,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -67240,8 +67633,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67254,8 +67650,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67267,8 +67666,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -67279,8 +67681,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -67292,8 +67697,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -71374,8 +71782,18 @@ export namespace Prisma {
     slug?: SortOrder
     displayName?: SortOrder
     headline?: SortOrder
+    bio?: SortOrder
     avatarUrl?: SortOrder
+    ogImageUrl?: SortOrder
     domain?: SortOrder
+    professionalCategory?: SortOrder
+    location?: SortOrder
+    companyName?: SortOrder
+    publicEmail?: SortOrder
+    publicPhone?: SortOrder
+    whatsapp?: SortOrder
+    primaryCtaLabel?: SortOrder
+    primaryCtaUrl?: SortOrder
     themeAccent?: SortOrder
     themeBackground?: SortOrder
     themeForeground?: SortOrder
@@ -71394,8 +71812,18 @@ export namespace Prisma {
     slug?: SortOrder
     displayName?: SortOrder
     headline?: SortOrder
+    bio?: SortOrder
     avatarUrl?: SortOrder
+    ogImageUrl?: SortOrder
     domain?: SortOrder
+    professionalCategory?: SortOrder
+    location?: SortOrder
+    companyName?: SortOrder
+    publicEmail?: SortOrder
+    publicPhone?: SortOrder
+    whatsapp?: SortOrder
+    primaryCtaLabel?: SortOrder
+    primaryCtaUrl?: SortOrder
     themeAccent?: SortOrder
     themeBackground?: SortOrder
     themeForeground?: SortOrder
@@ -71414,8 +71842,18 @@ export namespace Prisma {
     slug?: SortOrder
     displayName?: SortOrder
     headline?: SortOrder
+    bio?: SortOrder
     avatarUrl?: SortOrder
+    ogImageUrl?: SortOrder
     domain?: SortOrder
+    professionalCategory?: SortOrder
+    location?: SortOrder
+    companyName?: SortOrder
+    publicEmail?: SortOrder
+    publicPhone?: SortOrder
+    whatsapp?: SortOrder
+    primaryCtaLabel?: SortOrder
+    primaryCtaUrl?: SortOrder
     themeAccent?: SortOrder
     themeBackground?: SortOrder
     themeForeground?: SortOrder
@@ -71462,8 +71900,11 @@ export namespace Prisma {
     label?: SortOrder
     url?: SortOrder
     icon?: SortOrder
+    kind?: SortOrder
     sortOrder?: SortOrder
     isActive?: SortOrder
+    isFeatured?: SortOrder
+    openInNewTab?: SortOrder
     clickCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -71480,8 +71921,11 @@ export namespace Prisma {
     label?: SortOrder
     url?: SortOrder
     icon?: SortOrder
+    kind?: SortOrder
     sortOrder?: SortOrder
     isActive?: SortOrder
+    isFeatured?: SortOrder
+    openInNewTab?: SortOrder
     clickCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -71493,8 +71937,11 @@ export namespace Prisma {
     label?: SortOrder
     url?: SortOrder
     icon?: SortOrder
+    kind?: SortOrder
     sortOrder?: SortOrder
     isActive?: SortOrder
+    isFeatured?: SortOrder
+    openInNewTab?: SortOrder
     clickCount?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -80802,8 +81249,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -80823,8 +81280,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -81490,8 +81957,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81521,8 +82001,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81615,8 +82108,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -81627,8 +82123,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -81797,8 +82296,11 @@ export namespace Prisma {
     label?: StringFilter<"MaguiConnectLink"> | string
     url?: StringFilter<"MaguiConnectLink"> | string
     icon?: StringNullableFilter<"MaguiConnectLink"> | string | null
+    kind?: StringFilter<"MaguiConnectLink"> | string
     sortOrder?: IntFilter<"MaguiConnectLink"> | number
     isActive?: BoolFilter<"MaguiConnectLink"> | boolean
+    isFeatured?: BoolFilter<"MaguiConnectLink"> | boolean
+    openInNewTab?: BoolFilter<"MaguiConnectLink"> | boolean
     clickCount?: IntFilter<"MaguiConnectLink"> | number
     createdAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
     updatedAt?: DateTimeFilter<"MaguiConnectLink"> | Date | string
@@ -81855,8 +82357,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -81877,8 +82389,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -81927,8 +82449,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81959,8 +82494,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -81987,8 +82535,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -82009,8 +82567,18 @@ export namespace Prisma {
     slug?: string | null
     displayName: string
     headline?: string | null
+    bio?: string | null
     avatarUrl?: string | null
+    ogImageUrl?: string | null
     domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
     themeAccent?: string | null
     themeBackground?: string | null
     themeForeground?: string | null
@@ -82059,8 +82627,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -82091,8 +82672,21 @@ export namespace Prisma {
     slug?: NullableStringFieldUpdateOperationsInput | string | null
     displayName?: StringFieldUpdateOperationsInput | string
     headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
     avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
     domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
     themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
     themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
     themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
@@ -91436,8 +92030,11 @@ export namespace Prisma {
     label: string
     url: string
     icon?: string | null
+    kind?: string
     sortOrder?: number
     isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -91457,8 +92054,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91469,8 +92069,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -91481,8 +92084,11 @@ export namespace Prisma {
     label?: StringFieldUpdateOperationsInput | string
     url?: StringFieldUpdateOperationsInput | string
     icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
     sortOrder?: IntFieldUpdateOperationsInput | number
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string

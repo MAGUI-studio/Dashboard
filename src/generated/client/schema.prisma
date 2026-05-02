@@ -266,24 +266,34 @@ enum MaguiConnectStatus {
 }
 
 model MaguiConnectProfile {
-  id              String             @id @default(cuid())
-  userId          String             @unique
-  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  status          MaguiConnectStatus @default(DRAFT)
-  slug            String?            @unique
-  displayName     String
-  headline        String?
-  avatarUrl       String?
-  domain          String?            @unique
-  themeAccent     String?
-  themeBackground String?            @default("#0a0a0a")
-  themeForeground String?            @default("#f5f5f5")
-  seoTitle        String?
-  seoDescription  String?
-  publishedAt     DateTime?
-  lastSyncedAt    DateTime?
-  createdAt       DateTime           @default(now())
-  updatedAt       DateTime           @updatedAt
+  id                   String             @id @default(cuid())
+  userId               String             @unique
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status               MaguiConnectStatus @default(DRAFT)
+  slug                 String?            @unique
+  displayName          String
+  headline             String?
+  bio                  String?            @db.Text
+  avatarUrl            String?
+  ogImageUrl           String?
+  domain               String?            @unique
+  professionalCategory String?
+  location             String?
+  companyName          String?
+  publicEmail          String?
+  publicPhone          String?
+  whatsapp             String?
+  primaryCtaLabel      String?
+  primaryCtaUrl        String?
+  themeAccent          String?
+  themeBackground      String?            @default("#0a0a0a")
+  themeForeground      String?            @default("#f5f5f5")
+  seoTitle             String?
+  seoDescription       String?
+  publishedAt          DateTime?
+  lastSyncedAt         DateTime?
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
 
   links       MaguiConnectLink[]
   publishLogs MaguiConnectPublishLog[]
@@ -293,17 +303,20 @@ model MaguiConnectProfile {
 }
 
 model MaguiConnectLink {
-  id         String              @id @default(cuid())
-  profileId  String
-  profile    MaguiConnectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  label      String
-  url        String
-  icon       String?
-  sortOrder  Int                 @default(0)
-  isActive   Boolean             @default(true)
-  clickCount Int                 @default(0)
-  createdAt  DateTime            @default(now())
-  updatedAt  DateTime            @updatedAt
+  id           String              @id @default(cuid())
+  profileId    String
+  profile      MaguiConnectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  label        String
+  url          String
+  icon         String?
+  kind         String              @default("LINK") // LINK, WHATSAPP, EMAIL, etc
+  sortOrder    Int                 @default(0)
+  isActive     Boolean             @default(true)
+  isFeatured   Boolean             @default(false)
+  openInNewTab Boolean             @default(true)
+  clickCount   Int                 @default(0)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
 
   @@index([profileId, sortOrder])
 }
