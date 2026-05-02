@@ -10,10 +10,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "linkId is required" }, { status: 400 })
     }
 
-    await prisma.maguiConnectLink.update({
+    const link = await prisma.maguiConnectLink.update({
       where: { id: linkId },
       data: {
         clickCount: { increment: 1 },
+      },
+      select: {
+        id: true,
+        profileId: true,
+      },
+    })
+
+    // Record individual event for analytics
+    await prisma.maguiConnectClickEvent.create({
+      data: {
+        linkId: link.id,
+        profileId: link.profileId,
       },
     })
 
