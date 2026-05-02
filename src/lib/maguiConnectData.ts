@@ -113,7 +113,7 @@ function formatPublicPayload(profile: PublicMaguiConnectProfile) {
       headline: profile.headline,
       bio: profile.bio,
       avatarUrl: profile.avatarUrl,
-      ogImageUrl: profile.ogImageUrl,
+      ogImageUrl: profile.ogImageUrl || profile.avatarUrl || null,
       domain: profile.domain,
       slug: profile.slug,
       professionalCategory: profile.professionalCategory,
