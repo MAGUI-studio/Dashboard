@@ -76,8 +76,10 @@ export function MaguiConnectEditor({
     bio: initialProfile?.bio ?? "",
     avatarUrl: initialProfile?.avatarUrl ?? "",
     ogImageUrl: initialProfile?.ogImageUrl ?? "",
-    slug: initialProfile?.slug ?? "",
-    domain: initialProfile?.domain ?? "",
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    slug: undefined as any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    domain: undefined as any,
     professionalCategory: initialProfile?.professionalCategory ?? "",
     location: initialProfile?.location ?? "",
     companyName: initialProfile?.companyName ?? "",

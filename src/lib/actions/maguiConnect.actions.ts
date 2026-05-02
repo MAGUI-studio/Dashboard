@@ -130,7 +130,7 @@ async function saveMaguiConnectProfile(
 ) {
   const existingProfile = await prisma.maguiConnectProfile.findUnique({
     where: { userId: targetUserId },
-    select: { id: true },
+    select: { id: true, slug: true, domain: true },
   })
 
   const { slug, domain } = await ensureProfileUniqueFields(targetUserId, input)
@@ -155,8 +155,16 @@ async function saveMaguiConnectProfile(
     themeForeground: toNullable(input.themeForeground),
     seoTitle: toNullable(input.seoTitle),
     seoDescription: toNullable(input.seoDescription),
-    ...(slug !== undefined ? { slug } : {}),
-    ...(domain !== undefined ? { domain } : {}),
+    ...(slug !== undefined
+      ? { slug }
+      : existingProfile
+        ? { slug: existingProfile.slug }
+        : {}),
+    ...(domain !== undefined
+      ? { domain }
+      : existingProfile
+        ? { domain: existingProfile.domain }
+        : {}),
   }
 
   if (existingProfile) {
