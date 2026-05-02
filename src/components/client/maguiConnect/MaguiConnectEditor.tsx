@@ -70,6 +70,7 @@ export function MaguiConnectEditor({
   const [isPending, startTransition] = React.useTransition()
 
   const [formData, setFormData] = React.useState<MaguiConnectProfileInput>({
+    status: initialProfile?.status ?? "DRAFT",
     title: initialProfile?.displayName ?? "",
     description: initialProfile?.headline ?? "",
     bio: initialProfile?.bio ?? "",
@@ -201,6 +202,49 @@ export function MaguiConnectEditor({
           </div>
 
           <div className="grid gap-10">
+            <div className="grid gap-4">
+              <Label className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary/60">
+                {t("statusLabel")}
+              </Label>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {(["DRAFT", "PUBLISHED", "PAUSED"] as const).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    onClick={() => updateField("status", s)}
+                    className={cn(
+                      "flex flex-col gap-2 rounded-2xl border border-border/30 bg-muted/5 p-4 text-left transition-all hover:bg-muted/10",
+                      formData.status === s &&
+                        "border-brand-primary/40 bg-brand-primary/5 ring-1 ring-brand-primary/20"
+                    )}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={cn(
+                          "text-xs font-black uppercase tracking-wider",
+                          formData.status === s
+                            ? "text-brand-primary"
+                            : "text-foreground/70"
+                        )}
+                      >
+                        {t(`status${s}`)}
+                      </span>
+                      {formData.status === s && (
+                        <Check
+                          size={14}
+                          weight="bold"
+                          className="text-brand-primary"
+                        />
+                      )}
+                    </div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground/60">
+                      {t(`status${s}Desc`)}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div className="grid gap-3">
               <Label
                 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-primary/60"

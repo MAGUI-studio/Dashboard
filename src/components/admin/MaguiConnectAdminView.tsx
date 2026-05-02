@@ -27,6 +27,7 @@ import {
   updateMaguiConnectLinkForUserAction,
   upsertMaguiConnectProfileForUserAction,
 } from "@/src/lib/actions/maguiConnect.actions"
+import { cn } from "@/src/lib/utils/utils"
 import {
   type MaguiConnectLinkInput,
   type MaguiConnectProfileInput,
@@ -39,7 +40,14 @@ interface MaguiConnectAdminViewProps {
   userId: string
   profile:
     | (MaguiConnectProfile & {
-        links: Array<{ id: string; label: string; url: string }>
+        links: Array<{
+          id: string
+          label: string
+          url: string
+          kind?: string
+          isFeatured?: boolean
+          openInNewTab?: boolean
+        }>
       })
     | null
 }
@@ -54,6 +62,7 @@ export function MaguiConnectAdminView({
   const [isPending, startTransition] = useTransition()
   const [isOpen, setIsOpen] = useState(false)
   const [formData, setFormData] = useState<MaguiConnectProfileInput>({
+    status: profile?.status ?? "DRAFT",
     title: profile?.displayName ?? clientName,
     description: profile?.headline ?? "",
     bio: profile?.bio ?? "",
@@ -220,6 +229,42 @@ export function MaguiConnectAdminView({
               </div>
 
               <div className="space-y-3">
+                <div className="grid gap-2">
+                  <Label className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                    {t("statusLabel")}
+                  </Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(["DRAFT", "PUBLISHED", "PAUSED"] as const).map((s) => (
+                      <button
+                        key={s}
+                        type="button"
+                        onClick={() =>
+                          setFormData((prev) => ({ ...prev, status: s }))
+                        }
+                        className={cn(
+                          "flex flex-col gap-1 rounded-xl border border-border/40 p-3 text-left transition-all hover:bg-background/40",
+                          formData.status === s &&
+                            "border-brand-primary/40 bg-brand-primary/5 ring-1 ring-brand-primary/20"
+                        )}
+                      >
+                        <span
+                          className={cn(
+                            "text-[10px] font-black uppercase tracking-wider",
+                            formData.status === s
+                              ? "text-brand-primary"
+                              : "text-foreground/70"
+                          )}
+                        >
+                          {t(`status${s}`)}
+                        </span>
+                        <p className="text-[9px] leading-tight text-muted-foreground/60">
+                          {t(`status${s}Desc`)}
+                        </p>
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="grid gap-2">
                   <Label
                     className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground"

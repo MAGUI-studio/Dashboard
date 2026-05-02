@@ -136,6 +136,7 @@ async function saveMaguiConnectProfile(
   const { slug, domain } = await ensureProfileUniqueFields(targetUserId, input)
 
   const profileFields = {
+    status: input.status,
     displayName: input.title,
     headline: toNullable(input.description),
     bio: toNullable(input.bio),

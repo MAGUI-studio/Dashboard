@@ -1194,6 +1194,13 @@
     "adminLinkDeleteSuccess": "Link removido com sucesso.",
     "adminLinkDeleteError": "Não foi possível remover o link.",
     "adminUpdateSuccess": "Informações do MAGUI Connect atualizadas com sucesso.",
-    "adminUpdateError": "Não foi possível salvar as informações do MAGUI Connect."
+    "adminUpdateError": "Não foi possível salvar as informações do MAGUI Connect.",
+    "statusLabel": "Status da Página",
+    "statusDRAFT": "Rascunho",
+    "statusPUBLISHED": "Publicado",
+    "statusPAUSED": "Pausado",
+    "statusDRAFTDesc": "Página visível apenas para você.",
+    "statusPUBLISHEDDesc": "Página pública e disponível online.",
+    "statusPAUSEDDesc": "Página temporariamente offline."
   }
 }

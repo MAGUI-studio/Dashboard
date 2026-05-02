@@ -89,6 +89,7 @@ const optionalSafeUrlSchema = z
   )
 
 export const maguiConnectProfileSchema = z.object({
+  status: z.enum(["DRAFT", "PUBLISHED", "PAUSED"]).default("DRAFT"),
   title: z.string().min(2).max(80),
   description: z.string().max(280).optional().nullable(),
   bio: z.string().max(2000).optional().nullable(),
