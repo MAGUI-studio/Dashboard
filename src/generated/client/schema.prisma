@@ -297,26 +297,28 @@ model MaguiConnectProfile {
 
   links       MaguiConnectLink[]
   publishLogs MaguiConnectPublishLog[]
+  clickEvents MaguiConnectClickEvent[]
 
   @@index([status])
   @@index([domain])
 }
 
 model MaguiConnectLink {
-  id           String              @id @default(cuid())
+  id           String                   @id @default(cuid())
   profileId    String
-  profile      MaguiConnectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  profile      MaguiConnectProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
   label        String
   url          String
   icon         String?
-  kind         String              @default("LINK") // LINK, WHATSAPP, EMAIL, etc
-  sortOrder    Int                 @default(0)
-  isActive     Boolean             @default(true)
-  isFeatured   Boolean             @default(false)
-  openInNewTab Boolean             @default(true)
-  clickCount   Int                 @default(0)
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
+  kind         String                   @default("LINK") // LINK, WHATSAPP, EMAIL, etc
+  sortOrder    Int                      @default(0)
+  isActive     Boolean                  @default(true)
+  isFeatured   Boolean                  @default(false)
+  openInNewTab Boolean                  @default(true)
+  clickCount   Int                      @default(0)
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  clickEvents  MaguiConnectClickEvent[]
 
   @@index([profileId, sortOrder])
 }
@@ -1034,4 +1036,17 @@ model EmailLog {
   @@index([userId])
   @@index([templateKey])
   @@index([entityType, entityId])
+}
+
+model MaguiConnectClickEvent {
+  id        String              @id @default(cuid())
+  profileId String
+  profile   MaguiConnectProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  linkId    String
+  link      MaguiConnectLink    @relation(fields: [linkId], references: [id], onDelete: Cascade)
+  createdAt DateTime            @default(now())
+
+  @@index([profileId])
+  @@index([linkId])
+  @@index([createdAt])
 }

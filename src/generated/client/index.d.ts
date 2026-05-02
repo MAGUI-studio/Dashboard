@@ -219,6 +219,12 @@ export type PaymentEvent = $Result.DefaultSelection<Prisma.$PaymentEventPayload>
  *
  */
 export type EmailLog = $Result.DefaultSelection<Prisma.$EmailLogPayload>
+/**
+ * Model MaguiConnectClickEvent
+ *
+ */
+export type MaguiConnectClickEvent =
+  $Result.DefaultSelection<Prisma.$MaguiConnectClickEventPayload>
 
 /**
  * Enums
@@ -1138,6 +1144,19 @@ export class PrismaClient<
    * ```
    */
   get emailLog(): Prisma.EmailLogDelegate<ExtArgs, ClientOptions>
+
+  /**
+   * `prisma.maguiConnectClickEvent`: Exposes CRUD operations for the **MaguiConnectClickEvent** model.
+   * Example usage:
+   * ```ts
+   * // Fetch zero or more MaguiConnectClickEvents
+   * const maguiConnectClickEvents = await prisma.maguiConnectClickEvent.findMany()
+   * ```
+   */
+  get maguiConnectClickEvent(): Prisma.MaguiConnectClickEventDelegate<
+    ExtArgs,
+    ClientOptions
+  >
 }
 
 export namespace Prisma {
@@ -1626,6 +1645,7 @@ export namespace Prisma {
     Installment: "Installment"
     PaymentEvent: "PaymentEvent"
     EmailLog: "EmailLog"
+    MaguiConnectClickEvent: "MaguiConnectClickEvent"
   }
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -1687,6 +1707,7 @@ export namespace Prisma {
         | "installment"
         | "paymentEvent"
         | "emailLog"
+        | "maguiConnectClickEvent"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -4550,6 +4571,82 @@ export namespace Prisma {
           }
         }
       }
+      MaguiConnectClickEvent: {
+        payload: Prisma.$MaguiConnectClickEventPayload<ExtArgs>
+        fields: Prisma.MaguiConnectClickEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.MaguiConnectClickEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.MaguiConnectClickEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          findFirst: {
+            args: Prisma.MaguiConnectClickEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.MaguiConnectClickEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          findMany: {
+            args: Prisma.MaguiConnectClickEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>[]
+          }
+          create: {
+            args: Prisma.MaguiConnectClickEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          createMany: {
+            args: Prisma.MaguiConnectClickEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.MaguiConnectClickEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>[]
+          }
+          delete: {
+            args: Prisma.MaguiConnectClickEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          update: {
+            args: Prisma.MaguiConnectClickEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.MaguiConnectClickEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.MaguiConnectClickEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.MaguiConnectClickEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.MaguiConnectClickEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$MaguiConnectClickEventPayload>
+          }
+          aggregate: {
+            args: Prisma.MaguiConnectClickEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateMaguiConnectClickEvent>
+          }
+          groupBy: {
+            args: Prisma.MaguiConnectClickEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<MaguiConnectClickEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.MaguiConnectClickEventCountArgs<ExtArgs>
+            result:
+              | $Utils.Optional<MaguiConnectClickEventCountAggregateOutputType>
+              | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -4700,6 +4797,7 @@ export namespace Prisma {
     installment?: InstallmentOmit
     paymentEvent?: PaymentEventOmit
     emailLog?: EmailLogOmit
+    maguiConnectClickEvent?: MaguiConnectClickEventOmit
   }
 
   /* Types for Logging */
@@ -4947,6 +5045,7 @@ export namespace Prisma {
   export type MaguiConnectProfileCountOutputType = {
     links: number
     publishLogs: number
+    clickEvents: number
   }
 
   export type MaguiConnectProfileCountOutputTypeSelect<
@@ -4956,6 +5055,9 @@ export namespace Prisma {
     publishLogs?:
       | boolean
       | MaguiConnectProfileCountOutputTypeCountPublishLogsArgs
+    clickEvents?:
+      | boolean
+      | MaguiConnectProfileCountOutputTypeCountClickEventsArgs
   }
 
   // Custom InputTypes
@@ -4987,6 +5089,51 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     where?: MaguiConnectPublishLogWhereInput
+  }
+
+  /**
+   * MaguiConnectProfileCountOutputType without action
+   */
+  export type MaguiConnectProfileCountOutputTypeCountClickEventsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectClickEventWhereInput
+  }
+
+  /**
+   * Count Type MaguiConnectLinkCountOutputType
+   */
+
+  export type MaguiConnectLinkCountOutputType = {
+    clickEvents: number
+  }
+
+  export type MaguiConnectLinkCountOutputTypeSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    clickEvents?: boolean | MaguiConnectLinkCountOutputTypeCountClickEventsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectLinkCountOutputType without action
+   */
+  export type MaguiConnectLinkCountOutputTypeDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectLinkCountOutputType
+     */
+    select?: MaguiConnectLinkCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectLinkCountOutputType without action
+   */
+  export type MaguiConnectLinkCountOutputTypeCountClickEventsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectClickEventWhereInput
   }
 
   /**
@@ -10531,6 +10678,7 @@ export namespace Prisma {
       user?: boolean | UserDefaultArgs<ExtArgs>
       links?: boolean | MaguiConnectProfile$linksArgs<ExtArgs>
       publishLogs?: boolean | MaguiConnectProfile$publishLogsArgs<ExtArgs>
+      clickEvents?: boolean | MaguiConnectProfile$clickEventsArgs<ExtArgs>
       _count?: boolean | MaguiConnectProfileCountOutputTypeDefaultArgs<ExtArgs>
     },
     ExtArgs["result"]["maguiConnectProfile"]
@@ -10676,6 +10824,7 @@ export namespace Prisma {
     user?: boolean | UserDefaultArgs<ExtArgs>
     links?: boolean | MaguiConnectProfile$linksArgs<ExtArgs>
     publishLogs?: boolean | MaguiConnectProfile$publishLogsArgs<ExtArgs>
+    clickEvents?: boolean | MaguiConnectProfile$clickEventsArgs<ExtArgs>
     _count?: boolean | MaguiConnectProfileCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaguiConnectProfileIncludeCreateManyAndReturn<
@@ -10697,6 +10846,7 @@ export namespace Prisma {
       user: Prisma.$UserPayload<ExtArgs>
       links: Prisma.$MaguiConnectLinkPayload<ExtArgs>[]
       publishLogs: Prisma.$MaguiConnectPublishLogPayload<ExtArgs>[]
+      clickEvents: Prisma.$MaguiConnectClickEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<
       {
@@ -11319,6 +11469,17 @@ export namespace Prisma {
         >
       | Null
     >
+    clickEvents<T extends MaguiConnectProfile$clickEventsArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfile$clickEventsArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -11908,6 +12069,36 @@ export namespace Prisma {
   }
 
   /**
+   * MaguiConnectProfile.clickEvents
+   */
+  export type MaguiConnectProfile$clickEventsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    where?: MaguiConnectClickEventWhereInput
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?:
+      | MaguiConnectClickEventScalarFieldEnum
+      | MaguiConnectClickEventScalarFieldEnum[]
+  }
+
+  /**
    * MaguiConnectProfile without action
    */
   export type MaguiConnectProfileDefaultArgs<
@@ -12206,6 +12397,8 @@ export namespace Prisma {
       createdAt?: boolean
       updatedAt?: boolean
       profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+      clickEvents?: boolean | MaguiConnectLink$clickEventsArgs<ExtArgs>
+      _count?: boolean | MaguiConnectLinkCountOutputTypeDefaultArgs<ExtArgs>
     },
     ExtArgs["result"]["maguiConnectLink"]
   >
@@ -12292,6 +12485,8 @@ export namespace Prisma {
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
   > = {
     profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    clickEvents?: boolean | MaguiConnectLink$clickEventsArgs<ExtArgs>
+    _count?: boolean | MaguiConnectLinkCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type MaguiConnectLinkIncludeCreateManyAndReturn<
     ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
@@ -12310,6 +12505,7 @@ export namespace Prisma {
     name: "MaguiConnectLink"
     objects: {
       profile: Prisma.$MaguiConnectProfilePayload<ExtArgs>
+      clickEvents: Prisma.$MaguiConnectClickEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<
       {
@@ -12890,6 +13086,17 @@ export namespace Prisma {
       ExtArgs,
       GlobalOmitOptions
     >
+    clickEvents<T extends MaguiConnectLink$clickEventsArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectLink$clickEventsArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+          T,
+          "findMany",
+          GlobalOmitOptions
+        >
+      | Null
+    >
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -13392,6 +13599,36 @@ export namespace Prisma {
      * Limit how many MaguiConnectLinks to delete.
      */
     limit?: number
+  }
+
+  /**
+   * MaguiConnectLink.clickEvents
+   */
+  export type MaguiConnectLink$clickEventsArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    where?: MaguiConnectClickEventWhereInput
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?:
+      | MaguiConnectClickEventScalarFieldEnum
+      | MaguiConnectClickEventScalarFieldEnum[]
   }
 
   /**
@@ -61569,6 +61806,1382 @@ export namespace Prisma {
   }
 
   /**
+   * Model MaguiConnectClickEvent
+   */
+
+  export type AggregateMaguiConnectClickEvent = {
+    _count: MaguiConnectClickEventCountAggregateOutputType | null
+    _min: MaguiConnectClickEventMinAggregateOutputType | null
+    _max: MaguiConnectClickEventMaxAggregateOutputType | null
+  }
+
+  export type MaguiConnectClickEventMinAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    linkId: string | null
+    createdAt: Date | null
+  }
+
+  export type MaguiConnectClickEventMaxAggregateOutputType = {
+    id: string | null
+    profileId: string | null
+    linkId: string | null
+    createdAt: Date | null
+  }
+
+  export type MaguiConnectClickEventCountAggregateOutputType = {
+    id: number
+    profileId: number
+    linkId: number
+    createdAt: number
+    _all: number
+  }
+
+  export type MaguiConnectClickEventMinAggregateInputType = {
+    id?: true
+    profileId?: true
+    linkId?: true
+    createdAt?: true
+  }
+
+  export type MaguiConnectClickEventMaxAggregateInputType = {
+    id?: true
+    profileId?: true
+    linkId?: true
+    createdAt?: true
+  }
+
+  export type MaguiConnectClickEventCountAggregateInputType = {
+    id?: true
+    profileId?: true
+    linkId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type MaguiConnectClickEventAggregateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectClickEvent to aggregate.
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectClickEvents to fetch.
+     */
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the start position
+     */
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectClickEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectClickEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Count returned MaguiConnectClickEvents
+     **/
+    _count?: true | MaguiConnectClickEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the minimum value
+     **/
+    _min?: MaguiConnectClickEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     *
+     * Select which fields to find the maximum value
+     **/
+    _max?: MaguiConnectClickEventMaxAggregateInputType
+  }
+
+  export type GetMaguiConnectClickEventAggregateType<
+    T extends MaguiConnectClickEventAggregateArgs,
+  > = {
+    [P in keyof T & keyof AggregateMaguiConnectClickEvent]: P extends
+      | "_count"
+      | "count"
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateMaguiConnectClickEvent[P]>
+      : GetScalarType<T[P], AggregateMaguiConnectClickEvent[P]>
+  }
+
+  export type MaguiConnectClickEventGroupByArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    where?: MaguiConnectClickEventWhereInput
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithAggregationInput
+      | MaguiConnectClickEventOrderByWithAggregationInput[]
+    by:
+      | MaguiConnectClickEventScalarFieldEnum[]
+      | MaguiConnectClickEventScalarFieldEnum
+    having?: MaguiConnectClickEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: MaguiConnectClickEventCountAggregateInputType | true
+    _min?: MaguiConnectClickEventMinAggregateInputType
+    _max?: MaguiConnectClickEventMaxAggregateInputType
+  }
+
+  export type MaguiConnectClickEventGroupByOutputType = {
+    id: string
+    profileId: string
+    linkId: string
+    createdAt: Date
+    _count: MaguiConnectClickEventCountAggregateOutputType | null
+    _min: MaguiConnectClickEventMinAggregateOutputType | null
+    _max: MaguiConnectClickEventMaxAggregateOutputType | null
+  }
+
+  type GetMaguiConnectClickEventGroupByPayload<
+    T extends MaguiConnectClickEventGroupByArgs,
+  > = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<MaguiConnectClickEventGroupByOutputType, T["by"]> & {
+        [P in keyof T &
+          keyof MaguiConnectClickEventGroupByOutputType]: P extends "_count"
+          ? T[P] extends boolean
+            ? number
+            : GetScalarType<T[P], MaguiConnectClickEventGroupByOutputType[P]>
+          : GetScalarType<T[P], MaguiConnectClickEventGroupByOutputType[P]>
+      }
+    >
+  >
+
+  export type MaguiConnectClickEventSelect<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      linkId?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+      link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectClickEvent"]
+  >
+
+  export type MaguiConnectClickEventSelectCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      linkId?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+      link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectClickEvent"]
+  >
+
+  export type MaguiConnectClickEventSelectUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetSelect<
+    {
+      id?: boolean
+      profileId?: boolean
+      linkId?: boolean
+      createdAt?: boolean
+      profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+      link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+    },
+    ExtArgs["result"]["maguiConnectClickEvent"]
+  >
+
+  export type MaguiConnectClickEventSelectScalar = {
+    id?: boolean
+    profileId?: boolean
+    linkId?: boolean
+    createdAt?: boolean
+  }
+
+  export type MaguiConnectClickEventOmit<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = $Extensions.GetOmit<
+    "id" | "profileId" | "linkId" | "createdAt",
+    ExtArgs["result"]["maguiConnectClickEvent"]
+  >
+  export type MaguiConnectClickEventInclude<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectClickEventIncludeCreateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+  }
+  export type MaguiConnectClickEventIncludeUpdateManyAndReturn<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    profile?: boolean | MaguiConnectProfileDefaultArgs<ExtArgs>
+    link?: boolean | MaguiConnectLinkDefaultArgs<ExtArgs>
+  }
+
+  export type $MaguiConnectClickEventPayload<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    name: "MaguiConnectClickEvent"
+    objects: {
+      profile: Prisma.$MaguiConnectProfilePayload<ExtArgs>
+      link: Prisma.$MaguiConnectLinkPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<
+      {
+        id: string
+        profileId: string
+        linkId: string
+        createdAt: Date
+      },
+      ExtArgs["result"]["maguiConnectClickEvent"]
+    >
+    composites: {}
+  }
+
+  type MaguiConnectClickEventGetPayload<
+    S extends boolean | null | undefined | MaguiConnectClickEventDefaultArgs,
+  > = $Result.GetResult<Prisma.$MaguiConnectClickEventPayload, S>
+
+  type MaguiConnectClickEventCountArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = Omit<
+    MaguiConnectClickEventFindManyArgs,
+    "select" | "include" | "distinct" | "omit"
+  > & {
+    select?: MaguiConnectClickEventCountAggregateInputType | true
+  }
+
+  export interface MaguiConnectClickEventDelegate<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > {
+    [K: symbol]: {
+      types: Prisma.TypeMap<ExtArgs>["model"]["MaguiConnectClickEvent"]
+      meta: { name: "MaguiConnectClickEvent" }
+    }
+    /**
+     * Find zero or one MaguiConnectClickEvent that matches the filter.
+     * @param {MaguiConnectClickEventFindUniqueArgs} args - Arguments to find a MaguiConnectClickEvent
+     * @example
+     * // Get one MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends MaguiConnectClickEventFindUniqueArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventFindUniqueArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "findUnique",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find one MaguiConnectClickEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {MaguiConnectClickEventFindUniqueOrThrowArgs} args - Arguments to find a MaguiConnectClickEvent
+     * @example
+     * // Get one MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends MaguiConnectClickEventFindUniqueOrThrowArgs>(
+      args: SelectSubset<
+        T,
+        MaguiConnectClickEventFindUniqueOrThrowArgs<ExtArgs>
+      >
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "findUniqueOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectClickEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventFindFirstArgs} args - Arguments to find a MaguiConnectClickEvent
+     * @example
+     * // Get one MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends MaguiConnectClickEventFindFirstArgs>(
+      args?: SelectSubset<T, MaguiConnectClickEventFindFirstArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "findFirst",
+        GlobalOmitOptions
+      > | null,
+      null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find the first MaguiConnectClickEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventFindFirstOrThrowArgs} args - Arguments to find a MaguiConnectClickEvent
+     * @example
+     * // Get one MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends MaguiConnectClickEventFindFirstOrThrowArgs>(
+      args?: SelectSubset<
+        T,
+        MaguiConnectClickEventFindFirstOrThrowArgs<ExtArgs>
+      >
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "findFirstOrThrow",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Find zero or more MaguiConnectClickEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all MaguiConnectClickEvents
+     * const maguiConnectClickEvents = await prisma.maguiConnectClickEvent.findMany()
+     *
+     * // Get first 10 MaguiConnectClickEvents
+     * const maguiConnectClickEvents = await prisma.maguiConnectClickEvent.findMany({ take: 10 })
+     *
+     * // Only select the `id`
+     * const maguiConnectClickEventWithIdOnly = await prisma.maguiConnectClickEvent.findMany({ select: { id: true } })
+     *
+     */
+    findMany<T extends MaguiConnectClickEventFindManyArgs>(
+      args?: SelectSubset<T, MaguiConnectClickEventFindManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "findMany",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create a MaguiConnectClickEvent.
+     * @param {MaguiConnectClickEventCreateArgs} args - Arguments to create a MaguiConnectClickEvent.
+     * @example
+     * // Create one MaguiConnectClickEvent
+     * const MaguiConnectClickEvent = await prisma.maguiConnectClickEvent.create({
+     *   data: {
+     *     // ... data to create a MaguiConnectClickEvent
+     *   }
+     * })
+     *
+     */
+    create<T extends MaguiConnectClickEventCreateArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventCreateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "create",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Create many MaguiConnectClickEvents.
+     * @param {MaguiConnectClickEventCreateManyArgs} args - Arguments to create many MaguiConnectClickEvents.
+     * @example
+     * // Create many MaguiConnectClickEvents
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     */
+    createMany<T extends MaguiConnectClickEventCreateManyArgs>(
+      args?: SelectSubset<T, MaguiConnectClickEventCreateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many MaguiConnectClickEvents and returns the data saved in the database.
+     * @param {MaguiConnectClickEventCreateManyAndReturnArgs} args - Arguments to create many MaguiConnectClickEvents.
+     * @example
+     * // Create many MaguiConnectClickEvents
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Create many MaguiConnectClickEvents and only return the `id`
+     * const maguiConnectClickEventWithIdOnly = await prisma.maguiConnectClickEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    createManyAndReturn<
+      T extends MaguiConnectClickEventCreateManyAndReturnArgs,
+    >(
+      args?: SelectSubset<
+        T,
+        MaguiConnectClickEventCreateManyAndReturnArgs<ExtArgs>
+      >
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "createManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Delete a MaguiConnectClickEvent.
+     * @param {MaguiConnectClickEventDeleteArgs} args - Arguments to delete one MaguiConnectClickEvent.
+     * @example
+     * // Delete one MaguiConnectClickEvent
+     * const MaguiConnectClickEvent = await prisma.maguiConnectClickEvent.delete({
+     *   where: {
+     *     // ... filter to delete one MaguiConnectClickEvent
+     *   }
+     * })
+     *
+     */
+    delete<T extends MaguiConnectClickEventDeleteArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventDeleteArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "delete",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Update one MaguiConnectClickEvent.
+     * @param {MaguiConnectClickEventUpdateArgs} args - Arguments to update one MaguiConnectClickEvent.
+     * @example
+     * // Update one MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    update<T extends MaguiConnectClickEventUpdateArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventUpdateArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "update",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Delete zero or more MaguiConnectClickEvents.
+     * @param {MaguiConnectClickEventDeleteManyArgs} args - Arguments to filter MaguiConnectClickEvents to delete.
+     * @example
+     * // Delete a few MaguiConnectClickEvents
+     * const { count } = await prisma.maguiConnectClickEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     *
+     */
+    deleteMany<T extends MaguiConnectClickEventDeleteManyArgs>(
+      args?: SelectSubset<T, MaguiConnectClickEventDeleteManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectClickEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many MaguiConnectClickEvents
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     *
+     */
+    updateMany<T extends MaguiConnectClickEventUpdateManyArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventUpdateManyArgs<ExtArgs>>
+    ): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more MaguiConnectClickEvents and returns the data updated in the database.
+     * @param {MaguiConnectClickEventUpdateManyAndReturnArgs} args - Arguments to update many MaguiConnectClickEvents.
+     * @example
+     * // Update many MaguiConnectClickEvents
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *
+     * // Update zero or more MaguiConnectClickEvents and only return the `id`
+     * const maguiConnectClickEventWithIdOnly = await prisma.maguiConnectClickEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     *
+     */
+    updateManyAndReturn<
+      T extends MaguiConnectClickEventUpdateManyAndReturnArgs,
+    >(
+      args: SelectSubset<
+        T,
+        MaguiConnectClickEventUpdateManyAndReturnArgs<ExtArgs>
+      >
+    ): Prisma.PrismaPromise<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "updateManyAndReturn",
+        GlobalOmitOptions
+      >
+    >
+
+    /**
+     * Create or update one MaguiConnectClickEvent.
+     * @param {MaguiConnectClickEventUpsertArgs} args - Arguments to update or create a MaguiConnectClickEvent.
+     * @example
+     * // Update or create a MaguiConnectClickEvent
+     * const maguiConnectClickEvent = await prisma.maguiConnectClickEvent.upsert({
+     *   create: {
+     *     // ... data to create a MaguiConnectClickEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the MaguiConnectClickEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends MaguiConnectClickEventUpsertArgs>(
+      args: SelectSubset<T, MaguiConnectClickEventUpsertArgs<ExtArgs>>
+    ): Prisma__MaguiConnectClickEventClient<
+      $Result.GetResult<
+        Prisma.$MaguiConnectClickEventPayload<ExtArgs>,
+        T,
+        "upsert",
+        GlobalOmitOptions
+      >,
+      never,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+
+    /**
+     * Count the number of MaguiConnectClickEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventCountArgs} args - Arguments to filter MaguiConnectClickEvents to count.
+     * @example
+     * // Count the number of MaguiConnectClickEvents
+     * const count = await prisma.maguiConnectClickEvent.count({
+     *   where: {
+     *     // ... the filter for the MaguiConnectClickEvents we want to count
+     *   }
+     * })
+     **/
+    count<T extends MaguiConnectClickEventCountArgs>(
+      args?: Subset<T, MaguiConnectClickEventCountArgs>
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<"select", any>
+        ? T["select"] extends true
+          ? number
+          : GetScalarType<
+              T["select"],
+              MaguiConnectClickEventCountAggregateOutputType
+            >
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a MaguiConnectClickEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+     **/
+    aggregate<T extends MaguiConnectClickEventAggregateArgs>(
+      args: Subset<T, MaguiConnectClickEventAggregateArgs>
+    ): Prisma.PrismaPromise<GetMaguiConnectClickEventAggregateType<T>>
+
+    /**
+     * Group by MaguiConnectClickEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {MaguiConnectClickEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     *
+     **/
+    groupBy<
+      T extends MaguiConnectClickEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<"skip", Keys<T>>,
+        Extends<"take", Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: MaguiConnectClickEventGroupByArgs["orderBy"] }
+        : { orderBy?: MaguiConnectClickEventGroupByArgs["orderBy"] },
+      OrderFields extends ExcludeUnderscoreKeys<
+        Keys<MaybeTupleToUnion<T["orderBy"]>>
+      >,
+      ByFields extends MaybeTupleToUnion<T["by"]>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T["having"]>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T["by"] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+        ? `Error: "by" must not be empty.`
+        : HavingValid extends False
+          ? {
+              [P in HavingFields]: P extends ByFields
+                ? never
+                : P extends string
+                  ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+                  : [
+                      Error,
+                      "Field ",
+                      P,
+                      ` in "having" needs to be provided in "by"`,
+                    ]
+            }[HavingFields]
+          : "take" extends Keys<T>
+            ? "orderBy" extends Keys<T>
+              ? ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields]
+              : 'Error: If you provide "take", you also need to provide "orderBy"'
+            : "skip" extends Keys<T>
+              ? "orderBy" extends Keys<T>
+                ? ByValid extends True
+                  ? {}
+                  : {
+                      [P in OrderFields]: P extends ByFields
+                        ? never
+                        : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                    }[OrderFields]
+                : 'Error: If you provide "skip", you also need to provide "orderBy"'
+              : ByValid extends True
+                ? {}
+                : {
+                    [P in OrderFields]: P extends ByFields
+                      ? never
+                      : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+                  }[OrderFields],
+    >(
+      args: SubsetIntersection<
+        T,
+        MaguiConnectClickEventGroupByArgs,
+        OrderByArg
+      > &
+        InputErrors
+    ): {} extends InputErrors
+      ? GetMaguiConnectClickEventGroupByPayload<T>
+      : Prisma.PrismaPromise<InputErrors>
+    /**
+     * Fields of the MaguiConnectClickEvent model
+     */
+    readonly fields: MaguiConnectClickEventFieldRefs
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for MaguiConnectClickEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__MaguiConnectClickEventClient<
+    T,
+    Null = never,
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+    GlobalOmitOptions = {},
+  > extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    profile<T extends MaguiConnectProfileDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectProfileDefaultArgs<ExtArgs>>
+    ): Prisma__MaguiConnectProfileClient<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectProfilePayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    link<T extends MaguiConnectLinkDefaultArgs<ExtArgs> = {}>(
+      args?: Subset<T, MaguiConnectLinkDefaultArgs<ExtArgs>>
+    ): Prisma__MaguiConnectLinkClient<
+      | $Result.GetResult<
+          Prisma.$MaguiConnectLinkPayload<ExtArgs>,
+          T,
+          "findUniqueOrThrow",
+          GlobalOmitOptions
+        >
+      | Null,
+      Null,
+      ExtArgs,
+      GlobalOmitOptions
+    >
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(
+      onfulfilled?:
+        | ((value: T) => TResult1 | PromiseLike<TResult1>)
+        | undefined
+        | null,
+      onrejected?:
+        | ((reason: any) => TResult2 | PromiseLike<TResult2>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(
+      onrejected?:
+        | ((reason: any) => TResult | PromiseLike<TResult>)
+        | undefined
+        | null
+    ): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+  /**
+   * Fields of the MaguiConnectClickEvent model
+   */
+  interface MaguiConnectClickEventFieldRefs {
+    readonly id: FieldRef<"MaguiConnectClickEvent", "String">
+    readonly profileId: FieldRef<"MaguiConnectClickEvent", "String">
+    readonly linkId: FieldRef<"MaguiConnectClickEvent", "String">
+    readonly createdAt: FieldRef<"MaguiConnectClickEvent", "DateTime">
+  }
+
+  // Custom InputTypes
+  /**
+   * MaguiConnectClickEvent findUnique
+   */
+  export type MaguiConnectClickEventFindUniqueArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectClickEvent to fetch.
+     */
+    where: MaguiConnectClickEventWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectClickEvent findUniqueOrThrow
+   */
+  export type MaguiConnectClickEventFindUniqueOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectClickEvent to fetch.
+     */
+    where: MaguiConnectClickEventWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectClickEvent findFirst
+   */
+  export type MaguiConnectClickEventFindFirstArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectClickEvent to fetch.
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectClickEvents to fetch.
+     */
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectClickEvents.
+     */
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectClickEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectClickEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectClickEvents.
+     */
+    distinct?:
+      | MaguiConnectClickEventScalarFieldEnum
+      | MaguiConnectClickEventScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectClickEvent findFirstOrThrow
+   */
+  export type MaguiConnectClickEventFindFirstOrThrowArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectClickEvent to fetch.
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectClickEvents to fetch.
+     */
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for searching for MaguiConnectClickEvents.
+     */
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectClickEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectClickEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectClickEvents.
+     */
+    distinct?:
+      | MaguiConnectClickEventScalarFieldEnum
+      | MaguiConnectClickEventScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectClickEvent findMany
+   */
+  export type MaguiConnectClickEventFindManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter, which MaguiConnectClickEvents to fetch.
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     *
+     * Determine the order of MaguiConnectClickEvents to fetch.
+     */
+    orderBy?:
+      | MaguiConnectClickEventOrderByWithRelationInput
+      | MaguiConnectClickEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     *
+     * Sets the position for listing MaguiConnectClickEvents.
+     */
+    cursor?: MaguiConnectClickEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Take `±n` MaguiConnectClickEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     *
+     * Skip the first `n` MaguiConnectClickEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     *
+     * Filter by unique combinations of MaguiConnectClickEvents.
+     */
+    distinct?:
+      | MaguiConnectClickEventScalarFieldEnum
+      | MaguiConnectClickEventScalarFieldEnum[]
+  }
+
+  /**
+   * MaguiConnectClickEvent create
+   */
+  export type MaguiConnectClickEventCreateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a MaguiConnectClickEvent.
+     */
+    data: XOR<
+      MaguiConnectClickEventCreateInput,
+      MaguiConnectClickEventUncheckedCreateInput
+    >
+  }
+
+  /**
+   * MaguiConnectClickEvent createMany
+   */
+  export type MaguiConnectClickEventCreateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to create many MaguiConnectClickEvents.
+     */
+    data:
+      | MaguiConnectClickEventCreateManyInput
+      | MaguiConnectClickEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * MaguiConnectClickEvent createManyAndReturn
+   */
+  export type MaguiConnectClickEventCreateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many MaguiConnectClickEvents.
+     */
+    data:
+      | MaguiConnectClickEventCreateManyInput
+      | MaguiConnectClickEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectClickEvent update
+   */
+  export type MaguiConnectClickEventUpdateArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a MaguiConnectClickEvent.
+     */
+    data: XOR<
+      MaguiConnectClickEventUpdateInput,
+      MaguiConnectClickEventUncheckedUpdateInput
+    >
+    /**
+     * Choose, which MaguiConnectClickEvent to update.
+     */
+    where: MaguiConnectClickEventWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectClickEvent updateMany
+   */
+  export type MaguiConnectClickEventUpdateManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * The data used to update MaguiConnectClickEvents.
+     */
+    data: XOR<
+      MaguiConnectClickEventUpdateManyMutationInput,
+      MaguiConnectClickEventUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectClickEvents to update
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * Limit how many MaguiConnectClickEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectClickEvent updateManyAndReturn
+   */
+  export type MaguiConnectClickEventUpdateManyAndReturnArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * The data used to update MaguiConnectClickEvents.
+     */
+    data: XOR<
+      MaguiConnectClickEventUpdateManyMutationInput,
+      MaguiConnectClickEventUncheckedUpdateManyInput
+    >
+    /**
+     * Filter which MaguiConnectClickEvents to update
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * Limit how many MaguiConnectClickEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * MaguiConnectClickEvent upsert
+   */
+  export type MaguiConnectClickEventUpsertArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the MaguiConnectClickEvent to update in case it exists.
+     */
+    where: MaguiConnectClickEventWhereUniqueInput
+    /**
+     * In case the MaguiConnectClickEvent found by the `where` argument doesn't exist, create a new MaguiConnectClickEvent with this data.
+     */
+    create: XOR<
+      MaguiConnectClickEventCreateInput,
+      MaguiConnectClickEventUncheckedCreateInput
+    >
+    /**
+     * In case the MaguiConnectClickEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<
+      MaguiConnectClickEventUpdateInput,
+      MaguiConnectClickEventUncheckedUpdateInput
+    >
+  }
+
+  /**
+   * MaguiConnectClickEvent delete
+   */
+  export type MaguiConnectClickEventDeleteArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+    /**
+     * Filter which MaguiConnectClickEvent to delete.
+     */
+    where: MaguiConnectClickEventWhereUniqueInput
+  }
+
+  /**
+   * MaguiConnectClickEvent deleteMany
+   */
+  export type MaguiConnectClickEventDeleteManyArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Filter which MaguiConnectClickEvents to delete
+     */
+    where?: MaguiConnectClickEventWhereInput
+    /**
+     * Limit how many MaguiConnectClickEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * MaguiConnectClickEvent without action
+   */
+  export type MaguiConnectClickEventDefaultArgs<
+    ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs,
+  > = {
+    /**
+     * Select specific fields to fetch from the MaguiConnectClickEvent
+     */
+    select?: MaguiConnectClickEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the MaguiConnectClickEvent
+     */
+    omit?: MaguiConnectClickEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: MaguiConnectClickEventInclude<ExtArgs> | null
+  }
+
+  /**
    * Enums
    */
 
@@ -62228,6 +63841,16 @@ export namespace Prisma {
 
   export type EmailLogScalarFieldEnum =
     (typeof EmailLogScalarFieldEnum)[keyof typeof EmailLogScalarFieldEnum]
+
+  export const MaguiConnectClickEventScalarFieldEnum: {
+    id: "id"
+    profileId: "profileId"
+    linkId: "linkId"
+    createdAt: "createdAt"
+  }
+
+  export type MaguiConnectClickEventScalarFieldEnum =
+    (typeof MaguiConnectClickEventScalarFieldEnum)[keyof typeof MaguiConnectClickEventScalarFieldEnum]
 
   export const SortOrder: {
     asc: "asc"
@@ -63106,6 +64729,7 @@ export namespace Prisma {
     user?: XOR<UserScalarRelationFilter, UserWhereInput>
     links?: MaguiConnectLinkListRelationFilter
     publishLogs?: MaguiConnectPublishLogListRelationFilter
+    clickEvents?: MaguiConnectClickEventListRelationFilter
   }
 
   export type MaguiConnectProfileOrderByWithRelationInput = {
@@ -63139,6 +64763,7 @@ export namespace Prisma {
     user?: UserOrderByWithRelationInput
     links?: MaguiConnectLinkOrderByRelationAggregateInput
     publishLogs?: MaguiConnectPublishLogOrderByRelationAggregateInput
+    clickEvents?: MaguiConnectClickEventOrderByRelationAggregateInput
   }
 
   export type MaguiConnectProfileWhereUniqueInput = Prisma.AtLeast<
@@ -63204,6 +64829,7 @@ export namespace Prisma {
       user?: XOR<UserScalarRelationFilter, UserWhereInput>
       links?: MaguiConnectLinkListRelationFilter
       publishLogs?: MaguiConnectPublishLogListRelationFilter
+      clickEvents?: MaguiConnectClickEventListRelationFilter
     },
     "id" | "userId" | "slug" | "domain"
   >
@@ -63372,6 +64998,7 @@ export namespace Prisma {
       MaguiConnectProfileScalarRelationFilter,
       MaguiConnectProfileWhereInput
     >
+    clickEvents?: MaguiConnectClickEventListRelationFilter
   }
 
   export type MaguiConnectLinkOrderByWithRelationInput = {
@@ -63389,6 +65016,7 @@ export namespace Prisma {
     createdAt?: SortOrder
     updatedAt?: SortOrder
     profile?: MaguiConnectProfileOrderByWithRelationInput
+    clickEvents?: MaguiConnectClickEventOrderByRelationAggregateInput
   }
 
   export type MaguiConnectLinkWhereUniqueInput = Prisma.AtLeast<
@@ -63413,6 +65041,7 @@ export namespace Prisma {
         MaguiConnectProfileScalarRelationFilter,
         MaguiConnectProfileWhereInput
       >
+      clickEvents?: MaguiConnectClickEventListRelationFilter
     },
     "id"
   >
@@ -66975,6 +68604,82 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"EmailLog"> | Date | string
   }
 
+  export type MaguiConnectClickEventWhereInput = {
+    AND?: MaguiConnectClickEventWhereInput | MaguiConnectClickEventWhereInput[]
+    OR?: MaguiConnectClickEventWhereInput[]
+    NOT?: MaguiConnectClickEventWhereInput | MaguiConnectClickEventWhereInput[]
+    id?: StringFilter<"MaguiConnectClickEvent"> | string
+    profileId?: StringFilter<"MaguiConnectClickEvent"> | string
+    linkId?: StringFilter<"MaguiConnectClickEvent"> | string
+    createdAt?: DateTimeFilter<"MaguiConnectClickEvent"> | Date | string
+    profile?: XOR<
+      MaguiConnectProfileScalarRelationFilter,
+      MaguiConnectProfileWhereInput
+    >
+    link?: XOR<MaguiConnectLinkScalarRelationFilter, MaguiConnectLinkWhereInput>
+  }
+
+  export type MaguiConnectClickEventOrderByWithRelationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    linkId?: SortOrder
+    createdAt?: SortOrder
+    profile?: MaguiConnectProfileOrderByWithRelationInput
+    link?: MaguiConnectLinkOrderByWithRelationInput
+  }
+
+  export type MaguiConnectClickEventWhereUniqueInput = Prisma.AtLeast<
+    {
+      id?: string
+      AND?:
+        | MaguiConnectClickEventWhereInput
+        | MaguiConnectClickEventWhereInput[]
+      OR?: MaguiConnectClickEventWhereInput[]
+      NOT?:
+        | MaguiConnectClickEventWhereInput
+        | MaguiConnectClickEventWhereInput[]
+      profileId?: StringFilter<"MaguiConnectClickEvent"> | string
+      linkId?: StringFilter<"MaguiConnectClickEvent"> | string
+      createdAt?: DateTimeFilter<"MaguiConnectClickEvent"> | Date | string
+      profile?: XOR<
+        MaguiConnectProfileScalarRelationFilter,
+        MaguiConnectProfileWhereInput
+      >
+      link?: XOR<
+        MaguiConnectLinkScalarRelationFilter,
+        MaguiConnectLinkWhereInput
+      >
+    },
+    "id"
+  >
+
+  export type MaguiConnectClickEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    linkId?: SortOrder
+    createdAt?: SortOrder
+    _count?: MaguiConnectClickEventCountOrderByAggregateInput
+    _max?: MaguiConnectClickEventMaxOrderByAggregateInput
+    _min?: MaguiConnectClickEventMinOrderByAggregateInput
+  }
+
+  export type MaguiConnectClickEventScalarWhereWithAggregatesInput = {
+    AND?:
+      | MaguiConnectClickEventScalarWhereWithAggregatesInput
+      | MaguiConnectClickEventScalarWhereWithAggregatesInput[]
+    OR?: MaguiConnectClickEventScalarWhereWithAggregatesInput[]
+    NOT?:
+      | MaguiConnectClickEventScalarWhereWithAggregatesInput
+      | MaguiConnectClickEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"MaguiConnectClickEvent"> | string
+    profileId?: StringWithAggregatesFilter<"MaguiConnectClickEvent"> | string
+    linkId?: StringWithAggregatesFilter<"MaguiConnectClickEvent"> | string
+    createdAt?:
+      | DateTimeWithAggregatesFilter<"MaguiConnectClickEvent">
+      | Date
+      | string
+  }
+
   export type DashboardMetricSnapshotCreateInput = {
     id?: string
     date?: Date | string
@@ -67357,6 +69062,7 @@ export namespace Prisma {
     user: UserCreateNestedOneWithoutMaguiConnectProfileInput
     links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
     publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileUncheckedCreateInput = {
@@ -67389,6 +69095,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
     publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileUpdateInput = {
@@ -67434,6 +69141,7 @@ export namespace Prisma {
     user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
     links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
     publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutProfileNestedInput
   }
 
   export type MaguiConnectProfileUncheckedUpdateInput = {
@@ -67479,6 +69187,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
     publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutProfileNestedInput
   }
 
   export type MaguiConnectProfileCreateManyInput = {
@@ -67610,6 +69319,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     profile: MaguiConnectProfileCreateNestedOneWithoutLinksInput
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutLinkInput
   }
 
   export type MaguiConnectLinkUncheckedCreateInput = {
@@ -67626,6 +69336,7 @@ export namespace Prisma {
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutLinkInput
   }
 
   export type MaguiConnectLinkUpdateInput = {
@@ -67642,6 +69353,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     profile?: MaguiConnectProfileUpdateOneRequiredWithoutLinksNestedInput
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutLinkNestedInput
   }
 
   export type MaguiConnectLinkUncheckedUpdateInput = {
@@ -67658,6 +69370,7 @@ export namespace Prisma {
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutLinkNestedInput
   }
 
   export type MaguiConnectLinkCreateManyInput = {
@@ -71197,6 +72910,53 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type MaguiConnectClickEventCreateInput = {
+    id?: string
+    createdAt?: Date | string
+    profile: MaguiConnectProfileCreateNestedOneWithoutClickEventsInput
+    link: MaguiConnectLinkCreateNestedOneWithoutClickEventsInput
+  }
+
+  export type MaguiConnectClickEventUncheckedCreateInput = {
+    id?: string
+    profileId: string
+    linkId: string
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectClickEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: MaguiConnectProfileUpdateOneRequiredWithoutClickEventsNestedInput
+    link?: MaguiConnectLinkUpdateOneRequiredWithoutClickEventsNestedInput
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    linkId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventCreateManyInput = {
+    id?: string
+    profileId: string
+    linkId: string
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectClickEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    linkId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type StringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -71767,11 +73527,21 @@ export namespace Prisma {
     none?: MaguiConnectPublishLogWhereInput
   }
 
+  export type MaguiConnectClickEventListRelationFilter = {
+    every?: MaguiConnectClickEventWhereInput
+    some?: MaguiConnectClickEventWhereInput
+    none?: MaguiConnectClickEventWhereInput
+  }
+
   export type MaguiConnectLinkOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
   export type MaguiConnectPublishLogOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type MaguiConnectClickEventOrderByRelationAggregateInput = {
     _count?: SortOrder
   }
 
@@ -74405,6 +76175,32 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type MaguiConnectLinkScalarRelationFilter = {
+    is?: MaguiConnectLinkWhereInput
+    isNot?: MaguiConnectLinkWhereInput
+  }
+
+  export type MaguiConnectClickEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    linkId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaguiConnectClickEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    linkId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type MaguiConnectClickEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    profileId?: SortOrder
+    linkId?: SortOrder
+    createdAt?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -75670,6 +77466,23 @@ export namespace Prisma {
       | MaguiConnectPublishLogWhereUniqueInput[]
   }
 
+  export type MaguiConnectClickEventCreateNestedManyWithoutProfileInput = {
+    create?:
+      | XOR<
+          MaguiConnectClickEventCreateWithoutProfileInput,
+          MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectClickEventCreateWithoutProfileInput[]
+      | MaguiConnectClickEventUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectClickEventCreateOrConnectWithoutProfileInput
+      | MaguiConnectClickEventCreateOrConnectWithoutProfileInput[]
+    createMany?: MaguiConnectClickEventCreateManyProfileInputEnvelope
+    connect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+  }
+
   export type MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput = {
     create?:
       | XOR<
@@ -75703,6 +77516,24 @@ export namespace Prisma {
       connect?:
         | MaguiConnectPublishLogWhereUniqueInput
         | MaguiConnectPublishLogWhereUniqueInput[]
+    }
+
+  export type MaguiConnectClickEventUncheckedCreateNestedManyWithoutProfileInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectClickEventCreateWithoutProfileInput,
+            MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+          >
+        | MaguiConnectClickEventCreateWithoutProfileInput[]
+        | MaguiConnectClickEventUncheckedCreateWithoutProfileInput[]
+      connectOrCreate?:
+        | MaguiConnectClickEventCreateOrConnectWithoutProfileInput
+        | MaguiConnectClickEventCreateOrConnectWithoutProfileInput[]
+      createMany?: MaguiConnectClickEventCreateManyProfileInputEnvelope
+      connect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
     }
 
   export type EnumMaguiConnectStatusFieldUpdateOperationsInput = {
@@ -75800,6 +77631,44 @@ export namespace Prisma {
       | MaguiConnectPublishLogScalarWhereInput[]
   }
 
+  export type MaguiConnectClickEventUpdateManyWithoutProfileNestedInput = {
+    create?:
+      | XOR<
+          MaguiConnectClickEventCreateWithoutProfileInput,
+          MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+        >
+      | MaguiConnectClickEventCreateWithoutProfileInput[]
+      | MaguiConnectClickEventUncheckedCreateWithoutProfileInput[]
+    connectOrCreate?:
+      | MaguiConnectClickEventCreateOrConnectWithoutProfileInput
+      | MaguiConnectClickEventCreateOrConnectWithoutProfileInput[]
+    upsert?:
+      | MaguiConnectClickEventUpsertWithWhereUniqueWithoutProfileInput
+      | MaguiConnectClickEventUpsertWithWhereUniqueWithoutProfileInput[]
+    createMany?: MaguiConnectClickEventCreateManyProfileInputEnvelope
+    set?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    disconnect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    delete?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    connect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    update?:
+      | MaguiConnectClickEventUpdateWithWhereUniqueWithoutProfileInput
+      | MaguiConnectClickEventUpdateWithWhereUniqueWithoutProfileInput[]
+    updateMany?:
+      | MaguiConnectClickEventUpdateManyWithWhereWithoutProfileInput
+      | MaguiConnectClickEventUpdateManyWithWhereWithoutProfileInput[]
+    deleteMany?:
+      | MaguiConnectClickEventScalarWhereInput
+      | MaguiConnectClickEventScalarWhereInput[]
+  }
+
   export type MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput = {
     create?:
       | XOR<
@@ -75875,6 +77744,45 @@ export namespace Prisma {
         | MaguiConnectPublishLogScalarWhereInput[]
     }
 
+  export type MaguiConnectClickEventUncheckedUpdateManyWithoutProfileNestedInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectClickEventCreateWithoutProfileInput,
+            MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+          >
+        | MaguiConnectClickEventCreateWithoutProfileInput[]
+        | MaguiConnectClickEventUncheckedCreateWithoutProfileInput[]
+      connectOrCreate?:
+        | MaguiConnectClickEventCreateOrConnectWithoutProfileInput
+        | MaguiConnectClickEventCreateOrConnectWithoutProfileInput[]
+      upsert?:
+        | MaguiConnectClickEventUpsertWithWhereUniqueWithoutProfileInput
+        | MaguiConnectClickEventUpsertWithWhereUniqueWithoutProfileInput[]
+      createMany?: MaguiConnectClickEventCreateManyProfileInputEnvelope
+      set?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      disconnect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      delete?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      connect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      update?:
+        | MaguiConnectClickEventUpdateWithWhereUniqueWithoutProfileInput
+        | MaguiConnectClickEventUpdateWithWhereUniqueWithoutProfileInput[]
+      updateMany?:
+        | MaguiConnectClickEventUpdateManyWithWhereWithoutProfileInput
+        | MaguiConnectClickEventUpdateManyWithWhereWithoutProfileInput[]
+      deleteMany?:
+        | MaguiConnectClickEventScalarWhereInput
+        | MaguiConnectClickEventScalarWhereInput[]
+    }
+
   export type MaguiConnectProfileCreateNestedOneWithoutLinksInput = {
     create?: XOR<
       MaguiConnectProfileCreateWithoutLinksInput,
@@ -75883,6 +77791,41 @@ export namespace Prisma {
     connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutLinksInput
     connect?: MaguiConnectProfileWhereUniqueInput
   }
+
+  export type MaguiConnectClickEventCreateNestedManyWithoutLinkInput = {
+    create?:
+      | XOR<
+          MaguiConnectClickEventCreateWithoutLinkInput,
+          MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+        >
+      | MaguiConnectClickEventCreateWithoutLinkInput[]
+      | MaguiConnectClickEventUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?:
+      | MaguiConnectClickEventCreateOrConnectWithoutLinkInput
+      | MaguiConnectClickEventCreateOrConnectWithoutLinkInput[]
+    createMany?: MaguiConnectClickEventCreateManyLinkInputEnvelope
+    connect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+  }
+
+  export type MaguiConnectClickEventUncheckedCreateNestedManyWithoutLinkInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectClickEventCreateWithoutLinkInput,
+            MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+          >
+        | MaguiConnectClickEventCreateWithoutLinkInput[]
+        | MaguiConnectClickEventUncheckedCreateWithoutLinkInput[]
+      connectOrCreate?:
+        | MaguiConnectClickEventCreateOrConnectWithoutLinkInput
+        | MaguiConnectClickEventCreateOrConnectWithoutLinkInput[]
+      createMany?: MaguiConnectClickEventCreateManyLinkInputEnvelope
+      connect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+    }
 
   export type BoolFieldUpdateOperationsInput = {
     set?: boolean
@@ -75904,6 +77847,83 @@ export namespace Prisma {
       MaguiConnectProfileUncheckedUpdateWithoutLinksInput
     >
   }
+
+  export type MaguiConnectClickEventUpdateManyWithoutLinkNestedInput = {
+    create?:
+      | XOR<
+          MaguiConnectClickEventCreateWithoutLinkInput,
+          MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+        >
+      | MaguiConnectClickEventCreateWithoutLinkInput[]
+      | MaguiConnectClickEventUncheckedCreateWithoutLinkInput[]
+    connectOrCreate?:
+      | MaguiConnectClickEventCreateOrConnectWithoutLinkInput
+      | MaguiConnectClickEventCreateOrConnectWithoutLinkInput[]
+    upsert?:
+      | MaguiConnectClickEventUpsertWithWhereUniqueWithoutLinkInput
+      | MaguiConnectClickEventUpsertWithWhereUniqueWithoutLinkInput[]
+    createMany?: MaguiConnectClickEventCreateManyLinkInputEnvelope
+    set?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    disconnect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    delete?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    connect?:
+      | MaguiConnectClickEventWhereUniqueInput
+      | MaguiConnectClickEventWhereUniqueInput[]
+    update?:
+      | MaguiConnectClickEventUpdateWithWhereUniqueWithoutLinkInput
+      | MaguiConnectClickEventUpdateWithWhereUniqueWithoutLinkInput[]
+    updateMany?:
+      | MaguiConnectClickEventUpdateManyWithWhereWithoutLinkInput
+      | MaguiConnectClickEventUpdateManyWithWhereWithoutLinkInput[]
+    deleteMany?:
+      | MaguiConnectClickEventScalarWhereInput
+      | MaguiConnectClickEventScalarWhereInput[]
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateManyWithoutLinkNestedInput =
+    {
+      create?:
+        | XOR<
+            MaguiConnectClickEventCreateWithoutLinkInput,
+            MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+          >
+        | MaguiConnectClickEventCreateWithoutLinkInput[]
+        | MaguiConnectClickEventUncheckedCreateWithoutLinkInput[]
+      connectOrCreate?:
+        | MaguiConnectClickEventCreateOrConnectWithoutLinkInput
+        | MaguiConnectClickEventCreateOrConnectWithoutLinkInput[]
+      upsert?:
+        | MaguiConnectClickEventUpsertWithWhereUniqueWithoutLinkInput
+        | MaguiConnectClickEventUpsertWithWhereUniqueWithoutLinkInput[]
+      createMany?: MaguiConnectClickEventCreateManyLinkInputEnvelope
+      set?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      disconnect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      delete?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      connect?:
+        | MaguiConnectClickEventWhereUniqueInput
+        | MaguiConnectClickEventWhereUniqueInput[]
+      update?:
+        | MaguiConnectClickEventUpdateWithWhereUniqueWithoutLinkInput
+        | MaguiConnectClickEventUpdateWithWhereUniqueWithoutLinkInput[]
+      updateMany?:
+        | MaguiConnectClickEventUpdateManyWithWhereWithoutLinkInput
+        | MaguiConnectClickEventUpdateManyWithWhereWithoutLinkInput[]
+      deleteMany?:
+        | MaguiConnectClickEventScalarWhereInput
+        | MaguiConnectClickEventScalarWhereInput[]
+    }
 
   export type MaguiConnectProfileCreateNestedOneWithoutPublishLogsInput = {
     create?: XOR<
@@ -79626,6 +81646,59 @@ export namespace Prisma {
     >
   }
 
+  export type MaguiConnectProfileCreateNestedOneWithoutClickEventsInput = {
+    create?: XOR<
+      MaguiConnectProfileCreateWithoutClickEventsInput,
+      MaguiConnectProfileUncheckedCreateWithoutClickEventsInput
+    >
+    connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutClickEventsInput
+    connect?: MaguiConnectProfileWhereUniqueInput
+  }
+
+  export type MaguiConnectLinkCreateNestedOneWithoutClickEventsInput = {
+    create?: XOR<
+      MaguiConnectLinkCreateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedCreateWithoutClickEventsInput
+    >
+    connectOrCreate?: MaguiConnectLinkCreateOrConnectWithoutClickEventsInput
+    connect?: MaguiConnectLinkWhereUniqueInput
+  }
+
+  export type MaguiConnectProfileUpdateOneRequiredWithoutClickEventsNestedInput =
+    {
+      create?: XOR<
+        MaguiConnectProfileCreateWithoutClickEventsInput,
+        MaguiConnectProfileUncheckedCreateWithoutClickEventsInput
+      >
+      connectOrCreate?: MaguiConnectProfileCreateOrConnectWithoutClickEventsInput
+      upsert?: MaguiConnectProfileUpsertWithoutClickEventsInput
+      connect?: MaguiConnectProfileWhereUniqueInput
+      update?: XOR<
+        XOR<
+          MaguiConnectProfileUpdateToOneWithWhereWithoutClickEventsInput,
+          MaguiConnectProfileUpdateWithoutClickEventsInput
+        >,
+        MaguiConnectProfileUncheckedUpdateWithoutClickEventsInput
+      >
+    }
+
+  export type MaguiConnectLinkUpdateOneRequiredWithoutClickEventsNestedInput = {
+    create?: XOR<
+      MaguiConnectLinkCreateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedCreateWithoutClickEventsInput
+    >
+    connectOrCreate?: MaguiConnectLinkCreateOrConnectWithoutClickEventsInput
+    upsert?: MaguiConnectLinkUpsertWithoutClickEventsInput
+    connect?: MaguiConnectLinkWhereUniqueInput
+    update?: XOR<
+      XOR<
+        MaguiConnectLinkUpdateToOneWithWhereWithoutClickEventsInput,
+        MaguiConnectLinkUpdateWithoutClickEventsInput
+      >,
+      MaguiConnectLinkUncheckedUpdateWithoutClickEventsInput
+    >
+  }
+
   export type NestedStringFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -81272,6 +83345,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
     publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileUncheckedCreateWithoutUserInput = {
@@ -81303,6 +83377,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
     publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileCreateOrConnectWithoutUserInput = {
@@ -81991,6 +84066,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
     publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutProfileNestedInput
   }
 
   export type MaguiConnectProfileUncheckedUpdateWithoutUserInput = {
@@ -82035,6 +84111,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
     publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutProfileNestedInput
   }
 
   export type UserCreateWithoutMaguiConnectProfileInput = {
@@ -82116,6 +84193,7 @@ export namespace Prisma {
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutLinkInput
   }
 
   export type MaguiConnectLinkUncheckedCreateWithoutProfileInput = {
@@ -82131,6 +84209,7 @@ export namespace Prisma {
     clickCount?: number
     createdAt?: Date | string
     updatedAt?: Date | string
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutLinkInput
   }
 
   export type MaguiConnectLinkCreateOrConnectWithoutProfileInput = {
@@ -82178,6 +84257,33 @@ export namespace Prisma {
     data:
       | MaguiConnectPublishLogCreateManyProfileInput
       | MaguiConnectPublishLogCreateManyProfileInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type MaguiConnectClickEventCreateWithoutProfileInput = {
+    id?: string
+    createdAt?: Date | string
+    link: MaguiConnectLinkCreateNestedOneWithoutClickEventsInput
+  }
+
+  export type MaguiConnectClickEventUncheckedCreateWithoutProfileInput = {
+    id?: string
+    linkId: string
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectClickEventCreateOrConnectWithoutProfileInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    create: XOR<
+      MaguiConnectClickEventCreateWithoutProfileInput,
+      MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectClickEventCreateManyProfileInputEnvelope = {
+    data:
+      | MaguiConnectClickEventCreateManyProfileInput
+      | MaguiConnectClickEventCreateManyProfileInput[]
     skipDuplicates?: boolean
   }
 
@@ -82351,6 +84457,48 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"MaguiConnectPublishLog"> | Date | string
   }
 
+  export type MaguiConnectClickEventUpsertWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    update: XOR<
+      MaguiConnectClickEventUpdateWithoutProfileInput,
+      MaguiConnectClickEventUncheckedUpdateWithoutProfileInput
+    >
+    create: XOR<
+      MaguiConnectClickEventCreateWithoutProfileInput,
+      MaguiConnectClickEventUncheckedCreateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectClickEventUpdateWithWhereUniqueWithoutProfileInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    data: XOR<
+      MaguiConnectClickEventUpdateWithoutProfileInput,
+      MaguiConnectClickEventUncheckedUpdateWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectClickEventUpdateManyWithWhereWithoutProfileInput = {
+    where: MaguiConnectClickEventScalarWhereInput
+    data: XOR<
+      MaguiConnectClickEventUpdateManyMutationInput,
+      MaguiConnectClickEventUncheckedUpdateManyWithoutProfileInput
+    >
+  }
+
+  export type MaguiConnectClickEventScalarWhereInput = {
+    AND?:
+      | MaguiConnectClickEventScalarWhereInput
+      | MaguiConnectClickEventScalarWhereInput[]
+    OR?: MaguiConnectClickEventScalarWhereInput[]
+    NOT?:
+      | MaguiConnectClickEventScalarWhereInput
+      | MaguiConnectClickEventScalarWhereInput[]
+    id?: StringFilter<"MaguiConnectClickEvent"> | string
+    profileId?: StringFilter<"MaguiConnectClickEvent"> | string
+    linkId?: StringFilter<"MaguiConnectClickEvent"> | string
+    createdAt?: DateTimeFilter<"MaguiConnectClickEvent"> | Date | string
+  }
+
   export type MaguiConnectProfileCreateWithoutLinksInput = {
     id?: string
     status?: $Enums.MaguiConnectStatus
@@ -82380,6 +84528,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutMaguiConnectProfileInput
     publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileUncheckedCreateWithoutLinksInput = {
@@ -82411,6 +84560,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileCreateOrConnectWithoutLinksInput = {
@@ -82419,6 +84569,33 @@ export namespace Prisma {
       MaguiConnectProfileCreateWithoutLinksInput,
       MaguiConnectProfileUncheckedCreateWithoutLinksInput
     >
+  }
+
+  export type MaguiConnectClickEventCreateWithoutLinkInput = {
+    id?: string
+    createdAt?: Date | string
+    profile: MaguiConnectProfileCreateNestedOneWithoutClickEventsInput
+  }
+
+  export type MaguiConnectClickEventUncheckedCreateWithoutLinkInput = {
+    id?: string
+    profileId: string
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectClickEventCreateOrConnectWithoutLinkInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    create: XOR<
+      MaguiConnectClickEventCreateWithoutLinkInput,
+      MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+    >
+  }
+
+  export type MaguiConnectClickEventCreateManyLinkInputEnvelope = {
+    data:
+      | MaguiConnectClickEventCreateManyLinkInput
+      | MaguiConnectClickEventCreateManyLinkInput[]
+    skipDuplicates?: boolean
   }
 
   export type MaguiConnectProfileUpsertWithoutLinksInput = {
@@ -82483,6 +84660,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
     publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutProfileNestedInput
   }
 
   export type MaguiConnectProfileUncheckedUpdateWithoutLinksInput = {
@@ -82527,6 +84705,35 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectClickEventUpsertWithWhereUniqueWithoutLinkInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    update: XOR<
+      MaguiConnectClickEventUpdateWithoutLinkInput,
+      MaguiConnectClickEventUncheckedUpdateWithoutLinkInput
+    >
+    create: XOR<
+      MaguiConnectClickEventCreateWithoutLinkInput,
+      MaguiConnectClickEventUncheckedCreateWithoutLinkInput
+    >
+  }
+
+  export type MaguiConnectClickEventUpdateWithWhereUniqueWithoutLinkInput = {
+    where: MaguiConnectClickEventWhereUniqueInput
+    data: XOR<
+      MaguiConnectClickEventUpdateWithoutLinkInput,
+      MaguiConnectClickEventUncheckedUpdateWithoutLinkInput
+    >
+  }
+
+  export type MaguiConnectClickEventUpdateManyWithWhereWithoutLinkInput = {
+    where: MaguiConnectClickEventScalarWhereInput
+    data: XOR<
+      MaguiConnectClickEventUpdateManyMutationInput,
+      MaguiConnectClickEventUncheckedUpdateManyWithoutLinkInput
+    >
   }
 
   export type MaguiConnectProfileCreateWithoutPublishLogsInput = {
@@ -82558,6 +84765,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutMaguiConnectProfileInput
     links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileUncheckedCreateWithoutPublishLogsInput = {
@@ -82589,6 +84797,7 @@ export namespace Prisma {
     createdAt?: Date | string
     updatedAt?: Date | string
     links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
+    clickEvents?: MaguiConnectClickEventUncheckedCreateNestedManyWithoutProfileInput
   }
 
   export type MaguiConnectProfileCreateOrConnectWithoutPublishLogsInput = {
@@ -82661,6 +84870,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
     links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutProfileNestedInput
   }
 
   export type MaguiConnectProfileUncheckedUpdateWithoutPublishLogsInput = {
@@ -82705,6 +84915,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutProfileNestedInput
   }
 
   export type UserCreateWithoutOwnedLeadsInput = {
@@ -91219,6 +93430,280 @@ export namespace Prisma {
     maguiConnectProfile?: MaguiConnectProfileUncheckedUpdateOneWithoutUserNestedInput
   }
 
+  export type MaguiConnectProfileCreateWithoutClickEventsInput = {
+    id?: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    ogImageUrl?: string | null
+    domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    user: UserCreateNestedOneWithoutMaguiConnectProfileInput
+    links?: MaguiConnectLinkCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileUncheckedCreateWithoutClickEventsInput = {
+    id?: string
+    userId: string
+    status?: $Enums.MaguiConnectStatus
+    slug?: string | null
+    displayName: string
+    headline?: string | null
+    bio?: string | null
+    avatarUrl?: string | null
+    ogImageUrl?: string | null
+    domain?: string | null
+    professionalCategory?: string | null
+    location?: string | null
+    companyName?: string | null
+    publicEmail?: string | null
+    publicPhone?: string | null
+    whatsapp?: string | null
+    primaryCtaLabel?: string | null
+    primaryCtaUrl?: string | null
+    themeAccent?: string | null
+    themeBackground?: string | null
+    themeForeground?: string | null
+    seoTitle?: string | null
+    seoDescription?: string | null
+    publishedAt?: Date | string | null
+    lastSyncedAt?: Date | string | null
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    links?: MaguiConnectLinkUncheckedCreateNestedManyWithoutProfileInput
+    publishLogs?: MaguiConnectPublishLogUncheckedCreateNestedManyWithoutProfileInput
+  }
+
+  export type MaguiConnectProfileCreateOrConnectWithoutClickEventsInput = {
+    where: MaguiConnectProfileWhereUniqueInput
+    create: XOR<
+      MaguiConnectProfileCreateWithoutClickEventsInput,
+      MaguiConnectProfileUncheckedCreateWithoutClickEventsInput
+    >
+  }
+
+  export type MaguiConnectLinkCreateWithoutClickEventsInput = {
+    id?: string
+    label: string
+    url: string
+    icon?: string | null
+    kind?: string
+    sortOrder?: number
+    isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    profile: MaguiConnectProfileCreateNestedOneWithoutLinksInput
+  }
+
+  export type MaguiConnectLinkUncheckedCreateWithoutClickEventsInput = {
+    id?: string
+    profileId: string
+    label: string
+    url: string
+    icon?: string | null
+    kind?: string
+    sortOrder?: number
+    isActive?: boolean
+    isFeatured?: boolean
+    openInNewTab?: boolean
+    clickCount?: number
+    createdAt?: Date | string
+    updatedAt?: Date | string
+  }
+
+  export type MaguiConnectLinkCreateOrConnectWithoutClickEventsInput = {
+    where: MaguiConnectLinkWhereUniqueInput
+    create: XOR<
+      MaguiConnectLinkCreateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedCreateWithoutClickEventsInput
+    >
+  }
+
+  export type MaguiConnectProfileUpsertWithoutClickEventsInput = {
+    update: XOR<
+      MaguiConnectProfileUpdateWithoutClickEventsInput,
+      MaguiConnectProfileUncheckedUpdateWithoutClickEventsInput
+    >
+    create: XOR<
+      MaguiConnectProfileCreateWithoutClickEventsInput,
+      MaguiConnectProfileUncheckedCreateWithoutClickEventsInput
+    >
+    where?: MaguiConnectProfileWhereInput
+  }
+
+  export type MaguiConnectProfileUpdateToOneWithWhereWithoutClickEventsInput = {
+    where?: MaguiConnectProfileWhereInput
+    data: XOR<
+      MaguiConnectProfileUpdateWithoutClickEventsInput,
+      MaguiConnectProfileUncheckedUpdateWithoutClickEventsInput
+    >
+  }
+
+  export type MaguiConnectProfileUpdateWithoutClickEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    user?: UserUpdateOneRequiredWithoutMaguiConnectProfileNestedInput
+    links?: MaguiConnectLinkUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectProfileUncheckedUpdateWithoutClickEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    userId?: StringFieldUpdateOperationsInput | string
+    status?:
+      | EnumMaguiConnectStatusFieldUpdateOperationsInput
+      | $Enums.MaguiConnectStatus
+    slug?: NullableStringFieldUpdateOperationsInput | string | null
+    displayName?: StringFieldUpdateOperationsInput | string
+    headline?: NullableStringFieldUpdateOperationsInput | string | null
+    bio?: NullableStringFieldUpdateOperationsInput | string | null
+    avatarUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    ogImageUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    domain?: NullableStringFieldUpdateOperationsInput | string | null
+    professionalCategory?:
+      | NullableStringFieldUpdateOperationsInput
+      | string
+      | null
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    companyName?: NullableStringFieldUpdateOperationsInput | string | null
+    publicEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    publicPhone?: NullableStringFieldUpdateOperationsInput | string | null
+    whatsapp?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaLabel?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryCtaUrl?: NullableStringFieldUpdateOperationsInput | string | null
+    themeAccent?: NullableStringFieldUpdateOperationsInput | string | null
+    themeBackground?: NullableStringFieldUpdateOperationsInput | string | null
+    themeForeground?: NullableStringFieldUpdateOperationsInput | string | null
+    seoTitle?: NullableStringFieldUpdateOperationsInput | string | null
+    seoDescription?: NullableStringFieldUpdateOperationsInput | string | null
+    publishedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    lastSyncedAt?:
+      | NullableDateTimeFieldUpdateOperationsInput
+      | Date
+      | string
+      | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    links?: MaguiConnectLinkUncheckedUpdateManyWithoutProfileNestedInput
+    publishLogs?: MaguiConnectPublishLogUncheckedUpdateManyWithoutProfileNestedInput
+  }
+
+  export type MaguiConnectLinkUpsertWithoutClickEventsInput = {
+    update: XOR<
+      MaguiConnectLinkUpdateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedUpdateWithoutClickEventsInput
+    >
+    create: XOR<
+      MaguiConnectLinkCreateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedCreateWithoutClickEventsInput
+    >
+    where?: MaguiConnectLinkWhereInput
+  }
+
+  export type MaguiConnectLinkUpdateToOneWithWhereWithoutClickEventsInput = {
+    where?: MaguiConnectLinkWhereInput
+    data: XOR<
+      MaguiConnectLinkUpdateWithoutClickEventsInput,
+      MaguiConnectLinkUncheckedUpdateWithoutClickEventsInput
+    >
+  }
+
+  export type MaguiConnectLinkUpdateWithoutClickEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: MaguiConnectProfileUpdateOneRequiredWithoutLinksNestedInput
+  }
+
+  export type MaguiConnectLinkUncheckedUpdateWithoutClickEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    label?: StringFieldUpdateOperationsInput | string
+    url?: StringFieldUpdateOperationsInput | string
+    icon?: NullableStringFieldUpdateOperationsInput | string | null
+    kind?: StringFieldUpdateOperationsInput | string
+    sortOrder?: IntFieldUpdateOperationsInput | number
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    isFeatured?: BoolFieldUpdateOperationsInput | boolean
+    openInNewTab?: BoolFieldUpdateOperationsInput | boolean
+    clickCount?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ProjectCreateManyClientInput = {
     id?: string
     name: string
@@ -92049,6 +94534,12 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type MaguiConnectClickEventCreateManyProfileInput = {
+    id?: string
+    linkId: string
+    createdAt?: Date | string
+  }
+
   export type MaguiConnectLinkUpdateWithoutProfileInput = {
     id?: StringFieldUpdateOperationsInput | string
     label?: StringFieldUpdateOperationsInput | string
@@ -92062,6 +94553,7 @@ export namespace Prisma {
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clickEvents?: MaguiConnectClickEventUpdateManyWithoutLinkNestedInput
   }
 
   export type MaguiConnectLinkUncheckedUpdateWithoutProfileInput = {
@@ -92077,6 +94569,7 @@ export namespace Prisma {
     clickCount?: IntFieldUpdateOperationsInput | number
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    clickEvents?: MaguiConnectClickEventUncheckedUpdateManyWithoutLinkNestedInput
   }
 
   export type MaguiConnectLinkUncheckedUpdateManyWithoutProfileInput = {
@@ -92118,6 +94611,48 @@ export namespace Prisma {
     status?: StringFieldUpdateOperationsInput | string
     message?: NullableStringFieldUpdateOperationsInput | string | null
     payload?: NullableJsonNullValueInput | InputJsonValue
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    link?: MaguiConnectLinkUpdateOneRequiredWithoutClickEventsNestedInput
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    linkId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateManyWithoutProfileInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    linkId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventCreateManyLinkInput = {
+    id?: string
+    profileId: string
+    createdAt?: Date | string
+  }
+
+  export type MaguiConnectClickEventUpdateWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    profile?: MaguiConnectProfileUpdateOneRequiredWithoutClickEventsNestedInput
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type MaguiConnectClickEventUncheckedUpdateManyWithoutLinkInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    profileId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 

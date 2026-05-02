@@ -653,6 +653,13 @@ exports.Prisma.EmailLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.MaguiConnectClickEventScalarFieldEnum = {
+  id: 'id',
+  profileId: 'profileId',
+  linkId: 'linkId',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -905,7 +912,8 @@ exports.Prisma.ModelName = {
   Invoice: 'Invoice',
   Installment: 'Installment',
   PaymentEvent: 'PaymentEvent',
-  EmailLog: 'EmailLog'
+  EmailLog: 'EmailLog',
+  MaguiConnectClickEvent: 'MaguiConnectClickEvent'
 };
 
 /**
